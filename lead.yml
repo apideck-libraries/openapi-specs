@@ -1,0 +1,836 @@
+openapi: 3.0.0
+info:
+  description: >
+    Welcome to the Unify Lead API. 👋 You can have a chat with us at
+    [apideck-io.slack.com](https://apideck-io.slack.com).
+
+
+    You can use the API to access all lead endpoints, such as the Add Lead endpoint to create leads, or the Leads endpoint to get all leads from a specific consumer.
+
+
+    ## Base URL
+
+
+    The base URL for all API requests is ```https://unify.apideck.com/lead```
+
+
+    ## Headers
+
+    Custom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.
+
+
+    | Name                  	| Type    	| Required 	| Description                                                                                                                                                    	|
+
+    |-----------------------	|---------	|----------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+
+    | x-apideck-app-id      	| String  	| Yes      	| The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                          |
+
+    | x-apideck-consumer-id 	| String  	| Yes      	| The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. 	|
+
+    | x-apideck-service-id  	| String  	| No       	| Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             	|
+
+    | x-apideck-raw         	| Boolean 	| No       	| Include raw response. Mostly used for debugging purposes.                                                                                                      	|
+
+
+    Apideck Vault stores your customers access tokens and API keys on your behalf so you don't need to refresh tokens, store access tokens or handle auth flows. You can define the account id you want to your user data.
+
+
+    Altough you will miss out on some great benefits not using Apideck Vault. If you prefer to skip using Apideck Vault you can include your own access tokens when a sending request. 
+
+
+    ## API Keys
+
+
+    To make the API as explorable as possible, applications have a sandbox (upcoming) and a live mode, differentiated by API key. Login to get your API Key https://app.apideck.com/api-keys.
+
+
+    ## Connectors
+
+
+    Supported connectors and endpoints
+
+
+    | Service ID                                               | Status | v*         | Create      | Update | Show | List | Delete | Custom fields | Webhooks    |
+
+    | -------------------------------------------------------- | ------ | ---------- | ----------- | ------ | ---- | ---- | ------ | ------------- | ----------- |
+
+    | [Copper](https://www.copper.com/)                        | beta   | 1.0.0      | Yes         | Yes    | Yes  | Yes  | Yes    | -             | -           |
+
+    | [Close](https://close.com)                               | beta   | 1.0.0      | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | Coming soon |
+
+    | [Teamleader](https://www.teamleader.eu/)                 | beta   | 2019-01-24 | Yes (multi) | Yes    | Yes  | Yes  | Yes    | -             | -           |
+
+    | [Zoho CRM](https://www.zoho.com/crm/)                    | beta   | 2.0        | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | -           |
+
+    | [Pipedrive](https://www.pipedrive.com/)                  | beta   | 1.0.0      | Yes (multi) | Yes    | Yes  | Yes  | Yes    | No            | -           |
+
+    | [HubSpot](https://www.hubspot.com/)                      | beta   | 1.0.0      | Yes         | Yes    | Yes  | Yes  | Yes    | -             | -           |
+
+    | [Salesforce](https://www.salesforce.com)                 | beta   | v39.0      | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | -           |
+
+    | [ActiveCampaign](https://www.activecampaign.com/)        | beta   | 3          | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | -           |
+
+    | [Zendesk Sell](https://www.zendesk.com/sell/)            | beta   | 2.0        | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | -           |
+
+    | [Salesflare](https://salesflare.com)                     | beta   | 1.0.0      | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | Coming soon |
+
+    | [Freshsales](https://www.freshworks.com/freshsales-crm/) | beta   | 0.1.0      | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | Coming soon |
+
+
+    latest supported API version*
+
+
+    ## SDKs and API Clients
+
+
+    Upcoming. [Request the SDK of your choice](https://integrations.apideck.com/request).
+
+
+    ## Errors
+
+
+    The API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customised error message inside the JSON response. You can see the returned HTTP status codes below.
+
+
+    | Code               	| Title          	| Description                                                                                                                                                            	|
+
+    |--------------------	|----------------	|------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+
+    | 200                	| OK             	| Request successful.                                                                                                                                                    	|
+
+    | 201                	| Created        	| Resource successfully created.                                                                                                                                         	|
+
+    | 204                	| No Content     	| Request successful with no content returned.                                                                                                                           	|
+
+    | 400                	| Bad Request    	| Request was unacceptable. Double check the documentation to make sure you provided the correct parameters. In most cases the response will contain more info to debug. 	|
+
+    | 401                	| Unauthorised   	| The provided API key is invalid.                                                                                                                                       	|
+
+    | 402                	| Request Failed 	| Valid parameters but the request failed.                                                                                                                               	|
+
+    | 404                	| Not Found      	| Resource does not exist.                                                                                                                                               	|
+
+    | 409                	| Duplicate      	| Resource already exists.                                                                                                                                               	|
+
+    | 500, 502, 503, 504 	| Server Errors  	| Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                           	|
+
+
+    ### Handling errors
+
+
+    The Unify API and SDKs can produce errors for many reasons, such as a failed requests due to unconfigured integrations, invalid parameters, authentication errors, and network unavailability.
+
+
+    ## Postman
+
+
+    If you are working with APIs, you are probably already familiar with Postman, a development tool that enables you to configure and run API requests.
+
+
+    We have preconfigured Postman collection that you can download. You will have to configure some environment variables to customize the requests. For more information on this, refer to Using this API with our Postman Collections.
+
+
+    ## API Design
+
+
+    ### API Styles and data formats
+
+
+    #### REST API
+
+
+    The API is organised around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.
+
+
+    ##### Available HTTP methods
+
+
+    The Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter _method.
+
+
+    ```
+
+    POST /messages
+
+    GET /messages
+
+    GET /messages/{messageId}
+
+    PATCH /messages/{messageId}
+
+    DELETE /messages/{messageId}
+
+    ```
+
+
+    Response bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.
+
+
+    #### GraphQL
+
+
+    Hold tight. We're working on a GraphQL API.
+
+
+    ### Schema
+
+
+    All API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.
+
+
+    ### Meta
+
+
+    Meta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.
+
+
+    ### Debugging
+
+
+    Because of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the reponse size and can introduce extra latency.
+
+
+    ### Idempotence
+
+
+    To prevent the creation of duplicate resources, every POST method (such as one that creates a consumer record) must specify a unique value for the  X-Unique-Transaction-ID header name. Uniquely identifying each unique POST request ensures that the Open Platform API processes a given request once and only once.
+
+
+    Uniquely identifying new resource-creation POSTs is especially important when the outcome of a response is ambiguous because of a transient service interruption, such as a server-side timeout or network disruption. If a service interruption occurs, then the client application can safely retry the uniquely identified request without creating duplicate operations. (API endpoints that guarantee that every uniquely identified request is processed only once no matter how many times that uniquely identifiable request is made are described as idempotent.)
+
+
+    ### Request IDs
+
+
+    Each API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
+
+
+    ### Fixed field types
+
+
+    #### Dates
+
+
+    The dates returned by the API are all represented in Unix time in seconds.
+
+
+    Where possible dates will be returned in UTC. In the event a PMS doesn't specify a timezone dates will be returned as they are received which is normally the timezone of the hotel.
+
+
+    Where dates are passed in as query parameters they should be in the form YYYY-MM-DD.
+
+
+    #### Prices and Currencies
+
+
+    All prices returned by the API are represented as integer amounts in a currency’s smallest unit. For example, $5 USD would be returned as 500 (i.e, 500 cents).
+
+
+    For zero-decimal currencies, amounts will still be provided as an integer but without the need to divide by 100. For example, an amount of ¥5 (JPY) would be returned as 5.
+
+
+    All currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+
+
+    ## Support
+
+
+    If you have problems or need help with your case, you can always reach out to our Support.
+  version: 0.1.0
+  title: Lead API
+  contact:
+    email: hello@apideck.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://unify.apideck.com/lead
+tags:
+  - name: Leads
+paths:
+  /leads:
+    parameters:
+      - $ref: "#/components/parameters/raw"
+      - $ref: "#/components/parameters/x-apideck-consumer-id"
+      - $ref: "#/components/parameters/x-apideck-app-id"
+    post:
+      tags:
+        - Leads
+      summary: Create a lead
+      operationId: leadsAdd
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Lead object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: "#/components/schemas/leadsAddWithName"
+                - $ref: "#/components/schemas/leadsAddWithFirstLastName"
+      responses:
+        "201":
+          $ref: "#/components/responses/Created"
+        "405":
+          $ref: "#/components/responses/InvalidInput"
+        "409":
+          $ref: "#/components/responses/Duplicate"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+    get:
+      tags:
+        - Leads
+      summary: Get all leads
+      operationId: leadsAll
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/leadsAll"
+  "/leads/{id}":
+    get:
+      tags:
+        - Leads
+      summary: Get lead
+      operationId: leadsOne
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/leadsOne"
+    patch:
+      tags:
+        - Leads
+      summary: Update lead
+      operationId: leadsUpdate
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/leadsOne"
+      requestBody:
+        description: Lead fields to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: "#/components/schemas/leadsAddWithName"
+                - $ref: "#/components/schemas/leadsAddWithFirstLastName"
+    delete:
+      tags:
+        - Leads
+      summary: Deletes a lead
+      operationId: leadsDelete
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+      responses:
+        "200":
+          $ref: "#/components/responses/Deleted"
+        "400":
+          $ref: "#/components/responses/InvalidId"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  "/leads/{id}/schema":
+    get:
+      tags:
+        - Leads
+      summary: Get lead schema
+      operationId: leadsSchema
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/leadsSchema"
+components:
+  parameters:
+    x-apideck-consumer-id:
+      name: x-apideck-consumer-id
+      in: header
+      description: ID of the consumer which you want to get or push data from
+      required: true
+      schema:
+        type: string
+    x-apideck-app-id:
+      name: x-apideck-app-id
+      in: header
+      description: The ID of your Unify application
+      required: true
+      schema:
+        type: string
+    x-apideck-service-id:
+      name: x-apideck-service-id
+      in: header
+      description: Provide the service id you want to call (e.g., pipedrive). See the
+        full list in the connector section. Only needed when a consumer has
+        activated multiple integrations for a Unified API.
+      schema:
+        $ref: "#/components/schemas/Services"
+    id:
+      name: id
+      in: path
+      description: ID of the resource to return
+      required: true
+      schema:
+        type: integer
+    page:
+      name: page
+      in: query
+      description: Page number to start from. Omitting the page parameter will return page 1
+      schema:
+        type: integer
+        default: 1
+    per_page:
+      name: per_page
+      in: query
+      description: Number of records to return per page. Default = 100.
+      schema:
+        type: integer
+        default: 100
+    raw:
+      name: raw
+      in: query
+      description: Include raw response. Mostly used for debugging purposes
+      schema:
+        type: boolean
+        default: true
+    q:
+      name: q
+      in: query
+      description: Search query
+      required: true
+      schema:
+        type: string
+    email:
+      name: email
+      in: query
+      description: Email query
+      required: true
+      schema:
+        type: string
+    with_analytics:
+      name: with_analytics
+      in: query
+      description: Include analytics.
+      schema:
+        type: boolean
+  responses:
+    Created:
+      description: Resource created
+    Updated:
+      description: Resource updated
+    Deleted:
+      description: Resource succesfully deleted
+    NotFound:
+      description: Entity not found.
+    IllegalInput:
+      description: Illegal input for operation.
+    InvalidId:
+      description: Invalid ID supplied.
+    ValidationException:
+      description: Validation exception
+    InvalidInput:
+      description: Invalid input
+    Unprocessable:
+      description: Unprocessable Entity
+    Duplicate:
+      description: Duplicate resource
+    GeneralError:
+      description: General Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GeneralError"
+  schemas:
+    Services:
+      type: string
+      enum:
+        - pipedrive
+        - teamleader
+        - salesforce
+        - hubspot
+        - copper
+        - salesflare
+        - close
+        - freshsales
+        - zoho-crm
+        - zendesk-sell
+        - activecampaign
+      example: pipedrive
+    GeneralError:
+      type: array
+      items:
+        $ref: "#/components/schemas/Error"
+    Error:
+      properties:
+        code:
+          type: string
+          example: ERR-01234
+        title:
+          type: string
+          example: OAuthException
+        message:
+          type: string
+          example: Session has expired at unix time 1385243766. The current unix time is
+            1385848532.
+        href:
+          type: string
+          example: http://example.org/docs/errors/#ERR-01234
+    leadsAddWithName:
+      required:
+        - name
+        - company_name
+      x-pii:
+        - name
+        - email
+        - phone_number
+      properties:
+        name:
+          type: string
+          example: Elon Musk
+        prefix:
+          type: string
+          example: Duke
+        email:
+          type: string
+          example: elon@spacex.com
+        title:
+          type: string
+          example: CEO
+        phone_number:
+          type: string
+          example: +444 111 222 333
+        website:
+          type: string
+          example: https://www.spacex.com
+        company_name:
+          type: string
+          example: SpaceX
+        status:
+          type: string
+          example: open
+        lead_source:
+          type: string
+          example: website
+        note:
+          type: string
+          example: Eager to buy more rockets.
+        address:
+          type: object
+          properties:
+            line1:
+              type: string
+              example: Main street
+              description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+            city:
+              type: string
+              example: San Francisco
+              description: Name of city.
+            line2:
+              type: string
+              example: Bus 100
+              description: "Line 2 of the address e.g. number, street, suite, apt #, etc."
+            state:
+              type: string
+              example: CA
+              description: Name of state
+            postal_code:
+              type: string
+              example: "94104"
+              description: Zip code or equivalent.
+            country:
+              type: string
+              example: US
+              description: country code according to ISO 3166-1 alpha-2.
+        custom_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: custom_technologies
+              value:
+                type: string
+                example: Uses Salesforce and Marketo
+        tags:
+          type: array
+          example:
+            - new
+            - hot
+          items:
+            type: string
+    leadsAddWithFirstLastName:
+      required:
+        - first_name
+        - last_name
+        - company_name
+      x-pii:
+        - email
+        - first_name
+        - last_name
+        - phone_number
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        prefix:
+          type: string
+        email:
+          type: string
+        title:
+          type: string
+        phone_number:
+          type: string
+        website:
+          type: string
+        note:
+          type: string
+        company_name:
+          type: string
+        address:
+          type: object
+          properties:
+            line1:
+              type: string
+              example: Main street
+              description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+            city:
+              type: string
+              example: San Francisco
+              description: Name of city.
+            line2:
+              type: string
+              example: Bus 100
+              description: "Line 2 of the address e.g. number, street, suite, apt #, etc."
+            state:
+              type: string
+              example: CA
+              description: Name of state
+            postal_code:
+              type: string
+              example: "94104"
+              description: Zip code or equivalent.
+            country:
+              type: string
+              example: US
+              description: country code according to ISO 3166-1 alpha-2.
+        tags:
+          type: array
+          example:
+            - new
+            - hot
+          items:
+            type: string
+    leadsOne:
+      required:
+        - id
+      x-pii:
+        - name
+        - email
+        - first_name
+        - last_name
+      additionalproperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        prefix:
+          type: string
+        email:
+          type: string
+        title:
+          type: string
+        phone_number:
+          type: string
+        website:
+          type: string
+        company_name:
+          type: string
+        address:
+          type: object
+          properties:
+            line1:
+              oneOf:
+                - type: string
+                  example: Main street
+                  description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+                - nullable: true
+          line2:
+            type: string
+            example: Main street
+            description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+          city:
+            type: string
+            example: San Francisco
+            description: Name of city.
+          state:
+            type: string
+            example: CA
+            description: Name of state
+          postal_code:
+            type: string
+            example: "94104"
+            description: Zip code or equivalent.
+          country:
+            oneOf:
+              - type: string
+                example: US
+                description: country code according to ISO 3166-1 alpha-2.
+              - type: "null"
+        tags:
+          type: array
+          example:
+            - new
+            - hot
+          items:
+            type: string
+    leadsAll:
+      type: array
+      description: ""
+      uniqueItems: true
+      items:
+        type: object
+        required:
+          - id
+        x-pii:
+          - name
+          - email
+          - first_name
+          - last_name
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          first_name:
+            type: string
+          last_name:
+            type: string
+          prefix:
+            type: string
+          email:
+            type: string
+          title:
+            type: string
+          phone_number:
+            type: string
+          website:
+            type: string
+          company_name:
+            type: string
+          address:
+            type: object
+            properties:
+              line1:
+                type: string
+                example: Main street
+                description: Line 1 of the address e.g. number, street
+                nullable: true
+              line2:
+                type: string
+                example: Main street
+                description: "Line 2 of the address e.g. suite, apt #, etc."
+                nullable: true
+              city:
+                type: string
+                example: San Francisco
+                description: Name of city.
+                nullable: true
+              state:
+                type: string
+                example: CA
+                description: Name of state
+                nullable: true
+              postal_code:
+                type: string
+                example: "94104"
+                description: Zip code or equivalent.
+                nullable: true
+              country:
+                type: string
+                nullable: true
+                example: US
+                description: country code according to ISO 3166-1 alpha-2.
+          tags:
+            type: array
+            example:
+              - new
+              - hot
+            items:
+              type: string
+    leadsSchema:
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+        custom:
+          type: boolean
+        required:
+          type: boolean
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: token
+    ApiKey: {}
+security:
+  - BearerAuth: []

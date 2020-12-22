@@ -2,127 +2,248 @@ openapi: 3.0.0
 info:
   version: 0.0.1
   title: CRM API
-  description: placeholder_description
   contact:
     email: hello@apideck.com
     url: https://developers.apideck.com
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
+  x-logo:
+    url: https://www.apideck.com/logo.png
+  description: >
+    Welcome to the CRM API.
+
+
+    You can use the API to access all CRM endpoints.
+
+
+    ## Base URL
+
+
+    The base URL for all API requests is ```https://unify.apideck.com/crm```
+
+
+    ## Headers
+
+    Custom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.
+
+
+    | Name                  	| Type    	| Required 	| Description                                                                                                                                                    	|
+
+    |-----------------------	|---------	|----------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+
+    | x-apideck-consumer-id 	| String  	| Yes      	| The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. 	|
+
+    | x-apideck-service-id  	| String  	| No       	| Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             	|
+
+    | x-apideck-raw         	| Boolean 	| No       	| Include raw response. Mostly used for debugging purposes.                                                                                                      	|
+
+    | x-apideck-app-id      	| String  	| Yes      	| The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             	|
+
+    | Authorization         	| String  	| Yes      	| Bearer API KEY                                                                                                                                                 	|
+        
+    ## Connectors
+
+
+    Supported connectors and endpoints
+
+
+    | Service ID                                               | Status | v*         | Create      | Update | Show | List | Delete | Custom fields | Webhooks    |
+
+    | -------------------------------------------------------- | ------ | ---------- | ----------- | ------ | ---- | ---- | ------ | ------------- | ----------- |
+
+    | [Copper](https://www.copper.com/)                        | beta   | 1.0.0      | Yes         | Yes    | Yes  | Yes  | Yes    | -             | -           |
+
+    | [Close](https://close.com)                               | beta   | 1.0.0      | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | Coming soon |
+
+    | [Teamleader](https://www.teamleader.eu/)                 | beta   | 2019-01-24 | Yes (multi) | Yes    | Yes  | Yes  | Yes    | -             | -           |
+
+    | [Zoho CRM](https://www.zoho.com/crm/)                    | beta   | 2.0        | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | -           |
+
+    | [Pipedrive](https://www.pipedrive.com/)                  | beta   | 1.0.0      | Yes (multi) | Yes    | Yes  | Yes  | Yes    | No            | -           |
+
+    | [HubSpot](https://www.hubspot.com/)                      | beta   | 1.0.0      | Yes         | Yes    | Yes  | Yes  | Yes    | -             | -           |
+
+    | [Salesforce](https://www.salesforce.com)                 | beta   | v39.0      | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | -           |
+
+    | [ActiveCampaign](https://www.activecampaign.com/)        | beta   | 3          | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | -           |
+
+    | [Zendesk Sell](https://www.zendesk.com/sell/)            | beta   | 2.0        | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | -           |
+
+    | [Salesflare](https://salesflare.com)                     | beta   | 1.0.0      | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | Coming soon |
+
+    | [Freshsales](https://www.freshworks.com/freshsales-crm/) | beta   | 0.1.0      | Yes         | Yes    | Yes  | Yes  | Yes    | Coming soon   | Coming soon |
+
+
+    latest supported API version*
+
+
+    ## GraphQL
+
+
+    Use the [GraphQL playground](https://unify.apideck.com/graphql) to test out the GraphQL API. 
+
+
+    ## SDKs and API Clients
+
+
+    Upcoming. [Request the SDK of your choice](https://integrations.apideck.com/request).
+
+
+    ## Debugging
+
+
+    Because of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the reponse size and can introduce extra latency.
+
+
+    ## Errors
+
+
+    The API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customised error message inside the JSON response. You can see the returned HTTP status codes below.
+
+
+    | Code               	| Title          	| Description                                                                                                                                                            	|
+
+    |--------------------	|----------------	|------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+
+    | 200                	| OK             	| Request successful.                                                                                                                                                    	|
+
+    | 201                	| Created        	| Resource successfully created.                                                                                                                                         	|
+
+    | 204                	| No Content     	| Request successful with no content returned.                                                                                                                           	|
+
+    | 400                	| Bad Request    	| Request was unacceptable. Double check the documentation to make sure you provided the correct parameters. In most cases the response will contain more info to debug. 	|
+
+    | 401                	| Unauthorised   	| The provided API key is invalid.                                                                                                                                       	|
+
+    | 402                	| Request Failed 	| Valid parameters but the request failed.                                                                                                                               	|
+
+    | 404                	| Not Found      	| Resource does not exist.                                                                                                                                               	|
+
+    | 409                	| Duplicate      	| Resource already exists.                                                                                                                                               	|
+
+    | 500, 502, 503, 504 	| Server Errors  	| Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                           	|
+
+
+    ### Handling errors
+
+
+    The Unify API and SDKs can produce errors for many reasons, such as a failed requests due to unconfigured integrations, invalid parameters, authentication errors, and network unavailability.
+
+
+    ## Postman
+
+
+    If you are working with APIs, you are probably already familiar with Postman, a development tool that enables you to configure and run API requests.
+
+
+    We have preconfigured Postman collection that you can download. You will have to configure some environment variables to customize the requests. For more information on this, refer to Using this API with our Postman Collections.
+
+
+    ## API Design
+
+
+    ### API Styles and data formats
+
+
+    #### REST API
+
+
+    The API is organised around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.
+
+
+    ##### Available HTTP methods
+
+
+    The Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter _method.
+
+
+    ```
+
+    POST /messages
+
+    GET /messages
+
+    GET /messages/{messageId}
+
+    PATCH /messages/{messageId}
+
+    DELETE /messages/{messageId}
+
+    ```
+
+
+    Response bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.
+
+
+    ### Schema
+
+
+    All API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.
+
+
+    ### Meta
+
+
+    Meta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.
+
+
+    ### Idempotence
+
+
+    To prevent the creation of duplicate resources, every POST method (such as one that creates a consumer record) must specify a unique value for the  X-Unique-Transaction-ID header name. Uniquely identifying each unique POST request ensures that the Open Platform API processes a given request once and only once.
+
+
+    Uniquely identifying new resource-creation POSTs is especially important when the outcome of a response is ambiguous because of a transient service interruption, such as a server-side timeout or network disruption. If a service interruption occurs, then the client application can safely retry the uniquely identified request without creating duplicate operations. (API endpoints that guarantee that every uniquely identified request is processed only once no matter how many times that uniquely identifiable request is made are described as idempotent.)
+
+
+    ### Request IDs
+
+
+    Each API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
+
+
+    ### Fixed field types
+
+
+    #### Dates
+
+
+    The dates returned by the API are all represented in Unix time in seconds.
+
+
+    Where possible dates will be returned in UTC. In the event a PMS doesn't specify a timezone dates will be returned as they are received which is normally the timezone of the hotel.
+
+
+    Where dates are passed in as query parameters they should be in the form YYYY-MM-DD.
+
+
+    #### Prices and Currencies
+
+
+    All prices returned by the API are represented as integer amounts in a currency’s smallest unit. For example, $5 USD would be returned as 500 (i.e, 500 cents).
+
+
+    For zero-decimal currencies, amounts will still be provided as an integer but without the need to divide by 100. For example, an amount of ¥5 (JPY) would be returned as 5.
+
+
+    All currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+
+
+    ## Support
+
+
+    If you have problems or need help with your case, you can always reach out to our Support.
 servers:
   - url: https://unify.apideck.com/crm
 tags:
-  - name: Opportunities
   - name: Companies
     description: ""
+  - name: Opportunities
+    description: ""
+  - name: Leads
+    description: ""
 paths:
-  /opportunities:
-    get:
-      tags:
-        - Opportunities
-      summary: List opportunities
-      operationId: opportunitiesAll
-      description: ""
-      parameters:
-        - $ref: "#/components/parameters/raw"
-        - $ref: "#/components/parameters/x-apideck-consumer-id"
-        - $ref: "#/components/parameters/x-apideck-app-id"
-        - $ref: "#/components/parameters/x-apideck-service-id"
-        - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/per_page"
-      security:
-        - Bearer: []
-      responses:
-        "200":
-          description: opportunities
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/opportunitiesAll"
-    post:
-      tags:
-        - Opportunities
-      summary: Create opportunity
-      operationId: opportunitiesAdd
-      description: ""
-      parameters:
-        - $ref: "#/components/parameters/raw"
-        - $ref: "#/components/parameters/x-apideck-consumer-id"
-        - $ref: "#/components/parameters/x-apideck-app-id"
-        - $ref: "#/components/parameters/x-apideck-service-id"
-      security:
-        - Bearer: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/opportunitiesAdd"
-      responses:
-        "201":
-          $ref: "#/components/responses/Created"
-  "/opportunities/{id}":
-    get:
-      tags:
-        - Opportunities
-      summary: Get opportunity
-      operationId: opportunitiesOne
-      description: ""
-      parameters:
-        - $ref: "#/components/parameters/raw"
-        - $ref: "#/components/parameters/x-apideck-consumer-id"
-        - $ref: "#/components/parameters/x-apideck-app-id"
-        - $ref: "#/components/parameters/x-apideck-service-id"
-        - $ref: "#/components/parameters/id"
-      security:
-        - Bearer: []
-      responses:
-        "200":
-          description: opportunities
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/opportunitiesOne"
-    patch:
-      tags:
-        - Opportunities
-      summary: Update opportunity
-      operationId: opportunitiesUpdate
-      description: ""
-      parameters:
-        - $ref: "#/components/parameters/raw"
-        - $ref: "#/components/parameters/x-apideck-consumer-id"
-        - $ref: "#/components/parameters/x-apideck-app-id"
-        - $ref: "#/components/parameters/x-apideck-service-id"
-        - $ref: "#/components/parameters/id"
-      security:
-        - Bearer: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/opportunitiesUpdate"
-      responses:
-        "200":
-          $ref: "#/components/responses/Updated"
-    delete:
-      tags:
-        - Opportunities
-      summary: Delete opportunity
-      operationId: opportunitiesDelete
-      description: ""
-      parameters:
-        - $ref: "#/components/parameters/raw"
-        - $ref: "#/components/parameters/x-apideck-consumer-id"
-        - $ref: "#/components/parameters/x-apideck-app-id"
-        - $ref: "#/components/parameters/x-apideck-service-id"
-        - $ref: "#/components/parameters/id"
-      security:
-        - Bearer: []
-      responses:
-        "200":
-          $ref: "#/components/responses/Deleted"
   /companies:
     get:
       tags:
@@ -145,7 +266,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/companiesAll"
+                $ref: "#/components/schemas/companies"
     post:
       tags:
         - Companies
@@ -167,7 +288,11 @@ paths:
               $ref: "#/components/schemas/companiesAdd"
       responses:
         "201":
-          $ref: "#/components/responses/Created"
+          description: Company created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/companiesAddResponse"
   "/companies/{id}":
     get:
       tags:
@@ -189,7 +314,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/companiesOne"
+                $ref: "#/components/schemas/company"
     patch:
       tags:
         - Companies
@@ -212,12 +337,246 @@ paths:
               $ref: "#/components/schemas/companiesUpdate"
       responses:
         "200":
-          $ref: "#/components/responses/Updated"
+          description: Company updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/companiesUpdateResponse"
     delete:
       tags:
         - Companies
       summary: Delete company
       operationId: companiesDelete
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+        - $ref: "#/components/parameters/id"
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          $ref: "#/components/responses/Deleted"
+  /opportunities:
+    get:
+      tags:
+        - Opportunities
+      summary: List opportunities
+      operationId: opportunitiesAll
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: opportunities
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/opportunities"
+    post:
+      tags:
+        - Opportunities
+      summary: Create opportunity
+      operationId: opportunitiesAdd
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/opportunitiesAdd"
+      responses:
+        "201":
+          description: Opportunity created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/opportunitiesAddResponse"
+  "/opportunities/{id}":
+    get:
+      tags:
+        - Opportunities
+      summary: Get opportunity
+      operationId: opportunitiesOne
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+        - $ref: "#/components/parameters/id"
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: opportunities
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/opportunity"
+    patch:
+      tags:
+        - Opportunities
+      summary: Update opportunity
+      operationId: opportunitiesUpdate
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+        - $ref: "#/components/parameters/id"
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/opportunitiesUpdate"
+      responses:
+        "200":
+          description: Opportunity updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/opportunitiesUpdateResponse"
+    delete:
+      tags:
+        - Opportunities
+      summary: Delete opportunity
+      operationId: opportunitiesDelete
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+        - $ref: "#/components/parameters/id"
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          $ref: "#/components/responses/Deleted"
+  /leads:
+    get:
+      tags:
+        - Leads
+      summary: List leads
+      operationId: leadsAll
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: leads
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/leads"
+    post:
+      tags:
+        - Leads
+      summary: Create lead
+      operationId: leadsAdd
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/leadsAdd"
+      responses:
+        "201":
+          description: Lead created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/leadsAddResponse"
+  "/leads/{id}":
+    get:
+      tags:
+        - Leads
+      summary: Get lead
+      operationId: leadsOne
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+        - $ref: "#/components/parameters/id"
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: leads
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/lead"
+    patch:
+      tags:
+        - Leads
+      summary: Update lead
+      operationId: leadsUpdate
+      description: ""
+      parameters:
+        - $ref: "#/components/parameters/raw"
+        - $ref: "#/components/parameters/x-apideck-consumer-id"
+        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: "#/components/parameters/x-apideck-service-id"
+        - $ref: "#/components/parameters/id"
+      security:
+        - Bearer: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/leadsUpdate"
+      responses:
+        "200":
+          description: Lead updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/leadsUpdateResponse"
+    delete:
+      tags:
+        - Leads
+      summary: Delete lead
+      operationId: leadsDelete
       description: ""
       parameters:
         - $ref: "#/components/parameters/raw"
@@ -316,453 +675,22 @@ components:
         - zoho-crm
         - freshsales
       example: pipedrive
-    opportunitiesOne:
+    company:
       type: object
       required:
         - id
-        - title
-        - primary_contact_id
-      properties:
-        id:
-          type: string
-          example: "12345"
-          readOnly: true
-        title:
-          type: string
-          example: New Rocket
-        description:
-          type: string
-          minLength: 1
-          example: Opportunities are created for People and Companies that are interested
-            in buying your products or services. Create Opportunities for People
-            and Companies to move them through one of your Pipelines.
-        monetary_amount:
-          type: number
-          example: 75000
-        currency:
-          type: string
-          example: USD
-        win_probability:
-          type: number
-          example: 40
-          nullable: true
-        close_date:
-          type: string
-          minLength: 1
-          example: 10/7/2020
-          nullable: true
-        loss_reason_id:
-          type: string
-          example: "12345"
-          nullable: true
-        pipeline_id:
-          type: string
-          example: "782261"
-        pipeline_stage_id:
-          type: string
-          example: "3665451"
-        primary_contact_id:
-          type: string
-          example: "109639656"
-        lead_id:
-          type: string
-          example: "12345"
-          nullable: true
-        contact_id:
-          type: string
-          example: "12345"
-          nullable: true
-        company_id:
-          type: string
-          example: "49362140"
-        company_name:
-          type: string
-          example: Copper
-        owner_id:
-          type: string
-          example: "877655"
-        priority:
-          type: string
-          minLength: 1
-          example: None
-        status:
-          type: string
-          minLength: 1
-          example: Open
-        tags:
-          type: array
-          items:
-            type: string
-          example:
-            - ""
-        interaction_count:
-          type: number
-          example: 0
-          readOnly: true
-        custom_fields:
-          type: array
-          items:
-            type: object
-            required:
-              - id
-            additionalProperties: false
-            properties:
-              id:
-                type: string
-                example: custom_technologies
-              value:
-                type: string
-                example: Uses Salesforce and Marketo
-                nullable: true
-          example:
-            - id: "1111"
-              value: null
-        date_stage_changed:
-          type: number
-          example: 1601451803
-        date_last_contacted:
-          ? example
-        leads_converted_from:
-          type: array
-          items:
-            type: string
-          example:
-            - ""
-        date_lead_created:
-          ? example
-        updated_at:
-          type: string
-          example: 2020-09-30T07:43:32.000Z
-          readOnly: true
-        created_at:
-          type: string
-          example: 2020-09-30T07:43:32.000Z
-          readOnly: true
-    opportunitiesAll:
-      type: array
-      description: ""
-      minItems: 0
-      items:
-        type: object
-        required:
-          - id
-          - title
-          - primary_contact_id
-        properties:
-          id:
-            type: string
-            example: "12345"
-            readOnly: true
-          title:
-            type: string
-            example: New Rocket
-          description:
-            type: string
-            minLength: 1
-            example: Opportunities are created for People and Companies that are interested
-              in buying your products or services. Create Opportunities for
-              People and Companies to move them through one of your Pipelines.
-          monetary_amount:
-            type: number
-            example: 75000
-          currency:
-            type: string
-            example: USD
-          win_probability:
-            type: number
-            example: 40
-            nullable: true
-          close_date:
-            type: string
-            minLength: 1
-            example: 10/7/2020
-            nullable: true
-          loss_reason_id:
-            type: string
-            example: "12345"
-            nullable: true
-          pipeline_id:
-            type: string
-            example: "782261"
-          pipeline_stage_id:
-            type: string
-            example: "3665451"
-          primary_contact_id:
-            type: string
-            example: "109639656"
-          lead_id:
-            type: string
-            example: "12345"
-            nullable: true
-          contact_id:
-            type: string
-            example: "12345"
-            nullable: true
-          company_id:
-            type: string
-            example: "49362140"
-          company_name:
-            type: string
-            example: Copper
-          owner_id:
-            type: string
-            example: "877655"
-          priority:
-            type: string
-            minLength: 1
-            example: None
-          status:
-            type: string
-            minLength: 1
-            example: Open
-          tags:
-            type: array
-            items:
-              type: string
-            example:
-              - ""
-          interaction_count:
-            type: number
-            example: 0
-            readOnly: true
-          custom_fields:
-            type: array
-            items:
-              $ref: "#/components/schemas/opportunitiesOne/properties/custom_fields/items"
-            example:
-              - id: "1111"
-                value: null
-          date_stage_changed:
-            type: number
-            example: 1601451803
-          date_last_contacted:
-            ? example
-          leads_converted_from:
-            type: array
-            items:
-              type: string
-            example:
-              - ""
-          date_lead_created:
-            ? example
-          updated_at:
-            type: string
-            example: 2020-09-30T07:43:32.000Z
-            readOnly: true
-          created_at:
-            type: string
-            example: 2020-09-30T07:43:32.000Z
-            readOnly: true
-    opportunitiesAdd:
-      type: object
-      required:
-        - title
-        - primary_contact_id
-      properties:
-        title:
-          type: string
-          example: New Rocket
-        description:
-          type: string
-          minLength: 1
-          example: Opportunities are created for People and Companies that are interested
-            in buying your products or services. Create Opportunities for People
-            and Companies to move them through one of your Pipelines.
-        monetary_amount:
-          type: number
-          example: 75000
-        currency:
-          type: string
-          example: USD
-        win_probability:
-          type: number
-          example: 40
-          nullable: true
-        close_date:
-          type: string
-          minLength: 1
-          example: 10/7/2020
-          nullable: true
-        loss_reason_id:
-          type: string
-          example: "12345"
-          nullable: true
-        pipeline_id:
-          type: string
-          example: "782261"
-        pipeline_stage_id:
-          type: string
-          example: "3665451"
-        primary_contact_id:
-          type: string
-          example: "109639656"
-        lead_id:
-          type: string
-          example: "12345"
-          nullable: true
-        contact_id:
-          type: string
-          example: "12345"
-          nullable: true
-        company_id:
-          type: string
-          example: "49362140"
-        company_name:
-          type: string
-          example: Copper
-        owner_id:
-          type: string
-          example: "877655"
-        priority:
-          type: string
-          minLength: 1
-          example: None
-        status:
-          type: string
-          minLength: 1
-          example: Open
-        tags:
-          type: array
-          items:
-            type: string
-          example:
-            - ""
-        interaction_count:
-          type: number
-          example: 0
-          readOnly: true
-        custom_fields:
-          type: array
-          items:
-            $ref: "#/components/schemas/opportunitiesOne/properties/custom_fields/items"
-          example:
-            - id: "1111"
-              value: null
-        date_stage_changed:
-          type: number
-          example: 1601451803
-        date_last_contacted:
-          ? example
-        leads_converted_from:
-          type: array
-          items:
-            type: string
-          example:
-            - ""
-        date_lead_created:
-          ? example
-    opportunitiesUpdate:
-      type: object
-      required:
-        - title
-        - primary_contact_id
-      properties:
-        title:
-          type: string
-          example: New Rocket
-        description:
-          type: string
-          minLength: 1
-          example: Opportunities are created for People and Companies that are interested
-            in buying your products or services. Create Opportunities for People
-            and Companies to move them through one of your Pipelines.
-        monetary_amount:
-          type: number
-          example: 75000
-        currency:
-          type: string
-          example: USD
-        win_probability:
-          type: number
-          example: 40
-          nullable: true
-        close_date:
-          type: string
-          minLength: 1
-          example: 10/7/2020
-          nullable: true
-        loss_reason_id:
-          type: string
-          example: "12345"
-          nullable: true
-        pipeline_id:
-          type: string
-          example: "782261"
-        pipeline_stage_id:
-          type: string
-          example: "3665451"
-        primary_contact_id:
-          type: string
-          example: "109639656"
-        lead_id:
-          type: string
-          example: "12345"
-          nullable: true
-        contact_id:
-          type: string
-          example: "12345"
-          nullable: true
-        company_id:
-          type: string
-          example: "49362140"
-        company_name:
-          type: string
-          example: Copper
-        owner_id:
-          type: string
-          example: "877655"
-        priority:
-          type: string
-          minLength: 1
-          example: None
-        status:
-          type: string
-          minLength: 1
-          example: Open
-        tags:
-          type: array
-          items:
-            type: string
-          example:
-            - ""
-        interaction_count:
-          type: number
-          example: 0
-          readOnly: true
-        custom_fields:
-          type: array
-          items:
-            $ref: "#/components/schemas/opportunitiesOne/properties/custom_fields/items"
-          example:
-            - id: "1111"
-              value: null
-        date_stage_changed:
-          type: number
-          example: 1601451803
-        date_last_contacted:
-          ? example
-        leads_converted_from:
-          type: array
-          items:
-            type: string
-          example:
-            - ""
-        date_lead_created:
-          ? example
-    companiesOne:
-      type: object
-      required:
-        - id
+        - name
       properties:
         id:
           type: string
           readOnly: true
+          example: "12345"
         name:
           type: string
+          example: Copper
         owner_id:
           type: string
-        website:
-          type: string
+          example: "12345"
         websites:
           type: array
           items:
@@ -780,6 +708,16 @@ components:
           type: string
         description:
           type: string
+          example: A crm that works for you, so you can spend time on relationships
+            instead of data.
+        tags:
+          type: array
+          items:
+            type: string
+          example:
+            - sample
+        interation_count:
+          type: integer
         addresses:
           type: array
           items:
@@ -801,10 +739,11 @@ components:
                 type: string
                 example: Main street
                 description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+                nullable: true
               line2:
                 type: string
-                example: Main street
-                description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+                example: "apt #"
+                description: Line 2 of the address
                 nullable: true
               city:
                 type: string
@@ -848,6 +787,15 @@ components:
                   - linkedin
                   - other
                 example: twitter
+          example:
+            - url: https://twitter.com/dmsocialmedia
+              category: twitter
+            - url: https://youtube.com/user/nbc
+              category: youtube
+            - url: https://foursquare.com/user/61118832
+              category: foursquare
+            - url: http://www.pinterest.com/nbctv/
+              category: other
         phone_numbers:
           type: array
           items:
@@ -864,95 +812,29 @@ components:
                   - home
                   - fax
                   - other
-        tags:
-          type: array
-          items:
-            type: string
-          example:
-            - Retail
-            - EMEA
-        interation_count:
-          type: integer
         custom_fields:
           type: array
           items:
-            $ref: "#/components/schemas/opportunitiesOne/properties/custom_fields/items"
+            type: object
+            required:
+              - id
+            additionalProperties: false
+            properties:
+              id:
+                type: string
+                example: custom_technologies
+              value:
+                type: string
+                example: Uses Salesforce and Marketo
+                nullable: true
         updated_at:
           type: string
-          example: 2017-08-12T20:43:21.291Z
+          example: 2020-09-30T07:43:32.000Z
           readOnly: true
         created_at:
           type: string
-          example: 2017-08-12T20:43:21.291Z
+          example: 2020-09-30T07:43:32.000Z
           readOnly: true
-    companiesAll:
-      type: array
-      description: ""
-      minItems: 0
-      items:
-        type: object
-        required:
-          - id
-        properties:
-          id:
-            type: string
-            readOnly: true
-          name:
-            type: string
-          owner_id:
-            type: string
-          website:
-            type: string
-          websites:
-            type: array
-            items:
-              type: object
-              required:
-                - url
-              properties:
-                url:
-                  type: string
-                category:
-                  type: string
-          email:
-            type: string
-          image_url:
-            type: string
-          description:
-            type: string
-          addresses:
-            type: array
-            items:
-              $ref: "#/components/schemas/companiesOne/properties/addresses/items"
-          social_links:
-            type: array
-            items:
-              $ref: "#/components/schemas/companiesOne/properties/social_links/items"
-          phone_numbers:
-            type: array
-            items:
-              $ref: "#/components/schemas/companiesOne/properties/phone_numbers/items"
-          tags:
-            type: array
-            items:
-              type: string
-            example:
-              - Retail
-              - EMEA
-          interation_count:
-            type: integer
-          custom_fields:
-            type: array
-            items:
-              $ref: "#/components/schemas/opportunitiesOne/properties/custom_fields/items"
-          updated_at:
-            type: string
-            example: 2017-08-12T20:43:21.291Z
-            readOnly: true
-          created_at:
-            type: string
-            example: 2017-08-12T20:43:21.291Z
-            readOnly: true
     companiesAdd:
       type: object
       required:
@@ -960,10 +842,10 @@ components:
       properties:
         name:
           type: string
+          example: Copper
         owner_id:
           type: string
-        website:
-          type: string
+          example: "12345"
         websites:
           type: array
           items:
@@ -981,31 +863,30 @@ components:
           type: string
         description:
           type: string
-        addresses:
-          type: array
-          items:
-            $ref: "#/components/schemas/companiesOne/properties/addresses/items"
-        social_links:
-          type: array
-          items:
-            $ref: "#/components/schemas/companiesOne/properties/social_links/items"
-        phone_numbers:
-          type: array
-          items:
-            $ref: "#/components/schemas/companiesOne/properties/phone_numbers/items"
+          example: A crm that works for you, so you can spend time on relationships
+            instead of data.
         tags:
           type: array
           items:
             type: string
           example:
-            - Retail
-            - EMEA
+            - sample
         interation_count:
           type: integer
+        addresses:
+          $ref: "#/components/schemas/company/properties/addresses"
+        social_links:
+          $ref: "#/components/schemas/company/properties/social_links"
+        phone_numbers:
+          $ref: "#/components/schemas/company/properties/phone_numbers"
         custom_fields:
-          type: array
-          items:
-            $ref: "#/components/schemas/opportunitiesOne/properties/custom_fields/items"
+          $ref: "#/components/schemas/company/properties/custom_fields"
+    companiesAddResponse:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: "12345"
     companiesUpdate:
       type: object
       required:
@@ -1013,10 +894,10 @@ components:
       properties:
         name:
           type: string
+          example: Copper
         owner_id:
           type: string
-        website:
-          type: string
+          example: "12345"
         websites:
           type: array
           items:
@@ -1034,35 +915,599 @@ components:
           type: string
         description:
           type: string
-        addresses:
-          type: array
-          items:
-            $ref: "#/components/schemas/companiesOne/properties/addresses/items"
-        social_links:
-          type: array
-          items:
-            $ref: "#/components/schemas/companiesOne/properties/social_links/items"
-        phone_numbers:
-          type: array
-          items:
-            $ref: "#/components/schemas/companiesOne/properties/phone_numbers/items"
+          example: A crm that works for you, so you can spend time on relationships
+            instead of data.
         tags:
           type: array
           items:
             type: string
           example:
-            - Retail
-            - EMEA
+            - sample
         interation_count:
           type: integer
+        addresses:
+          $ref: "#/components/schemas/company/properties/addresses"
+        social_links:
+          $ref: "#/components/schemas/company/properties/social_links"
+        phone_numbers:
+          $ref: "#/components/schemas/company/properties/phone_numbers"
+        custom_fields:
+          $ref: "#/components/schemas/company/properties/custom_fields"
+    companiesUpdateResponse:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: "12345"
+    companies:
+      type: array
+      description: ""
+      minItems: 0
+      items:
+        $ref: "#/components/schemas/company"
+    opportunity:
+      type: object
+      required:
+        - id
+        - title
+        - primary_contact_id
+      properties:
+        id:
+          type: string
+          example: "12345"
+          readOnly: true
+        title:
+          type: string
+          example: 25 Office Chairs (Sample - Try me!)
+        description:
+          type: string
+          minLength: 1
+          example: Opportunities are created for People and Companies that are interested
+            in buying your products or services. Create Opportunities for People
+            and Companies to move them through one of your Pipelines.
+        monetary_amount:
+          type: number
+          example: 75000
+        currency:
+          type: string
+          example: USD
+        win_probability:
+          type: number
+          example: 40
+          nullable: true
+        close_date:
+          type: string
+          minLength: 1
+          example: 10/7/2020
+          nullable: true
+        loss_reason_id:
+          type: string
+          example: "12345"
+          nullable: true
+        pipeline_id:
+          type: string
+          example: "12345"
+        pipeline_stage_id:
+          type: string
+          example: "12345"
+        primary_contact_id:
+          type: string
+          example: "12345"
+        lead_id:
+          type: string
+          example: "12345"
+          nullable: true
+        contact_id:
+          type: string
+          example: "12345"
+          nullable: true
+        company_id:
+          type: string
+          example: "12345"
+        company_name:
+          type: string
+          example: Copper
+        owner_id:
+          type: string
+          example: "12345"
+        priority:
+          type: string
+          minLength: 1
+          example: None
+        status:
+          type: string
+          minLength: 1
+          example: Open
+        tags:
+          type: array
+          items:
+            type: string
+          example:
+            - sample
+        interaction_count:
+          type: number
+          example: 0
+          readOnly: true
+        custom_fields:
+          $ref: "#/components/schemas/company/properties/custom_fields"
+        date_stage_changed:
+          type: number
+          example: 1601451803
+        date_last_contacted:
+          ? example
+        leads_converted_from:
+          type: array
+          items:
+            type: string
+          example: []
+        date_lead_created:
+          ? example
+        updated_at:
+          type: string
+          example: 2020-09-30T07:43:32.000Z
+          readOnly: true
+        created_at:
+          type: string
+          example: 2020-09-30T07:43:32.000Z
+          readOnly: true
+    opportunitiesAdd:
+      type: object
+      required:
+        - title
+        - primary_contact_id
+      properties:
+        title:
+          type: string
+          example: 25 Office Chairs (Sample - Try me!)
+        description:
+          type: string
+          minLength: 1
+          example: Opportunities are created for People and Companies that are interested
+            in buying your products or services. Create Opportunities for People
+            and Companies to move them through one of your Pipelines.
+        monetary_amount:
+          type: number
+          example: 75000
+        currency:
+          type: string
+          example: USD
+        win_probability:
+          type: number
+          example: 40
+          nullable: true
+        close_date:
+          type: string
+          minLength: 1
+          example: 10/7/2020
+          nullable: true
+        loss_reason_id:
+          type: string
+          example: "12345"
+          nullable: true
+        pipeline_id:
+          type: string
+          example: "782261"
+        pipeline_stage_id:
+          type: string
+          example: "3665451"
+        primary_contact_id:
+          type: string
+          example: "109639656"
+        lead_id:
+          type: string
+          example: "12345"
+          nullable: true
+        contact_id:
+          type: string
+          example: "12345"
+          nullable: true
+        company_id:
+          type: string
+          example: "49362140"
+        company_name:
+          type: string
+          example: Copper
+        owner_id:
+          type: string
+          example: "877655"
+        priority:
+          type: string
+          minLength: 1
+          example: None
+        status:
+          type: string
+          minLength: 1
+          example: Open
+        tags:
+          type: array
+          items:
+            type: string
+          example:
+            - sample
+        interaction_count:
+          type: number
+          example: 0
+          readOnly: true
+        custom_fields:
+          $ref: "#/components/schemas/company/properties/custom_fields"
+        date_stage_changed:
+          type: number
+          example: 1601451803
+        date_last_contacted:
+          ? example
+        leads_converted_from:
+          type: array
+          items:
+            type: string
+          example: []
+        date_lead_created:
+          ? example
+    opportunitiesAddResponse:
+      properties:
+        id:
+          type: string
+          example: "12345"
+          readOnly: true
+    opportunitiesUpdate:
+      type: object
+      required:
+        - title
+        - primary_contact_id
+      properties:
+        title:
+          type: string
+          example: 25 Office Chairs (Sample - Try me!)
+        description:
+          type: string
+          minLength: 1
+          example: Opportunities are created for People and Companies that are interested
+            in buying your products or services. Create Opportunities for People
+            and Companies to move them through one of your Pipelines.
+        monetary_amount:
+          type: number
+          example: 75000
+        currency:
+          type: string
+          example: USD
+        win_probability:
+          type: number
+          example: 40
+          nullable: true
+        close_date:
+          type: string
+          minLength: 1
+          example: 10/7/2020
+          nullable: true
+        loss_reason_id:
+          type: string
+          example: "12345"
+          nullable: true
+        pipeline_id:
+          type: string
+          example: "782261"
+        pipeline_stage_id:
+          type: string
+          example: "3665451"
+        primary_contact_id:
+          type: string
+          example: "109639656"
+        lead_id:
+          type: string
+          example: "12345"
+          nullable: true
+        contact_id:
+          type: string
+          example: "12345"
+          nullable: true
+        company_id:
+          type: string
+          example: "49362140"
+        company_name:
+          type: string
+          example: Copper
+        owner_id:
+          type: string
+          example: "877655"
+        priority:
+          type: string
+          minLength: 1
+          example: None
+        status:
+          type: string
+          minLength: 1
+          example: Open
+        tags:
+          type: array
+          items:
+            type: string
+          example:
+            - sample
+        interaction_count:
+          type: number
+          example: 0
+          readOnly: true
+        custom_fields:
+          $ref: "#/components/schemas/company/properties/custom_fields"
+        date_stage_changed:
+          type: number
+          example: 1601451803
+        date_last_contacted:
+          ? example
+        leads_converted_from:
+          type: array
+          items:
+            type: string
+          example: []
+        date_lead_created:
+          ? example
+    opportunitiesUpdateResponse:
+      properties:
+        id:
+          type: string
+          example: "12345"
+          readOnly: true
+    opportunities:
+      type: array
+      description: ""
+      minItems: 0
+      items:
+        $ref: "#/components/schemas/opportunity"
+    lead:
+      required:
+        - id
+      x-pii:
+        - name
+        - email
+        - first_name
+        - last_name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+        email:
+          type: string
+        title:
+          type: string
+        phone_number:
+          type: string
+          nullable: true
+        website:
+          type: string
+        company_name:
+          type: string
+        address:
+          type: object
+          properties:
+            line1:
+              type: string
+              example: Main street
+              description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+              nullable: true
+            line2:
+              type: string
+              example: Main street
+              description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+            city:
+              type: string
+              example: San Francisco
+              description: Name of city.
+            state:
+              type: string
+              example: CA
+              description: Name of state
+            postal_code:
+              type: string
+              example: "94104"
+              description: Zip code or equivalent.
+            country:
+              type: string
+              example: US
+              description: country code according to ISO 3166-1 alpha-2.
+              nullable: true
+        tags:
+          type: array
+          example:
+            - new
+            - hot
+          items:
+            type: string
+    leadsAdd:
+      required:
+        - name
+        - company_name
+      x-pii:
+        - name
+        - email
+        - phone_number
+      properties:
+        name:
+          type: string
+          example: Elon Musk
+        prefix:
+          type: string
+          example: Duke
+        email:
+          type: string
+          example: elon@spacex.com
+        title:
+          type: string
+          example: CEO
+        phone_number:
+          type: string
+          example: +444 111 222 333
+          nullable: true
+        website:
+          type: string
+          example: https://www.spacex.com
+        company_name:
+          type: string
+          example: SpaceX
+        status:
+          type: string
+          example: open
+        lead_source:
+          type: string
+          example: website
+        note:
+          type: string
+          example: Eager to buy more rockets.
+        address:
+          type: object
+          properties:
+            line1:
+              type: string
+              example: Main street
+              description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+            city:
+              type: string
+              example: San Francisco
+              description: Name of city.
+            line2:
+              type: string
+              example: Bus 100
+              description: "Line 2 of the address e.g. number, street, suite, apt #, etc."
+            state:
+              type: string
+              example: CA
+              description: Name of state
+            postal_code:
+              type: string
+              example: "94104"
+              description: Zip code or equivalent.
+            country:
+              type: string
+              example: US
+              description: country code according to ISO 3166-1 alpha-2.
         custom_fields:
           type: array
           items:
-            $ref: "#/components/schemas/opportunitiesOne/properties/custom_fields/items"
+            type: object
+            properties:
+              id:
+                type: string
+                example: custom_technologies
+              value:
+                type: string
+                example: Uses Salesforce and Marketo
+        tags:
+          type: array
+          example:
+            - new
+            - hot
+          items:
+            type: string
+    leadsAddResponse:
+      properties:
+        id:
+          type: string
+    leadsUpdate:
+      required:
+        - name
+        - company_name
+      x-pii:
+        - name
+        - email
+        - phone_number
+      properties:
+        name:
+          type: string
+          example: Elon Musk
+        prefix:
+          type: string
+          example: Duke
+        email:
+          type: string
+          example: elon@spacex.com
+        title:
+          type: string
+          example: CEO
+        phone_number:
+          type: string
+          example: +444 111 222 333
+          nullable: true
+        website:
+          type: string
+          example: https://www.spacex.com
+        company_name:
+          type: string
+          example: SpaceX
+        status:
+          type: string
+          example: open
+        lead_source:
+          type: string
+          example: website
+        note:
+          type: string
+          example: Eager to buy more rockets.
+        address:
+          type: object
+          properties:
+            line1:
+              type: string
+              example: Main street
+              description: "Line 1 of the address e.g. number, street, suite, apt #, etc."
+            city:
+              type: string
+              example: San Francisco
+              description: Name of city.
+            line2:
+              type: string
+              example: Bus 100
+              description: "Line 2 of the address e.g. number, street, suite, apt #, etc."
+            state:
+              type: string
+              example: CA
+              description: Name of state
+            postal_code:
+              type: string
+              example: "94104"
+              description: Zip code or equivalent.
+            country:
+              type: string
+              example: US
+              description: country code according to ISO 3166-1 alpha-2.
+        custom_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: custom_technologies
+              value:
+                type: string
+                example: Uses Salesforce and Marketo
+        tags:
+          type: array
+          example:
+            - new
+            - hot
+          items:
+            type: string
+    leadsUpdateResponse:
+      properties:
+        id:
+          type: string
+    leads:
+      type: array
+      description: ""
+      minItems: 0
+      items:
+        $ref: "#/components/schemas/lead"
   securitySchemes:
     Bearer:
       type: http
       scheme: bearer
-      bearerFormat: JWT
+      description: |
+        placeholder_description
 security:
   - Bearer: []

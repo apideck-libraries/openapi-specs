@@ -188,10 +188,10 @@ info:
     Meta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.
 
 
-    ### Idempotence
+    ### Idempotence (upcoming)
 
 
-    To prevent the creation of duplicate resources, every POST method (such as one that creates a consumer record) must specify a unique value for the  X-Unique-Transaction-ID header name. Uniquely identifying each unique POST request ensures that the Open Platform API processes a given request once and only once.
+    To prevent the creation of duplicate resources, every POST method (such as one that creates a consumer record) must specify a unique value for the  X-Unique-Transaction-ID header name. Uniquely identifying each unique POST request ensures that the API processes a given request once and only once.
 
 
     Uniquely identifying new resource-creation POSTs is especially important when the outcome of a response is ambiguous because of a transient service interruption, such as a server-side timeout or network disruption. If a service interruption occurs, then the client application can safely retry the uniquely identified request without creating duplicate operations. (API endpoints that guarantee that every uniquely identified request is processed only once no matter how many times that uniquely identifiable request is made are described as idempotent.)
@@ -209,13 +209,13 @@ info:
     #### Dates
 
 
-    The dates returned by the API are all represented in Unix time in seconds.
+    The dates returned by the API are all represented in UTC (ISO8601 format).
 
 
-    Where possible dates will be returned in UTC. In the event a PMS doesn't specify a timezone dates will be returned as they are received which is normally the timezone of the hotel.
+    This example ```2019-11-14T00:55:31.820Z``` is defined by the ISO 8601 standard. The T in the middle separates the year-month-day portion from the hour-minute-second portion. The Z on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The Z is pronounced "Zulu" per military/aviation tradition.
 
 
-    Where dates are passed in as query parameters they should be in the form YYYY-MM-DD.
+    The ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.
 
 
     #### Prices and Currencies
@@ -228,12 +228,6 @@ info:
 
 
     All currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-
-
-    ## Support
-
-
-    If you have problems or need help with your case, you can always reach out to our Support.
 servers:
   - url: https://unify.apideck.com/crm
 tags:

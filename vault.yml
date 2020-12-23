@@ -2,7 +2,12 @@ openapi: 3.0.0
 info:
   version: 0.1.0
   title: Vault API
-  url: https://developers.apideck.com
+  contact:
+    email: hello@apideck.com
+    url: https://developers.apideck.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
   x-logo:
     url: https://www.apideck.com/logo.png
   description: >
@@ -56,44 +61,6 @@ info:
     - Register the redirect URI for the example app (https://unify.apideck.com/vault/callback) in the list of redirect URIs under your app's settings
 
 
-    ## Migration
-
-
-    If you're already storing access tokens, we will help you migrate through our Vault Migration API.
-
-
-    ## Hosted Vault
-
-
-    Hosted Vault is a simple no-code solution, so you don't need to build your own UI to handle the integration settings and authentication. It's a great way to explore Unify without needing to build an integrations overview to get started.
-
-
-    ![Hosted Vault - Integrations portal](https://app.apideck.com/images/hosted-vault.png)
-
-
-    ### Apideck Ecosystem customers
-
-
-    Once logged in, pick your ecosystem; on the left-hand side of the screen, you'll have the option to create an application underneath the Unify section.
-
-
-    ## How to integrate Apideck Vault
-
-
-    This section covers everything you need to know to authenticate your customers through Vault.
-
-    Vault provides __three strategies__ to use API tokens from your customers:
-
-    - Vault API
-
-    - Hosted Vault
-
-    - Apideck Ecosystem *(COMING SOON)*
-
-
-    You can also opt to bypass Vault and still take care of authentication flows yourself. Make sure to put the right safeguards in place to protect your customers' tokens and other sensitive data.
-
-
     ### Vault API
 
 
@@ -117,7 +84,13 @@ info:
     ### Hosted Vault
 
 
-    The Hosted Vault implements the Vault API endpoints and handles the following features for your customers:
+    Hosted Vault is a simple no-code solution, so you don't need to build your own UI to handle the integration settings and authentication. It's a great way to explore Unify without needing to build an integrations overview to get started.
+
+
+    ![Hosted Vault - Integrations portal](https://app.apideck.com/images/hosted-vault.png)
+
+
+    Behind the scenes Hosted Vault implements the Vault API endpoints and handles the following features for your customers:
 
 
     - Add a connection (for an integration)
@@ -140,58 +113,6 @@ info:
     Our domain model contains five main entity types: Consumer (user, account, team, machine), Application, Connector, Integration, and Connection.
 
 
-    ## Sandbox
-
-
-    The sandbox is pre-loaded with data similar to a real-life integrations setup. You can use the preconfigured OAauth configured connectors for testing purposes and can skip this step by using the Apideck sandbox credentials to get you started.
-
-
-    ## Supported auth types
-
-
-    What auth strategies does Vault handle? We currently support two flows so your customers can activate an integration.
-
-
-    - OAuth 2.0
-
-    - API keys
-
-
-    ### API keys
-
-
-    For Services supporting the API key strategy, you will need to provide an in-app form where users can configure their API keys provided by the integration service. You can also use the drop-in solution if you don't want your own integration settings overview.
-
-
-    ### OAuth 2.0
-
-
-    #### Authorization Code Grant Type Flow
-
-
-    Vault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own. 
-
-
-    Certain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate. 
-
-
-    This is being handled by the ``/authorize`` endpoint.
-
-
-    ## Guides
-
-
-    - How to configure the OAuth credentials for integration providers (COMING SOON)
-
-    - How to build an integrations UI with Vault (COMING SOON)
-
-
-    ## Migration
-
-
-    Using our migration API, you can migrate the access tokens and accounts to Apideck Vault. (COMING SOON)
-
-
     ## Headers
 
     Custom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.
@@ -205,45 +126,10 @@ info:
 
     | x-apideck-consumer-id 	| String  	| Yes      	| The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. 	|
 
-    | x-apideck-service-id  	| String  	| No       	| Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             	|
-
     | x-apideck-raw         	| Boolean 	| No       	| Include raw response. Mostly used for debugging purposes.                                                                                                      	|
 
 
-    ## Getting production-ready
-
-
-    Once you've tested your application with sandbox integration data in Test mode, you're ready to get connected to a real hotel:
-
-
-    1. In the Apideck Unify Dashboard, switch to Live mode.
-
-    2. Make sure your production app uses your live API key.
-
-    3. Go to the Unified APIs section of your application in the Apideck Unify Dashboard and configure the integrations you want to connect to.
-
-    4. Before using Apideck Vault in production, you will also need to add credentials for the OAuth services your application utilizes.
-
-    5. Add Apideck to your subprocessor list and privacy policy.
-
-    5. You can now start accessing your customers integration data through Apideck Vault.
-
-
-    ## Compliance and Privacy
-
-
-    Vault employs data minimization, therefore only requesting the minimum amount of scopes needed to perform an API request.
-
-
-    ## FAQ
-
-
-    __What purpose does Vault serve? Can I just handle the authentication and access token myself?__
-
-    You can store everything yourself, but that defeats the purpose of using Apideck Unify. Handling tokens for multiple providers can quickly become very complex.
-
-
-    ## Supported connectors
+    ## Connectors
 
 
     A full list of what vendors require which auth flow:
@@ -304,12 +190,96 @@ info:
     | [journy.io]()          | journy-io          |           | available |
 
     | [Albacross]()          | albacross          |           | available |
-  contact:
-    email: hello@apideck.com
-    url: /
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+
+    ## Sandbox (upcoming)
+
+
+    The sandbox is pre-loaded with data similar to a real-life integrations setup. You can use the preconfigured OAauth configured connectors for testing purposes and can skip this step by using the Apideck sandbox credentials to get you started.
+
+
+    ## Guides
+
+
+    - How to configure the OAuth credentials for integration providers (COMING SOON)
+
+    - How to build an integrations UI with Vault (COMING SOON)
+
+
+    ## FAQ
+
+
+    __What purpose does Vault serve? Can I just handle the authentication and access token myself?__
+
+    You can store everything yourself, but that defeats the purpose of using Apideck Unify. Handling tokens for multiple providers can quickly become very complex.
+
+
+    ### Is my data secure?
+
+
+    Vault employs data minimization, therefore only requesting the minimum amount of scopes needed to perform an API request.
+
+
+    ### How do I migrate existing data?
+
+
+    Using our migration API, you can migrate the access tokens and accounts to Apideck Vault. (COMING SOON)
+
+
+    ### Can I use Vault in combination with existing integrations?
+
+
+    Yes, you can. The granularity of Unify allows to quickly the use cases you need, while keeping a gradual migration path based on your timeline and requirements.
+
+
+    ### How does Vault work for Apideck Ecosystem customers?
+
+
+    Once logged in, pick your ecosystem; on the left-hand side of the screen, you'll have the option to create an application underneath the Unify section.
+
+
+    ### How to integrate Apideck Vault
+
+
+    This section covers everything you need to know to authenticate your customers through Vault.
+
+    Vault provides __three strategies__ to use API tokens from your customers:
+
+    - Vault API
+
+    - Hosted Vault
+
+    - Apideck Ecosystem *(COMING SOON)*
+
+
+    You can also opt to bypass Vault and still take care of authentication flows yourself. Make sure to put the right safeguards in place to protect your customers' tokens and other sensitive data.
+
+
+    ### What auth types does Vault support?
+
+
+    What auth strategies does Vault handle? We currently support two flows so your customers can activate an integration.
+
+
+    #### API keys
+
+
+    For Services supporting the API key strategy, you will need to provide an in-app form where users can configure their API keys provided by the integration service. You can also use the drop-in solution if you don't want your own integration settings overview.
+
+
+    #### OAuth 2.0
+
+
+    ##### Authorization Code Grant Type Flow
+
+
+    Vault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own. 
+
+
+    Certain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate. 
+
+
+    This is being handled by the ``/authorize`` endpoint.
 servers:
   - url: https://vault.apideck.com/integrations
     description: Production server

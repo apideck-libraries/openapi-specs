@@ -4,313 +4,40 @@ info:
   title: Vault API
   contact:
     email: hello@apideck.com
-    url: https://developers.apideck.com
+    url: /
   license:
     name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
   x-logo:
-    url: https://www.apideck.com/logo.png
-  description: >
-    Welcome to the Vault API 👋
-
-
-    ## Intro
-
-
-    Building integrations starts with handling user credentials and generating access tokens for the APIs you want to use. 
-
-
-    When you're looking to connect to an API, the first step is authentication. 
-
-    Vault helps you store API keys and access tokens from customers.
-
-
-    The only thing you need to use the Unify APIs is the consumer id, and Vault will do the look-up in the background to perform the API call(s), adding an extra layer of protection to prevent access token leakage.
-
-
-    ## Why Apideck Vault
-
-
-    The Vault API allows you to build your own integrations UI, so your customers can activate and configure integrations.
-
-
-    Through the API, your customers authenticate directly in your app, where Vault will still take care of redirecting to the auth provider and back to your app. This strategy gives you full control over the flow and look & feel of the integration experience.
-
-
-    Through the Unify dashboard, you can configure which connectors you want to support as integrations, and it also allows you to control which kinds of providers your application supports
-
-
-    Alternatively, you can use the Hosted Vault, a no-code solution.
-
-
-    ## Get Started
-
-
-    To use the Apideck APIs, you need to first sign up for free at [https://app.apideck.com/signup](). Follow the steps below to get started.
-
-    - Create a free account.
-
-    - Sign in to the Apideck Unify Dashboard.
-
-    - Get your API key and the application ID.
-
-    - Select and configure the integrations you want to make available to your users
-
-    - Retrieve the client_id and client_secret for the integration you want to activate (Only needed for OAuth integrations). You can skip this step by using the Apideck sandbox credentials to get you started. (GUIDES per service coming soon)
-
-    - Register the redirect URI for the example app (https://unify.apideck.com/vault/callback) in the list of redirect URIs under your app's settings
-
-
-    ### Vault API
-
-
-    If you are building your integration settings UI manually, you can call the Vault API directly.
-
-    The Vault API is for companies who want to completely whitelabel the in-app integrations overview and authentication experience.
-
-    Through the API, your customers authenticate directly in your app where Vault will still take care of redirecting to the auth provider and back to your app.
-
-    This strategy gives you full control over the flow and look & feel of the integration experience.
-
-    Through the Unify dashboard you can configure which connectors you want to support as integrations. and also allows you to control which kinds of providers your application supports.
-
-
-    If you're already storing access tokens we will help you migrate through our Vault Migration API.
-
-
-    Beware, this is strategy takes more time to implement and is more complex than the hosted vault strategy.
-
-
-    ### Hosted Vault
-
-
-    Hosted Vault is a simple no-code solution, so you don't need to build your own UI to handle the integration settings and authentication. It's a great way to explore Unify without needing to build an integrations overview to get started.
-
-
-    ![Hosted Vault - Integrations portal](https://app.apideck.com/images/hosted-vault.png)
-
-
-    Behind the scenes Hosted Vault implements the Vault API endpoints and handles the following features for your customers:
-
-
-    - Add a connection (for an integration)
-
-    - Handle the OAuth flow
-
-    - Configure connection settings per integration
-
-    - Manage connections
-
-    - Discover and propose integration options
-
-
-    ## Domain model
-
-
-    At its core, a domain model creates a web of interconnected entities.
-
-
-    Our domain model contains five main entity types: Consumer (user, account, team, machine), Application, Connector, Integration, and Connection.
-
-
-    ## Headers
-
-    Custom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.
-
-
-    | Name                  	| Type    	| Required 	| Description                                                                                                                                                    	|
-
-    |-----------------------	|---------	|----------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-
-    | x-apideck-app-id      	| String  	| Yes      	| The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                          |
-
-    | x-apideck-consumer-id 	| String  	| Yes      	| The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. 	|
-
-    | x-apideck-raw         	| Boolean 	| No       	| Include raw response. Mostly used for debugging purposes.                                                                                                      	|
-
-
-    ## Connectors
-
-
-    A full list of what vendors require which auth flow:
-
-
-    | Provider               | Provider ID        | Auth Type | Status    |
-
-    | ---------------------- | ------------------ | --------- | --------- |
-
-    | [Copper]()             | copper             | apiKey    | available |
-
-    | [Close]()              | close              | apiKey    | available |
-
-    | [Teamleader]()         | teamleader         | oauth2    | available |
-
-    | [Pipedrive]()          | pipedrive          | oauth2    | available |
-
-    | [Slack]()              | slack              | oauth2    | available |
-
-    | [Google]()             | google             | oauth2    | available |
-
-    | [Google Sheets]()      | google-sheets      | oauth2    | available |
-
-    | [Hubspot]()            | hubspot            | oauth2    | available |
-
-    | [Salesforce]()         | salesforce         | oauth2    | available |
-
-    | [Reply]()              | reply              | apiKey    | available |
-
-    | [MixMax]()             | mixmax             | apiKey    | available |
-
-    | [Intercom]()           | intercom           | oauth2    | available |
-
-    | [Drift]()              | drift              |           | available |
-
-    | [Livechat]()           | livechat           |           | available |
-
-    | [Crisp]()              | crisp              |           | available |
-
-    | [Tink]()               | tink               | oauth2    | available |
-
-    | [Auth0]()              | auth0              | oauth2    | available |
-
-    | [Segment]()            | segment            |           | available |
-
-    | [iubenda]()            | iubenda            |           | available |
-
-    | [Metomic]()            | metomic-io         |           | available |
-
-    | [Google Analytics]()   | google-analytics   |           | available |
-
-    | [Google Tag Manager]() | google-tag-manager |           | available |
-
-    | [Heap]()               | heap               |           | available |
-
-    | [OneTrust]()           | onetrust           |           | available |
-
-    | [journy.io]()          | journy-io          |           | available |
-
-    | [Albacross]()          | albacross          |           | available |
-
-
-    ## Sandbox (upcoming)
-
-
-    The sandbox is pre-loaded with data similar to a real-life integrations setup. You can use the preconfigured OAauth configured connectors for testing purposes and can skip this step by using the Apideck sandbox credentials to get you started.
-
-
-    ## Guides
-
-
-    - How to configure the OAuth credentials for integration providers (COMING SOON)
-
-    - How to build an integrations UI with Vault (COMING SOON)
-
-
-    ## FAQ
-
-
-    __What purpose does Vault serve? Can I just handle the authentication and access token myself?__
-
-    You can store everything yourself, but that defeats the purpose of using Apideck Unify. Handling tokens for multiple providers can quickly become very complex.
-
-
-    ### Is my data secure?
-
-
-    Vault employs data minimization, therefore only requesting the minimum amount of scopes needed to perform an API request.
-
-
-    ### How do I migrate existing data?
-
-
-    Using our migration API, you can migrate the access tokens and accounts to Apideck Vault. (COMING SOON)
-
-
-    ### Can I use Vault in combination with existing integrations?
-
-
-    Yes, you can. The granularity of Unify allows to quickly the use cases you need, while keeping a gradual migration path based on your timeline and requirements.
-
-
-    ### How does Vault work for Apideck Ecosystem customers?
-
-
-    Once logged in, pick your ecosystem; on the left-hand side of the screen, you'll have the option to create an application underneath the Unify section.
-
-
-    ### How to integrate Apideck Vault
-
-
-    This section covers everything you need to know to authenticate your customers through Vault.
-
-    Vault provides __three strategies__ to use API tokens from your customers:
-
-    - Vault API
-
-    - Hosted Vault
-
-    - Apideck Ecosystem *(COMING SOON)*
-
-
-    You can also opt to bypass Vault and still take care of authentication flows yourself. Make sure to put the right safeguards in place to protect your customers' tokens and other sensitive data.
-
-
-    ### What auth types does Vault support?
-
-
-    What auth strategies does Vault handle? We currently support two flows so your customers can activate an integration.
-
-
-    #### API keys
-
-
-    For Services supporting the API key strategy, you will need to provide an in-app form where users can configure their API keys provided by the integration service. You can also use the drop-in solution if you don't want your own integration settings overview.
-
-
-    #### OAuth 2.0
-
-
-    ##### Authorization Code Grant Type Flow
-
-
-    Vault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own. 
-
-
-    Certain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate. 
-
-
-    This is being handled by the ``/authorize`` endpoint.
+    url: 'https://developers.apideck.com/icon.png'
+  description: "Welcome to the Vault API \U0001F44B\n\nBuilding integrations starts with handling user credentials and generating access tokens for the APIs you want to use.\n\nWhen you're looking to connect to an API, the first step is authentication.\nVault helps you store API keys and access tokens from customers.\n\nThe only thing you need to use the Unify APIs is the consumer id, and Vault will do the look-up in the background to perform the API call(s), adding an extra layer of protection to prevent access token leakage.\n\n## Why Apideck Vault\n\nThe Vault API allows you to build your own integrations UI, so your customers can activate and configure integrations.\n\nThrough the API, your customers authenticate directly in your app, where Vault will still take care of redirecting to the auth provider and back to your app. This strategy gives you full control over the flow and look & feel of the integration experience.\n\nThrough the Unify dashboard, you can configure which connectors you want to support as integrations, and it also allows you to control which kinds of providers your application supports\n\nAlternatively, you can use the Hosted Vault, a no-code solution.\n\n## Get Started\n\nTo use the Apideck APIs, you need to first sign up for free at [https://app.apideck.com/signup](). Follow the steps below to get started.\n- Create a free account.\n- Sign in to the Apideck Unify Dashboard.\n- Get your API key and the application ID.\n- Select and configure the integrations you want to make available to your users\n- Retrieve the client_id and client_secret for the integration you want to activate (Only needed for OAuth integrations). You can skip this step by using the Apideck sandbox credentials to get you started. (GUIDES per service coming soon)\n- Register the redirect URI for the example app (https://unify.apideck.com/vault/callback) in the list of redirect URIs under your app's settings\n\n### Vault API\n\nIf you are building your integration settings UI manually, you can call the Vault API directly.\nThe Vault API is for companies who want to completely whitelabel the in-app integrations overview and authentication experience.\nThrough the API, your customers authenticate directly in your app where Vault will still take care of redirecting to the auth provider and back to your app.\nThis strategy gives you full control over the flow and look & feel of the integration experience.\nThrough the Unify dashboard you can configure which connectors you want to support as integrations. and also allows you to control which kinds of providers your application supports.\n\nIf you're already storing access tokens we will help you migrate through our Vault Migration API.\n\nBeware, this is strategy takes more time to implement and is more complex than the hosted vault strategy.\n\n### Hosted Vault\n\nHosted Vault is a simple no-code solution, so you don't need to build your own UI to handle the integration settings and authentication. It's a great way to explore Unify without needing to build an integrations overview to get started.\n\n![Hosted Vault - Integrations portal](https://app.apideck.com/images/hosted-vault.png)\n\nBehind the scenes Hosted Vault implements the Vault API endpoints and handles the following features for your customers:\n\n- Add a connection (for an integration)\n- Handle the OAuth flow\n- Configure connection settings per integration\n- Manage connections\n- Discover and propose integration options\n\n## Domain model\n\nAt its core, a domain model creates a web of interconnected entities.\n\nOur domain model contains five main entity types: Consumer (user, account, team, machine), Application, Connector, Integration, and Connection.\n\n## Headers\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  \t| Type    \t| Required \t| Description                                                                                                                                                    \t|\n|-----------------------\t|---------\t|----------\t|----------------------------------------------------------------------------------------------------------------------------------------------------------------\t|\n| x-apideck-app-id      \t| String  \t| Yes      \t| The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                          |\n| x-apideck-consumer-id \t| String  \t| Yes      \t| The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. \t|\n| x-apideck-raw         \t| Boolean \t| No       \t| Include raw response. Mostly used for debugging purposes.                                                                                                      \t|\n\n## Connectors\n\nA full list of what vendors require which auth flow:\n\n| Provider               | Provider ID        | Auth Type | Status    |\n| ---------------------- | ------------------ | --------- | --------- |\n| [Copper]()             | copper             | apiKey    | available |\n| [Close]()              | close              | apiKey    | available |\n| [Teamleader]()         | teamleader         | oauth2    | available |\n| [Pipedrive]()          | pipedrive          | oauth2    | available |\n| [Slack]()              | slack              | oauth2    | available |\n| [Google]()             | google             | oauth2    | available |\n| [Google Sheets]()      | google-sheets      | oauth2    | available |\n| [Hubspot]()            | hubspot            | oauth2    | available |\n| [Salesforce]()         | salesforce         | oauth2    | available |\n| [Reply]()              | reply              | apiKey    | available |\n| [MixMax]()             | mixmax             | apiKey    | available |\n| [Intercom]()           | intercom           | oauth2    | available |\n| [Drift]()              | drift              |           | available |\n| [Livechat]()           | livechat           |           | available |\n| [Crisp]()              | crisp              |           | available |\n| [Tink]()               | tink               | oauth2    | available |\n| [Auth0]()              | auth0              | oauth2    | available |\n| [Segment]()            | segment            |           | available |\n| [iubenda]()            | iubenda            |           | available |\n| [Metomic]()            | metomic-io         |           | available |\n| [Google Analytics]()   | google-analytics   |           | available |\n| [Google Tag Manager]() | google-tag-manager |           | available |\n| [Heap]()               | heap               |           | available |\n| [OneTrust]()           | onetrust           |           | available |\n| [journy.io]()          | journy-io          |           | available |\n| [Albacross]()          | albacross          |           | available |\n\n## Sandbox (upcoming)\n\nThe sandbox is pre-loaded with data similar to a real-life integrations setup. You can use the preconfigured OAauth configured connectors for testing purposes and can skip this step by using the Apideck sandbox credentials to get you started.\n\n## Guides\n\n- How to configure the OAuth credentials for integration providers (COMING SOON)\n- How to build an integrations UI with Vault (COMING SOON)\n\n## FAQ\n\n__What purpose does Vault serve? Can I just handle the authentication and access token myself?__\nYou can store everything yourself, but that defeats the purpose of using Apideck Unify. Handling tokens for multiple providers can quickly become very complex.\n\n### Is my data secure?\n\nVault employs data minimization, therefore only requesting the minimum amount of scopes needed to perform an API request.\n\n### How do I migrate existing data?\n\nUsing our migration API, you can migrate the access tokens and accounts to Apideck Vault. (COMING SOON)\n\n### Can I use Vault in combination with existing integrations?\n\nYes, you can. The granularity of Unify allows to quickly the use cases you need, while keeping a gradual migration path based on your timeline and requirements.\n\n### How does Vault work for Apideck Ecosystem customers?\n\nOnce logged in, pick your ecosystem; on the left-hand side of the screen, you'll have the option to create an application underneath the Unify section.\n\n### How to integrate Apideck Vault\n\nThis section covers everything you need to know to authenticate your customers through Vault.\nVault provides __three strategies__ to use API tokens from your customers:\n- Vault API\n- Hosted Vault\n- Apideck Ecosystem *(COMING SOON)*\n\nYou can also opt to bypass Vault and still take care of authentication flows yourself. Make sure to put the right safeguards in place to protect your customers' tokens and other sensitive data.\n\n### What auth types does Vault support?\n\nWhat auth strategies does Vault handle? We currently support two flows so your customers can activate an integration.\n\n#### API keys\n\nFor Services supporting the API key strategy, you will need to provide an in-app form where users can configure their API keys provided by the integration service. You can also use the drop-in solution if you don't want your own integration settings overview.\n\n#### OAuth 2.0\n\n##### Authorization Code Grant Type Flow\n\nVault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own.\n\nCertain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate.\n\nThis is being handled by the ``/authorize`` endpoint.\n"
 servers:
-  - url: https://vault.apideck.com/integrations
+  - url: 'https://vault.apideck.com/integrations'
     description: Production server
 paths:
   /connections:
     get:
       summary: Get all connections
       operationId: connectionsAll
-      description: >
-        This endpoint includes all the configured integrations and contains the
-        needed assets
-
+      description: |
+        This endpoint includes all the configured integrations and contains the needed assets
         to build an integrations page where your users can install integrations.
-
         OAuth2 supported integrations will contain authorize and revoke links to handle the authentication flows.
       tags:
         - Connections
       parameters:
-        - $ref: "#/components/parameters/x-apideck-consumer-id"
-        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
       responses:
-        "200":
+        '200':
           description: ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ConnectionList"
+                $ref: '#/components/schemas/ConnectionList'
     patch:
       summary: Bulk update connections
-      description: Used to update settings and API keys (only services that don't
-        support OAuth 2.0)
+      description: Used to update settings and API keys (only services that don't support OAuth 2.0)
       operationId: connectionsBulkUpdate
       tags:
         - Connections
@@ -320,141 +47,130 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BulkUpdateConnections"
+              $ref: '#/components/schemas/BulkUpdateConnections'
       responses:
-        "200":
+        '200':
           description: ok
-        "400":
-          $ref: "#/components/responses/ValidationException"
-        "404":
-          $ref: "#/components/responses/NotFound"
-  "/connections/{unified_api}/{service_id}":
+        '400':
+          $ref: '#/components/responses/ValidationException'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/connections/{unified_api}/{service_id}':
     patch:
       tags:
         - Connections
       summary: Update a connection
       operationId: connectionsUpdate
       parameters:
-        - $ref: "#/components/parameters/service_id"
-        - $ref: "#/components/parameters/unified_api"
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unified_api'
       requestBody:
         description: Fields that need to be updated on the resource
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateConnection"
+              $ref: '#/components/schemas/UpdateConnection'
       responses:
-        "200":
+        '200':
           description: ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Connection"
-        "400":
-          $ref: "#/components/responses/InvalidId"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "405":
-          $ref: "#/components/responses/ValidationException"
+                $ref: '#/components/schemas/Connection'
+        '400':
+          $ref: '#/components/responses/InvalidId'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '405':
+          $ref: '#/components/responses/ValidationException'
     delete:
       tags:
         - Connections
       summary: Deletes a connection
       operationId: deleteConnection
       parameters:
-        - $ref: "#/components/parameters/service_id"
-        - $ref: "#/components/parameters/unified_api"
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unified_api'
       responses:
-        "204":
-          $ref: "#/components/responses/Deleted"
-        "400":
-          $ref: "#/components/responses/InvalidId"
-        "404":
-          $ref: "#/components/responses/NotFound"
-  "/authorize/{service_id}/{application_id}":
+        '204':
+          $ref: '#/components/responses/Deleted'
+        '400':
+          $ref: '#/components/responses/InvalidId'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  '/authorize/{service_id}/{application_id}':
     get:
       tags:
         - Connections
       summary: Authorize
       operationId: authorize
-      description: >
-        __In most cases the authorize link is provided in the ``/connections``
-        endpoint. Normally you don't need to manually generate these links.__
-
+      description: |
+        __In most cases the authorize link is provided in the ``/connections`` endpoint. Normally you don't need to manually generate these links.__
 
         Use this endpoint to authenticate a user with a connector. It will return a 302 redirect to the downstream connector ednpoints.
 
-
         Auth links will have a state parameter included to verify the validity of the request. This is the url your users will use to activate OAuth supported integation providers.
-
 
         Vault handles the complete Authorization Code Grant Type Flow for you and will redirect you to the dynamic redirect uri you have appended to the url in case this is missing the default redirect uri you have configured for your Unify application.
       parameters:
-        - $ref: "#/components/parameters/application_id"
-        - $ref: "#/components/parameters/service_id"
-        - $ref: "#/components/parameters/state"
-        - $ref: "#/components/parameters/redirect_uri"
+        - $ref: '#/components/parameters/application_id'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/state'
+        - $ref: '#/components/parameters/redirect_uri'
       responses:
-        "200":
+        '200':
           description: ok
-  "/revoke/{service_id}/{application_id}":
+  '/revoke/{service_id}/{application_id}':
     get:
       tags:
         - Connections
       summary: Revoke
       operationId: revoke
-      description: >
-        __In most cases the authorize link is provided in the ``/connections``
-        endpoint. Normally you don't need to manually generate these links.__
-
+      description: |
+        __In most cases the authorize link is provided in the ``/connections`` endpoint. Normally you don't need to manually generate these links.__
 
         Use this endpoint to revoke an existing OAuth connector.
 
-
         Auth links will have a state parameter included to verify the validity of the request. This is the url your users will use to activate OAuth supported integation providers.
-
 
         Vault handles the complete revoke flow for you and will redirect you to the dynamic redirect uri you have appended to the url in case this is missing the default redirect uri you have configured for your Unify application.
       parameters:
-        - $ref: "#/components/parameters/application_id"
-        - $ref: "#/components/parameters/service_id"
-        - $ref: "#/components/parameters/state"
-        - $ref: "#/components/parameters/redirect_uri"
+        - $ref: '#/components/parameters/application_id'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/state'
+        - $ref: '#/components/parameters/redirect_uri'
       responses:
-        "200":
+        '200':
           description: ok
   /sessions:
     post:
       summary: Retrieve a JWT authorization
       operationId: createSession
-      description: >
-        Making a POST request to this endpoint will initiate a Hosted Vault
-        session. Redirect the consumer to the returned
-
+      description: |
+        Making a POST request to this endpoint will initiate a Hosted Vault session. Redirect the consumer to the returned
         url to allow temporary access to manage their integrations and settings.
-
 
         Note: This is a short lived token that will expire after 30 minutes (TTL: 1800).
       tags:
         - Sessions
       parameters:
-        - $ref: "#/components/parameters/x-apideck-consumer-id"
-        - $ref: "#/components/parameters/x-apideck-app-id"
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
       requestBody:
         description: Additional redirect uri and/or consumer metadata
         required: false
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SessionConfig"
+              $ref: '#/components/schemas/SessionConfig'
       responses:
-        "200":
+        '200':
           description: ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateSession"
+                $ref: '#/components/schemas/CreateSession'
 components:
   parameters:
     x-apideck-consumer-id:
@@ -482,10 +198,7 @@ components:
     state:
       name: state
       in: query
-      description: An opaque value the applications adds to the initial request that
-        the authorization server includes when redirecting the back to the
-        application. This value must be used by the application to prevent CSRF
-        attacks.
+      description: An opaque value the applications adds to the initial request that the authorization server includes when redirecting the back to the application. This value must be used by the application to prevent CSRF attacks.
       schema:
         type: string
     page:
@@ -518,15 +231,14 @@ components:
     redirect_uri:
       name: redirect_uri
       in: query
-      description: URL to redirect back to after authorization. When left empty the
-        default configured redirect uri will be used.
+      description: URL to redirect back to after authorization. When left empty the default configured redirect uri will be used.
       required: true
       schema:
         type: string
-      example: https://yoursaasapp.com/integrations
+      example: 'https://yoursaasapp.com/integrations'
     consumer_id:
       name: x-apideck-consumer-id
-      in: header
+      in: path
       description: ID of the consumer which you want to get or push data from
       required: true
       schema:
@@ -556,7 +268,7 @@ components:
         session_uri:
           type: string
       example:
-        session_uri: http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj
+        session_uri: 'http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj'
     SessionConfig:
       title: Session config
       type: object
@@ -590,20 +302,20 @@ components:
             privacy_url:
               type: string
       example:
-        redirect_uri: https://mysaas.com/dashboard
+        redirect_uri: 'https://mysaas.com/dashboard'
         consumer_metadata:
           account_name: SpaceX
           user_name: Elon Musk
-          image: https://imgix.com/honeybadger
+          image: 'https://imgix.com/honeybadger'
         theme:
           vault_name: Intercom
-          primary_color: "#286efa"
-          sidepanel_background_color: "#286efa"
-          sidepanel_text_color: "#FFFFFF"
-          logo: https://res.cloudinary.com/apideck/image/upload/v1554113418/catalog/intercom/logo.png
-          favicon: https://www.intercom.com/_next/static/images/favicon-348ad8df6c167d93fb894e8bcb4dcd2a.png
-          terms_url: https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e
-          privacy_url: https://compliance.apideck.com/privacy-policy
+          primary_color: '#286efa'
+          sidepanel_background_color: '#286efa'
+          sidepanel_text_color: '#FFFFFF'
+          logo: 'https://res.cloudinary.com/apideck/image/upload/v1554113418/catalog/intercom/logo.png'
+          favicon: 'https://www.intercom.com/_next/static/images/favicon-348ad8df6c167d93fb894e8bcb4dcd2a.png'
+          terms_url: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e'
+          privacy_url: 'https://compliance.apideck.com/privacy-policy'
     ConnectionList:
       title: Connection List
       required:
@@ -612,18 +324,19 @@ components:
         data:
           type: array
           items:
-            $ref: "#/components/schemas/Connection"
+            $ref: '#/components/schemas/Connection'
           example:
-            - name: Salesforce
+            - id: salesforce
+              name: Salesforce
               tag_line: Sync new leads to Salesforce
-              icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
-              logo: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+              icon: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
+              logo: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
               auth_type: oauth2
               unified_api:
                 - lead
               authorization_flow_enabled: true
-              authorization_url: https://vault.apideck.com/authorize/salesforce/{application_id}
-              revoke_url: https://vault.apideck.com/revoke/salesforce/{application_id}
+              authorization_url: 'https://vault.apideck.com/authorize/salesforce/{application_id}'
+              revoke_url: 'https://vault.apideck.com/revoke/salesforce/{application_id}'
               authorized: true
               enabled: true
               authorized_by:
@@ -640,7 +353,7 @@ components:
                   type: select
                   required: false
                   description: Assign a default lead source to leads
-                  validation_rule: ^.{1,}$
+                  validation_rule: '^.{1,}$'
                   validation_message: Invalid lead source
                   disabled: false
                   options:
@@ -651,16 +364,17 @@ components:
               metadata:
                 account_name: test
               status: upcoming
-            - name: close
+            - id: close
+              name: close
               tag_line: Sync new leads to close
-              icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
-              logo: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+              icon: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
+              logo: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
               authType: apiKey
               unified_api:
                 - lead
               authorized: true
               enabled: false
-              apiKey: "1223440590540954095"
+              apiKey: '1223440590540954095'
               metadata:
                 account_name: test
               status: live
@@ -671,12 +385,12 @@ components:
         data:
           type: array
           items:
-            $ref: "#/components/schemas/UpdateConnection"
+            $ref: '#/components/schemas/UpdateConnection'
           example:
             service_id: close
             unified_api: lead
             enabled: true
-            api_key: "1223440590540954095"
+            api_key: '1223440590540954095'
             settings:
               lead_source: webinar
               domain_id: apideck.com
@@ -685,7 +399,7 @@ components:
         api_key:
           anyOf:
             - type: string
-            - nullable: true
+            - type: 'null'
         enabled:
           type: boolean
         settings:
@@ -722,7 +436,7 @@ components:
             - apiKey
     Connection:
       allOf:
-        - $ref: "#/components/schemas/Service"
+        - $ref: '#/components/schemas/Service'
         - type: object
           properties:
             status:
@@ -750,7 +464,7 @@ components:
     GeneralError:
       type: array
       items:
-        $ref: "#/components/schemas/Error"
+        $ref: '#/components/schemas/Error'
     Error:
       properties:
         code:
@@ -761,11 +475,10 @@ components:
           example: OAuthException
         message:
           type: string
-          example: Session has expired at unix time 1385243766. The current unix time is
-            1385848532.
+          example: Session has expired at unix time 1385243766. The current unix time is 1385848532.
         href:
           type: string
-          example: http://example.org/docs/errors/#ERR-01234
+          example: 'http://example.org/docs/errors/#ERR-01234'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

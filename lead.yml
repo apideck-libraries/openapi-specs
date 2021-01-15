@@ -64,8 +64,6 @@ components:
         type: boolean
         default: true
   responses:
-    Deleted:
-      description: Resource deleted
     NotFound:
       description: The specified resource was not found
       content:
@@ -477,6 +475,10 @@ components:
       minItems: 0
       items:
         $ref: '#/components/schemas/lead'
+    leadsDeleteResponse:
+      properties:
+        id:
+          type: string
   securitySchemes:
     apiKey:
       type: http
@@ -681,7 +683,11 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/Deleted'
+          description: Leads deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leadsDeleteResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

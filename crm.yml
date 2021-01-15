@@ -399,6 +399,7 @@ components:
                   - invoicing
                   - delivery
                   - visiting
+                  - mailing
                   - other
                 example: invoicing
               name:
@@ -514,6 +515,10 @@ components:
       minItems: 0
       items:
         $ref: '#/components/schemas/company'
+    companiesDeleteResponse:
+      properties:
+        id:
+          type: string
     opportunitiesAdd:
       type: object
       required:
@@ -814,6 +819,10 @@ components:
       minItems: 0
       items:
         $ref: '#/components/schemas/opportunity'
+    opportunitiesDeleteResponse:
+      properties:
+        id:
+          type: string
     leadsAdd:
       required:
         - name
@@ -1008,6 +1017,10 @@ components:
       minItems: 0
       items:
         $ref: '#/components/schemas/lead'
+    leadsDeleteResponse:
+      properties:
+        id:
+          type: string
     contact:
       required:
         - name
@@ -1046,19 +1059,24 @@ components:
         prefix:
           type: string
           example: Mr.
+          nullable: true
         suffix:
           type: string
           example: PhD
+          nullable: true
         title:
           type: string
           example: CEO
+          nullable: true
         department:
           type: string
           example: Engineering
+          nullable: true
         language:
           type: string
           example: EN
           description: language code according to ISO 639-1. For the United States - EN
+          nullable: true
         gender:
           type: string
           enum:
@@ -1070,18 +1088,24 @@ components:
         birthday:
           type: string
           example: '2000-08-12'
+          nullable: true
         image:
           type: string
           example: 'https://logo.clearbit.com/spacex.com?s=128'
+          nullable: true
+        lead_source:
+          type: string
+          minLength: 1
+          example: Cold Call
+          nullable: true
         fax:
           type: string
           example: '+12129876543'
-        lead_source:
-          type: string
-          example: Cold Call
+          nullable: true
         description:
           type: string
           example: Internal champion
+          nullable: true
         emails:
           type: array
           items:
@@ -1148,19 +1172,24 @@ components:
         prefix:
           type: string
           example: Mr.
+          nullable: true
         suffix:
           type: string
           example: PhD
+          nullable: true
         title:
           type: string
           example: CEO
+          nullable: true
         department:
           type: string
           example: Engineering
+          nullable: true
         language:
           type: string
           example: EN
           description: language code according to ISO 639-1. For the United States - EN
+          nullable: true
         gender:
           type: string
           enum:
@@ -1172,19 +1201,24 @@ components:
         birthday:
           type: string
           example: '2000-08-12'
+          nullable: true
         image:
           type: string
           example: 'https://logo.clearbit.com/spacex.com?s=128'
+          nullable: true
         lead_source:
           type: string
           minLength: 1
           example: Cold Call
+          nullable: true
         fax:
           type: string
           example: '+12129876543'
+          nullable: true
         description:
           type: string
           example: Internal champion
+          nullable: true
         emails:
           $ref: '#/components/schemas/contact/properties/emails'
         websites:
@@ -1233,19 +1267,24 @@ components:
         prefix:
           type: string
           example: Mr.
+          nullable: true
         suffix:
           type: string
           example: PhD
+          nullable: true
         title:
           type: string
           example: CEO
+          nullable: true
         department:
           type: string
           example: Engineering
+          nullable: true
         language:
           type: string
           example: EN
           description: language code according to ISO 639-1. For the United States - EN
+          nullable: true
         gender:
           type: string
           enum:
@@ -1257,18 +1296,24 @@ components:
         birthday:
           type: string
           example: '2000-08-12'
+          nullable: true
         image:
           type: string
           example: 'https://logo.clearbit.com/spacex.com?s=128'
+          nullable: true
+        lead_source:
+          type: string
+          minLength: 1
+          example: Cold Call
+          nullable: true
         fax:
           type: string
           example: '+12129876543'
-        lead_source:
-          type: string
-          example: Cold Call
+          nullable: true
         description:
           type: string
           example: Internal champion
+          nullable: true
         emails:
           $ref: '#/components/schemas/contact/properties/emails'
         websites:
@@ -1301,6 +1346,10 @@ components:
       minItems: 0
       items:
         $ref: '#/components/schemas/contact'
+    contactsDeleteResponse:
+      properties:
+        id:
+          type: string
   securitySchemes:
     apiKey:
       type: http
@@ -1511,7 +1560,11 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/Deleted'
+          description: Companies deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/companiesDeleteResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1706,7 +1759,11 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/Deleted'
+          description: Opportunities deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opportunitiesDeleteResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1901,7 +1958,11 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/Deleted'
+          description: Leads deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/leadsDeleteResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2096,7 +2157,11 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/Deleted'
+          description: Contacts deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contactsDeleteResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

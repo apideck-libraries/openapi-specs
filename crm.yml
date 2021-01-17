@@ -823,204 +823,6 @@ components:
       properties:
         id:
           type: string
-    leadsAdd:
-      required:
-        - name
-        - company_name
-      x-pii:
-        - name
-        - first_name
-        - last_name
-        - email
-        - phone_number
-      properties:
-        name:
-          type: string
-          example: Elon Musk
-        first_name:
-          type: string
-          example: Elon
-        last_name:
-          type: string
-          example: Musk
-        prefix:
-          type: string
-          example: Duke
-        email:
-          type: string
-          example: elon@spacex.com
-        title:
-          type: string
-          example: CEO
-        phone_number:
-          type: string
-          example: +444 111 222 333
-          nullable: true
-        website:
-          type: string
-          example: 'https://www.spacex.com'
-        company_name:
-          type: string
-          example: SpaceX
-        status:
-          type: string
-          example: open
-        lead_source:
-          type: string
-          example: website
-        note:
-          type: string
-          example: Eager to buy more rockets.
-        address:
-          type: object
-          properties:
-            line1:
-              type: string
-              example: Main street
-              description: 'Line 1 of the address e.g. number, street, suite, apt #, etc.'
-            city:
-              type: string
-              example: San Francisco
-              description: Name of city.
-            line2:
-              type: string
-              example: Bus 100
-              description: 'Line 2 of the address e.g. number, street, suite, apt #, etc.'
-            state:
-              type: string
-              example: CA
-              description: Name of state
-            postal_code:
-              type: string
-              example: '94104'
-              description: Zip code or equivalent.
-            country:
-              type: string
-              example: US
-              description: country code according to ISO 3166-1 alpha-2.
-        custom_fields:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                example: custom_technologies
-              value:
-                type: string
-                example: Uses Salesforce and Marketo
-        tags:
-          type: array
-          example:
-            - new
-            - hot
-          items:
-            type: string
-    leadsUpdate:
-      required:
-        - name
-        - company_name
-      x-pii:
-        - name
-        - email
-        - phone_number
-      properties:
-        name:
-          type: string
-          example: Elon Musk
-        prefix:
-          type: string
-          example: Duke
-        email:
-          type: string
-          example: elon@spacex.com
-        title:
-          type: string
-          example: CEO
-        phone_number:
-          type: string
-          example: +444 111 222 333
-          nullable: true
-        website:
-          type: string
-          example: 'https://www.spacex.com'
-        company_name:
-          type: string
-          example: SpaceX
-        status:
-          type: string
-          example: open
-        lead_source:
-          type: string
-          example: website
-        note:
-          type: string
-          example: Eager to buy more rockets.
-        address:
-          type: object
-          properties:
-            line1:
-              type: string
-              example: Main street
-              description: 'Line 1 of the address e.g. number, street, suite, apt #, etc.'
-            city:
-              type: string
-              example: San Francisco
-              description: Name of city.
-            line2:
-              type: string
-              example: Bus 100
-              description: 'Line 2 of the address e.g. number, street, suite, apt #, etc.'
-            state:
-              type: string
-              example: CA
-              description: Name of state
-            postal_code:
-              type: string
-              example: '94104'
-              description: Zip code or equivalent.
-            country:
-              type: string
-              example: US
-              description: country code according to ISO 3166-1 alpha-2.
-        custom_fields:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                example: custom_technologies
-              value:
-                type: string
-                example: Uses Salesforce and Marketo
-        tags:
-          type: array
-          example:
-            - new
-            - hot
-          items:
-            type: string
-    lead:
-      properties:
-        id:
-          type: string
-    leadsAddResponse:
-      properties:
-        id:
-          type: string
-    leadsUpdateResponse:
-      $ref: '#/components/schemas/lead'
-    leads:
-      type: array
-      description: ''
-      minItems: 0
-      items:
-        $ref: '#/components/schemas/lead'
-    leadsDeleteResponse:
-      properties:
-        id:
-          type: string
     contact:
       required:
         - name
@@ -1350,6 +1152,278 @@ components:
       properties:
         id:
           type: string
+    leadsAdd:
+      required:
+        - name
+        - company_name
+      x-pii:
+        - name
+        - first_name
+        - last_name
+        - email
+        - phone_number
+      properties:
+        name:
+          type: string
+          example: Elon Musk
+        first_name:
+          type: string
+          example: Elon
+        last_name:
+          type: string
+          example: Musk
+        prefix:
+          type: string
+          example: Duke
+        email:
+          type: string
+          example: elon@spacex.com
+        title:
+          type: string
+          example: CEO
+        phone_number:
+          type: string
+          example: +444 111 222 333
+          nullable: true
+        website:
+          type: string
+          example: 'https://www.spacex.com'
+        company_name:
+          type: string
+          example: SpaceX
+        status:
+          type: string
+          example: open
+        lead_source:
+          type: string
+          example: website
+        note:
+          type: string
+          example: Eager to buy more rockets.
+        address:
+          type: object
+          properties:
+            line1:
+              type: string
+              example: Main street
+              description: 'Line 1 of the address e.g. number, street, suite, apt #, etc.'
+            city:
+              type: string
+              example: San Francisco
+              description: Name of city.
+            line2:
+              type: string
+              example: Bus 100
+              description: 'Line 2 of the address e.g. number, street, suite, apt #, etc.'
+            state:
+              type: string
+              example: CA
+              description: Name of state
+            postal_code:
+              type: string
+              example: '94104'
+              description: Zip code or equivalent.
+            country:
+              type: string
+              example: US
+              description: country code according to ISO 3166-1 alpha-2.
+        custom_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: custom_technologies
+              value:
+                type: string
+                example: Uses Salesforce and Marketo
+        tags:
+          type: array
+          example:
+            - new
+            - hot
+          items:
+            type: string
+    leadsUpdate:
+      required:
+        - name
+        - company_name
+      x-pii:
+        - name
+        - email
+        - phone_number
+      properties:
+        name:
+          type: string
+          example: Elon Musk
+        prefix:
+          type: string
+          example: Duke
+        email:
+          type: string
+          example: elon@spacex.com
+        title:
+          type: string
+          example: CEO
+        phone_number:
+          type: string
+          example: +444 111 222 333
+          nullable: true
+        website:
+          type: string
+          example: 'https://www.spacex.com'
+        company_name:
+          type: string
+          example: SpaceX
+        status:
+          type: string
+          example: open
+        lead_source:
+          type: string
+          example: website
+        note:
+          type: string
+          example: Eager to buy more rockets.
+        address:
+          type: object
+          properties:
+            line1:
+              type: string
+              example: Main street
+              description: 'Line 1 of the address e.g. number, street, suite, apt #, etc.'
+            city:
+              type: string
+              example: San Francisco
+              description: Name of city.
+            line2:
+              type: string
+              example: Bus 100
+              description: 'Line 2 of the address e.g. number, street, suite, apt #, etc.'
+            state:
+              type: string
+              example: CA
+              description: Name of state
+            postal_code:
+              type: string
+              example: '94104'
+              description: Zip code or equivalent.
+            country:
+              type: string
+              example: US
+              description: country code according to ISO 3166-1 alpha-2.
+        custom_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: custom_technologies
+              value:
+                type: string
+                example: Uses Salesforce and Marketo
+        tags:
+          type: array
+          example:
+            - new
+            - hot
+          items:
+            type: string
+    lead:
+      required:
+        - id
+      x-pii:
+        - name
+        - email
+        - first_name
+        - last_name
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+          nullable: true
+        prefix:
+          type: string
+        email:
+          type: string
+        title:
+          type: string
+        phone_number:
+          type: string
+          nullable: true
+        website:
+          type: string
+        company_name:
+          type: string
+        address:
+          type: object
+          properties:
+            line1:
+              type: string
+              example: Main street
+              description: 'Line 1 of the address e.g. number, street, suite, apt #, etc.'
+              nullable: true
+            line2:
+              type: string
+              example: Main street
+              description: 'Line 1 of the address e.g. number, street, suite, apt #, etc.'
+            city:
+              type: string
+              example: San Francisco
+              description: Name of city.
+            state:
+              type: string
+              example: CA
+              description: Name of state
+            postal_code:
+              type: string
+              example: '94104'
+              description: Zip code or equivalent.
+            country:
+              type: string
+              example: US
+              description: country code according to ISO 3166-1 alpha-2.
+              nullable: true
+        tags:
+          type: array
+          example:
+            - new
+            - hot
+          items:
+            type: string
+        updated_at:
+          type: string
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
+        created_at:
+          type: string
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
+    leadsAddResponse:
+      properties:
+        id:
+          type: string
+    leadsUpdateResponse:
+      properties:
+        id:
+          type: string
+    leadsDeleteResponse:
+      properties:
+        id:
+          type: string
+    leads:
+      type: array
+      description: ''
+      minItems: 0
+      items:
+        $ref: '#/components/schemas/lead'
   securitySchemes:
     apiKey:
       type: http
@@ -1925,7 +1999,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/lead'
+                $ref: '#/components/schemas/leadsUpdateResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

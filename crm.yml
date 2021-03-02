@@ -1273,9 +1273,16 @@ components:
                 type: string
                 example: custom_technologies
               value:
-                type: string
-                example: Uses Salesforce and Marketo
-                nullable: true
+                anyOf:
+                  - type: string
+                    example: Uses Salesforce and Marketo
+                  - type: number
+                    example: 10
+                  - type: boolean
+                    example: true
+                  - type: array
+                    items:
+                      type: string
         tags:
           type: array
           items:
@@ -1819,9 +1826,16 @@ components:
                 type: string
                 example: custom_technologies
               value:
-                type: string
-                example: Uses Salesforce and Marketo
-                nullable: true
+                anyOf:
+                  - type: string
+                    example: Uses Salesforce and Marketo
+                  - type: number
+                    example: 10
+                  - type: boolean
+                    example: true
+                  - type: array
+                    items:
+                      type: string
         tags:
           type: array
           items:

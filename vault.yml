@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   version: 0.2.0
   title: Vault API
-  description: "Welcome to the Vault API \U0001F44B\n\nBuilding integrations starts with handling user credentials and generating access tokens for the APIs you want to use.\n\nWhen you're looking to connect to an API, the first step is authentication.\nVault helps you store API keys and access tokens from customers.\n\nThe only thing you need to use the Unify APIs is the consumer id, and Vault will do the look-up in the background to perform the API call(s), adding an extra layer of protection to prevent access token leakage.\n\n## Why Apideck Vault\n\nThe Vault API allows you to build your own integrations UI, so your customers can activate and configure integrations.\n\nThrough the API, your customers authenticate directly in your app, where Vault will still take care of redirecting to the auth provider and back to your app. This strategy gives you full control over the flow and look & feel of the integration experience.\n\nThrough the Unify dashboard, you can configure which connectors you want to support as integrations, and it also allows you to control which kinds of providers your application supports\n\nAlternatively, you can use the Hosted Vault, a no-code solution.\n\n## Get Started\n\nTo use the Apideck APIs, you need to first sign up for free at [https://app.apideck.com/signup](). Follow the steps below to get started.\n- Create a free account.\n- Sign in to the Apideck Unify Dashboard.\n- Get your API key and the application ID.\n- Select and configure the integrations you want to make available to your users\n- Retrieve the client_id and client_secret for the integration you want to activate (Only needed for OAuth integrations). You can skip this step by using the Apideck sandbox credentials to get you started. (GUIDES per service coming soon)\n- Register the redirect URI for the example app (https://unify.apideck.com/vault/callback) in the list of redirect URIs under your app's settings\n\n### Vault API\n\nIf you are building your integration settings UI manually, you can call the Vault API directly.\nThe Vault API is for companies who want to completely whitelabel the in-app integrations overview and authentication experience.\nThrough the API, your customers authenticate directly in your app where Vault will still take care of redirecting to the auth provider and back to your app.\nThis strategy gives you full control over the flow and look & feel of the integration experience.\nThrough the Unify dashboard you can configure which connectors you want to support as integrations. and also allows you to control which kinds of providers your application supports.\n\nIf you're already storing access tokens we will help you migrate through our Vault Migration API.\n\nBeware, this is strategy takes more time to implement and is more complex than the hosted vault strategy.\n\n### Hosted Vault\n\nHosted Vault is a simple no-code solution, so you don't need to build your own UI to handle the integration settings and authentication. It's a great way to explore Unify without needing to build an integrations overview to get started.\n\n![Hosted Vault - Integrations portal](https://app.apideck.com/images/hosted-vault.png)\n\nBehind the scenes Hosted Vault implements the Vault API endpoints and handles the following features for your customers:\n\n- Add a connection (for an integration)\n- Handle the OAuth flow\n- Configure connection settings per integration\n- Manage connections\n- Discover and propose integration options\n\n## Domain model\n\nAt its core, a domain model creates a web of interconnected entities.\n\nOur domain model contains five main entity types: Consumer (user, account, team, machine), Application, Connector, Integration, and Connection.\n\n## Headers\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  \t| Type    \t| Required \t| Description                                                                                                                                                    \t|\n|-----------------------\t|---------\t|----------\t|----------------------------------------------------------------------------------------------------------------------------------------------------------------\t|\n| x-apideck-app-id      \t| String  \t| Yes      \t| The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                          |\n| x-apideck-consumer-id \t| String  \t| Yes      \t| The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. \t|\n| x-apideck-raw         \t| Boolean \t| No       \t| Include raw response. Mostly used for debugging purposes.                                                                                                      \t|\n\n## Connectors\n\nA full list of what vendors require which auth flow:\n\n| Provider               | Provider ID        | Auth Type | Status    |\n| ---------------------- | ------------------ | --------- | --------- |\n| [Copper]()             | copper             | apiKey    | available |\n| [Close]()              | close              | apiKey    | available |\n| [Teamleader]()         | teamleader         | oauth2    | available |\n| [Pipedrive]()          | pipedrive          | oauth2    | available |\n| [Slack]()              | slack              | oauth2    | available |\n| [Google]()             | google             | oauth2    | available |\n| [Google Sheets]()      | google-sheets      | oauth2    | available |\n| [Hubspot]()            | hubspot            | oauth2    | available |\n| [Salesforce]()         | salesforce         | oauth2    | available |\n| [Reply]()              | reply              | apiKey    | available |\n| [MixMax]()             | mixmax             | apiKey    | available |\n| [Intercom]()           | intercom           | oauth2    | available |\n| [Drift]()              | drift              |           | available |\n| [Livechat]()           | livechat           |           | available |\n| [Crisp]()              | crisp              |           | available |\n| [Tink]()               | tink               | oauth2    | available |\n| [Auth0]()              | auth0              | oauth2    | available |\n| [Segment]()            | segment            |           | available |\n| [iubenda]()            | iubenda            |           | available |\n| [Metomic]()            | metomic-io         |           | available |\n| [Google Analytics]()   | google-analytics   |           | available |\n| [Google Tag Manager]() | google-tag-manager |           | available |\n| [Heap]()               | heap               |           | available |\n| [OneTrust]()           | onetrust           |           | available |\n| [journy.io]()          | journy-io          |           | available |\n| [Albacross]()          | albacross          |           | available |\n\n## Sandbox (upcoming)\n\nThe sandbox is pre-loaded with data similar to a real-life integrations setup. You can use the preconfigured OAauth configured connectors for testing purposes and can skip this step by using the Apideck sandbox credentials to get you started.\n\n## Guides\n\n- How to configure the OAuth credentials for integration providers (COMING SOON)\n- How to build an integrations UI with Vault (COMING SOON)\n\n## FAQ\n\n__What purpose does Vault serve? Can I just handle the authentication and access token myself?__\nYou can store everything yourself, but that defeats the purpose of using Apideck Unify. Handling tokens for multiple providers can quickly become very complex.\n\n### Is my data secure?\n\nVault employs data minimization, therefore only requesting the minimum amount of scopes needed to perform an API request.\n\n### How do I migrate existing data?\n\nUsing our migration API, you can migrate the access tokens and accounts to Apideck Vault. (COMING SOON)\n\n### Can I use Vault in combination with existing integrations?\n\nYes, you can. The granularity of Unify allows to quickly the use cases you need, while keeping a gradual migration path based on your timeline and requirements.\n\n### How does Vault work for Apideck Ecosystem customers?\n\nOnce logged in, pick your ecosystem; on the left-hand side of the screen, you'll have the option to create an application underneath the Unify section.\n\n### How to integrate Apideck Vault\n\nThis section covers everything you need to know to authenticate your customers through Vault.\nVault provides __three strategies__ to use API tokens from your customers:\n- Vault API\n- Hosted Vault\n- Apideck Ecosystem *(COMING SOON)*\n\nYou can also opt to bypass Vault and still take care of authentication flows yourself. Make sure to put the right safeguards in place to protect your customers' tokens and other sensitive data.\n\n### What auth types does Vault support?\n\nWhat auth strategies does Vault handle? We currently support two flows so your customers can activate an integration.\n\n#### API keys\n\nFor Services supporting the API key strategy, you will need to provide an in-app form where users can configure their API keys provided by the integration service. You can also use the drop-in solution if you don't want your own integration settings overview.\n\n#### OAuth 2.0\n\n##### Authorization Code Grant Type Flow\n\nVault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own.\n\nCertain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate.\n\nThis is being handled by the ``/authorize`` endpoint.\n"
+  description: "Welcome to the Vault API \U0001F44B\n\nBuilding integrations starts with handling user credentials and generating access tokens for the APIs you want to use.\n\nWhen you're looking to connect to an API, the first step is authentication.\nVault helps you store API keys and access tokens from customers.\n\nThe only thing you need to use the Unify APIs is the consumer id, and Vault will do the look-up in the background to perform the API call(s), adding an extra layer of protection to prevent access token leakage.\n\n## Why Apideck Vault\n\nThe Vault API allows you to build your own integrations UI, so your customers can activate and configure integrations.\n\nThrough the API, your customers authenticate directly in your app, where Vault will still take care of redirecting to the auth provider and back to your app. This strategy gives you full control over the flow and look & feel of the integration experience.\n\nThrough the Unify dashboard, you can configure which connectors you want to support as integrations, and it also allows you to control which kinds of providers your application supports\n\nAlternatively, you can use the Hosted Vault, a no-code solution.\n\n## Get Started\n\nTo use the Apideck APIs, you need to first sign up for free at [https://app.apideck.com/signup](). Follow the steps below to get started.\n- Create a free account.\n- Sign in to the Apideck Unify Dashboard.\n- Get your API key and the application ID.\n- Select and configure the integrations you want to make available to your users\n- Retrieve the client_id and client_secret for the integration you want to activate (Only needed for OAuth integrations). You can skip this step by using the Apideck sandbox credentials to get you started. (GUIDES per service coming soon)\n- Register the redirect URI for the example app (https://unify.apideck.com/vault/callback) in the list of redirect URIs under your app's settings\n\n### Vault API\n\nIf you are building your integration settings UI manually, you can call the Vault API directly.\nThe Vault API is for companies who want to completely whitelabel the in-app integrations overview and authentication experience.\nThrough the API, your customers authenticate directly in your app where Vault will still take care of redirecting to the auth provider and back to your app.\nThis strategy gives you full control over the flow and look & feel of the integration experience.\nThrough the Unify dashboard you can configure which connectors you want to support as integrations. and also allows you to control which kinds of providers your application supports.\n\nIf you're already storing access tokens we will help you migrate through our Vault Migration API.\n\nBeware, this is strategy takes more time to implement and is more complex than the hosted vault strategy.\n\n### Hosted Vault\n\nHosted Vault is a simple no-code solution, so you don't need to build your own UI to handle the integration settings and authentication. It's a great way to explore Unify without needing to build an integrations overview to get started.\n\n![Hosted Vault - Integrations portal](https://app.apideck.com/images/hosted-vault.png)\n\nBehind the scenes Hosted Vault implements the Vault API endpoints and handles the following features for your customers:\n\n- Add a connection (for an integration)\n- Handle the OAuth flow\n- Configure connection settings per integration\n- Manage connections\n- Discover and propose integration options\n\n## Domain model\n\nAt its core, a domain model creates a web of interconnected entities.\n\nOur domain model contains five main entity types: Consumer (user, account, team, machine), Application, Connector, Integration, and Connection.\n\n## Headers\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  \t| Type    \t| Required \t| Description                                                                                                                                                    \t|\n|-----------------------\t|---------\t|----------\t|----------------------------------------------------------------------------------------------------------------------------------------------------------------\t|\n| x-apideck-app-id      \t| String  \t| Yes      \t| The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                          |\n| x-apideck-consumer-id \t| String  \t| Yes      \t| The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. \t|\n| x-apideck-raw         \t| Boolean \t| No       \t| Include raw response. Mostly used for debugging purposes.                                                                                                      \t|\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Connectors\n\nA full list of what vendors require which auth flow:\n\n| Provider               | Provider ID        | Auth Type | Status    |\n| ---------------------- | ------------------ | --------- | --------- |\n| [Copper]()             | copper             | apiKey    | available |\n| [Close]()              | close              | apiKey    | available |\n| [Teamleader]()         | teamleader         | oauth2    | available |\n| [Pipedrive]()          | pipedrive          | oauth2    | available |\n| [Slack]()              | slack              | oauth2    | available |\n| [Google]()             | google             | oauth2    | available |\n| [Google Sheets]()      | google-sheets      | oauth2    | available |\n| [Hubspot]()            | hubspot            | oauth2    | available |\n| [Salesforce]()         | salesforce         | oauth2    | available |\n| [Reply]()              | reply              | apiKey    | available |\n| [MixMax]()             | mixmax             | apiKey    | available |\n| [Intercom]()           | intercom           | oauth2    | available |\n| [Drift]()              | drift              |           | available |\n| [Livechat]()           | livechat           |           | available |\n| [Crisp]()              | crisp              |           | available |\n| [Tink]()               | tink               | oauth2    | available |\n| [Auth0]()              | auth0              | oauth2    | available |\n| [Segment]()            | segment            |           | available |\n| [iubenda]()            | iubenda            |           | available |\n| [Metomic]()            | metomic-io         |           | available |\n| [Google Analytics]()   | google-analytics   |           | available |\n| [Google Tag Manager]() | google-tag-manager |           | available |\n| [Heap]()               | heap               |           | available |\n| [OneTrust]()           | onetrust           |           | available |\n| [journy.io]()          | journy-io          |           | available |\n| [Albacross]()          | albacross          |           | available |\n\n## Sandbox (upcoming)\n\nThe sandbox is pre-loaded with data similar to a real-life integrations setup. You can use the preconfigured OAauth configured connectors for testing purposes and can skip this step by using the Apideck sandbox credentials to get you started.\n\n## Guides\n\n- How to build an integrations UI with Vault (https://github.com/apideck-samples/integration-settings)\n- How to configure the OAuth credentials for integration providers (COMING SOON)\n\n## FAQ\n\n__What purpose does Vault serve? Can I just handle the authentication and access token myself?__\nYou can store everything yourself, but that defeats the purpose of using Apideck Unify. Handling tokens for multiple providers can quickly become very complex.\n\n### Is my data secure?\n\nVault employs data minimization, therefore only requesting the minimum amount of scopes needed to perform an API request.\n\n### How do I migrate existing data?\n\nUsing our migration API, you can migrate the access tokens and accounts to Apideck Vault. (COMING SOON)\n\n### Can I use Vault in combination with existing integrations?\n\nYes, you can. The granularity of Unify allows to quickly the use cases you need, while keeping a gradual migration path based on your timeline and requirements.\n\n### How does Vault work for Apideck Ecosystem customers?\n\nOnce logged in, pick your ecosystem; on the left-hand side of the screen, you'll have the option to create an application underneath the Unify section.\n\n### How to integrate Apideck Vault\n\nThis section covers everything you need to know to authenticate your customers through Vault.\nVault provides __three strategies__ to use API tokens from your customers:\n- Vault API\n- Hosted Vault\n- Apideck Ecosystem *(COMING SOON)*\n\nYou can also opt to bypass Vault and still take care of authentication flows yourself. Make sure to put the right safeguards in place to protect your customers' tokens and other sensitive data.\n\n### What auth types does Vault support?\n\nWhat auth strategies does Vault handle? We currently support two flows so your customers can activate an integration.\n\n#### API keys\n\nFor Services supporting the API key strategy, you will need to provide an in-app form where users can configure their API keys provided by the integration service. You can also use the drop-in solution if you don't want your own integration settings overview.\n\n#### OAuth 2.0\n\n##### Authorization Code Grant Type Flow\n\nVault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own.\n\nCertain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate.\n\nThis is being handled by the ``/authorize`` endpoint.\n"
   contact:
     email: hello@apideck.com
     url: 'https://developers.apideck.com'
@@ -12,7 +12,7 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 servers:
-  - url: 'https://vault.apideck.com/integrations'
+  - url: 'https://unify.apideck.com/vault'
     description: Production server
 tags:
   - name: Sessions
@@ -31,33 +31,29 @@ paths:
       tags:
         - Connections
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/apideckConsumerId'
+        - $ref: '#/components/parameters/apideckAppId'
       security:
         - apiKey: []
       responses:
         '200':
-          description: ok
+          description: All Connections
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConnectionList'
+                $ref: '#/components/schemas/connectionsList'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/badRequest'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/unauthorized'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/paymentRequired'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/notFound'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/unprocessable'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/defaultError'
   '/connections/{unified_api}/{service_id}/{resource}/defaults':
     get:
       summary: Get connection resource settings
@@ -67,11 +63,11 @@ paths:
       tags:
         - Connections
       parameters:
-        - $ref: '#/components/parameters/unified_api'
-        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unifiedApi'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/resource'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/apideckConsumerId'
+        - $ref: '#/components/parameters/apideckAppId'
       security:
         - apiKey: []
       responses:
@@ -80,23 +76,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConnectionConfig'
+                $ref: '#/components/schemas/connection'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/badRequest'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/unauthorized'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/paymentRequired'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/notFound'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/unprocessable'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/defaultError'
     patch:
       tags:
         - Connections
@@ -104,11 +96,11 @@ paths:
       description: Update default values for a connection's resource settings
       operationId: resourceSettingsUpdate
       parameters:
-        - $ref: '#/components/parameters/service_id'
-        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/unifiedApi'
         - $ref: '#/components/parameters/resource'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/apideckConsumerId'
+        - $ref: '#/components/parameters/apideckAppId'
       security:
         - apiKey: []
       requestBody:
@@ -117,30 +109,26 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateConnection'
+              $ref: '#/components/schemas/updateConnection'
       responses:
         '200':
           description: Connection Resource Settings Updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Connection'
+                $ref: '#/components/schemas/connection'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/badRequest'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/unauthorized'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/paymentRequired'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/notFound'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/unprocessable'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/defaultError'
   '/connections/{unified_api}/{service_id}':
     patch:
       tags:
@@ -149,40 +137,36 @@ paths:
       description: Update a connection
       operationId: connectionsUpdate
       parameters:
-        - $ref: '#/components/parameters/service_id'
-        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/unifiedApi'
       security:
         - apiKey: []
       requestBody:
-        description: Fields that need to be updated on the resource
+        description: Fields to be updated on the resource
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateConnection'
+              $ref: '#/components/schemas/updateConnection'
       responses:
         '200':
           description: Connection Updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Connection'
+                $ref: '#/components/schemas/connection'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/badRequest'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/unauthorized'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/paymentRequired'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/notFound'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/unprocessable'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/defaultError'
     delete:
       tags:
         - Connections
@@ -190,29 +174,25 @@ paths:
       description: Deletes a connection
       operationId: deleteConnection
       parameters:
-        - $ref: '#/components/parameters/service_id'
-        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/unifiedApi'
       security:
         - apiKey: []
       responses:
         '204':
-          $ref: '#/components/responses/Deleted'
+          $ref: '#/components/responses/deleted'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/badRequest'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/unauthorized'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/paymentRequired'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/notFound'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/unprocessable'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/defaultError'
   '/authorize/{service_id}/{application_id}':
     get:
       tags:
@@ -228,10 +208,10 @@ paths:
 
         Vault handles the complete Authorization Code Grant Type Flow for you and will redirect you to the dynamic redirect uri you have appended to the url in case this is missing the default redirect uri you have configured for your Unify application.
       parameters:
-        - $ref: '#/components/parameters/application_id'
-        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/state'
-        - $ref: '#/components/parameters/redirect_uri'
+        - $ref: '#/components/parameters/redirectUri'
       security:
         - apiKey: []
       responses:
@@ -252,31 +232,27 @@ paths:
 
         Vault handles the complete revoke flow for you and will redirect you to the dynamic redirect uri you have appended to the url in case this is missing the default redirect uri you have configured for your Unify application.
       parameters:
-        - $ref: '#/components/parameters/application_id'
-        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/state'
-        - $ref: '#/components/parameters/redirect_uri'
+        - $ref: '#/components/parameters/redirectUri'
       security:
         - apiKey: []
       responses:
         '200':
           description: ok
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/badRequest'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/unauthorized'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/paymentRequired'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/notFound'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/unprocessable'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/defaultError'
   /sessions:
     post:
       summary: Retrieve a JWT authorization
@@ -289,8 +265,8 @@ paths:
       tags:
         - Sessions
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/apideckConsumerId'
+        - $ref: '#/components/parameters/apideckAppId'
       security:
         - apiKey: []
       requestBody:
@@ -299,47 +275,70 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SessionConfig'
+              $ref: '#/components/schemas/createSession'
       responses:
         '200':
-          description: ok
+          description: Session Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateSession'
+                $ref: '#/components/schemas/session'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/badRequest'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/unauthorized'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/paymentRequired'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/notFound'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/unprocessable'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/defaultError'
 components:
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      description: |
+        To use API you have to sign up and get your own API key. Unify API accounts have sandbox mode and live mode API keys. 
+        To change modes just use the appropriate key to get a live or test object. You can find your API keys on the unify settings of your Apideck app.
+        Your Apideck application_id can also be found on the same page.
+
+        Authenticate your API requests by including your test or live secret API key in the request header. 
+
+        Bearer authorization header: `Authorization: Bearer <your-apideck-api-key>`
+
+        You should use the public keys on the SDKs and the secret keys to authenticate API requests.
+
+        **Do not share or include your secret API keys on client side code. Your API keys carry significant privileges. Please ensure to keep them 100% secure and be sure to not share your secret API keys in areas that are publicly accessible like GitHub. See API Access Key Security for more information.
+
+        Learn how to set the Authorization header inside Postman https://learning.postman.com/docs/postman/sending-api-requests/authorization/#api-key
+
+        Go to Unify to grab your API KEY https://app.apideck.com/unify/api-keys
   parameters:
-    x-apideck-consumer-id:
+    apideckConsumerId:
       name: x-apideck-consumer-id
       in: header
       description: ID of the consumer which you want to get or push data from
       required: true
       schema:
         type: string
-    x-apideck-app-id:
+    apideckAppId:
       name: x-apideck-app-id
       in: header
       description: The ID of your Unify application
       required: true
       schema:
         type: string
-    service_id:
+    applicationId:
+      name: application_id
+      in: path
+      description: Application ID of the resource to return
+      required: true
+      schema:
+        type: string
+    serviceId:
       name: service_id
       in: path
       description: Service ID of the resource to return
@@ -347,14 +346,21 @@ components:
       schema:
         type: string
       example: pipedrive
-    application_id:
-      name: application_id
-      in: path
-      description: Application ID of the resource to return
+    state:
+      name: state
+      in: query
+      description: An opaque value the applications adds to the initial request that the authorization server includes when redirecting the back to the application. This value must be used by the application to prevent CSRF attacks.
+      schema:
+        type: string
+    redirectUri:
+      name: redirect_uri
+      in: query
+      description: URL to redirect back to after authorization. When left empty the default configured redirect uri will be used.
       required: true
       schema:
         type: string
-    unified_api:
+      example: 'https://yoursaasapp.com/integrations'
+    unifiedApi:
       name: unified_api
       in: path
       required: true
@@ -370,269 +376,8 @@ components:
       schema:
         type: string
       example: lead
-    consumer_id:
-      name: x-apideck-consumer-id
-      in: path
-      description: ID of the consumer which you want to get or push data from
-      required: true
-      schema:
-        type: string
-    state:
-      name: state
-      in: query
-      description: An opaque value the applications adds to the initial request that the authorization server includes when redirecting the back to the application. This value must be used by the application to prevent CSRF attacks.
-      schema:
-        type: string
-    page:
-      name: page
-      in: query
-      description: Page number to start from. Omitting the page parameter will return page 1
-      schema:
-        type: integer
-    per_page:
-      name: per_page
-      in: query
-      description: Number of records to return per page. Default = 100.
-      schema:
-        type: integer
-    redirect_uri:
-      name: redirect_uri
-      in: query
-      description: URL to redirect back to after authorization. When left empty the default configured redirect uri will be used.
-      required: true
-      schema:
-        type: string
-      example: 'https://yoursaasapp.com/integrations'
-  responses:
-    Deleted:
-      description: Resource deleted
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 404
-              error:
-                type: string
-                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-                example: Not Found
-              typeName:
-                type: string
-                description: The type of error returned
-                example: EntityNotFoundError
-              message:
-                type: string
-                description: A human-readable message providing more details about the error.
-                example: Unknown Widget
-              detail:
-                type: string
-                description: Contains parameter or domain specific information related to the error and why it occured.
-                example: 'Could not find widget with id: ''123'''
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#entitynotfounderror'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 401
-              error:
-                type: string
-                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-                example: Unauthorized
-              typeName:
-                type: string
-                description: The type of error returned
-                example: UnauthorizedError
-              message:
-                type: string
-                description: A human-readable message providing more details about the error.
-                example: Unauthorized Request
-              detail:
-                oneOf:
-                  - type: string
-                  - type: object
-                description: Contains parameter or domain specific information related to the error and why it occured.
-                example: Failed to generate valid JWT Session. Verify applicationId is correct
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#unauthorizederror'
-    Unprocessable:
-      description: Unprocessable
-      content:
-        application/json:
-          schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 422
-              error:
-                type: string
-                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-                example: Unprocessable Entity
-              typeName:
-                type: string
-                description: The type of error returned
-                example: InvalidStateError
-              message:
-                type: string
-                description: A human-readable message providing more details about the error.
-                example: Invalid State
-              detail:
-                type: string
-                description: Contains parameter or domain specific information related to the error and why it occured.
-                example: State did not include unified_api
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#invalidstateerror'
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 400
-              error:
-                type: string
-                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-                example: Bad Request
-              typeName:
-                type: string
-                description: The type of error returned
-                example: MissingHeadersError
-              message:
-                type: string
-                description: A human-readable message providing more details about the error.
-                example: Invalid Params
-              detail:
-                oneOf:
-                  - type: string
-                  - type: object
-                description: Contains parameter or domain specific information related to the error and why it occured.
-                example:
-                  missing:
-                    - - foobar: required
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#missingheaderserror'
-    PaymentRequired:
-      description: Payment Required
-      content:
-        application/json:
-          schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 402
-              error:
-                type: string
-                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-                example: Payment Required
-              typeName:
-                type: string
-                description: The type of error returned
-                example: RequestLimitError
-              message:
-                type: string
-                description: A human-readable message providing more details about the error.
-                example: Request Limit Reached
-              detail:
-                type: string
-                description: Contains parameter or domain specific information related to the error and why it occured.
-                example: You have reached your limit of 2000
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#requestlimiterror'
-    NotImplemented:
-      description: Not Implemented
-      content:
-        application/json:
-          schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 501
-              error:
-                type: string
-                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-                example: Not Implemented
-              typeName:
-                type: string
-                description: The type of error returned
-                example: MappingError
-              message:
-                type: string
-                description: A human-readable message providing more details about the error.
-                example: Unmapped Attribute
-              detail:
-                oneOf:
-                  - type: string
-                  - type: object
-                description: Contains parameter or domain specific information related to the error and why it occured.
-                example: Failed to retrieve Widget tokenUrl from 'components.securitySchemes.oauth2.flows'
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#mappingerror'
   schemas:
-    Error:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 400
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Bad Request
-        typeName:
-          type: string
-          description: The type of error returned
-          example: MissingHeadersError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid Params
-        detail:
-          oneOf:
-            - type: string
-            - type: object
-          description: Contains parameter or domain specific information related to the error and why it occured.
-          example: 'Missing Header: x-apideck-consumer-id'
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#unauthorizederror'
-    CreateSession:
-      title: Create Session
-      type: object
-      properties:
-        session_uri:
-          type: string
-      example:
-        session_uri: 'http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj'
-    SessionConfig:
-      title: Session config
+    createSession:
       type: object
       properties:
         redirect_uri:
@@ -678,161 +423,20 @@ components:
           favicon: 'https://www.intercom.com/_next/static/images/favicon-348ad8df6c167d93fb894e8bcb4dcd2a.png'
           terms_url: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e'
           privacy_url: 'https://compliance.apideck.com/privacy-policy'
-    ConnectionConfig:
-      title: Connection Resource Defaults
-      required:
-        - data
-      properties:
-        data:
-          type: object
-          properties:
-            id:
-              type: string
-            label:
-              type: string
-            placeholder:
-              type: string
-              nullable: true
-            description:
-              type: string
-              nullable: true
-            type:
-              enum:
-                - select
-                - multi-select
-                - text
-                - textarea
-                - email
-                - url
-                - number
-                - tel
-                - checkbox
-                - hidden
-                - date
-                - datetime
-                - time
-            required:
-              type: boolean
-            custom_field:
-              type: boolean
-            disabled:
-              type: boolean
-              nullable: true
-            options:
-              type: array
-              items:
-                type: object
-                properties:
-                  label:
-                    type: string
-                  value:
-                    oneOf:
-                      - type: string
-                      - type: integer
-                      - type: boolean
-                      - type: array
-                        items:
-                          anyOf:
-                            - type: string
-                            - type: integer
-    ConnectionList:
-      title: Connection List
-      required:
-        - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Connection'
-          example:
-            - id: lead+salesforce
-              name: Salesforce
-              tag_line: Sync new leads to Salesforce
-              icon: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-              logo: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-              auth_type: oauth2
-              unified_api: lead
-              authorization_flow_enabled: true
-              authorization_url: 'https://vault.apideck.com/authorize/salesforce/{application_id}'
-              revoke_url: 'https://vault.apideck.com/revoke/salesforce/{application_id}'
-              authorized: true
-              enabled: true
-              authorized_by:
-                name: Elon Musk
-                created_at: 10/11/2019
-                external_user_id: elonmusk-2219129
-                external_account_id: spacex
-              form_fields:
-                - id: lead_source
-                  label: Lead Source
-                  value: webinar
-                  placeholder: Select source
-                  mask: true
-                  type: select
-                  required: false
-                  description: Assign a default lead source to leads
-                  validation_rule: '^.{1,}$'
-                  validation_message: Invalid lead source
-                  disabled: false
-                  options:
-                    - value: webinar
-                      label: Webinar
-                    - value: conference
-                      label: Conference
-              metadata:
-                account_name: test
-              status: upcoming
-            - id: lead+close
-              name: close
-              tag_line: Sync new leads to close
-              icon: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-              logo: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-              authType: apiKey
-              unified_api: lead
-              authorized: true
-              enabled: false
-              apiKey: '1223440590540954095'
-              metadata:
-                account_name: test
-              status: live
-    UpdateConnection:
-      type: object
-      properties:
-        api_key:
-          type: string
-          nullable: true
-        enabled:
-          type: boolean
-        settings:
-          type: object
-        configuration:
-          type: array
-          items:
-            properties:
-              id:
-                type: string
-              value:
-                oneOf:
-                  - type: string
-                  - type: integer
-                  - type: boolean
-                  - type: array
-                    items:
-                      anyOf:
-                        - type: string
-                        - type: integer
-        metadata:
-          type: object
-    Service:
+    connection:
       type: object
       properties:
         id:
           type: string
+        service_id:
+          type: string
         name:
           type: string
-        tagLine:
+        tag_line:
           type: string
         unified_api:
+          type: string
+        website:
           type: string
         icon:
           type: string
@@ -843,52 +447,327 @@ components:
           enum:
             - oauth2
             - apiKey
-    Connection:
-      allOf:
-        - $ref: '#/components/schemas/Service'
-        - type: object
-          properties:
-            status:
-              type: string
-              enum:
-                - live
-                - upcoming
-                - requested
-            authorizationUrl:
-              type: string
-            revokeUrl:
-              type: string
-            added:
-              type: boolean
-            addedOn:
-              type: string
-            addedBy:
-              type: string
-            enabled:
-              type: boolean
-            authorize:
-              type: boolean
-            metadata:
-              type: object
-  securitySchemes:
-    apiKey:
-      type: http
-      scheme: bearer
-      description: |
-        To use API you have to sign up and get your own API key. Unify API accounts have sandbox mode and live mode API keys. 
-        To change modes just use the appropriate key to get a live or test object. You can find your API keys on the unify settings of your Apideck app.
-        Your Apideck application_id can also be found on the same page.
-
-        Authenticate your API requests by including your test or live secret API key in the request header. 
-
-        Bearer authorization header: `Authorization: Bearer <your-apideck-api-key>`
-
-        You should use the public keys on the SDKs and the secret keys to authenticate API requests.
-
-        **Do not share or include your secret API keys on client side code. Your API keys carry significant privileges. Please ensure to keep them 100% secure and be sure to not share your secret API keys in areas that are publicly accessible like GitHub. See API Access Key Security for more information.
-
-        Learn how to set the Authorization header inside Postman https://learning.postman.com/docs/postman/sending-api-requests/authorization/#api-key
-
-        Go to Unify to grab your API KEY https://app.apideck.com/unify/api-keys
+        status:
+          type: string
+          enum:
+            - live
+            - upcoming
+            - requested
+        form_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              label:
+                type: string
+              placeholder:
+                type: string
+                nullable: true
+              description:
+                type: string
+                nullable: true
+              type:
+                enum:
+                  - select
+                  - multi-select
+                  - text
+                  - textarea
+                  - number
+                  - boolean
+                  - hidden
+                  - date
+                  - datetime
+              required:
+                type: boolean
+              custom_field:
+                type: boolean
+              disabled:
+                type: boolean
+                nullable: true
+              options:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    label:
+                      type: string
+                    value:
+                      oneOf:
+                        - type: string
+                        - type: integer
+                        - type: number
+                        - type: boolean
+                        - type: array
+                          items:
+                            anyOf:
+                              - type: string
+                              - type: integer
+                              - type: number
+        configuration:
+          type: array
+          items:
+            $ref: '#/components/schemas/connection/properties/form_fields/items'
+        configurable_resources:
+          type: array
+          items:
+            type: string
+        settings_required_for_authorization:
+          type: array
+          items:
+            type: string
+        authorize_url:
+          type: string
+        revoke_url:
+          type: string
+        added:
+          type: boolean
+        enabled:
+          type: boolean
+        created_at:
+          type: number
+    updateConnection:
+      type: object
+      properties:
+        api_key:
+          type: string
+          nullable: true
+        enabled:
+          type: boolean
+        settings:
+          type: object
+        metadata:
+          type: object
+        configuration:
+          type: array
+          items:
+            type: object
+            properties:
+              resource:
+                type: string
+              defaults:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    value:
+                      oneOf:
+                        - type: string
+                        - type: integer
+                        - type: number
+                        - type: boolean
+                        - type: array
+                          items:
+                            anyOf:
+                              - type: string
+                              - type: integer
+                              - type: number
+    connectionsList:
+      type: array
+      items:
+        $ref: '#/components/schemas/connection'
+    session:
+      type: object
+      properties:
+        session_uri:
+          type: string
+      example:
+        session_uri: 'http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj'
+  responses:
+    badRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            properties:
+              status_code:
+                type: number
+                description: HTTP status code
+                example: 400
+              error:
+                type: string
+                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+                example: Bad Request
+              typeName:
+                type: string
+                description: The type of error returned
+                example: MissingHeadersError
+              message:
+                type: string
+                description: A human-readable message providing more details about the error.
+                example: Invalid Params
+              detail:
+                oneOf:
+                  - type: string
+                  - type: object
+                description: Contains parameter or domain specific information related to the error and why it occured.
+                example:
+                  missing:
+                    - - foobar: required
+              ref:
+                type: string
+                description: Link to documentation of error type
+                example: 'https://developers.apideck.com/errors#missingheaderserror'
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            properties:
+              status_code:
+                type: number
+                description: HTTP status code
+                example: 401
+              error:
+                type: string
+                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+                example: Unauthorized
+              typeName:
+                type: string
+                description: The type of error returned
+                example: UnauthorizedError
+              message:
+                type: string
+                description: A human-readable message providing more details about the error.
+                example: Unauthorized Request
+              detail:
+                oneOf:
+                  - type: string
+                  - type: object
+                description: Contains parameter or domain specific information related to the error and why it occured.
+                example: Failed to generate valid JWT Session. Verify applicationId is correct
+              ref:
+                type: string
+                description: Link to documentation of error type
+                example: 'https://developers.apideck.com/errors#unauthorizederror'
+    paymentRequired:
+      description: Payment Required
+      content:
+        application/json:
+          schema:
+            properties:
+              status_code:
+                type: number
+                description: HTTP status code
+                example: 402
+              error:
+                type: string
+                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+                example: Payment Required
+              typeName:
+                type: string
+                description: The type of error returned
+                example: RequestLimitError
+              message:
+                type: string
+                description: A human-readable message providing more details about the error.
+                example: Request Limit Reached
+              detail:
+                type: string
+                description: Contains parameter or domain specific information related to the error and why it occured.
+                example: You have reached your limit of 2000
+              ref:
+                type: string
+                description: Link to documentation of error type
+                example: 'https://developers.apideck.com/errors#requestlimiterror'
+    notFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            properties:
+              status_code:
+                type: number
+                description: HTTP status code
+                example: 404
+              error:
+                type: string
+                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+                example: Not Found
+              typeName:
+                type: string
+                description: The type of error returned
+                example: EntityNotFoundError
+              message:
+                type: string
+                description: A human-readable message providing more details about the error.
+                example: Unknown Widget
+              detail:
+                type: string
+                description: Contains parameter or domain specific information related to the error and why it occured.
+                example: 'Could not find widget with id: ''123'''
+              ref:
+                type: string
+                description: Link to documentation of error type
+                example: 'https://developers.apideck.com/errors#entitynotfounderror'
+    unprocessable:
+      description: Unprocessable
+      content:
+        application/json:
+          schema:
+            properties:
+              status_code:
+                type: number
+                description: HTTP status code
+                example: 422
+              error:
+                type: string
+                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+                example: Unprocessable Entity
+              typeName:
+                type: string
+                description: The type of error returned
+                example: InvalidStateError
+              message:
+                type: string
+                description: A human-readable message providing more details about the error.
+                example: Invalid State
+              detail:
+                type: string
+                description: Contains parameter or domain specific information related to the error and why it occured.
+                example: State did not include unified_api
+              ref:
+                type: string
+                description: Link to documentation of error type
+                example: 'https://developers.apideck.com/errors#invalidstateerror'
+    deleted:
+      description: Resource deleted
+    defaultError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            properties:
+              status_code:
+                type: number
+                description: HTTP status code
+                example: 500
+              error:
+                type: string
+                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+                example: Internal Server Error
+              typeName:
+                type: string
+                description: The type of error returned
+                example: UnexpectedError
+              message:
+                type: string
+                description: A human-readable message providing more details about the error.
+                example: An unexpected error occurred.
+              detail:
+                oneOf:
+                  - type: string
+                  - type: object
+                description: Contains parameter or domain specific information related to the error and why it occured.
+                example:
+                  missing:
+                    - - foobar: required
+              ref:
+                type: string
+                description: Link to documentation of error type
+                example: 'https://developers.apideck.com/errors'
 security:
   - apiKey: []

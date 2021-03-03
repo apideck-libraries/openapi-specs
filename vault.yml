@@ -12,7 +12,7 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 servers:
-  - url: 'https://unify.apideck.com/vault'
+  - url: 'https://unify.apideck.com'
     description: Production server
 tags:
   - name: Sessions
@@ -20,7 +20,7 @@ tags:
   - name: Connections
     description: ''
 paths:
-  /connections:
+  /vault/connections:
     get:
       summary: Get all connections
       operationId: connectionsAll
@@ -54,7 +54,7 @@ paths:
           $ref: '#/components/responses/unprocessable'
         default:
           $ref: '#/components/responses/defaultError'
-  '/connections/{unified_api}/{service_id}/{resource}/defaults':
+  '/vault/connections/{unified_api}/{service_id}/{resource}/defaults':
     get:
       summary: Get connection resource settings
       operationId: connectionsOne
@@ -129,7 +129,7 @@ paths:
           $ref: '#/components/responses/unprocessable'
         default:
           $ref: '#/components/responses/defaultError'
-  '/connections/{unified_api}/{service_id}':
+  '/vault/connections/{unified_api}/{service_id}':
     patch:
       tags:
         - Connections
@@ -193,7 +193,7 @@ paths:
           $ref: '#/components/responses/unprocessable'
         default:
           $ref: '#/components/responses/defaultError'
-  '/authorize/{service_id}/{application_id}':
+  '/vault/authorize/{service_id}/{application_id}':
     get:
       tags:
         - Connections
@@ -217,7 +217,7 @@ paths:
       responses:
         '200':
           description: ok
-  '/revoke/{service_id}/{application_id}':
+  '/vault/revoke/{service_id}/{application_id}':
     get:
       tags:
         - Connections
@@ -253,7 +253,7 @@ paths:
           $ref: '#/components/responses/unprocessable'
         default:
           $ref: '#/components/responses/defaultError'
-  /sessions:
+  /vault/sessions:
     post:
       summary: Retrieve a JWT authorization
       operationId: createSession
@@ -350,6 +350,7 @@ components:
       name: state
       in: query
       description: An opaque value the applications adds to the initial request that the authorization server includes when redirecting the back to the application. This value must be used by the application to prevent CSRF attacks.
+      required: true
       schema:
         type: string
     redirectUri:

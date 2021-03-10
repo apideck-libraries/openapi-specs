@@ -13,264 +13,7 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 servers:
   - url: 'https://unify.apideck.com'
-    description: Production
-security:
-  - apiKey: []
-tags:
-  - name: Leads
-    description: ''
 components:
-  schemas:
-    id:
-      properties:
-        id:
-          type: string
-          readOnly: true
-          example: '12345'
-    lead:
-      required:
-        - name
-        - company_name
-      x-pii:
-        - name
-        - email
-        - first_name
-        - last_name
-      properties:
-        id:
-          type: string
-          readOnly: true
-        owner_id:
-          type: string
-          example: '1'
-        company_id:
-          type: string
-          example: '2'
-          nullable: true
-        company_name:
-          type: string
-          example: Spacex
-          nullable: true
-        name:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-          nullable: true
-        description:
-          type: string
-          example: A thinker
-        prefix:
-          type: string
-        title:
-          type: string
-        status:
-          type: string
-        fax:
-          type: string
-          example: '+12129876543'
-          nullable: true
-        websites:
-          type: array
-          items:
-            $ref: '#/components/schemas/website'
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/address'
-        social_links:
-          type: array
-          items:
-            $ref: '#/components/schemas/social_link'
-        phone_numbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/phone_number'
-        emails:
-          type: array
-          items:
-            $ref: '#/components/schemas/email'
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/custom_field'
-        tags:
-          $ref: '#/components/schemas/tags'
-        updated_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
-        created_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
-    bank_account:
-      type: object
-      properties:
-        iban:
-          type: string
-          example: CH2989144532982975332
-          nullable: true
-        bic:
-          type: string
-          example: AUDSCHGGXXX
-          nullable: true
-    website:
-      type: object
-      required:
-        - url
-      properties:
-        id:
-          type: string
-          example: '123'
-        url:
-          type: string
-          example: 'http://example.com'
-        category:
-          type: string
-          example: default
-    address:
-      type: object
-      properties:
-        id:
-          type: string
-          example: '123'
-        type:
-          type: string
-          enum:
-            - default
-            - primary
-            - secondary
-            - tertiary
-            - invoicing
-            - delivery
-            - visiting
-            - mailing
-            - home
-            - work
-            - other
-          example: invoicing
-        name:
-          type: string
-          example: HQ US
-          nullable: true
-        line1:
-          type: string
-          example: Main street
-          description: 'Line 1 of the address e.g. number, street, suite, apt #, etc.'
-          nullable: true
-        line2:
-          type: string
-          example: 'apt #'
-          description: Line 2 of the address
-          nullable: true
-        city:
-          type: string
-          example: San Francisco
-          description: Name of city.
-          nullable: true
-        state:
-          type: string
-          example: CA
-          description: Name of state
-          nullable: true
-        postal_code:
-          type: string
-          example: '94104'
-          description: Zip code or equivalent.
-          nullable: true
-        country:
-          type: string
-          example: US
-          description: country code according to ISO 3166-1 alpha-2.
-          nullable: true
-        latitude:
-          type: string
-          example: '40.759211'
-          nullable: true
-        longitude:
-          type: string
-          example: '-73.984638'
-          nullable: true
-    social_link:
-      required:
-        - url
-      type: object
-      properties:
-        id:
-          type: string
-          example: '123'
-        url:
-          type: string
-          example: 'https://www.twitter.com/apideck-io'
-        platform:
-          type: string
-          example: twitter
-    phone_number:
-      required:
-        - number
-      type: object
-      properties:
-        id:
-          type: string
-          example: '123'
-        number:
-          type: string
-          example: 111-111-1111
-        phone_type:
-          type: string
-          enum:
-            - default
-            - phone
-            - mobile
-            - work
-            - office
-            - home
-            - fax
-            - assistant
-            - other
-    email:
-      required:
-        - email
-      type: object
-      properties:
-        id:
-          type: string
-          example: '123'
-        email:
-          type: string
-          format: email
-          example: elon@musk.com
-        type:
-          type: string
-          example: default
-    custom_field:
-      type: object
-      required:
-        - id
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          example: custom_technologies
-        value:
-          anyOf:
-            - type: string
-              example: Uses Salesforce and Marketo
-            - type: number
-              example: 10
-            - type: boolean
-              example: true
-            - type: array
-              items:
-                type: string
-    tags:
-      type: array
-      items:
-        type: string
-      example:
-        - New
   parameters:
     id:
       in: path
@@ -279,6 +22,13 @@ components:
         type: string
       required: true
       description: ID of the record you are acting upon.
+    x-apideck-consumer-id:
+      name: x-apideck-consumer-id
+      in: header
+      description: ID of the consumer which you want to get or push data from
+      required: true
+      schema:
+        type: string
     x-apideck-app-id:
       name: x-apideck-app-id
       in: header
@@ -292,13 +42,6 @@ components:
       description: 'Provide the service id you want to call (e.g., pipedrive). See the full list in the connector section. Only needed when a consumer has activated multiple integrations for a Unified API.'
       schema:
         type: string
-    x-apideck-consumer-id:
-      name: x-apideck-consumer-id
-      in: header
-      description: ID of the consumer which you want to get or push data from
-      required: true
-      schema:
-        type: string
     page:
       name: page
       in: query
@@ -309,7 +52,7 @@ components:
     per_page:
       name: per_page
       in: query
-      description: Number of records to return per page. Default = 100.
+      description: Number of records to return per result set. Default = 100.
       schema:
         type: integer
         default: 100
@@ -380,7 +123,7 @@ components:
                 description: A human-readable message providing more details about the error.
                 example: Unauthorized Request
               detail:
-                anyOf:
+                oneOf:
                   - type: string
                   - type: object
                 description: Contains parameter or domain specific information related to the error and why it occured.
@@ -442,7 +185,7 @@ components:
                 description: A human-readable message providing more details about the error.
                 example: Invalid Params
               detail:
-                anyOf:
+                oneOf:
                   - type: string
                   - type: object
                 description: Contains parameter or domain specific information related to the error and why it occured.
@@ -506,7 +249,7 @@ components:
                 description: A human-readable message providing more details about the error.
                 example: Unmapped Attribute
               detail:
-                anyOf:
+                oneOf:
                   - type: string
                   - type: object
                 description: Contains parameter or domain specific information related to the error and why it occured.
@@ -515,38 +258,391 @@ components:
                 type: string
                 description: Link to documentation of error type
                 example: 'https://developers.apideck.com/errors#mappingerror'
-    UnexpectedError:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
+  schemas:
+    Error:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Bad Request
+        typeName:
+          type: string
+          description: The type of error returned
+          example: MissingHeadersError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          oneOf:
+            - type: string
+            - type: object
+          description: Contains parameter or domain specific information related to the error and why it occured.
+          example: 'Missing Header: x-apideck-consumer-id'
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#unauthorizederror'
+    leadsAdd:
+      required:
+        - name
+        - company_name
+      x-pii:
+        - name
+        - first_name
+        - last_name
+        - email
+        - phone_number
+      properties:
+        name:
+          type: string
+          example: Elon Musk
+        first_name:
+          type: string
+          example: Elon
+        last_name:
+          type: string
+          example: Musk
+        prefix:
+          type: string
+          example: Duke
+        title:
+          type: string
+          example: CEO
+        description:
+          type: string
+          example: A thinker
+        company_id:
+          type: string
+          example: '1234567'
+        company_name:
+          type: string
+          example: SpaceX
+        status:
+          type: string
+          example: open
+        lead_source:
+          type: string
+          example: website
+        fax:
+          type: string
+          example: '+12129876543'
+          nullable: true
+        note:
+          type: string
+          example: Eager to buy more rockets.
+        emails:
+          $ref: '#/components/schemas/lead/properties/emails'
+        websites:
+          $ref: '#/components/schemas/lead/properties/websites'
+        addresses:
+          $ref: '#/components/schemas/lead/properties/addresses'
+        social_links:
+          $ref: '#/components/schemas/lead/properties/social_links'
+        phone_numbers:
+          $ref: '#/components/schemas/lead/properties/phone_numbers'
+        custom_fields:
+          $ref: '#/components/schemas/lead/properties/custom_fields'
+        tags:
+          $ref: '#/components/schemas/lead/properties/tags'
+    leadsUpdate:
+      required:
+        - name
+        - company_name
+      x-pii:
+        - name
+        - first_name
+        - last_name
+        - email
+        - phone_number
+      properties:
+        name:
+          type: string
+          example: Elon Musk
+        first_name:
+          type: string
+          example: Elon
+        last_name:
+          type: string
+          example: Musk
+        prefix:
+          type: string
+          example: Duke
+        title:
+          type: string
+          example: CEO
+        description:
+          type: string
+          example: A thinker
+        company_id:
+          type: string
+          example: '1234567'
+        company_name:
+          type: string
+          example: SpaceX
+        status:
+          type: string
+          example: open
+        lead_source:
+          type: string
+          example: website
+        fax:
+          type: string
+          example: '+12129876543'
+          nullable: true
+        note:
+          type: string
+          example: Eager to buy more rockets.
+        emails:
+          $ref: '#/components/schemas/lead/properties/emails'
+        websites:
+          $ref: '#/components/schemas/lead/properties/websites'
+        addresses:
+          $ref: '#/components/schemas/lead/properties/addresses'
+        social_links:
+          $ref: '#/components/schemas/lead/properties/social_links'
+        phone_numbers:
+          $ref: '#/components/schemas/lead/properties/phone_numbers'
+        custom_fields:
+          $ref: '#/components/schemas/lead/properties/custom_fields'
+        tags:
+          $ref: '#/components/schemas/lead/properties/tags'
+    lead:
+      required:
+        - id
+      x-pii:
+        - name
+        - email
+        - first_name
+        - last_name
+      properties:
+        id:
+          type: string
+          readOnly: true
+        owner_id:
+          type: string
+          example: '1'
+        company_id:
+          type: string
+          example: '2'
+          nullable: true
+        company_name:
+          type: string
+          example: Spacex
+          nullable: true
+        name:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          example: A thinker
+        prefix:
+          type: string
+        title:
+          type: string
+        status:
+          type: string
+        fax:
+          type: string
+          example: '+12129876543'
+          nullable: true
+        emails:
+          type: array
+          items:
+            type: object
             properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 400
-              error:
+              id:
                 type: string
-                description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-                example: Bad Request
-              typeName:
+                example: '123'
+              email:
                 type: string
-                description: The type of error returned
-                example: MissingHeadersError
-              message:
+                format: email
+                example: elon@musk.com
+              type:
                 type: string
-                description: A human-readable message providing more details about the error.
-                example: Invalid Params
-              detail:
+                example: default
+        websites:
+          type: array
+          items:
+            type: object
+            required:
+              - url
+            properties:
+              id:
+                type: string
+                example: '123'
+              url:
+                type: string
+                example: 'http://example.com'
+              category:
+                type: string
+                example: default
+        addresses:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: '123'
+              type:
+                type: string
+                enum:
+                  - default
+                  - primary
+                  - secondary
+                  - tertiary
+                  - invoicing
+                  - delivery
+                  - visiting
+                  - mailing
+                  - home
+                  - work
+                  - other
+                example: invoicing
+              name:
+                type: string
+                example: HQ US
+              line1:
+                type: string
+                example: Main street
+                description: 'Line 1 of the address e.g. number, street, suite, apt #, etc.'
+                nullable: true
+              line2:
+                type: string
+                example: 'apt #'
+                description: Line 2 of the address
+                nullable: true
+              city:
+                type: string
+                example: San Francisco
+                description: Name of city.
+                nullable: true
+              state:
+                type: string
+                example: CA
+                description: Name of state
+                nullable: true
+              postal_code:
+                type: string
+                example: '94104'
+                description: Zip code or equivalent.
+                nullable: true
+              country:
+                type: string
+                example: US
+                description: country code according to ISO 3166-1 alpha-2.
+                nullable: true
+              latitude:
+                type: string
+                example: '40.759211'
+                nullable: true
+              longitude:
+                type: string
+                example: '-73.984638'
+                nullable: true
+        social_links:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: '123'
+              url:
+                type: string
+                example: 'https://www.twitter.com/apideck-io'
+              platform:
+                type: string
+                example: twitter
+        phone_numbers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: '123'
+              number:
+                type: string
+                example: 111-111-1111
+              phone_type:
+                type: string
+                enum:
+                  - default
+                  - mobile
+                  - work
+                  - office
+                  - home
+                  - fax
+                  - assistant
+                  - other
+        custom_fields:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            additionalProperties: false
+            properties:
+              id:
+                type: string
+                example: custom_technologies
+              value:
                 anyOf:
                   - type: string
-                  - type: object
-                description: Contains parameter or domain specific information related to the error and why it occured.
-                example: 'Missing Header: x-apideck-consumer-id'
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#unauthorizederror'
+                    example: Uses Salesforce and Marketo
+                  - type: number
+                    example: 10
+                  - type: boolean
+                    example: true
+                  - type: array
+                    items:
+                      type: string
+        tags:
+          type: array
+          items:
+            type: string
+          example:
+            - New
+        updated_at:
+          type: string
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
+        created_at:
+          type: string
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
+    leadsAddResponse:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+    leadsUpdateResponse:
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+    leads:
+      type: array
+      description: ''
+      minItems: 0
+      items:
+        $ref: '#/components/schemas/lead'
+    leadsDeleteResponse:
+      properties:
+        id:
+          type: string
   securitySchemes:
     apiKey:
       type: http
@@ -567,6 +663,11 @@ components:
         Learn how to set the Authorization header inside Postman https://learning.postman.com/docs/postman/sending-api-requests/authorization/#api-key
 
         Go to Unify to grab your API KEY https://app.apideck.com/unify/api-keys
+security:
+  - apiKey: []
+tags:
+  - name: Leads
+    description: ''
 paths:
   /lead/leads:
     get:
@@ -580,7 +681,6 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/per_page'
       security:
@@ -591,32 +691,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/lead'
+                $ref: '#/components/schemas/leads'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -628,7 +703,11 @@ paths:
         '422':
           $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       tags:
         - Leads
@@ -647,37 +726,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/lead'
+              $ref: '#/components/schemas/leadsAdd'
       responses:
         '201':
           description: Leads created
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    $ref: '#/components/schemas/id'
+                $ref: '#/components/schemas/leadsAddResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -689,7 +745,11 @@ paths:
         '422':
           $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   '/lead/leads/{id}':
     get:
       tags:
@@ -698,11 +758,11 @@ paths:
       summary: Get lead
       description: Get lead
       parameters:
-        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/id'
       security:
         - apiKey: []
       responses:
@@ -711,30 +771,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    $ref: '#/components/schemas/lead'
+                $ref: '#/components/schemas/lead'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -746,7 +783,11 @@ paths:
         '422':
           $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     patch:
       tags:
         - Leads
@@ -754,11 +795,11 @@ paths:
       summary: Update lead
       description: Update lead
       parameters:
-        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/id'
       security:
         - apiKey: []
       requestBody:
@@ -766,37 +807,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/lead'
+              $ref: '#/components/schemas/leadsUpdate'
       responses:
         '200':
           description: Leads updated
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    $ref: '#/components/schemas/id'
+                $ref: '#/components/schemas/leadsUpdateResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -808,7 +826,11 @@ paths:
         '422':
           $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - Leads
@@ -816,11 +838,11 @@ paths:
       summary: Delete lead
       description: Delete lead
       parameters:
-        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/id'
       security:
         - apiKey: []
       responses:
@@ -829,30 +851,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    $ref: '#/components/schemas/id'
+                $ref: '#/components/schemas/leadsDeleteResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -864,4 +863,8 @@ paths:
         '422':
           $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

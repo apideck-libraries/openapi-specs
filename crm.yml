@@ -1481,6 +1481,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Company'
+        meta:
+          $ref: '#/components/schemas/GetLeadsResponse/properties/meta'
+        links:
+          $ref: '#/components/schemas/GetLeadsResponse/properties/links'
     CreateLeadResponse:
       type: object
       properties:
@@ -1608,6 +1612,50 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Lead'
+        meta:
+          type: object
+          description: Reponse metadata
+          properties:
+            items_on_page:
+              type: integer
+              description: Number of items returned in the data property of the response
+            limit:
+              type: integer
+              description: >-
+                Maximum number of items returned in this reponse, as specified
+                in the request
+              default: 20
+            cursors:
+              type: object
+              description: Cursors to navigate to previous or next pages through the API
+              properties:
+                previous:
+                  type: string
+                  description: Cursor to navigate to the previous page through the API
+                  nullable: true
+                current:
+                  type: string
+                  description: Cursor to navigate to the current page through the API
+                  nullable: true
+                next:
+                  type: string
+                  description: Cursor to navigate to the previous page through the API
+                  nullable: true
+        links:
+          type: object
+          description: Links to navigate to previous or next pages through the API
+          properties:
+            previous:
+              type: string
+              description: Link to navigate to the previous page through the API
+              nullable: true
+            current:
+              type: string
+              description: Link to navigate to the current page through the API
+            next:
+              type: string
+              description: Link to navigate to the previous page through the API
+              nullable: true
     CreateOpportunityResponse:
       type: object
       properties:
@@ -1735,6 +1783,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Opportunity'
+        meta:
+          $ref: '#/components/schemas/GetLeadsResponse/properties/meta'
+        links:
+          $ref: '#/components/schemas/GetLeadsResponse/properties/links'
     CreateContactResponse:
       type: object
       properties:
@@ -1862,6 +1914,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Contact'
+        meta:
+          $ref: '#/components/schemas/GetLeadsResponse/properties/meta'
+        links:
+          $ref: '#/components/schemas/GetLeadsResponse/properties/links'
   parameters:
     x-apideck-app-id:
       name: x-apideck-app-id
@@ -1886,29 +1942,6 @@ components:
       required: true
       schema:
         type: string
-    page:
-      name: page
-      in: query
-      description: >-
-        Page number to start from. Omitting the page parameter will return page
-        1
-      schema:
-        type: integer
-        default: 1
-    per_page:
-      name: per_page
-      in: query
-      description: Number of records to return per page. Default = 100.
-      schema:
-        type: integer
-        default: 100
-    offset:
-      name: offset
-      in: query
-      description: The number of items to skip before starting to collect the result set
-      schema:
-        type: integer
-        default: 0
     raw:
       name: raw
       in: query
@@ -2138,9 +2171,8 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/paths/~1crm~1leads/get/parameters/4'
+        - $ref: '#/paths/~1crm~1leads/get/parameters/5'
       security:
         - apiKey: []
       responses:
@@ -2298,9 +2330,8 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/paths/~1crm~1leads/get/parameters/4'
+        - $ref: '#/paths/~1crm~1leads/get/parameters/5'
       security:
         - apiKey: []
       responses:
@@ -2458,9 +2489,8 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/paths/~1crm~1leads/get/parameters/4'
+        - $ref: '#/paths/~1crm~1leads/get/parameters/5'
       security:
         - apiKey: []
       responses:
@@ -2618,9 +2648,21 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
+        - name: cursor
+          in: query
+          description: Cursor to start from (optional)
+          schema:
+            type: string
+            nullable: true
+            default: null
+        - name: limit
+          in: query
+          description: Number of records to return. Default = 20
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 20
       security:
         - apiKey: []
       responses:

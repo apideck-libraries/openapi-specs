@@ -333,273 +333,346 @@ components:
                         - type: string
                         - type: integer
                         - type: number
+    GetConnectionResponse:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          properties:
+            data:
+              $ref: '#/components/schemas/Connection'
+    GetConnectionsResponse:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Connection'
+    UpdateConnectionResponse:
+      type: object
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Connection'
+    CreateSessionResponse:
+      description: Session Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Session'
+    NotFoundResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 404
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Not Found
+        typeName:
+          type: string
+          description: The type of error returned
+          example: EntityNotFoundError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unknown Widget
+        detail:
+          type: string
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: "Could not find widget with id: '123'"
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#entitynotfounderror'
+    Unauthorized:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 401
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Unauthorized
+        typeName:
+          type: string
+          description: The type of error returned
+          example: UnauthorizedError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unauthorized Request
+        detail:
+          anyOf:
+            - type: string
+            - type: object
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: >-
+            Failed to generate valid JWT Session. Verify applicationId is
+            correct
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#unauthorizederror'
+    Unprocessable:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 422
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Unprocessable Entity
+        typeName:
+          type: string
+          description: The type of error returned
+          example: InvalidStateError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid State
+        detail:
+          type: string
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: State did not include unified_api
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#invalidstateerror'
+    BadRequest:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Bad Request
+        typeName:
+          type: string
+          description: The type of error returned
+          example: MissingHeadersError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+            - type: object
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example:
+            missing:
+              - - foobar: required
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#missingheaderserror'
+    PaymentRequired:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 402
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Payment Required
+        typeName:
+          type: string
+          description: The type of error returned
+          example: RequestLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Request Limit Reached
+        detail:
+          type: string
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: You have reached your limit of 2000
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#requestlimiterror'
+    NotImplemented:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 501
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Not Implemented
+        typeName:
+          type: string
+          description: The type of error returned
+          example: MappingError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unmapped Attribute
+        detail:
+          anyOf:
+            - type: string
+            - type: object
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: >-
+            Failed to retrieve Widget tokenUrl from
+            'components.securitySchemes.oauth2.flows'
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#mappingerror'
+    UnexpectedError:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Bad Request
+        typeName:
+          type: string
+          description: The type of error returned
+          example: MissingHeadersError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+            - type: object
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: 'Missing Header: x-apideck-consumer-id'
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#unauthorizederror'
   responses:
+    GetConnection:
+      description: Connection
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConnectionResponse'
+    GetConnections:
+      description: All Connections
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConnectionsResponse'
+    UpdateConnection:
+      description: Connection updated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateConnectionResponse'
+    CreateSession:
+      description: Session created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateSessionResponse'
     NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 404
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Not Found
-              typeName:
-                type: string
-                description: The type of error returned
-                example: EntityNotFoundError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Unknown Widget
-              detail:
-                type: string
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: "Could not find widget with id: '123'"
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#entitynotfounderror'
+            $ref: '#/components/schemas/NotFoundResponse'
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 401
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Unauthorized
-              typeName:
-                type: string
-                description: The type of error returned
-                example: UnauthorizedError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Unauthorized Request
-              detail:
-                anyOf:
-                  - type: string
-                  - type: object
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: >-
-                  Failed to generate valid JWT Session. Verify applicationId is
-                  correct
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#unauthorizederror'
+            $ref: '#/components/schemas/Unauthorized'
     Unprocessable:
       description: Unprocessable
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 422
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Unprocessable Entity
-              typeName:
-                type: string
-                description: The type of error returned
-                example: InvalidStateError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Invalid State
-              detail:
-                type: string
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: State did not include unified_api
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#invalidstateerror'
+            $ref: '#/components/schemas/Unprocessable'
     BadRequest:
       description: Bad Request
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 400
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Bad Request
-              typeName:
-                type: string
-                description: The type of error returned
-                example: MissingHeadersError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Invalid Params
-              detail:
-                anyOf:
-                  - type: string
-                  - type: object
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example:
-                  missing:
-                    - - foobar: required
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#missingheaderserror'
+            $ref: '#/components/schemas/BadRequest'
     PaymentRequired:
       description: Payment Required
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 402
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Payment Required
-              typeName:
-                type: string
-                description: The type of error returned
-                example: RequestLimitError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Request Limit Reached
-              detail:
-                type: string
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: You have reached your limit of 2000
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#requestlimiterror'
+            $ref: '#/components/schemas/PaymentRequired'
     NotImplemented:
       description: Not Implemented
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 501
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Not Implemented
-              typeName:
-                type: string
-                description: The type of error returned
-                example: MappingError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Unmapped Attribute
-              detail:
-                anyOf:
-                  - type: string
-                  - type: object
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: >-
-                  Failed to retrieve Widget tokenUrl from
-                  'components.securitySchemes.oauth2.flows'
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#mappingerror'
+            $ref: '#/components/schemas/NotImplemented'
     UnexpectedError:
       description: Unexpected error
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 400
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Bad Request
-              typeName:
-                type: string
-                description: The type of error returned
-                example: MissingHeadersError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Invalid Params
-              detail:
-                anyOf:
-                  - type: string
-                  - type: object
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: 'Missing Header: x-apideck-consumer-id'
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#unauthorizederror'
+            $ref: '#/components/schemas/UnexpectedError'
   securitySchemes:
     apiKey:
       type: http
@@ -663,36 +736,19 @@ paths:
         - apiKey: []
       responses:
         '200':
-          description: All Connections
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Connection'
+          $ref: '#/components/responses/GetConnections'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/paths/~1vault~1sessions/post/responses/400'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/paths/~1vault~1sessions/post/responses/401'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/paths/~1vault~1sessions/post/responses/402'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/paths/~1vault~1sessions/post/responses/404'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/paths/~1vault~1sessions/post/responses/422'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/paths/~1vault~1sessions/post/responses/default'
   '/vault/connections/{unified_api}/{service_id}':
     patch:
       tags:
@@ -714,34 +770,19 @@ paths:
               $ref: '#/components/schemas/Connection'
       responses:
         '200':
-          description: Connection Updated
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  data:
-                    $ref: '#/components/schemas/Connection'
+          $ref: '#/components/responses/UpdateConnection'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/paths/~1vault~1sessions/post/responses/400'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/paths/~1vault~1sessions/post/responses/401'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/paths/~1vault~1sessions/post/responses/402'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/paths/~1vault~1sessions/post/responses/404'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/paths/~1vault~1sessions/post/responses/422'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/paths/~1vault~1sessions/post/responses/default'
     delete:
       tags:
         - Connections
@@ -757,17 +798,17 @@ paths:
         '204':
           description: Resource deleted
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/paths/~1vault~1sessions/post/responses/400'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/paths/~1vault~1sessions/post/responses/401'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/paths/~1vault~1sessions/post/responses/402'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/paths/~1vault~1sessions/post/responses/404'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/paths/~1vault~1sessions/post/responses/422'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/paths/~1vault~1sessions/post/responses/default'
   '/vault/connections/{unified_api}/{service_id}/{resource}/defaults':
     get:
       tags:
@@ -787,36 +828,19 @@ paths:
         - apiKey: []
       responses:
         '200':
-          description: Connection
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  data:
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/Connection'
+          $ref: '#/components/responses/GetConnection'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/paths/~1vault~1sessions/post/responses/400'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/paths/~1vault~1sessions/post/responses/401'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/paths/~1vault~1sessions/post/responses/402'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/paths/~1vault~1sessions/post/responses/404'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/paths/~1vault~1sessions/post/responses/422'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/paths/~1vault~1sessions/post/responses/default'
     patch:
       tags:
         - Connections
@@ -837,39 +861,109 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Connection'
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '12345'
+                  readOnly: true
+                service_id:
+                  type: string
+                name:
+                  type: string
+                tag_line:
+                  type: string
+                unified_api:
+                  type: string
+                website:
+                  type: string
+                icon:
+                  type: string
+                logo:
+                  type: string
+                api_key:
+                  type: string
+                  nullable: true
+                settings:
+                  type: object
+                  nullable: true
+                metadata:
+                  type: object
+                  nullable: true
+                auth_type:
+                  type: string
+                  enum:
+                    - oauth2
+                    - apiKey
+                status:
+                  type: string
+                  enum:
+                    - live
+                    - upcoming
+                    - requested
+                form_fields:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FormField'
+                configuration:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      resource:
+                        type: string
+                      defaults:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            value:
+                              anyOf:
+                                - type: string
+                                - type: integer
+                                - type: number
+                                - type: boolean
+                                - type: array
+                                  items:
+                                    anyOf:
+                                      - type: string
+                                      - type: integer
+                                      - type: number
+                configurable_resources:
+                  type: array
+                  items:
+                    type: string
+                settings_required_for_authorization:
+                  type: array
+                  items:
+                    type: string
+                authorize_url:
+                  type: string
+                revoke_url:
+                  type: string
+                added:
+                  type: boolean
+                enabled:
+                  type: boolean
+                created_at:
+                  type: number
       responses:
         '200':
-          description: Updated Connection
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  data:
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/Connection'
+          $ref: '#/components/responses/UpdateConnection'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/paths/~1vault~1sessions/post/responses/400'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/paths/~1vault~1sessions/post/responses/401'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/paths/~1vault~1sessions/post/responses/402'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/paths/~1vault~1sessions/post/responses/404'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/paths/~1vault~1sessions/post/responses/422'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/paths/~1vault~1sessions/post/responses/default'
   '/vault/authorize/{service_id}/{application_id}':
     get:
       tags:
@@ -907,17 +1001,17 @@ paths:
         '200':
           description: ok
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/paths/~1vault~1sessions/post/responses/400'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/paths/~1vault~1sessions/post/responses/401'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/paths/~1vault~1sessions/post/responses/402'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/paths/~1vault~1sessions/post/responses/404'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/paths/~1vault~1sessions/post/responses/422'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/paths/~1vault~1sessions/post/responses/default'
   '/vault/revoke/{service_id}/{application_id}':
     get:
       tags:
@@ -952,17 +1046,17 @@ paths:
         '200':
           description: ok
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/paths/~1vault~1sessions/post/responses/400'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/paths/~1vault~1sessions/post/responses/401'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/paths/~1vault~1sessions/post/responses/402'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/paths/~1vault~1sessions/post/responses/404'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/paths/~1vault~1sessions/post/responses/422'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/paths/~1vault~1sessions/post/responses/default'
   /vault/sessions:
     post:
       summary: Retrieve a JWT authorization
@@ -992,20 +1086,40 @@ paths:
               $ref: '#/components/schemas/SessionRequest'
       responses:
         '200':
-          description: Session Created
+          $ref: '#/components/responses/CreateSession'
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Session'
-        '400':
-          $ref: '#/components/responses/BadRequest'
+                $ref: '#/components/schemas/BadRequest'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          description: Payment Required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequired'
         '404':
-          $ref: '#/components/responses/NotFound'
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unprocessable'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'

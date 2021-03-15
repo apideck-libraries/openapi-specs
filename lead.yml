@@ -21,13 +21,16 @@ tags:
     description: ''
 components:
   schemas:
-    id:
+    UnifiedId:
+      title: UnifiedId
+      required:
+        - id
       properties:
         id:
           type: string
           readOnly: true
           example: '12345'
-    lead:
+    Lead:
       required:
         - name
         - company_name
@@ -74,29 +77,29 @@ components:
         websites:
           type: array
           items:
-            $ref: '#/components/schemas/website'
+            $ref: '#/components/schemas/Website'
         addresses:
           type: array
           items:
-            $ref: '#/components/schemas/address'
+            $ref: '#/components/schemas/Address'
         social_links:
           type: array
           items:
-            $ref: '#/components/schemas/social_link'
+            $ref: '#/components/schemas/SocialLink'
         phone_numbers:
           type: array
           items:
-            $ref: '#/components/schemas/phone_number'
+            $ref: '#/components/schemas/PhoneNumber'
         emails:
           type: array
           items:
-            $ref: '#/components/schemas/email'
+            $ref: '#/components/schemas/Email'
         custom_fields:
           type: array
           items:
-            $ref: '#/components/schemas/custom_field'
+            $ref: '#/components/schemas/CustomField'
         tags:
-          $ref: '#/components/schemas/tags'
+          $ref: '#/components/schemas/Tags'
         updated_at:
           type: string
           example: '2020-09-30T07:43:32.000Z'
@@ -105,7 +108,7 @@ components:
           type: string
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
-    bank_account:
+    BankAccount:
       type: object
       properties:
         iban:
@@ -116,7 +119,7 @@ components:
           type: string
           example: AUDSCHGGXXX
           nullable: true
-    website:
+    Website:
       type: object
       required:
         - url
@@ -130,7 +133,7 @@ components:
         category:
           type: string
           example: default
-    address:
+    Address:
       type: object
       properties:
         id:
@@ -193,7 +196,7 @@ components:
           type: string
           example: '-73.984638'
           nullable: true
-    social_link:
+    SocialLink:
       required:
         - url
       type: object
@@ -207,7 +210,7 @@ components:
         platform:
           type: string
           example: twitter
-    phone_number:
+    PhoneNumber:
       required:
         - number
       type: object
@@ -230,7 +233,7 @@ components:
             - fax
             - assistant
             - other
-    email:
+    Email:
       required:
         - email
       type: object
@@ -245,7 +248,7 @@ components:
         type:
           type: string
           example: default
-    custom_field:
+    CustomField:
       type: object
       required:
         - id
@@ -265,12 +268,236 @@ components:
             - type: array
               items:
                 type: string
-    tags:
+    Tags:
       type: array
       items:
         type: string
       example:
         - New
+    NotFoundResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 404
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Not Found
+        typeName:
+          type: string
+          description: The type of error returned
+          example: EntityNotFoundError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unknown Widget
+        detail:
+          type: string
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: "Could not find widget with id: '123'"
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#entitynotfounderror'
+    Unauthorized:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 401
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Unauthorized
+        typeName:
+          type: string
+          description: The type of error returned
+          example: UnauthorizedError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unauthorized Request
+        detail:
+          anyOf:
+            - type: string
+            - type: object
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: >-
+            Failed to generate valid JWT Session. Verify applicationId is
+            correct
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#unauthorizederror'
+    Unprocessable:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 422
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Unprocessable Entity
+        typeName:
+          type: string
+          description: The type of error returned
+          example: InvalidStateError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid State
+        detail:
+          type: string
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: State did not include unified_api
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#invalidstateerror'
+    BadRequest:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Bad Request
+        typeName:
+          type: string
+          description: The type of error returned
+          example: MissingHeadersError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+            - type: object
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example:
+            missing:
+              - - foobar: required
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#missingheaderserror'
+    PaymentRequired:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 402
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Payment Required
+        typeName:
+          type: string
+          description: The type of error returned
+          example: RequestLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Request Limit Reached
+        detail:
+          type: string
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: You have reached your limit of 2000
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#requestlimiterror'
+    NotImplemented:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 501
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Not Implemented
+        typeName:
+          type: string
+          description: The type of error returned
+          example: MappingError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unmapped Attribute
+        detail:
+          anyOf:
+            - type: string
+            - type: object
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: >-
+            Failed to retrieve Widget tokenUrl from
+            'components.securitySchemes.oauth2.flows'
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#mappingerror'
+    UnexpectedError:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: >-
+            Contains an explanation of the status_code as defined in HTTP/1.1
+            standard (RFC 7231)
+          example: Bad Request
+        typeName:
+          type: string
+          description: The type of error returned
+          example: MissingHeadersError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+            - type: object
+          description: >-
+            Contains parameter or domain specific information related to the
+            error and why it occured.
+          example: 'Missing Header: x-apideck-consumer-id'
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#unauthorizederror'
   parameters:
     id:
       in: path
@@ -302,29 +529,6 @@ components:
       required: true
       schema:
         type: string
-    page:
-      name: page
-      in: query
-      description: >-
-        Page number to start from. Omitting the page parameter will return page
-        1
-      schema:
-        type: integer
-        default: 1
-    per_page:
-      name: per_page
-      in: query
-      description: Number of records to return per page. Default = 100.
-      schema:
-        type: integer
-        default: 100
-    offset:
-      name: offset
-      in: query
-      description: The number of items to skip before starting to collect the result set
-      schema:
-        type: integer
-        default: 0
     raw:
       name: raw
       in: query
@@ -332,273 +536,265 @@ components:
       schema:
         type: boolean
         default: true
+    cursor:
+      name: cursor
+      in: query
+      description: Cursor to start from (optional)
+      schema:
+        type: string
+        nullable: true
+        default: null
+    limit:
+      name: limit
+      in: query
+      description: Number of records to return. Default = 20
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 20
   responses:
+    GetLeads:
+      description: Leads
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: HTTP Response Status Code
+                example: 200
+              status:
+                type: string
+                description: HTTP Response Status
+                example: OK
+              service:
+                type: string
+                description: Apideck ID of service provider
+                example: zoho-crm
+              resource:
+                type: string
+                description: Unified API resource name
+                example: companies
+              operation:
+                type: string
+                description: Operation performed
+                example: one
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lead'
+              meta:
+                type: object
+                description: Reponse metadata
+                properties:
+                  items_on_page:
+                    type: integer
+                    description: >-
+                      Number of items returned in the data property of the
+                      response
+                  limit:
+                    type: integer
+                    description: >-
+                      Maximum number of items returned in this reponse, as
+                      specified in the request
+                    default: 20
+                  cursors:
+                    type: object
+                    description: >-
+                      Cursors to navigate to previous or next pages through the
+                      API
+                    properties:
+                      previous:
+                        type: string
+                        description: >-
+                          Cursor to navigate to the previous page through the
+                          API
+                        nullable: true
+                      current:
+                        type: string
+                        description: Cursor to navigate to the current page through the API
+                        nullable: true
+                      next:
+                        type: string
+                        description: >-
+                          Cursor to navigate to the previous page through the
+                          API
+                        nullable: true
+              links:
+                type: object
+                description: Links to navigate to previous or next pages through the API
+                properties:
+                  previous:
+                    type: string
+                    description: Link to navigate to the previous page through the API
+                    nullable: true
+                  current:
+                    type: string
+                    description: Link to navigate to the current page through the API
+                  next:
+                    type: string
+                    description: Link to navigate to the previous page through the API
+                    nullable: true
+    GetLead:
+      description: Lead
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: HTTP Response Status Code
+                example: 200
+              status:
+                type: string
+                description: HTTP Response Status
+                example: OK
+              service:
+                type: string
+                description: Apideck ID of service provider
+                example: zoho-crm
+              resource:
+                type: string
+                description: Unified API resource name
+                example: companies
+              operation:
+                type: string
+                description: Operation performed
+                example: one
+              data:
+                $ref: '#/components/schemas/Lead'
+    CreateLead:
+      description: Lead created
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: HTTP Response Status Code
+                example: 200
+              status:
+                type: string
+                description: HTTP Response Status
+                example: OK
+              service:
+                type: string
+                description: Apideck ID of service provider
+                example: zoho-crm
+              resource:
+                type: string
+                description: Unified API resource name
+                example: companies
+              operation:
+                type: string
+                description: Operation performed
+                example: one
+              data:
+                $ref: '#/components/schemas/UnifiedId'
+    UpdateLead:
+      description: Lead updated
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: HTTP Response Status Code
+                example: 200
+              status:
+                type: string
+                description: HTTP Response Status
+                example: OK
+              service:
+                type: string
+                description: Apideck ID of service provider
+                example: zoho-crm
+              resource:
+                type: string
+                description: Unified API resource name
+                example: companies
+              operation:
+                type: string
+                description: Operation performed
+                example: one
+              data:
+                $ref: '#/components/schemas/UnifiedId'
+    DeleteLead:
+      description: Lead deleted
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status_code:
+                type: integer
+                description: HTTP Response Status Code
+                example: 200
+              status:
+                type: string
+                description: HTTP Response Status
+                example: OK
+              service:
+                type: string
+                description: Apideck ID of service provider
+                example: zoho-crm
+              resource:
+                type: string
+                description: Unified API resource name
+                example: companies
+              operation:
+                type: string
+                description: Operation performed
+                example: one
+              data:
+                $ref: '#/components/schemas/UnifiedId'
     NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 404
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Not Found
-              typeName:
-                type: string
-                description: The type of error returned
-                example: EntityNotFoundError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Unknown Widget
-              detail:
-                type: string
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: "Could not find widget with id: '123'"
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#entitynotfounderror'
+            $ref: '#/components/schemas/NotFoundResponse'
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 401
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Unauthorized
-              typeName:
-                type: string
-                description: The type of error returned
-                example: UnauthorizedError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Unauthorized Request
-              detail:
-                anyOf:
-                  - type: string
-                  - type: object
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: >-
-                  Failed to generate valid JWT Session. Verify applicationId is
-                  correct
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#unauthorizederror'
+            $ref: '#/components/schemas/Unauthorized'
     Unprocessable:
       description: Unprocessable
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 422
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Unprocessable Entity
-              typeName:
-                type: string
-                description: The type of error returned
-                example: InvalidStateError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Invalid State
-              detail:
-                type: string
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: State did not include unified_api
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#invalidstateerror'
+            $ref: '#/components/schemas/Unprocessable'
     BadRequest:
       description: Bad Request
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 400
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Bad Request
-              typeName:
-                type: string
-                description: The type of error returned
-                example: MissingHeadersError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Invalid Params
-              detail:
-                anyOf:
-                  - type: string
-                  - type: object
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example:
-                  missing:
-                    - - foobar: required
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#missingheaderserror'
+            $ref: '#/components/schemas/BadRequest'
     PaymentRequired:
       description: Payment Required
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 402
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Payment Required
-              typeName:
-                type: string
-                description: The type of error returned
-                example: RequestLimitError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Request Limit Reached
-              detail:
-                type: string
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: You have reached your limit of 2000
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#requestlimiterror'
+            $ref: '#/components/schemas/PaymentRequired'
     NotImplemented:
       description: Not Implemented
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 501
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Not Implemented
-              typeName:
-                type: string
-                description: The type of error returned
-                example: MappingError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Unmapped Attribute
-              detail:
-                anyOf:
-                  - type: string
-                  - type: object
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: >-
-                  Failed to retrieve Widget tokenUrl from
-                  'components.securitySchemes.oauth2.flows'
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#mappingerror'
+            $ref: '#/components/schemas/NotImplemented'
     UnexpectedError:
       description: Unexpected error
       content:
         application/json:
           schema:
-            properties:
-              status_code:
-                type: number
-                description: HTTP status code
-                example: 400
-              error:
-                type: string
-                description: >-
-                  Contains an explanation of the status_code as defined in
-                  HTTP/1.1 standard (RFC 7231)
-                example: Bad Request
-              typeName:
-                type: string
-                description: The type of error returned
-                example: MissingHeadersError
-              message:
-                type: string
-                description: >-
-                  A human-readable message providing more details about the
-                  error.
-                example: Invalid Params
-              detail:
-                anyOf:
-                  - type: string
-                  - type: object
-                description: >-
-                  Contains parameter or domain specific information related to
-                  the error and why it occured.
-                example: 'Missing Header: x-apideck-consumer-id'
-              ref:
-                type: string
-                description: Link to documentation of error type
-                example: 'https://developers.apideck.com/errors#unauthorizederror'
+            $ref: '#/components/schemas/UnexpectedError'
   securitySchemes:
     apiKey:
       type: http
@@ -651,43 +847,13 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/components/parameters/offset'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       security:
         - apiKey: []
       responses:
         '200':
-          description: lead
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/lead'
+          $ref: '#/components/responses/GetLeads'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -718,37 +884,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/lead'
+              $ref: '#/components/schemas/Lead'
       responses:
         '201':
-          description: Leads created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    $ref: '#/components/schemas/id'
+          $ref: '#/components/responses/CreateLead'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -761,7 +900,7 @@ paths:
           $ref: '#/components/responses/Unprocessable'
         default:
           $ref: '#/components/responses/UnexpectedError'
-  '/lead/leads/{lead_id}':
+  '/lead/leads/{id}':
     get:
       tags:
         - Leads
@@ -769,12 +908,7 @@ paths:
       summary: Get lead
       description: Get lead
       parameters:
-        - name: lead_id
-          in: path
-          description: Lead ID
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
@@ -783,34 +917,7 @@ paths:
         - apiKey: []
       responses:
         '200':
-          description: lead
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    $ref: '#/components/schemas/lead'
+          $ref: '#/components/responses/GetLead'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -830,7 +937,7 @@ paths:
       summary: Update lead
       description: Update lead
       parameters:
-        - $ref: '#/paths/~1lead~1leads~1%7Blead_id%7D/get/parameters/0'
+        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
@@ -842,37 +949,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/lead'
+              $ref: '#/components/schemas/Lead'
       responses:
         '200':
-          description: Leads updated
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    $ref: '#/components/schemas/id'
+          $ref: '#/components/responses/UpdateLead'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -892,7 +972,7 @@ paths:
       summary: Delete lead
       description: Delete lead
       parameters:
-        - $ref: '#/paths/~1lead~1leads~1%7Blead_id%7D/get/parameters/0'
+        - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
@@ -901,34 +981,7 @@ paths:
         - apiKey: []
       responses:
         '200':
-          description: Leads deleted
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                    description: HTTP Response Status Code
-                    example: 200
-                  status:
-                    type: string
-                    description: HTTP Response Status
-                    example: OK
-                  service:
-                    type: string
-                    description: Apideck ID of service provider
-                    example: zoho-crm
-                  resource:
-                    type: string
-                    description: Unified API resource name
-                    example: leads
-                  operation:
-                    type: string
-                    description: Operation performed
-                    example: one
-                  data:
-                    $ref: '#/components/schemas/id'
+          $ref: '#/components/responses/DeleteLead'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

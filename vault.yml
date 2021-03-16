@@ -299,6 +299,10 @@ components:
                         - type: number
     GetConnectionResponse:
       type: object
+      required:
+        - status_code
+        - status
+        - data
       properties:
         status_code:
           type: integer
@@ -314,6 +318,10 @@ components:
               $ref: '#/components/schemas/Connection'
     GetConnectionsResponse:
       type: object
+      required:
+        - status_code
+        - status
+        - data
       properties:
         status_code:
           type: integer
@@ -329,6 +337,10 @@ components:
             $ref: '#/components/schemas/Connection'
     UpdateConnectionResponse:
       type: object
+      required:
+        - status_code
+        - status
+        - data
       properties:
         status_code:
           type: integer
@@ -341,11 +353,24 @@ components:
         data:
           $ref: '#/components/schemas/Connection'
     CreateSessionResponse:
-      description: Session Created
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Session'
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          properties:
+            data:
+              $ref: '#/components/schemas/Session'
     NotFoundResponse:
       properties:
         status_code:

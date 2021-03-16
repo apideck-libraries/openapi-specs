@@ -45,10 +45,7 @@ components:
     x-apideck-service-id:
       name: x-apideck-service-id
       in: header
-      description: >-
-        Provide the service id you want to call (e.g., pipedrive). See the full
-        list in the connector section. Only needed when a consumer has activated
-        multiple integrations for a Unified API.
+      description: 'Provide the service id you want to call (e.g., pipedrive). See the full list in the connector section. Only needed when a consumer has activated multiple integrations for a Unified API.'
       schema:
         type: string
     unified_api:
@@ -92,9 +89,7 @@ components:
     redirect_uri:
       name: redirect_uri
       in: query
-      description: >-
-        URL to redirect back to after authorization. When left empty the default
-        configured redirect uri will be used.
+      description: URL to redirect back to after authorization. When left empty the default configured redirect uri will be used.
       required: true
       schema:
         type: string
@@ -102,11 +97,7 @@ components:
     state:
       name: state
       in: query
-      description: >-
-        An opaque value the applications adds to the initial request that the
-        authorization server includes when redirecting the back to the
-        application. This value must be used by the application to prevent CSRF
-        attacks.
+      description: An opaque value the applications adds to the initial request that the authorization server includes when redirecting the back to the application. This value must be used by the application to prevent CSRF attacks.
       required: true
       schema:
         type: string
@@ -206,8 +197,7 @@ components:
         session_uri:
           type: string
       example:
-        session_uri: >-
-          http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj
+        session_uri: 'http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj'
     SessionRequest:
       type: object
       properties:
@@ -250,12 +240,9 @@ components:
           primary_color: '#286efa'
           sidepanel_background_color: '#286efa'
           sidepanel_text_color: '#FFFFFF'
-          logo: >-
-            https://res.cloudinary.com/apideck/image/upload/v1554113418/catalog/intercom/logo.png
-          favicon: >-
-            https://www.intercom.com/_next/static/images/favicon-348ad8df6c167d93fb894e8bcb4dcd2a.png
-          terms_url: >-
-            https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e
+          logo: 'https://res.cloudinary.com/apideck/image/upload/v1554113418/catalog/intercom/logo.png'
+          favicon: 'https://www.intercom.com/_next/static/images/favicon-348ad8df6c167d93fb894e8bcb4dcd2a.png'
+          terms_url: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e'
           privacy_url: 'https://compliance.apideck.com/privacy-policy'
     FormField:
       type: object
@@ -367,9 +354,7 @@ components:
           example: 404
         error:
           type: string
-          description: >-
-            Contains an explanation of the status_code as defined in HTTP/1.1
-            standard (RFC 7231)
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
           example: Not Found
         typeName:
           type: string
@@ -381,9 +366,7 @@ components:
           example: Unknown Widget
         detail:
           type: string
-          description: >-
-            Contains parameter or domain specific information related to the
-            error and why it occured.
+          description: Contains parameter or domain specific information related to the error and why it occured.
           example: "Could not find widget with id: '123'"
         ref:
           type: string
@@ -397,9 +380,7 @@ components:
           example: 401
         error:
           type: string
-          description: >-
-            Contains an explanation of the status_code as defined in HTTP/1.1
-            standard (RFC 7231)
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
           example: Unauthorized
         typeName:
           type: string
@@ -413,12 +394,8 @@ components:
           anyOf:
             - type: string
             - type: object
-          description: >-
-            Contains parameter or domain specific information related to the
-            error and why it occured.
-          example: >-
-            Failed to generate valid JWT Session. Verify applicationId is
-            correct
+          description: Contains parameter or domain specific information related to the error and why it occured.
+          example: Failed to generate valid JWT Session. Verify applicationId is correct
         ref:
           type: string
           description: Link to documentation of error type
@@ -431,9 +408,7 @@ components:
           example: 422
         error:
           type: string
-          description: >-
-            Contains an explanation of the status_code as defined in HTTP/1.1
-            standard (RFC 7231)
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
           example: Unprocessable Entity
         typeName:
           type: string
@@ -445,9 +420,7 @@ components:
           example: Invalid State
         detail:
           type: string
-          description: >-
-            Contains parameter or domain specific information related to the
-            error and why it occured.
+          description: Contains parameter or domain specific information related to the error and why it occured.
           example: State did not include unified_api
         ref:
           type: string
@@ -461,9 +434,7 @@ components:
           example: 400
         error:
           type: string
-          description: >-
-            Contains an explanation of the status_code as defined in HTTP/1.1
-            standard (RFC 7231)
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
           example: Bad Request
         typeName:
           type: string
@@ -477,9 +448,7 @@ components:
           anyOf:
             - type: string
             - type: object
-          description: >-
-            Contains parameter or domain specific information related to the
-            error and why it occured.
+          description: Contains parameter or domain specific information related to the error and why it occured.
           example:
             missing:
               - - foobar: required
@@ -495,9 +464,7 @@ components:
           example: 402
         error:
           type: string
-          description: >-
-            Contains an explanation of the status_code as defined in HTTP/1.1
-            standard (RFC 7231)
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
           example: Payment Required
         typeName:
           type: string
@@ -509,9 +476,7 @@ components:
           example: Request Limit Reached
         detail:
           type: string
-          description: >-
-            Contains parameter or domain specific information related to the
-            error and why it occured.
+          description: Contains parameter or domain specific information related to the error and why it occured.
           example: You have reached your limit of 2000
         ref:
           type: string
@@ -525,9 +490,7 @@ components:
           example: 501
         error:
           type: string
-          description: >-
-            Contains an explanation of the status_code as defined in HTTP/1.1
-            standard (RFC 7231)
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
           example: Not Implemented
         typeName:
           type: string
@@ -541,12 +504,8 @@ components:
           anyOf:
             - type: string
             - type: object
-          description: >-
-            Contains parameter or domain specific information related to the
-            error and why it occured.
-          example: >-
-            Failed to retrieve Widget tokenUrl from
-            'components.securitySchemes.oauth2.flows'
+          description: Contains parameter or domain specific information related to the error and why it occured.
+          example: Failed to retrieve Widget tokenUrl from 'components.securitySchemes.oauth2.flows'
         ref:
           type: string
           description: Link to documentation of error type
@@ -559,9 +518,7 @@ components:
           example: 400
         error:
           type: string
-          description: >-
-            Contains an explanation of the status_code as defined in HTTP/1.1
-            standard (RFC 7231)
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
           example: Bad Request
         typeName:
           type: string
@@ -575,9 +532,7 @@ components:
           anyOf:
             - type: string
             - type: object
-          description: >-
-            Contains parameter or domain specific information related to the
-            error and why it occured.
+          description: Contains parameter or domain specific information related to the error and why it occured.
           example: 'Missing Header: x-apideck-consumer-id'
         ref:
           type: string
@@ -654,39 +609,20 @@ components:
     apiKey:
       type: http
       scheme: bearer
-      description: >
-        To use API you have to sign up and get your own API key. Unify API
-        accounts have sandbox mode and live mode API keys. 
-
-        To change modes just use the appropriate key to get a live or test
-        object. You can find your API keys on the unify settings of your Apideck
-        app.
-
+      description: |
+        To use API you have to sign up and get your own API key. Unify API accounts have sandbox mode and live mode API keys. 
+        To change modes just use the appropriate key to get a live or test object. You can find your API keys on the unify settings of your Apideck app.
         Your Apideck application_id can also be found on the same page.
 
+        Authenticate your API requests by including your test or live secret API key in the request header. 
 
-        Authenticate your API requests by including your test or live secret API
-        key in the request header. 
+        Bearer authorization header: `Authorization: Bearer <your-apideck-api-key>`
 
+        You should use the public keys on the SDKs and the secret keys to authenticate API requests.
 
-        Bearer authorization header: `Authorization: Bearer
-        <your-apideck-api-key>`
+        **Do not share or include your secret API keys on client side code. Your API keys carry significant privileges. Please ensure to keep them 100% secure and be sure to not share your secret API keys in areas that are publicly accessible like GitHub. See API Access Key Security for more information.
 
-
-        You should use the public keys on the SDKs and the secret keys to
-        authenticate API requests.
-
-
-        **Do not share or include your secret API keys on client side code. Your
-        API keys carry significant privileges. Please ensure to keep them 100%
-        secure and be sure to not share your secret API keys in areas that are
-        publicly accessible like GitHub. See API Access Key Security for more
-        information.
-
-
-        Learn how to set the Authorization header inside Postman
-        https://learning.postman.com/docs/postman/sending-api-requests/authorization/#api-key
-
+        Learn how to set the Authorization header inside Postman https://learning.postman.com/docs/postman/sending-api-requests/authorization/#api-key
 
         Go to Unify to grab your API KEY https://app.apideck.com/unify/api-keys
 security:
@@ -696,14 +632,10 @@ paths:
     get:
       summary: Get all connections
       operationId: connectionsAll
-      description: >
-        This endpoint includes all the configured integrations and contains the
-        required assets
-
+      description: |
+        This endpoint includes all the configured integrations and contains the required assets
         to build an integrations page where your users can install integrations.
-
-        OAuth2 supported integrations will contain authorize and revoke links to
-        handle the authentication flows.
+        OAuth2 supported integrations will contain authorize and revoke links to handle the authentication flows.
       tags:
         - Connections
       parameters:
@@ -791,9 +723,8 @@ paths:
       tags:
         - Connections
       summary: Get connection resource settings
-      description: >
-        This endpoint returns custom settings and their defaults required by
-        connection for a given resource.
+      description: |
+        This endpoint returns custom settings and their defaults required by connection for a given resource.
       operationId: connectionsOne
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
@@ -838,94 +769,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: '12345'
-                  readOnly: true
-                service_id:
-                  type: string
-                name:
-                  type: string
-                tag_line:
-                  type: string
-                unified_api:
-                  type: string
-                website:
-                  type: string
-                icon:
-                  type: string
-                logo:
-                  type: string
-                api_key:
-                  type: string
-                  nullable: true
-                settings:
-                  type: object
-                  nullable: true
-                metadata:
-                  type: object
-                  nullable: true
-                auth_type:
-                  type: string
-                  enum:
-                    - oauth2
-                    - apiKey
-                status:
-                  type: string
-                  enum:
-                    - live
-                    - upcoming
-                    - requested
-                form_fields:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/FormField'
-                configuration:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      resource:
-                        type: string
-                      defaults:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                            value:
-                              anyOf:
-                                - type: string
-                                - type: integer
-                                - type: number
-                                - type: boolean
-                                - type: array
-                                  items:
-                                    anyOf:
-                                      - type: string
-                                      - type: integer
-                                      - type: number
-                configurable_resources:
-                  type: array
-                  items:
-                    type: string
-                settings_required_for_authorization:
-                  type: array
-                  items:
-                    type: string
-                authorize_url:
-                  type: string
-                revoke_url:
-                  type: string
-                added:
-                  type: boolean
-                enabled:
-                  type: boolean
-                created_at:
-                  type: number
+              $ref: '#/components/schemas/Connection'
       responses:
         '200':
           $ref: '#/components/responses/UpdateConnection'
@@ -947,24 +791,14 @@ paths:
         - Connections
       summary: Authorize
       operationId: authorize
-      description: >
-        __In most cases the authorize link is provided in the ``/connections``
-        endpoint. Normally you don't need to manually generate these links.__
+      description: |
+        __In most cases the authorize link is provided in the ``/connections`` endpoint. Normally you don't need to manually generate these links.__
 
+        Use this endpoint to authenticate a user with a connector. It will return a 302 redirect to the downstream connector endpoints.
 
-        Use this endpoint to authenticate a user with a connector. It will
-        return a 302 redirect to the downstream connector endpoints.
+        Auth links will have a state parameter included to verify the validity of the request. This is the url your users will use to activate OAuth supported integation providers.
 
-
-        Auth links will have a state parameter included to verify the validity
-        of the request. This is the url your users will use to activate OAuth
-        supported integation providers.
-
-
-        Vault handles the complete Authorization Code Grant Type Flow for you
-        and will redirect you to the dynamic redirect uri you have appended to
-        the url in case this is missing the default redirect uri you have
-        configured for your Unify application.
+        Vault handles the complete Authorization Code Grant Type Flow for you and will redirect you to the dynamic redirect uri you have appended to the url in case this is missing the default redirect uri you have configured for your Unify application.
       parameters:
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
@@ -995,23 +829,14 @@ paths:
         - Connections
       summary: Revoke
       operationId: revoke
-      description: >
-        __In most cases the authorize link is provided in the ``/connections``
-        endpoint. Normally you don't need to manually generate these links.__
-
+      description: |
+        __In most cases the authorize link is provided in the ``/connections`` endpoint. Normally you don't need to manually generate these links.__
 
         Use this endpoint to revoke an existing OAuth connector.
 
+        Auth links will have a state parameter included to verify the validity of the request. This is the url your users will use to activate OAuth supported integation providers.
 
-        Auth links will have a state parameter included to verify the validity
-        of the request. This is the url your users will use to activate OAuth
-        supported integation providers.
-
-
-        Vault handles the complete revoke flow for you and will redirect you to
-        the dynamic redirect uri you have appended to the url in case this is
-        missing the default redirect uri you have configured for your Unify
-        application.
+        Vault handles the complete revoke flow for you and will redirect you to the dynamic redirect uri you have appended to the url in case this is missing the default redirect uri you have configured for your Unify application.
       parameters:
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/application_id'
@@ -1038,15 +863,11 @@ paths:
     post:
       summary: Retrieve a JWT authorization
       operationId: createSession
-      description: >
-        Making a POST request to this endpoint will initiate a Hosted Vault
-        session. Redirect the consumer to the returned
-
+      description: |
+        Making a POST request to this endpoint will initiate a Hosted Vault session. Redirect the consumer to the returned
         url to allow temporary access to manage their integrations and settings.
 
-
-        Note: This is a short lived token that will expire after 30 minutes
-        (TTL: 1800).
+        Note: This is a short lived token that will expire after 30 minutes (TTL: 1800).
       tags:
         - Sessions
       parameters:

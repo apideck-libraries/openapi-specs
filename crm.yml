@@ -823,6 +823,44 @@ components:
         type: string
       example:
         - New
+    Meta:
+      type: object
+      description: Reponse metadata
+      properties:
+        items_on_page:
+          type: integer
+          description: Number of items returned in the data property of the response
+        cursors:
+          type: object
+          description: Cursors to navigate to previous or next pages through the API
+          properties:
+            previous:
+              type: string
+              description: Cursor to navigate to the previous page through the API
+              nullable: true
+            current:
+              type: string
+              description: Cursor to navigate to the current page through the API
+              nullable: true
+            next:
+              type: string
+              description: Cursor to navigate to the previous page through the API
+              nullable: true
+    Links:
+      type: object
+      description: Links to navigate to previous or next pages through the API
+      properties:
+        previous:
+          type: string
+          description: Link to navigate to the previous page through the API
+          nullable: true
+        current:
+          type: string
+          description: Link to navigate to the current page through the API
+        next:
+          type: string
+          description: Link to navigate to the previous page through the API
+          nullable: true
     NotFoundResponse:
       properties:
         status_code:
@@ -1144,6 +1182,7 @@ components:
         data:
           $ref: '#/components/schemas/Company'
     GetCompaniesResponse:
+      x-graphql-title: CompanyList
       type: object
       required:
         - status_code
@@ -1178,9 +1217,9 @@ components:
           items:
             $ref: '#/components/schemas/Company'
         meta:
-          $ref: '#/components/schemas/GetLeadsResponse/properties/meta'
+          $ref: '#/components/schemas/Meta'
         links:
-          $ref: '#/components/schemas/GetLeadsResponse/properties/links'
+          $ref: '#/components/schemas/Links'
     CreateLeadResponse:
       type: object
       required:
@@ -1310,6 +1349,7 @@ components:
         data:
           $ref: '#/components/schemas/Lead'
     GetLeadsResponse:
+      x-graphql-title: LeadList
       type: object
       required:
         - status_code
@@ -1344,47 +1384,9 @@ components:
           items:
             $ref: '#/components/schemas/Lead'
         meta:
-          type: object
-          description: Reponse metadata
-          properties:
-            items_on_page:
-              type: integer
-              description: Number of items returned in the data property of the response
-            limit:
-              type: integer
-              description: 'Maximum number of items returned in this reponse, as specified in the request'
-              default: 20
-            cursors:
-              type: object
-              description: Cursors to navigate to previous or next pages through the API
-              properties:
-                previous:
-                  type: string
-                  description: Cursor to navigate to the previous page through the API
-                  nullable: true
-                current:
-                  type: string
-                  description: Cursor to navigate to the current page through the API
-                  nullable: true
-                next:
-                  type: string
-                  description: Cursor to navigate to the previous page through the API
-                  nullable: true
+          $ref: '#/components/schemas/Meta'
         links:
-          type: object
-          description: Links to navigate to previous or next pages through the API
-          properties:
-            previous:
-              type: string
-              description: Link to navigate to the previous page through the API
-              nullable: true
-            current:
-              type: string
-              description: Link to navigate to the current page through the API
-            next:
-              type: string
-              description: Link to navigate to the previous page through the API
-              nullable: true
+          $ref: '#/components/schemas/Links'
     CreateOpportunityResponse:
       type: object
       required:
@@ -1514,6 +1516,7 @@ components:
         data:
           $ref: '#/components/schemas/Opportunity'
     GetOpportunitiesResponse:
+      x-graphql-title: OpportunityList
       type: object
       required:
         - status_code
@@ -1548,9 +1551,9 @@ components:
           items:
             $ref: '#/components/schemas/Opportunity'
         meta:
-          $ref: '#/components/schemas/GetLeadsResponse/properties/meta'
+          $ref: '#/components/schemas/Meta'
         links:
-          $ref: '#/components/schemas/GetLeadsResponse/properties/links'
+          $ref: '#/components/schemas/Links'
     CreateContactResponse:
       type: object
       required:
@@ -1680,6 +1683,7 @@ components:
         data:
           $ref: '#/components/schemas/Contact'
     GetContactsResponse:
+      x-graphql-title: ContactList
       type: object
       required:
         - status_code
@@ -1714,9 +1718,9 @@ components:
           items:
             $ref: '#/components/schemas/Contact'
         meta:
-          $ref: '#/components/schemas/GetLeadsResponse/properties/meta'
+          $ref: '#/components/schemas/Meta'
         links:
-          $ref: '#/components/schemas/GetLeadsResponse/properties/links'
+          $ref: '#/components/schemas/Links'
   parameters:
     x-apideck-app-id:
       name: x-apideck-app-id
@@ -1752,6 +1756,23 @@ components:
         type: string
       required: true
       description: ID of the record you are acting upon.
+    limit:
+      name: limit
+      in: query
+      description: Number of records to return. Default = 20
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 20
+    cursor:
+      name: cursor
+      in: query
+      description: Cursor to start from (optional)
+      schema:
+        type: string
+        nullable: true
+        default: null
   responses:
     GetCompanies:
       description: Companies
@@ -1941,6 +1962,7 @@ paths:
       tags:
         - Companies
       operationId: companiesAll
+      x-graphql-title: companies
       summary: List companies
       description: List companies
       parameters:
@@ -1948,8 +1970,8 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/paths/~1crm~1leads/get/parameters/4'
-        - $ref: '#/paths/~1crm~1leads/get/parameters/5'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       security:
         - apiKey: []
       responses:
@@ -2099,6 +2121,7 @@ paths:
     get:
       tags:
         - Contacts
+      x-graphql-title: contacts
       operationId: contactsAll
       summary: List contacts
       description: List contacts
@@ -2107,8 +2130,8 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/paths/~1crm~1leads/get/parameters/4'
-        - $ref: '#/paths/~1crm~1leads/get/parameters/5'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       security:
         - apiKey: []
       responses:
@@ -2258,6 +2281,7 @@ paths:
     get:
       tags:
         - Opportunities
+      x-graphql-title: opportunities
       operationId: opportunitiesAll
       summary: List opportunities
       description: List opportunities
@@ -2266,8 +2290,8 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/paths/~1crm~1leads/get/parameters/4'
-        - $ref: '#/paths/~1crm~1leads/get/parameters/5'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       security:
         - apiKey: []
       responses:
@@ -2417,6 +2441,7 @@ paths:
     get:
       tags:
         - Leads
+      x-graphql-title: leads
       operationId: leadsAll
       summary: List leads
       description: List leads
@@ -2425,21 +2450,8 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - name: cursor
-          in: query
-          description: Cursor to start from (optional)
-          schema:
-            type: string
-            nullable: true
-            default: null
-        - name: limit
-          in: query
-          description: Number of records to return. Default = 20
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 200
-            default: 20
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       security:
         - apiKey: []
       responses:

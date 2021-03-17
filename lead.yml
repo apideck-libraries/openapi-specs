@@ -274,6 +274,44 @@ components:
         type: string
       example:
         - New
+    Meta:
+      type: object
+      description: Reponse metadata
+      properties:
+        items_on_page:
+          type: integer
+          description: Number of items returned in the data property of the response
+        cursors:
+          type: object
+          description: Cursors to navigate to previous or next pages through the API
+          properties:
+            previous:
+              type: string
+              description: Cursor to navigate to the previous page through the API
+              nullable: true
+            current:
+              type: string
+              description: Cursor to navigate to the current page through the API
+              nullable: true
+            next:
+              type: string
+              description: Cursor to navigate to the previous page through the API
+              nullable: true
+    Links:
+      type: object
+      description: Links to navigate to previous or next pages through the API
+      properties:
+        previous:
+          type: string
+          description: Link to navigate to the previous page through the API
+          nullable: true
+        current:
+          type: string
+          description: Link to navigate to the current page through the API
+        next:
+          type: string
+          description: Link to navigate to the previous page through the API
+          nullable: true
     NotFoundResponse:
       properties:
         status_code:
@@ -524,6 +562,7 @@ components:
       content:
         application/json:
           schema:
+            x-graphql-title: LeadList
             type: object
             required:
               - status_code
@@ -558,47 +597,9 @@ components:
                 items:
                   $ref: '#/components/schemas/Lead'
               meta:
-                type: object
-                description: Reponse metadata
-                properties:
-                  items_on_page:
-                    type: integer
-                    description: Number of items returned in the data property of the response
-                  limit:
-                    type: integer
-                    description: 'Maximum number of items returned in this reponse, as specified in the request'
-                    default: 20
-                  cursors:
-                    type: object
-                    description: Cursors to navigate to previous or next pages through the API
-                    properties:
-                      previous:
-                        type: string
-                        description: Cursor to navigate to the previous page through the API
-                        nullable: true
-                      current:
-                        type: string
-                        description: Cursor to navigate to the current page through the API
-                        nullable: true
-                      next:
-                        type: string
-                        description: Cursor to navigate to the previous page through the API
-                        nullable: true
+                $ref: '#/components/schemas/Meta'
               links:
-                type: object
-                description: Links to navigate to previous or next pages through the API
-                properties:
-                  previous:
-                    type: string
-                    description: Link to navigate to the previous page through the API
-                    nullable: true
-                  current:
-                    type: string
-                    description: Link to navigate to the current page through the API
-                  next:
-                    type: string
-                    description: Link to navigate to the previous page through the API
-                    nullable: true
+                $ref: '#/components/schemas/Links'
     GetLead:
       description: Lead
       content:
@@ -811,6 +812,7 @@ paths:
       tags:
         - Leads
       operationId: leadsAll
+      x-graphql-title: leads
       summary: List leads
       description: List leads
       parameters:

@@ -71,6 +71,13 @@ components:
       required: true
       schema:
         type: string
+    api:
+      name: api
+      in: query
+      description: Scope results to Unified API
+      schema:
+        type: string
+      example: crm
     resource:
       name: resource
       in: path
@@ -101,6 +108,13 @@ components:
       required: true
       schema:
         type: string
+    configured:
+      name: configured
+      in: query
+      description: Scopes results to connections that have been configured or not
+      schema:
+        type: boolean
+      example: true
   schemas:
     Connection:
       type: object
@@ -185,6 +199,7 @@ components:
           type: string
         revoke_url:
           type: string
+          nullable: true
         added:
           type: boolean
         enabled:
@@ -666,23 +681,25 @@ paths:
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/api'
+        - $ref: '#/components/parameters/configured'
       security:
         - apiKey: []
       responses:
         '200':
           $ref: '#/components/responses/GetConnections'
         '400':
-          $ref: '#/paths/~1vault~1sessions/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1vault~1sessions/post/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '402':
-          $ref: '#/paths/~1vault~1sessions/post/responses/402'
+          $ref: '#/components/responses/PaymentRequired'
         '404':
-          $ref: '#/paths/~1vault~1sessions/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1vault~1sessions/post/responses/422'
+          $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/paths/~1vault~1sessions/post/responses/default'
+          $ref: '#/components/responses/UnexpectedError'
   '/vault/connections/{unified_api}/{service_id}':
     patch:
       tags:
@@ -706,17 +723,17 @@ paths:
         '200':
           $ref: '#/components/responses/UpdateConnection'
         '400':
-          $ref: '#/paths/~1vault~1sessions/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1vault~1sessions/post/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '402':
-          $ref: '#/paths/~1vault~1sessions/post/responses/402'
+          $ref: '#/components/responses/PaymentRequired'
         '404':
-          $ref: '#/paths/~1vault~1sessions/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1vault~1sessions/post/responses/422'
+          $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/paths/~1vault~1sessions/post/responses/default'
+          $ref: '#/components/responses/UnexpectedError'
     delete:
       tags:
         - Connections
@@ -732,17 +749,17 @@ paths:
         '204':
           description: Resource deleted
         '400':
-          $ref: '#/paths/~1vault~1sessions/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1vault~1sessions/post/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '402':
-          $ref: '#/paths/~1vault~1sessions/post/responses/402'
+          $ref: '#/components/responses/PaymentRequired'
         '404':
-          $ref: '#/paths/~1vault~1sessions/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1vault~1sessions/post/responses/422'
+          $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/paths/~1vault~1sessions/post/responses/default'
+          $ref: '#/components/responses/UnexpectedError'
   '/vault/connections/{unified_api}/{service_id}/{resource}/defaults':
     get:
       tags:
@@ -763,17 +780,17 @@ paths:
         '200':
           $ref: '#/components/responses/GetConnection'
         '400':
-          $ref: '#/paths/~1vault~1sessions/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1vault~1sessions/post/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '402':
-          $ref: '#/paths/~1vault~1sessions/post/responses/402'
+          $ref: '#/components/responses/PaymentRequired'
         '404':
-          $ref: '#/paths/~1vault~1sessions/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1vault~1sessions/post/responses/422'
+          $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/paths/~1vault~1sessions/post/responses/default'
+          $ref: '#/components/responses/UnexpectedError'
     patch:
       tags:
         - Connections
@@ -799,17 +816,17 @@ paths:
         '200':
           $ref: '#/components/responses/UpdateConnection'
         '400':
-          $ref: '#/paths/~1vault~1sessions/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1vault~1sessions/post/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '402':
-          $ref: '#/paths/~1vault~1sessions/post/responses/402'
+          $ref: '#/components/responses/PaymentRequired'
         '404':
-          $ref: '#/paths/~1vault~1sessions/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1vault~1sessions/post/responses/422'
+          $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/paths/~1vault~1sessions/post/responses/default'
+          $ref: '#/components/responses/UnexpectedError'
   '/vault/authorize/{service_id}/{application_id}':
     get:
       tags:
@@ -837,17 +854,17 @@ paths:
         '200':
           description: ok
         '400':
-          $ref: '#/paths/~1vault~1sessions/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1vault~1sessions/post/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '402':
-          $ref: '#/paths/~1vault~1sessions/post/responses/402'
+          $ref: '#/components/responses/PaymentRequired'
         '404':
-          $ref: '#/paths/~1vault~1sessions/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1vault~1sessions/post/responses/422'
+          $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/paths/~1vault~1sessions/post/responses/default'
+          $ref: '#/components/responses/UnexpectedError'
   '/vault/revoke/{service_id}/{application_id}':
     get:
       tags:
@@ -873,17 +890,17 @@ paths:
         '200':
           description: ok
         '400':
-          $ref: '#/paths/~1vault~1sessions/post/responses/400'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          $ref: '#/paths/~1vault~1sessions/post/responses/401'
+          $ref: '#/components/responses/Unauthorized'
         '402':
-          $ref: '#/paths/~1vault~1sessions/post/responses/402'
+          $ref: '#/components/responses/PaymentRequired'
         '404':
-          $ref: '#/paths/~1vault~1sessions/post/responses/404'
+          $ref: '#/components/responses/NotFound'
         '422':
-          $ref: '#/paths/~1vault~1sessions/post/responses/422'
+          $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/paths/~1vault~1sessions/post/responses/default'
+          $ref: '#/components/responses/UnexpectedError'
   /vault/sessions:
     post:
       summary: Retrieve a JWT authorization
@@ -911,38 +928,14 @@ paths:
         '200':
           $ref: '#/components/responses/CreateSession'
         '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BadRequest'
+          $ref: '#/components/responses/BadRequest'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unauthorized'
+          $ref: '#/components/responses/Unauthorized'
         '402':
-          description: Payment Required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequired'
         '404':
-          description: The specified resource was not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NotFoundResponse'
+          $ref: '#/components/responses/NotFound'
         '422':
-          description: Unprocessable
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Unprocessable'
+          $ref: '#/components/responses/Unprocessable'
         default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedError'

@@ -17,6 +17,7 @@ servers:
 security:
   - apiKey: []
     applicationId: []
+    consumerId: []
 tags:
   - name: Companies
     description: ''
@@ -1525,19 +1526,19 @@ components:
         links:
           $ref: '#/components/schemas/Links'
   parameters:
-    x-apideck-app-id:
+    applicationId:
       name: x-apideck-app-id
       in: header
       description: The ID of your Unify application
       schema:
         type: string
-    x-apideck-service-id:
+    serviceId:
       name: x-apideck-service-id
       in: header
       description: 'Provide the service id you want to call (e.g., pipedrive). See the full list in the connector section. Only needed when a consumer has activated multiple integrations for a Unified API.'
       schema:
         type: string
-    x-apideck-consumer-id:
+    consumerId:
       name: x-apideck-consumer-id
       in: header
       required: true
@@ -1764,6 +1765,11 @@ components:
       in: header
       name: x-apideck-app-id
       description: The ID of your Unify application
+    consumerId:
+      type: apiKey
+      in: header
+      name: x-apideck-consumer-id
+      description: The ID of the consumer which you want to get or push data from
 paths:
   /crm/companies:
     get:
@@ -1775,9 +1781,9 @@ paths:
       description: List companies
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
       security:
@@ -1805,9 +1811,9 @@ paths:
       description: Create company
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
       requestBody:
@@ -1841,9 +1847,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
       responses:
@@ -1870,9 +1876,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
       requestBody:
@@ -1905,9 +1911,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
       responses:
@@ -1935,9 +1941,9 @@ paths:
       description: List contacts
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
       security:
@@ -1965,9 +1971,9 @@ paths:
       description: Create contact
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
       requestBody:
@@ -2000,9 +2006,9 @@ paths:
       description: Get contact
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
@@ -2029,9 +2035,9 @@ paths:
       description: Update contact
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
@@ -2064,9 +2070,9 @@ paths:
       description: Delete contact
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
@@ -2095,9 +2101,9 @@ paths:
       description: List opportunities
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
       security:
@@ -2125,9 +2131,9 @@ paths:
       description: Create opportunity
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
       requestBody:
@@ -2160,9 +2166,9 @@ paths:
       description: Get opportunity
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
@@ -2189,9 +2195,9 @@ paths:
       description: Update opportunity
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
@@ -2224,9 +2230,9 @@ paths:
       description: Delete opportunity
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
@@ -2255,9 +2261,9 @@ paths:
       description: List leads
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
       security:
@@ -2285,9 +2291,9 @@ paths:
       description: Create lead
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
       requestBody:
@@ -2320,9 +2326,9 @@ paths:
       description: Get lead
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
@@ -2349,9 +2355,9 @@ paths:
       description: Update lead
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
@@ -2384,9 +2390,9 @@ paths:
       description: Delete lead
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []

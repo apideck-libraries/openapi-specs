@@ -7,7 +7,7 @@ info:
     email: hello@apideck.com
     url: 'https://developers.apideck.com'
   x-logo:
-    url: 'https://www.apideck.com/logo.png'
+    url: 'https://developers.apideck.com/icon.png'
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
@@ -17,6 +17,7 @@ servers:
 security:
   - apiKey: []
     applicationId: []
+    consumerId: []
 tags:
   - name: Leads
     description: ''
@@ -812,6 +813,11 @@ components:
       in: header
       name: x-apideck-app-id
       description: The ID of your Unify application
+    consumerId:
+      type: apiKey
+      in: header
+      name: x-apideck-consumer-id
+      description: The ID of the consumer which you want to get or push data from
 paths:
   /lead/leads:
     get:

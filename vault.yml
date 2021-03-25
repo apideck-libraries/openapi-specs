@@ -123,27 +123,57 @@ components:
           readOnly: true
         service_id:
           type: string
+          example: salesforce
         name:
           type: string
+          example: Salesforce
         tag_line:
           type: string
+          example: 'CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.'
         unified_api:
           type: string
+          example: crm
         website:
           type: string
+          example: 'https://www.salesforce.com'
         icon:
           type: string
+          example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
         logo:
           type: string
+          example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
         api_key:
           type: string
+          description: API Key. Only valid when auth_type is `apiKey`. OAuth connections do not require `api_key`.
           nullable: true
+          example: 820b4ce9-b66d-4d12-9562-c859f2a6bf39
         settings:
           type: object
+          description: Connection settings. Values will persist to `form_fields` with corresponding id
           nullable: true
+          example:
+            instance_url: 'https://eu28.salesforce.com'
+            <setting-key>: <setting-value>
         metadata:
           type: object
+          properties:
+            ecosystem:
+              $ref: '#/components/schemas/Connection/properties/metadata/properties/account'
+            account:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
           nullable: true
+          example:
+            ecosystem:
+              name: My Ecosystem
+              id: a6469332-7948-46a6-abc2-87ba3f005025
+            account:
+              name: My Company
+              id: c01458a5-7276-41ce-bc19-639906b0450a
         auth_type:
           type: string
           enum:
@@ -159,6 +189,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FormField'
+          example:
+            - id: instance_url
+              label: Instance url
+              value: 'https://eu28.salesforce.com'
+              placeholder: ''
+              mask: false
+              type: text
+              required: true
+              disabled: false
+              custom_field: false
         configuration:
           type: array
           items:
@@ -189,21 +229,34 @@ components:
           type: array
           items:
             type: string
+          example:
+            - opportunities
+            - companies
+            - contacts
+            - leads
         settings_required_for_authorization:
           type: array
           items:
             type: string
+          example:
+            - instance_url
         authorize_url:
           type: string
+          example: 'https://unify.apideck.com/vault/authorize/salesforce/<application-id>?state=<state>'
         revoke_url:
           type: string
           nullable: true
+          example: 'https://unify.apideck.com/vault/revoke/salesforce/<application-id>?state=<state>'
         added:
           type: boolean
         enabled:
           type: boolean
         created_at:
           type: number
+          example: 1615563533390
+        updated_at:
+          type: number
+          example: 1616662325753
     Session:
       type: object
       properties:
@@ -348,6 +401,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Connection'
+    UpdateConnectionRequestBody:
+      type: object
+      properties:
+        enabled:
+          $ref: '#/components/schemas/Connection/properties/enabled'
+        api_key:
+          $ref: '#/components/schemas/Connection/properties/api_key'
+        settings:
+          $ref: '#/components/schemas/Connection/properties/settings'
+        metadata:
+          $ref: '#/components/schemas/Connection/properties/metadata'
+      additionalProperties: false
     UpdateConnectionResponse:
       type: object
       required:
@@ -576,6 +641,14 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
+  requestBodies:
+    UpdateConnectionRequestBody:
+      description: Fields to be updated on the resource
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateConnectionRequestBody'
   responses:
     GetConnection:
       description: Connection
@@ -720,12 +793,7 @@ paths:
       security:
         - apiKey: []
       requestBody:
-        description: Fields to be updated on the resource
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Connection'
+        $ref: '#/components/requestBodies/UpdateConnectionRequestBody'
       responses:
         '200':
           $ref: '#/components/responses/UpdateConnection'
@@ -769,7 +837,7 @@ paths:
           $ref: '#/components/responses/Unprocessable'
         default:
           $ref: '#/components/responses/UnexpectedError'
-  '/vault/connections/{unified_api}/{service_id}/{resource}/defaults':
+  '/vault/connections/{unified_api}/{service_id}/{resource}/config':
     get:
       tags:
         - Connections

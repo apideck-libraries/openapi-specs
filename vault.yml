@@ -53,7 +53,7 @@ components:
       description: Unified API
       schema:
         type: string
-      example: lead
+      example: crm
     service_id:
       name: service_id
       in: path
@@ -66,6 +66,22 @@ components:
       name: application_id
       in: path
       description: Application ID of the resource to return
+      required: true
+      schema:
+        type: string
+    downstream_url:
+      name: downstream_url
+      in: header
+      description: Upstream URL
+      example: 'https://api.twilio.com'
+      required: true
+      schema:
+        type: string
+    downstream_method:
+      name: downstream_method
+      in: header
+      description: Upstream method
+      example: POST
       required: true
       schema:
         type: string
@@ -83,7 +99,7 @@ components:
       description: Resource Name
       schema:
         type: string
-      example: lead
+      example: leads
     raw:
       name: raw
       in: query
@@ -449,6 +465,11 @@ components:
           properties:
             data:
               $ref: '#/components/schemas/Session'
+    Created:
+      type: object
+      required:
+        - ''
+      properties: {}
     NotFoundResponse:
       properties:
         status_code:
@@ -716,6 +737,36 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UnexpectedError'
+    Ok:
+      description: Ok
+      content:
+        application/json:
+          schema: {}
+          example: {}
+    NoContent:
+      description: No content
+      content:
+        application/json:
+          schema: {}
+          example: {}
+    Created:
+      description: Resource created
+      content:
+        application/json:
+          schema: {}
+          example: {}
+    Updated:
+      description: Resource updated
+      content:
+        application/json:
+          schema: {}
+          example: {}
+    Deleted:
+      description: Resource succesfully deleted
+      content:
+        application/json:
+          schema: {}
+          example: {}
   securitySchemes:
     apiKey:
       type: http
@@ -1002,6 +1053,72 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/CreateSession'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /vault/proxy:
+    post:
+      summary: Proxy call
+      operationId: proxyCall
+      description: |
+        Proxies a downstream API call to a connector and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
+        **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
+      tags:
+        - Proxy (Upcoming)
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/downstream_url'
+        - $ref: '#/components/parameters/downstream_method'
+      security:
+        - apiKey: []
+      requestBody:
+        description: Depending on the verb/method of the request this will contain the request body you want to POST/PATCH/PUT.
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+              example:
+                account_sid: ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                api_version: '2010-04-01'
+                body: This is the ship that made the Kessel Run in fourteen parsecs?
+                date_created: 'Thu, 30 Jul 2015 20:12:31 +0000'
+                date_sent: 'Thu, 30 Jul 2015 20:12:33 +0000'
+                date_updated: 'Thu, 30 Jul 2015 20:12:33 +0000'
+                direction: outbound-api
+                error_code: null
+                error_message: null
+                from: '+15017122661'
+                messaging_service_sid: MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                num_media: '0'
+                num_segments: '1'
+                price: null
+                price_unit: null
+                sid: SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                status: sent
+                subresource_uris:
+                  media: /2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages/SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Media.json
+                to: '+15558675310'
+                uri: /2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages/SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.json
+      responses:
+        '200':
+          $ref: '#/components/responses/Ok'
+        '201':
+          $ref: '#/components/responses/Created'
+        '204':
+          $ref: '#/components/responses/NoContent'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

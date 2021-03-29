@@ -135,7 +135,7 @@ components:
       properties:
         id:
           type: string
-          example: '12345'
+          example: lead+close
           readOnly: true
         service_id:
           type: string
@@ -195,6 +195,7 @@ components:
           enum:
             - oauth2
             - apiKey
+          nullable: true
         status:
           type: string
           enum:
@@ -222,6 +223,7 @@ components:
             properties:
               resource:
                 type: string
+                example: leads
               defaults:
                 type: array
                 items:
@@ -229,18 +231,26 @@ components:
                   properties:
                     id:
                       type: string
+                      example: ProductInterest
                     value:
                       anyOf:
                         - type: string
+                          example: GC5000 series
                         - type: integer
+                          example: 10
                         - type: number
+                          example: 10.5
                         - type: boolean
+                          example: true
                         - type: array
                           items:
                             anyOf:
                               - type: string
+                                example: GC6000 series
                               - type: integer
+                                example: 10
                               - type: number
+                                example: 10.5
         configurable_resources:
           type: array
           items:
@@ -265,8 +275,10 @@ components:
           example: 'https://unify.apideck.com/vault/revoke/salesforce/<application-id>?state=<state>'
         added:
           type: boolean
+          example: true
         enabled:
           type: boolean
+          example: true
         created_at:
           type: number
           example: 1615563533390
@@ -278,66 +290,65 @@ components:
       properties:
         session_uri:
           type: string
-      example:
-        session_uri: 'http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj'
+          example: 'http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj'
     SessionRequest:
       type: object
       properties:
         redirect_uri:
           type: string
+          example: 'https://mysaas.com/dashboard'
         consumer_metadata:
           type: object
           properties:
             account_name:
               type: string
+              string: SpaceX
             user_name:
               type: string
+              example: Elon Musk
             image:
               type: string
+              example: 'https://www.spacex.com/static/images/share.jpg'
         theme:
           type: object
           properties:
             vault_name:
               type: string
+              example: Intercom
             primary_color:
               type: string
+              example: '#286efa'
             sidepanel_background_color:
               type: string
+              example: '#286efa'
             sidepanel_text_color:
               type: string
+              example: '#FFFFFF'
             favicon:
               type: string
+              example: 'https://www.intercom.com/_next/static/images/favicon-348ad8df6c167d93fb894e8bcb4dcd2a.png'
             terms_url:
               type: string
+              example: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e'
             privacy_url:
               type: string
-      example:
-        redirect_uri: 'https://mysaas.com/dashboard'
-        consumer_metadata:
-          account_name: SpaceX
-          user_name: Elon Musk
-          image: 'https://imgix.com/honeybadger'
-        theme:
-          vault_name: Intercom
-          primary_color: '#286efa'
-          sidepanel_background_color: '#286efa'
-          sidepanel_text_color: '#FFFFFF'
-          logo: 'https://res.cloudinary.com/apideck/image/upload/v1554113418/catalog/intercom/logo.png'
-          favicon: 'https://www.intercom.com/_next/static/images/favicon-348ad8df6c167d93fb894e8bcb4dcd2a.png'
-          terms_url: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e'
-          privacy_url: 'https://compliance.apideck.com/privacy-policy'
+              example: 'https://compliance.apideck.com/privacy-policy'
     FormField:
       type: object
       properties:
         id:
           type: string
+          example: channel
         label:
           type: string
+          example: Channel
         placeholder:
           type: string
+          example: Select a channel
           nullable: true
         description:
           type: string
+          example: Slack channel to push notification to
           nullable: true
         type:
           enum:
@@ -367,18 +378,26 @@ components:
             properties:
               label:
                 type: string
+                example: General Channel
               value:
                 anyOf:
                   - type: string
+                    example: general
                   - type: integer
+                    example: 123
                   - type: number
+                    example: 12.5
                   - type: boolean
+                    example: true
                   - type: array
                     items:
                       anyOf:
                         - type: string
                         - type: integer
                         - type: number
+                    example:
+                      - team
+                      - general
     GetConnectionResponse:
       type: object
       required:

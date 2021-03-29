@@ -60,6 +60,8 @@ components:
           example: '12345'
         image_url:
           type: string
+          example: 'https://www.spacex.com/static/images/share.jpg'
+          nullable: true
         description:
           type: string
           example: 'A crm that works for you, so you can spend time on relationships instead of data.'
@@ -137,30 +139,35 @@ components:
       properties:
         id:
           type: string
-          example: '1'
+          example: '12345'
           readOnly: true
         owner_id:
           type: string
-          example: '1'
+          example: '54321'
+          nullable: true
         company_id:
           type: string
-          example: '2'
+          example: '23456'
           nullable: true
         lead_id:
           type: string
-          example: '3'
+          example: '34567'
+          nullable: true
         name:
           type: string
           example: Elon Musk
         first_name:
           type: string
           example: Elon
+          nullable: true
         middle_name:
           type: string
           example: D.
+          nullable: true
         last_name:
           type: string
           example: Musk
+          nullable: true
         prefix:
           type: string
           example: Mr.
@@ -214,6 +221,7 @@ components:
         status:
           type: string
           example: open
+          nullable: true
         websites:
           type: array
           items:
@@ -269,9 +277,11 @@ components:
         monetary_amount:
           type: number
           example: 75000
+          nullable: true
         currency:
           type: string
           example: USD
+          nullable: true
         win_probability:
           type: number
           example: 40
@@ -296,6 +306,7 @@ components:
         source_id:
           type: string
           example: '12345'
+          nullable: true
         primary_contact_id:
           type: string
           example: '12345'
@@ -315,6 +326,7 @@ components:
         company_name:
           type: string
           example: Copper
+          nullable: true
         owner_id:
           type: string
           example: '12345'
@@ -323,24 +335,23 @@ components:
           type: string
           minLength: 1
           example: None
+          nullable: true
         status:
           type: string
           minLength: 1
           example: Open
+          nullable: true
         status_id:
           type: string
           example: '12345'
           nullable: true
         tags:
-          type: array
-          items:
-            type: string
-          example:
-            - sample
+          $ref: '#/components/schemas/Tags'
         interaction_count:
           type: number
           example: 0
           readOnly: true
+          nullable: true
         custom_fields:
           type: array
           items:
@@ -395,10 +406,11 @@ components:
       properties:
         id:
           type: string
+          example: '12345'
           readOnly: true
         owner_id:
           type: string
-          example: '1'
+          example: '54321'
         company_id:
           type: string
           example: '2'
@@ -409,20 +421,39 @@ components:
           nullable: true
         name:
           type: string
+          example: Elon Musk
         first_name:
           type: string
+          example: Elon
+          nullable: true
         last_name:
           type: string
+          example: Musk
           nullable: true
         description:
           type: string
           example: A thinker
+          nullable: true
         prefix:
           type: string
+          example: Sir
+          nullable: true
         title:
           type: string
+          example: CEO
+          nullable: true
         status:
           type: string
+          example: New
+          nullable: true
+        monetary_amount:
+          type: number
+          example: 75000
+          nullable: true
+        currency:
+          type: string
+          example: USD
+          nullable: true
         fax:
           type: string
           example: '+12129876543'
@@ -479,11 +510,12 @@ components:
       properties:
         id:
           type: string
-          example: '123'
+          example: '12345'
+          nullable: true
         url:
           type: string
           example: 'http://example.com'
-        category:
+        type:
           type: string
           example: default
     Address:
@@ -492,6 +524,7 @@ components:
         id:
           type: string
           example: '123'
+          nullable: true
         type:
           type: string
           enum:
@@ -556,13 +589,15 @@ components:
       properties:
         id:
           type: string
-          example: '123'
+          example: '12345'
+          nullable: true
         url:
           type: string
           example: 'https://www.twitter.com/apideck-io'
-        platform:
+        type:
           type: string
           example: twitter
+          nullable: true
     PhoneNumber:
       required:
         - number
@@ -570,14 +605,17 @@ components:
       properties:
         id:
           type: string
-          example: '123'
+          example: '12345'
+          nullable: true
         number:
           type: string
           example: 111-111-1111
-        phone_type:
+        type:
           type: string
           enum:
             - default
+            - primary
+            - secondary
             - phone
             - mobile
             - work
@@ -634,6 +672,7 @@ components:
         items_on_page:
           type: integer
           description: Number of items returned in the data property of the response
+          example: 50
         cursors:
           type: object
           description: Cursors to navigate to previous or next pages through the API
@@ -641,14 +680,17 @@ components:
             previous:
               type: string
               description: Cursor to navigate to the previous page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjE=
               nullable: true
             current:
               type: string
               description: Cursor to navigate to the current page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjI=
               nullable: true
             next:
               type: string
               description: Cursor to navigate to the next page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
     Links:
       type: object
@@ -657,13 +699,16 @@ components:
         previous:
           type: string
           description: Link to navigate to the previous page through the API
+          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjE%3D'
           nullable: true
         current:
           type: string
           description: Link to navigate to the current page through the API
+          example: 'https://unify.apideck.com/crm/companies'
         next:
           type: string
           description: Link to navigate to the previous page through the API
+          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM'
           nullable: true
     NotFoundResponse:
       properties:

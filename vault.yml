@@ -19,6 +19,8 @@ tags:
     description: ''
   - name: Connections
     description: ''
+  - name: Proxy (Upcoming)
+    description: ''
 components:
   parameters:
     id:
@@ -69,7 +71,7 @@ components:
       required: true
       schema:
         type: string
-    downstream_url:
+    x-apideck-downstream-url:
       name: downstream_url
       in: header
       description: Upstream URL
@@ -77,7 +79,7 @@ components:
       required: true
       schema:
         type: string
-    downstream_method:
+    x-apideck-downstream-method:
       name: downstream_method
       in: header
       description: Upstream method
@@ -195,6 +197,7 @@ components:
           enum:
             - oauth2
             - apiKey
+            - basic
           nullable: true
         status:
           type: string
@@ -311,7 +314,7 @@ components:
           properties:
             account_name:
               type: string
-              string: SpaceX
+              example: SpaceX
             user_name:
               type: string
               example: Elon Musk
@@ -1106,8 +1109,8 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
-        - $ref: '#/components/parameters/downstream_url'
-        - $ref: '#/components/parameters/downstream_method'
+        - $ref: '#/components/parameters/x-apideck-downstream-url'
+        - $ref: '#/components/parameters/x-apideck-downstream-method'
       security:
         - apiKey: []
       requestBody:

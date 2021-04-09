@@ -1621,6 +1621,14 @@ components:
         type: string
         nullable: true
         default: null
+    email:
+      name: email
+      in: query
+      description: Filter Contacts on email (beta)
+      schema:
+        type: string
+        format: email
+        example: elon@tesla.com
   responses:
     GetCompanies:
       description: Companies
@@ -1991,6 +1999,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/email'
       security:
         - apiKey: []
       responses:

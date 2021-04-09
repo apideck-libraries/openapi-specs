@@ -74,7 +74,7 @@ components:
     x-apideck-downstream-url:
       name: downstream_url
       in: header
-      description: Upstream URL
+      description: Downstream URL
       example: 'https://api.twilio.com'
       required: true
       schema:
@@ -82,8 +82,16 @@ components:
     x-apideck-downstream-method:
       name: downstream_method
       in: header
-      description: Upstream method
+      description: Downstream method
       example: POST
+      required: true
+      schema:
+        type: string
+    x-apideck-downstream-authorization:
+      name: downstream_authorization
+      in: header
+      description: Downstream authorization header
+      example: Bearer XXXXXXXXXXXXXXXXX
       required: true
       schema:
         type: string
@@ -1111,6 +1119,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-service-id'
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-method'
+        - $ref: '#/components/parameters/x-apideck-downstream-authorization'
       security:
         - apiKey: []
       requestBody:

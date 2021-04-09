@@ -90,9 +90,9 @@ components:
     x-apideck-downstream-authorization:
       name: downstream_authorization
       in: header
-      description: Downstream authorization header
+      description: Downstream authorization header. This will skip the Vault token injection.
       example: Bearer XXXXXXXXXXXXXXXXX
-      required: true
+      required: false
       schema:
         type: string
     api:
@@ -1117,9 +1117,9 @@ paths:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
         - $ref: '#/components/parameters/x-apideck-service-id'
+        - $ref: '#/components/parameters/x-apideck-downstream-authorization'
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-method'
-        - $ref: '#/components/parameters/x-apideck-downstream-authorization'
       security:
         - apiKey: []
       requestBody:

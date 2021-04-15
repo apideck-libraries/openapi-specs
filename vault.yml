@@ -33,19 +33,22 @@ components:
     x-apideck-app-id:
       name: x-apideck-app-id
       in: header
+      required: true
       description: The ID of your Unify application
       schema:
         type: string
     x-apideck-consumer-id:
       name: x-apideck-consumer-id
       in: header
+      required: true
       description: ID of the consumer which you want to get or push data from
       schema:
         type: string
     x-apideck-service-id:
       name: x-apideck-service-id
       in: header
-      description: 'Provide the service id you want to call (e.g., pipedrive). See the full list in the connector section. Only needed when a consumer has activated multiple integrations for a Unified API.'
+      required: true
+      description: 'Provide the service id you want to call (e.g., pipedrive). [See the full list in the connector section.](#section/Connectors) Only needed when a consumer has activated multiple integrations for a Unified API.'
       schema:
         type: string
     unified_api:

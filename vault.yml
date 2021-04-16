@@ -779,6 +779,16 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UnexpectedError'
+    ProxyError:
+      description: Proxy error
+      headers:
+        x-apideck-downstream-error:
+          schema:
+            type: boolean
+            description: Indicates if the error returned in the body is from the downstream
+      content:
+        application/json:
+          schema: {}
     Ok:
       description: Ok
       content:
@@ -1158,19 +1168,5 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Ok'
-        '201':
-          $ref: '#/components/responses/Created'
-        '204':
-          $ref: '#/components/responses/NoContent'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '402':
-          $ref: '#/components/responses/PaymentRequired'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '422':
-          $ref: '#/components/responses/Unprocessable'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/ProxyError'

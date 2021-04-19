@@ -295,6 +295,18 @@ components:
           type: string
           example: '12345'
           nullable: true
+        loss_reason:
+          type: string
+          example: No budget
+          nullable: true
+        won_reason_id:
+          type: string
+          example: '12345'
+          nullable: true
+        won_reason:
+          type: string
+          example: Best pitch
+          nullable: true
         pipeline_id:
           type: string
           example: '12345'
@@ -1626,11 +1638,18 @@ components:
     email:
       name: email
       in: query
-      description: Filter Contacts on email (beta)
+      description: Filter on email (beta)
       schema:
         type: string
         format: email
         example: elon@tesla.com
+    name:
+      name: name
+      in: query
+      description: Filter on name (beta)
+      schema:
+        type: string
+        example: ''
   responses:
     GetCompanies:
       description: Companies
@@ -2162,6 +2181,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/name'
       security:
         - apiKey: []
       responses:

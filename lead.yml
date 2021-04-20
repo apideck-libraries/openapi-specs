@@ -57,6 +57,10 @@ components:
           type: string
           example: Spacex
           nullable: true
+        contact_id:
+          type: string
+          example: '2'
+          nullable: true
         name:
           type: string
           example: Elon Musk
@@ -155,7 +159,14 @@ components:
           example: 'http://example.com'
         type:
           type: string
-          example: default
+          x-graphql-type-name: WebsiteType
+          enum:
+            - primary
+            - secondary
+            - work
+            - personal
+            - other
+          example: primary
     Address:
       type: object
       properties:
@@ -165,19 +176,16 @@ components:
           nullable: true
         type:
           type: string
+          x-graphql-type-name: AddressType
           enum:
-            - default
             - primary
             - secondary
-            - tertiary
-            - invoicing
-            - delivery
-            - visiting
-            - mailing
             - home
-            - work
+            - office
+            - shipping
+            - billing
             - other
-          example: invoicing
+          example: primary
         name:
           type: string
           example: HQ US
@@ -252,17 +260,15 @@ components:
           type: string
           x-graphql-type-name: PhoneType
           enum:
-            - default
             - primary
             - secondary
-            - phone
-            - mobile
-            - work
-            - office
             - home
-            - fax
+            - office
+            - mobile
             - assistant
+            - fax
             - other
+          example: primary
     Email:
       required:
         - email
@@ -277,7 +283,15 @@ components:
           example: elon@musk.com
         type:
           type: string
-          example: default
+          x-graphql-type-name: EmailType
+          enum:
+            - primary
+            - secondary
+            - work
+            - personal
+            - billing
+            - other
+          example: primary
     CustomField:
       type: object
       required:
@@ -291,10 +305,13 @@ components:
           anyOf:
             - type: string
               example: Uses Salesforce and Marketo
+              nullable: true
             - type: number
               example: 10
+              nullable: true
             - type: boolean
               example: true
+              nullable: true
             - type: array
               items:
                 type: string

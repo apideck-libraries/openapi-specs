@@ -142,6 +142,20 @@ components:
       schema:
         type: boolean
       example: true
+    scope:
+      name: scope
+      in: query
+      description: One or more OAuth scopes to request from the connector. OAuth scopes control the set of resources and operations that are allowed after authorization. Refer to the connector's documentation for the available scopes.
+      schema:
+        type: array
+        items:
+          type: string
+      style: spaceDelimited
+      explode: false
+      example:
+        - openid
+        - 'leads:write'
+        - 'profile:read'
   schemas:
     Connection:
       type: object
@@ -1026,6 +1040,7 @@ paths:
         - $ref: '#/components/parameters/application_id'
         - $ref: '#/components/parameters/state'
         - $ref: '#/components/parameters/redirect_uri'
+        - $ref: '#/components/parameters/scope'
       security:
         - apiKey: []
       responses:

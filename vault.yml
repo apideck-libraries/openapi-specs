@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 1.1.0
+  version: 1.1.1
   title: Vault API
   description: "Welcome to the Vault API \U0001F44B\n\nBuilding integrations starts with handling user credentials and generating access tokens for the APIs you want to use.\n\nWhen you're looking to connect to an API, the first step is authentication.\nVault helps you store API keys and access tokens from customers.\n\nThe only thing you need to use the Unify APIs is the consumer id, and Vault will do the look-up in the background to perform the API call(s), adding an extra layer of protection to prevent access token leakage.\n\nEasily import the Vault API into your favorite API tool by using the buttons below.\n\n[![Run our Vault API in Postman](https://app.apideck.com/images/postman-button.svg)](https://app.getpostman.com/run-collection/1311564-758bd122-d9e7-4e0c-9291-8d10da248af7)\n\n[![Run our Vault API in Insomnia}](https://app.apideck.com/images/insomnia-button.svg)](https://insomnia.rest/run/?label=Apideck%20Vault%20API&uri=https%3A%2F%2Fspecs.apideck.com%2Fvault.yml)\n\n## Why Apideck Vault\n\nThe Vault API allows you to build your own integrations UI, so your customers can activate and configure integrations.\n\nThrough the API, your customers authenticate directly in your app, where Vault will still take care of redirecting to the auth provider and back to your app. This strategy gives you full control over the flow and look & feel of the integration experience.\n\nThrough the Unify dashboard, you can configure which connectors you want to support as integrations, and it also allows you to control which kinds of providers your application supports\n\nAlternatively, you can use the Hosted Vault, a no-code solution.\n\n## Get Started\n\nTo use the Apideck APIs, you need to first sign up for free at [https://app.apideck.com/signup](). Follow the steps below to get started.\n\n- Create a free account.\n- Sign in to the Apideck Unify Dashboard.\n- Get your API key and the application ID.\n- Select and configure the integrations you want to make available to your users\n- Retrieve the client_id and client_secret for the integration you want to activate (Only needed for OAuth integrations). You can skip this step by using the Apideck sandbox credentials to get you started. (GUIDES per service coming soon)\n- Register the redirect URI for the example app (https://unify.apideck.com/vault/callback) in the list of redirect URIs under your app's settings\n\n### Vault API\n\nIf you are building your integration settings UI manually, you can call the Vault API directly.\nThe Vault API is for companies who want to completely whitelabel the in-app integrations overview and authentication experience.\nThrough the API, your customers authenticate directly in your app where Vault will still take care of redirecting to the auth provider and back to your app.\nThis strategy gives you full control over the flow and look & feel of the integration experience.\nThrough the Unify dashboard you can configure which connectors you want to support as integrations. and also allows you to control which kinds of providers your application supports.\n\nIf you're already storing access tokens we will help you migrate through our Vault Migration API.\n\nBeware, this is strategy takes more time to implement and is more complex than the hosted vault strategy.\n\n### Hosted Vault\n\nHosted Vault is a simple no-code solution, so you don't need to build your own UI to handle the integration settings and authentication. It's a great way to explore Unify without needing to build an integrations overview to get started.\n\n![Hosted Vault - Integrations portal](https://app.apideck.com/images/hosted-vault.png)\n\nBehind the scenes Hosted Vault implements the Vault API endpoints and handles the following features for your customers:\n\n- Add a connection (for an integration)\n- Handle the OAuth flow\n- Configure connection settings per integration\n- Manage connections\n- Discover and propose integration options\n\n## Domain model\n\nAt its core, a domain model creates a web of interconnected entities.\n\nOur domain model contains five main entity types: Consumer (user, account, team, machine), Application, Connector, Integration, and Connection.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-app-id      | String  | Yes      | The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                               |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes.                                                                                                      |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Connectors\n\nA full list of what vendors require which auth flow:\n\n| Service                                                                                    | Service ID         | Auth Type  | Status |\n| ------------------------------------------------------------------------------------------ | ------------------ | ---------- | ------ |\n| **[ActiveCampaign](https://developers.apideck.com/connectors/activecampaign)**             | activecampaign     | API Key    | ✅      |\n| **[Albacross](https://developers.apideck.com/connectors/albacross)**                       | albacross          | None       | ✅      |\n| **[Close](https://developers.apideck.com/connectors/close)**                               | close              | API Key    | ✅      |\n| **[Copper](https://developers.apideck.com/connectors/copper)**                             | copper             | API Key    | ✅      |\n| **[Crisp](https://developers.apideck.com/connectors/crisp)**                               | crisp              | None       | ✅      |\n| **[Drift](https://developers.apideck.com/connectors/drift)**                               | drift              | None       | ✅      |\n| **[Exact Online](https://developers.apideck.com/connectors/exact-online)**                 | exact-online       | OAuth2     | ✅      |\n| **[Freshsales](https://developers.apideck.com/connectors/freshsales)**                     | freshsales         | API Key    | ✅      |\n| **[GeoDynamics](https://developers.apideck.com/connectors/geodynamics-be)**                | geodynamics-be     | API Key    | ✅      |\n| **[Google Analytics](https://developers.apideck.com/connectors/google-analytics)**         | google-analytics   | None       | ✅      |\n| **[Google Tag Manager](https://developers.apideck.com/connectors/google-tag-manager)**     | google-tag-manager | None       | ✅      |\n| **[HubSpot](https://developers.apideck.com/connectors/hubspot)**                           | hubspot            | OAuth2     | ✅      |\n| **[Intercom](https://developers.apideck.com/connectors/intercom)**                         | intercom           | OAuth2     | ✅      |\n| **[Iubenda](https://developers.apideck.com/connectors/iubenda)**                           | iubenda            | None       | ✅      |\n| **[journy.io](https://developers.apideck.com/connectors/journy-io)**                       | journy-io          | None       | ✅      |\n| **[Livechat](https://developers.apideck.com/connectors/livechat)**                         | livechat           | None       | ✅      |\n| **[Metomic](https://developers.apideck.com/connectors/metomic-io)**                        | metomic-io         | None       | ✅      |\n| **[Microsoft Dynamics CRM](https://developers.apideck.com/connectors/microsoft-dynamics)** | microsoft-dynamics | OAuth2     | ✅      |\n| **[Pipedrive](https://developers.apideck.com/connectors/pipedrive)**                       | pipedrive          | OAuth2     | ✅      |\n| **[Plivo](https://developers.apideck.com/connectors/plivo)**                               | plivo              | Basic Auth | ✅      |\n| **[QuickBooks](https://developers.apideck.com/connectors/quickbooks)**                     | quickbooks         | OAuth2     | ✅      |\n| **[Salesflare](https://developers.apideck.com/connectors/salesflare)**                     | salesflare         | API Key    | ✅      |\n| **[Salesforce](https://developers.apideck.com/connectors/salesforce)**                     | salesforce         | OAuth2     | ✅      |\n| **[Securex](https://developers.apideck.com/connectors/securex)**                           | securex            | OAuth2     | ✅      |\n| **[Segment](https://developers.apideck.com/connectors/segment)**                           | segment            | None       | ✅      |\n| **[Shopify](https://developers.apideck.com/connectors/shopify)**                           | shopify            | OAuth2     | ✅      |\n| **[Slack](https://developers.apideck.com/connectors/slack)**                               | slack              | OAuth2     | ✅      |\n| **[Teamleader](https://developers.apideck.com/connectors/teamleader)**                     | teamleader         | OAuth2     | ✅      |\n| **[Twilio](https://developers.apideck.com/connectors/twilio)**                             | twilio             | Basic Auth | ✅      |\n| **[Xero](https://developers.apideck.com/connectors/xero)**                                 | xero               | OAuth2     | ✅      |\n| **[Zendesk Sell](https://developers.apideck.com/connectors/zendesk-sell)**                 | zendesk-sell       | OAuth2     | ✅      |\n| **[Zoho CRM](https://developers.apideck.com/connectors/zoho-crm)**                         | zoho-crm           | OAuth2     | ✅      |\n\n## Sandbox (upcoming)\n\nThe sandbox is pre-loaded with data similar to a real-life integrations setup. You can use the preconfigured OAauth configured connectors for testing purposes and can skip this step by using the Apideck sandbox credentials to get you started.\n\n## Guides\n\n- How to build an integrations UI with Vault (https://github.com/apideck-samples/integration-settings)\n- How to configure the OAuth credentials for integration providers (COMING SOON)\n\n## FAQ\n\n**What purpose does Vault serve? Can I just handle the authentication and access token myself?**\nYou can store everything yourself, but that defeats the purpose of using Apideck Unify. Handling tokens for multiple providers can quickly become very complex.\n\n### Is my data secure?\n\nVault employs data minimization, therefore only requesting the minimum amount of scopes needed to perform an API request.\n\n### How do I migrate existing data?\n\nUsing our migration API, you can migrate the access tokens and accounts to Apideck Vault. (COMING SOON)\n\n### Can I use Vault in combination with existing integrations?\n\nYes, you can. The granularity of Unify allows to quickly the use cases you need, while keeping a gradual migration path based on your timeline and requirements.\n\n### How does Vault work for Apideck Ecosystem customers?\n\nOnce logged in, pick your ecosystem; on the left-hand side of the screen, you'll have the option to create an application underneath the Unify section.\n\n### How to integrate Apideck Vault\n\nThis section covers everything you need to know to authenticate your customers through Vault.\nVault provides **three strategies** to use API tokens from your customers:\n\n- Vault API\n- Hosted Vault\n- Apideck Ecosystem _(COMING SOON)_\n\nYou can also opt to bypass Vault and still take care of authentication flows yourself. Make sure to put the right safeguards in place to protect your customers' tokens and other sensitive data.\n\n### What auth types does Vault support?\n\nWhat auth strategies does Vault handle? We currently support two flows so your customers can activate an integration.\n\n#### API keys\n\nFor Services supporting the API key strategy, you will need to provide an in-app form where users can configure their API keys provided by the integration service. You can also use the drop-in solution if you don't want your own integration settings overview.\n\n#### OAuth 2.0\n\n##### Authorization Code Grant Type Flow\n\nVault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own.\n\nCertain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate.\n\nThis is being handled by the `/authorize` endpoint.\n"
   contact:
@@ -20,6 +20,8 @@ tags:
   - name: Connections
     description: ''
   - name: Proxy
+    description: ''
+  - name: Consumers (Upcoming)
     description: ''
 components:
   parameters:
@@ -74,6 +76,14 @@ components:
       required: true
       schema:
         type: string
+    consumer_id:
+      name: consumer_id
+      in: path
+      description: ID of the consumer to return
+      required: true
+      schema:
+        type: string
+      example: test_user_id
     x-apideck-downstream-url:
       name: x-apideck-downstream-url
       in: header
@@ -120,6 +130,23 @@ components:
       schema:
         type: boolean
         default: true
+    limit:
+      name: limit
+      in: query
+      description: Number of records to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 20
+    cursor:
+      name: cursor
+      in: query
+      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
+      schema:
+        type: string
+        nullable: true
+        default: null
     redirect_uri:
       name: redirect_uri
       in: query
@@ -521,6 +548,150 @@ components:
           properties:
             data:
               $ref: '#/components/schemas/Session'
+    GetConsumerResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          properties:
+            data:
+              type: object
+              properties:
+                consumer_id:
+                  type: string
+                  example: test_consumer_id
+                connections:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      service_id:
+                        type: string
+                        example: teamleader
+                      unified_api:
+                        type: string
+                        example: crm
+                      state:
+                        type: string
+                        example: callable
+                      updated_at:
+                        type: number
+                        example: 1616662325753
+                connection_count:
+                  type: number
+                  example: 3
+                aggregated_request_count:
+                  type: number
+                  example: 101
+                request_counts:
+                  type: object
+                  properties:
+                    unify:
+                      type: number
+                      example: 50
+                    proxy:
+                      type: number
+                      example: 1
+                    vault:
+                      type: number
+                      example: 50
+    GetConsumersResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              consumer_id:
+                type: string
+                example: test_consumer_id
+              connection_count:
+                type: number
+                example: 3
+              aggregated_request_count:
+                type: number
+                example: 101
+              request_counts:
+                type: object
+                properties:
+                  unify:
+                    type: number
+                    example: 50
+                  proxy:
+                    type: number
+                    example: 1
+                  vault:
+                    type: number
+                    example: 50
+        meta:
+          type: object
+          description: Reponse metadata
+          properties:
+            items_on_page:
+              type: integer
+              description: Number of items returned in the data property of the response
+              example: 50
+            cursors:
+              type: object
+              description: Cursors to navigate to previous or next pages through the API
+              properties:
+                previous:
+                  type: string
+                  description: Cursor to navigate to the previous page of results through the API
+                  example: em9oby1jcm06OnBhZ2U6OjE=
+                  nullable: true
+                current:
+                  type: string
+                  description: Cursor to navigate to the current page of results through the API
+                  example: em9oby1jcm06OnBhZ2U6OjI=
+                  nullable: true
+                next:
+                  type: string
+                  description: Cursor to navigate to the next page of results through the API
+                  example: em9oby1jcm06OnBhZ2U6OjM=
+                  nullable: true
+        links:
+          type: object
+          description: Links to navigate to previous or next pages through the API
+          properties:
+            previous:
+              type: string
+              description: Link to navigate to the previous page through the API
+              example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjE%3D'
+              nullable: true
+            current:
+              type: string
+              description: Link to navigate to the current page through the API
+              example: 'https://unify.apideck.com/crm/companies'
+            next:
+              type: string
+              description: Link to navigate to the previous page through the API
+              example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM'
+              nullable: true
     Created:
       type: object
       required:
@@ -751,6 +922,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateSessionResponse'
+    GetConsumer:
+      description: Consumer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConsumerResponse'
+    GetConsumers:
+      description: All Consumers
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConsumersResponse'
     NotFound:
       description: The specified resource was not found
       content:
@@ -863,6 +1046,63 @@ security:
   - apiKey: []
     applicationId: []
 paths:
+  /vault/consumers:
+    get:
+      summary: Get all consumers
+      operationId: consumersAll
+      description: |
+        This endpoint includes all application consumers, along with an aggregated count of requests made.
+      tags:
+        - Consumers (Upcoming)
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetConsumers'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  '/vault/consumers/{consumer_id}':
+    get:
+      summary: Get Consumer
+      operationId: consumersOne
+      description: |
+        Consumer detail including their aggregated counts with the connections they have authorized.
+      tags:
+        - Consumers (Upcoming)
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumer_id'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetConsumer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
   /vault/connections:
     get:
       summary: Get all connections

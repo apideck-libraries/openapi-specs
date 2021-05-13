@@ -669,6 +669,10 @@ components:
                   example: em9oby1jcm06OnBhZ2U6OjM=
                   nullable: true
         links:
+          example:
+            previous: 'https://unify.apideck.com/vault/consumers?cursor=em9oby1jcm06OnBhZ2U6OjE%3D'
+            current: 'https://unify.apideck.com/vault/consumers'
+            next: 'https://unify.apideck.com/vault/consumers?cursor=em9oby1jcm06OnBhZ2U6OjM'
           type: object
           description: Links to navigate to previous or next pages through the API
           properties:
@@ -1124,7 +1128,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   '/vault/consumers/{consumer_id}':
     get:
-      summary: Get Consumer
+      summary: Get consumer
       operationId: consumersOne
       description: |
         Consumer detail including their aggregated counts with the connections they have authorized.
@@ -1152,7 +1156,7 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
   '/vault/consumers/{consumer_id}/stats':
     get:
-      summary: Consumer Request Counts
+      summary: Consumer request counts
       operationId: consumerRequestCounts
       description: |
         Get consumer request counts within a given datetime range.

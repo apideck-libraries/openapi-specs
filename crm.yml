@@ -33,10 +33,170 @@ tags:
     description: ''
   - name: Users
     description: ''
-  - name: Activity (upcoming)
+  - name: Activities
     description: ''
 components:
   schemas:
+    Activity:
+      type: object
+      additionalProperties: false
+      required:
+        - activity_datetime
+        - duration_seconds
+        - type
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        contact_id:
+          type: string
+          example: '12345'
+        company_id:
+          type: string
+          example: '12345'
+        opportunity_id:
+          type: string
+          example: '12345'
+        lead_id:
+          type: string
+          example: '12345'
+        owner_id:
+          type: string
+          example: '12345'
+        campaign_id:
+          type: string
+          example: '12345'
+        case_id:
+          type: string
+          example: '12345'
+        asset_id:
+          type: string
+          example: '12345'
+        contract_id:
+          type: string
+          example: '12345'
+        product_id:
+          type: string
+          example: '12345'
+        solution_id:
+          type: string
+          example: '12345'
+        custom_object_id:
+          type: string
+          example: '12345'
+        type:
+          type: string
+          enum:
+            - call
+            - meeting
+            - email
+            - send-letter
+            - send-quote
+            - other
+          example: meeting
+        title:
+          type: string
+          example: Meeting
+        description:
+          type: string
+          example: More info about the meeting
+        location:
+          type: string
+          example: Space
+        all_day_event:
+          type: boolean
+          example: false
+        is_private:
+          type: boolean
+          example: true
+        group_event:
+          type: boolean
+          example: true
+        group_event_type:
+          type: boolean
+          example: true
+        archived:
+          type: boolean
+          example: false
+        show_as:
+          type: string
+          enum:
+            - free
+            - busy
+          example: busy
+        activity_datetime:
+          type: string
+          example: '2021-05-01T12:00:00.000Z'
+        activity_date:
+          type: string
+          example: '2021-05-01'
+        duration_seconds:
+          type: integer
+          example: 3600
+        start_datetime:
+          type: string
+          example: '2021-05-01T16:00:00.000Z'
+        end_datetime:
+          type: string
+          example: '2021-05-01T17:00:00.000Z'
+        end_date:
+          type: string
+          example: '2021-05-01'
+        recurrent:
+          type: boolean
+          example: true
+        recurrence_activity_id:
+          type: string
+          example: '12345'
+        recurrence_start_datetime:
+          type: string
+          example: '2021-05-01T17:00:00.000Z'
+        recurrence_end_date:
+          type: string
+          example: '2022-05-01'
+        recurrence_timezone:
+          type: string
+          example: Asia/Seoul
+        recurrence_interval:
+          type: integer
+          example: 10
+        recurrence_day_of_week_mask:
+          type: string
+        recurrence_day_of_month:
+          type: string
+        recurrence_instance:
+          type: string
+        recurrence_month_of_year:
+          type: string
+        reminder_datetime:
+          type: string
+          example: '2021-05-01T17:00:00.000Z'
+        reminder_set:
+          type: boolean
+          example: false
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        updated_by:
+          type: string
+          example: '12345'
+          readOnly: true
+          nullable: true
+        created_by:
+          type: string
+          example: '12345'
+          readOnly: true
+          nullable: true
+        updated_at:
+          type: string
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
+        created_at:
+          type: string
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
     Address:
       type: object
       properties:
@@ -404,6 +564,38 @@ components:
           description: E-mail of the contact to filter on
           example: elon@tesla.com
       additionalProperties: false
+    CreateActivityResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: zoho-crm
+        resource:
+          type: string
+          description: Unified API resource name
+          example: activities
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     CreateCompanyResponse:
       type: object
       required:
@@ -651,6 +843,38 @@ components:
             - type: array
               items:
                 type: string
+    DeleteActivityResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: zoho-crm
+        resource:
+          type: string
+          description: Unified API resource name
+          example: activities
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     DeleteCompanyResponse:
       type: object
       required:
@@ -898,6 +1122,78 @@ components:
             - billing
             - other
           example: primary
+    GetActivitiesResponse:
+      x-graphql-type-name: ActivityList
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: zoho-crm
+        resource:
+          type: string
+          description: Unified API resource name
+          example: activities
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetActivityResponse:
+      x-graphql-type-name: activity
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: zoho-crm
+        resource:
+          type: string
+          description: Unified API resource name
+          example: activities
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Activity'
     GetCompaniesResponse:
       x-graphql-type-name: CompanyList
       type: object
@@ -2055,6 +2351,38 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#invalidstateerror'
+    UpdateActivityResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: zoho-crm
+        resource:
+          type: string
+          description: Unified API resource name
+          example: activities
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     UpdateCompanyResponse:
       type: object
       required:
@@ -2384,6 +2712,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/BadRequest'
+    CreateActivityResponse:
+      description: Activity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateActivityResponse'
     CreateCompany:
       description: Company created
       content:
@@ -2426,6 +2760,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateUserResponse'
+    DeleteActivityResponse:
+      description: Activity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteActivityResponse'
     DeleteCompany:
       description: Company deleted
       content:
@@ -2468,6 +2808,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteUserResponse'
+    GetActivitiesResponse:
+      description: Activities
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetActivitiesResponse'
+    GetActivityResponse:
+      description: Activity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetActivityResponse'
     GetCompanies:
       description: Companies
       content:
@@ -2588,6 +2940,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Unprocessable'
+    UpdateActivityResponse:
+      description: Activity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateActivityResponse'
     UpdateCompany:
       description: Company updated
       content:
@@ -3771,6 +4129,166 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DeleteUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /crm/activities:
+    get:
+      tags:
+        - Activities
+      x-graphql-field-name: activities
+      operationId: activitiesAll
+      summary: List activities
+      description: List activities
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetActivitiesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    post:
+      tags:
+        - Activities
+      operationId: activitiesAdd
+      summary: Create activity
+      description: Create activity
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Activity'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateActivityResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  '/crm/activities/{id}':
+    get:
+      tags:
+        - Activities
+      operationId: activitiesOne
+      summary: Get activity
+      description: Get activity
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetActivityResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    patch:
+      tags:
+        - Activities
+      operationId: activitiesUpdate
+      summary: Update activity
+      description: Update activity
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Activity'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateActivityResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+    delete:
+      tags:
+        - Activities
+      operationId: activitiesDelete
+      summary: Delete activity
+      description: Delete activity
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteActivityResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

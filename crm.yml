@@ -2221,17 +2221,20 @@ components:
           type: integer
           example: 1
         stages:
-          properties:
-            id:
-              type: string
-              example: contractsent
-              readOnly: true
-            name:
-              type: string
-              example: Contract Sent
-            display_order:
-              type: integer
-              example: 1
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: contractsent
+                readOnly: true
+              name:
+                type: string
+                example: Contract Sent
+              display_order:
+                type: integer
+                example: 1
         updated_at:
           type: string
           example: '2017-08-12T20:43:21.291Z'

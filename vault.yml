@@ -230,11 +230,6 @@ components:
         logo:
           type: string
           example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
-        api_key:
-          type: string
-          description: API Key. Only valid when auth_type is `apiKey`. OAuth connections do not require `api_key`.
-          nullable: true
-          example: 820b4ce9-b66d-4d12-9562-c859f2a6bf39
         settings:
           type: object
           description: Connection settings. Values will persist to `form_fields` with corresponding id
@@ -383,9 +378,6 @@ components:
           type: string
           nullable: true
           example: 'https://unify.apideck.com/vault/revoke/salesforce/<application-id>?state=<state>'
-        added:
-          type: boolean
-          example: true
         enabled:
           type: boolean
           example: true
@@ -401,7 +393,6 @@ components:
             - available
             - callable
             - added
-            - configured
             - authorized
           example: authorized
     Session:
@@ -586,8 +577,6 @@ components:
       properties:
         enabled:
           $ref: '#/components/schemas/Connection/properties/enabled'
-        api_key:
-          $ref: '#/components/schemas/Connection/properties/api_key'
         settings:
           $ref: '#/components/schemas/Connection/properties/settings'
         metadata:

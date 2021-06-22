@@ -2,7 +2,7 @@
 
 ### ACTION REQUIRED
 
-<span className='tag'>Vault API</span>
+<span class='tag'>Vault API</span>
 
 Beta users should note the following breaking changes that may affect existing integrations implementing the `Vault` API:
 
@@ -153,3 +153,4 @@ Beta users should note the following breaking changes that may affect existing i
 - `PhoneNumber.phone_type` changed to `PhoneNumber.type` and `enum` now accepts: `["primary", "secondary", "home", "office", "mobile", "assistant", "fax", "other"]`.
 
 > Note: All enums that previously accepted `default` now expect `primary`!
+

@@ -1336,36 +1336,6 @@ paths:
           $ref: '#/components/responses/Unprocessable'
         default:
           $ref: '#/components/responses/UnexpectedError'
-    post:
-      tags:
-        - Connections
-      summary: Create connection
-      description: Create a connection
-      operationId: connectionsCreate
-      parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/service_id'
-        - $ref: '#/components/parameters/unified_api'
-      security:
-        - apiKey: []
-      requestBody:
-        $ref: '#/components/requestBodies/CreateConnectionRequestBody'
-      responses:
-        '200':
-          $ref: '#/components/responses/UpdateConnection'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '402':
-          $ref: '#/components/responses/PaymentRequired'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '422':
-          $ref: '#/components/responses/Unprocessable'
-        default:
-          $ref: '#/components/responses/UnexpectedError'
   '/vault/connections/{unified_api}/{service_id}':
     post:
       summary: Create connection
@@ -1546,7 +1516,7 @@ paths:
       security:
         - apiKey: []
       responses:
-        '302':
+        '301':
           description: redirect
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -1582,7 +1552,7 @@ paths:
       security:
         - apiKey: []
       responses:
-        '302':
+        '301':
           description: redirect
         '400':
           $ref: '#/components/responses/BadRequest'

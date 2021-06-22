@@ -2,7 +2,7 @@
 
 ### ACTION REQUIRED
 
-<span class='tag'>Vault API</span>
+<span className='tag'>Vault API</span>
 
 Beta users should note the following breaking changes that may affect existing integrations implementing the `Vault` API:
 

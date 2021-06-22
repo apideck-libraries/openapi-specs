@@ -2,7 +2,7 @@
 
 ### ACTION REQUIRED
 
-<span className='tag'>Vault API</span>
+<span class='tag'>Vault API</span>
 
 Beta users should note the following breaking changes that may affect existing integrations implementing the `Vault` API:
 
@@ -78,13 +78,13 @@ Beta users should note the following breaking changes that may affect existing i
 - Added `filter-type` to `FormField.type` that allows configuration options to be filtered by the value of a separate setting.
 - `FormFieldOptionGroup` schema added to define grouping of options within a FormField
 
-<span className='tag'>1.4.0</span>
+<span class='tag'>1.4.0</span>
 
 ## v1.4.0 - (2021-05-18)
 
 Added configuration options per resource.
 
-<span className='tag'>1.4.0</span>
+<span class='tag'>1.4.0</span>
 
 ### Vault API
 
@@ -95,7 +95,7 @@ Added configuration options per resource.
 
 Apideck APIs now use a single semver version for clarity.
 
-<span className='tag'>1.3.0</span>
+<span class='tag'>1.3.0</span>
 
 ### CRM API & Lead API
 
@@ -105,7 +105,7 @@ Apideck APIs now use a single semver version for clarity.
 
 New consumer endpoints added to the Vault API providing a list and aggregate data on the type of requests consumers are making.
 
-<span className='tag'>Vault 1.2.0</span>
+<span class='tag'>Vault 1.2.0</span>
 
 - [`/vault/consumers`](apis/vault/reference#operation/consumersAll) added to provide paginated [list of consumers](apis/vault/reference#operation/consumersAll) scoped to application
 - [`/vault/consumers/{consumer_id}`](apis/vault/reference#operation/consumersOne) added to provide consumer detail including `aggregated_request_count` and request counts across the Unified APIs.
@@ -115,7 +115,7 @@ New consumer endpoints added to the Vault API providing a list and aggregate dat
 
 Initial spec of new Vault Consumers API drafted for upcoming release.
 
-<span className='tag'>Vault 1.1.1</span>
+<span class='tag'>Vault 1.1.1</span>
 
 ## v1.1.0 - (2021-04-23)
 
@@ -123,7 +123,7 @@ We switched to a dynamic way of using filters instead of fixed query parameters.
 
 ### ACTION REQUIRED
 
-<span className='tag'>CRM 1.1.0</span>
+<span class='tag'>CRM 1.1.0</span>
 
 Beta users should note the following breaking changes that may affect existing integrations implementing the `CRM` API:
 
@@ -140,7 +140,7 @@ From here on in, we'll be tracking, documenting and broadcasting implemented or 
 
 ### ACTION REQUIRED
 
-<span className='tag'>CRM 1.0.0</span> <span className='tag'>Lead 1.0.0</span>
+<span class='tag'>CRM 1.0.0</span> <span class='tag'>Lead 1.0.0</span>
 
 Beta users should note the following breaking changes that may affect existing integrations implementing either `Lead` or `CRM` API:
 

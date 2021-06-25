@@ -52,6 +52,9 @@ components:
           type: string
           readOnly: true
           example: '12345'
+        account_id:
+          type: string
+          example: '12345'
         contact_id:
           type: string
           example: '12345'
@@ -146,6 +149,9 @@ components:
         duration_seconds:
           type: integer
           example: 1800
+        duration_minutes:
+          type: integer
+          example: 30
         start_datetime:
           type: string
           example: '2021-05-01T12:00:00.000Z'
@@ -1773,6 +1779,10 @@ components:
           type: string
           example: '2'
           nullable: true
+        lead_source:
+          type: string
+          example: Cold Call
+          nullable: true
         name:
           type: string
           example: Elon Musk
@@ -1795,6 +1805,11 @@ components:
         title:
           type: string
           example: CEO
+          nullable: true
+        language:
+          type: string
+          example: EN
+          description: language code according to ISO 639-1. For the United States - EN
           nullable: true
         status:
           type: string
@@ -2263,6 +2278,9 @@ components:
               name:
                 type: string
                 example: Contract Sent
+              value:
+                type: string
+                example: CONTRACT_SENT
               display_order:
                 type: integer
                 example: 1
@@ -3811,6 +3829,7 @@ paths:
       operationId: pipelinesAdd
       summary: Create pipeline
       description: Create pipeline
+      x-apideck-upcoming: true
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'
@@ -3846,6 +3865,7 @@ paths:
       operationId: pipelinesOne
       summary: Get pipeline
       description: Get pipeline
+      x-apideck-upcoming: true
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'
@@ -3875,6 +3895,7 @@ paths:
       operationId: pipelinesUpdate
       summary: Update pipeline
       description: Update pipeline
+      x-apideck-upcoming: true
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'
@@ -3910,6 +3931,7 @@ paths:
       operationId: pipelinesDelete
       summary: Delete pipeline
       description: Delete pipeline
+      x-apideck-upcoming: true
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'

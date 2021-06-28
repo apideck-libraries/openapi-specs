@@ -1,3 +1,10 @@
+## v3.0.1 - (2021-06-28)
+
+### CRM API & Lead API
+
+- `lead_source` and `language` added to Lead resource
+- `account_id` and `duration_in_minutes` added to Activity resource
+
 ## v3.0.0 - (2021-06-18)
 
 ### ACTION REQUIRED

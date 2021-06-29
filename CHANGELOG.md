@@ -1,3 +1,9 @@
+## v3.0.2 - (2021-06-29)
+
+### CRM API & Lead API & Vault API
+
+- all required fields are validated with `minLength: 1`
+
 ## v3.0.1 - (2021-06-28)
 
 ### CRM API & Lead API

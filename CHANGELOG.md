@@ -1,3 +1,9 @@
+## v4.1.1 - (2021-07-05)
+
+### CRM API & Lead API & Vault API
+
+- extend examples for fields that allow `anyOf` (in this case errors that allow strings or objects)
+
 ## v4.1.0 - (2021-07-02)
 
 ### CRM API

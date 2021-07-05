@@ -1,3 +1,44 @@
+## v4.1.0 - (2021-07-02)
+
+### CRM API
+
+- Added sorting support to Leads, Companies and Opportunities. To sort results, use the `sort[by]` and `sort[direction]` query parameters.
+  - **Leads**: available `sort[by]` values are `name`, `first_name`, `last_name`, `email`, `created_at` and `updated_at`.
+  - **Companies**: available `sort[by]` values are `name`, `created_at` and `updated_at`.
+  - **Opportunities**: available `sort[by]` values are `title`, `status`, `monetary_amount`, `win_probability`,`created_at` and `updated_at`.
+
+## v4.0.0 - (2021-07-01)
+
+### CRM API
+
+- Added `note` and `task` as allowed values for `type` on the activity resource
+- `activity_datetime` and `duration_seconds` are no longer required on the activity resource
+
+### ACTION REQUIRED
+
+<span className='tag'>CRM API</span>
+
+Beta users should note the following breaking changes that may affect existing integrations implementing the `CRM` API:
+
+- On the activity resource, following fields were removed:
+  - `recurrence_activity_id`
+  - `recurrence_start_datetime`
+  - `recurrence_end_date`
+  - `recurrence_timezone`
+  - `recurrence_interval`
+  - `recurrence_day_of_week_mask`
+  - `recurrence_day_of_month`
+  - `recurrence_instance`
+  - `recurrence_month_of_year`
+  - `recurrence_end_date_only`
+  - `recurrence_type`
+
+## v3.0.3 - (2021-07-01)
+
+### CRM API & Lead API & Vault API
+
+- `detail` property on all errors can be a string _or_ and object
+
 ## v3.0.2 - (2021-06-29)
 
 ### CRM API & Lead API & Vault API

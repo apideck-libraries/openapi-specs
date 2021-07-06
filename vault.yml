@@ -653,70 +653,68 @@ components:
           description: HTTP Response Status
           example: OK
         data:
+          type: object
           properties:
-            data:
-              type: object
-              properties:
-                consumer_id:
-                  type: string
-                  example: test_consumer_id
-                connections:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        example: 1111+test_user_id
-                        readOnly: true
-                      name:
-                        type: string
-                        example: Salesforce
-                      icon:
-                        type: string
-                        example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-                      logo:
-                        type: string
-                        example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
-                      service_id:
-                        type: string
-                        example: teamleader
-                      unified_api:
-                        type: string
-                        example: crm
-                      auth_type:
-                        type: string
-                        enum:
-                          - oauth2
-                          - apiKey
-                          - basic
-                        nullable: true
-                      enabled:
-                        type: boolean
-                        example: true
-                      created_at:
-                        type: string
-                        example: '2020-09-19T12:18:37.071Z'
-                      updated_at:
-                        type: string
-                        example: '2020-09-19T12:18:37.071Z'
-                      state:
-                        type: string
-                        enum:
-                          - available
-                          - callable
-                          - added
-                          - configured
-                          - authorized
-                        example: authorized
-                aggregated_request_count:
-                  type: number
-                  example: 101
-                request_counts:
-                  $ref: '#/components/schemas/RequestCountAllocation'
-                request_count_updated:
-                  type: string
-                  example: '2021-05-07T12:55:42.242Z'
+            consumer_id:
+              type: string
+              example: test_consumer_id
+            connections:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1111+test_user_id
+                    readOnly: true
+                  name:
+                    type: string
+                    example: Salesforce
+                  icon:
+                    type: string
+                    example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
+                  logo:
+                    type: string
+                    example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
+                  service_id:
+                    type: string
+                    example: teamleader
+                  unified_api:
+                    type: string
+                    example: crm
+                  auth_type:
+                    type: string
+                    enum:
+                      - oauth2
+                      - apiKey
+                      - basic
+                    nullable: true
+                  enabled:
+                    type: boolean
+                    example: true
+                  created_at:
+                    type: string
+                    example: '2020-09-19T12:18:37.071Z'
+                  updated_at:
+                    type: string
+                    example: '2020-09-19T12:18:37.071Z'
+                  state:
+                    type: string
+                    enum:
+                      - available
+                      - callable
+                      - added
+                      - configured
+                      - authorized
+                    example: authorized
+            aggregated_request_count:
+              type: number
+              example: 101
+            request_counts:
+              $ref: '#/components/schemas/RequestCountAllocation'
+            request_count_updated:
+              type: string
+              example: '2021-05-07T12:55:42.242Z'
     GetConsumersResponse:
       type: object
       required:
@@ -748,6 +746,14 @@ components:
               request_count_updated:
                 type: string
                 example: '2021-05-07T12:55:42.242Z'
+              services:
+                type: array
+                items:
+                  type: string
+                  example: salesforce
+                example:
+                  - salesforce
+                  - stripe
         meta:
           type: object
           description: Reponse metadata

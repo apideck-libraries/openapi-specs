@@ -1,3 +1,9 @@
+## v4.2.0 - (2021-07-07)
+
+### Vault API
+
+- Added a `services` array to list all active services when listing all consumers.
+
 ## v4.1.1 - (2021-07-05)
 
 ### CRM API & Lead API & Vault API

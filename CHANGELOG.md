@@ -1,3 +1,9 @@
+## v4.3.0 - (2021-07-14)
+
+### Vault API
+
+- New `/vault/logs` endpoint released to enable fetching paginated list of request logs scoped to application and consumer.
+
 ## v4.2.0 - (2021-07-07)
 
 ### Vault API

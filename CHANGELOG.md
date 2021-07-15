@@ -1,3 +1,9 @@
+## v4.3.1 - (2021-07-15)
+
+### Vault API
+
+- Added ability to filter log results in vault.
+
 ## v4.3.0 - (2021-07-14)
 
 ### Vault API

@@ -1765,8 +1765,7 @@ paths:
         - $ref: '#/components/parameters/state'
         - $ref: '#/components/parameters/redirect_uri'
         - $ref: '#/components/parameters/scope'
-      security:
-        - apiKey: []
+      security: null
       responses:
         '301':
           description: redirect
@@ -1806,6 +1805,34 @@ paths:
       responses:
         '301':
           description: redirect
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          $ref: '#/components/responses/PaymentRequired'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/Unprocessable'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+  /vault/callback:
+    get:
+      tags:
+        - Connections
+      summary: Callback
+      operationId: callback
+      description: |
+        This endpoint gets called after the triggering the authorize flow.
+
+        Callback links need a state and code parameter to verify the validity of the request.
+      parameters:
+        - $ref: '#/components/parameters/state'
+      security: null
+      responses:
+        '301':
+          description: callback
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

@@ -274,12 +274,7 @@ components:
               name: My Company
               id: c01458a5-7276-41ce-bc19-639906b0450a
         auth_type:
-          type: string
-          enum:
-            - oauth2
-            - apiKey
-            - basic
-          nullable: true
+          $ref: '#/components/schemas/AuthType'
         status:
           type: string
           enum:
@@ -326,21 +321,7 @@ components:
                     options:
                       type: array
                       items:
-                        anyOf:
-                          - type: object
-                            $ref: '#/components/schemas/FormFieldOption'
-                          - type: object
-                            properties:
-                              id:
-                                type: string
-                                example: '1234'
-                              label:
-                                type: string
-                                example: General Channel
-                              options:
-                                type: array
-                                items:
-                                  $ref: '#/components/schemas/FormFieldOption'
+                        $ref: '#/components/schemas/FormFieldOption'
                     value:
                       anyOf:
                         - type: string
@@ -406,13 +387,15 @@ components:
           example: 1616662325753
           nullable: true
         state:
-          type: string
-          enum:
-            - available
-            - callable
-            - added
-            - authorized
-          example: authorized
+          $ref: '#/components/schemas/ConnectionState'
+    ConnectionState:
+      type: string
+      enum:
+        - available
+        - callable
+        - added
+        - authorized
+      example: authorized
     ConnectionMetadata:
       type: object
       properties:
@@ -420,6 +403,13 @@ components:
           type: string
         name:
           type: string
+    AuthType:
+      type: string
+      enum:
+        - oauth2
+        - apiKey
+        - basic
+        - none
     Session:
       type: object
       properties:
@@ -433,20 +423,7 @@ components:
           type: string
           example: 'https://mysaas.com/dashboard'
         consumer_metadata:
-          type: object
-          properties:
-            account_name:
-              type: string
-              example: SpaceX
-            user_name:
-              type: string
-              example: Elon Musk
-            email:
-              type: string
-              example: elon@musk.com
-            image:
-              type: string
-              example: 'https://www.spacex.com/static/images/share.jpg'
+          $ref: '#/components/schemas/ConsumerMetadata'
         theme:
           type: object
           properties:
@@ -513,31 +490,8 @@ components:
         options:
           type: array
           items:
-            type: object
-            properties:
-              label:
-                type: string
-                example: General Channel
-              value:
-                anyOf:
-                  - type: string
-                    example: general
-                  - type: integer
-                    example: 123
-                  - type: number
-                    example: 12.5
-                  - type: boolean
-                    example: true
-                  - type: array
-                    items:
-                      anyOf:
-                        - type: string
-                        - type: integer
-                        - type: number
-                    example:
-                      - team
-                      - general
-    FormFieldOption:
+            $ref: '#/components/schemas/FormFieldOption'
+    SimpleFormFieldOption:
       type: object
       properties:
         label:
@@ -562,6 +516,23 @@ components:
               example:
                 - team
                 - general
+    FormFieldOption:
+      anyOf:
+        - $ref: '#/components/schemas/SimpleFormFieldOption'
+        - $ref: '#/components/schemas/FormFieldOptionGroup'
+    FormFieldOptionGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1234'
+        label:
+          type: string
+          example: General Channel
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/SimpleFormFieldOption'
     Log:
       additionalProperties: false
       properties:
@@ -718,9 +689,7 @@ components:
           description: HTTP Response Status
           example: OK
         data:
-          properties:
-            data:
-              $ref: '#/components/schemas/Connection'
+          $ref: '#/components/schemas/Connection'
     GetConnectionsResponse:
       type: object
       required:
@@ -820,9 +789,7 @@ components:
           description: HTTP Response Status
           example: OK
         data:
-          properties:
-            data:
-              $ref: '#/components/schemas/Session'
+          $ref: '#/components/schemas/Session'
     GetConsumerResponse:
       type: object
       required:
@@ -839,69 +806,100 @@ components:
           description: HTTP Response Status
           example: OK
         data:
-          type: object
-          properties:
-            consumer_id:
-              type: string
-              example: test_consumer_id
-            connections:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    example: 1111+test_user_id
-                    readOnly: true
-                  name:
-                    type: string
-                    example: Salesforce
-                  icon:
-                    type: string
-                    example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-                  logo:
-                    type: string
-                    example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
-                  service_id:
-                    type: string
-                    example: teamleader
-                  unified_api:
-                    type: string
-                    example: crm
-                  auth_type:
-                    type: string
-                    enum:
-                      - oauth2
-                      - apiKey
-                      - basic
-                    nullable: true
-                  enabled:
-                    type: boolean
-                    example: true
-                  created_at:
-                    type: string
-                    example: '2020-09-19T12:18:37.071Z'
-                  updated_at:
-                    type: string
-                    example: '2020-09-19T12:18:37.071Z'
-                    nullable: true
-                  state:
-                    type: string
-                    enum:
-                      - available
-                      - callable
-                      - added
-                      - configured
-                      - authorized
-                    example: authorized
-            aggregated_request_count:
-              type: number
-              example: 101
-            request_counts:
-              $ref: '#/components/schemas/RequestCountAllocation'
-            request_count_updated:
-              type: string
-              example: '2021-05-07T12:55:42.242Z'
+          $ref: '#/components/schemas/Consumer'
+    Consumer:
+      type: object
+      properties:
+        consumer_id:
+          type: string
+          example: test_consumer_id
+        application_id:
+          type: string
+          example: '1111'
+        metadata:
+          $ref: '#/components/schemas/ConsumerMetadata'
+        connections:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 1111+test_user_id
+                readOnly: true
+              name:
+                type: string
+                example: Salesforce
+              icon:
+                type: string
+                example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
+              logo:
+                type: string
+                example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
+              service_id:
+                type: string
+                example: teamleader
+              unified_api:
+                type: string
+                example: crm
+              auth_type:
+                $ref: '#/components/schemas/AuthType'
+              enabled:
+                type: boolean
+                example: true
+              created_at:
+                type: string
+                example: '2020-09-19T12:18:37.071Z'
+              updated_at:
+                type: string
+                example: '2020-09-19T12:18:37.071Z'
+                nullable: true
+              state:
+                type: string
+                enum:
+                  - available
+                  - callable
+                  - added
+                  - configured
+                  - authorized
+                example: authorized
+        services:
+          type: array
+          items:
+            type: string
+            example: salesforce
+          example:
+            - salesforce
+            - stripe
+        aggregated_request_count:
+          type: number
+          example: 101
+        request_counts:
+          $ref: '#/components/schemas/RequestCountAllocation'
+        created:
+          type: string
+          example: '2021-05-07T12:55:42.242Z'
+        modified:
+          type: string
+          example: '2021-05-07T12:55:42.242Z'
+        request_count_updated:
+          type: string
+          example: '2021-05-07T12:55:42.242Z'
+    ConsumerMetadata:
+      type: object
+      properties:
+        account_name:
+          type: string
+          example: SpaceX
+        user_name:
+          type: string
+          example: Elon Musk
+        email:
+          type: string
+          example: elon@musk.com
+        image:
+          type: string
+          example: 'https://www.spacex.com/static/images/share.jpg'
     GetConsumersResponse:
       type: object
       required:
@@ -925,11 +923,22 @@ components:
               consumer_id:
                 type: string
                 example: test_consumer_id
+              application_id:
+                type: string
+                example: '1111'
+              metadata:
+                $ref: '#/components/schemas/ConsumerMetadata'
               aggregated_request_count:
                 type: number
                 example: 101
               request_counts:
                 $ref: '#/components/schemas/RequestCountAllocation'
+              created:
+                type: string
+                example: '2021-05-07T12:55:42.242Z'
+              modified:
+                type: string
+                example: '2021-05-07T12:55:42.242Z'
               request_count_updated:
                 type: string
                 example: '2021-05-07T12:55:42.242Z'
@@ -947,6 +956,7 @@ components:
         - status_code
         - status
         - data
+      x-graphql-type-name: LogList
       properties:
         status_code:
           type: integer
@@ -1472,6 +1482,7 @@ paths:
     get:
       summary: Get all consumers
       operationId: consumersAll
+      x-graphql-field-name: consumers
       description: |
         This endpoint includes all application consumers, along with an aggregated count of requests made.
       tags:
@@ -1501,6 +1512,7 @@ paths:
     get:
       summary: Get consumer
       operationId: consumersOne
+      x-graphql-field-name: consumer
       description: |
         Consumer detail including their aggregated counts with the connections they have authorized.
       tags:
@@ -1529,6 +1541,7 @@ paths:
     get:
       summary: Consumer request counts
       operationId: consumerRequestCounts
+      x-graphql-field-name: consumerRequestCounts
       description: |
         Get consumer request counts within a given datetime range.
       tags:
@@ -1559,6 +1572,7 @@ paths:
     get:
       summary: Get all connections
       operationId: connectionsAll
+      x-graphql-field-name: connections
       description: |
         This endpoint includes all the configured integrations and contains the required assets
         to build an integrations page where your users can install integrations.
@@ -1655,6 +1669,7 @@ paths:
       summary: Deletes a connection
       description: Deletes a connection
       operationId: deleteConnection
+      x-graphql-field-name: connectionsDelete
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
@@ -1682,6 +1697,7 @@ paths:
       tags:
         - Connections
       summary: Get settings
+      x-graphql-field-name: connectionSettings
       description: |
         This endpoint returns custom settings and their defaults required by connection for a given resource.
       operationId: getConnectionSettings
@@ -1714,6 +1730,7 @@ paths:
       summary: Update settings
       description: Update default values for a connection's resource settings
       operationId: updateConnectionSettings
+      x-graphql-field-name: connectionSettingsUpdate
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
@@ -1750,6 +1767,7 @@ paths:
         - Connections
       summary: Authorize
       operationId: authorize
+      x-graphql-exclude: true
       description: |
         __In most cases the authorize link is provided in the ``/connections`` endpoint. Normally you don't need to manually generate these links.__
 
@@ -1786,6 +1804,7 @@ paths:
         - Connections
       summary: Revoke
       operationId: revoke
+      x-graphql-exclude: true
       description: |
         __In most cases the authorize link is provided in the ``/connections`` endpoint. Normally you don't need to manually generate these links.__
 
@@ -1887,6 +1906,7 @@ paths:
       deprecated: true
       summary: GET
       operationId: getProxy
+      x-graphql-exclude: true
       description: |
         **Note**: This endpoint is deprecated in favor of the [Proxy API](https://docs.apideck.com/apis/proxy). Please use the new API as documented at https://docs.apideck.com/apis/proxy
       tags:
@@ -1909,6 +1929,7 @@ paths:
       deprecated: true
       summary: POST
       operationId: postProxy
+      x-graphql-exclude: true
       description: |
         **Note**: This endpoint is deprecated in favor of the [Proxy API](https://docs.apideck.com/apis/proxy). Please use the new API as documented at https://docs.apideck.com/apis/proxy
       tags:
@@ -1938,6 +1959,7 @@ paths:
       deprecated: true
       summary: PUT
       operationId: putProxy
+      x-graphql-exclude: true
       description: |
         **Note**: This endpoint is deprecated in favor of the [Proxy API](https://docs.apideck.com/apis/proxy). Please use the new API as documented at https://docs.apideck.com/apis/proxy
       tags:
@@ -1967,6 +1989,7 @@ paths:
       deprecated: true
       summary: PATCH
       operationId: patchProxy
+      x-graphql-exclude: true
       description: |
         **Note**: This endpoint is deprecated in favor of the [Proxy API](https://docs.apideck.com/apis/proxy). Please use the new API as documented at https://docs.apideck.com/apis/proxy
       tags:
@@ -1996,6 +2019,7 @@ paths:
       deprecated: true
       summary: DELETE
       operationId: deleteProxy
+      x-graphql-exclude: true
       description: |
         **Note**: This endpoint is deprecated in favor of the [Proxy API](https://docs.apideck.com/apis/proxy). Please use the new API as documented at https://docs.apideck.com/apis/proxy
       tags:
@@ -2025,6 +2049,7 @@ paths:
     get:
       summary: Get all consumer request logs
       operationId: logsAll
+      x-graphql-field-name: logs
       description: |
         This endpoint includes all consumer request logs.
       tags:

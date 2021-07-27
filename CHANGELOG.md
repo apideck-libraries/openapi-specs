@@ -1,3 +1,10 @@
+## v4.3.2 - (2021-07-23)
+
+### Vault API
+
+- Connection.json#updated_at is nullable
+- `vault/logs` filter for exclude_unified_apis has been refactored to be comma separated string
+
 ## v4.3.1 - (2021-07-15)
 
 ### Vault API

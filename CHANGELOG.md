@@ -1,3 +1,9 @@
+## v4.3.3 - (2021-07-29)
+
+### Vault API
+
+- `vault/callback`: Added `code` parameter
+
 ## v4.3.2 - (2021-07-23)
 
 ### Vault API

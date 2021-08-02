@@ -1,3 +1,13 @@
+## v5.0.0 - (2021-08-01)
+
+### CRM & Lead API
+
+- `expected_revenue`, `type`, `last_activity_at`, `lead_source`, and `stage_last_changed_at` added to Opportunity resource
+- `annual_revenue`, `number_of_employees`, `industry`, `last_activity_at`, `ownership`, and `parent_id` added to Company resource
+- Renamed `image_url` to `image` on the Company resource
+- Remove `tax` on the Company resource, since it's already present in `phone_numbers`
+- `image`, `last_activity_at`, `first_email_at`, and `first_call_at` added to Contact resource
+
 ## v4.3.3 - (2021-07-29)
 
 ### Vault API

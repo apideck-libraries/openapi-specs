@@ -464,6 +464,26 @@ components:
             privacy_url:
               type: string
               example: 'https://compliance.apideck.com/privacy-policy'
+        settings:
+          x-graphql-type-name: SessionSettings
+          type: object
+          properties:
+            session_length:
+              type: string
+              description: The duration of time the session is valid for (maximum 1 week).
+              example: 30m
+              default: 1h
+            hide_resource_settings:
+              type: boolean
+              default: false
+            show_logs:
+              type: boolean
+              default: true
+            sandbox_mode:
+              type: boolean
+              default: false
+          additionalProperties: false
+      additionalProperties: false
     FormField:
       type: object
       properties:

@@ -1,3 +1,9 @@
+## v5.0.1 - (2021-08-11)
+
+### CRM, Lead & Vault API
+
+- For all error responses, `typeName` was renamed to `type_name` for consistency.
+
 ## v5.0.0 - (2021-08-01)
 
 ### CRM & Lead API

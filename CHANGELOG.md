@@ -1,3 +1,16 @@
+## v5.1.0 - (2021-08-13)
+
+### Accounting API
+
+- Added alpha version of the [Accounting API](apis/accounting/reference) and the [MYOB connector](connectors/myob)
+
+Supported resources:
+- Ledger Accounts
+- Tax Rates
+- Invoices
+- Contacts
+- Companies
+
 ## v5.0.1 - (2021-08-11)
 
 ### CRM, Lead & Vault API
@@ -138,7 +151,7 @@ Beta users should note the following breaking changes that may affect existing i
 ### Vault API
 
 - Undocumented `connectionsAdd` added
-- Normalized reponses for `getConnectionSettings` and `updateConnectionSettings`
+- Normalized reponses for `connectionsGetSettings` and `connectionsUpdateSettings`
 
 ## v2.0.0 - (2021-05-28)
 
@@ -195,7 +208,7 @@ Added configuration options per resource.
 
 ### Vault API
 
-- Renamed `schema_support` to `resource_schema_support` and introduced `resource_settings_support` to the [connection settings endpoint](apis/vault/reference#operation/deleteConnection)
+- Renamed `schema_support` to `resource_schema_support` and introduced `resource_settings_support` to the [connection settings endpoint](apis/vault/reference#operation/connectionsDelete)
 - Add `configurable_resources` to the [connections endpoint](apis/vault/reference#operation/connectionsAll)
 
 ## v1.3.0 - (2021-05-13)
@@ -216,7 +229,7 @@ New consumer endpoints added to the Vault API providing a list and aggregate dat
 
 - [`/vault/consumers`](apis/vault/reference#operation/consumersAll) added to provide paginated [list of consumers](apis/vault/reference#operation/consumersAll) scoped to application
 - [`/vault/consumers/{consumer_id}`](apis/vault/reference#operation/consumersOne) added to provide consumer detail including `aggregated_request_count` and request counts across the Unified APIs.
-- [`/vault/consumers/{consumer_id}/stats`](apis/vault/reference#operation/consumerRequestCounts) added to provide request count aggregation data within a datetime range.
+- [`/vault/consumers/{consumer_id}/stats`](apis/vault/reference#operation/consumersRequestCounts) added to provide request count aggregation data within a datetime range.
 
 ## v1.1.1 - (2021-05-10)
 

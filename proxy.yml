@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 5.0.1
+  version: 5.1.0
   title: Proxy API
   description: |
     Welcome to the Proxy API.
@@ -222,6 +222,7 @@ info:
     url: 'https://developers.apideck.com'
   x-logo:
     url: 'https://developers.apideck.com/icon.png'
+  x-apideck-api: proxy
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
@@ -345,8 +346,9 @@ components:
           example: {}
   securitySchemes:
     apiKey:
-      type: http
-      scheme: bearer
+      type: apiKey
+      in: header
+      name: Authorization
       description: |
         To use API you have to sign up and get your own API key. Unify API accounts have sandbox mode and live mode API keys. 
         To change modes just use the appropriate key to get a live or test object. You can find your API keys on the unify settings of your Apideck app.
@@ -377,6 +379,8 @@ paths:
     get:
       summary: GET
       operationId: getProxy
+      x-graphql-exclude: true
+      x-sdk-exclude: true
       description: |
         Proxies a downstream GET request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
@@ -400,6 +404,8 @@ paths:
     post:
       summary: POST
       operationId: postProxy
+      x-graphql-exclude: true
+      x-sdk-exclude: true
       description: |
         Proxies a downstream POST request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
@@ -452,6 +458,8 @@ paths:
     put:
       summary: PUT
       operationId: putProxy
+      x-graphql-exclude: true
+      x-sdk-exclude: true
       description: |
         Proxies a downstream PUT request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
@@ -504,6 +512,8 @@ paths:
     patch:
       summary: PATCH
       operationId: patchProxy
+      x-graphql-exclude: true
+      x-sdk-exclude: true
       description: |
         Proxies a downstream PATCH request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
@@ -556,6 +566,8 @@ paths:
     delete:
       summary: DELETE
       operationId: deleteProxy
+      x-graphql-exclude: true
+      x-sdk-exclude: true
       description: |
         Proxies a downstream DELETE request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.

@@ -1,8 +1,14 @@
+## v5.2.0 - (2021-08-15)
+
+### CRM API
+
+- Add `contact_id`, `company_id`, `opportunity_id`, `lead_id`, and `active` to [Notes](apis/crm/reference#tag/Notes).
+
 ## v5.1.0 - (2021-08-13)
 
 ### Accounting API
 
-- Added alpha version of the [Accounting API](apis/accounting/reference) and the [MYOB connector](connectors/myob)
+- Added alpha version of the [Accounting API](apis/accounting/reference) and the [MYOB connector](connectors/myob).
 
 Supported resources:
 - Ledger Accounts

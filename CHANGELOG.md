@@ -1,3 +1,9 @@
+## v5.3.0 - (2021-08-19)
+
+### Vault API
+
+- Add `custom_consumer_settings` to [create session](apis/vault/reference#tag/Sessions). Allow wildcard objects to be passed through the `metadata` field on a connection.
+
 ## v5.2.0 - (2021-08-15)
 
 ### CRM API

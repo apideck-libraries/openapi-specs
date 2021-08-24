@@ -17,6 +17,7 @@
 - Added alpha version of the [Accounting API](apis/accounting/reference) and the [MYOB connector](connectors/myob).
 
 Supported resources:
+
 - Ledger Accounts
 - Tax Rates
 - Invoices

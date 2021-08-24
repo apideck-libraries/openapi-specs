@@ -2120,7 +2120,7 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetTaxRateResponse:
-      x-graphql-type-name: TaxRate
+      x-graphql-type-name: TaxRateOne
       type: object
       required:
         - status_code
@@ -2342,20 +2342,7 @@ components:
                 example: 12344
                 nullable: true
               tax_rate:
-                properties:
-                  id:
-                    $ref: '#/components/schemas/Id'
-                  name:
-                    type: string
-                    example: 15% GST on Expenses
-                    minLength: 1
-                    nullable: true
-                  code:
-                    type: string
-                    example: ABN
-                    title: Tax code
-                    minLength: 1
-                    nullable: true
+                $ref: '#/components/schemas/LinkedTaxRate'
               general_ledger_account:
                 properties:
                   id:
@@ -2493,7 +2480,7 @@ components:
           readOnly: true
     LedgerAccount:
       type: object
-      additionalProperties: false
+      additionalProperties: true
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -2536,6 +2523,7 @@ components:
             - current_liability
             - non_current_liability
             - other_liability
+          x-graphql-type-name: ledgerAccountType
           example: bank
           nullable: true
         sub_type:
@@ -2552,17 +2540,16 @@ components:
           nullable: true
         description:
           type: string
-          minLength: 1
-          example: The main checking account
+          example: Main checking account
           nullable: true
         opening_balance:
           type: number
-          description: 'The opening balance. A positive integer representing the smallest currency unit (e.g., 100 cents equals $1.00 or 100 equals ¥100, a zero-decimal currency)'
+          title: Opening balance
           example: 75000
           nullable: true
         current_balance:
           type: number
-          description: 'The current balance. A positive integer representing the smallest currency unit (e.g., 20000 cents equals $200.00 or 20000 equals ¥20000, a zero-decimal currency)'
+          title: Current balance
           example: 20000
           nullable: true
         currency:
@@ -2571,16 +2558,20 @@ components:
           type: string
           example: USD
           nullable: true
-        tax_code:
-          type: string
-          example: N-T
-          nullable: true
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
         level:
-          type: string
-          example: '2'
+          type: number
+          example: 2
           nullable: true
         active:
           type: boolean
+          title: Is active
+          example: true
+          nullable: true
+        header:
+          type: boolean
+          title: Is header
           example: true
           nullable: true
         bank_account:
@@ -2625,6 +2616,10 @@ components:
           format: date
           example: '2020-09-30'
           readOnly: true
+        row_version:
+          type: string
+          readOnly: true
+          example: 1-12345
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -2957,6 +2952,16 @@ components:
         type: string
       example:
         - New
+    LinkedTaxRate:
+      x-graphql-type-name: LinkedTaxRate
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        code:
+          type: string
+          example: N-T
+          nullable: true
     TaxRate:
       type: object
       additionalProperties: false
@@ -3768,8 +3773,7 @@ paths:
                     discount_percentage: 15,
                     item_id: 12344,
                     tax_rate: {
-                      name: '15% GST on Expenses',
-                      code: 'ABN'
+                      code: 'N-T'
                     },
                     general_ledger_account: {
                       name: 'Bank account'
@@ -3943,8 +3947,7 @@ paths:
                     discount_percentage: 15,
                     item_id: 12344,
                     tax_rate: {
-                      name: '15% GST on Expenses',
-                      code: 'ABN'
+                      code: 'N-T'
                     },
                     general_ledger_account: {
                       name: 'Bank account'
@@ -4992,14 +4995,17 @@ paths:
                 sub_type: 'CHECKING_ACCOUNT',
                 name: 'Bank account',
                 fully_qualified_name: 'Asset.Bank.Checking_Account',
-                description: 'The main checking account',
+                description: 'Main checking account',
                 opening_balance: 75000,
                 current_balance: 20000,
                 currency: 'USD',
                 tax_type: 'USD',
-                tax_code: 'N-T',
-                level: '2',
+                tax_rate: {
+                  code: 'N-T'
+                },
+                level: 2,
                 active: true,
+                header: true,
                 bank_account: {
                   iban: 'CH2989144532982975332',
                   bic: 'AUDSCHGGXXX',
@@ -5126,14 +5132,17 @@ paths:
                 sub_type: 'CHECKING_ACCOUNT',
                 name: 'Bank account',
                 fully_qualified_name: 'Asset.Bank.Checking_Account',
-                description: 'The main checking account',
+                description: 'Main checking account',
                 opening_balance: 75000,
                 current_balance: 20000,
                 currency: 'USD',
                 tax_type: 'USD',
-                tax_code: 'N-T',
-                level: '2',
+                tax_rate: {
+                  code: 'N-T'
+                },
+                level: 2,
                 active: true,
+                header: true,
                 bank_account: {
                   iban: 'CH2989144532982975332',
                   bic: 'AUDSCHGGXXX',

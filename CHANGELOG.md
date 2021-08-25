@@ -1,3 +1,9 @@
+## v5.4.0 - (2021-08-25)
+
+### CRM API
+
+- Make `duration_minutes` read-only on [Activities](apis/crm/reference#tag/Activities).
+
 ## v5.3.0 - (2021-08-19)
 
 ### Vault API

@@ -1,3 +1,10 @@
+## v5.4.1 - (2021-08-27)
+
+### Accounting, CRM, Lead & Vault API
+
+- normlized the naming of definitions
+- fixed response descriptions to match shared definitions and avoid duplicates
+
 ## v5.4.0 - (2021-08-25)
 
 ### CRM API

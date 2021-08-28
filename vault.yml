@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 5.4.0
+  version: 5.4.1
   title: Vault API
   description: "Welcome to the Vault API \U0001F44B\n\nWhen you're looking to connect to an API, the first step is authentication.\n\nVault helps you handle OAuth flows, store API keys, and refresh access tokens from users (called consumers in Apideck).\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Get Started\n\nTo use the Apideck APIs, you need to sign up for free at [https://app.apideck.com/signup](). Follow the steps below to get started.\n\n- [Create a free account.](https://app.apideck.com/signup)\n- Go to the [Dashboard](https://app.apideck.com/unify/unified-apis/dashboard).\n- Get your API key and the application ID.\n- Select and configure the integrations you want to make available to your users. Through the Unify dashboard, you can configure which connectors you want to support as integrations.\n- Retrieve the client_id and client_secret for the integration you want to activate (Only needed for OAuth integrations).\n- Soon, you can skip the previous step and use the Apideck sandbox credentials to get you started instead (upcoming)\n- Register the redirect URI for the example app (https://unify.apideck.com/vault/callback) in the list of redirect URIs under your app's settings\n- Use the [publishing guides](/app-listing-requirements) to get your integration listed across app marketplaces.\n\n### Hosted Vault\n\nHosted Vault (vault.apideck.com) is a no-code solution, so you don't need to build your own UI to handle the integration settings and authentication.\n\n![Hosted Vault - Integrations portal](https://github.com/apideck-samples/integration-settings/raw/master/public/img/vault.png)\n\nBehind the scenes, Hosted Vault implements the Vault API endpoints and handles the following features for your customers:\n\n- Add a connection\n- Handle the OAuth flow\n- Configure connection settings per integration\n- Manage connections\n- Discover and propose integration options\n- Search for integrations (upcoming)\n- Give integration suggestions based on provided metadata (email or website) when creating the session (upcoming)\n\nTo use Hosted Vault, you will need to first [__create a session__](https://developers.apideck.com/apis/vault/reference#operation/sessionsCreate). This can be achieved by making a POST request to the Vault API to create a valid session for a user, hereafter referred to as the consumer ID.\n\nExample using curl:\n\n```\ncurl -X POST https://unify.apideck.com/vault/sessions\n    -H \"Content-Type: application/json\"\n    -H \"Authorization: Bearer <your-api-key>\"\n    -H \"X-APIDECK-CONSUMER-ID: <consumer-id>\"\n    -H \"X-APIDECK-APP-ID: <application-id>\"\n    -d '{\"consumer_metadata\": { \"account_name\" : \"Sample\", \"user_name\": \"Sand Box\", \"email\": \"sand@box.com\", \"image\": \"https://unavatar.now.sh/jake\" }, \"theme\": { \"vault_name\": \"Intercom\", \"primary_color\": \"#286efa\", \"sidepanel_background_color\": \"#286efa\",\"sidepanel_text_color\": \"#FFFFFF\", \"favicon\": \"https://res.cloudinary.com/apideck/icons/intercom\" }}'\n```\n\n### Vault API\n\n_Beware, this is strategy takes more time to implement in comparison to Hosted Vault._\n\nIf you are building your integration settings UI manually, you can call the Vault API directly.\n\nThe Vault API is for those who want to completely white label the in-app integrations overview and authentication experience. All the available endpoints are listed below.\n\nThrough the API, your customers authenticate directly in your app, where Vault will still take care of redirecting to the auth provider and back to your app.\n\nIf you're already storing access tokens, we will help you migrate through our Vault Migration API (upcoming).\n\n## Domain model\n\nAt its core, a domain model creates a web of interconnected entities.\n\nOur domain model contains five main entity types: Consumer (user, account, team, machine), Application, Connector, Integration, and Connection.\n\n## Connection state\n\nThe connection state is computed based on the connection flow below.\n\n![](https://developers.apideck.com/api-references/vault/connection-flow.png)\n\n## Unify and Proxy integration\n\nThe only thing you need to use the Unify APIs and Proxy is the consumer id; thereafter, Vault will do the look-up in the background to handle the token injection before performing the API call(s).\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-app-id      | String  | Yes      | The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                               |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes.                                                                                                      |\n\n## Sandbox (upcoming)\n\nThe sandbox is pre-loaded with data similar to a real-life integrations setup. You can use the preconfigured OAauth configured connectors for testing purposes and can skip this step by using the Apideck sandbox credentials to get you started.\n\n## Guides\n\n- [How to build an integrations UI with Vault](https://github.com/apideck-samples/integration-settings)\n- How to configure the OAuth credentials for integration providers (COMING SOON)\n\n## FAQ\n\n**What purpose does Vault serve? Can I just handle the authentication and access token myself?**\nYou can store everything yourself, but that defeats the purpose of using Apideck Unify. Handling tokens for multiple providers can quickly become very complex.\n\n### Is my data secure?\n\nVault employs data minimization, therefore only requesting the minimum amount of scopes needed to perform an API request.\n\n### How do I migrate existing data?\n\nUsing our migration API, you can migrate the access tokens and accounts to Apideck Vault. (COMING SOON)\n\n### Can I use Vault in combination with existing integrations?\n\nYes, you can. The flexibility of Unify allows you to quickly the use cases you need while keeping a gradual migration path based on your timeline and requirements.\n\n### How does Vault work for Apideck Ecosystem customers?\n\nOnce logged in, pick your ecosystem; on the left-hand side of the screen, you'll have the option to create an application underneath the Unify section.\n\n### How to integrate Apideck Vault\n\nThis section covers everything you need to know to authenticate your customers through Vault.\nVault provides **three auth strategies** to use API tokens from your customers:\n\n- Vault API\n- Hosted Vault\n- Apideck Ecosystem _(COMING SOON)_\n\nYou can also opt to bypass Vault and still take care of authentication flows yourself. Make sure to put the right safeguards in place to protect your customers' tokens and other sensitive data.\n\n### What auth types does Vault support?\n\nWhat auth strategies does Vault handle? We currently support three flows so your customers can activate an integration.\n\n#### API keys\n\nFor Services supporting the API key strategy, you can use Hosted Vault will need to provide an in-app form where users can configure their API keys provided by the integration service.\n\n#### OAuth 2.0\n\n##### Authorization Code Grant Type Flow\n\nVault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own.\n\nCertain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate.\n\nThis is being handled by the `/authorize` endpoint.\n\n#### Basic auth\n\nBasic authentication is a simple authentication scheme built into the HTTP protocol. The required fields to complete basic auth are handled by Hosted Vault or by updating the connection through the Vault API below.\n"
   contact:
@@ -166,20 +166,7 @@ components:
       style: deepObject
       explode: true
       schema:
-        type: object
-        properties:
-          connector_id:
-            type: string
-            example: crm+salesforce
-            nullable: true
-          status_code:
-            type: number
-            example: 201
-            nullable: true
-          exclude_unified_apis:
-            type: string
-            nullable: true
-            example: 'vault,proxy'
+        $ref: '#/components/schemas/LogsFilter'
     redirect_uri:
       name: redirect_uri
       in: query
@@ -242,6 +229,44 @@ components:
         type: string
       example: '2021-05-30T12:00:00.000Z'
   schemas:
+    AuthType:
+      type: string
+      enum:
+        - oauth2
+        - apiKey
+        - basic
+        - none
+    BadRequestResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Bad Request
+        type_name:
+          type: string
+          description: The type of error returned
+          example: RequestHeadersValidationError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+              example: Missing property foobar
+            - type: object
+              example:
+                missing:
+                  - foobar: required
+          description: Contains parameter or domain specific information related to the error and why it occured.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#requestbodyvalidationerror'
     Connection:
       type: object
       properties:
@@ -252,24 +277,31 @@ components:
         service_id:
           type: string
           example: salesforce
+          readOnly: true
         name:
           type: string
           example: Salesforce
+          readOnly: true
         tag_line:
           type: string
           example: 'CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.'
+          readOnly: true
         unified_api:
           type: string
           example: crm
+          readOnly: true
         website:
           type: string
           example: 'https://www.salesforce.com'
+          readOnly: true
         icon:
           type: string
           example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
+          readOnly: true
         logo:
           type: string
           example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
+          readOnly: true
         settings:
           type: object
           description: Connection settings. Values will persist to `form_fields` with corresponding id
@@ -289,12 +321,14 @@ components:
             plan: enterprise
         auth_type:
           $ref: '#/components/schemas/AuthType'
+          readOnly: true
         status:
           type: string
           enum:
             - live
             - upcoming
             - requested
+          readOnly: true
         form_fields:
           type: array
           items:
@@ -364,44 +398,60 @@ components:
             - companies
             - contacts
             - leads
+          readOnly: true
         resource_schema_support:
           type: array
           items:
             type: string
+          readOnly: true
           example:
             - leads
         resource_settings_support:
           type: array
           items:
             type: string
+          readOnly: true
           example:
             - leads
         settings_required_for_authorization:
           type: array
           items:
             type: string
+          readOnly: true
           example:
             - instance_url
         authorize_url:
           type: string
           example: 'https://unify.apideck.com/vault/authorize/salesforce/<application-id>?state=<state>'
           nullable: true
+          readOnly: true
         revoke_url:
           type: string
           nullable: true
+          readOnly: true
           example: 'https://unify.apideck.com/vault/revoke/salesforce/<application-id>?state=<state>'
         enabled:
           type: boolean
           example: true
         created_at:
           type: number
+          readOnly: true
           example: 1615563533390
         updated_at:
           type: number
           example: 1616662325753
+          readOnly: true
           nullable: true
         state:
           $ref: '#/components/schemas/ConnectionState'
+          readOnly: true
+    ConnectionMetadata:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
     ConnectionState:
       type: string
       description: '[Connection state flow](#section/Connection-state)'
@@ -411,91 +461,183 @@ components:
         - added
         - authorized
       example: authorized
-    ConnectionMetadata:
+      readOnly: true
+    Consumer:
       type: object
       properties:
-        id:
+        consumer_id:
           type: string
-        name:
+          example: test_consumer_id
+        application_id:
           type: string
-    AuthType:
-      type: string
-      enum:
-        - oauth2
-        - apiKey
-        - basic
-        - none
-    Session:
-      type: object
-      properties:
-        session_uri:
-          type: string
-          example: 'http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj'
-    SessionRequest:
-      type: object
-      properties:
-        redirect_uri:
-          type: string
-          example: 'https://mysaas.com/dashboard'
-        consumer_metadata:
+          example: '1111'
+        metadata:
           $ref: '#/components/schemas/ConsumerMetadata'
-        custom_consumer_settings:
-          type: object
-          title: Custom consumer settings
-          description: Custom consumer settings that are passed part of the session.
-          additionalProperties: true
-          properties: {}
+        connections:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 1111+test_user_id
+                readOnly: true
+              name:
+                type: string
+                example: Salesforce
+              icon:
+                type: string
+                example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
+              logo:
+                type: string
+                example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
+              service_id:
+                type: string
+                example: teamleader
+              unified_api:
+                type: string
+                example: crm
+              auth_type:
+                $ref: '#/components/schemas/AuthType'
+              enabled:
+                type: boolean
+                example: true
+              created_at:
+                type: string
+                example: '2020-09-19T12:18:37.071Z'
+              updated_at:
+                type: string
+                example: '2020-09-19T12:18:37.071Z'
+                nullable: true
+              state:
+                type: string
+                enum:
+                  - available
+                  - callable
+                  - added
+                  - configured
+                  - authorized
+                example: authorized
+        services:
+          type: array
+          items:
+            type: string
+            example: salesforce
           example:
-            feature_flag_1: true
-            tax_rates:
-              - id: '6'
-                label: 6%
-              - id: '21'
-                label: 21%
-        theme:
+            - salesforce
+            - stripe
+        aggregated_request_count:
+          type: number
+          example: 101
+        request_counts:
+          $ref: '#/components/schemas/RequestCountAllocation'
+        created:
+          type: string
+          example: '2021-05-07T12:55:42.242Z'
+        modified:
+          type: string
+          example: '2021-05-07T12:55:42.242Z'
+        request_count_updated:
+          type: string
+          example: '2021-05-07T12:55:42.242Z'
+    ConsumerMetadata:
+      type: object
+      properties:
+        account_name:
+          type: string
+          example: SpaceX
+        user_name:
+          type: string
+          example: Elon Musk
+        email:
+          type: string
+          example: elon@musk.com
+        image:
+          type: string
+          example: 'https://www.spacex.com/static/images/share.jpg'
+    ConsumerRequestCountsInDateRangeResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
           type: object
           properties:
-            vault_name:
+            application_id:
               type: string
-              example: Intercom
-            primary_color:
+              example: '1111'
+            consumer_id:
               type: string
-              example: '#286efa'
-            sidepanel_background_color:
+              example: test_user_id
+            start_datetime:
               type: string
-              example: '#286efa'
-            sidepanel_text_color:
+              example: '2021-05-01T12:00:00.000Z'
+            end_datetime:
               type: string
-              example: '#FFFFFF'
-            favicon:
-              type: string
-              example: 'https://res.cloudinary.com/apideck/icons/intercom'
-            terms_url:
-              type: string
-              example: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e'
-            privacy_url:
-              type: string
-              example: 'https://compliance.apideck.com/privacy-policy'
-        settings:
-          x-graphql-type-name: SessionSettings
-          type: object
-          properties:
-            session_length:
-              type: string
-              description: The duration of time the session is valid for (maximum 1 week).
-              example: 30m
-              default: 1h
-            hide_resource_settings:
-              type: boolean
-              default: false
-            show_logs:
-              type: boolean
-              default: true
-            sandbox_mode:
-              type: boolean
-              default: false
-          additionalProperties: false
+              example: '2021-05-10T12:00:00.000Z'
+            aggregated_request_count:
+              type: number
+              example: 40
+            request_counts:
+              $ref: '#/components/schemas/RequestCountAllocation'
+    CreateConnectionResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 201
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Connection'
+    Created:
+      type: object
+      required:
+        - ''
+      properties: {}
+    CreateSessionResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
       additionalProperties: false
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: object
+          required:
+            - session_uri
+          properties:
+            session_uri:
+              example: 'http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj'
+              readOnly: true
+              type: string
+          additionalProperties: false
     FormField:
       type: object
       properties:
@@ -546,31 +688,6 @@ components:
           example:
             - label: General Channel
               value: general
-    SimpleFormFieldOption:
-      type: object
-      properties:
-        label:
-          type: string
-          example: General Channel
-        value:
-          anyOf:
-            - type: string
-              example: general
-            - type: integer
-              example: 123
-            - type: number
-              example: 12.5
-            - type: boolean
-              example: true
-            - type: array
-              items:
-                anyOf:
-                  - type: string
-                  - type: integer
-                  - type: number
-              example:
-                - team
-                - general
     FormFieldOption:
       anyOf:
         - $ref: '#/components/schemas/SimpleFormFieldOption'
@@ -588,6 +705,151 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SimpleFormFieldOption'
+    GetConnectionResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Connection'
+    GetConnectionsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Connection'
+    GetConsumerResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Consumer'
+    GetConsumersResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              consumer_id:
+                type: string
+                example: test_consumer_id
+              application_id:
+                type: string
+                example: '1111'
+              metadata:
+                $ref: '#/components/schemas/ConsumerMetadata'
+              aggregated_request_count:
+                type: number
+                example: 101
+              request_counts:
+                $ref: '#/components/schemas/RequestCountAllocation'
+              created:
+                type: string
+                example: '2021-05-07T12:55:42.242Z'
+              modified:
+                type: string
+                example: '2021-05-07T12:55:42.242Z'
+              request_count_updated:
+                type: string
+                example: '2021-05-07T12:55:42.242Z'
+              services:
+                type: array
+                items:
+                  type: string
+                  example: salesforce
+                example:
+                  - salesforce
+                  - stripe
+    GetLogsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      x-graphql-type-name: LogList
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Log'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    Links:
+      type: object
+      description: Links to navigate to previous or next pages through the API
+      properties:
+        previous:
+          type: string
+          description: Link to navigate to the previous page through the API
+          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjE%3D'
+          nullable: true
+        current:
+          type: string
+          description: Link to navigate to the current page through the API
+          example: 'https://unify.apideck.com/crm/companies'
+        next:
+          type: string
+          description: Link to navigate to the previous page through the API
+          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM'
+          nullable: true
     Log:
       additionalProperties: false
       properties:
@@ -728,307 +990,135 @@ components:
         - timestamp
         - unified_api
       type: object
-    GetConnectionResponse:
+    LogsFilter:
       type: object
-      required:
-        - status_code
-        - status
-        - data
+      x-graphql-type-name: LogsFilter
       properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
+        connector_id:
           type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          $ref: '#/components/schemas/Connection'
-    GetConnectionsResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Connection'
-    CreateConnectionRequestBody:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-          example: true
-        settings:
-          type: object
-          description: Connection settings. Values will persist to `form_fields` with corresponding id
+          example: crm+salesforce
           nullable: true
-          example:
-            instance_url: 'https://eu28.salesforce.com'
-        metadata:
-          type: object
-          properties:
-            ecosystem:
-              $ref: '#/components/schemas/ConnectionMetadata'
-            account:
-              $ref: '#/components/schemas/ConnectionMetadata'
-          nullable: true
-          example:
-            ecosystem:
-              name: My Ecosystem
-              id: a6469332-7948-46a6-abc2-87ba3f005025
-            account:
-              name: My Company
-              id: c01458a5-7276-41ce-bc19-639906b0450a
-      additionalProperties: false
-    CreateConnectionResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - data
-      properties:
         status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 201
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          $ref: '#/components/schemas/Connection'
-    UpdateConnectionRequestBody:
-      $ref: '#/components/schemas/CreateConnectionRequestBody'
-    UpdateConnectionResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          $ref: '#/components/schemas/Connection'
-    CreateSessionResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          $ref: '#/components/schemas/Session'
-    GetConsumerResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          $ref: '#/components/schemas/Consumer'
-    Consumer:
-      type: object
-      properties:
-        consumer_id:
-          type: string
-          example: test_consumer_id
-        application_id:
-          type: string
-          example: '1111'
-        metadata:
-          $ref: '#/components/schemas/ConsumerMetadata'
-        connections:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                example: 1111+test_user_id
-                readOnly: true
-              name:
-                type: string
-                example: Salesforce
-              icon:
-                type: string
-                example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-              logo:
-                type: string
-                example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
-              service_id:
-                type: string
-                example: teamleader
-              unified_api:
-                type: string
-                example: crm
-              auth_type:
-                $ref: '#/components/schemas/AuthType'
-              enabled:
-                type: boolean
-                example: true
-              created_at:
-                type: string
-                example: '2020-09-19T12:18:37.071Z'
-              updated_at:
-                type: string
-                example: '2020-09-19T12:18:37.071Z'
-                nullable: true
-              state:
-                type: string
-                enum:
-                  - available
-                  - callable
-                  - added
-                  - configured
-                  - authorized
-                example: authorized
-        services:
-          type: array
-          items:
-            type: string
-            example: salesforce
-          example:
-            - salesforce
-            - stripe
-        aggregated_request_count:
           type: number
-          example: 101
-        request_counts:
-          $ref: '#/components/schemas/RequestCountAllocation'
-        created:
+          example: 201
+          nullable: true
+        exclude_unified_apis:
           type: string
-          example: '2021-05-07T12:55:42.242Z'
-        modified:
-          type: string
-          example: '2021-05-07T12:55:42.242Z'
-        request_count_updated:
-          type: string
-          example: '2021-05-07T12:55:42.242Z'
-    ConsumerMetadata:
+          nullable: true
+          example: 'vault,proxy'
+    Meta:
       type: object
+      description: Reponse metadata
       properties:
-        account_name:
-          type: string
-          example: SpaceX
-        user_name:
-          type: string
-          example: Elon Musk
-        email:
-          type: string
-          example: elon@musk.com
-        image:
-          type: string
-          example: 'https://www.spacex.com/static/images/share.jpg'
-    GetConsumersResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - data
+        items_on_page:
+          type: integer
+          description: Number of items returned in the data property of the response
+          example: 50
+        cursors:
+          type: object
+          description: Cursors to navigate to previous or next pages through the API
+          properties:
+            previous:
+              type: string
+              description: Cursor to navigate to the previous page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjE=
+              nullable: true
+            current:
+              type: string
+              description: Cursor to navigate to the current page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjI=
+              nullable: true
+            next:
+              type: string
+              description: Cursor to navigate to the next page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjM=
+              nullable: true
+    NotFoundResponse:
       properties:
         status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
+          type: number
+          description: HTTP status code
+          example: 404
+        error:
           type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              consumer_id:
-                type: string
-                example: test_consumer_id
-              application_id:
-                type: string
-                example: '1111'
-              metadata:
-                $ref: '#/components/schemas/ConsumerMetadata'
-              aggregated_request_count:
-                type: number
-                example: 101
-              request_counts:
-                $ref: '#/components/schemas/RequestCountAllocation'
-              created:
-                type: string
-                example: '2021-05-07T12:55:42.242Z'
-              modified:
-                type: string
-                example: '2021-05-07T12:55:42.242Z'
-              request_count_updated:
-                type: string
-                example: '2021-05-07T12:55:42.242Z'
-              services:
-                type: array
-                items:
-                  type: string
-                  example: salesforce
-                example:
-                  - salesforce
-                  - stripe
-    GetLogsResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - data
-      x-graphql-type-name: LogList
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Not Found
+        type_name:
+          type: string
+          description: The type of error returned
+          example: EntityNotFoundError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unknown Widget
+        detail:
+          anyOf:
+            - type: string
+              example: "Could not find widget with id: '123'"
+            - type: object
+              example:
+                not_found:
+                  entity: widget
+                  id: '123'
+          description: Contains parameter or domain specific information related to the error and why it occured.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#entitynotfounderror'
+    NotImplementedResponse:
       properties:
         status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
+          type: number
+          description: HTTP status code
+          example: 501
+        error:
           type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Log'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Not Implemented
+        type_name:
+          type: string
+          description: The type of error returned
+          example: MappingError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unmapped Attribute
+        detail:
+          anyOf:
+            - type: string
+              example: Failed to retrieve Widget tokenUrl from 'components.securitySchemes.oauth2.flows'
+            - type: object
+          description: Contains parameter or domain specific information related to the error and why it occured.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#mappingerror'
+    PaymentRequiredResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 402
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Payment Required
+        type_name:
+          type: string
+          description: The type of error returned
+          example: RequestLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Request Limit Reached
+        detail:
+          type: string
+          description: Contains parameter or domain specific information related to the error and why it occured.
+          example: You have reached your limit of 2000
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#requestlimiterror'
     ProxyRequest:
       type: object
       properties: {}
@@ -1066,124 +1156,96 @@ components:
         vault:
           type: number
           example: 21
-    ConsumerRequestCountsInDateRangeResponse:
+    Session:
+      additionalProperties: false
       type: object
-      required:
-        - status_code
-        - status
-        - data
       properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
+        consumer_metadata:
+          $ref: '#/components/schemas/ConsumerMetadata'
+        custom_consumer_settings:
+          additionalProperties: true
+          description: Custom consumer settings that are passed as part of the session.
+          example:
+            feature_flag_1: true
+            tax_rates:
+              - id: '6'
+                label: 6%
+              - id: '21'
+                label: 21%
+          title: Custom consumer settings
           type: object
+        redirect_uri:
+          example: 'https://mysaas.com/dashboard'
+          type: string
+        settings:
+          additionalProperties: false
           properties:
-            application_id:
+            hide_resource_settings:
+              default: false
+              type: boolean
+            sandbox_mode:
+              default: false
+              type: boolean
+            session_length:
+              default: 1h
+              description: The duration of time the session is valid for (maximum 1 week).
+              example: 30m
               type: string
-              example: '1111'
-            consumer_id:
-              type: string
-              example: test_user_id
-            start_datetime:
-              type: string
-              example: '2021-05-01T12:00:00.000Z'
-            end_datetime:
-              type: string
-              example: '2021-05-10T12:00:00.000Z'
-            aggregated_request_count:
-              type: number
-              example: 40
-            request_counts:
-              $ref: '#/components/schemas/RequestCountAllocation'
-    Meta:
-      type: object
-      description: Reponse metadata
-      properties:
-        items_on_page:
-          type: integer
-          description: Number of items returned in the data property of the response
-          example: 50
-        cursors:
+            show_logs:
+              default: true
+              type: boolean
           type: object
-          description: Cursors to navigate to previous or next pages through the API
+          x-graphql-type-name: SessionSettings
+        theme:
           properties:
-            previous:
+            favicon:
+              example: 'https://res.cloudinary.com/apideck/icons/intercom'
               type: string
-              description: Cursor to navigate to the previous page of results through the API
-              example: em9oby1jcm06OnBhZ2U6OjE=
-              nullable: true
-            current:
+            primary_color:
+              example: '#286efa'
               type: string
-              description: Cursor to navigate to the current page of results through the API
-              example: em9oby1jcm06OnBhZ2U6OjI=
-              nullable: true
-            next:
+            privacy_url:
+              example: 'https://compliance.apideck.com/privacy-policy'
               type: string
-              description: Cursor to navigate to the next page of results through the API
-              example: em9oby1jcm06OnBhZ2U6OjM=
-              nullable: true
-    Links:
+            sidepanel_background_color:
+              example: '#286efa'
+              type: string
+            sidepanel_text_color:
+              example: '#FFFFFF'
+              type: string
+            terms_url:
+              example: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e'
+              type: string
+            vault_name:
+              example: Intercom
+              type: string
+          type: object
+    SimpleFormFieldOption:
       type: object
-      description: Links to navigate to previous or next pages through the API
       properties:
-        previous:
+        label:
           type: string
-          description: Link to navigate to the previous page through the API
-          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjE%3D'
-          nullable: true
-        current:
-          type: string
-          description: Link to navigate to the current page through the API
-          example: 'https://unify.apideck.com/crm/companies'
-        next:
-          type: string
-          description: Link to navigate to the previous page through the API
-          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM'
-          nullable: true
-    Created:
-      type: object
-      required:
-        - ''
-      properties: {}
-    NotFoundResponse:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 404
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Not Found
-        type_name:
-          type: string
-          description: The type of error returned
-          example: EntityNotFoundError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Unknown Widget
-        detail:
+          example: General Channel
+        value:
           anyOf:
             - type: string
-              example: "Could not find widget with id: '123'"
-            - type: object
+              example: general
+            - type: integer
+              example: 123
+            - type: number
+              example: 12.5
+            - type: boolean
+              example: true
+            - type: array
+              items:
+                anyOf:
+                  - type: string
+                  - type: integer
+                  - type: number
               example:
-                not_found:
-                  entity: widget
-                  id: '123'
-          description: Contains parameter or domain specific information related to the error and why it occured.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#entitynotfounderror'
-    Unauthorized:
+                - team
+                - general
+    UnauthorizedResponse:
       properties:
         status_code:
           type: number
@@ -1209,118 +1271,7 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
-    Unprocessable:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 422
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Unprocessable Entity
-        type_name:
-          type: string
-          description: The type of error returned
-          example: InvalidStateError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid State
-        detail:
-          type: string
-          description: Contains parameter or domain specific information related to the error and why it occured.
-          example: State did not include unified_api
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#invalidstateerror'
-    BadRequest:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 400
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Bad Request
-        type_name:
-          type: string
-          description: The type of error returned
-          example: RequestHeadersValidationError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid Params
-        detail:
-          anyOf:
-            - type: string
-              example: Missing property foobar
-            - type: object
-              example:
-                missing:
-                  - foobar: required
-          description: Contains parameter or domain specific information related to the error and why it occured.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#requestbodyvalidationerror'
-    PaymentRequired:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 402
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Payment Required
-        type_name:
-          type: string
-          description: The type of error returned
-          example: RequestLimitError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Request Limit Reached
-        detail:
-          type: string
-          description: Contains parameter or domain specific information related to the error and why it occured.
-          example: You have reached your limit of 2000
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#requestlimiterror'
-    NotImplemented:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 501
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Not Implemented
-        type_name:
-          type: string
-          description: The type of error returned
-          example: MappingError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Unmapped Attribute
-        detail:
-          anyOf:
-            - type: string
-              example: Failed to retrieve Widget tokenUrl from 'components.securitySchemes.oauth2.flows'
-            - type: object
-          description: Contains parameter or domain specific information related to the error and why it occured.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#mappingerror'
-    UnexpectedError:
+    UnexpectedErrorResponse:
       properties:
         status_code:
           type: number
@@ -1351,158 +1302,186 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
-  requestBodies:
-    CreateConnectionRequestBody:
-      description: Fields to be persisted as Connection
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateConnectionRequestBody'
-    UpdateConnectionRequestBody:
-      description: Fields to be updated on the resource
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateConnectionRequestBody'
+    UnprocessableResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 422
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Unprocessable Entity
+        type_name:
+          type: string
+          description: The type of error returned
+          example: InvalidStateError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid State
+        detail:
+          type: string
+          description: Contains parameter or domain specific information related to the error and why it occured.
+          example: State did not include unified_api
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#invalidstateerror'
+    UpdateConnectionResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Connection'
   responses:
-    GetConnection:
-      description: Connection
+    BadRequestResponse:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/GetConnectionResponse'
-    GetConnections:
-      description: All Connections
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/GetConnectionsResponse'
-    CreateConnection:
-      description: Connection created
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateConnectionResponse'
-    UpdateConnection:
-      description: Connection updated
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UpdateConnectionResponse'
-    CreateSession:
-      description: Session created
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateSessionResponse'
-    GetConsumer:
-      description: Consumer
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/GetConsumerResponse'
-    GetConsumers:
-      description: All Consumers
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/GetConsumersResponse'
-    GetLogs:
-      description: All Consumer Logs
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/GetLogsResponse'
-    ConsumerRequestCountsInDateRange:
-      description: Consumers Request Counts within Date Range
+            $ref: '#/components/schemas/BadRequestResponse'
+      description: Bad Request
+    ConsumerRequestCountsInDateRangeResponse:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ConsumerRequestCountsInDateRangeResponse'
-    NotFound:
-      description: The specified resource was not found
+      description: Consumers Request Counts within Date Range
+    CreateConnectionResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateConnectionResponse'
+      description: Connection created
+    Created:
+      content:
+        application/json:
+          example: {}
+          schema: {}
+      description: Resource created
+    CreateSessionResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateSessionResponse'
+      description: Session created
+    Deleted:
+      content:
+        application/json:
+          example: {}
+          schema: {}
+      description: Resource succesfully deleted
+    GetConnectionResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConnectionResponse'
+      description: Connection
+    GetConnectionsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConnectionsResponse'
+      description: Connections
+    GetConsumerResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConsumerResponse'
+      description: Consumer
+    GetConsumersResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConsumersResponse'
+      description: Consumers
+    GetLogsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetLogsResponse'
+      description: Logs
+    NoContent:
+      content:
+        application/json:
+          example: {}
+          schema: {}
+      description: No content
+    NotFoundResponse:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/NotFoundResponse'
-    Unauthorized:
-      description: Unauthorized
+      description: The specified resource was not found
+    NotImplementedResponse:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Unauthorized'
-    Unprocessable:
-      description: Unprocessable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Unprocessable'
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BadRequest'
-    PaymentRequired:
-      description: Payment Required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/PaymentRequired'
-    NotImplemented:
+            $ref: '#/components/schemas/NotImplementedResponse'
       description: Not Implemented
+    Ok:
+      content:
+        application/json:
+          example: {}
+          schema: {}
+      description: Ok
+    PaymentRequiredResponse:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/NotImplemented'
-    UnexpectedError:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UnexpectedError'
+            $ref: '#/components/schemas/PaymentRequiredResponse'
+      description: Payment Required
     ProxyError:
+      content:
+        application/json:
+          schema: {}
       description: Proxy error
       headers:
         x-apideck-downstream-error:
           schema:
-            type: boolean
             description: Indicates if the error returned in the body is from the downstream
+            type: boolean
+    UnauthorizedResponse:
       content:
         application/json:
-          schema: {}
-    Ok:
-      description: Ok
+          schema:
+            $ref: '#/components/schemas/UnauthorizedResponse'
+      description: Unauthorized
+    UnexpectedErrorResponse:
       content:
         application/json:
-          schema: {}
-          example: {}
-    NoContent:
-      description: No content
+          schema:
+            $ref: '#/components/schemas/UnexpectedErrorResponse'
+      description: Unexpected error
+    UnprocessableResponse:
       content:
         application/json:
-          schema: {}
-          example: {}
-    Created:
-      description: Resource created
+          schema:
+            $ref: '#/components/schemas/UnprocessableResponse'
+      description: Unprocessable
+    UpdateConnectionResponse:
       content:
         application/json:
-          schema: {}
-          example: {}
+          schema:
+            $ref: '#/components/schemas/UpdateConnectionResponse'
+      description: Connection updated
     Updated:
+      content:
+        application/json:
+          example: {}
+          schema: {}
       description: Resource updated
-      content:
-        application/json:
-          schema: {}
-          example: {}
-    Deleted:
-      description: Resource succesfully deleted
-      content:
-        application/json:
-          schema: {}
-          example: {}
   securitySchemes:
     apiKey:
       type: apiKey
@@ -1551,19 +1530,19 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/GetConsumers'
+          $ref: '#/components/responses/GetConsumersResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -1598,19 +1577,19 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/GetConsumer'
+          $ref: '#/components/responses/GetConsumerResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -1649,19 +1628,19 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/ConsumerRequestCountsInDateRange'
+          $ref: '#/components/responses/ConsumerRequestCountsInDateRangeResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -1674,10 +1653,14 @@ paths:
               appId: 'REPLACE_WITH_APP_ID'
             })
 
+            const params = {
+              consumerId: 'test_user_id',
+              startDatetime: '2021-05-01T12:00:00.000Z',
+              endDatetime: '2021-05-30T12:00:00.000Z'
+            }
+
             try {
-              const { data } = await apideck.vault.consumersRequestCounts({
-                consumerId: 'test_user_id'
-              })
+              const { data } = await apideck.vault.consumersRequestCounts(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -1702,19 +1685,19 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/GetConnections'
+          $ref: '#/components/responses/GetConnectionsResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -1752,22 +1735,27 @@ paths:
       security:
         - apiKey: []
       requestBody:
-        $ref: '#/components/requestBodies/CreateConnectionRequestBody'
+        description: Fields that need to be persisted on the resource
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Connection'
       responses:
         '200':
-          $ref: '#/components/responses/CreateConnection'
+          $ref: '#/components/responses/CreateConnectionResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -1781,11 +1769,52 @@ paths:
               consumerId: 'REPLACE_WITH_CONSUMER_ID'
             })
 
+            const params = {
+              serviceId: 'pipedrive',
+              unifiedApi: 'crm',
+              connection: {
+                settings: {
+                  instance_url: 'https://eu28.salesforce.com'
+                },
+                metadata: {
+                  account: {
+                    name: 'My Company',
+                    id: 'c01458a5-7276-41ce-bc19-639906b0450a'
+                  },
+                  plan: 'enterprise'
+                },
+                auth_type: 'oauth2',
+                form_fields: [
+                  {
+                    id: 'instance_url',
+                    label: 'Instance url',
+                    value: 'https://eu28.salesforce.com',
+                    placeholder: '',
+                    mask: false,
+                    type: 'text',
+                    required: true,
+                    disabled: false,
+                    custom_field: false
+                  }
+                ],
+                configuration: [
+                  {
+                    resource: 'leads',
+                    defaults: [
+                      {
+                        id: 'ProductInterest',
+                        options: [Array],
+                        value: 'GC5000 series'
+                      }
+                    ]
+                  }
+                ],
+                enabled: true
+              }
+            }
+
             try {
-              const { data } = await apideck.vault.connectionsAdd({
-                serviceId: 'pipedrive',
-                unifiedApi: 'crm'
-              })
+              const { data } = await apideck.vault.connectionsAdd(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -1804,22 +1833,27 @@ paths:
       security:
         - apiKey: []
       requestBody:
-        $ref: '#/components/requestBodies/UpdateConnectionRequestBody'
+        description: Fields that need to be updated on the resource
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Connection'
       responses:
         '200':
-          $ref: '#/components/responses/UpdateConnection'
+          $ref: '#/components/responses/UpdateConnectionResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -1833,11 +1867,52 @@ paths:
               consumerId: 'REPLACE_WITH_CONSUMER_ID'
             })
 
+            const params = {
+              serviceId: 'pipedrive',
+              unifiedApi: 'crm',
+              connection: {
+                settings: {
+                  instance_url: 'https://eu28.salesforce.com'
+                },
+                metadata: {
+                  account: {
+                    name: 'My Company',
+                    id: 'c01458a5-7276-41ce-bc19-639906b0450a'
+                  },
+                  plan: 'enterprise'
+                },
+                auth_type: 'oauth2',
+                form_fields: [
+                  {
+                    id: 'instance_url',
+                    label: 'Instance url',
+                    value: 'https://eu28.salesforce.com',
+                    placeholder: '',
+                    mask: false,
+                    type: 'text',
+                    required: true,
+                    disabled: false,
+                    custom_field: false
+                  }
+                ],
+                configuration: [
+                  {
+                    resource: 'leads',
+                    defaults: [
+                      {
+                        id: 'ProductInterest',
+                        options: [Array],
+                        value: 'GC5000 series'
+                      }
+                    ]
+                  }
+                ],
+                enabled: true
+              }
+            }
+
             try {
-              const { data } = await apideck.vault.connectionsUpdate({
-                serviceId: 'pipedrive',
-                unifiedApi: 'crm'
-              })
+              const { data } = await apideck.vault.connectionsUpdate(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -1860,17 +1935,17 @@ paths:
         '204':
           description: Resource deleted
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -1912,19 +1987,19 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/GetConnection'
+          $ref: '#/components/responses/GetConnectionResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -1974,19 +2049,19 @@ paths:
               $ref: '#/components/schemas/Connection'
       responses:
         '200':
-          $ref: '#/components/responses/UpdateConnection'
+          $ref: '#/components/responses/UpdateConnectionResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -2004,16 +2079,7 @@ paths:
               serviceId: 'pipedrive',
               unifiedApi: 'crm',
               resource: 'leads',
-              connectionsSetting: {
-                service_id: 'salesforce',
-                name: 'Salesforce',
-                tag_line:
-                  'CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.',
-                unified_api: 'crm',
-                website: 'https://www.salesforce.com',
-                icon:
-                  'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png',
-                logo: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg',
+              connection: {
                 settings: {
                   instance_url: 'https://eu28.salesforce.com'
                 },
@@ -2025,7 +2091,6 @@ paths:
                   plan: 'enterprise'
                 },
                 auth_type: 'oauth2',
-                status: 'live',
                 form_fields: [
                   {
                     id: 'instance_url',
@@ -2051,17 +2116,7 @@ paths:
                     ]
                   }
                 ],
-                configurable_resources: ['opportunities', 'companies', 'contacts', 'leads'],
-                resource_schema_support: ['leads'],
-                resource_settings_support: ['leads'],
-                settings_required_for_authorization: ['instance_url'],
-                authorize_url:
-                  'https://unify.apideck.com/vault/authorize/salesforce/<application-id>?state=<state>',
-                revoke_url: 'https://unify.apideck.com/vault/revoke/salesforce/<application-id>?state=<state>',
-                enabled: true,
-                created_at: 1615563533390,
-                updated_at: 1616662325753,
-                state: 'authorized'
+                enabled: true
               }
             }
 
@@ -2098,17 +2153,17 @@ paths:
         '301':
           description: redirect
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -2122,7 +2177,10 @@ paths:
 
             const params = {
               serviceId: 'pipedrive',
-              applicationId: 'application_id_example'
+              applicationId: 'application_id_example',
+              state:
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk',
+              redirectUri: 'http://example.com/integrations'
             }
 
             try {
@@ -2157,17 +2215,17 @@ paths:
         '301':
           description: redirect
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -2181,7 +2239,10 @@ paths:
 
             const params = {
               serviceId: 'pipedrive',
-              applicationId: 'application_id_example'
+              applicationId: 'application_id_example',
+              state:
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk',
+              redirectUri: 'http://example.com/integrations'
             }
 
             try {
@@ -2210,17 +2271,17 @@ paths:
         '301':
           description: callback
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -2232,8 +2293,14 @@ paths:
               apiKey: 'REPLACE_WITH_API_KEY'
             })
 
+            const params = {
+              state:
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk',
+              code: 'g0ZGZmNjVmOWI'
+            }
+
             try {
-              const { data } = await apideck.vault.connectionsCallback({})
+              const { data } = await apideck.vault.connectionsCallback(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -2260,22 +2327,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SessionRequest'
+              $ref: '#/components/schemas/Session'
       responses:
         '200':
-          $ref: '#/components/responses/CreateSession'
+          $ref: '#/components/responses/CreateSessionResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript
@@ -2291,7 +2358,6 @@ paths:
 
             const params = {
               session: {
-                redirect_uri: 'https://mysaas.com/dashboard',
                 consumer_metadata: {
                   account_name: 'SpaceX',
                   user_name: 'Elon Musk',
@@ -2311,20 +2377,21 @@ paths:
                     }
                   ]
                 },
+                redirect_uri: 'https://mysaas.com/dashboard',
+                settings: {
+                  hide_resource_settings: false,
+                  sandbox_mode: false,
+                  session_length: '30m',
+                  show_logs: true
+                },
                 theme: {
-                  vault_name: 'Intercom',
+                  favicon: 'https://res.cloudinary.com/apideck/icons/intercom',
                   primary_color: '#286efa',
+                  privacy_url: 'https://compliance.apideck.com/privacy-policy',
                   sidepanel_background_color: '#286efa',
                   sidepanel_text_color: '#FFFFFF',
-                  favicon: 'https://res.cloudinary.com/apideck/icons/intercom',
                   terms_url: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e',
-                  privacy_url: 'https://compliance.apideck.com/privacy-policy'
-                },
-                settings: {
-                  session_length: '30m',
-                  hide_resource_settings: false,
-                  show_logs: true,
-                  sandbox_mode: false
+                  vault_name: 'Intercom'
                 }
               }
             }
@@ -2693,19 +2760,19 @@ paths:
         - apiKey: []
       responses:
         '200':
-          $ref: '#/components/responses/GetLogs'
+          $ref: '#/components/responses/GetLogsResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/BadRequestResponse'
         '401':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/UnauthorizedResponse'
         '402':
-          $ref: '#/components/responses/PaymentRequired'
+          $ref: '#/components/responses/PaymentRequiredResponse'
         '404':
-          $ref: '#/components/responses/NotFound'
+          $ref: '#/components/responses/NotFoundResponse'
         '422':
-          $ref: '#/components/responses/Unprocessable'
+          $ref: '#/components/responses/UnprocessableResponse'
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
       x-codeSamples:
         - lang: TypeScript

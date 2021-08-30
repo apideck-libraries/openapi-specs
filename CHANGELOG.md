@@ -1,3 +1,9 @@
+## v5.5.1 - (2021-08-29)
+
+### Accounting API
+
+- Rename `general_ledger_account` to `ledger_account` read-only on [Invoices](apis/accounting/reference#tag/Invoices).
+
 ## v5.4.1 - (2021-08-27)
 
 ### Accounting, CRM, Lead & Vault API

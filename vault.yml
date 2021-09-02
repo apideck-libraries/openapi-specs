@@ -2792,3 +2792,44 @@ paths:
             } catch (error) {
               console.error(error)
             }
+x-webhooks:
+  ConnectionUpdated:
+    post:
+      summary: Connection Updated
+      description: Connection Updated
+      operationId: connectionUpdated
+      x-apideck-event-type: vault.connection.updated
+      tags:
+        - Connection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                connection:
+                  $ref: '#/components/schemas/Connection'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  ConnectionCreated:
+    post:
+      summary: Connection Created
+      description: Connection Created
+      operationId: connectionCreated
+      x-apideck-event-type: vault.connection.created
+      tags:
+        - Connection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                connection:
+                  $ref: '#/components/schemas/Connection'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully

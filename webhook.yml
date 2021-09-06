@@ -298,6 +298,8 @@ components:
               - '*'
               - vault.connection.created
               - vault.connection.updated
+              - vault.connection.deleted
+              - vault.connection.callable
     Meta:
       type: object
       description: Reponse metadata
@@ -857,279 +859,7 @@ x-webhooks:
               type: object
               additionalProperties: false
               properties:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    example: lead+close
-                    readOnly: true
-                  service_id:
-                    type: string
-                    example: salesforce
-                    readOnly: true
-                  name:
-                    type: string
-                    example: Salesforce
-                    readOnly: true
-                  tag_line:
-                    type: string
-                    example: 'CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.'
-                    readOnly: true
-                  unified_api:
-                    type: string
-                    example: crm
-                    readOnly: true
-                  website:
-                    type: string
-                    example: 'https://www.salesforce.com'
-                    readOnly: true
-                  icon:
-                    type: string
-                    example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-                    readOnly: true
-                  logo:
-                    type: string
-                    example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
-                    readOnly: true
-                  settings:
-                    type: object
-                    description: Connection settings. Values will persist to `form_fields` with corresponding id
-                    nullable: true
-                    example:
-                      instance_url: 'https://eu28.salesforce.com'
-                  metadata:
-                    type: object
-                    description: Attach your own consumer specific metadata
-                    additionalProperties: true
-                    properties: {}
-                    nullable: true
-                    example:
-                      account:
-                        name: My Company
-                        id: c01458a5-7276-41ce-bc19-639906b0450a
-                      plan: enterprise
-                  auth_type:
-                    readOnly: true
-                    type: string
-                    enum:
-                      - oauth2
-                      - apiKey
-                      - basic
-                      - none
-                  status:
-                    type: string
-                    enum:
-                      - live
-                      - upcoming
-                      - requested
-                    readOnly: true
-                  form_fields:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: channel
-                        label:
-                          type: string
-                          example: Channel
-                        placeholder:
-                          type: string
-                          example: Select a channel
-                          nullable: true
-                        description:
-                          type: string
-                          example: Slack channel to push notification to
-                          nullable: true
-                        type:
-                          enum:
-                            - text
-                            - checkbox
-                            - tel
-                            - email
-                            - url
-                            - textarea
-                            - select
-                            - filtered-select
-                            - multi-select
-                            - datetime
-                            - date
-                            - time
-                            - number
-                          example: select
-                        required:
-                          type: boolean
-                          example: true
-                        custom_field:
-                          type: boolean
-                          example: false
-                        disabled:
-                          type: boolean
-                          nullable: true
-                          example: false
-                        options:
-                          type: array
-                          items:
-                            $ref: '#/x-webhooks/ConnectionCreated/post/requestBody/content/application~1json/schema/properties/properties/configuration/items/properties/defaults/items/properties/options/items'
-                          example:
-                            - label: General Channel
-                              value: general
-                    example:
-                      - id: instance_url
-                        label: Instance url
-                        value: 'https://eu28.salesforce.com'
-                        placeholder: ''
-                        mask: false
-                        type: text
-                        required: true
-                        disabled: false
-                        custom_field: false
-                  configuration:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        resource:
-                          type: string
-                          example: leads
-                        defaults:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              target:
-                                type: string
-                                enum:
-                                  - custom_fields
-                                  - resource
-                                example: custom_fields
-                                readOnly: true
-                              id:
-                                type: string
-                                example: ProductInterest
-                              options:
-                                type: array
-                                items:
-                                  anyOf:
-                                    - type: object
-                                      properties:
-                                        label:
-                                          type: string
-                                          example: General Channel
-                                        value:
-                                          anyOf:
-                                            - type: string
-                                              example: general
-                                            - type: integer
-                                              example: 123
-                                            - type: number
-                                              example: 12.5
-                                            - type: boolean
-                                              example: true
-                                            - type: array
-                                              items:
-                                                anyOf:
-                                                  - type: string
-                                                  - type: integer
-                                                  - type: number
-                                              example:
-                                                - team
-                                                - general
-                                    - type: object
-                                      properties:
-                                        id:
-                                          type: string
-                                          example: '1234'
-                                        label:
-                                          type: string
-                                          example: General Channel
-                                        options:
-                                          type: array
-                                          items:
-                                            $ref: '#/x-webhooks/ConnectionCreated/post/requestBody/content/application~1json/schema/properties/properties/configuration/items/properties/defaults/items/properties/options/items/anyOf/0'
-                              value:
-                                anyOf:
-                                  - type: string
-                                    example: GC5000 series
-                                  - type: integer
-                                    example: 10
-                                  - type: number
-                                    example: 10.5
-                                  - type: boolean
-                                    example: true
-                                  - type: array
-                                    items:
-                                      anyOf:
-                                        - type: string
-                                          example: GC6000 series
-                                        - type: integer
-                                          example: 10
-                                        - type: number
-                                          example: 10.5
-                  configurable_resources:
-                    type: array
-                    items:
-                      type: string
-                    example:
-                      - opportunities
-                      - companies
-                      - contacts
-                      - leads
-                    readOnly: true
-                  resource_schema_support:
-                    type: array
-                    items:
-                      type: string
-                    readOnly: true
-                    example:
-                      - leads
-                  resource_settings_support:
-                    type: array
-                    items:
-                      type: string
-                    readOnly: true
-                    example:
-                      - leads
-                  settings_required_for_authorization:
-                    type: array
-                    items:
-                      type: string
-                    readOnly: true
-                    example:
-                      - instance_url
-                  authorize_url:
-                    type: string
-                    example: 'https://unify.apideck.com/vault/authorize/salesforce/<application-id>?state=<state>'
-                    nullable: true
-                    readOnly: true
-                  revoke_url:
-                    type: string
-                    nullable: true
-                    readOnly: true
-                    example: 'https://unify.apideck.com/vault/revoke/salesforce/<application-id>?state=<state>'
-                  enabled:
-                    type: boolean
-                    example: true
-                  created_at:
-                    type: number
-                    readOnly: true
-                    example: 1615563533390
-                  updated_at:
-                    type: number
-                    example: 1616662325753
-                    readOnly: true
-                    nullable: true
-                  state:
-                    readOnly: true
-                    type: string
-                    description: '[Connection state flow](#section/Connection-state)'
-                    enum:
-                      - available
-                      - callable
-                      - added
-                      - authorized
-                    example: authorized
+                $ref: '#/x-webhooks/ConnectionUpdated/post/requestBody/content/application~1json/schema/properties'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -1148,7 +878,116 @@ x-webhooks:
               type: object
               additionalProperties: false
               properties:
-                $ref: '#/x-webhooks/ConnectionCreated/post/requestBody/content/application~1json/schema/properties'
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 1111+test_user_id
+                    readOnly: true
+                  name:
+                    type: string
+                    example: Salesforce
+                  icon:
+                    type: string
+                    example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
+                  logo:
+                    type: string
+                    example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
+                  website:
+                    type: string
+                    example: 'https://www.salesforce.com'
+                    readOnly: true
+                  tag_line:
+                    type: string
+                    example: 'CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.'
+                    readOnly: true
+                  service_id:
+                    type: string
+                    example: teamleader
+                  unified_api:
+                    type: string
+                    example: crm
+                  auth_type:
+                    type: string
+                    enum:
+                      - oauth2
+                      - apiKey
+                      - basic
+                      - none
+                  enabled:
+                    type: boolean
+                    example: true
+                  settings:
+                    type: object
+                    description: Connection settings. Values will persist to `form_fields` with corresponding id
+                    nullable: true
+                    example:
+                      instance_url: 'https://eu28.salesforce.com'
+                  metadata:
+                    type: object
+                    description: Attach your own consumer specific metadata
+                    additionalProperties: true
+                    properties: {}
+                    nullable: true
+                    example:
+                      account:
+                        name: My Company
+                        id: c01458a5-7276-41ce-bc19-639906b0450a
+                      plan: enterprise
+                  created_at:
+                    type: string
+                    example: '2020-09-19T12:18:37.071Z'
+                  updated_at:
+                    type: string
+                    example: '2020-09-19T12:18:37.071Z'
+                    nullable: true
+                  state:
+                    type: string
+                    enum:
+                      - available
+                      - callable
+                      - added
+                      - configured
+                      - authorized
+                    example: authorized
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  ConnectionDeleted:
+    post:
+      summary: Connection Deleted
+      description: Connection Deleted
+      operationId: connectionDeleted
+      x-apideck-event-type: vault.connection.deleted
+      tags:
+        - Connection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                $ref: '#/x-webhooks/ConnectionUpdated/post/requestBody/content/application~1json/schema/properties'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  ConnectionCallable:
+    post:
+      summary: Connection Callable
+      description: Connection Callable
+      operationId: connectionCallable
+      x-apideck-event-type: vault.connection.callable
+      tags:
+        - Connection
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                $ref: '#/x-webhooks/ConnectionUpdated/post/requestBody/content/application~1json/schema/properties'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully

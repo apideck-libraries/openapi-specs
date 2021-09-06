@@ -1,3 +1,9 @@
+## v5.6.0 - (2021-09-06)
+
+### Accounting API
+
+- Add [Customers](apis/accounting/reference#tag/Customers) resource.
+
 ## v5.5.1 - (2021-08-29)
 
 ### Accounting API

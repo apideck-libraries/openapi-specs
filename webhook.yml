@@ -170,6 +170,37 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+    CreateWebhookRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - url
+        - status
+        - events
+      properties:
+        id:
+          type: string
+          example: '1234'
+          readOnly: true
+        description:
+          $ref: '#/components/schemas/Description'
+        status:
+          $ref: '#/components/schemas/Status'
+        url:
+          $ref: '#/components/schemas/Url'
+        events:
+          type: array
+          title: Subscribed events
+          description: 'The list of subscribed events for this webhook. [’*’] indicates that all events are enabled.'
+          example:
+            - vault.connection.created
+            - vault.connection.updated
+          items:
+            $ref: '#/components/schemas/Event'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     DeleteWebhookResponse:
       type: object
       required:
@@ -246,6 +277,33 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+    UpdateWebhookRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          example: '1234'
+          readOnly: true
+        description:
+          $ref: '#/components/schemas/Description'
+        status:
+          $ref: '#/components/schemas/Status'
+        url:
+          $ref: '#/components/schemas/Url'
+        events:
+          type: array
+          title: Subscribed events
+          description: 'The list of subscribed events for this webhook. [’*’] indicates that all events are enabled.'
+          example:
+            - vault.connection.created
+            - vault.connection.updated
+          items:
+            $ref: '#/components/schemas/Event'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     Webhook:
       type: object
       additionalProperties: false
@@ -276,15 +334,9 @@ components:
           pattern: '^(https?)://'
           example: 'https://example.com/my/webhook/endpoint'
         updated_at:
-          type: string
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
+          $ref: '#/components/schemas/UpdatedAt'
         created_at:
-          type: string
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
+          $ref: '#/components/schemas/CreatedAt'
         events:
           type: array
           title: Subscribed events
@@ -293,13 +345,7 @@ components:
             - vault.connection.created
             - vault.connection.updated
           items:
-            type: string
-            enum:
-              - '*'
-              - vault.connection.created
-              - vault.connection.updated
-              - vault.connection.deleted
-              - vault.connection.callable
+            $ref: '#/components/schemas/Event'
     Meta:
       type: object
       description: Reponse metadata
@@ -545,6 +591,41 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
+    CreatedAt:
+      type: string
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    UpdatedAt:
+      type: string
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    Description:
+      type: string
+      description: An optional description of what the webhook is used for.
+      example: This is a webhook. It listens to connection events
+    Status:
+      type: string
+      description: The status of the webhook.
+      example: enabled
+      enum:
+        - enabled
+        - disabled
+    Url:
+      type: string
+      format: uri
+      description: The URL of the webhook endpoint.
+      pattern: '^(https?)://'
+      example: 'https://example.com/my/webhook/endpoint'
+    Event:
+      type: string
+      enum:
+        - '*'
+        - vault.connection.created
+        - vault.connection.updated
+        - vault.connection.deleted
+        - vault.connection.callable
   securitySchemes:
     apiKey:
       type: apiKey
@@ -641,7 +722,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Webhook'
+              $ref: '#/components/schemas/CreateWebhookRequest'
       responses:
         '201':
           $ref: '#/components/responses/CreateWebhookResponse'
@@ -751,7 +832,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Webhook'
+              $ref: '#/components/schemas/UpdateWebhookRequest'
       responses:
         '200':
           $ref: '#/components/responses/UpdateWebhookResponse'

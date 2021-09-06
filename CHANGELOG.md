@@ -1,3 +1,7 @@
+## v5.7.0 - (2021-09-06)
+
+- Add [Company info](apis/accounting/reference#tag/Company-Info) resource. Replace Contact and Company resource by [Customer](apis/accounting/reference#tag/Customers) resource.
+
 ## v5.6.0 - (2021-09-06)
 
 ### Accounting API

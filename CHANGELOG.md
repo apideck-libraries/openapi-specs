@@ -1,3 +1,9 @@
+## v5.9.1 - (2021-09-08)
+
+### File Storage API
+
+- Added filter on `folderId` to the Files resource.
+
 ## v5.8.1 - (2021-09-08)
 
 ## Proxy API

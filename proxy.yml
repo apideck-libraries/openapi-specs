@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 5.8.0
+  version: 5.8.1
   title: Proxy API
   description: |
     Welcome to the Proxy API.
@@ -73,6 +73,20 @@ info:
     ### Timeout
 
     The request timeout is set at 30 seconds.
+
+    ### Response Size
+
+    The Proxy API has no response size limit. For responses larger than 2MB, the Proxy API will redirect to a temporary URL. In this case the usual Apideck response headers will be returned in the redirect response. Most HTTP clients will handle this redirect automatically.
+
+    ```
+    GET /proxy
+    < 301 Moved Permanently
+    < x-apideck-request-id: {{requestId}}
+    < Location: {{temporaryUrl}}
+
+    GET {{temporaryUrl}}
+    < {{responseBody}}
+    ```
 
     ## SDKs and API Clients
 

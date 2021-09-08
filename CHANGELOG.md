@@ -1,3 +1,9 @@
+## v5.8.1 - (2021-09-08)
+
+## Proxy API
+
+- Added support for responses larger than 6MB. For more information, see the [Proxy API docs](/apis/proxy/reference#limitations).
+
 ## v5.8.0 - (2021-09-08)
 
 ### File Storage API

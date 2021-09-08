@@ -1,3 +1,9 @@
+## v5.8.0 - (2021-09-08)
+
+### File Storage API
+
+- Added beta version of the [File Storage API](apis/file-storage/reference) and the [Google Drive connector](connectors/google-drive).
+
 ## v5.7.0 - (2021-09-06)
 
 - Add [Company info](apis/accounting/reference#tag/Company-Info) resource. Replace Contact and Company resource by [Customer](apis/accounting/reference#tag/Customers) resource.

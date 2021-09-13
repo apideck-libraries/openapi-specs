@@ -544,6 +544,9 @@ components:
         unified_api:
           type: string
           example: crm
+        consumer_id:
+          type: string
+          example: test_user_id
         auth_type:
           $ref: '#/components/schemas/AuthType'
         enabled:
@@ -995,6 +998,7 @@ components:
             - lead
             - proxy
             - vault
+            - accounting
           type: string
       required:
         - id
@@ -2835,7 +2839,11 @@ x-webhooks:
               type: object
               additionalProperties: false
               properties:
-                $ref: '#/components/schemas/ConsumerConnection'
+                entity:
+                  $ref: '#/components/schemas/ConsumerConnection'
+                entity_type:
+                  type: string
+                  example: Connection
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -2854,7 +2862,11 @@ x-webhooks:
               type: object
               additionalProperties: false
               properties:
-                $ref: '#/components/schemas/ConsumerConnection'
+                entity:
+                  $ref: '#/components/schemas/ConsumerConnection'
+                entity_type:
+                  type: string
+                  example: Connection
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully

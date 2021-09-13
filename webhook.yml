@@ -40,13 +40,6 @@ components:
       description: ID of the consumer which you want to get or push data from
       schema:
         type: string
-    raw:
-      name: raw
-      in: query
-      description: Include raw response. Mostly used for debugging purposes
-      schema:
-        type: boolean
-        default: true
     id:
       in: path
       name: id
@@ -70,6 +63,14 @@ components:
       schema:
         type: string
         nullable: true
+    filter:
+      name: filter
+      in: query
+      description: Filter results
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/WebhookEventLogsFilter'
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -89,6 +90,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteWebhookResponse'
+    GetWebhookEventLogsResponse:
+      description: EventLogs
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetWebhookEventLogsResponse'
     GetWebhookResponse:
       description: Webhooks
       content:
@@ -218,6 +225,30 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+    GetWebhookEventLogsResponse:
+      x-graphql-type-name: EventLogList
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookEventLog'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
     GetWebhookResponse:
       x-graphql-type-name: Webhook
       type: object
@@ -346,6 +377,108 @@ components:
             - vault.connection.updated
           items:
             $ref: '#/components/schemas/Event'
+    WebhookEventLog:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          example: 1d174c4d-fe9e-4377-a76c-6da22fe9cd87
+        status_code:
+          description: HTTP Status code that was returned.
+          example: 200
+          type: integer
+        success:
+          description: Whether or not the request was successful.
+          example: true
+          type: boolean
+        error_message:
+          description: 'If error occured, response captured here'
+          example: Forbidden
+          type: string
+          nullable: true
+        application_id:
+          $ref: '#/components/schemas/ApplicationId'
+        consumer_id:
+          $ref: '#/components/schemas/ConsumerId'
+        unified_api:
+          $ref: '#/components/schemas/UnifiedApi'
+        service:
+          additionalProperties: false
+          description: Apideck service provider associated with event.
+          properties:
+            id:
+              description: Apideck service provider id.
+              example: 101-data-solution
+              type: string
+            name:
+              description: Apideck service provider name.
+              example: 101 Data Solution
+              type: string
+          required:
+            - id
+            - name
+          type: object
+        endpoint:
+          type: string
+          format: uri
+          description: The URL of the webhook endpoint.
+          pattern: '^(https?)://'
+          example: 'https://example.com/my/webhook/endpoint'
+        event_type:
+          type: string
+          description: Name of source event that webhook is subscribed to.
+          example: vault.connection.updated
+        execution_attempt:
+          type: number
+          description: Number of attempts webhook endpoint was called before a success was returned or eventually failed
+          example: 3
+        http_method:
+          description: HTTP Method of request to endpoint.
+          example: GET
+          type: string
+        timestamp:
+          description: ISO Date and time when the request was made.
+          example: '2021-07-12T14:26:17.420Z'
+          type: string
+        entity_type:
+          type: string
+          description: Name of the Entity described by the attributes delivered within payload
+          example: Connection
+        request_body:
+          type: string
+          description: The JSON stringified payload that was delivered to the webhook endpoint.
+          example: '{"entity":{"id":"2222+test_user_id","application_id":"2222","consumer_id":"test_user_id","name":"ActiveCampaign","icon":"https://res.cloudinary.com/apideck/image/upload/v1529455970/catalog/activecampaign/icon128x128.png","logo":"https://www.activecampaign.com/site/assets/social-2x.png","unified_api":"crm","service_id":"activecampaign","auth_type":"apiKey","enabled":true,"tag_line":"Integrated email marketing, marketing automation, and small business CRM. Save time while growing your business with sales automation.","website":"https://www.activecampaign.com/","settings":{"instance_url":"https://eu28.salesforce.com","base_url":"https://updated.api-us1.com"},"metadata":{"plan":"enterprise","account":{"name":"My Company"}},"state":"callable","created_at":"2021-09-10T10:39:49.628Z","updated_at":"2021-09-10T10:39:52.715Z"},"entityType":"Connection"}'
+        response_body:
+          type: string
+          description: The JSON stringified response that was returned from the webhook endpoint.
+          example: '{"status":"OK"}'
+    WebhookEventLogsFilter:
+      type: object
+      x-graphql-type-name: WebhookEventLogsFilter
+      properties:
+        status_code:
+          type: number
+          example: 201
+          nullable: true
+        exclude_unified_apis:
+          type: string
+          nullable: true
+          example: 'vault,proxy'
+        service:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+        entity_type:
+          type: string
+          nullable: true
+          example: Connection
+        event_type:
+          type: string
+          nullable: true
+          example: vault.connection.callable
     Meta:
       type: object
       description: Reponse metadata
@@ -591,6 +724,28 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
+    ApplicationId:
+      type: string
+      description: ID of your Apideck Application
+      example: '1111'
+    ServiceId:
+      type: string
+      description: Service provider identifier
+      example: close
+    ConsumerId:
+      type: string
+      example: test_consumer_id
+      description: Consumer identifier
+    UnifiedApi:
+      type: string
+      description: Name of Apideck Unified Api
+      example: crm
+      enum:
+        - crm
+        - lead
+        - proxy
+        - vault
+        - accounting
     CreatedAt:
       type: string
       format: date-time
@@ -665,7 +820,6 @@ paths:
       summary: List webhooks
       description: List webhooks
       parameters:
-        - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
@@ -712,7 +866,6 @@ paths:
       summary: Create webhook
       description: Create webhook
       parameters:
-        - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
       security:
@@ -776,7 +929,6 @@ paths:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
-        - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
       responses:
@@ -824,7 +976,6 @@ paths:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
-        - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
       requestBody:
@@ -886,7 +1037,6 @@ paths:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
-        - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
       responses:
@@ -924,6 +1074,52 @@ paths:
             } catch (error) {
               console.error(error)
             }
+  /webhook/logs:
+    get:
+      tags:
+        - Webhooks
+      x-graphql-field-name: eventLogs
+      operationId: eventLogsAll
+      summary: List event logs
+      description: List event logs
+      parameters:
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/filter'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetWebhookEventLogsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: webhook
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY'
+            })
+
+            try {
+              const { data } = await apideck.webhook.eventLogsAll({})
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
 x-webhooks:
   ConnectionCreated:
     post:
@@ -940,7 +1136,11 @@ x-webhooks:
               type: object
               additionalProperties: false
               properties:
-                $ref: '#/x-webhooks/ConnectionUpdated/post/requestBody/content/application~1json/schema/properties'
+                entity:
+                  $ref: '#/x-webhooks/ConnectionUpdated/post/requestBody/content/application~1json/schema/properties/entity'
+                entity_type:
+                  type: string
+                  example: Connection
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -959,78 +1159,85 @@ x-webhooks:
               type: object
               additionalProperties: false
               properties:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    example: 1111+test_user_id
-                    readOnly: true
-                  name:
-                    type: string
-                    example: Salesforce
-                  icon:
-                    type: string
-                    example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-                  logo:
-                    type: string
-                    example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
-                  website:
-                    type: string
-                    example: 'https://www.salesforce.com'
-                    readOnly: true
-                  tag_line:
-                    type: string
-                    example: 'CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.'
-                    readOnly: true
-                  service_id:
-                    type: string
-                    example: teamleader
-                  unified_api:
-                    type: string
-                    example: crm
-                  auth_type:
-                    type: string
-                    enum:
-                      - oauth2
-                      - apiKey
-                      - basic
-                      - none
-                  enabled:
-                    type: boolean
-                    example: true
-                  settings:
-                    type: object
-                    description: Connection settings. Values will persist to `form_fields` with corresponding id
-                    nullable: true
-                    example:
-                      instance_url: 'https://eu28.salesforce.com'
-                  metadata:
-                    type: object
-                    description: Attach your own consumer specific metadata
-                    additionalProperties: true
-                    properties: {}
-                    nullable: true
-                    example:
-                      account:
-                        name: My Company
-                        id: c01458a5-7276-41ce-bc19-639906b0450a
-                      plan: enterprise
-                  created_at:
-                    type: string
-                    example: '2020-09-19T12:18:37.071Z'
-                  updated_at:
-                    type: string
-                    example: '2020-09-19T12:18:37.071Z'
-                    nullable: true
-                  state:
-                    type: string
-                    enum:
-                      - available
-                      - callable
-                      - added
-                      - configured
-                      - authorized
-                    example: authorized
+                entity:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 1111+test_user_id
+                      readOnly: true
+                    name:
+                      type: string
+                      example: Salesforce
+                    icon:
+                      type: string
+                      example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
+                    logo:
+                      type: string
+                      example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
+                    website:
+                      type: string
+                      example: 'https://www.salesforce.com'
+                      readOnly: true
+                    tag_line:
+                      type: string
+                      example: 'CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.'
+                      readOnly: true
+                    service_id:
+                      type: string
+                      example: teamleader
+                    unified_api:
+                      type: string
+                      example: crm
+                    consumer_id:
+                      type: string
+                      example: test_user_id
+                    auth_type:
+                      type: string
+                      enum:
+                        - oauth2
+                        - apiKey
+                        - basic
+                        - none
+                    enabled:
+                      type: boolean
+                      example: true
+                    settings:
+                      type: object
+                      description: Connection settings. Values will persist to `form_fields` with corresponding id
+                      nullable: true
+                      example:
+                        instance_url: 'https://eu28.salesforce.com'
+                    metadata:
+                      type: object
+                      description: Attach your own consumer specific metadata
+                      additionalProperties: true
+                      properties: {}
+                      nullable: true
+                      example:
+                        account:
+                          name: My Company
+                          id: c01458a5-7276-41ce-bc19-639906b0450a
+                        plan: enterprise
+                    created_at:
+                      type: string
+                      example: '2020-09-19T12:18:37.071Z'
+                    updated_at:
+                      type: string
+                      example: '2020-09-19T12:18:37.071Z'
+                      nullable: true
+                    state:
+                      type: string
+                      enum:
+                        - available
+                        - callable
+                        - added
+                        - configured
+                        - authorized
+                      example: authorized
+                entity_type:
+                  type: string
+                  example: Connection
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -1049,7 +1256,11 @@ x-webhooks:
               type: object
               additionalProperties: false
               properties:
-                $ref: '#/x-webhooks/ConnectionUpdated/post/requestBody/content/application~1json/schema/properties'
+                entity:
+                  $ref: '#/x-webhooks/ConnectionUpdated/post/requestBody/content/application~1json/schema/properties/entity'
+                entity_type:
+                  type: string
+                  example: Connection
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -1068,7 +1279,11 @@ x-webhooks:
               type: object
               additionalProperties: false
               properties:
-                $ref: '#/x-webhooks/ConnectionUpdated/post/requestBody/content/application~1json/schema/properties'
+                entity:
+                  $ref: '#/x-webhooks/ConnectionUpdated/post/requestBody/content/application~1json/schema/properties/entity'
+                entity_type:
+                  type: string
+                  example: Connection
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully

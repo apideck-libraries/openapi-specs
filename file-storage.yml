@@ -767,7 +767,7 @@ paths:
             })
 
             try {
-              const { data } = (await apideck.file) - storage.filesAll({})
+              const { data } = await apideck.fileStorage.filesAll({})
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -816,11 +816,9 @@ paths:
             })
 
             try {
-              const { data } =
-                (await apideck.file) -
-                storage.filesOne({
-                  id: 'id_example'
-                })
+              const { data } = await apideck.fileStorage.filesOne({
+                id: 'id_example'
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -868,11 +866,9 @@ paths:
             })
 
             try {
-              const { data } =
-                (await apideck.file) -
-                storage.filesDelete({
-                  id: 'id_example'
-                })
+              const { data } = await apideck.fileStorage.filesDelete({
+                id: 'id_example'
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -921,11 +917,9 @@ paths:
             })
 
             try {
-              const { data } =
-                (await apideck.file) -
-                storage.filesDownload({
-                  id: 'id_example'
-                })
+              const { data } = await apideck.fileStorage.filesDownload({
+                id: 'id_example'
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

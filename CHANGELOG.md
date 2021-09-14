@@ -1,3 +1,10 @@
+## v5.10.0 - (2021-09-13)
+
+### File Storage API
+
+- Renamed `folderId` filter to `folder_id`
+- Add `shared` filter to the Files resource
+
 ## v5.9.1 - (2021-09-08)
 
 ### File Storage API

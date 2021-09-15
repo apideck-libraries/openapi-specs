@@ -1,3 +1,9 @@
+## v5.11.0 - (2021-09-15)
+
+### File Storage API
+
+- Added `/file-storage/files/search` endpoint.
+
 ## v5.10.0 - (2021-09-13)
 
 ### File Storage API

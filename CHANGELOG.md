@@ -1,3 +1,11 @@
+## v5.12.0 - (2021-09-16)
+
+- Extended phone number resource with `country_code`, `area_code`, and new `direct-dial-in` type
+
+### Accounting API
+
+- Mapped Xero [customers](/apis/accounting/reference#Customers)
+
 ## v5.11.0 - (2021-09-15)
 
 ### File Storage API

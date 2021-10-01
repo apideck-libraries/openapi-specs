@@ -392,11 +392,6 @@ components:
           description: Whether or not the request was successful.
           example: true
           type: boolean
-        error_message:
-          description: 'If error occured, response captured here'
-          example: Forbidden
-          type: string
-          nullable: true
         application_id:
           $ref: '#/components/schemas/ApplicationId'
         consumer_id:
@@ -453,14 +448,36 @@ components:
           type: string
           description: The JSON stringified response that was returned from the webhook endpoint.
           example: '{"status":"OK"}'
+        attempts:
+          type: array
+          description: record of each attempt to call webhook endpoint
+          items:
+            type: object
+            properties:
+              timestamp:
+                description: ISO Date and time when the request was made.
+                example: '2021-07-12T14:26:17.420Z'
+                type: string
+              execution_attempt:
+                type: number
+                description: Number of attempts webhook endpoint was called before a success was returned or eventually failed
+                example: 3
+              status_code:
+                description: HTTP Status code that was returned.
+                example: 200
+                type: integer
+              success:
+                description: Whether or not the request was successful.
+                example: true
+                type: boolean
+              retry_scheduled:
+                description: If the request has not hit the max retry limit and will be retried.
+                example: true
+                type: boolean
     WebhookEventLogsFilter:
       type: object
       x-graphql-type-name: WebhookEventLogsFilter
       properties:
-        status_code:
-          type: number
-          example: 201
-          nullable: true
         exclude_unified_apis:
           type: string
           nullable: true
@@ -471,6 +488,10 @@ components:
           properties:
             id:
               type: string
+        consumer_id:
+          type: string
+          nullable: true
+          example: test_user_id
         entity_type:
           type: string
           nullable: true
@@ -1143,6 +1164,12 @@ x-webhooks:
                 entity_type:
                   type: string
                   example: Connection
+                event_id:
+                  type: string
+                  example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+                execution_attempt:
+                  type: number
+                  example: 2
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -1240,6 +1267,12 @@ x-webhooks:
                 entity_type:
                   type: string
                   example: Connection
+                event_id:
+                  type: string
+                  example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+                execution_attempt:
+                  type: number
+                  example: 2
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -1263,6 +1296,12 @@ x-webhooks:
                 entity_type:
                   type: string
                   example: Connection
+                event_id:
+                  type: string
+                  example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+                execution_attempt:
+                  type: number
+                  example: 2
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -1286,6 +1325,12 @@ x-webhooks:
                 entity_type:
                   type: string
                   example: Connection
+                event_id:
+                  type: string
+                  example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+                execution_attempt:
+                  type: number
+                  example: 2
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully

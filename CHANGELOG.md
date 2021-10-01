@@ -6,11 +6,16 @@
 
 - Mapped Xero [customers](/apis/accounting/reference#Customers)
 
+### File Storage API
+
+- Added the [Dropbox](connectors/dropbox) and [Box](connectors/box) connectors
+
 ## v5.11.0 - (2021-09-15)
 
 ### File Storage API
 
 - Added `/file-storage/files/search` endpoint.
+- Added the [Sharepoint](connectors/sharepoint) and [OneDrive](connectors/onedrive) connectors
 
 ## v5.10.0 - (2021-09-13)
 

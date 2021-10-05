@@ -1217,6 +1217,11 @@ components:
             sandbox_mode:
               default: false
               type: boolean
+              description: Forces Vault to shows a banner informing the current consumer is in a test environment.
+            isolation_mode:
+              type: boolean
+              default: false
+              description: 'Forces Vault to run in isolation mode, meaning it only shows the connection settings and hides the navigation items.'
             session_length:
               default: 1h
               description: The duration of time the session is valid for (maximum 1 week).
@@ -2412,6 +2417,7 @@ paths:
                 settings: {
                   hide_resource_settings: false,
                   sandbox_mode: false,
+                  isolation_mode: false,
                   session_length: '30m',
                   show_logs: true
                 },

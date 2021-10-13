@@ -876,6 +876,45 @@ components:
             - personal
             - other
           example: primary
+    EventType:
+      type: string
+      enum:
+        - lead.lead.created
+        - lead.lead.updated
+        - lead.lead.deleted
+      example: lead.lead.created
+    WebhookEvent:
+      allOf:
+        - type: object
+          properties:
+            event_id:
+              type: string
+              description: Unique reference to this request event
+              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+            service_id:
+              type: string
+              description: Service provider identifier
+              example: close
+            entity_id:
+              type: string
+              description: The service provider's ID of the entity that triggered this event
+              example: 123456ASDF
+            entity_type:
+              type: string
+              description: The type entity that triggered this event
+              example: Company
+            execution_attempt:
+              type: number
+              description: The current count this request event has been attempted
+              example: 2
+            occured_at:
+              type: string
+              description: ISO Datetime for when the original event occurred
+              example: '2021-10-01T03:14:55.419Z'
+        - type: object
+          properties:
+            event_type:
+              $ref: '#/components/schemas/EventType'
   parameters:
     applicationId:
       name: x-apideck-app-id
@@ -1471,3 +1510,73 @@ paths:
             } catch (error) {
               console.error(error)
             }
+x-webhooks:
+  LeadCreated:
+    post:
+      summary: Lead Created
+      description: Lead Created
+      operationId: leadCreated
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            type: string
+            example: lead.lead.created
+      tags:
+        - Lead
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  LeadUpdated:
+    post:
+      summary: Lead Updated
+      description: Lead Updated
+      operationId: leadUpdated
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            type: string
+            example: lead.lead.updated
+      tags:
+        - Lead
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  LeadDeleted:
+    post:
+      summary: Lead Deleted
+      description: Lead Deleted
+      operationId: leadDeleted
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            type: string
+            example: lead.lead.deleted
+      tags:
+        - Lead
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully

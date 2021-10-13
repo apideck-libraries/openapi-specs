@@ -1392,6 +1392,45 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Connection'
+    ConnectionEvent:
+      type: object
+      properties:
+        event_id:
+          type: string
+          description: Unique reference to this request event
+          example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+        service_id:
+          type: string
+          description: Service provider identifier
+          example: close
+        entity_id:
+          type: string
+          description: The service provider's ID of the entity that triggered this event
+          example: 123456ASDF
+        entity_type:
+          type: string
+          description: The type entity that triggered this event
+          example: Company
+        entity:
+          $ref: '#/components/schemas/ConsumerConnection'
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        execution_attempt:
+          type: number
+          description: The current count this request event has been attempted
+          example: 2
+        occured_at:
+          type: string
+          description: ISO Datetime for when the original event occurred
+          example: '2021-10-01T03:14:55.419Z'
+    EventType:
+      type: string
+      enum:
+        - vault.connection.created
+        - vault.connection.updated
+        - vault.connection.deleted
+        - vault.connection.callable
+      example: vault.connection.created
   responses:
     BadRequestResponse:
       content:
@@ -2847,27 +2886,20 @@ x-webhooks:
       summary: Connection Updated
       description: Connection Updated
       operationId: connectionUpdated
-      x-apideck-event-type: vault.connection.updated
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/EventType'
       tags:
-        - Connection
+        - Webhook Events
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties: false
-              properties:
-                entity:
-                  $ref: '#/components/schemas/ConsumerConnection'
-                entity_type:
-                  type: string
-                  example: Connection
-                event_id:
-                  type: string
-                  example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-                execution_attempt:
-                  type: number
-                  example: 2
+              $ref: '#/components/schemas/ConnectionEvent'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
@@ -2876,27 +2908,64 @@ x-webhooks:
       summary: Connection Created
       description: Connection Created
       operationId: connectionCreated
-      x-apideck-event-type: vault.connection.created
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/EventType'
       tags:
-        - Connection
+        - Webhook Events
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties: false
-              properties:
-                entity:
-                  $ref: '#/components/schemas/ConsumerConnection'
-                entity_type:
-                  type: string
-                  example: Connection
-                event_id:
-                  type: string
-                  example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-                execution_attempt:
-                  type: number
-                  example: 2
+              $ref: '#/components/schemas/ConnectionEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  ConnectionDeleted:
+    post:
+      summary: Connection Deleted
+      description: Connection Deleted
+      operationId: connectionDeleted
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/EventType'
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  ConnectionCallable:
+    post:
+      summary: Connection Callable
+      description: Connection Callable
+      operationId: connectionCallable
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/EventType'
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionEvent'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully

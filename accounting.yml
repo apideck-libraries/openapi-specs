@@ -3597,6 +3597,57 @@ components:
       title: Sales Tax Number
       example: 111.222.333
       nullable: true
+    EventType:
+      type: string
+      enum:
+        - accounting.customer.created
+        - accounting.customer.updated
+        - accounting.customer.deleted
+        - accounting.invoice.created
+        - accounting.invoice.updated
+        - accounting.invoice.deleted
+        - accounting.invoice_item.created
+        - accounting.invoice_item.updated
+        - accounting.invoice_item.deleted
+        - accounting.ledger_account.created
+        - accounting.ledger_account.updated
+        - accounting.ledger_account.deleted
+        - accounting.tax_rate.created
+        - accounting.tax_rate.updated
+        - accounting.tax_rate.deleted
+      example: accounting.invoice.created
+    WebhookEvent:
+      allOf:
+        - type: object
+          properties:
+            event_id:
+              type: string
+              description: Unique reference to this request event
+              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+            service_id:
+              type: string
+              description: Service provider identifier
+              example: close
+            entity_id:
+              type: string
+              description: The service provider's ID of the entity that triggered this event
+              example: 123456ASDF
+            entity_type:
+              type: string
+              description: The type entity that triggered this event
+              example: Company
+            execution_attempt:
+              type: number
+              description: The current count this request event has been attempted
+              example: 2
+            occured_at:
+              type: string
+              description: ISO Datetime for when the original event occurred
+              example: '2021-10-01T03:14:55.419Z'
+        - type: object
+          properties:
+            event_type:
+              $ref: '#/components/schemas/EventType'
   securitySchemes:
     apiKey:
       type: apiKey

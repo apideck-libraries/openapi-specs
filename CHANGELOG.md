@@ -1,3 +1,9 @@
+## v5.12.1 - (2021-10-13)
+
+### Vault API
+
+- Connection.form_fields is readOnly. The values should be sent via Connection.settings when mutating a connection.
+
 ## v5.12.0 - (2021-09-16)
 
 - Extended phone number resource with `country_code`, `area_code`, and new `direct-dial-in` type

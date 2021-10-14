@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 5.12.1
+  version: 5.12.2
   title: Webhook API
   description: Welcome to the Webhook API.
   contact:
@@ -191,14 +191,10 @@ components:
         - events
         - unified_api
       properties:
-        id:
-          type: string
-          example: '1234'
-          readOnly: true
-        unified_api:
-          $ref: '#/components/schemas/UnifiedApi'
         description:
           $ref: '#/components/schemas/Description'
+        unified_api:
+          $ref: '#/components/schemas/UnifiedApi'
         status:
           $ref: '#/components/schemas/Status'
         url:
@@ -212,10 +208,6 @@ components:
             - vault.connection.updated
           items:
             $ref: '#/components/schemas/EventType'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
     DeleteWebhookResponse:
       type: object
       required:
@@ -320,13 +312,6 @@ components:
       type: object
       additionalProperties: false
       properties:
-        id:
-          type: string
-          example: '1234'
-          readOnly: true
-        unified_api:
-          $ref: '#/components/schemas/UnifiedApi'
-          readOnly: true
         description:
           $ref: '#/components/schemas/Description'
         status:
@@ -342,10 +327,6 @@ components:
             - vault.connection.updated
           items:
             $ref: '#/components/schemas/EventType'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
     ExecuteWebhookEventRequest:
       type: object
       additionalProperties: true
@@ -401,10 +382,6 @@ components:
           $ref: '#/components/schemas/Url'
         execute_base_url:
           $ref: '#/components/schemas/ExecuteBaseUrl'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
         events:
           type: array
           title: Subscribed events
@@ -414,6 +391,10 @@ components:
             - vault.connection.updated
           items:
             $ref: '#/components/schemas/EventType'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     WebhookEventLog:
       type: object
       additionalProperties: false
@@ -1114,8 +1095,8 @@ paths:
 
             const params = {
               webhook: {
-                unified_api: 'vault',
                 description: 'This is a webhook. It listens to connection events',
+                unified_api: 'vault',
                 status: 'enabled',
                 url: 'https://example.com/my/webhook/endpoint',
                 events: ['vault.connection.created', 'vault.connection.updated']
@@ -1222,7 +1203,6 @@ paths:
             const params = {
               id: 'id_example',
               webhook: {
-                unified_api: 'vault',
                 description: 'This is a webhook. It listens to connection events',
                 status: 'enabled',
                 url: 'https://example.com/my/webhook/endpoint',

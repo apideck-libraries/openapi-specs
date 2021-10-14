@@ -1,3 +1,9 @@
+## v5.12.2 - (2021-10-14)
+
+### Webhook API
+
+- Remove unneeded `unified_api` field for [update webhook](apis/vault/reference#tag/Webhook).
+
 ## v5.12.1 - (2021-10-13)
 
 ### Vault API

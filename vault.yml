@@ -671,6 +671,7 @@ components:
           additionalProperties: false
     FormField:
       type: object
+      x-graphql-type-name: FormField
       properties:
         id:
           type: string
@@ -708,6 +709,12 @@ components:
         custom_field:
           type: boolean
           example: false
+        allow_custom_values:
+          title: Allow custom values
+          description: Only applicable to select fields. Allow the user to add a custom value though the option select if the desired value is not in the option select list.
+          type: boolean
+          example: false
+          default: false
         disabled:
           type: boolean
           nullable: true

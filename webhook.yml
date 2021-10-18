@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 5.12.2
+  version: 6.0.0
   title: Webhook API
   description: Welcome to the Webhook API.
   contact:
@@ -466,6 +466,10 @@ components:
           type: string
           description: The JSON stringified response that was returned from the webhook endpoint.
           example: '{"status":"OK"}'
+        retry_scheduled:
+          description: If the request has not hit the max retry limit and will be retried.
+          example: true
+          type: boolean
         attempts:
           type: array
           description: record of each attempt to call webhook endpoint
@@ -486,10 +490,6 @@ components:
                 type: integer
               success:
                 description: Whether or not the request was successful.
-                example: true
-                type: boolean
-              retry_scheduled:
-                description: If the request has not hit the max retry limit and will be retried.
                 example: true
                 type: boolean
     WebhookEventLogsFilter:
@@ -918,6 +918,7 @@ components:
           example: '2021-10-01T03:14:55.419Z'
     WebhookEvent:
       type: object
+      x-sdk-exclude: true
       properties:
         event_id:
           type: string

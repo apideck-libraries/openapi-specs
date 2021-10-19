@@ -1,3 +1,13 @@
+## v7.0.0 - (2021-10-19)
+
+### Customer Support API
+
+- Added the [Kustomer connector](connectors/kustomer) the [Customer Support API](apis/customer-support/reference).
+
+### CRM & Lead API
+
+- Added the [Flexmail connector](connectors/flexmail) the [CRM API](apis/crm/reference).
+
 ## v6.0.0 - (2021-10-14)
 
 ### Webhook API

@@ -1,3 +1,9 @@
+## v7.1.0 - (2021-10-22)
+
+### Webhook API
+
+- Rename `url` to `delivery_url`.
+
 ## v7.0.0 - (2021-10-19)
 
 ### Customer Support API

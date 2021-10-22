@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 7.0.0
+  version: 7.1.0
   title: Webhook API
   description: Welcome to the Webhook API.
   contact:
@@ -186,7 +186,7 @@ components:
       type: object
       additionalProperties: false
       required:
-        - url
+        - delivery_url
         - status
         - events
         - unified_api
@@ -197,8 +197,8 @@ components:
           $ref: '#/components/schemas/UnifiedApi'
         status:
           $ref: '#/components/schemas/Status'
-        url:
-          $ref: '#/components/schemas/Url'
+        delivery_url:
+          $ref: '#/components/schemas/DeliveryUrl'
         events:
           type: array
           title: Subscribed events
@@ -316,8 +316,8 @@ components:
           $ref: '#/components/schemas/Description'
         status:
           $ref: '#/components/schemas/Status'
-        url:
-          $ref: '#/components/schemas/Url'
+        delivery_url:
+          $ref: '#/components/schemas/DeliveryUrl'
         events:
           type: array
           title: Subscribed events
@@ -362,7 +362,7 @@ components:
       type: object
       additionalProperties: false
       required:
-        - url
+        - delivery_url
         - status
         - events
         - unified_api
@@ -378,8 +378,8 @@ components:
           $ref: '#/components/schemas/UnifiedApi'
         status:
           $ref: '#/components/schemas/Status'
-        url:
-          $ref: '#/components/schemas/Url'
+        delivery_url:
+          $ref: '#/components/schemas/DeliveryUrl'
         execute_base_url:
           $ref: '#/components/schemas/ExecuteBaseUrl'
         events:
@@ -800,10 +800,10 @@ components:
       enum:
         - enabled
         - disabled
-    Url:
+    DeliveryUrl:
       type: string
       format: uri
-      description: The URL of the webhook endpoint.
+      description: The delivery url of the webhook endpoint.
       pattern: '^(https?)://'
       example: 'https://example.com/my/webhook/endpoint'
     ExecuteBaseUrl:
@@ -1103,7 +1103,7 @@ paths:
                 description: 'This is a webhook. It listens to connection events',
                 unified_api: 'vault',
                 status: 'enabled',
-                url: 'https://example.com/my/webhook/endpoint',
+                delivery_url: 'https://example.com/my/webhook/endpoint',
                 events: ['vault.connection.created', 'vault.connection.updated']
               }
             }
@@ -1210,7 +1210,7 @@ paths:
               webhook: {
                 description: 'This is a webhook. It listens to connection events',
                 status: 'enabled',
-                url: 'https://example.com/my/webhook/endpoint',
+                delivery_url: 'https://example.com/my/webhook/endpoint',
                 events: ['vault.connection.created', 'vault.connection.updated']
               }
             }

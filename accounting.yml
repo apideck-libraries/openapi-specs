@@ -2709,9 +2709,7 @@ components:
           readOnly: true
           nullable: true
         row_version:
-          type: string
-          nullable: true
-          example: '3144638439811448832'
+          $ref: '#/components/schemas/RowVersion'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -3149,6 +3147,7 @@ components:
       type: string
       title: Row version
       example: 1-12345
+      nullable: true
     SocialLink:
       required:
         - url
@@ -3204,6 +3203,18 @@ components:
           description: Not compounded sum of the components of a tax rate
           example: 10
           nullable: true
+        tax_payable_account_id:
+          type: string
+          title: Tax payable account id
+          description: Unique identifier for the account for tax collected.
+          example: '123456'
+          nullable: true
+        tax_remitted_account_id:
+          type: string
+          title: Tax remitted account id
+          description: Unique identifier for the account for tax remitted.
+          example: '123456'
+          nullable: true
         components:
           type: array
           title: Tax components
@@ -3226,9 +3237,20 @@ components:
           nullable: true
         tax_type:
           type: string
-          title: Description
-          description: 'Special tax type to handle zero rate taxes. Used with VAT registered Businesses who receive goods/services (acquisitions) from other EU countries, will need to calculate the VAT due, but not paid, on these acquisitions. The rate of VAT payable is the same that would have been paid if the goods had been supplied by a UK supplier.'
-          example: NONE
+          title: Tax Type
+          enum:
+            - output
+            - input
+            - withholdings
+            - import_gst
+            - output_gst
+            - input_exempt
+            - output_exempt
+            - consolidated
+            - luxury_car_tax
+            - none
+          description: Tax type used to define the source of tax collected or paid
+          example: output_gst
           nullable: true
         original_tax_rate_id:
           type: string
@@ -3241,6 +3263,8 @@ components:
           title: Active
           example: true
           nullable: true
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -3850,6 +3874,8 @@ paths:
                 description: 'No ABN Withholding',
                 effective_tax_rate: 10,
                 total_tax_rate: 10,
+                tax_payable_account_id: '123456',
+                tax_remitted_account_id: '123456',
                 components: [
                   {
                     name: 'City tax',
@@ -3857,9 +3883,10 @@ paths:
                     compound: true
                   }
                 ],
-                tax_type: 'NONE',
+                tax_type: 'output_gst',
                 original_tax_rate_id: '12345',
-                active: true
+                active: true,
+                row_version: '1-12345'
               }
             }
 
@@ -3976,6 +4003,8 @@ paths:
                 description: 'No ABN Withholding',
                 effective_tax_rate: 10,
                 total_tax_rate: 10,
+                tax_payable_account_id: '123456',
+                tax_remitted_account_id: '123456',
                 components: [
                   {
                     name: 'City tax',
@@ -3983,9 +4012,10 @@ paths:
                     compound: true
                   }
                 ],
-                tax_type: 'NONE',
+                tax_type: 'output_gst',
                 original_tax_rate_id: '12345',
-                active: true
+                active: true,
+                row_version: '1-12345'
               }
             }
 
@@ -4620,7 +4650,7 @@ paths:
                   display_id: '1-1100'
                 },
                 sub_account: false,
-                row_version: '3144638439811448832'
+                row_version: '1-12345'
               }
             }
 
@@ -4765,7 +4795,7 @@ paths:
                   display_id: '1-1100'
                 },
                 sub_account: false,
-                row_version: '3144638439811448832'
+                row_version: '1-12345'
               }
             }
 

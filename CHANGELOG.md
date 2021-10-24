@@ -1,3 +1,7 @@
+## v7.2.0 - (2021-10-23)
+
+- Added [users](apis/crm/reference#tag/Users) support for the [Salesforce connector](connectors/salesforce).
+
 ## v7.1.0 - (2021-10-22)
 
 ### Webhook API
@@ -8,11 +12,11 @@
 
 ### Customer Support API
 
-- Added the [Kustomer connector](connectors/kustomer) the [Customer Support API](apis/customer-support/reference).
+- Added the [Kustomer connector](connectors/kustomer) to the [Customer Support API](apis/customer-support/reference).
 
 ### CRM & Lead API
 
-- Added the [Flexmail connector](connectors/flexmail) the [CRM API](apis/crm/reference).
+- Added the [Flexmail connector](connectors/flexmail) to the [CRM API](apis/crm/reference).
 
 ## v6.0.0 - (2021-10-14)
 

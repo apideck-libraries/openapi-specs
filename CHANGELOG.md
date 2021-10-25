@@ -1,4 +1,10 @@
+## v8.0.0 - (2021-10-25)
+
+- Added [SMS API](apis/sms/reference).
+
 ## v7.2.0 - (2021-10-23)
+
+### CRM API
 
 - Added [users](apis/crm/reference#tag/Users) support for the [Salesforce connector](connectors/salesforce).
 

@@ -3539,101 +3539,6 @@ components:
       example: '12345'
       readOnly: true
       nullable: true
-    User:
-      required:
-        - emails
-      x-pii:
-        - username
-        - first_name
-        - last_name
-        - email
-      properties:
-        id:
-          type: string
-          example: '12345'
-          readOnly: true
-        parent_id:
-          type: string
-          example: '54321'
-          nullable: true
-        username:
-          type: string
-          example: masterofcoin
-          nullable: true
-        first_name:
-          type: string
-          example: Elon
-          nullable: true
-        last_name:
-          type: string
-          example: Musk
-          nullable: true
-        title:
-          type: string
-          title: Title
-          example: CEO
-          nullable: true
-        division:
-          type: string
-          title: Division
-          description: The division the user is currently in.
-          example: Europe
-          nullable: true
-        department:
-          type: string
-          title: Department
-          description: The department the user is currently in.
-          example: R&D
-          nullable: true
-        company_name:
-          $ref: '#/components/schemas/CompanyName'
-        employee_number:
-          type: string
-          title: Employee number
-          description: 'An Employee Number, Employee ID or Employee Code, is a unique number that has been assigned to each individual staff member within a company.'
-          example: 123456-AB
-          nullable: true
-        description:
-          type: string
-          title: Description
-          example: A description
-          nullable: true
-        image:
-          type: string
-          example: 'https://logo.clearbit.com/spacex.com?s=128'
-          nullable: true
-        language:
-          type: string
-          example: EN
-          nullable: true
-        status:
-          type: string
-          example: active
-          nullable: true
-        password:
-          type: string
-          example: supersecretpassword
-          writeOnly: true
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/Address'
-        phone_numbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        emails:
-          type: array
-          items:
-            $ref: '#/components/schemas/Email'
-        updated_at:
-          type: string
-          example: '2017-08-12T20:43:21.291Z'
-          readOnly: true
-        created_at:
-          type: string
-          example: '2017-08-12T20:43:21.291Z'
-          readOnly: true
     Website:
       type: object
       required:
@@ -3662,7 +3567,7 @@ components:
       title: Sales Tax Number
       example: 111.222.333
       nullable: true
-    EventType:
+    AccountingEventType:
       type: string
       enum:
         - accounting.customer.created
@@ -3717,7 +3622,7 @@ components:
         - type: object
           properties:
             event_type:
-              $ref: '#/components/schemas/EventType'
+              $ref: '#/components/schemas/AccountingEventType'
   securitySchemes:
     apiKey:
       type: apiKey

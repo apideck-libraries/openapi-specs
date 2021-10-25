@@ -207,7 +207,7 @@ components:
             - vault.connection.created
             - vault.connection.updated
           items:
-            $ref: '#/components/schemas/EventType'
+            $ref: '#/components/schemas/WebhookEventType'
     DeleteWebhookResponse:
       type: object
       required:
@@ -326,7 +326,7 @@ components:
             - vault.connection.created
             - vault.connection.updated
           items:
-            $ref: '#/components/schemas/EventType'
+            $ref: '#/components/schemas/WebhookEventType'
     ExecuteWebhookEventRequest:
       type: object
       additionalProperties: true
@@ -350,7 +350,7 @@ components:
           type: string
           description: HTTP Response Status
           example: OK
-        requestId:
+        request_id:
           type: string
           description: UUID of the request received
           example: c6af9ac6-7b61-11e6-9a41-93e8deadbeef
@@ -390,7 +390,7 @@ components:
             - vault.connection.created
             - vault.connection.updated
           items:
-            $ref: '#/components/schemas/EventType'
+            $ref: '#/components/schemas/WebhookEventType'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
@@ -813,109 +813,6 @@ components:
       pattern: '^(https?)://'
       readOnly: true
       example: 'https://unify.apideck.com/webhook/webhooks/1234/execute'
-    ConnectionEvent:
-      type: object
-      properties:
-        event_id:
-          type: string
-          description: Unique reference to this request event
-          example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-        service_id:
-          $ref: '#/components/schemas/ServiceId'
-        entity_id:
-          type: string
-          description: The service provider's ID of the entity that triggered this event
-          example: 123456ASDF
-        entity_type:
-          type: string
-          description: The type entity that triggered this event
-          example: Company
-        entity:
-          type: object
-          properties:
-            id:
-              type: string
-              example: 1111+test_user_id
-              readOnly: true
-            name:
-              type: string
-              example: Salesforce
-            icon:
-              type: string
-              example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
-            logo:
-              type: string
-              example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
-            website:
-              type: string
-              example: 'https://www.salesforce.com'
-              readOnly: true
-            tag_line:
-              type: string
-              example: 'CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.'
-              readOnly: true
-            service_id:
-              type: string
-              example: teamleader
-            unified_api:
-              type: string
-              example: crm
-            consumer_id:
-              type: string
-              example: test_user_id
-            auth_type:
-              type: string
-              enum:
-                - oauth2
-                - apiKey
-                - basic
-                - none
-            enabled:
-              type: boolean
-              example: true
-            settings:
-              type: object
-              description: Connection settings. Values will persist to `form_fields` with corresponding id
-              nullable: true
-              example:
-                instance_url: 'https://eu28.salesforce.com'
-            metadata:
-              type: object
-              description: Attach your own consumer specific metadata
-              additionalProperties: true
-              properties: {}
-              nullable: true
-              example:
-                account:
-                  name: My Company
-                  id: c01458a5-7276-41ce-bc19-639906b0450a
-                plan: enterprise
-            created_at:
-              type: string
-              example: '2020-09-19T12:18:37.071Z'
-            updated_at:
-              type: string
-              example: '2020-09-19T12:18:37.071Z'
-              nullable: true
-            state:
-              type: string
-              enum:
-                - available
-                - callable
-                - added
-                - configured
-                - authorized
-              example: authorized
-        event_type:
-          $ref: '#/components/schemas/EventType'
-        execution_attempt:
-          type: number
-          description: The current count this request event has been attempted
-          example: 2
-        occured_at:
-          type: string
-          description: ISO Datetime for when the original event occurred
-          example: '2021-10-01T03:14:55.419Z'
     WebhookEvent:
       type: object
       x-sdk-exclude: true
@@ -927,7 +824,7 @@ components:
         service_id:
           $ref: '#/components/schemas/ServiceId'
         event_type:
-          $ref: '#/components/schemas/EventType'
+          $ref: '#/components/schemas/WebhookEventType'
         entity_id:
           type: string
           description: The service provider's ID of the entity that triggered this event
@@ -948,7 +845,7 @@ components:
           type: string
           description: ISO Datetime for when the original event occurred
           example: '2021-10-01T03:14:55.419Z'
-    EventType:
+    WebhookEventType:
       type: string
       enum:
         - '*'

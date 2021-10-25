@@ -1423,7 +1423,7 @@ components:
         entity:
           $ref: '#/components/schemas/ConsumerConnection'
         event_type:
-          $ref: '#/components/schemas/EventType'
+          $ref: '#/components/schemas/VaultEventType'
         execution_attempt:
           type: number
           description: The current count this request event has been attempted
@@ -1432,7 +1432,7 @@ components:
           type: string
           description: ISO Datetime for when the original event occurred
           example: '2021-10-01T03:14:55.419Z'
-    EventType:
+    VaultEventType:
       type: string
       enum:
         - vault.connection.created
@@ -2863,7 +2863,7 @@ x-webhooks:
           required: true
           description: The type of event that was triggered
           schema:
-            $ref: '#/components/schemas/EventType'
+            $ref: '#/components/schemas/VaultEventType'
       tags:
         - Webhook Events
       requestBody:
@@ -2885,7 +2885,7 @@ x-webhooks:
           required: true
           description: The type of event that was triggered
           schema:
-            $ref: '#/components/schemas/EventType'
+            $ref: '#/components/schemas/VaultEventType'
       tags:
         - Webhook Events
       requestBody:
@@ -2907,7 +2907,7 @@ x-webhooks:
           required: true
           description: The type of event that was triggered
           schema:
-            $ref: '#/components/schemas/EventType'
+            $ref: '#/components/schemas/VaultEventType'
       tags:
         - Webhook Events
       requestBody:
@@ -2929,7 +2929,7 @@ x-webhooks:
           required: true
           description: The type of event that was triggered
           schema:
-            $ref: '#/components/schemas/EventType'
+            $ref: '#/components/schemas/VaultEventType'
       tags:
         - Webhook Events
       requestBody:

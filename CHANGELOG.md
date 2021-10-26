@@ -1,3 +1,9 @@
+## v8.1.0 - (2021-10-26)
+
+### SMS API
+
+- Added [Twilio](connectors/twilio) and [Plivo](connectors/plivo) messages.
+
 ## v8.0.0 - (2021-10-25)
 
 - Added [SMS API](apis/sms/reference).

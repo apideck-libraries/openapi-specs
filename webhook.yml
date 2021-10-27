@@ -791,8 +791,9 @@ components:
       example: vault
     Description:
       type: string
-      description: An optional description of what the webhook is used for.
-      example: This is a webhook. It listens to connection events
+      title: Description
+      example: A description
+      nullable: true
     Status:
       type: string
       description: The status of the webhook.
@@ -997,7 +998,7 @@ paths:
 
             const params = {
               webhook: {
-                description: 'This is a webhook. It listens to connection events',
+                description: 'A description',
                 unified_api: 'vault',
                 status: 'enabled',
                 delivery_url: 'https://example.com/my/webhook/endpoint',
@@ -1105,7 +1106,7 @@ paths:
             const params = {
               id: 'id_example',
               webhook: {
-                description: 'This is a webhook. It listens to connection events',
+                description: 'A description',
                 status: 'enabled',
                 delivery_url: 'https://example.com/my/webhook/endpoint',
                 events: ['vault.connection.created', 'vault.connection.updated']

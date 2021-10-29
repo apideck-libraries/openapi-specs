@@ -194,7 +194,7 @@ components:
         description:
           $ref: '#/components/schemas/Description'
         unified_api:
-          $ref: '#/components/schemas/UnifiedApi'
+          $ref: '#/components/schemas/UnifiedApiId'
         status:
           $ref: '#/components/schemas/Status'
         delivery_url:
@@ -375,7 +375,7 @@ components:
         description:
           $ref: '#/components/schemas/Description'
         unified_api:
-          $ref: '#/components/schemas/UnifiedApi'
+          $ref: '#/components/schemas/UnifiedApiId'
         status:
           $ref: '#/components/schemas/Status'
         delivery_url:
@@ -415,7 +415,7 @@ components:
         consumer_id:
           $ref: '#/components/schemas/ConsumerId'
         unified_api:
-          $ref: '#/components/schemas/UnifiedApi'
+          $ref: '#/components/schemas/UnifiedApiId'
         service:
           additionalProperties: false
           description: Apideck service provider associated with event.
@@ -785,10 +785,30 @@ components:
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
-    UnifiedApi:
+    UnifiedApiId:
       type: string
-      description: The unifiedApi the webhook originated from
-      example: vault
+      description: Name of Apideck Unified API
+      example: crm
+      enum:
+        - vault
+        - lead
+        - crm
+        - accounting
+        - spreadsheet
+        - email
+        - script
+        - sms
+        - team-messaging
+        - ecommerce
+        - payroll
+        - customer-support
+        - time-registration
+        - transactional-email
+        - hcm
+        - form
+        - csp
+        - email-marketing
+        - ats
     Description:
       type: string
       title: Description
@@ -999,7 +1019,7 @@ paths:
             const params = {
               webhook: {
                 description: 'A description',
-                unified_api: 'vault',
+                unified_api: 'crm',
                 status: 'enabled',
                 delivery_url: 'https://example.com/my/webhook/endpoint',
                 events: ['vault.connection.created', 'vault.connection.updated']

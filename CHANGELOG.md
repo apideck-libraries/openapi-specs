@@ -1,3 +1,8 @@
+## v8.2.0 - (2021-11-01)
+### SMS API
+
+- Added [MessageBird](connectors/messagebird) and [Vonage](connectors/vonage) messages.
+
 ## v8.1.0 - (2021-10-26)
 
 ### SMS API

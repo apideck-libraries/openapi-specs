@@ -1,4 +1,12 @@
+## v8.3.0 - (2021-11-02)
+
+### Accounting API
+
+- Added [Payments](apis/accounting/reference#tag/Payments)
+- Added `downstream_id` to [Invoices](apis/accounting/reference#tag/Invoices) allowing for single endpoint fanning out to multiple downstream endpoints for Invoices.
+
 ## v8.2.0 - (2021-11-01)
+
 ### SMS API
 
 - Added [MessageBird](connectors/messagebird) and [Vonage](connectors/vonage) messages.

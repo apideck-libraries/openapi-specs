@@ -70,6 +70,14 @@ components:
       schema:
         type: string
         nullable: true
+    jobsFilter:
+      name: filter
+      in: query
+      description: Apply filters (beta)
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/JobsFilter'
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -77,6 +85,24 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/BadRequestResponse'
+    CreateApplicantResponse:
+      description: Applicants
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateApplicantResponse'
+    GetApplicantResponse:
+      description: Applicants
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetApplicantResponse'
+    GetApplicantsResponse:
+      description: Applicants
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetApplicantsResponse'
     GetJobResponse:
       description: Jobs
       content:
@@ -216,6 +242,36 @@ components:
           type: string
           example: 111-111-1111
           nullable: true
+    Applicant:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+          description: The name of an applicant.
+          example: Elon Musk
+        first_name:
+          type: string
+          title: First name
+          example: Elon
+          nullable: true
+        last_name:
+          type: string
+          title: Last name
+          example: Musk
+          nullable: true
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+        phone_numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     BadRequestResponse:
       properties:
         status_code:
@@ -247,6 +303,47 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestbodyvalidationerror'
+    Code:
+      type: string
+      description: The code of the job.
+      example: 123-OC
+    CreateApplicantResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: zoho-crm
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applicants
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    CreatedAt:
+      type: string
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
     CustomField:
       type: object
       required:
@@ -281,6 +378,11 @@ components:
             - type: array
               items:
                 type: string
+    Description:
+      type: string
+      title: Description
+      example: A description
+      nullable: true
     Email:
       required:
         - email
@@ -305,6 +407,78 @@ components:
             - billing
             - other
           example: primary
+    GetApplicantResponse:
+      x-graphql-type-name: Applicant
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: zoho-crm
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applicants
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Applicant'
+    GetApplicantsResponse:
+      x-graphql-type-name: ApplicantList
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: zoho-crm
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applicants
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Applicant'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
     GetJobResponse:
       x-graphql-type-name: Job
       type: object
@@ -377,6 +551,10 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    Id:
+      type: string
+      example: '12345'
+      readOnly: true
     Job:
       type: object
       additionalProperties: false
@@ -395,6 +573,15 @@ components:
           $ref: '#/components/schemas/Url'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+    JobStatus:
+      type: string
+      description: The status of the job.
+      example: completed
+      enum:
+        - draft
+        - internal
+        - published
+        - completed
     Links:
       type: object
       description: Links to navigate to previous or next pages through the API
@@ -570,6 +757,11 @@ components:
         type: string
       example:
         - New
+    Title:
+      type: string
+      title: Title
+      example: CEO
+      nullable: true
     UnauthorizedResponse:
       properties:
         status_code:
@@ -662,44 +854,23 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#invalidstateerror'
-    Id:
-      type: string
-      example: '12345'
-      readOnly: true
-    Title:
-      type: string
-      title: Title
-      example: CEO
-      nullable: true
-    Description:
-      type: string
-      title: Description
-      example: A description
-      nullable: true
-    Code:
-      type: string
-      description: The code of the job.
-      example: 123-OC
-    JobStatus:
-      type: string
-      description: The status of the job.
-      example: completed
-      enum:
-        - draft
-        - internal
-        - published
-        - completed
     Url:
       type: string
       format: uri
       description: The url pointing to the job.
       pattern: '^(https?)://'
       example: 'https://downstreamconnector.com/job?id=123'
-    CreatedAt:
-      type: string
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
+    JobsFilter:
+      type: object
+      x-graphql-type-name: JobsFilter
+      example:
+        job_id: '1234'
+      properties:
+        job_id:
+          type: string
+          description: Id of the job to filter on
+          example: '1234'
+      additionalProperties: false
   securitySchemes:
     apiKey:
       type: apiKey
@@ -729,6 +900,10 @@ tags:
     description: ''
     x-apideck-model:
       $ref: '#/components/schemas/Job'
+  - name: applicants
+    description: ''
+    x-apideck-model:
+      $ref: '#/components/schemas/Applicant'
 paths:
   /ats/jobs:
     get:
@@ -826,6 +1001,186 @@ paths:
 
             try {
               const { data } = await apideck.ats.jobsOne({
+                id: 'id_example'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /ats/applicants:
+    get:
+      tags:
+        - applicants
+      x-graphql-field-name: applicants
+      operationId: applicantsAll
+      summary: List applicants
+      description: List applicants
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/jobsFilter'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetApplicantsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.ats.applicantsAll({})
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    post:
+      tags:
+        - applicants
+      operationId: applicantsAdd
+      summary: Create applicant
+      description: Create applicant
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Applicant'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateApplicantResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              applicant: {
+                name: 'Elon Musk',
+                first_name: 'Elon',
+                last_name: 'Musk',
+                emails: [
+                  {
+                    id: '123',
+                    email: 'elon@musk.com',
+                    type: 'primary'
+                  }
+                ],
+                phone_numbers: [
+                  {
+                    id: '12345',
+                    country_code: '1',
+                    area_code: '323',
+                    number: '111-111-1111',
+                    type: 'primary'
+                  }
+                ]
+              }
+            }
+
+            try {
+              const { data } = await apideck.ats.applicantsAdd(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  '/ats/applicants/{id}':
+    get:
+      tags:
+        - applicants
+      operationId: applicantsOne
+      summary: Get applicant
+      description: Get applicant
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetApplicantResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.ats.applicantsOne({
                 id: 'id_example'
               })
               console.log('API called successfully', data)

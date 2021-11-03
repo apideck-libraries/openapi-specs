@@ -1,8 +1,14 @@
+## v8.3.2 - (2021-11-03)
+
+### Accounting API
+
+- Extend [InvoiceItems](apis/accounting/reference#tag/InvoiceItems) to include `income_account` and `expense_account`.
+
 ## v8.3.1 - (2021-11-02)
 
 ### Accounting API
 
-- Ensure Customer is shared model between Inpoce and Payment
+- Ensure Customer is shared model between Invoice and Payment
 
 ## v8.3.0 - (2021-11-02)
 

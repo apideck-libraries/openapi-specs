@@ -2544,7 +2544,7 @@ components:
             unit_price:
               $ref: '#/components/schemas/UnitPrice'
             unit_of_measure:
-              $ref: '#/components/schemas/InvoiceLineItem/properties/unit_of_measure'
+              $ref: '#/components/schemas/UnitOfMeasure'
             tax_inclusive:
               type: boolean
               title: Tax inclusive
@@ -2630,11 +2630,7 @@ components:
         unit_price:
           $ref: '#/components/schemas/UnitPrice'
         unit_of_measure:
-          type: string
-          title: Unit of measure
-          description: 'Description of the unit type the item is sold as, ie: kg, hour.'
-          example: pc.
-          nullable: true
+          $ref: '#/components/schemas/UnitOfMeasure'
         discount_percentage:
           type: integer
           title: Amount
@@ -3335,7 +3331,7 @@ components:
         transaction_date:
           type: string
           title: Transaction datetime
-          description: 'Date transction was entered - YYYY:MM::DDThh:mm:ss.sTZD'
+          description: 'Date transaction was entered - YYYY:MM::DDThh:mm:ss.sTZD'
           format: date-time
           example: '2021-05-01T12:00:00.000Z'
         customer:
@@ -3359,7 +3355,7 @@ components:
               amount:
                 type: number
                 title: Amount
-                description: Amount of payment that should be attributted to this allocation
+                description: Amount of payment that should be attributed to this allocation
                 example: 49.99
     PaymentRequiredResponse:
       properties:
@@ -3683,6 +3679,12 @@ components:
       type: number
       title: Unit price
       example: 27500.5
+      nullable: true
+    UnitOfMeasure:
+      type: string
+      title: Unit of measure
+      description: 'Description of the unit type the item is sold as, ie: kg, hour.'
+      example: pc.
       nullable: true
     UnprocessableResponse:
       properties:

@@ -1,3 +1,9 @@
+## v8.3.1 - (2021-11-02)
+
+### Accounting API
+
+- Ensure Customer is shared model between Inpoce and Payment
+
 ## v8.3.0 - (2021-11-02)
 
 ### Accounting API

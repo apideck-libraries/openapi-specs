@@ -2445,11 +2445,7 @@ components:
         currency:
           $ref: '#/components/schemas/Currency'
         tax_inclusive:
-          type: boolean
-          title: Tax inclusive
-          description: Amounts include tax
-          example: true
-          nullable: true
+          $ref: '#/components/schemas/TaxInclusive'
         sub_total:
           title: Sub-total amount
           type: number
@@ -2546,11 +2542,7 @@ components:
             unit_of_measure:
               $ref: '#/components/schemas/UnitOfMeasure'
             tax_inclusive:
-              type: boolean
-              title: Tax inclusive
-              description: Indicates the unit price includes tax.
-              example: true
-              nullable: true
+              $ref: '#/components/schemas/TaxInclusive'
             tax_rate:
               $ref: '#/components/schemas/LinkedTaxRate'
         quantity:
@@ -3507,6 +3499,12 @@ components:
         type: string
       example:
         - New
+    TaxInclusive:
+      type: boolean
+      title: Tax inclusive
+      description: Amounts are including tax
+      example: true
+      nullable: true
     TaxRate:
       type: object
       additionalProperties: false

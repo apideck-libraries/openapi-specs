@@ -1,3 +1,7 @@
+## v8.4.0 - (2021-11-04)
+
+- Added [Connector API](apis/connector/reference).
+
 ## v8.3.2 - (2021-11-03)
 
 ### Accounting API

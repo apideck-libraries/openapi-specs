@@ -248,6 +248,10 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/Id'
+        position_id:
+          type: string
+          description: The PositionId the applicant applied for.
+          example: '123'
         name:
           type: string
           description: The name of an applicant.
@@ -1010,7 +1014,7 @@ paths:
   /ats/applicants:
     get:
       tags:
-        - applicants
+        - Applicants
       x-graphql-field-name: applicants
       operationId: applicantsAll
       summary: List applicants
@@ -1108,6 +1112,7 @@ paths:
 
             const params = {
               applicant: {
+                position_id: '123',
                 name: 'Elon Musk',
                 first_name: 'Elon',
                 last_name: 'Musk',
@@ -1139,7 +1144,7 @@ paths:
   '/ats/applicants/{id}':
     get:
       tags:
-        - applicants
+        - Applicants
       operationId: applicantsOne
       summary: Get applicant
       description: Get applicant

@@ -1,3 +1,9 @@
+## v8.4.1 - (2021-11-08)
+
+### File Storage API
+
+- Added sorting support to Files. To sort results, use the `sort[by]` and `sort[direction]` query parameters. Available `sort[by]` values are `name` and `updated_at`.
+
 ## v8.4.0 - (2021-11-04)
 
 - Added [Connector API](apis/connector/reference).

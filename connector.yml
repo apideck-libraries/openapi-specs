@@ -653,53 +653,55 @@ components:
         coverage:
           type: array
           items:
-            downstream_id:
-              type: string
-              description: ID of the resource in the Connector's API (downstream)
-              example: accounts
-            downstream_name:
-              type: string
-              description: Name of the resource in the Connector's API (downstream)
-              example: Accounts
-            pagination_supported:
-              type: boolean
-              description: Indicates if pagination (cursor and limit parameters) is supported on the list endpoint of the resource.
-            supported_operations:
-              type: array
-              description: List of supported operations on the resource.
-              example:
-                - all
-                - one
-                - add
-                - update
-                - delete
-              items:
+            type: object
+            properties:
+              downstream_id:
                 type: string
-            supported_filters:
-              type: array
-              description: Supported filters on the list endpoint of the resource.
-              example:
-                - name
-                - email
-              items:
+                description: ID of the resource in the Connector's API (downstream)
+                example: accounts
+              downstream_name:
                 type: string
-            supported_sort_by:
-              type: array
-              description: Supported sorting properties on the list endpoint of the resource.
-              example:
-                - updated_at
-                - created_at
-                - name
-              items:
-                type: string
-            supported_fields:
-              type: array
-              description: Supported fields.
-              items:
-                type: object
-                properties:
-                  unified_property:
-                    $ref: '#/components/schemas/UnifiedProperty'
+                description: Name of the resource in the Connector's API (downstream)
+                example: Accounts
+              pagination_supported:
+                type: boolean
+                description: Indicates if pagination (cursor and limit parameters) is supported on the list endpoint of the resource.
+              supported_operations:
+                type: array
+                description: List of supported operations on the resource.
+                example:
+                  - all
+                  - one
+                  - add
+                  - update
+                  - delete
+                items:
+                  type: string
+              supported_filters:
+                type: array
+                description: Supported filters on the list endpoint of the resource.
+                example:
+                  - name
+                  - email
+                items:
+                  type: string
+              supported_sort_by:
+                type: array
+                description: Supported sorting properties on the list endpoint of the resource.
+                example:
+                  - updated_at
+                  - created_at
+                  - name
+                items:
+                  type: string
+              supported_fields:
+                type: array
+                description: Supported fields.
+                items:
+                  type: object
+                  properties:
+                    unified_property:
+                      $ref: '#/components/schemas/UnifiedProperty'
     GetConnectorResponse:
       type: object
       required:

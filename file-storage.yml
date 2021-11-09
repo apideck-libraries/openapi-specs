@@ -410,25 +410,13 @@ components:
           type: boolean
           description: Whether the list of parent folder is complete. Some connectors only return the direct parent of a file
         updated_by:
-          type: string
-          example: '12345'
-          readOnly: true
-          nullable: true
+          $ref: '#/components/schemas/UpdatedBy'
         created_by:
-          type: string
-          example: '12345'
-          readOnly: true
-          nullable: true
+          $ref: '#/components/schemas/CreatedBy'
         updated_at:
-          type: string
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
+          $ref: '#/components/schemas/UpdatedAt'
         created_at:
-          type: string
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
+          $ref: '#/components/schemas/CreatedAt'
     FilesFilter:
       type: object
       x-graphql-type-name: FilesFilter
@@ -494,13 +482,13 @@ components:
           description: Whether the list of parent folder is complete. Some connectors only return the direct parent of a folder
           readOnly: true
         updated_by:
-          $ref: '#/components/schemas/File/properties/updated_by'
+          $ref: '#/components/schemas/UpdatedBy'
         created_by:
-          $ref: '#/components/schemas/File/properties/created_by'
+          $ref: '#/components/schemas/CreatedBy'
         updated_at:
-          $ref: '#/components/schemas/File/properties/updated_at'
+          $ref: '#/components/schemas/UpdatedAt'
         created_at:
-          $ref: '#/components/schemas/File/properties/created_at'
+          $ref: '#/components/schemas/CreatedAt'
     UpdateFolderRequest:
       type: object
       additionalProperties: false
@@ -734,6 +722,26 @@ components:
       type: string
       example: '12345'
       readOnly: true
+    CreatedAt:
+      type: string
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    CreatedBy:
+      type: string
+      example: '12345'
+      readOnly: true
+      nullable: true
+    UpdatedAt:
+      type: string
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    UpdatedBy:
+      type: string
+      example: '12345'
+      readOnly: true
+      nullable: true
     Links:
       type: object
       description: Links to navigate to previous or next pages through the API

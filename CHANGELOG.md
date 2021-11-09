@@ -1,3 +1,9 @@
+## v8.5.0 - (2021-11-09)
+
+### File Storage API
+
+- Add [Folders](apis/file-storage/reference#tag/Folders) resource.
+
 ## v8.4.1 - (2021-11-08)
 
 ### File Storage API

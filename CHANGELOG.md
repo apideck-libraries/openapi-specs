@@ -1,3 +1,13 @@
+## v8.6.0 - (2021-11-11)
+
+### ACTION REQUIRED
+
+<span className='tag'>Accounting API</span>
+
+Beta users should note the following breaking changes that may affect existing integrations implementing the `Accounting` API:
+
+- Type of [TaxRates](apis/accounting/reference#tag/TaxRates) `tax_type` has been deprecated to facilitate migrating from an enum to string using new `TaxRate.type`. Values sent via `TaxRate.type` should be aligned with any downstream connector requirements.
+
 ## v8.5.0 - (2021-11-09)
 
 ### File Storage API

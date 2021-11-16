@@ -563,6 +563,18 @@ components:
           description: The name which you used in opening your bank account.
           example: SPACEX LLC
           nullable: true
+        account_type:
+          type: string
+          title: Account Type
+          enum:
+            - bank_account
+            - credit_card
+            - other
+          description: The type of bank account.
+          example: credit_card
+          nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
     Company:
       type: object
       required:
@@ -599,9 +611,7 @@ components:
           example: BE0689615164
           nullable: true
         currency:
-          type: string
-          example: USD
-          nullable: true
+          $ref: '#/components/schemas/Currency'
         status:
           type: string
           minLength: 1
@@ -2730,9 +2740,7 @@ components:
           example: 75000
           nullable: true
         currency:
-          type: string
-          example: USD
-          nullable: true
+          $ref: '#/components/schemas/Currency'
         fax:
           type: string
           example: '+12129876543'
@@ -2803,8 +2811,10 @@ components:
           type: string
           enum:
             - accounts_receivable
+            - revenue
             - bank
             - current_asset
+            - fixed_asset
             - non_current_asset
             - other_asset
             - equity
@@ -2817,7 +2827,6 @@ components:
             - non_current_liability
             - other_liability
           example: bank
-          nullable: true
         sub_type:
           type: string
           example: CHECKING_ACCOUNT
@@ -2848,7 +2857,7 @@ components:
           $ref: '#/components/schemas/Currency'
         tax_type:
           type: string
-          example: USD
+          example: NONE
           nullable: true
         tax_rate:
           $ref: '#/components/schemas/LinkedTaxRate'
@@ -2860,6 +2869,16 @@ components:
           type: boolean
           title: Is active
           example: true
+          nullable: true
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - archived
+          x-graphql-type-name: LedgerAccountStatus
+          title: Account status
+          example: active
           nullable: true
         header:
           type: boolean
@@ -3139,9 +3158,7 @@ components:
           example: 75000
           nullable: true
         currency:
-          type: string
-          example: USD
-          nullable: true
+          $ref: '#/components/schemas/Currency'
         win_probability:
           type: number
           example: 40
@@ -3436,8 +3453,7 @@ components:
           example: Sales Pipeline
           minLength: 1
         currency:
-          type: string
-          example: USD
+          $ref: '#/components/schemas/Currency'
         archived:
           type: boolean
           example: false
@@ -3520,10 +3536,12 @@ components:
       additionalProperties: false
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          type: string
+          example: '1234'
+          nullable: true
         name:
           type: string
-          example: 15% GST on Expenses
+          example: GST on Purchases
           minLength: 1
         code:
           type: string
@@ -3534,7 +3552,7 @@ components:
         description:
           type: string
           title: Description
-          example: No ABN Withholding
+          example: Reduced rate GST Purchases
           nullable: true
         effective_tax_rate:
           type: number
@@ -3566,11 +3584,11 @@ components:
             properties:
               name:
                 type: string
-                example: City tax
+                example: GST
                 minLength: 1
               rate:
                 type: number
-                title: Tax rate
+                title: TaxRate
                 example: 10
                 nullable: true
               compound:
@@ -3601,7 +3619,7 @@ components:
           type: string
           title: Tax Type
           description: Tax type used to indicate the source of tax collected or paid
-          example: GST_VAT
+          example: NONE
           nullable: true
         original_tax_rate_id:
           type: string
@@ -3609,10 +3627,15 @@ components:
           description: ID of the original tax rate from which the new tax rate is derived. Helps to understand the relationship between corresponding tax rate entities.
           example: '12345'
           nullable: true
-        active:
-          type: boolean
-          title: Active
-          example: true
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - archived
+          x-graphql-type-name: TaxRateStatus
+          title: Tax rate status
+          example: active
           nullable: true
         row_version:
           $ref: '#/components/schemas/RowVersion'
@@ -4143,24 +4166,25 @@ paths:
 
             const params = {
               taxRate: {
-                name: '15% GST on Expenses',
+                id: '1234',
+                name: 'GST on Purchases',
                 code: 'ABN',
-                description: 'No ABN Withholding',
+                description: 'Reduced rate GST Purchases',
                 effective_tax_rate: 10,
                 total_tax_rate: 10,
                 tax_payable_account_id: '123456',
                 tax_remitted_account_id: '123456',
                 components: [
                   {
-                    name: 'City tax',
+                    name: 'GST',
                     rate: 10,
                     compound: true
                   }
                 ],
                 tax_type: 'output_gst',
-                type: 'GST_VAT',
+                type: 'NONE',
                 original_tax_rate_id: '12345',
-                active: true,
+                status: 'active',
                 row_version: '1-12345'
               }
             }
@@ -4273,24 +4297,25 @@ paths:
             const params = {
               id: 'id_example',
               taxRate: {
-                name: '15% GST on Expenses',
+                id: '1234',
+                name: 'GST on Purchases',
                 code: 'ABN',
-                description: 'No ABN Withholding',
+                description: 'Reduced rate GST Purchases',
                 effective_tax_rate: 10,
                 total_tax_rate: 10,
                 tax_payable_account_id: '123456',
                 tax_remitted_account_id: '123456',
                 components: [
                   {
-                    name: 'City tax',
+                    name: 'GST',
                     rate: 10,
                     compound: true
                   }
                 ],
                 tax_type: 'output_gst',
-                type: 'GST_VAT',
+                type: 'NONE',
                 original_tax_rate_id: '12345',
-                active: true,
+                status: 'active',
                 row_version: '1-12345'
               }
             }
@@ -4908,12 +4933,13 @@ paths:
                 opening_balance: 75000,
                 current_balance: 20000,
                 currency: 'USD',
-                tax_type: 'USD',
+                tax_type: 'NONE',
                 tax_rate: {
                   id: '123456'
                 },
                 level: 1,
                 active: true,
+                status: 'active',
                 header: true,
                 bank_account: {
                   iban: 'CH2989144532982975332',
@@ -4921,7 +4947,9 @@ paths:
                   bsb_number: '062-001',
                   bank_code: 'BNH',
                   account_number: '123456789',
-                  account_name: 'SPACEX LLC'
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  currency: 'USD'
                 },
                 parent_account: {
                   id: '12345',
@@ -5053,12 +5081,13 @@ paths:
                 opening_balance: 75000,
                 current_balance: 20000,
                 currency: 'USD',
-                tax_type: 'USD',
+                tax_type: 'NONE',
                 tax_rate: {
                   id: '123456'
                 },
                 level: 1,
                 active: true,
+                status: 'active',
                 header: true,
                 bank_account: {
                   iban: 'CH2989144532982975332',
@@ -5066,7 +5095,9 @@ paths:
                   bsb_number: '062-001',
                   bank_code: 'BNH',
                   account_number: '123456789',
-                  account_name: 'SPACEX LLC'
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  currency: 'USD'
                 },
                 parent_account: {
                   id: '12345',
@@ -5610,7 +5641,9 @@ paths:
                   bsb_number: '062-001',
                   bank_code: 'BNH',
                   account_number: '123456789',
-                  account_name: 'SPACEX LLC'
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  currency: 'USD'
                 },
                 status: 'active',
                 row_version: '1-12345'
@@ -5782,7 +5815,9 @@ paths:
                   bsb_number: '062-001',
                   bank_code: 'BNH',
                   account_number: '123456789',
-                  account_name: 'SPACEX LLC'
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  currency: 'USD'
                 },
                 status: 'active',
                 row_version: '1-12345'

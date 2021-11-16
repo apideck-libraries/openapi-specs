@@ -196,6 +196,18 @@ components:
           description: The name which you used in opening your bank account.
           example: SPACEX LLC
           nullable: true
+        account_type:
+          type: string
+          title: Account Type
+          enum:
+            - bank_account
+            - credit_card
+            - other
+          description: The type of bank account.
+          example: credit_card
+          nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
     CreateLeadResponse:
       type: object
       required:
@@ -228,6 +240,558 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
+    Currency:
+      type: string
+      title: Currency
+      description: 'Indicates the associated currency for an amount of money. Values correspond to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).'
+      example: USD
+      enum:
+        - UNKNOWN_CURRENCY
+        - AED
+        - AFN
+        - ALL
+        - AMD
+        - ANG
+        - AOA
+        - ARS
+        - AUD
+        - AWG
+        - AZN
+        - BAM
+        - BBD
+        - BDT
+        - BGN
+        - BHD
+        - BIF
+        - BMD
+        - BND
+        - BOB
+        - BOV
+        - BRL
+        - BSD
+        - BTN
+        - BWP
+        - BYR
+        - BZD
+        - CAD
+        - CDF
+        - CHE
+        - CHF
+        - CHW
+        - CLF
+        - CLP
+        - CNY
+        - COP
+        - COU
+        - CRC
+        - CUC
+        - CUP
+        - CVE
+        - CZK
+        - DJF
+        - DKK
+        - DOP
+        - DZD
+        - EGP
+        - ERN
+        - ETB
+        - EUR
+        - FJD
+        - FKP
+        - GBP
+        - GEL
+        - GHS
+        - GIP
+        - GMD
+        - GNF
+        - GTQ
+        - GYD
+        - HKD
+        - HNL
+        - HRK
+        - HTG
+        - HUF
+        - IDR
+        - ILS
+        - INR
+        - IQD
+        - IRR
+        - ISK
+        - JMD
+        - JOD
+        - JPY
+        - KES
+        - KGS
+        - KHR
+        - KMF
+        - KPW
+        - KRW
+        - KWD
+        - KYD
+        - KZT
+        - LAK
+        - LBP
+        - LKR
+        - LRD
+        - LSL
+        - LTL
+        - LVL
+        - LYD
+        - MAD
+        - MDL
+        - MGA
+        - MKD
+        - MMK
+        - MNT
+        - MOP
+        - MRO
+        - MUR
+        - MVR
+        - MWK
+        - MXN
+        - MXV
+        - MYR
+        - MZN
+        - NAD
+        - NGN
+        - NIO
+        - NOK
+        - NPR
+        - NZD
+        - OMR
+        - PAB
+        - PEN
+        - PGK
+        - PHP
+        - PKR
+        - PLN
+        - PYG
+        - QAR
+        - RON
+        - RSD
+        - RUB
+        - RWF
+        - SAR
+        - SBD
+        - SCR
+        - SDG
+        - SEK
+        - SGD
+        - SHP
+        - SLL
+        - SOS
+        - SRD
+        - SSP
+        - STD
+        - SVC
+        - SYP
+        - SZL
+        - THB
+        - TJS
+        - TMT
+        - TND
+        - TOP
+        - TRC
+        - TRY
+        - TTD
+        - TWD
+        - TZS
+        - UAH
+        - UGX
+        - USD
+        - USN
+        - USS
+        - UYI
+        - UYU
+        - UZS
+        - VEF
+        - VND
+        - VUV
+        - WST
+        - XAF
+        - XAG
+        - XAU
+        - XBA
+        - XBB
+        - XBC
+        - XBD
+        - XCD
+        - XDR
+        - XOF
+        - XPD
+        - XPF
+        - XPT
+        - XTS
+        - XXX
+        - YER
+        - ZAR
+        - ZMK
+        - ZMW
+        - BTC
+      x-enum-elements:
+        - name: UNKNOWN_CURRENCY
+          description: Unknown currency
+        - name: AED
+          description: United Arab Emirates dirham
+        - name: AFN
+          description: Afghan afghani
+        - name: ALL
+          description: Albanian lek
+        - name: AMD
+          description: Armenian dram
+        - name: ANG
+          description: Netherlands Antillean guilder
+        - name: AOA
+          description: Angolan kwanza
+        - name: ARS
+          description: Argentine peso
+        - name: AUD
+          description: Australian dollar
+        - name: AWG
+          description: Aruban florin
+        - name: AZN
+          description: Azerbaijani manat
+        - name: BAM
+          description: Bosnia and Herzegovina convertible mark
+        - name: BBD
+          description: Barbados dollar
+        - name: BDT
+          description: Bangladeshi taka
+        - name: BGN
+          description: Bulgarian lev
+        - name: BHD
+          description: Bahraini dinar
+        - name: BIF
+          description: Burundian franc
+        - name: BMD
+          description: Bermudian dollar
+        - name: BND
+          description: Brunei dollar
+        - name: BOB
+          description: Boliviano
+        - name: BOV
+          description: Bolivian Mvdol
+        - name: BRL
+          description: Brazilian real
+        - name: BSD
+          description: Bahamian dollar
+        - name: BTN
+          description: Bhutanese ngultrum
+        - name: BWP
+          description: Botswana pula
+        - name: BYR
+          description: Belarusian ruble
+        - name: BZD
+          description: Belize dollar
+        - name: CAD
+          description: Canadian dollar
+        - name: CDF
+          description: Congolese franc
+        - name: CHE
+          description: WIR Euro
+        - name: CHF
+          description: Swiss franc
+        - name: CHW
+          description: WIR Franc
+        - name: CLF
+          description: Unidad de Fomento
+        - name: CLP
+          description: Chilean peso
+        - name: CNY
+          description: Chinese yuan
+        - name: COP
+          description: Colombian peso
+        - name: COU
+          description: Unidad de Valor Real
+        - name: CRC
+          description: Costa Rican colon
+        - name: CUC
+          description: Cuban convertible peso
+        - name: CUP
+          description: Cuban peso
+        - name: CVE
+          description: Cape Verdean escudo
+        - name: CZK
+          description: Czech koruna
+        - name: DJF
+          description: Djiboutian franc
+        - name: DKK
+          description: Danish krone
+        - name: DOP
+          description: Dominican peso
+        - name: DZD
+          description: Algerian dinar
+        - name: EGP
+          description: Egyptian pound
+        - name: ERN
+          description: Eritrean nakfa
+        - name: ETB
+          description: Ethiopian birr
+        - name: EUR
+          description: Euro
+        - name: FJD
+          description: Fiji dollar
+        - name: FKP
+          description: Falkland Islands pound
+        - name: GBP
+          description: Pound sterling
+        - name: GEL
+          description: Georgian lari
+        - name: GHS
+          description: Ghanaian cedi
+        - name: GIP
+          description: Gibraltar pound
+        - name: GMD
+          description: Gambian dalasi
+        - name: GNF
+          description: Guinean franc
+        - name: GTQ
+          description: Guatemalan quetzal
+        - name: GYD
+          description: Guyanese dollar
+        - name: HKD
+          description: Hong Kong dollar
+        - name: HNL
+          description: Honduran lempira
+        - name: HRK
+          description: Croatian kuna
+        - name: HTG
+          description: Haitian gourde
+        - name: HUF
+          description: Hungarian forint
+        - name: IDR
+          description: Indonesian rupiah
+        - name: ILS
+          description: Israeli new shekel
+        - name: INR
+          description: Indian rupee
+        - name: IQD
+          description: Iraqi dinar
+        - name: IRR
+          description: Iranian rial
+        - name: ISK
+          description: Icelandic króna
+        - name: JMD
+          description: Jamaican dollar
+        - name: JOD
+          description: Jordanian dinar
+        - name: JPY
+          description: Japanese yen
+        - name: KES
+          description: Kenyan shilling
+        - name: KGS
+          description: Kyrgyzstani som
+        - name: KHR
+          description: Cambodian riel
+        - name: KMF
+          description: Comoro franc
+        - name: KPW
+          description: North Korean won
+        - name: KRW
+          description: South Korean won
+        - name: KWD
+          description: Kuwaiti dinar
+        - name: KYD
+          description: Cayman Islands dollar
+        - name: KZT
+          description: Kazakhstani tenge
+        - name: LAK
+          description: Lao kip
+        - name: LBP
+          description: Lebanese pound
+        - name: LKR
+          description: Sri Lankan rupee
+        - name: LRD
+          description: Liberian dollar
+        - name: LSL
+          description: Lesotho loti
+        - name: LTL
+          description: Lithuanian litas
+        - name: LVL
+          description: Latvian lats
+        - name: LYD
+          description: Libyan dinar
+        - name: MAD
+          description: Moroccan dirham
+        - name: MDL
+          description: Moldovan leu
+        - name: MGA
+          description: Malagasy ariary
+        - name: MKD
+          description: Macedonian denar
+        - name: MMK
+          description: Myanmar kyat
+        - name: MNT
+          description: Mongolian tögrög
+        - name: MOP
+          description: Macanese pataca
+        - name: MRO
+          description: Mauritanian ouguiya
+        - name: MUR
+          description: Mauritian rupee
+        - name: MVR
+          description: Maldivian rufiyaa
+        - name: MWK
+          description: Malawian kwacha
+        - name: MXN
+          description: Mexican peso
+        - name: MXV
+          description: Mexican Unidad de Inversion
+        - name: MYR
+          description: Malaysian ringgit
+        - name: MZN
+          description: Mozambican metical
+        - name: NAD
+          description: Namibian dollar
+        - name: NGN
+          description: Nigerian naira
+        - name: NIO
+          description: Nicaraguan córdoba
+        - name: NOK
+          description: Norwegian krone
+        - name: NPR
+          description: Nepalese rupee
+        - name: NZD
+          description: New Zealand dollar
+        - name: OMR
+          description: Omani rial
+        - name: PAB
+          description: Panamanian balboa
+        - name: PEN
+          description: Peruvian sol
+        - name: PGK
+          description: Papua New Guinean kina
+        - name: PHP
+          description: Philippine peso
+        - name: PKR
+          description: Pakistani rupee
+        - name: PLN
+          description: Polish złoty
+        - name: PYG
+          description: Paraguayan guaraní
+        - name: QAR
+          description: Qatari riyal
+        - name: RON
+          description: Romanian leu
+        - name: RSD
+          description: Serbian dinar
+        - name: RUB
+          description: Russian ruble
+        - name: RWF
+          description: Rwandan franc
+        - name: SAR
+          description: Saudi riyal
+        - name: SBD
+          description: Solomon Islands dollar
+        - name: SCR
+          description: Seychelles rupee
+        - name: SDG
+          description: Sudanese pound
+        - name: SEK
+          description: Swedish krona
+        - name: SGD
+          description: Singapore dollar
+        - name: SHP
+          description: Saint Helena pound
+        - name: SLL
+          description: Sierra Leonean leone
+        - name: SOS
+          description: Somali shilling
+        - name: SRD
+          description: Surinamese dollar
+        - name: SSP
+          description: South Sudanese pound
+        - name: STD
+          description: São Tomé and Príncipe dobra
+        - name: SVC
+          description: Salvadoran colón
+        - name: SYP
+          description: Syrian pound
+        - name: SZL
+          description: Swazi lilangeni
+        - name: THB
+          description: Thai baht
+        - name: TJS
+          description: Tajikstani somoni
+        - name: TMT
+          description: Turkmenistan manat
+        - name: TND
+          description: Tunisian dinar
+        - name: TOP
+          description: Tongan pa'anga
+        - name: TRY
+          description: Turkish lira
+        - name: TTD
+          description: Trinidad and Tobago dollar
+        - name: TWD
+          description: New Taiwan dollar
+        - name: TZS
+          description: Tanzanian shilling
+        - name: UAH
+          description: Ukrainian hryvnia
+        - name: UGX
+          description: Ugandan shilling
+        - name: USD
+          description: United States dollar
+        - name: USN
+          description: United States dollar (next day)
+        - name: USS
+          description: United States dollar (same day)
+        - name: UYI
+          description: Uruguay Peso en Unidedades Indexadas
+        - name: UYU
+          description: Uruguyan peso
+        - name: UZS
+          description: Uzbekistan som
+        - name: VEF
+          description: Venezuelan bolívar soberano
+        - name: VND
+          description: Vietnamese đồng
+        - name: VUV
+          description: Vanuatu vatu
+        - name: WST
+          description: Samoan tala
+        - name: XAF
+          description: CFA franc BEAC
+        - name: XAG
+          description: Silver
+        - name: XAU
+          description: Gold
+        - name: XBA
+          description: European Composite Unit
+        - name: XBB
+          description: European Monetary Unit
+        - name: XBC
+          description: European Unit of Account 9
+        - name: XBD
+          description: European Unit of Account 17
+        - name: XCD
+          description: East Caribbean dollar
+        - name: XDR
+          description: Special drawing rights (International Monetary Fund)
+        - name: XOF
+          description: CFA franc BCEAO
+        - name: XPD
+          description: Palladium
+        - name: XPF
+          description: CFP franc
+        - name: XPT
+          description: Platinum
+        - name: XTS
+          description: Code reserved for testing
+        - name: XXX
+          description: No currency
+        - name: YER
+          description: Yemeni rial
+        - name: ZAR
+          description: South African rand
+        - name: ZMK
+          description: Zambian kwacha
+        - name: ZMW
+          description: Zambian kwacha
+        - name: BTC
+          description: Bitcoin
+      nullable: true
     CustomField:
       type: object
       required:
@@ -461,9 +1025,7 @@ components:
           example: 75000
           nullable: true
         currency:
-          type: string
-          example: USD
-          nullable: true
+          $ref: '#/components/schemas/Currency'
         fax:
           type: string
           example: '+12129876543'

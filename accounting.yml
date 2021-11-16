@@ -2622,7 +2622,7 @@ components:
           type: string
           title: Type
           x-graphql-type-name: InvoiceLineItemType
-          example: Inventory
+          example: inventory
           enum:
             - inventory
             - service
@@ -2668,117 +2668,6 @@ components:
       title: Last name
       example: Musk
       nullable: true
-    Lead:
-      required:
-        - name
-        - company_name
-      x-pii:
-        - name
-        - email
-        - first_name
-        - last_name
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          example: '12345'
-          readOnly: true
-        name:
-          type: string
-          example: Elon Musk
-          minLength: 1
-        company_name:
-          type: string
-          example: Spacex
-          nullable: true
-        owner_id:
-          type: string
-          example: '54321'
-        company_id:
-          type: string
-          example: '2'
-          nullable: true
-        contact_id:
-          type: string
-          example: '2'
-          nullable: true
-        lead_source:
-          type: string
-          example: Cold Call
-          nullable: true
-        first_name:
-          type: string
-          example: Elon
-          nullable: true
-        last_name:
-          type: string
-          example: Musk
-          nullable: true
-        description:
-          type: string
-          example: A thinker
-          nullable: true
-        prefix:
-          type: string
-          example: Sir
-          nullable: true
-        title:
-          type: string
-          example: CEO
-          nullable: true
-        language:
-          type: string
-          example: EN
-          description: language code according to ISO 639-1. For the United States - EN
-          nullable: true
-        status:
-          type: string
-          example: New
-          nullable: true
-        monetary_amount:
-          type: number
-          example: 75000
-          nullable: true
-        currency:
-          $ref: '#/components/schemas/Currency'
-        fax:
-          type: string
-          example: '+12129876543'
-          nullable: true
-        websites:
-          type: array
-          items:
-            $ref: '#/components/schemas/Website'
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/Address'
-        social_links:
-          type: array
-          items:
-            $ref: '#/components/schemas/SocialLink'
-        phone_numbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        emails:
-          type: array
-          items:
-            $ref: '#/components/schemas/Email'
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomField'
-        tags:
-          $ref: '#/components/schemas/Tags'
-        updated_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
-        created_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
     LedgerAccount:
       type: object
       additionalProperties: true
@@ -2790,7 +2679,7 @@ components:
           example: 1-12345
         nominal_code:
           type: string
-          example: 091
+          example: N091
           nullable: true
         classification:
           type: string
@@ -3124,186 +3013,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
-    Opportunity:
-      type: object
-      required:
-        - title
-        - primary_contact_id
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          example: '12345'
-          readOnly: true
-        title:
-          type: string
-          example: New Rocket
-          minLength: 1
-        primary_contact_id:
-          type: string
-          example: '12345'
-          nullable: true
-        description:
-          type: string
-          minLength: 1
-          example: Opportunities are created for People and Companies that are interested in buying your products or services. Create Opportunities for People and Companies to move them through one of your Pipelines.
-          nullable: true
-        type:
-          type: string
-          minLength: 1
-          example: Existing Customer - Upgrade
-          nullable: true
-        monetary_amount:
-          type: number
-          example: 75000
-          nullable: true
-        currency:
-          $ref: '#/components/schemas/Currency'
-        win_probability:
-          type: number
-          example: 40
-          nullable: true
-        expected_revenue:
-          description: Expected Revenue
-          type: number
-          example: 75000
-          nullable: true
-          readOnly: true
-        close_date:
-          type: string
-          example: '2020-10-30'
-          format: date
-          nullable: true
-        loss_reason_id:
-          type: string
-          example: '12345'
-          nullable: true
-        loss_reason:
-          type: string
-          example: No budget
-          nullable: true
-        won_reason_id:
-          type: string
-          example: '12345'
-          nullable: true
-        won_reason:
-          type: string
-          example: Best pitch
-          nullable: true
-        pipeline_id:
-          type: string
-          example: '12345'
-          nullable: true
-        pipeline_stage_id:
-          type: string
-          example: '12345'
-          nullable: true
-        source_id:
-          type: string
-          example: '12345'
-          nullable: true
-        lead_id:
-          type: string
-          example: '12345'
-          nullable: true
-        lead_source:
-          description: Lead source
-          type: string
-          example: Website
-          nullable: true
-        contact_id:
-          type: string
-          example: '12345'
-          nullable: true
-        company_id:
-          type: string
-          example: '12345'
-          nullable: true
-        company_name:
-          type: string
-          example: Copper
-          nullable: true
-        owner_id:
-          type: string
-          example: '12345'
-          nullable: true
-        priority:
-          type: string
-          minLength: 1
-          example: None
-          nullable: true
-        status:
-          type: string
-          minLength: 1
-          example: Open
-          nullable: true
-        status_id:
-          type: string
-          example: '12345'
-          nullable: true
-        tags:
-          $ref: '#/components/schemas/Tags'
-        interaction_count:
-          type: number
-          example: 0
-          readOnly: true
-          nullable: true
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomField'
-        stage_last_changed_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          format: date-time
-          nullable: true
-        last_activity_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
-          nullable: true
-        deleted:
-          type: boolean
-          example: false
-          readOnly: true
-        date_stage_changed:
-          type: string
-          example: '2020-09-30T00:00:00.000Z'
-          format: date-time
-          nullable: true
-          readOnly: true
-        date_last_contacted:
-          type: string
-          example: '2020-09-30T00:00:00.000Z'
-          format: date-time
-          nullable: true
-          readOnly: true
-        date_lead_created:
-          type: string
-          example: '2020-09-30T00:00:00.000Z'
-          format: date-time
-          nullable: true
-          readOnly: true
-        updated_by:
-          type: string
-          example: '12345'
-          nullable: true
-          readOnly: true
-        created_by:
-          type: string
-          example: '12345'
-          nullable: true
-          readOnly: true
-        updated_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          format: date-time
-          readOnly: true
-        created_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          format: date-time
-          readOnly: true
     Payment:
       type: object
       required:
@@ -4500,7 +4209,7 @@ paths:
                     line_number: 1,
                     description:
                       'Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.',
-                    type: 'Inventory',
+                    type: 'inventory',
                     tax_amount: 27500,
                     total_amount: 27500,
                     quantity: 1,
@@ -4699,7 +4408,7 @@ paths:
                     line_number: 1,
                     description:
                       'Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.',
-                    type: 'Inventory',
+                    type: 'inventory',
                     tax_amount: 27500,
                     total_amount: 27500,
                     quantity: 1,
@@ -4923,7 +4632,7 @@ paths:
             const params = {
               ledgerAccount: {
                 display_id: '1-12345',
-                nominal_code: '091',
+                nominal_code: 'N091',
                 classification: 'asset',
                 type: 'bank',
                 sub_type: 'CHECKING_ACCOUNT',
@@ -5071,7 +4780,7 @@ paths:
               id: 'id_example',
               ledgerAccount: {
                 display_id: '1-12345',
-                nominal_code: '091',
+                nominal_code: 'N091',
                 classification: 'asset',
                 type: 'bank',
                 sub_type: 'CHECKING_ACCOUNT',

@@ -1,3 +1,20 @@
+## v8.7.1 - (2021-11-16)
+
+### Accounting API
+
+- added `BankAccount.account_type` and `BankAccount.currency`. Account type is an enum [`bank_account`, `credit_card`, `other`]
+
+- [LedgerAccounts](apis/accounting/reference#tag/LedgerAccounts)
+
+  - `LedgerAccount.type` enum extended to include `fixed_asset` and `revenue`
+  - `LedgerAccount.status` added to reflect downstream provider who allow different states (soft delete) [`active`, `inactive`, `archived`]
+
+- [InvoiceItems](apis/accounting/reference#tag/InvoiceItems)
+  - `InvoiceItem.purchase_details` added to reflect purchase cost detail on an item
+  - `InvoiceItem.tracked` added to indicate whether or not the item is tracked via inventory
+  - `InvoiceItem.asset_account` added to reflect the asset account that this item should be related to.
+  - `InvoiceItem.purchased` boolean added to indicate whether or not the item is available for purchase transactions
+
 ## v8.7.0 - (2021-11-15)
 
 ### File Storage API

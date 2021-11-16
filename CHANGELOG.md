@@ -1,3 +1,9 @@
+## v8.7.0 - (2021-11-15)
+
+### File Storage API
+
+- Added [File Upload](apis/file-storage/reference#operation/filesUpload).
+
 ## v8.6.0 - (2021-11-11)
 
 ### ACTION REQUIRED
@@ -12,7 +18,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### File Storage API
 
-- Add [Folders](apis/file-storage/reference#tag/Folders) resource.
+- Added [Folders](apis/file-storage/reference#tag/Folders) resource.
 
 ## v8.4.1 - (2021-11-08)
 

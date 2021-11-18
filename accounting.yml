@@ -1704,6 +1704,12 @@ components:
         - name: BTC
           description: Bitcoin
       nullable: true
+    CurrencyRate:
+      type: number
+      title: Currency Exchange Rate
+      description: Currency Exchange Rate at the time entity was recorded/generated.
+      nullable: true
+      example: 0.69
     CustomField:
       type: object
       required:
@@ -2420,6 +2426,7 @@ components:
             - credit
             - service
             - product
+            - supplier
             - other
           example: service
           nullable: true
@@ -2449,6 +2456,12 @@ components:
           description: A PO Number uniquely identifies a purchase order and is generally defined by the buyer. The buyer will match the PO number in the invoice to the Purchase Order.
           example: '90000117'
           nullable: true
+        reference:
+          type: string
+          title: Invoice reference
+          description: Optional invoice reference.
+          example: '123456'
+          nullable: true
         status:
           type: string
           title: Status
@@ -2457,13 +2470,21 @@ components:
           enum:
             - draft
             - submitted
+            - authorised
             - partially_paid
             - paid
             - void
             - credit
           nullable: true
+        invoice_sent:
+          type: boolean
+          title: Invoice Sent
+          description: Invoice sent to contact/customer
+          example: true
         currency:
           $ref: '#/components/schemas/Currency'
+        currency_rate:
+          $ref: '#/components/schemas/CurrencyRate'
         tax_inclusive:
           $ref: '#/components/schemas/TaxInclusive'
         sub_total:
@@ -2925,12 +2946,11 @@ components:
     LinkedTaxRate:
       x-graphql-type-name: LinkedTaxRate
       type: object
-      required:
-        - id
       properties:
         id:
           type: string
           example: '123456'
+          nullable: true
         code:
           type: string
           example: N-T
@@ -3057,11 +3077,7 @@ components:
         currency:
           $ref: '#/components/schemas/Currency'
         currency_rate:
-          type: number
-          title: Currency exchange Rate
-          description: Exchange rate when payment is received
-          nullable: true
-          example: 0.69
+          $ref: '#/components/schemas/CurrencyRate'
         total_amount:
           type: number
           title: Total Amount
@@ -4221,8 +4237,11 @@ paths:
                 invoice_date: '2020-09-30',
                 due_date: '2020-10-30',
                 po_number: '90000117',
+                reference: '123456',
                 status: 'submitted',
+                invoice_sent: true,
                 currency: 'USD',
+                currency_rate: 0.69,
                 tax_inclusive: true,
                 sub_total: 27500,
                 total_tax: 2500,
@@ -4420,8 +4439,11 @@ paths:
                 invoice_date: '2020-09-30',
                 due_date: '2020-10-30',
                 po_number: '90000117',
+                reference: '123456',
                 status: 'submitted',
+                invoice_sent: true,
                 currency: 'USD',
+                currency_rate: 0.69,
                 tax_inclusive: true,
                 sub_total: 27500,
                 total_tax: 2500,

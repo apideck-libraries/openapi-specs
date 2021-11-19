@@ -1,3 +1,9 @@
+## v8.8.0 - (2021-11-18)
+
+### File Storage API
+
+- Added [Shared Links](apis/file-storage/reference#tag/SharedLinks) resource.
+
 ## v8.7.1 - (2021-11-16)
 
 ### Accounting API

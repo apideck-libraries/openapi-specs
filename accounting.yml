@@ -2466,7 +2466,7 @@ components:
           type: string
           title: Status
           description: Invoice status
-          example: submitted
+          example: draft
           enum:
             - draft
             - submitted
@@ -2475,6 +2475,7 @@ components:
             - paid
             - void
             - credit
+            - deleted
           nullable: true
         invoice_sent:
           type: boolean
@@ -2525,6 +2526,12 @@ components:
           $ref: '#/components/schemas/Address'
         shipping_address:
           $ref: '#/components/schemas/Address'
+        template_id:
+          type: string
+          title: Template
+          description: Optional invoice template
+          example: '123456'
+          nullable: true
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -4238,7 +4245,7 @@ paths:
                 due_date: '2020-10-30',
                 po_number: '90000117',
                 reference: '123456',
-                status: 'submitted',
+                status: 'draft',
                 invoice_sent: true,
                 currency: 'USD',
                 currency_rate: 0.69,
@@ -4319,6 +4326,7 @@ paths:
                   email: 'elon@musk.com',
                   website: 'https://elonmusk.com'
                 },
+                template_id: '123456',
                 row_version: '1-12345'
               }
             }
@@ -4440,7 +4448,7 @@ paths:
                 due_date: '2020-10-30',
                 po_number: '90000117',
                 reference: '123456',
-                status: 'submitted',
+                status: 'draft',
                 invoice_sent: true,
                 currency: 'USD',
                 currency_rate: 0.69,
@@ -4521,6 +4529,7 @@ paths:
                   email: 'elon@musk.com',
                   website: 'https://elonmusk.com'
                 },
+                template_id: '123456',
                 row_version: '1-12345'
               }
             }

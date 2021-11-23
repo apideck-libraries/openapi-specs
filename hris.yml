@@ -582,10 +582,7 @@ components:
           example: Mr
           nullable: true
         title:
-          type: string
-          title: Title
-          example: CEO
-          nullable: true
+          $ref: '#/components/schemas/Title'
         marital_status:
           title: Marital status
           type: string
@@ -688,7 +685,7 @@ components:
               employee_id:
                 $ref: '#/components/schemas/Id'
               title:
-                $ref: '#/components/schemas/Employee/properties/title'
+                $ref: '#/components/schemas/Title'
               compensation_rate:
                 type: string
                 title: The compensation rate of the job.
@@ -769,6 +766,11 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+    Title:
+      type: string
+      title: Title
+      example: CEO
+      nullable: true
     EmployeeNumber:
       type: string
       title: Employee number

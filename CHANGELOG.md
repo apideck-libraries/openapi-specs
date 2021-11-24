@@ -1,3 +1,30 @@
+## v8.8.1 - (2021-11-24)
+
+### Accounting API
+
+- [Payments](apis/accounting/reference#tag/Payments)
+  - `Payment.reconciled` added to reflect reconciliation state
+  - `Payment.status` enum added [`authorised`, `paid`, `voided`, `deleted`]
+  - `Payment.type` enum added
+    [
+    `accounts_receivable`,
+    `accounts_payable`,
+    `accounts_receivable_credit`,
+    `accounts_payable_credit`,
+    `accounts_receivable_overpayment`,
+    `accounts_payable_overpayment`,
+    `accounts_receivable_prepayment`,
+    `accounts_payable_prepayment`
+    ]
+
+### ACTION REQUIRED
+
+<span className='tag'>Accounting API</span>
+
+Beta users should note the following breaking changes that may affect existing integrations implementing the `Accounting` API:
+
+- [Payments](apis/accounting/reference#tag/Payments) `accounts_receivable_account_type` and `accounts_receivable_account_id` have been deprecated in favour of a single `account` object.
+
 ## v8.8.0 - (2021-11-18)
 
 ### File Storage API

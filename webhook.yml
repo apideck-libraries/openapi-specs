@@ -165,23 +165,50 @@ components:
           schema:
             $ref: '#/components/schemas/UpdateWebhookResponse'
   schemas:
-    CreateWebhookResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - data
+    ApplicationId:
+      type: string
+      description: ID of your Apideck Application
+      example: '1111'
+    BadRequestResponse:
       properties:
         status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
           type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          $ref: '#/components/schemas/Webhook'
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Bad Request
+        type_name:
+          type: string
+          description: The type of error returned
+          example: RequestHeadersValidationError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+              example: Missing property foobar
+            - type: object
+              example:
+                missing:
+                  - foobar: required
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#requestbodyvalidationerror'
+    ConsumerId:
+      type: string
+      example: test_consumer_id
+      description: Consumer identifier
+    CreatedAt:
+      type: string
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
     CreateWebhookRequest:
       type: object
       additionalProperties: false
@@ -208,6 +235,23 @@ components:
             - vault.connection.updated
           items:
             $ref: '#/components/schemas/WebhookEventType'
+    CreateWebhookResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Webhook'
     DeleteWebhookResponse:
       type: object
       required:
@@ -225,6 +269,55 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+    DeliveryUrl:
+      type: string
+      format: uri
+      description: The delivery url of the webhook endpoint.
+      pattern: '^(https?)://'
+      example: 'https://example.com/my/webhook/endpoint'
+    Description:
+      type: string
+      title: Description
+      example: A description
+      nullable: true
+    ExecuteBaseUrl:
+      type: string
+      format: uri
+      description: The Unify Base URL events from connectors will be sent to after service id is appended.
+      pattern: '^(https?)://'
+      readOnly: true
+      example: 'https://unify.apideck.com/webhook/webhooks/1234/execute'
+    ExecuteWebhookEventRequest:
+      type: object
+      additionalProperties: true
+    ExecuteWebhookEventsRequest:
+      type: array
+      items:
+        type: object
+        additionalProperties: true
+    ExecuteWebhookResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        request_id:
+          type: string
+          description: UUID of the request received
+          example: c6af9ac6-7b61-11e6-9a41-93e8deadbeef
+        timestamp:
+          type: string
+          description: ISO Dtae time webhook event was received
+          example: '2021-10-01T08:26:28.039Z'
     GetWebhookEventLogsResponse:
       x-graphql-type-name: EventLogList
       type: object
@@ -291,23 +384,263 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
-    UpdateWebhookResponse:
+    Links:
       type: object
-      required:
-        - status_code
-        - status
-        - data
+      description: Links to navigate to previous or next pages through the API
+      properties:
+        previous:
+          type: string
+          description: Link to navigate to the previous page through the API
+          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjE%3D'
+          nullable: true
+        current:
+          type: string
+          description: Link to navigate to the current page through the API
+          example: 'https://unify.apideck.com/crm/companies'
+        next:
+          type: string
+          description: Link to navigate to the previous page through the API
+          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM'
+          nullable: true
+    Meta:
+      type: object
+      description: Response metadata
+      properties:
+        items_on_page:
+          type: integer
+          description: Number of items returned in the data property of the response
+          example: 50
+        cursors:
+          type: object
+          description: Cursors to navigate to previous or next pages through the API
+          properties:
+            previous:
+              type: string
+              description: Cursor to navigate to the previous page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjE=
+              nullable: true
+            current:
+              type: string
+              description: Cursor to navigate to the current page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjI=
+              nullable: true
+            next:
+              type: string
+              description: Cursor to navigate to the next page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjM=
+              nullable: true
+    NotFoundResponse:
       properties:
         status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
+          type: number
+          description: HTTP status code
+          example: 404
+        error:
           type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          $ref: '#/components/schemas/Webhook'
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Not Found
+        type_name:
+          type: string
+          description: The type of error returned
+          example: EntityNotFoundError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unknown Widget
+        detail:
+          anyOf:
+            - type: string
+              example: "Could not find widget with id: '123'"
+            - type: object
+              example:
+                not_found:
+                  entity: widget
+                  id: '123'
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#entitynotfounderror'
+    NotImplementedResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 501
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Not Implemented
+        type_name:
+          type: string
+          description: The type of error returned
+          example: MappingError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unmapped Attribute
+        detail:
+          anyOf:
+            - type: string
+              example: Failed to retrieve Widget tokenUrl from 'components.securitySchemes.oauth2.flows'
+            - type: object
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#mappingerror'
+    PaymentRequiredResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 402
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Payment Required
+        type_name:
+          type: string
+          description: The type of error returned
+          example: RequestLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Request Limit Reached
+        detail:
+          type: string
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+          example: You have reached your limit of 2000
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#requestlimiterror'
+    ServiceId:
+      type: string
+      description: Service provider identifier
+      example: close
+    Status:
+      type: string
+      x-graphql-type-name: WebhookStatus
+      description: The status of the webhook.
+      example: enabled
+      enum:
+        - enabled
+        - disabled
+    UnauthorizedResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 401
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Unauthorized
+        type_name:
+          type: string
+          description: The type of error returned
+          example: UnauthorizedError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unauthorized Request
+        detail:
+          type: string
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+          example: Failed to generate valid JWT Session. Verify applicationId is correct
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#unauthorizederror'
+    UnexpectedErrorResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Bad Request
+        type_name:
+          type: string
+          description: The type of error returned
+          example: RequestHeadersValidationError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+              example: 'Missing Header: x-apideck-consumer-id'
+            - type: object
+              example:
+                missing:
+                  - x-apideck-consumer-id: required
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#unauthorizederror'
+    UnifiedApiId:
+      description: Name of Apideck Unified API
+      enum:
+        - vault
+        - lead
+        - crm
+        - accounting
+        - file-storage
+        - spreadsheet
+        - email
+        - script
+        - sms
+        - team-messaging
+        - ecommerce
+        - payroll
+        - customer-support
+        - time-registration
+        - transactional-email
+        - hcm
+        - form
+        - csp
+        - email-marketing
+        - ats
+        - hris
+      example: crm
+      type: string
+    UnprocessableResponse:
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 422
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Unprocessable Entity
+        type_name:
+          type: string
+          description: The type of error returned
+          example: InvalidStateError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid State
+        detail:
+          type: string
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+          example: State did not include unified_api
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: 'https://developers.apideck.com/errors#invalidstateerror'
+    UpdatedAt:
+      type: string
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
     UpdateWebhookRequest:
       type: object
       additionalProperties: false
@@ -327,15 +660,7 @@ components:
             - vault.connection.updated
           items:
             $ref: '#/components/schemas/WebhookEventType'
-    ExecuteWebhookEventRequest:
-      type: object
-      additionalProperties: true
-    ExecuteWebhookEventsRequest:
-      type: array
-      items:
-        type: object
-        additionalProperties: true
-    ExecuteWebhookResponse:
+    UpdateWebhookResponse:
       type: object
       required:
         - status_code
@@ -350,14 +675,8 @@ components:
           type: string
           description: HTTP Response Status
           example: OK
-        request_id:
-          type: string
-          description: UUID of the request received
-          example: c6af9ac6-7b61-11e6-9a41-93e8deadbeef
-        timestamp:
-          type: string
-          description: ISO Dtae time webhook event was received
-          example: '2021-10-01T08:26:28.039Z'
+        data:
+          $ref: '#/components/schemas/Webhook'
     Webhook:
       type: object
       additionalProperties: false
@@ -395,6 +714,38 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+    WebhookEvent:
+      type: object
+      x-sdk-exclude: true
+      properties:
+        event_id:
+          type: string
+          description: Unique reference to this request event
+          example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+        service_id:
+          $ref: '#/components/schemas/ServiceId'
+        event_type:
+          $ref: '#/components/schemas/WebhookEventType'
+        entity_id:
+          type: string
+          description: The service provider's ID of the entity that triggered this event
+          example: 123456ASDF
+        entity_type:
+          type: string
+          description: The type entity that triggered this event
+          example: Company
+        entity_url:
+          type: string
+          description: The url to retrieve entity detail.
+          example: 'https://unify.apideck.com/crm/contacts/123456'
+        execution_attempt:
+          type: number
+          description: The current count this request event has been attempted
+          example: 2
+        occurred_at:
+          type: string
+          description: ISO Datetime for when the original event occurred
+          example: '2021-10-01T03:14:55.419Z'
     WebhookEventLog:
       type: object
       additionalProperties: false
@@ -518,356 +869,6 @@ components:
           type: string
           nullable: true
           example: vault.connection.callable
-    Meta:
-      type: object
-      description: Response metadata
-      properties:
-        items_on_page:
-          type: integer
-          description: Number of items returned in the data property of the response
-          example: 50
-        cursors:
-          type: object
-          description: Cursors to navigate to previous or next pages through the API
-          properties:
-            previous:
-              type: string
-              description: Cursor to navigate to the previous page of results through the API
-              example: em9oby1jcm06OnBhZ2U6OjE=
-              nullable: true
-            current:
-              type: string
-              description: Cursor to navigate to the current page of results through the API
-              example: em9oby1jcm06OnBhZ2U6OjI=
-              nullable: true
-            next:
-              type: string
-              description: Cursor to navigate to the next page of results through the API
-              example: em9oby1jcm06OnBhZ2U6OjM=
-              nullable: true
-    Links:
-      type: object
-      description: Links to navigate to previous or next pages through the API
-      properties:
-        previous:
-          type: string
-          description: Link to navigate to the previous page through the API
-          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjE%3D'
-          nullable: true
-        current:
-          type: string
-          description: Link to navigate to the current page through the API
-          example: 'https://unify.apideck.com/crm/companies'
-        next:
-          type: string
-          description: Link to navigate to the previous page through the API
-          example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM'
-          nullable: true
-    NotFoundResponse:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 404
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Not Found
-        type_name:
-          type: string
-          description: The type of error returned
-          example: EntityNotFoundError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Unknown Widget
-        detail:
-          anyOf:
-            - type: string
-              example: "Could not find widget with id: '123'"
-            - type: object
-              example:
-                not_found:
-                  entity: widget
-                  id: '123'
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#entitynotfounderror'
-    UnauthorizedResponse:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 401
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Unauthorized
-        type_name:
-          type: string
-          description: The type of error returned
-          example: UnauthorizedError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Unauthorized Request
-        detail:
-          type: string
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-          example: Failed to generate valid JWT Session. Verify applicationId is correct
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#unauthorizederror'
-    UnprocessableResponse:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 422
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Unprocessable Entity
-        type_name:
-          type: string
-          description: The type of error returned
-          example: InvalidStateError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid State
-        detail:
-          type: string
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-          example: State did not include unified_api
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#invalidstateerror'
-    BadRequestResponse:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 400
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Bad Request
-        type_name:
-          type: string
-          description: The type of error returned
-          example: RequestHeadersValidationError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid Params
-        detail:
-          anyOf:
-            - type: string
-              example: Missing property foobar
-            - type: object
-              example:
-                missing:
-                  - foobar: required
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#requestbodyvalidationerror'
-    PaymentRequiredResponse:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 402
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Payment Required
-        type_name:
-          type: string
-          description: The type of error returned
-          example: RequestLimitError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Request Limit Reached
-        detail:
-          type: string
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-          example: You have reached your limit of 2000
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#requestlimiterror'
-    NotImplementedResponse:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 501
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Not Implemented
-        type_name:
-          type: string
-          description: The type of error returned
-          example: MappingError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Unmapped Attribute
-        detail:
-          anyOf:
-            - type: string
-              example: Failed to retrieve Widget tokenUrl from 'components.securitySchemes.oauth2.flows'
-            - type: object
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#mappingerror'
-    UnexpectedErrorResponse:
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 400
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Bad Request
-        type_name:
-          type: string
-          description: The type of error returned
-          example: RequestHeadersValidationError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid Params
-        detail:
-          anyOf:
-            - type: string
-              example: 'Missing Header: x-apideck-consumer-id'
-            - type: object
-              example:
-                missing:
-                  - x-apideck-consumer-id: required
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: 'https://developers.apideck.com/errors#unauthorizederror'
-    ApplicationId:
-      type: string
-      description: ID of your Apideck Application
-      example: '1111'
-    ServiceId:
-      type: string
-      description: Service provider identifier
-      example: close
-    ConsumerId:
-      type: string
-      example: test_consumer_id
-      description: Consumer identifier
-    CreatedAt:
-      type: string
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-    UpdatedAt:
-      type: string
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-    UnifiedApiId:
-      description: Name of Apideck Unified API
-      enum:
-        - vault
-        - lead
-        - crm
-        - accounting
-        - file-storage
-        - spreadsheet
-        - email
-        - script
-        - sms
-        - team-messaging
-        - ecommerce
-        - payroll
-        - customer-support
-        - time-registration
-        - transactional-email
-        - hcm
-        - form
-        - csp
-        - email-marketing
-        - ats
-        - hris
-      example: crm
-      type: string
-    Description:
-      type: string
-      title: Description
-      example: A description
-      nullable: true
-    Status:
-      type: string
-      description: The status of the webhook.
-      example: enabled
-      enum:
-        - enabled
-        - disabled
-    DeliveryUrl:
-      type: string
-      format: uri
-      description: The delivery url of the webhook endpoint.
-      pattern: '^(https?)://'
-      example: 'https://example.com/my/webhook/endpoint'
-    ExecuteBaseUrl:
-      type: string
-      format: uri
-      description: The Unify Base URL events from connectors will be sent to after service id is appended.
-      pattern: '^(https?)://'
-      readOnly: true
-      example: 'https://unify.apideck.com/webhook/webhooks/1234/execute'
-    WebhookEvent:
-      type: object
-      x-sdk-exclude: true
-      properties:
-        event_id:
-          type: string
-          description: Unique reference to this request event
-          example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-        service_id:
-          $ref: '#/components/schemas/ServiceId'
-        event_type:
-          $ref: '#/components/schemas/WebhookEventType'
-        entity_id:
-          type: string
-          description: The service provider's ID of the entity that triggered this event
-          example: 123456ASDF
-        entity_type:
-          type: string
-          description: The type entity that triggered this event
-          example: Company
-        entity_url:
-          type: string
-          description: The url to retrieve entity detail.
-          example: 'https://unify.apideck.com/crm/contacts/123456'
-        execution_attempt:
-          type: number
-          description: The current count this request event has been attempted
-          example: 2
-        occurred_at:
-          type: string
-          description: ISO Datetime for when the original event occurred
-          example: '2021-10-01T03:14:55.419Z'
     WebhookEventType:
       type: string
       enum:

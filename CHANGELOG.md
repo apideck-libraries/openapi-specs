@@ -4,7 +4,7 @@
 
 - [Payments](apis/accounting/reference#tag/Payments)
   - `Payment.reconciled` added to reflect reconciliation state
-  - `Payment.status` enum added [`authorised`, `paid`, `voided`, `deleted`]
+  - `Payment.status` enum added to reflect payment state [`authorised`, `paid`, `voided`, `deleted`]
   - `Payment.type` enum added
     [
     `accounts_receivable`,

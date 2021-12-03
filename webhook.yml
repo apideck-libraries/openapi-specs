@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 8.8.1
+  version: 8.9.0
   title: Webhook API
   description: Welcome to the Webhook API.
   contact:
@@ -206,6 +206,7 @@ components:
       description: Consumer identifier
     CreatedAt:
       type: string
+      title: Created at (timestamp)
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
@@ -638,6 +639,7 @@ components:
           example: 'https://developers.apideck.com/errors#invalidstateerror'
     UpdatedAt:
       type: string
+      title: Updated at (timestamp)
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
@@ -744,6 +746,7 @@ components:
           example: 2
         occurred_at:
           type: string
+          format: date-time
           description: ISO Datetime for when the original event occurred
           example: '2021-10-01T03:14:55.419Z'
     WebhookEventLog:
@@ -870,7 +873,6 @@ components:
           nullable: true
           example: vault.connection.callable
     WebhookEventType:
-      type: string
       enum:
         - '*'
         - crm.activity.created
@@ -898,7 +900,14 @@ components:
         - vault.connection.updated
         - vault.connection.deleted
         - vault.connection.callable
+        - ats.job.created
+        - ats.job.updated
+        - ats.job.deleted
+        - ats.applicant.created
+        - ats.applicant.updated
+        - ats.applicant.deleted
       example: crm.company.created
+      type: string
   securitySchemes:
     apiKey:
       type: apiKey

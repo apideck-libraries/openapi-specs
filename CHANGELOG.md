@@ -1,3 +1,9 @@
+## v8.9.0 - (2021-12-03)
+
+### ATS API
+
+- Added [Lever](connectors/lever) connector.
+
 ## v8.8.1 - (2021-11-24)
 
 ### Accounting API

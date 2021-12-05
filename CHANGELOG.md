@@ -1,8 +1,14 @@
 ## v8.10.0 - (2021-12-05)
 
+### File Storage API
+
+- Added [Upload Sessions](apis/file-storage/reference#tag/UploadSessions) resource.
+- Added File Upload to the [Google Drive](connectors/google-drive) connector.
+
 ### HRIS API
 
 - Added [BambooHR](connectors/bamboohr) connector.
+
 
 ## v8.9.0 - (2021-12-03)
 

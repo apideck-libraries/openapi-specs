@@ -79,6 +79,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateFileRequest'
+    partNumber:
+      name: part_number
+      in: query
+      description: Part number of the file part being uploaded.
+      required: true
+      schema:
+        type: number
+        minimum: 0
+        maximum: 10000
     filesFilter:
       name: filter
       in: query
@@ -120,6 +129,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateSharedLinkResponse'
+    CreateUploadSessionResponse:
+      description: UploadSessions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateUploadSessionResponse'
     DeleteFileResponse:
       description: Files
       content:
@@ -138,6 +153,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteSharedLinkResponse'
+    DeleteUploadSessionResponse:
+      description: UploadSessions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteUploadSessionResponse'
     GetFileDownloadResponse:
       description: File Download
       content:
@@ -146,7 +167,7 @@ components:
             type: string
             format: binary
     GetFileResponse:
-      description: Files
+      description: File
       content:
         application/json:
           schema:
@@ -181,6 +202,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/GetSharedLinksResponse'
+    GetUploadSessionResponse:
+      description: UploadSessions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetUploadSessionResponse'
     NotFoundResponse:
       description: The specified resource was not found
       content:
@@ -235,6 +262,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateSharedLinkResponse'
+    UpdateUploadSessionResponse:
+      description: UploadSessions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateUploadSessionResponse'
   schemas:
     BadRequestResponse:
       properties:
@@ -280,9 +313,7 @@ components:
           description: The name of the folder.
           example: Documents
         parent_folder_id:
-          type: string
-          description: The parent folder to copy the folder to.
-          example: '1234'
+          $ref: '#/components/schemas/ParentFolderId'
     CreateFileRequest:
       type: object
       additionalProperties: false
@@ -290,20 +321,16 @@ components:
         - name
         - parent_folder_id
       properties:
-        id:
-          $ref: '#/components/schemas/Id'
         name:
           type: string
           description: The name of the file.
           example: Documents
+        parent_folder_id:
+          $ref: '#/components/schemas/ParentFolderId'
         description:
           type: string
           description: Optional description of the file.
           example: My Personal Documents
-        parent_folder_id:
-          type: string
-          description: The parent folder to create the new file within.
-          example: '1234'
     CreateFileResponse:
       type: object
       required:
@@ -354,9 +381,7 @@ components:
           description: Optional description of the folder.
           example: My Personal Documents
         parent_folder_id:
-          type: string
-          description: The parent folder to create the new folder within.
-          example: '1234'
+          $ref: '#/components/schemas/ParentFolderId'
     CreateFolderResponse:
       type: object
       required:
@@ -421,6 +446,54 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
+    CreateUploadSessionResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: dropbox
+        resource:
+          type: string
+          description: Unified API resource name
+          example: UploadSessions
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    CreateUploadSessionRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - parent_folder_id
+        - size
+      properties:
+        name:
+          type: string
+          description: The name of the file.
+          example: Documents
+        parent_folder_id:
+          $ref: '#/components/schemas/ParentFolderId'
+        size:
+          $ref: '#/components/schemas/FileSize'
     CreatedAt:
       type: string
       title: Created at (timestamp)
@@ -529,6 +602,38 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
+    DeleteUploadSessionResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: dropbox
+        resource:
+          type: string
+          description: Unified API resource name
+          example: UploadSessions
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     File:
       type: object
       additionalProperties: false
@@ -561,9 +666,7 @@ components:
           type: boolean
           description: Whether the current user can download this file
         size:
-          type: integer
-          description: The size of the file in bytes
-          example: 1810673
+          $ref: '#/components/schemas/FileSize'
         owner:
           $ref: '#/components/schemas/Owner'
         parent_folders:
@@ -592,6 +695,15 @@ components:
       description: 'The type of resource. Could be file, folder or url'
       readOnly: true
       example: file
+    FileSize:
+      x-graphql-type-name: FileSize
+      type: integer
+      description: The size of the file in bytes
+      example: 1810673
+    ParentFolderId:
+      type: string
+      description: The parent folder to create the new file within.
+      example: '1234'
     FilesFilter:
       type: object
       x-graphql-type-name: FilesFilter
@@ -900,6 +1012,39 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetUploadSessionResponse:
+      x-graphql-type-name: UploadSession
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: dropbox
+        resource:
+          type: string
+          description: Unified API resource name
+          example: UploadSessions
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UploadSession'
     Id:
       type: string
       example: '12345'
@@ -1103,10 +1248,7 @@ components:
           nullable: true
           description: Optional password for the shared link.
         expires_at:
-          type: string
-          format: date-time
-          example: '2022-09-30T07:43:32.000Z'
-          description: Optional datetime when the shared link expires.
+          $ref: '#/components/schemas/ExpiresAt'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
@@ -1273,9 +1415,7 @@ components:
           description: Optional description of the folder.
           example: My Personal Documents
         parent_folder_id:
-          type: string
-          description: The parent folder to create the new folder within.
-          example: '1234'
+          $ref: '#/components/schemas/ParentFolderId'
     UpdateFolderResponse:
       type: object
       required:
@@ -1340,17 +1480,82 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
+    UpdateUploadSessionResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: dropbox
+        resource:
+          type: string
+          description: Unified API resource name
+          example: UploadSessions
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     UpdatedAt:
       type: string
       title: Updated at (timestamp)
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
+    ExpiresAt:
+      type: string
+      format: date-time
+      example: '2022-09-30T07:43:32.000Z'
+      readOnly: true
     UpdatedBy:
       type: string
       example: '12345'
       readOnly: true
       nullable: true
+    UploadSession:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        success:
+          type: boolean
+          description: Indicates if the upload session was completed successfully.
+          example: true
+          readOnly: true
+        part_size:
+          type: number
+          description: Size in bytes of each part of the file that you will upload. Uploaded parts need to be this size for the upload to be successful.
+          example: 1000000
+          readOnly: true
+        parallel_upload_supported:
+          type: boolean
+          description: Indicates if parts of the file can uploaded in parallel.
+          example: true
+          readOnly: true
+        uploaded_byte_range:
+          type: string
+          description: The range of bytes that was successfully uploaded.
+          example: 0-42
+          readOnly: true
+        expires_at:
+          $ref: '#/components/schemas/ExpiresAt'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -1388,6 +1593,10 @@ tags:
     description: ''
     x-apideck-model:
       $ref: '#/components/schemas/SharedLink'
+  - name: Upload Sessions
+    description: ''
+    x-apideck-model:
+      $ref: '#/components/schemas/UploadSession'
 paths:
   /file-storage/files:
     get:
@@ -1447,7 +1656,7 @@ paths:
         - Files
       operationId: filesUpload
       summary: Upload file
-      description: Upload file
+      description: Upload file (max 4MB). Please use the Upload Session API to upload bigger files.
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/metadata'
@@ -2099,8 +2308,7 @@ paths:
                 download_url: 'https://www.box.com/shared/static/rh935iit6ewrmw0unyul.jpeg',
                 target_id: 'string',
                 scope: 'https://www.box.com/s/vspke7y05sb214wjokpk',
-                password: 'string',
-                expires_at: '2022-09-30T07:43:32.000Z'
+                password: 'string'
               }
             }
 
@@ -2215,8 +2423,7 @@ paths:
                 download_url: 'https://www.box.com/shared/static/rh935iit6ewrmw0unyul.jpeg',
                 target_id: 'string',
                 scope: 'https://www.box.com/s/vspke7y05sb214wjokpk',
-                password: 'string',
-                expires_at: '2022-09-30T07:43:32.000Z'
+                password: 'string'
               }
             }
 
@@ -2272,6 +2479,287 @@ paths:
               const { data } = await apideck.fileStorage.sharedLinksDelete({
                 id: 'id_example'
               })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /file-storage/upload-sessions:
+    post:
+      tags:
+        - Upload Sessions
+      operationId: uploadSessionsAdd
+      summary: Start Upload Session
+      description: Start Upload Session
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUploadSessionRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateUploadSessionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: fileStorage
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              uploadSession: {
+                name: 'Documents',
+                parent_folder_id: '1234',
+                size: 1810673
+              }
+            }
+
+            try {
+              const { data } = await apideck.fileStorage.uploadSessionsAdd(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  '/file-storage/upload-sessions/{id}':
+    get:
+      tags:
+        - Upload Sessions
+      operationId: uploadSessionsOne
+      summary: Get Upload Session
+      description: Get Upload Session
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetUploadSessionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: fileStorage
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.fileStorage.uploadSessionsOne({
+                id: 'id_example'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    put:
+      tags:
+        - Upload Sessions
+      operationId: uploadSessionsUpload
+      summary: Upload part of file to Upload Session
+      description: Upload part of file to Upload Session
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/partNumber'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          '*/*':
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateUploadSessionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: fileStorage
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.fileStorage.uploadSessionsUpload({
+                id: 'id_example',
+                partNumber: undefined
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    delete:
+      tags:
+        - Upload Sessions
+      operationId: uploadSessionsDelete
+      summary: Abort Upload Session
+      description: Abort Upload Session
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteUploadSessionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: fileStorage
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.fileStorage.uploadSessionsDelete({
+                id: 'id_example'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  '/file-storage/upload-sessions/{id}/finish':
+    post:
+      tags:
+        - Upload Sessions
+      operationId: uploadSessionsFinish
+      summary: Finish Upload Session
+      description: Finish Upload Session
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {}
+      responses:
+        '201':
+          $ref: '#/components/responses/GetFileResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: fileStorage
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              id: 'id_example',
+              uploadSessionsFinish: null
+            }
+
+            try {
+              const { data } = await apideck.fileStorage.uploadSessionsFinish(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

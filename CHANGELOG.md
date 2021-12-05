@@ -1,3 +1,9 @@
+## v8.10.0 - (2021-12-05)
+
+### HRIS API
+
+- Added [BambooHR](connectors/bamboohr) connector.
+
 ## v8.9.0 - (2021-12-03)
 
 ### ATS API

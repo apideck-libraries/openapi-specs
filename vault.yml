@@ -765,9 +765,14 @@ components:
           type: object
           required:
             - session_uri
+            - session_token
           properties:
             session_uri:
               example: 'http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj'
+              readOnly: true
+              type: string
+            session_token:
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj
               readOnly: true
               type: string
           additionalProperties: false
@@ -1356,6 +1361,11 @@ components:
               default: false
               type: boolean
               description: 'Configure [Vault](/apis/vault/reference#section/Get-Started) to show the suggestions page. Defaults to `true`.'
+            auto_redirect:
+              title: Auto-redirect
+              default: false
+              type: boolean
+              description: Automatically redirect to redirect uri after the connection has been configured as callable. Defaults to `false`.
           type: object
           x-graphql-type-name: SessionSettings
         theme:
@@ -2626,7 +2636,8 @@ paths:
                   isolation_mode: false,
                   session_length: '30m',
                   show_logs: true,
-                  show_suggestions: false
+                  show_suggestions: false,
+                  auto_redirect: false
                 },
                 theme: {
                   favicon: 'https://res.cloudinary.com/apideck/icons/intercom',

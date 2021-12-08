@@ -4,6 +4,10 @@
 
   - `LedgerAccount.type` enum extended to include `other_income`
 
+- [AccountingCustomer](apis/accounting/reference#tag/AccountingCustomer)
+
+  - `AccountingCustomer` extended with `websites`, `title`, `display_name`, `middle_name`, `last_name`, and `suffix` properties
+
 ## v8.10.0 - (2021-12-05)
 
 ### File Storage API

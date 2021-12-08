@@ -317,12 +317,26 @@ components:
           title: Display ID
           example: EMP00101
           nullable: true
+        display_name:
+          type: string
+          title: Display Name
+          example: Bill's Windsurf Shop
+          nullable: true
         company_name:
           $ref: '#/components/schemas/CompanyName'
+        title:
+          type: string
+          title: Job title
+          example: CEO
+          nullable: true
         first_name:
           $ref: '#/components/schemas/FirstName'
+        middle_name:
+          $ref: '#/components/schemas/MiddleName'
         last_name:
           $ref: '#/components/schemas/LastName'
+        suffix:
+          $ref: '#/components/schemas/Suffix'
         individual:
           type: boolean
           title: Is individual
@@ -345,6 +359,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Email'
+        websites:
+          type: array
+          items:
+            $ref: '#/components/schemas/Website'
         tax_rate:
           $ref: '#/components/schemas/LinkedTaxRate'
         tax_number:
@@ -3017,6 +3035,11 @@ components:
               description: Cursor to navigate to the next page of results through the API
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
+    MiddleName:
+      type: string
+      title: Middle name
+      example: D.
+      nullable: true
     NotFoundResponse:
       properties:
         status_code:
@@ -3341,6 +3364,11 @@ components:
           type: string
           example: twitter
           nullable: true
+    Suffix:
+      type: string
+      title: Suffix
+      example: Jr.
+      nullable: true
     Tags:
       type: array
       items:
@@ -5430,9 +5458,13 @@ paths:
             const params = {
               customer: {
                 display_id: 'EMP00101',
+                display_name: "Bill's Windsurf Shop",
                 company_name: 'SpaceX',
+                title: 'CEO',
                 first_name: 'Elon',
+                middle_name: 'D.',
                 last_name: 'Musk',
+                suffix: 'Jr.',
                 individual: true,
                 addresses: [
                   {
@@ -5473,6 +5505,13 @@ paths:
                   {
                     id: '123',
                     email: 'elon@musk.com',
+                    type: 'primary'
+                  }
+                ],
+                websites: [
+                  {
+                    id: '12345',
+                    url: 'http://example.com',
                     type: 'primary'
                   }
                 ],
@@ -5605,9 +5644,13 @@ paths:
               id: 'id_example',
               customer: {
                 display_id: 'EMP00101',
+                display_name: "Bill's Windsurf Shop",
                 company_name: 'SpaceX',
+                title: 'CEO',
                 first_name: 'Elon',
+                middle_name: 'D.',
                 last_name: 'Musk',
+                suffix: 'Jr.',
                 individual: true,
                 addresses: [
                   {
@@ -5648,6 +5691,13 @@ paths:
                   {
                     id: '123',
                     email: 'elon@musk.com',
+                    type: 'primary'
+                  }
+                ],
+                websites: [
+                  {
+                    id: '12345',
+                    url: 'http://example.com',
                     type: 'primary'
                   }
                 ],

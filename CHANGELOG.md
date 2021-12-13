@@ -1,5 +1,6 @@
 ### Accounting API
 
+- Shared Schema `Address` extended with optional `line3` and `line4` properties
 - [LedgerAccounts](apis/accounting/reference#tag/LedgerAccounts)
 
   - `LedgerAccount.type` enum extended to include `other_income`
@@ -7,6 +8,9 @@
 - [AccountingCustomer](apis/accounting/reference#tag/AccountingCustomer)
 
   - `AccountingCustomer` extended with `websites`, `title`, `display_name`, `middle_name`, `last_name`, and `suffix` properties
+
+- [Invoice](apis/accounting/reference#tag/Invoice)
+  - `Invoice` extended with optional `terms` string
 
 ## v8.10.0 - (2021-12-05)
 

@@ -454,6 +454,16 @@ components:
           example: 'apt #'
           description: Line 2 of the address
           nullable: true
+        line3:
+          type: string
+          example: 'Suite #'
+          description: Line 3 of the address
+          nullable: true
+        line4:
+          type: string
+          example: delivery instructions
+          description: Line 4 of the address
+          nullable: true
         street_number:
           type: string
           example: '25'
@@ -2471,6 +2481,12 @@ components:
           description: The invoice due date is the date on which a payment or invoice is scheduled to be received by the seller - YYYY-MM-DD
           format: date
           example: '2020-10-30'
+        terms:
+          type: string
+          title: Terms
+          description: Terms of payment
+          example: Net 30 days
+          nullable: true
         po_number:
           type: string
           title: Purchase Order number
@@ -2699,10 +2715,12 @@ components:
           type: string
           title: Type
           x-graphql-type-name: InvoiceLineItemType
-          example: inventory
+          example: sales_item
           enum:
-            - inventory
-            - service
+            - sales_item
+            - discount
+            - info
+            - sub_total
           nullable: true
         tax_amount:
           type: number
@@ -2927,6 +2945,11 @@ components:
           example: CUST00101
           nullable: true
           readOnly: true
+        display_name:
+          type: string
+          title: Display Name
+          example: Bill's Windsurf Shop
+          nullable: true
         company_name:
           type: string
           example: The boring company
@@ -4316,10 +4339,12 @@ paths:
                 type: 'service',
                 number: 'OIT00546',
                 customer: {
-                  id: '12345'
+                  id: '12345',
+                  display_name: "Bill's Windsurf Shop"
                 },
                 invoice_date: '2020-09-30',
                 due_date: '2020-10-30',
+                terms: 'Net 30 days',
                 po_number: '90000117',
                 reference: '123456',
                 status: 'draft',
@@ -4340,7 +4365,7 @@ paths:
                     line_number: 1,
                     description:
                       'Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.',
-                    type: 'inventory',
+                    type: 'sales_item',
                     tax_amount: 27500,
                     total_amount: 27500,
                     quantity: 1,
@@ -4367,6 +4392,8 @@ paths:
                   name: 'HQ US',
                   line1: 'Main street',
                   line2: 'apt #',
+                  line3: 'Suite #',
+                  line4: 'delivery instructions',
                   street_number: '25',
                   city: 'San Francisco',
                   state: 'CA',
@@ -4389,6 +4416,8 @@ paths:
                   name: 'HQ US',
                   line1: 'Main street',
                   line2: 'apt #',
+                  line3: 'Suite #',
+                  line4: 'delivery instructions',
                   street_number: '25',
                   city: 'San Francisco',
                   state: 'CA',
@@ -4520,10 +4549,12 @@ paths:
                 type: 'service',
                 number: 'OIT00546',
                 customer: {
-                  id: '12345'
+                  id: '12345',
+                  display_name: "Bill's Windsurf Shop"
                 },
                 invoice_date: '2020-09-30',
                 due_date: '2020-10-30',
+                terms: 'Net 30 days',
                 po_number: '90000117',
                 reference: '123456',
                 status: 'draft',
@@ -4544,7 +4575,7 @@ paths:
                     line_number: 1,
                     description:
                       'Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.',
-                    type: 'inventory',
+                    type: 'sales_item',
                     tax_amount: 27500,
                     total_amount: 27500,
                     quantity: 1,
@@ -4571,6 +4602,8 @@ paths:
                   name: 'HQ US',
                   line1: 'Main street',
                   line2: 'apt #',
+                  line3: 'Suite #',
+                  line4: 'delivery instructions',
                   street_number: '25',
                   city: 'San Francisco',
                   state: 'CA',
@@ -4593,6 +4626,8 @@ paths:
                   name: 'HQ US',
                   line1: 'Main street',
                   line2: 'apt #',
+                  line3: 'Suite #',
+                  line4: 'delivery instructions',
                   street_number: '25',
                   city: 'San Francisco',
                   state: 'CA',
@@ -5480,6 +5515,8 @@ paths:
                     name: 'HQ US',
                     line1: 'Main street',
                     line2: 'apt #',
+                    line3: 'Suite #',
+                    line4: 'delivery instructions',
                     street_number: '25',
                     city: 'San Francisco',
                     state: 'CA',
@@ -5666,6 +5703,8 @@ paths:
                     name: 'HQ US',
                     line1: 'Main street',
                     line2: 'apt #',
+                    line3: 'Suite #',
+                    line4: 'delivery instructions',
                     street_number: '25',
                     city: 'San Francisco',
                     state: 'CA',
@@ -5895,7 +5934,8 @@ paths:
                 },
                 transaction_date: '2021-05-01T12:00:00.000Z',
                 customer: {
-                  id: '12345'
+                  id: '12345',
+                  display_name: "Bill's Windsurf Shop"
                 },
                 reconciled: true,
                 status: 'authorised',
@@ -6030,7 +6070,8 @@ paths:
                 },
                 transaction_date: '2021-05-01T12:00:00.000Z',
                 customer: {
-                  id: '12345'
+                  id: '12345',
+                  display_name: "Bill's Windsurf Shop"
                 },
                 reconciled: true,
                 status: 'authorised',

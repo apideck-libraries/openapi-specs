@@ -10,7 +10,11 @@
   - `AccountingCustomer` extended with `websites`, `title`, `display_name`, `middle_name`, `last_name`, and `suffix` properties
 
 - [Invoice](apis/accounting/reference#tag/Invoice)
+
   - `Invoice` extended with optional `terms` string
+
+- [Payment](apis/accounting/reference#tag/Payment)
+  - `Payment` extended with optional `note` string
 
 ## v8.10.0 - (2021-12-05)
 

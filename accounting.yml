@@ -3156,6 +3156,12 @@ components:
           description: 'Optional payment reference message ie: Debit remittance detail.'
           example: '123456'
           nullable: true
+        payment_method_reference:
+          type: string
+          title: Payment method reference
+          description: Optional reference message returned by payment method on processing
+          example: '123456'
+          nullable: true
         accounts_receivable_account_type:
           deprecated: true
           type: string
@@ -3228,7 +3234,8 @@ components:
                 enum:
                   - invoice
                   - order
-                  - credit_note
+                  - expense
+                  - credit_memo
                   - over_payment
                   - pre_payment
               code:
@@ -3241,6 +3248,15 @@ components:
                 description: 'Amount of payment that should be attributed to this allocation. If null, the total_amount will be used.'
                 example: 49.99
                 nullable: true
+        note:
+          type: string
+          title: Note
+          example: Some notes about this payment
+          nullable: true
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
     PaymentRequiredResponse:
@@ -5926,6 +5942,7 @@ paths:
                 currency_rate: 0.69,
                 total_amount: 49.99,
                 reference: '123456',
+                payment_method_reference: '123456',
                 accounts_receivable_account_type: 'Account',
                 accounts_receivable_account_id: '123456',
                 account: {
@@ -5946,7 +5963,9 @@ paths:
                     type: 'invoice',
                     amount: 49.99
                   }
-                ]
+                ],
+                note: 'Some notes about this payment',
+                row_version: '1-12345'
               }
             }
 
@@ -6062,6 +6081,7 @@ paths:
                 currency_rate: 0.69,
                 total_amount: 49.99,
                 reference: '123456',
+                payment_method_reference: '123456',
                 accounts_receivable_account_type: 'Account',
                 accounts_receivable_account_id: '123456',
                 account: {
@@ -6082,7 +6102,9 @@ paths:
                     type: 'invoice',
                     amount: 49.99
                   }
-                ]
+                ],
+                note: 'Some notes about this payment',
+                row_version: '1-12345'
               }
             }
 

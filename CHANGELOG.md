@@ -1,3 +1,5 @@
+## v8.10.1 - (2021-12-14)
+
 ### Accounting API
 
 - Shared Schema `Address` extended with optional `line3` and `line4` properties

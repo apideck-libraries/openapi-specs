@@ -2724,7 +2724,10 @@ paths:
         required: true
         content:
           application/json:
-            schema: {}
+            schema:
+              type: object
+              properties: {}
+              additionalProperties: false
       responses:
         '201':
           $ref: '#/components/responses/GetFileResponse'
@@ -2753,13 +2756,11 @@ paths:
               consumerId: 'REPLACE_WITH_CONSUMER_ID'
             })
 
-            const params = {
-              id: 'id_example',
-              uploadSessionsFinish: null
-            }
-
             try {
-              const { data } = await apideck.fileStorage.uploadSessionsFinish(params)
+              const { data } = await apideck.fileStorage.uploadSessionsFinish({
+                id: 'id_example',
+                uploadSessionsFinish: {}
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

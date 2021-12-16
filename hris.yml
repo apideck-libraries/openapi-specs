@@ -661,6 +661,11 @@ components:
               $ref: '#/components/schemas/FirstName'
             last_name:
               $ref: '#/components/schemas/LastName'
+            email:
+              type: string
+              format: email
+              example: elon@musk.com
+              nullable: true
         social_security_number:
           type: string
           title: Social Security Number
@@ -1550,7 +1555,8 @@ paths:
                 manager: {
                   name: 'Elon Musk',
                   first_name: 'Elon',
-                  last_name: 'Musk'
+                  last_name: 'Musk',
+                  email: 'elon@musk.com'
                 },
                 social_security_number: '123456789',
                 birthday: '2000-08-12',
@@ -1799,7 +1805,8 @@ paths:
                 manager: {
                   name: 'Elon Musk',
                   first_name: 'Elon',
-                  last_name: 'Musk'
+                  last_name: 'Musk',
+                  email: 'elon@musk.com'
                 },
                 social_security_number: '123456789',
                 birthday: '2000-08-12',

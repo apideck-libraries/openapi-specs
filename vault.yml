@@ -274,7 +274,7 @@ components:
       properties:
         id:
           type: string
-          example: lead+close
+          example: crm+salesforce
           readOnly: true
         service_id:
           type: string
@@ -345,6 +345,17 @@ components:
               required: true
               disabled: false
               custom_field: false
+              sensitive: false
+            - id: api_key
+              label: API Key
+              value: '123455677'
+              placeholder: ''
+              mask: false
+              type: text
+              required: true
+              disabled: false
+              custom_field: false
+              sensitive: true
           readOnly: true
         configuration:
           type: array
@@ -823,6 +834,10 @@ components:
           example: false
           default: false
         disabled:
+          type: boolean
+          nullable: true
+          example: false
+        sensitive:
           type: boolean
           nullable: true
           example: false

@@ -88,6 +88,7 @@ components:
         type: number
         minimum: 0
         maximum: 10000
+        example: 0
     filesFilter:
       name: filter
       in: query
@@ -1701,7 +1702,9 @@ paths:
             })
 
             try {
-              const { data } = await apideck.fileStorage.filesUpload({})
+              const { data } = await apideck.fileStorage.filesUpload({
+                filesUpload: 'string'
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -2618,6 +2621,7 @@ paths:
             schema:
               type: string
               format: binary
+              example: <binary string>
       responses:
         '200':
           $ref: '#/components/responses/UpdateUploadSessionResponse'
@@ -2646,11 +2650,14 @@ paths:
               consumerId: 'REPLACE_WITH_CONSUMER_ID'
             })
 
+            const params = {
+              id: 'id_example',
+              partNumber: 0,
+              body: '<binary string>'
+            }
+
             try {
-              const { data } = await apideck.fileStorage.uploadSessionsUpload({
-                id: 'id_example',
-                partNumber: undefined
-              })
+              const { data } = await apideck.fileStorage.uploadSessionsUpload(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -2721,7 +2728,6 @@ paths:
       security:
         - apiKey: []
       requestBody:
-        required: true
         content:
           application/json:
             schema:

@@ -645,8 +645,27 @@ components:
           enum:
             - active
             - inactive
+            - terminated
             - other
           nullable: true
+        employment_role:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - contractor
+                - employee
+                - freelance
+                - temp
+              nullable: true
+            sub_type:
+              type: string
+              enum:
+                - full_time
+                - part_time
+                - hourly
+              nullable: true
         manager:
           type: object
           properties:
@@ -1552,6 +1571,10 @@ paths:
                 employment_end_date: '2028-10-26',
                 employee_number: '123456-AB',
                 employment_status: 'active',
+                employment_role: {
+                  type: 'contractor',
+                  sub_type: 'full_time'
+                },
                 manager: {
                   name: 'Elon Musk',
                   first_name: 'Elon',
@@ -1802,6 +1825,10 @@ paths:
                 employment_end_date: '2028-10-26',
                 employee_number: '123456-AB',
                 employment_status: 'active',
+                employment_role: {
+                  type: 'contractor',
+                  sub_type: 'full_time'
+                },
                 manager: {
                   name: 'Elon Musk',
                   first_name: 'Elon',

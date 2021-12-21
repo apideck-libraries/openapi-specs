@@ -238,6 +238,7 @@ components:
         - none
       example: oauth2
       description: Type of authorization used by the connector
+      readOnly: true
     BadRequestResponse:
       properties:
         status_code:
@@ -323,7 +324,6 @@ components:
             plan: enterprise
         auth_type:
           $ref: '#/components/schemas/AuthType'
-          readOnly: true
         status:
           type: string
           enum:
@@ -458,7 +458,6 @@ components:
           nullable: true
         state:
           $ref: '#/components/schemas/ConnectionState'
-          readOnly: true
     ConnectionMetadata:
       type: object
       properties:
@@ -644,7 +643,7 @@ components:
         events:
           type: array
           title: Subscribed events
-          description: 'The list of subscribed events for this webhook. [’*’] indicates that all events are enabled.'
+          description: 'The list of subscribed events for this webhook. [`*`] indicates that all events are enabled.'
           example:
             - vault.connection.created
             - vault.connection.updated
@@ -751,11 +750,6 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Connection'
-    Created:
-      type: object
-      required:
-        - ''
-      properties: {}
     CreateSessionResponse:
       type: object
       required:
@@ -1291,14 +1285,10 @@ components:
         date_sent: 'Thu, 30 Jul 2015 20:12:33 +0000'
         date_updated: 'Thu, 30 Jul 2015 20:12:33 +0000'
         direction: outbound-api
-        error_code: null
-        error_message: null
         from: '+15017122661'
         messaging_service_sid: MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         num_media: '0'
         num_segments: '1'
-        price: null
-        price_unit: null
         sid: SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         status: sent
         subresource_uris:
@@ -2088,7 +2078,6 @@ paths:
                   },
                   plan: 'enterprise'
                 },
-                auth_type: 'oauth2',
                 configuration: [
                   {
                     resource: 'leads',
@@ -2173,7 +2162,6 @@ paths:
                   },
                   plan: 'enterprise'
                 },
-                auth_type: 'oauth2',
                 configuration: [
                   {
                     resource: 'leads',
@@ -2369,7 +2357,6 @@ paths:
                   },
                   plan: 'enterprise'
                 },
-                auth_type: 'oauth2',
                 configuration: [
                   {
                     resource: 'leads',
@@ -2775,14 +2762,10 @@ paths:
                 date_sent: 'Thu, 30 Jul 2015 20:12:33 +0000',
                 date_updated: 'Thu, 30 Jul 2015 20:12:33 +0000',
                 direction: 'outbound-api',
-                error_code: null,
-                error_message: null,
                 from: '+15017122661',
                 messaging_service_sid: 'MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
                 num_media: '0',
                 num_segments: '1',
-                price: null,
-                price_unit: null,
                 sid: 'SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
                 status: 'sent',
                 subresource_uris: {
@@ -2856,14 +2839,10 @@ paths:
                 date_sent: 'Thu, 30 Jul 2015 20:12:33 +0000',
                 date_updated: 'Thu, 30 Jul 2015 20:12:33 +0000',
                 direction: 'outbound-api',
-                error_code: null,
-                error_message: null,
                 from: '+15017122661',
                 messaging_service_sid: 'MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
                 num_media: '0',
                 num_segments: '1',
-                price: null,
-                price_unit: null,
                 sid: 'SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
                 status: 'sent',
                 subresource_uris: {
@@ -2937,14 +2916,10 @@ paths:
                 date_sent: 'Thu, 30 Jul 2015 20:12:33 +0000',
                 date_updated: 'Thu, 30 Jul 2015 20:12:33 +0000',
                 direction: 'outbound-api',
-                error_code: null,
-                error_message: null,
                 from: '+15017122661',
                 messaging_service_sid: 'MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
                 num_media: '0',
                 num_segments: '1',
-                price: null,
-                price_unit: null,
                 sid: 'SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
                 status: 'sent',
                 subresource_uris: {

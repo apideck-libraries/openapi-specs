@@ -284,6 +284,11 @@ components:
           type: string
           example: 'https://elonmusk.com'
           nullable: true
+        row_version:
+          type: string
+          title: Row version
+          example: 1-12345
+          nullable: true
     BadRequestResponse:
       properties:
         status_code:
@@ -827,6 +832,8 @@ components:
                 type: string
                 example: twitter
                 nullable: true
+        row_version:
+          $ref: '#/components/schemas/Address/properties/row_version'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -1620,7 +1627,8 @@ paths:
                       phone_number: '111-111-1111',
                       fax: '122-111-1111',
                       email: 'elon@musk.com',
-                      website: 'https://elonmusk.com'
+                      website: 'https://elonmusk.com',
+                      row_version: '1-12345'
                     },
                     compensations: [
                       {
@@ -1657,7 +1665,8 @@ paths:
                     phone_number: '111-111-1111',
                     fax: '122-111-1111',
                     email: 'elon@musk.com',
-                    website: 'https://elonmusk.com'
+                    website: 'https://elonmusk.com',
+                    row_version: '1-12345'
                   }
                 ],
                 phone_numbers: [
@@ -1691,7 +1700,8 @@ paths:
                     url: 'https://www.twitter.com/apideck-io',
                     type: 'twitter'
                   }
-                ]
+                ],
+                row_version: '1-12345'
               }
             }
 
@@ -1874,7 +1884,8 @@ paths:
                       phone_number: '111-111-1111',
                       fax: '122-111-1111',
                       email: 'elon@musk.com',
-                      website: 'https://elonmusk.com'
+                      website: 'https://elonmusk.com',
+                      row_version: '1-12345'
                     },
                     compensations: [
                       {
@@ -1911,7 +1922,8 @@ paths:
                     phone_number: '111-111-1111',
                     fax: '122-111-1111',
                     email: 'elon@musk.com',
-                    website: 'https://elonmusk.com'
+                    website: 'https://elonmusk.com',
+                    row_version: '1-12345'
                   }
                 ],
                 phone_numbers: [
@@ -1945,7 +1957,8 @@ paths:
                     url: 'https://www.twitter.com/apideck-io',
                     type: 'twitter'
                   }
-                ]
+                ],
+                row_version: '1-12345'
               }
             }
 

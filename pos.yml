@@ -261,10 +261,7 @@ components:
           example: 'https://elonmusk.com'
           nullable: true
         row_version:
-          type: string
-          title: Row version
-          example: 1-12345
-          nullable: true
+          $ref: '#/components/schemas/RowVersion'
     BadRequestResponse:
       properties:
         status_code:
@@ -296,6 +293,38 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestbodyvalidationerror'
+    CreateOrderResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: clover
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Orders
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     CustomField:
       type: object
       required:
@@ -330,6 +359,38 @@ components:
             - type: array
               items:
                 type: string
+    DeleteOrderResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: clover
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Orders
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     Email:
       required:
         - email
@@ -354,6 +415,78 @@ components:
             - billing
             - other
           example: primary
+    GetOrderResponse:
+      x-graphql-type-name: Order
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: clover
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Orders
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Order'
+    GetOrdersResponse:
+      x-graphql-type-name: OrderList
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: clover
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Orders
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
     Links:
       type: object
       description: Links to navigate to previous or next pages through the API
@@ -459,6 +592,42 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
+    Order:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          example: '12345'
+          readOnly: true
+        merchant:
+          type: object
+          properties:
+            id:
+              type: string
+        updated_by:
+          type: string
+          example: '12345'
+          readOnly: true
+          nullable: true
+        created_by:
+          type: string
+          title: Created by
+          example: '12345'
+          readOnly: true
+          nullable: true
+        updated_at:
+          type: string
+          title: Updated at (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
+        created_at:
+          type: string
+          title: Created at (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
     PaymentRequiredResponse:
       properties:
         status_code:
@@ -530,6 +699,11 @@ components:
             - personal
             - other
           example: primary
+    RowVersion:
+      type: string
+      title: Row version
+      example: 1-12345
+      nullable: true
     SocialLink:
       required:
         - url
@@ -645,6 +819,38 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#invalidstateerror'
+    UpdateOrderResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: clover
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Orders
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     User:
       required:
         - emails
@@ -746,29 +952,6 @@ components:
           type: string
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
-    Website:
-      type: object
-      required:
-        - url
-      properties:
-        id:
-          type: string
-          example: '12345'
-          nullable: true
-        url:
-          type: string
-          example: 'http://example.com'
-          minLength: 1
-        type:
-          type: string
-          x-graphql-type-name: WebsiteType
-          enum:
-            - primary
-            - secondary
-            - work
-            - personal
-            - other
-          example: primary
     WebhookEvent:
       x-sdk-exclude: true
       allOf:
@@ -811,210 +994,29 @@ components:
                 - pos.order.updated
                 - pos.order.deleted
               example: pos.order.created
-    CreateOrderResponse:
+    Website:
       type: object
       required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: clover
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Orders
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteOrderResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: clover
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Orders
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    GetOrderResponse:
-      x-graphql-type-name: Order
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: clover
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Orders
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/Order'
-    GetOrdersResponse:
-      x-graphql-type-name: OrderList
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: clover
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Orders
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-    Order:
-      type: object
-      additionalProperties: false
+        - url
       properties:
         id:
           type: string
           example: '12345'
-          readOnly: true
-        merchant:
-          type: object
-          properties:
-            id:
-              type: string
-        updated_by:
-          type: string
-          example: '12345'
-          readOnly: true
           nullable: true
-        created_by:
+        url:
           type: string
-          title: Created by
-          example: '12345'
-          readOnly: true
-          nullable: true
-        updated_at:
+          example: 'http://example.com'
+          minLength: 1
+        type:
           type: string
-          title: Updated at (timestamp)
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
-        created_at:
-          type: string
-          title: Created at (timestamp)
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
-    UpdateOrderResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: clover
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Orders
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/UnifiedId'
+          x-graphql-type-name: WebsiteType
+          enum:
+            - primary
+            - secondary
+            - work
+            - personal
+            - other
+          example: primary
   securitySchemes:
     apiKey:
       type: apiKey

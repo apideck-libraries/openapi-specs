@@ -458,10 +458,7 @@ components:
           example: 'https://elonmusk.com'
           nullable: true
         row_version:
-          type: string
-          title: Row version
-          example: 1-12345
-          nullable: true
+          $ref: '#/components/schemas/RowVersion'
     BadRequestResponse:
       properties:
         status_code:
@@ -2081,6 +2078,29 @@ components:
             - billing
             - other
           example: primary
+    EventType:
+      type: string
+      enum:
+        - '*'
+        - crm.activity.created
+        - crm.activity.updated
+        - crm.activity.deleted
+        - crm.company.created
+        - crm.company.updated
+        - crm.company.deleted
+        - crm.contact.created
+        - crm.contact.updated
+        - crm.contact.deleted
+        - crm.lead.created
+        - crm.lead.updated
+        - crm.lead.deleted
+        - crm.note.created
+        - crm.note.updated
+        - crm.note.deleted
+        - crm.opportunity.created
+        - crm.opportunity.updated
+        - crm.opportunity.deleted
+      example: crm.company.created
     GetActivitiesResponse:
       x-graphql-type-name: ActivityList
       type: object
@@ -2857,61 +2877,6 @@ components:
               description: Cursor to navigate to the next page of results through the API
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
-    Note:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          readOnly: true
-          example: '12345'
-        title:
-          type: string
-          example: Meeting Notes
-        content:
-          type: string
-          example: Office hours are 9AM-6PM
-        owner_id:
-          type: string
-          example: '12345'
-        contact_id:
-          type: string
-          example: '12345'
-          nullable: true
-        company_id:
-          type: string
-          example: '12345'
-          nullable: true
-        opportunity_id:
-          type: string
-          example: '12345'
-          nullable: true
-        lead_id:
-          type: string
-          example: '12345'
-          nullable: true
-        active:
-          type: boolean
-          example: true
-          nullable: true
-        updated_by:
-          type: string
-          example: '12345'
-          readOnly: true
-          nullable: true
-        created_by:
-          type: string
-          example: '12345'
-          readOnly: true
-          nullable: true
-        updated_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
-        created_at:
-          type: string
-          example: '2020-09-30T07:43:32.000Z'
-          readOnly: true
     NotFoundResponse:
       properties:
         status_code:
@@ -2972,6 +2937,61 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
+    Note:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        title:
+          type: string
+          example: Meeting Notes
+        content:
+          type: string
+          example: Office hours are 9AM-6PM
+        owner_id:
+          type: string
+          example: '12345'
+        contact_id:
+          type: string
+          example: '12345'
+          nullable: true
+        company_id:
+          type: string
+          example: '12345'
+          nullable: true
+        opportunity_id:
+          type: string
+          example: '12345'
+          nullable: true
+        lead_id:
+          type: string
+          example: '12345'
+          nullable: true
+        active:
+          type: boolean
+          example: true
+          nullable: true
+        updated_by:
+          type: string
+          example: '12345'
+          readOnly: true
+          nullable: true
+        created_by:
+          type: string
+          example: '12345'
+          readOnly: true
+          nullable: true
+        updated_at:
+          type: string
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
+        created_at:
+          type: string
+          example: '2020-09-30T07:43:32.000Z'
+          readOnly: true
     OpportunitiesFilter:
       type: object
       x-graphql-type-name: OpportunitiesFilter
@@ -3318,6 +3338,11 @@ components:
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
       additionalProperties: false
+    RowVersion:
+      type: string
+      title: Row version
+      example: 1-12345
+      nullable: true
     SocialLink:
       required:
         - url
@@ -3798,52 +3823,6 @@ components:
           type: string
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
-    Website:
-      type: object
-      required:
-        - url
-      properties:
-        id:
-          type: string
-          example: '12345'
-          nullable: true
-        url:
-          type: string
-          example: 'http://example.com'
-          minLength: 1
-        type:
-          type: string
-          x-graphql-type-name: WebsiteType
-          enum:
-            - primary
-            - secondary
-            - work
-            - personal
-            - other
-          example: primary
-    EventType:
-      type: string
-      enum:
-        - '*'
-        - crm.activity.created
-        - crm.activity.updated
-        - crm.activity.deleted
-        - crm.company.created
-        - crm.company.updated
-        - crm.company.deleted
-        - crm.contact.created
-        - crm.contact.updated
-        - crm.contact.deleted
-        - crm.lead.created
-        - crm.lead.updated
-        - crm.lead.deleted
-        - crm.note.created
-        - crm.note.updated
-        - crm.note.deleted
-        - crm.opportunity.created
-        - crm.opportunity.updated
-        - crm.opportunity.deleted
-      example: crm.company.created
     WebhookEvent:
       x-sdk-exclude: true
       allOf:
@@ -3881,6 +3860,29 @@ components:
           properties:
             event_type:
               $ref: '#/components/schemas/EventType'
+    Website:
+      type: object
+      required:
+        - url
+      properties:
+        id:
+          type: string
+          example: '12345'
+          nullable: true
+        url:
+          type: string
+          example: 'http://example.com'
+          minLength: 1
+        type:
+          type: string
+          x-graphql-type-name: WebsiteType
+          enum:
+            - primary
+            - secondary
+            - work
+            - personal
+            - other
+          example: primary
   parameters:
     applicationId:
       name: x-apideck-app-id

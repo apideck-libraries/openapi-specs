@@ -263,10 +263,11 @@ components:
           example: 'https://elonmusk.com'
           nullable: true
         row_version:
-          type: string
-          title: Row version
-          example: 1-12345
-          nullable: true
+          $ref: '#/components/schemas/RowVersion'
+    Anonymized:
+      title: Anonymized
+      type: boolean
+      example: true
     Applicant:
       type: object
       additionalProperties: false
@@ -364,10 +365,10 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
-    Anonymized:
-      title: Anonymized
+    Archived:
+      title: Archived
       type: boolean
-      example: true
+      example: false
     BadRequestResponse:
       properties:
         status_code:
@@ -435,10 +436,6 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
-    Archived:
-      title: Archived
-      type: boolean
-      example: false
     CreatedAt:
       type: string
       title: Created at (timestamp)
@@ -1037,11 +1034,6 @@ components:
             - type: array
               items:
                 type: string
-    Description:
-      type: string
-      title: Description
-      example: A description
-      nullable: true
     DeletedAt:
       type: string
       title: Deleted at (timestamp)
@@ -1054,6 +1046,11 @@ components:
       title: Deleted by
       example: '12345'
       readOnly: true
+      nullable: true
+    Description:
+      type: string
+      title: Description
+      example: A description
       nullable: true
     Email:
       required:
@@ -1332,6 +1329,12 @@ components:
           description: Id of the job to filter on
           example: '1234'
       additionalProperties: false
+    LastInteractionAt:
+      type: string
+      title: Last interaction at (timestamp)
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
     Links:
       type: object
       description: Links to navigate to previous or next pages through the API
@@ -1350,12 +1353,6 @@ components:
           description: Link to navigate to the previous page through the API
           example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM'
           nullable: true
-    LastInteractionAt:
-      type: string
-      title: Last interaction at (timestamp)
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
     Meta:
       type: object
       description: Response metadata
@@ -1518,6 +1515,11 @@ components:
             - personal
             - other
           example: primary
+    RowVersion:
+      type: string
+      title: Row version
+      example: 1-12345
+      nullable: true
     Tags:
       type: array
       items:

@@ -204,12 +204,6 @@ components:
       type: string
       example: test_consumer_id
       description: Consumer identifier
-    CreatedAt:
-      type: string
-      title: Created at (timestamp)
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
     CreateWebhookRequest:
       type: object
       additionalProperties: false
@@ -253,6 +247,12 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+    CreatedAt:
+      type: string
+      title: Created at (timestamp)
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
     DeleteWebhookResponse:
       type: object
       required:
@@ -638,12 +638,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#invalidstateerror'
-    UpdatedAt:
-      type: string
-      title: Updated at (timestamp)
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
     UpdateWebhookRequest:
       type: object
       additionalProperties: false
@@ -680,6 +674,12 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+    UpdatedAt:
+      type: string
+      title: Updated at (timestamp)
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
     Webhook:
       type: object
       additionalProperties: false

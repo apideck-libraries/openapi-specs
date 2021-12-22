@@ -285,10 +285,7 @@ components:
           example: 'https://elonmusk.com'
           nullable: true
         row_version:
-          type: string
-          title: Row version
-          example: 1-12345
-          nullable: true
+          $ref: '#/components/schemas/RowVersion'
     BadRequestResponse:
       properties:
         status_code:
@@ -320,38 +317,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestbodyvalidationerror'
-    HrisCompany:
-      type: object
-      required:
-        - name
-      additionalProperties: false
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        legal_name:
-          type: string
-          example: SpaceX
-          minLength: 1
-        display_name:
-          type: string
-          example: SpaceX
-          minLength: 1
-        debtor_id:
-          type: string
-          example: '12345'
-          minLength: 1
-        deleted:
-          type: boolean
-          example: false
-          readOnly: true
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
     CompanyId:
       type: string
       title: Company ID
@@ -362,38 +327,6 @@ components:
       title: Company name
       example: SpaceX
       nullable: true
-    CreateHrisCompanyResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: undefined
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Companies
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/UnifiedId'
     CreateEmployeeResponse:
       type: object
       required:
@@ -426,6 +359,50 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
+    CreateHrisCompanyResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: undefined
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Companies
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    CreatedAt:
+      type: string
+      title: Created at (timestamp)
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    CreatedBy:
+      type: string
+      title: Created by
+      example: '12345'
+      readOnly: true
+      nullable: true
     CustomField:
       type: object
       required:
@@ -460,38 +437,6 @@ components:
             - type: array
               items:
                 type: string
-    DeleteHrisCompanyResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: undefined
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Companies
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/UnifiedId'
     DeleteEmployeeResponse:
       type: object
       required:
@@ -518,6 +463,38 @@ components:
           type: string
           description: Unified API resource name
           example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteHrisCompanyResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: undefined
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Companies
         operation:
           type: string
           description: Operation performed
@@ -833,7 +810,7 @@ components:
                 example: twitter
                 nullable: true
         row_version:
-          $ref: '#/components/schemas/Address/properties/row_version'
+          $ref: '#/components/schemas/RowVersion'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -842,11 +819,6 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
-    Title:
-      type: string
-      title: Job title
-      example: CEO
-      nullable: true
     EmployeeNumber:
       type: string
       title: Employee number
@@ -867,78 +839,6 @@ components:
         - other
       example: male
       nullable: true
-    GetHrisCompaniesResponse:
-      x-graphql-type-name: HrisCompanyList
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: undefined
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Companies
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/HrisCompany'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-    GetHrisCompanyResponse:
-      x-graphql-type-name: HrisCompany
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: undefined
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Companies
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/HrisCompany'
     GetEmployeeResponse:
       x-graphql-type-name: Employee
       type: object
@@ -1011,6 +911,110 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetHrisCompaniesResponse:
+      x-graphql-type-name: HrisCompanyList
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: undefined
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Companies
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/HrisCompany'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetHrisCompanyResponse:
+      x-graphql-type-name: HrisCompany
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: undefined
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Companies
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/HrisCompany'
+    HrisCompany:
+      type: object
+      required:
+        - name
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        legal_name:
+          type: string
+          example: SpaceX
+          minLength: 1
+        display_name:
+          type: string
+          example: SpaceX
+          minLength: 1
+        debtor_id:
+          type: string
+          example: '12345'
+          minLength: 1
+        deleted:
+          type: boolean
+          example: false
+          readOnly: true
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     Id:
       type: string
       example: '12345'
@@ -1220,6 +1224,16 @@ components:
       title: Photo URL
       example: 'https://unavatar.io/elon-musk'
       nullable: true
+    RowVersion:
+      type: string
+      title: Row version
+      example: 1-12345
+      nullable: true
+    Title:
+      type: string
+      title: Job title
+      example: CEO
+      nullable: true
     UnauthorizedResponse:
       properties:
         status_code:
@@ -1312,38 +1326,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#invalidstateerror'
-    UpdateHrisCompanyResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: undefined
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Companies
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/UnifiedId'
     UpdateEmployeeResponse:
       type: object
       required:
@@ -1376,6 +1358,49 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
+    UpdateHrisCompanyResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: undefined
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Companies
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    UpdatedAt:
+      type: string
+      title: Updated at (timestamp)
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    UpdatedBy:
+      type: string
+      example: '12345'
+      readOnly: true
+      nullable: true
     Website:
       type: object
       required:
@@ -1399,29 +1424,6 @@ components:
             - personal
             - other
           example: primary
-    UpdatedBy:
-      type: string
-      example: '12345'
-      readOnly: true
-      nullable: true
-    UpdatedAt:
-      type: string
-      title: Updated at (timestamp)
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-    CreatedBy:
-      type: string
-      title: Created by
-      example: '12345'
-      readOnly: true
-      nullable: true
-    CreatedAt:
-      type: string
-      title: Created at (timestamp)
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
   securitySchemes:
     apiKey:
       type: apiKey

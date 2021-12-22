@@ -255,10 +255,7 @@ components:
           example: 'https://elonmusk.com'
           nullable: true
         row_version:
-          type: string
-          title: Row version
-          example: 1-12345
-          nullable: true
+          $ref: '#/components/schemas/RowVersion'
     BadRequestResponse:
       properties:
         status_code:
@@ -1264,6 +1261,40 @@ components:
         - name: BTC
           description: Bitcoin
       nullable: true
+    CustomField:
+      type: object
+      required:
+        - id
+      additionalProperties: false
+      properties:
+        id:
+          title: ID
+          type: string
+          example: '2389328923893298'
+        name:
+          title: Name
+          type: string
+          description: Name of the custom field.
+          example: employee_level
+        description:
+          title: Description
+          type: string
+          description: More information about the custom field
+          example: Employee Level
+        value:
+          anyOf:
+            - type: string
+              example: Uses Salesforce and Marketo
+              nullable: true
+            - type: number
+              example: 10
+              nullable: true
+            - type: boolean
+              example: true
+              nullable: true
+            - type: array
+              items:
+                type: string
     CustomerSupportCustomer:
       type: object
       additionalProperties: false
@@ -1350,40 +1381,6 @@ components:
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
-    CustomField:
-      type: object
-      required:
-        - id
-      additionalProperties: false
-      properties:
-        id:
-          title: ID
-          type: string
-          example: '2389328923893298'
-        name:
-          title: Name
-          type: string
-          description: Name of the custom field.
-          example: employee_level
-        description:
-          title: Description
-          type: string
-          description: More information about the custom field
-          example: Employee Level
-        value:
-          anyOf:
-            - type: string
-              example: Uses Salesforce and Marketo
-              nullable: true
-            - type: number
-              example: 10
-              nullable: true
-            - type: boolean
-              example: true
-              nullable: true
-            - type: array
-              items:
-                type: string
     DeleteCustomerSupportCustomerResponse:
       type: object
       required:
@@ -2026,6 +2023,11 @@ components:
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
       additionalProperties: false
+    RowVersion:
+      type: string
+      title: Row version
+      example: 1-12345
+      nullable: true
     SocialLink:
       required:
         - url

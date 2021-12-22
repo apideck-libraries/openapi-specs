@@ -141,10 +141,7 @@ components:
           example: 'https://elonmusk.com'
           nullable: true
         row_version:
-          type: string
-          title: Row version
-          example: 1-12345
-          nullable: true
+          $ref: '#/components/schemas/RowVersion'
     BadRequestResponse:
       properties:
         status_code:
@@ -1079,6 +1076,14 @@ components:
           type: string
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+    LeadEventType:
+      type: string
+      enum:
+        - '*'
+        - lead.lead.created
+        - lead.lead.updated
+        - lead.lead.deleted
+      example: lead.lead.created
     LeadsFilter:
       type: object
       x-graphql-type-name: LeadsFilter
@@ -1304,6 +1309,11 @@ components:
             - personal
             - other
           example: primary
+    RowVersion:
+      type: string
+      title: Row version
+      example: 1-12345
+      nullable: true
     SocialLink:
       required:
         - url
@@ -1459,37 +1469,6 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
-    Website:
-      type: object
-      required:
-        - url
-      properties:
-        id:
-          type: string
-          example: '12345'
-          nullable: true
-        url:
-          type: string
-          example: 'http://example.com'
-          minLength: 1
-        type:
-          type: string
-          x-graphql-type-name: WebsiteType
-          enum:
-            - primary
-            - secondary
-            - work
-            - personal
-            - other
-          example: primary
-    LeadEventType:
-      type: string
-      enum:
-        - '*'
-        - lead.lead.created
-        - lead.lead.updated
-        - lead.lead.deleted
-      example: lead.lead.created
     WebhookEvent:
       x-sdk-exclude: true
       allOf:
@@ -1527,6 +1506,29 @@ components:
           properties:
             event_type:
               $ref: '#/components/schemas/LeadEventType'
+    Website:
+      type: object
+      required:
+        - url
+      properties:
+        id:
+          type: string
+          example: '12345'
+          nullable: true
+        url:
+          type: string
+          example: 'http://example.com'
+          minLength: 1
+        type:
+          type: string
+          x-graphql-type-name: WebsiteType
+          enum:
+            - primary
+            - secondary
+            - work
+            - personal
+            - other
+          example: primary
   parameters:
     applicationId:
       name: x-apideck-app-id

@@ -635,7 +635,7 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
-    File:
+    UnifiedFile:
       type: object
       additionalProperties: false
       required:
@@ -827,7 +827,7 @@ components:
           description: Operation performed
           example: one
         data:
-          $ref: '#/components/schemas/File'
+          $ref: '#/components/schemas/UnifiedFile'
     GetFilesResponse:
       x-graphql-type-name: FileList
       type: object
@@ -862,7 +862,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/File'
+            $ref: '#/components/schemas/UnifiedFile'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -1583,7 +1583,7 @@ tags:
   - name: Files
     description: Files
     x-apideck-model:
-      $ref: '#/components/schemas/File'
+      $ref: '#/components/schemas/UnifiedFile'
   - name: Folders
     description: ''
     x-apideck-model:
@@ -1656,6 +1656,8 @@ paths:
       operationId: filesUpload
       summary: Upload file
       description: Upload file (max 4MB). Please use the Upload Session API to upload bigger files.
+      x-sdk-exclude: true
+      x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/metadata'
@@ -2603,6 +2605,8 @@ paths:
       operationId: uploadSessionsUpload
       summary: Upload part of file to Upload Session
       description: Upload part of file to Upload Session
+      x-sdk-exclude: true
+      x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'

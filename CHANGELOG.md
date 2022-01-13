@@ -1,3 +1,9 @@
+## v8.10.2 - (2022-01-12)
+
+### HRIS API
+
+- Moved compensations out of jobs array on [Employees](apis/hris/reference#tag/Employee)
+
 ## v8.10.1 - (2021-12-14)
 
 ### Accounting API

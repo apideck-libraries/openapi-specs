@@ -1,3 +1,9 @@
+## v8.11.0 - (2022-01-15)
+
+### POS API
+
+- Added [Square](connectors/square) connector.
+
 ## v8.10.2 - (2022-01-12)
 
 ### HRIS API

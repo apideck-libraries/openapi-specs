@@ -580,12 +580,6 @@ components:
           type: string
           example: married
           nullable: true
-        picture_url:
-          type: string
-          title: Picture URL
-          description: The URL pointing to a picture.
-          example: 'https://example.com/picture.jpg'
-          nullable: true
         division:
           $ref: '#/components/schemas/Division'
         department:
@@ -1363,6 +1357,11 @@ components:
                 nullable: true
         row_version:
           $ref: '#/components/schemas/RowVersion'
+        deleted:
+          type: boolean
+          title: Deleted
+          example: true
+          nullable: true
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -2119,7 +2118,6 @@ paths:
                 salutation: 'Mr',
                 title: 'CEO',
                 marital_status: 'married',
-                picture_url: 'https://example.com/picture.jpg',
                 division: 'Europe',
                 department: 'R&D',
                 team: {
@@ -2255,7 +2253,8 @@ paths:
                     type: 'twitter'
                   }
                 ],
-                row_version: '1-12345'
+                row_version: '1-12345',
+                deleted: true
               }
             }
 
@@ -2376,7 +2375,6 @@ paths:
                 salutation: 'Mr',
                 title: 'CEO',
                 marital_status: 'married',
-                picture_url: 'https://example.com/picture.jpg',
                 division: 'Europe',
                 department: 'R&D',
                 team: {
@@ -2512,7 +2510,8 @@ paths:
                     type: 'twitter'
                   }
                 ],
-                row_version: '1-12345'
+                row_version: '1-12345',
+                deleted: true
               }
             }
 

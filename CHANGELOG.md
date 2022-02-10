@@ -1,3 +1,9 @@
+## v8.11.1 - (2022-02-09)
+
+### Accounting API
+
+- optional `report_tax_type` property added to [TaxRates](apis/accounting/reference#tag/TaxRates)
+
 ## v8.11.0 - (2022-01-15)
 
 ### POS API

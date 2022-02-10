@@ -2734,10 +2734,7 @@ components:
           example: 27500
           nullable: true
         quantity:
-          type: number
-          title: Quantity
-          example: 1
-          nullable: true
+          $ref: '#/components/schemas/Quantity'
         unit_price:
           $ref: '#/components/schemas/UnitPrice'
         unit_of_measure:
@@ -3141,7 +3138,7 @@ components:
       properties:
         id:
           type: string
-          title: Payment Identifier
+          title: Payment identifier
           description: Unique identifier representing the entity
           example: '123456'
           readOnly: true
@@ -3151,7 +3148,7 @@ components:
           $ref: '#/components/schemas/CurrencyRate'
         total_amount:
           type: number
-          title: Total Amount
+          title: Total amount
           description: Amount of payment
           example: 49.99
         reference:
@@ -3197,7 +3194,7 @@ components:
           example: true
         status:
           type: string
-          title: Payment Status
+          title: Payment status
           x-graphql-type-name: PaymentStatus
           description: Status of payment
           enum:
@@ -3227,7 +3224,7 @@ components:
             properties:
               id:
                 type: string
-                title: Linked Entity Id
+                title: Linked entity ID
                 description: Unique identifier of entity this payment should be attributed to.
                 example: '123456'
               type:

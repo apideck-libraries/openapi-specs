@@ -1,3 +1,20 @@
+## v8.12.1 - (2022-02-18)
+
+### Accounting API
+
+- Added `taxRatesFilter` filter to [TaxRates](apis/accounting/reference#tag/TaxRates)
+
+## v8.12.0 - (2022-02-16)
+
+### Vault API
+
+- Added `oauth_grant_type` property to [Connections](apis/vault/reference#tag/Connection).
+- Added [Token](apis/vault/reference#operation/connectionsToken) endpoint to support the `client_credentials` OAuth flow.
+
+### HRIS API
+
+- Added [Workday](connectors/workday) and [Paylocity](connectors/paylocity) connectors.
+
 ## v8.11.1 - (2022-02-09)
 
 ### Accounting API

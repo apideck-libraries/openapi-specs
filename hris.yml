@@ -70,6 +70,14 @@ components:
       schema:
         type: string
         nullable: true
+    employeesFilter:
+      name: filter
+      in: query
+      description: Apply filters (beta)
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/EmployeesFilter'
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -1378,6 +1386,17 @@ components:
       description: 'An Employee Number, Employee ID or Employee Code, is a unique number that has been assigned to each individual staff member within a company.'
       example: 123456-AB
       nullable: true
+    EmployeesFilter:
+      type: object
+      x-graphql-type-name: EmployeesFilter
+      example:
+        company_id: '1234'
+      properties:
+        company_id:
+          type: string
+          description: Company ID to filter on
+          example: '1234'
+      additionalProperties: false
     FirstName:
       type: string
       title: First name
@@ -2048,6 +2067,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/employeesFilter'
       security:
         - apiKey: []
       responses:

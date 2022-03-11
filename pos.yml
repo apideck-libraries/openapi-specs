@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  version: 8.12.1
+  version: 8.13.0
   title: pos
-  description: "Welcome to the pos.\n\nYou can use this API to access all pos endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## GraphQL\n\nUse the [GraphQL playground](https://developers.apideck.com/graphql/playground) to test out the GraphQL API.\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes.                                                                                                      |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer API KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nUpcoming. [Request the SDK of your choice](https://integrations.apideck.com/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer sk_live_***'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will no be able to make further requests until this limit resets at the end of the month, or talk to us about upgrading your subscription to continue immediately.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Idempotence (upcoming)\n\nTo prevent the creation of duplicate resources, every POST method (such as one that creates a consumer record) must specify a unique value for the X-Unique-Transaction-ID header name. Uniquely identifying each unique POST request ensures that the API processes a given request once and only once.\n\nUniquely identifying new resource-creation POSTs is especially important when the outcome of a response is ambiguous because of a transient service interruption, such as a server-side timeout or network disruption. If a service interruption occurs, then the client application can safely retry the uniquely identified request without creating duplicate operations. (API endpoints that guarantee that every uniquely identified request is processed only once no matter how many times that uniquely identifiable request is made are described as idempotent.)\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Prices and Currencies\n\nAll prices returned by the API are represented as integer amounts in a currency’s smallest unit. For example, $5 USD would be returned as 500 (i.e, 500 cents).\n\nFor zero-decimal currencies, amounts will still be provided as an integer but without the need to divide by 100. For example, an amount of ¥5 (JPY) would be returned as 5.\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n"
+  description: "Welcome to the POS API.\n\nYou can use this API to access all POS endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## GraphQL\n\nUse the [GraphQL playground](https://developers.apideck.com/graphql/playground) to test out the GraphQL API.\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes.                                                                                                      |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer API KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nUpcoming. [Request the SDK of your choice](https://integrations.apideck.com/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer sk_live_***'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will no be able to make further requests until this limit resets at the end of the month, or talk to us about upgrading your subscription to continue immediately.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Idempotence (upcoming)\n\nTo prevent the creation of duplicate resources, every POST method (such as one that creates a consumer record) must specify a unique value for the X-Unique-Transaction-ID header name. Uniquely identifying each unique POST request ensures that the API processes a given request once and only once.\n\nUniquely identifying new resource-creation POSTs is especially important when the outcome of a response is ambiguous because of a transient service interruption, such as a server-side timeout or network disruption. If a service interruption occurs, then the client application can safely retry the uniquely identified request without creating duplicate operations. (API endpoints that guarantee that every uniquely identified request is processed only once no matter how many times that uniquely identifiable request is made are described as idempotent.)\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Prices and Currencies\n\nAll prices returned by the API are represented as integer amounts in a currency’s smallest unit. For example, $5 USD would be returned as 500 (i.e, 500 cents).\n\nFor zero-decimal currencies, amounts will still be provided as an integer but without the need to divide by 100. For example, an amount of ¥5 (JPY) would be returned as 5.\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n"
   contact:
     email: hello@apideck.com
     url: 'https://developers.apideck.com'
@@ -157,42 +157,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateOrderResponse'
-    CreateProductResponse:
-      description: Products
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateProductResponse'
-    DeleteProductResponse:
-      description: Products
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/DeleteProductResponse'
-    GetProductResponse:
-      description: Products
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/GetProductResponse'
-    GetProductsResponse:
-      description: Products
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/GetProductsResponse'
-    Product:
-      description: Products
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Product'
-    UpdateProductResponse:
-      description: Products
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UpdateProductResponse'
     CreatePaymentResponse:
       description: Payments
       content:
@@ -880,7 +844,10 @@ components:
           nullable: true
         reference_id:
           type: string
+          title: Reference ID
+          description: 'An optional user-defined reference ID that associates this record with another entity in an external system. For example, a customer ID from an external customer management system.'
           example: my-order-001
+          nullable: true
         status:
           title: Status
           type: string
@@ -1485,6 +1452,11 @@ components:
           title: Total refund
           example: 0
           nullable: true
+        total_service_charge:
+          type: number
+          title: Total service charge
+          example: 0
+          nullable: true
         customers:
           type: array
           items:
@@ -1550,10 +1522,15 @@ components:
               name:
                 type: string
                 example: New York Strip Steak
-              tax_amount:
+              total_tax:
                 type: number
                 title: Tax amount
-                example: 27500
+                example: 2000
+                nullable: true
+              total_discount:
+                type: number
+                title: Total discount amount
+                example: 3000
                 nullable: true
               total_amount:
                 type: number
@@ -1682,8 +1659,8 @@ components:
               type:
                 type: string
                 enum:
-                  - FIXED_PERCENTAGE
-                example: FIXED_PERCENTAGE
+                  - fixed_percentage
+                example: fixed_percentage
               amount:
                 type: number
                 example: 27500
@@ -1692,9 +1669,201 @@ components:
               scope:
                 type: string
                 enum:
-                  - ORDER
-                  - LINE_ITEM
-                example: ORDER
+                  - order
+                  - line_item
+                example: order
+        tenders:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                $ref: '#/components/schemas/Id'
+              name:
+                type: string
+                example: 10% off
+              type:
+                type: string
+                enum:
+                  - cash
+                  - card
+                  - other
+                example: cash
+              note:
+                title: Note
+                type: string
+                example: An optional note associated with the tender at the time of payment.
+              amount:
+                type: number
+                example: 27500
+              currency:
+                $ref: '#/components/schemas/Order/properties/currency'
+              total_amount:
+                type: number
+                title: Total amount
+                example: 27.5
+                nullable: true
+              total_tip:
+                type: number
+                title: Total tax
+                example: 7
+                nullable: true
+              total_processing_fee:
+                type: number
+                title: Total processing fee
+                example: 0
+                nullable: true
+              total_tax:
+                type: number
+                title: Total tax
+                example: 2.75
+                nullable: true
+              total_discount:
+                type: number
+                title: Total discount
+                example: 3
+                nullable: true
+              total_refund:
+                type: number
+                title: Total refund
+                example: 0
+                nullable: true
+              total_service_charge:
+                type: number
+                title: Total service charge
+                example: 0
+                nullable: true
+              buyer_tendered_cash_amount:
+                type: number
+                description: The amount of cash tendered by the buyer. Only applicable when the tender type is cash.
+                example: 27500
+                nullable: true
+              change_back_cash_amount:
+                type: number
+                description: The amount of cash returned to the buyer. Only applicable when the tender type is cash.
+                example: 27500
+                nullable: true
+              card:
+                type: object
+                description: The card's non-confidential details. Only applicable when the tender type is card.
+                properties:
+                  id:
+                    $ref: '#/components/schemas/Id'
+                  billing_address:
+                    $ref: '#/components/schemas/Address'
+                  bin:
+                    type: string
+                    description: 'The first six digits of the card number, known as the Bank Identification Number (BIN).'
+                    example: '41111'
+                    nullable: true
+                  card_brand:
+                    type: string
+                    enum:
+                      - visa
+                      - mastercard
+                      - amex
+                      - discover
+                      - discover-diners
+                      - jcb
+                      - china-unionpay
+                      - square-gift-card
+                      - square-capital-card
+                      - interac
+                      - eftpos
+                      - felica
+                      - ebt
+                      - other
+                    description: 'The first six digits of the card number, known as the Bank Identification Number (BIN).'
+                    nullable: true
+                  card_type:
+                    type: string
+                    enum:
+                      - credit
+                      - debit
+                      - prepaid
+                      - other
+                    example: credit
+                    nullable: true
+                  prepaid_type:
+                    type: string
+                    enum:
+                      - non-prepaid
+                      - prepaid
+                      - unknown
+                    example: prepaid
+                    nullable: true
+                  cardholder_name:
+                    type: string
+                    example: John Doe
+                    nullable: true
+                  customer_id:
+                    type: string
+                    example: '12345'
+                    nullable: true
+                  merchant_id:
+                    type: string
+                    example: '12345'
+                  exp_month:
+                    type: integer
+                    description: The expiration month of the associated card as an integer between 1 and 12.
+                    example: 1
+                    nullable: true
+                    minimum: 1
+                    maximum: 12
+                  exp_year:
+                    type: integer
+                    description: The four-digit year of the card's expiration date.
+                    example: 2022
+                    nullable: true
+                  fingerprint:
+                    type: string
+                    example: ' Intended as a POS-assigned identifier, based on the card number, to identify the card across multiple locations within a single application.'
+                    nullable: true
+                  last_4:
+                    type: string
+                    example: The last 4 digits of the card number.
+                    nullable: true
+                  enabled:
+                    type: boolean
+                    description: Indicates whether or not a card can be used for payments.
+                    example: true
+                    nullable: true
+                  reference_id:
+                    type: string
+                    title: Reference ID
+                    description: 'An optional user-defined reference ID that associates this record with another entity in an external system. For example, a customer ID from an external customer management system.'
+                    example: card-001
+                    nullable: true
+                  version:
+                    $ref: '#/components/schemas/Order/properties/version'
+                nullable: true
+              card_status:
+                type: string
+                description: The status of the card. Only applicable when the tender type is card.
+                enum:
+                  - authorized
+                  - captured
+                  - failed
+                  - voided
+                example: authorized
+                nullable: true
+              card_entry_method:
+                type: string
+                description: The entry method of the card. Only applicable when the tender type is card.
+                enum:
+                  - evm
+                  - swiped
+                  - keyed
+                  - on-file
+                  - contactless
+                example: swiped
+                nullable: true
+              payment_id:
+                $ref: '#/components/schemas/Id'
+              location_id:
+                $ref: '#/components/schemas/Id'
+              transaction_id:
+                $ref: '#/components/schemas/Id'
         source:
           type: string
           description: Source of order. Indicates the way that the order was placed.
@@ -1708,6 +1877,8 @@ components:
             - google
             - invoice
           example: api
+          readOnly: true
+          nullable: true
         voided:
           type: boolean
           example: false
@@ -1717,6 +1888,11 @@ components:
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+        version:
+          type: string
+          title: Version
+          example: '230320320320'
+          nullable: true
         updated_by:
           $ref: '#/components/schemas/Item/properties/version'
         created_by:
@@ -2087,9 +2263,6 @@ components:
                 - pos.order.created
                 - pos.order.updated
                 - pos.order.deleted
-                - pos.product.created
-                - pos.product.updated
-                - pos.product.deleted
                 - pos.payment.created
                 - pos.payment.updated
                 - pos.payment.deleted
@@ -2132,188 +2305,6 @@ components:
             - personal
             - other
           example: primary
-    CreateProductResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: square-pos
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Products
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteProductResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: square-pos
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Products
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    GetProductResponse:
-      x-graphql-type-name: Product
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: square-pos
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Products
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/Product'
-    GetProductsResponse:
-      x-graphql-type-name: ProductList
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: square-pos
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Products
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Product'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-    Product:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        updated_by:
-          $ref: '#/components/schemas/Item/properties/version'
-        created_by:
-          $ref: '#/components/schemas/Item/properties/created_by'
-        updated_at:
-          $ref: '#/components/schemas/Item/properties/updated_at'
-        created_at:
-          $ref: '#/components/schemas/Item/properties/created_at'
-    UpdateProductResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: square-pos
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Products
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/UnifiedId'
     CreatePaymentResponse:
       type: object
       required:
@@ -2477,11 +2468,7 @@ components:
           type: string
           example: '12345'
         idempotency_key:
-          minLength: 1
-          maxLength: 45
-          type: string
-          description: A value you specify that uniquely identifies this request among requests you have sent.
-          example: random_string
+          $ref: '#/components/schemas/Item/properties/idempotency_key'
         amount:
           type: number
           title: Amount
@@ -3272,13 +3259,30 @@ components:
     Item:
       type: object
       additionalProperties: false
+      required:
+        - idempotency_key
       properties:
         id:
-          $ref: '#/components/schemas/Id'
-        name:
-          title: name
           type: string
-          example: Product
+          example: '#cocoa'
+        idempotency_key:
+          minLength: 1
+          maxLength: 45
+          type: string
+          description: A value you specify that uniquely identifies this request among requests you have sent.
+          example: random_string
+        name:
+          title: Name
+          type: string
+          example: Cocoa
+        description:
+          title: Description
+          type: string
+          example: Hot Chocolate
+        abbreviation:
+          title: Abbreviation
+          type: string
+          example: Ch
         product_type:
           title: Product type
           type: string
@@ -3361,6 +3365,10 @@ components:
                 example: 10
               price_currency:
                 $ref: '#/components/schemas/Order/properties/currency'
+              stockable:
+                title: Stockable
+                type: boolean
+                example: false
               present_at_all_locations:
                 title: Present at all locations
                 type: boolean
@@ -3387,6 +3395,11 @@ components:
           type: string
           example: '12345'
           readOnly: true
+          nullable: true
+        deleted:
+          type: boolean
+          title: Deleted
+          example: true
           nullable: true
         updated_by:
           $ref: '#/components/schemas/Item/properties/version'
@@ -3833,10 +3846,6 @@ tags:
     description: ''
     x-apideck-model:
       $ref: '#/components/schemas/Order'
-  - name: Products
-    description: ''
-    x-apideck-model:
-      $ref: '#/components/schemas/Product'
   - name: Payments
     description: ''
     x-apideck-model:
@@ -3979,6 +3988,7 @@ paths:
                 total_tax: 2.75,
                 total_discount: 3,
                 total_refund: 0,
+                total_service_charge: 0,
                 customers: [
                   {
                     first_name: 'Elon',
@@ -4063,7 +4073,8 @@ paths:
                 line_items: [
                   {
                     name: 'New York Strip Steak',
-                    tax_amount: 27500,
+                    total_tax: 2000,
+                    total_discount: 3000,
                     total_amount: 27500,
                     quantity: 1,
                     unit_price: 27500.5,
@@ -4114,14 +4125,76 @@ paths:
                 discounts: [
                   {
                     name: '10% off',
-                    type: 'FIXED_PERCENTAGE',
+                    type: 'fixed_percentage',
                     amount: 27500,
                     currency: 'USD',
-                    scope: 'ORDER'
+                    scope: 'order'
                   }
                 ],
-                source: 'api',
-                voided: false
+                tenders: [
+                  {
+                    name: '10% off',
+                    type: 'cash',
+                    note: 'An optional note associated with the tender at the time of payment.',
+                    amount: 27500,
+                    currency: 'USD',
+                    total_amount: 27.5,
+                    total_tip: 7,
+                    total_processing_fee: 0,
+                    total_tax: 2.75,
+                    total_discount: 3,
+                    total_refund: 0,
+                    total_service_charge: 0,
+                    buyer_tendered_cash_amount: 27500,
+                    change_back_cash_amount: 27500,
+                    card: {
+                      billing_address: {
+                        id: '123',
+                        type: 'primary',
+                        string: '25 Spring Street, Blackburn, VIC 3130',
+                        name: 'HQ US',
+                        line1: 'Main street',
+                        line2: 'apt #',
+                        line3: 'Suite #',
+                        line4: 'delivery instructions',
+                        street_number: '25',
+                        city: 'San Francisco',
+                        state: 'CA',
+                        postal_code: '94104',
+                        country: 'US',
+                        latitude: '40.759211',
+                        longitude: '-73.984638',
+                        county: 'Santa Clara',
+                        contact_name: 'Elon Musk',
+                        salutation: 'Mr',
+                        phone_number: '111-111-1111',
+                        fax: '122-111-1111',
+                        email: 'elon@musk.com',
+                        website: 'https://elonmusk.com',
+                        row_version: '1-12345'
+                      },
+                      bin: '41111',
+                      card_brand: 'visa',
+                      card_type: 'credit',
+                      prepaid_type: 'prepaid',
+                      cardholder_name: 'John Doe',
+                      customer_id: '12345',
+                      merchant_id: '12345',
+                      exp_month: 1,
+                      exp_year: 2022,
+                      fingerprint:
+                        ' Intended as a POS-assigned identifier, based on the card number, to identify the card across multiple locations within a single application.',
+                      last_4: 'The last 4 digits of the card number.',
+                      enabled: true,
+                      reference_id: 'card-001',
+                      version: '230320320320'
+                    },
+                    card_status: 'authorized',
+                    card_entry_method: 'swiped'
+                  }
+                ],
+                voided: false,
+                version: '230320320320'
               }
             }
 
@@ -4250,6 +4323,7 @@ paths:
                 total_tax: 2.75,
                 total_discount: 3,
                 total_refund: 0,
+                total_service_charge: 0,
                 customers: [
                   {
                     first_name: 'Elon',
@@ -4334,7 +4408,8 @@ paths:
                 line_items: [
                   {
                     name: 'New York Strip Steak',
-                    tax_amount: 27500,
+                    total_tax: 2000,
+                    total_discount: 3000,
                     total_amount: 27500,
                     quantity: 1,
                     unit_price: 27500.5,
@@ -4385,14 +4460,76 @@ paths:
                 discounts: [
                   {
                     name: '10% off',
-                    type: 'FIXED_PERCENTAGE',
+                    type: 'fixed_percentage',
                     amount: 27500,
                     currency: 'USD',
-                    scope: 'ORDER'
+                    scope: 'order'
                   }
                 ],
-                source: 'api',
-                voided: false
+                tenders: [
+                  {
+                    name: '10% off',
+                    type: 'cash',
+                    note: 'An optional note associated with the tender at the time of payment.',
+                    amount: 27500,
+                    currency: 'USD',
+                    total_amount: 27.5,
+                    total_tip: 7,
+                    total_processing_fee: 0,
+                    total_tax: 2.75,
+                    total_discount: 3,
+                    total_refund: 0,
+                    total_service_charge: 0,
+                    buyer_tendered_cash_amount: 27500,
+                    change_back_cash_amount: 27500,
+                    card: {
+                      billing_address: {
+                        id: '123',
+                        type: 'primary',
+                        string: '25 Spring Street, Blackburn, VIC 3130',
+                        name: 'HQ US',
+                        line1: 'Main street',
+                        line2: 'apt #',
+                        line3: 'Suite #',
+                        line4: 'delivery instructions',
+                        street_number: '25',
+                        city: 'San Francisco',
+                        state: 'CA',
+                        postal_code: '94104',
+                        country: 'US',
+                        latitude: '40.759211',
+                        longitude: '-73.984638',
+                        county: 'Santa Clara',
+                        contact_name: 'Elon Musk',
+                        salutation: 'Mr',
+                        phone_number: '111-111-1111',
+                        fax: '122-111-1111',
+                        email: 'elon@musk.com',
+                        website: 'https://elonmusk.com',
+                        row_version: '1-12345'
+                      },
+                      bin: '41111',
+                      card_brand: 'visa',
+                      card_type: 'credit',
+                      prepaid_type: 'prepaid',
+                      cardholder_name: 'John Doe',
+                      customer_id: '12345',
+                      merchant_id: '12345',
+                      exp_month: 1,
+                      exp_year: 2022,
+                      fingerprint:
+                        ' Intended as a POS-assigned identifier, based on the card number, to identify the card across multiple locations within a single application.',
+                      last_4: 'The last 4 digits of the card number.',
+                      enabled: true,
+                      reference_id: 'card-001',
+                      version: '230320320320'
+                    },
+                    card_status: 'authorized',
+                    card_entry_method: 'swiped'
+                  }
+                ],
+                voided: false,
+                version: '230320320320'
               }
             }
 
@@ -4521,6 +4658,7 @@ paths:
                 total_tax: 2.75,
                 total_discount: 3,
                 total_refund: 0,
+                total_service_charge: 0,
                 customers: [
                   {
                     first_name: 'Elon',
@@ -4605,7 +4743,8 @@ paths:
                 line_items: [
                   {
                     name: 'New York Strip Steak',
-                    tax_amount: 27500,
+                    total_tax: 2000,
+                    total_discount: 3000,
                     total_amount: 27500,
                     quantity: 1,
                     unit_price: 27500.5,
@@ -4656,283 +4795,81 @@ paths:
                 discounts: [
                   {
                     name: '10% off',
-                    type: 'FIXED_PERCENTAGE',
+                    type: 'fixed_percentage',
                     amount: 27500,
                     currency: 'USD',
-                    scope: 'ORDER'
+                    scope: 'order'
                   }
                 ],
-                source: 'api',
-                voided: false
+                tenders: [
+                  {
+                    name: '10% off',
+                    type: 'cash',
+                    note: 'An optional note associated with the tender at the time of payment.',
+                    amount: 27500,
+                    currency: 'USD',
+                    total_amount: 27.5,
+                    total_tip: 7,
+                    total_processing_fee: 0,
+                    total_tax: 2.75,
+                    total_discount: 3,
+                    total_refund: 0,
+                    total_service_charge: 0,
+                    buyer_tendered_cash_amount: 27500,
+                    change_back_cash_amount: 27500,
+                    card: {
+                      billing_address: {
+                        id: '123',
+                        type: 'primary',
+                        string: '25 Spring Street, Blackburn, VIC 3130',
+                        name: 'HQ US',
+                        line1: 'Main street',
+                        line2: 'apt #',
+                        line3: 'Suite #',
+                        line4: 'delivery instructions',
+                        street_number: '25',
+                        city: 'San Francisco',
+                        state: 'CA',
+                        postal_code: '94104',
+                        country: 'US',
+                        latitude: '40.759211',
+                        longitude: '-73.984638',
+                        county: 'Santa Clara',
+                        contact_name: 'Elon Musk',
+                        salutation: 'Mr',
+                        phone_number: '111-111-1111',
+                        fax: '122-111-1111',
+                        email: 'elon@musk.com',
+                        website: 'https://elonmusk.com',
+                        row_version: '1-12345'
+                      },
+                      bin: '41111',
+                      card_brand: 'visa',
+                      card_type: 'credit',
+                      prepaid_type: 'prepaid',
+                      cardholder_name: 'John Doe',
+                      customer_id: '12345',
+                      merchant_id: '12345',
+                      exp_month: 1,
+                      exp_year: 2022,
+                      fingerprint:
+                        ' Intended as a POS-assigned identifier, based on the card number, to identify the card across multiple locations within a single application.',
+                      last_4: 'The last 4 digits of the card number.',
+                      enabled: true,
+                      reference_id: 'card-001',
+                      version: '230320320320'
+                    },
+                    card_status: 'authorized',
+                    card_entry_method: 'swiped'
+                  }
+                ],
+                voided: false,
+                version: '230320320320'
               }
             }
 
             try {
               const { data } = await apideck.pos.ordersPay(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
-  /pos/products:
-    get:
-      tags:
-        - Products
-      x-graphql-field-name: products
-      operationId: productsAll
-      summary: List Products
-      description: List Products
-      parameters:
-        - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/consumerId'
-        - $ref: '#/components/parameters/applicationId'
-        - $ref: '#/components/parameters/serviceId'
-        - $ref: '#/components/parameters/cursor'
-        - $ref: '#/components/parameters/limit'
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          $ref: '#/components/responses/GetProductsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '402':
-          $ref: '#/components/responses/PaymentRequiredResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '422':
-          $ref: '#/components/responses/UnprocessableResponse'
-        default:
-          $ref: '#/components/responses/UnexpectedErrorResponse'
-      x-apideck-api: pos
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.pos.productsAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
-    post:
-      tags:
-        - Products
-      operationId: productsAdd
-      summary: Create Product
-      description: Create Product
-      parameters:
-        - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/consumerId'
-        - $ref: '#/components/parameters/applicationId'
-        - $ref: '#/components/parameters/serviceId'
-      security:
-        - apiKey: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-      responses:
-        '201':
-          $ref: '#/components/responses/CreateProductResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '402':
-          $ref: '#/components/responses/PaymentRequiredResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '422':
-          $ref: '#/components/responses/UnprocessableResponse'
-        default:
-          $ref: '#/components/responses/UnexpectedErrorResponse'
-      x-apideck-api: pos
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.pos.productsAdd({
-                product: {}
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
-  '/pos/products/{id}':
-    get:
-      tags:
-        - Products
-      operationId: productsOne
-      summary: Get Product
-      description: Get Product
-      parameters:
-        - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/consumerId'
-        - $ref: '#/components/parameters/applicationId'
-        - $ref: '#/components/parameters/serviceId'
-        - $ref: '#/components/parameters/raw'
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          $ref: '#/components/responses/GetProductResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '402':
-          $ref: '#/components/responses/PaymentRequiredResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '422':
-          $ref: '#/components/responses/UnprocessableResponse'
-        default:
-          $ref: '#/components/responses/UnexpectedErrorResponse'
-      x-apideck-api: pos
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.pos.productsOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
-    patch:
-      tags:
-        - Products
-      operationId: productsUpdate
-      summary: Update Product
-      description: Update Product
-      parameters:
-        - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/consumerId'
-        - $ref: '#/components/parameters/applicationId'
-        - $ref: '#/components/parameters/serviceId'
-        - $ref: '#/components/parameters/raw'
-      security:
-        - apiKey: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-      responses:
-        '200':
-          $ref: '#/components/responses/UpdateProductResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '402':
-          $ref: '#/components/responses/PaymentRequiredResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '422':
-          $ref: '#/components/responses/UnprocessableResponse'
-        default:
-          $ref: '#/components/responses/UnexpectedErrorResponse'
-      x-apideck-api: pos
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.pos.productsUpdate({
-                id: 'id_example',
-                product: {}
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
-    delete:
-      tags:
-        - Products
-      operationId: productsDelete
-      summary: Delete Product
-      description: Delete Product
-      parameters:
-        - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/consumerId'
-        - $ref: '#/components/parameters/applicationId'
-        - $ref: '#/components/parameters/serviceId'
-        - $ref: '#/components/parameters/raw'
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          $ref: '#/components/responses/DeleteProductResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '402':
-          $ref: '#/components/responses/PaymentRequiredResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '422':
-          $ref: '#/components/responses/UnprocessableResponse'
-        default:
-          $ref: '#/components/responses/UnexpectedErrorResponse'
-      x-apideck-api: pos
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.pos.productsDelete({
-                id: 'id_example'
-              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -5906,7 +5843,7 @@ paths:
             } catch (error) {
               console.error(error)
             }
-  '/pos/{merchantId}/items':
+  /pos/items:
     get:
       tags:
         - Items
@@ -5916,7 +5853,6 @@ paths:
       description: List Items
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/merchantId'
         - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
@@ -5953,9 +5889,7 @@ paths:
             })
 
             try {
-              const { data } = await apideck.pos.itemsAll({
-                merchantId: 'merchantId_example'
-              })
+              const { data } = await apideck.pos.itemsAll({})
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -5968,7 +5902,6 @@ paths:
       description: Create Item
       parameters:
         - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/merchantId'
         - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
@@ -6009,9 +5942,12 @@ paths:
             })
 
             const params = {
-              merchantId: 'merchantId_example',
               item: {
-                name: 'Product',
+                id: '#cocoa',
+                idempotency_key: 'random_string',
+                name: 'Cocoa',
+                description: 'Hot Chocolate',
+                abbreviation: 'Ch',
                 product_type: 'regular',
                 tax_ids: ['12345', '67890'],
                 absent_at_location_ids: ['12345', '67890'],
@@ -6035,7 +5971,8 @@ paths:
                     price_currency: 'USD',
                     image_ids: ['12345', '67890']
                   }
-                ]
+                ],
+                deleted: true
               }
             }
 
@@ -6045,7 +5982,7 @@ paths:
             } catch (error) {
               console.error(error)
             }
-  '/pos/{merchantId}/items/{id}':
+  '/pos/items/{id}':
     get:
       tags:
         - Items
@@ -6054,7 +5991,6 @@ paths:
       description: Get Item
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/merchantId'
         - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
@@ -6089,13 +6025,10 @@ paths:
               consumerId: 'REPLACE_WITH_CONSUMER_ID'
             })
 
-            const params = {
-              id: 'id_example',
-              merchantId: 'merchantId_example'
-            }
-
             try {
-              const { data } = await apideck.pos.itemsOne(params)
+              const { data } = await apideck.pos.itemsOne({
+                id: 'id_example'
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -6108,7 +6041,6 @@ paths:
       description: Update Item
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/merchantId'
         - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
@@ -6151,9 +6083,12 @@ paths:
 
             const params = {
               id: 'id_example',
-              merchantId: 'merchantId_example',
               item: {
-                name: 'Product',
+                id: '#cocoa',
+                idempotency_key: 'random_string',
+                name: 'Cocoa',
+                description: 'Hot Chocolate',
+                abbreviation: 'Ch',
                 product_type: 'regular',
                 tax_ids: ['12345', '67890'],
                 absent_at_location_ids: ['12345', '67890'],
@@ -6177,7 +6112,8 @@ paths:
                     price_currency: 'USD',
                     image_ids: ['12345', '67890']
                   }
-                ]
+                ],
+                deleted: true
               }
             }
 
@@ -6195,7 +6131,6 @@ paths:
       description: Delete Item
       parameters:
         - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/merchantId'
         - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
@@ -6230,13 +6165,10 @@ paths:
               consumerId: 'REPLACE_WITH_CONSUMER_ID'
             })
 
-            const params = {
-              id: 'id_example',
-              merchantId: 'merchantId_example'
-            }
-
             try {
-              const { data } = await apideck.pos.itemsDelete(params)
+              const { data } = await apideck.pos.itemsDelete({
+                id: 'id_example'
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -6811,54 +6743,6 @@ x-webhooks:
       operationId: orderDeleted
       x-apideck-event-type: pos.order.deleted
       x-apideck-upcoming: true
-      tags:
-        - Webhook Events
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WebhookEvent'
-      responses:
-        '200':
-          description: Return a 200 status to indicate that the data was received successfully
-  ProductDeleted:
-    post:
-      summary: Product deleted
-      description: Product deleted
-      operationId: productDeleted
-      x-apideck-event-type: pos.product.deleted
-      tags:
-        - Webhook Events
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WebhookEvent'
-      responses:
-        '200':
-          description: Return a 200 status to indicate that the data was received successfully
-  ProductUpdated:
-    post:
-      summary: Product updated
-      description: Product updated
-      operationId: productUpdated
-      x-apideck-event-type: pos.product.updated
-      tags:
-        - Webhook Events
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WebhookEvent'
-      responses:
-        '200':
-          description: Return a 200 status to indicate that the data was received successfully
-  ProductCreated:
-    post:
-      summary: Product created
-      description: Product created
-      operationId: productCreated
-      x-apideck-event-type: pos.product.created
       tags:
         - Webhook Events
       requestBody:

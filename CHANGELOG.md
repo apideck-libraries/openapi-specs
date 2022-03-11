@@ -1,3 +1,7 @@
+## v8.13.0 - (2022-03-09)
+
+- Added `Items` and `Orders` POS mapping to [Square](connectors/square`)
+
 ## v8.12.1 - (2022-02-18)
 
 ### Accounting API

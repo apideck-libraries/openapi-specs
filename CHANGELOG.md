@@ -1,3 +1,20 @@
+## v8.14.0 - (2022-03-18)
+
+### Accounting API
+
+- Added [Sage Intacct](connectors/sage-intacct) connector
+- [LedgerAccounts](apis/accounting/reference#tag/LedgerAccounts)
+  - `LedgerAccount.type` enum extended to include `balancesheet`
+  - Added `categories` property
+- [AccountingCustomer](apis/accounting/reference#tag/AccountingCustomer)
+  - `AccountingCustomer.status` enum extended to include `inactive`
+- [Payment](apis/accounting/reference#tag/Payment)
+  - `Payment` extended with optional `payment_method` string
+
+### Vault API
+
+- Extended [Connections](apis/vault/reference#tag/Connection) `auth_type` enum to include `custom`.
+
 ## v8.13.0 - (2022-03-09)
 
 - Added `Items` and `Orders` POS mapping to [Square](connectors/square`)

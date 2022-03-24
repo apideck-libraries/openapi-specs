@@ -1,4 +1,12 @@
+## v8.16.0 - (2022-03-24)
+
+- Added [Departments](apis/hris/reference#tag/Departments) to HRIS
+- Fixed Nmbrs birthday date format on Employees
+
 ## v8.15.0 - (2022-03-23)
+
+- Added [Greenhouse](connectors/greenhouse) connector to ATS
+- Added Merchant ID to [Clover](connectors/clover) connector
 
 ## v8.14.0 - (2022-03-18)
 

@@ -1,4 +1,12 @@
+## v8.17.0 - (2022-03-24)
+
+### Connector API
+
+- Added `oauth_grant_type`, `oauth_credentials_source` and `has_sandbox_credentials` to [Connector](apis/connector/reference#tag/Connector)
+
 ## v8.16.0 - (2022-03-24)
+
+### HRIS API
 
 - Added [Departments](apis/hris/reference#tag/Departments) to HRIS
 - Fixed Nmbrs birthday date format on Employees

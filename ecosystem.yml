@@ -1,0 +1,1283 @@
+openapi: 3.0.3
+info:
+  version: 0.0.1
+  title: Ecosystem API
+  description: 'Ecosystem API'
+  contact:
+    email: hello@apideck.com
+    url: 'https://developers.apideck.com'
+  x-logo:
+    url: 'https://developers.apideck.com/icon.png'
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+externalDocs:
+  description: Apideck Developer Docs
+  url: 'https://developers.apideck.com'
+servers:
+  - url: 'https://api.apideck.com'
+    description: Production
+security: []
+tags:
+  - name: Ecosystem
+    description: ''
+  - name: Listing
+    description: ''
+  - name: Collection
+    description: ''
+  - name: Category
+    description: ''
+  - name: Product
+    description: ''
+components:
+  schemas:
+    Category:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        description:
+          nullable: true
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        translations:
+          $ref: '#/components/schemas/Translations'
+        listing_description_text_template:
+          type: string
+        listing_price_text_template:
+          type: string
+        listing_features_text_template:
+          type: string
+        logo:
+          $ref: '#/components/schemas/Logo'
+        created_at:
+          type: string
+          readOnly: true
+          format: date-time
+        updated_at:
+          type: string
+          readOnly: true
+          format: date-time
+    Collection:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        card_background_color:
+          nullable: true
+          type: string
+        card_background_image:
+          $ref: '#/components/schemas/File'
+        card_columns:
+          nullable: true
+          type: integer
+        card_style:
+          type: string
+        description:
+          nullable: true
+          type: string
+        logo:
+          $ref: '#/components/schemas/File'
+        name:
+          type: string
+        hidden_from_homepage:
+          nullable: true
+          type: boolean
+        show_max_items_homepage:
+          nullable: true
+          type: integer
+        sequence:
+          nullable: true
+          type: integer
+        slug:
+          type: string
+        translations:
+          $ref: '#/components/schemas/Translations'
+        visible:
+          type: boolean
+    CardSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        background_color:
+          nullable: true
+          type: string
+        border_color:
+          nullable: true
+          type: string
+        border_radius:
+          nullable: true
+          type: string
+        border_size:
+          nullable: true
+          type: string
+        color:
+          nullable: true
+          type: string
+        columns:
+          nullable: true
+          type: integer
+        description_lines:
+          nullable: true
+          type: integer
+        icon_border_radius:
+          nullable: true
+          type: string
+        icon_shadow_enabled:
+          nullable: true
+          type: boolean
+        icon_size:
+          nullable: true
+          type: integer
+        shadow_enabled:
+          nullable: true
+          type: boolean
+        show_action:
+          nullable: true
+          type: boolean
+        show_badges:
+          nullable: true
+          type: boolean
+        show_category:
+          nullable: true
+          type: boolean
+        show_description:
+          nullable: true
+          type: boolean
+        style:
+          nullable: true
+          type: string
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        first_name:
+          type: string
+          nullable: true
+        last_name:
+          type: string
+          nullable: true
+        name:
+          type: string
+        email:
+          type: string
+          nullable: true
+        role:
+          type: string
+          nullable: true
+        linked_in:
+          type: string
+          nullable: true
+        twitter:
+          type: string
+          nullable: true
+    CTASettings:
+      type: object
+      additionalProperties: false
+      properties:
+        background_color:
+          nullable: true
+          type: string
+        button_background_color:
+          nullable: true
+          type: string
+        button_color:
+          nullable: true
+          type: string
+        button_label:
+          nullable: true
+          type: string
+        button_link:
+          nullable: true
+          type: string
+        color:
+          nullable: true
+          type: string
+        description:
+          nullable: true
+          type: string
+        enabled:
+          nullable: true
+          type: boolean
+        title:
+          nullable: true
+          type: string
+    CustomSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        css:
+          nullable: true
+          type: string
+        css_link:
+          nullable: true
+          type: string
+        domain:
+          nullable: true
+          type: string
+        html_footer:
+          nullable: true
+          type: string
+        html_nav:
+          nullable: true
+          type: string
+        java_script_link:
+          nullable: true
+          type: string
+    Ecosystem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        about:
+          nullable: true
+          type: string
+        alternatives_background_color:
+          nullable: true
+          type: string
+        alternatives_color:
+          nullable: true
+          type: string
+        attribution:
+          nullable: true
+          type: boolean
+        body_background_color:
+          nullable: true
+          type: string
+        body_button_background_color:
+          nullable: true
+          type: string
+        body_button_color:
+          nullable: true
+          type: string
+        body_color:
+          nullable: true
+          type: string
+        body_link_color:
+          nullable: true
+          type: string
+        card_settings:
+          $ref: '#/components/schemas/CardSettings'
+        categories_count_badge:
+          nullable: true
+          type: boolean
+        categories_show_max_items:
+          nullable: true
+          type: integer
+        collections_count_badge:
+          nullable: true
+          type: boolean
+        collections_title:
+          nullable: true
+          type: string
+        create_link:
+          nullable: true
+          type: string
+        cta_settings:
+          $ref: '#/components/schemas/CTASettings'
+        custom_settings:
+          $ref: '#/components/schemas/CustomSettings'
+        detail_pages_enabled:
+          nullable: true
+          type: boolean
+        footer_background_color:
+          nullable: true
+          type: string
+        footer_color:
+          nullable: true
+          type: string
+        google_site_verification_id:
+          nullable: true
+          type: string
+        hide_install_buttons:
+          nullable: true
+          type: boolean
+        home_page_collection_category_cards:
+          nullable: true
+          type: boolean
+        home_page_show_all_listings:
+          nullable: true
+          type: boolean
+        installation_request_flow_enabled:
+          nullable: true
+          type: boolean
+        integration_settings:
+          $ref: '#/components/schemas/IntegrationSettings'
+        is_published:
+          nullable: true
+          type: boolean
+        lead_form_settings:
+          $ref: '#/components/schemas/LeadFormSettings'
+        listing_settings:
+          $ref: '#/components/schemas/ListingSettings'
+        masthead_settings:
+          $ref: '#/components/schemas/MastheadSettings'
+        menu_position:
+          enum:
+            - TOP
+            - LEFT
+            - RIGHT
+            - HIDDEN
+          nullable: true
+          type: string
+        menu_style:
+          enum:
+            - LIST
+            - PILL
+            - FILTER
+          nullable: true
+          type: string
+        meta_tag_settings:
+          $ref: '#/components/schemas/MetaTagSettings'
+        name:
+          type: string
+        navigation_background_color:
+          nullable: true
+          type: string
+        navigation_color:
+          nullable: true
+          type: string
+        navigation_logo_post_fix:
+          nullable: true
+          type: string
+        navigation_mobile_menu_type:
+          enum:
+            - ICON
+            - TEXT
+          nullable: true
+          type: string
+        navigation_sticky:
+          nullable: true
+          type: boolean
+        primary_color:
+          nullable: true
+          type: string
+        privacy_link:
+          nullable: true
+          type: string
+        published:
+          type: boolean
+        request_link:
+          nullable: true
+          type: string
+        shadow_page_description:
+          nullable: true
+          type: string
+        shadow_pages_enabled:
+          nullable: true
+          type: boolean
+        show_attribution_badge:
+          nullable: true
+          type: boolean
+        show_requested_listings:
+          nullable: true
+          type: boolean
+        slug:
+          nullable: false
+          type: string
+        terms_link:
+          nullable: true
+          type: string
+        total_published_listings:
+          nullable: true
+          type: integer
+        unify_application_id:
+          nullable: true
+          type: string
+        utm_campaign:
+          nullable: true
+          type: string
+        website:
+          nullable: true
+          type: string
+        zaps_menu_title:
+          nullable: true
+          type: string
+        zaps_page_enabled:
+          nullable: true
+          type: boolean
+    File:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        contentType:
+          type: string
+          example: 'application/jpeg'
+        type:
+          enum:
+            - LOGO
+            - BANNER
+            - SCREENSHOT
+          nullable: true
+          type: string
+        url:
+          type: string
+        created_at:
+          type: string
+          readOnly: true
+          format: date-time
+        updated_at:
+          type: string
+          readOnly: true
+          format: date-time
+    IntegrationSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        albacross_id:
+          nullable: true
+          type: string
+        automate_enabled:
+          nullable: true
+          type: boolean
+        blendr_enabled:
+          nullable: true
+          type: boolean
+        combidesk_enabled:
+          nullable: true
+          type: boolean
+        crisp_id:
+          nullable: true
+          type: string
+        drift_id:
+          nullable: true
+          type: string
+        google_analytics_id:
+          nullable: true
+          type: string
+        google_tag_manager_id:
+          nullable: true
+          type: string
+        heap_id:
+          nullable: true
+          type: string
+        hubspot_portal_id:
+          nullable: true
+          type: string
+        integromat_enabled:
+          nullable: true
+          type: boolean
+        intercom_app_id:
+          nullable: true
+          type: string
+        iubenda_cookie_policy_id:
+          nullable: true
+          type: string
+        iubenda_site_id:
+          nullable: true
+          type: string
+        journy_io_domain:
+          nullable: true
+          type: string
+        journy_io_id:
+          nullable: true
+          type: string
+        livechat_id:
+          nullable: true
+          type: string
+        metomic_id:
+          nullable: true
+          type: string
+        microsoft_flow_id:
+          nullable: true
+          type: string
+        microsoft_flow_enabled:
+          nullable: true
+          type: boolean
+        onetrust_id:
+          nullable: true
+          type: string
+        piesync_enabled:
+          nullable: true
+          type: boolean
+        segment_id:
+          nullable: true
+          type: string
+        segment_enabled:
+          nullable: true
+          type: boolean
+        tray_io_enabled:
+          nullable: true
+          type: boolean
+        zapier_beta_link:
+          nullable: true
+          type: string
+        zapier_enabled:
+          nullable: true
+          type: boolean
+        zapier_id:
+          nullable: true
+          type: string
+    LeadFormSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        capture_form_enabled:
+          nullable: true
+          type: boolean
+        first_name_field_enabled:
+          nullable: true
+          type: boolean
+        first_name_field_required:
+          nullable: true
+          type: boolean
+        integration_enabled:
+          nullable: true
+          type: boolean
+        last_name_field_enabled:
+          nullable: true
+          type: boolean
+        last_name_field_required:
+          nullable: true
+          type: boolean
+        telephone_field_enabled:
+          nullable: true
+          type: boolean
+        telephone_field_required:
+          nullable: true
+          type: boolean
+        work_email_validation:
+          nullable: true
+          type: boolean
+    Listing:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        external_id:
+          type: string
+          readOnly: true
+          example: '12345'
+        automate_id:
+          nullable: true
+          type: string
+        blendr_id:
+          nullable: true
+          type: string
+        card_background_color:
+          nullable: true
+          type: string
+        category:
+          $ref: '#/components/schemas/Category'
+        cloud_service_id:
+          nullable: true
+          type: string
+        combidesk_id:
+          nullable: true
+          type: string
+        description:
+          nullable: true
+          type: string
+        detail_page_disabled:
+          nullable: true
+          type: boolean
+        features:
+          nullable: true
+          type: string
+        integromat_id:
+          nullable: true
+          type: string
+        logo:
+          $ref: '#/components/schemas/Logo'
+        meta_tag_description:
+          nullable: true
+          type: string
+        meta_tag_keywords:
+          nullable: true
+          type: string
+        meta_tag_title:
+          nullable: true
+          type: string
+        name:
+          type: string
+        native_integration:
+          nullable: true
+          type: boolean
+        native_integration_link:
+          nullable: true
+          type: string
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+        partner:
+          $ref: '#/components/schemas/Partner'
+        piesync_id:
+          nullable: true
+          type: string
+        pricing:
+          nullable: true
+          type: string
+        published:
+          nullable: true
+          type: boolean
+        published_at:
+          type: string
+          readOnly: true
+          format: date-time
+        screenshots:
+          type: array
+          items:
+            $ref: '#/components/schemas/Screenshot'
+        segment_id:
+          nullable: true
+          type: string
+        slug:
+          type: string
+        sticky:
+          nullable: true
+          type: boolean
+        tag_line:
+          nullable: true
+          type: string
+        third_party_integration:
+          nullable: true
+          type: boolean
+        third_party_integration_link:
+          nullable: true
+          type: string
+        translations:
+          $ref: '#/components/schemas/Translations'
+        tray_io_id:
+          nullable: true
+          type: string
+        unify_connector_id:
+          nullable: true
+          type: string
+        upcoming:
+          nullable: true
+          type: boolean
+        zapier_id:
+          nullable: true
+          type: string
+        created_at:
+          type: string
+          readOnly: true
+          format: date-time
+        updated_at:
+          type: string
+          readOnly: true
+          format: date-time
+    ListingSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        description_text_template:
+          nullable: true
+          type: string
+        description_title:
+          nullable: true
+          type: string
+        features_text_template:
+          nullable: true
+          type: string
+        features_title:
+          nullable: true
+          type: string
+        install_button_label:
+          nullable: true
+          type: string
+        name_postfix:
+          nullable: true
+          type: string
+        naming:
+          enum:
+            - LISTING
+            - LISTINGS
+            - INTEGRATIONS
+            - APPS
+            - CONNECTORS
+            - DATASOURCES
+            - ADDONS
+            - PLUGINS
+            - PARTNERS
+            - CHANNELS
+            - CONNECTIONS
+            - EXTENSIONS
+          nullable: true
+          type: string
+        native_integration_link:
+          nullable: true
+          type: string
+        pricing_disabled:
+          nullable: true
+          type: boolean
+        pricing_text_template:
+          nullable: true
+          type: string
+        pricing_title:
+          nullable: true
+          type: string
+        sidebar_position:
+          enum:
+            - TOP
+            - LEFT
+            - RIGHT
+            - HIDDEN
+          nullable: true
+          type: string
+    Logo:
+      type: object
+      additionalProperties: false
+      properties:
+        content_type:
+          nullable: true
+          type: string
+        id:
+          type: string
+        type:
+          enum:
+            - LOGO
+            - BANNER
+            - SCREENSHOT
+          nullable: true
+          type: string
+        url:
+          type: string
+    MastheadSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        background:
+          nullable: true
+          type: string
+        background_color:
+          nullable: true
+          type: string
+        color:
+          nullable: true
+          type: string
+        columns:
+          nullable: true
+          type: integer
+        description:
+          nullable: true
+          type: string
+        title:
+          nullable: true
+          type: string
+    Media:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        caption:
+          type: string
+          example: 'Media'
+        type:
+          enum:
+            - SCREENSHOT
+            - VIDEO
+          nullable: true
+          type: string
+        url:
+          type: string
+        sequence:
+          type: integer
+          example: 1
+        translations:
+          $ref: '#/components/schemas/Translations'
+    MetaTagSettings:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          nullable: true
+          type: string
+        description_category_page:
+          nullable: true
+          type: string
+        description_collection_page:
+          nullable: true
+          type: string
+        description_listing_page:
+          nullable: true
+          type: string
+        keywords:
+          nullable: true
+          type: string
+        title:
+          nullable: true
+          type: string
+        title_postfix:
+          nullable: true
+          type: string
+    Partner:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        company:
+          type: string
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+        icon:
+          $ref: '#/components/schemas/File'
+        listed:
+          nullable: true
+          type: string
+        twitter:
+          nullable: true
+          type: string
+        website:
+          nullable: true
+          type: string
+        created_at:
+          type: string
+          readOnly: true
+          format: date-time
+        updated_at:
+          type: string
+          readOnly: true
+          format: date-time
+    Product:
+      type: 'object'
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          nullable: true
+          type: string
+        visible:
+          type: boolean
+        sequence:
+          type: integer
+          example: 1
+        count:
+          type: integer
+          example: 1
+        logo:
+          $ref: '#/components/schemas/File'
+        translations:
+          $ref: '#/components/schemas/Translations'
+    Screenshot:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: '12345'
+        caption:
+          type: string
+          example: 'Screenshot'
+        file:
+          $ref: '#/components/schemas/File'
+        translations:
+          $ref: '#/components/schemas/Translations'
+    Translations:
+      nullable: true
+      type: array
+      items:
+        properties:
+          key:
+            type: string
+          locale:
+            type: string
+          value:
+            nullable: true
+            type: string
+        type: object
+    GetEcosystemResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Ecosystem'
+    GetCategoriesResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Category' }
+    GetCategoryResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Category'
+    GetCollectionsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Collection' }
+    GetCollectionResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Collection'
+    GetProductsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Product' }
+    GetProductResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Product'
+
+    GetListingsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Listing' }
+    GetListingResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Listing'
+  parameters:
+    ecosystem_id:
+      name: ecosystem_id
+      in: path
+      required: true
+      schema:
+        type: string
+    id:
+      in: path
+      name: id
+      description: ID of the record you are acting upon.
+      required: true
+      schema:
+        type: string
+  responses:
+    GetEcosystemResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetEcosystemResponse'
+      description: Ecosystems
+    GetCategoriesResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetCategoriesResponse'
+      description: Categories
+    GetCategoryResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetCategoryResponse'
+      description: Category
+    GetCollectionsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetCollectionsResponse'
+      description: Collections
+    GetCollectionResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetCollectionResponse'
+      description: Collection
+    GetListingsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetListingsResponse'
+      description: Listings
+    GetListingResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetListingResponse'
+      description: Listing
+    GetProductsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetProductsResponse'
+      description: Products
+    GetProductResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetProductResponse'
+      description: Product
+paths:
+  /ecosystems/{ecosystem_id}:
+    get:
+      tags:
+        - Ecosystem
+      operationId: ecosystemsAll
+      summary: List ecosystems
+      description: List ecosystems
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetEcosystemResponse'
+  /ecosystems/{ecosystem_id}/listings/{id}:
+    get:
+      tags:
+        - Listing
+      operationId: listingsAll
+      summary: List listings
+      description: List listings
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetListingsResponse'
+  /ecosystems/{ecosystem_id}/categories:
+    get:
+      tags:
+        - Category
+      operationId: categoriesAll
+      summary: List categories
+      description: List categories
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoriesResponse'
+  /ecosystems/{ecosystem_id}/categories/{id}:
+    get:
+      tags:
+        - Category
+      operationId: categoriesOne
+      summary: Get category
+      description: Get category
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCategoryResponse'
+  /ecosystems/{ecosystem_id}/categories/{id}/listings:
+    get:
+      tags:
+        - Listing
+        - Category
+      operationId: categorylistingsAll
+      summary: List category listings
+      description: List category listings
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetListingsResponse'
+  /ecosystems/{ecosystem_id}/collections:
+    get:
+      tags:
+        - Collection
+      operationId: collectionsAll
+      summary: List collections
+      description: List collections
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCollectionsResponse'
+  /ecosystems/{ecosystem_id}/collections/{id}:
+    get:
+      tags:
+        - Collection
+      operationId: collectionsOne
+      summary: Get collection
+      description: Get collection
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCollectionResponse'
+  /ecosystems/{ecosystem_id}/collections/{id}/listings:
+    get:
+      tags:
+        - Listing
+        - Collection
+      operationId: collectionListingsAll
+      summary: List collection listings
+      description: List collection listings
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetListingsResponse'
+  /ecosystems/{ecosystem_id}/products:
+    get:
+      tags:
+        - Product
+      operationId: productsAll
+      summary: List products
+      description: List products
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductsResponse'
+  /ecosystems/{ecosystem_id}/products/{id}:
+    get:
+      tags:
+        - Product
+      operationId: productsOne
+      summary: Get product
+      description: Get product
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProductResponse'
+  /ecosystems/{ecosystem_id}/products/{id}/listings:
+    get:
+      tags:
+        - Listing
+        - Product
+      operationId: productlistingsAll
+      summary: List product listings
+      description: List product listings
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetListingsResponse'

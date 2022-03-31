@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 0.0.1
+  version: 0.0.2
   title: Ecosystem API
   description: 'Ecosystem API'
   contact:
@@ -554,6 +554,24 @@ components:
         work_email_validation:
           nullable: true
           type: boolean
+    Links:
+      type: object
+      description: Links to navigate to previous or next pages through the API
+      properties:
+        previous:
+          type: string
+          description: Link to navigate to the previous page through the API
+          example: 'https://api.apideck.com/ecosystem/123abc/listings?cursor=em9oby1jcm06OnBhZ2U6OjE%3D'
+          nullable: true
+        current:
+          type: string
+          description: Link to navigate to the current page through the API
+          example: 'https://api.apideck.com/ecosystem/123abc/listings'
+        next:
+          type: string
+          description: Link to navigate to the previous page through the API
+          example: 'https://api.apideck.com/ecosystem/123abc/listings?cursor=em9oby1jcm06OnBhZ2U6OjM'
+          nullable: true
     Listing:
       type: object
       additionalProperties: false
@@ -798,6 +816,33 @@ components:
           example: 1
         translations:
           $ref: '#/components/schemas/Translations'
+    Meta:
+      type: object
+      description: Response metadata
+      properties:
+        items_on_page:
+          type: integer
+          description: Number of items returned in the data property of the response
+          example: 50
+        cursors:
+          type: object
+          description: Cursors to navigate to previous or next pages through the API
+          properties:
+            previous:
+              type: string
+              description: Cursor to navigate to the previous page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjE=
+              nullable: true
+            current:
+              type: string
+              description: Cursor to navigate to the current page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjI=
+              nullable: true
+            next:
+              type: string
+              description: Cursor to navigate to the next page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjM=
+              nullable: true
     MetaTagSettings:
       type: object
       additionalProperties: false
@@ -1052,6 +1097,10 @@ components:
         data:
           type: array
           items: { $ref: '#/components/schemas/Listing' }
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
     GetListingResponse:
       type: object
       required:
@@ -1070,6 +1119,13 @@ components:
         data:
           $ref: '#/components/schemas/Listing'
   parameters:
+    cursor:
+      name: cursor
+      in: query
+      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
+      schema:
+        type: string
+        nullable: true
     ecosystem_id:
       name: ecosystem_id
       in: path
@@ -1083,6 +1139,15 @@ components:
       required: true
       schema:
         type: string
+    limit:
+      name: limit
+      in: query
+      description: Number of records to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 50
   responses:
     GetEcosystemResponse:
       content:
@@ -1151,7 +1216,7 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/GetEcosystemResponse'
-  /ecosystems/{ecosystem_id}/listings/{id}:
+  /ecosystems/{ecosystem_id}/listings:
     get:
       tags:
         - Listing
@@ -1160,10 +1225,24 @@ paths:
       description: List listings
       parameters:
         - $ref: '#/components/parameters/ecosystem_id'
-        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       responses:
         '200':
           $ref: '#/components/responses/GetListingsResponse'
+  /ecosystems/{ecosystem_id}/listings/{id}:
+    get:
+      tags:
+        - Listing
+      operationId: listingsOne
+      summary: Get listing
+      description: Get listing
+      parameters:
+        - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/GetListingResponse'
   /ecosystems/{ecosystem_id}/categories:
     get:
       tags:
@@ -1192,7 +1271,6 @@ paths:
   /ecosystems/{ecosystem_id}/categories/{id}/listings:
     get:
       tags:
-        - Listing
         - Category
       operationId: categorylistingsAll
       summary: List category listings
@@ -1200,6 +1278,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ecosystem_id'
         - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       responses:
         '200':
           $ref: '#/components/responses/GetListingsResponse'
@@ -1231,7 +1311,6 @@ paths:
   /ecosystems/{ecosystem_id}/collections/{id}/listings:
     get:
       tags:
-        - Listing
         - Collection
       operationId: collectionListingsAll
       summary: List collection listings
@@ -1239,6 +1318,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ecosystem_id'
         - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       responses:
         '200':
           $ref: '#/components/responses/GetListingsResponse'
@@ -1270,7 +1351,6 @@ paths:
   /ecosystems/{ecosystem_id}/products/{id}/listings:
     get:
       tags:
-        - Listing
         - Product
       operationId: productlistingsAll
       summary: List product listings
@@ -1278,6 +1358,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ecosystem_id'
         - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       responses:
         '200':
           $ref: '#/components/responses/GetListingsResponse'

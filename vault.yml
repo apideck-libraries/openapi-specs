@@ -473,6 +473,56 @@ components:
           nullable: true
         state:
           $ref: '#/components/schemas/ConnectionState'
+    ConnectionImportData:
+      type: object
+      properties:
+        credentials:
+          type: object
+          additionalProperties: false
+          required:
+            - refresh_token
+          properties:
+            refresh_token:
+              type: string
+              description: The refresh token can be used to obtain a new access token.
+              minLength: 1
+              example: 1234567890abcdefghijklmnopqrstuvwxyz
+            access_token:
+              type: string
+              description: Access token
+              minLength: 1
+              example: 1234567890abcdefghijklmnopqrstuvwxyz
+            issued_at:
+              type: string
+              description: The datetime at which the token was issued. If omitted the token will be queued for refresh.
+              nullable: true
+              format: date-time
+              example: '2020-01-01T00:00:00Z'
+            expires_in:
+              type: integer
+              description: The number of seconds until the token expires. If omitted the token will be queued for refresh.
+              nullable: true
+              example: 3600
+          example:
+            access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+            refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.cThIIoDvwdueQB468K5xDc5633seEFoqwxjF_xSJyQQ
+        settings:
+          type: object
+          description: Connection settings. Values will persist to `form_fields` with corresponding id
+          nullable: true
+          example:
+            instance_url: 'https://eu28.salesforce.com'
+        metadata:
+          type: object
+          description: Attach your own consumer specific metadata
+          additionalProperties: true
+          properties: {}
+          nullable: true
+          example:
+            account:
+              name: My Company
+              id: c01458a5-7276-41ce-bc19-639906b0450a
+            plan: enterprise
     ConnectionMetadata:
       type: object
       properties:
@@ -690,6 +740,7 @@ components:
               - vault.connection.updated
               - vault.connection.deleted
               - vault.connection.callable
+              - vault.connection.token_refresh.failed
               - ats.job.created
               - ats.job.updated
               - ats.job.deleted
@@ -1643,6 +1694,7 @@ components:
         - vault.connection.updated
         - vault.connection.deleted
         - vault.connection.callable
+        - vault.connection.token_refresh.failed
       example: vault.connection.created
   responses:
     BadRequestResponse:
@@ -2285,6 +2337,87 @@ paths:
                 serviceId: 'pipedrive',
                 unifiedApi: 'crm'
               })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  '/vault/connections/{unified_api}/{service_id}/import':
+    post:
+      summary: Import connection
+      operationId: connectionsImport
+      description: |
+        Import an authorized connection
+      tags:
+        - Connections
+      x-graphql-exclude: true
+      x-sdk-exclude: true
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unified_api'
+      security:
+        - apiKey: []
+      requestBody:
+        description: Fields that need to be persisted on the resource
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionImportData'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateConnectionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              serviceId: 'pipedrive',
+              unifiedApi: 'crm',
+              connectionsImport: {
+                credentials: {
+                  access_token:
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+                  refresh_token:
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.cThIIoDvwdueQB468K5xDc5633seEFoqwxjF_xSJyQQ'
+                },
+                settings: {
+                  instance_url: 'https://eu28.salesforce.com'
+                },
+                metadata: {
+                  account: {
+                    name: 'My Company',
+                    id: 'c01458a5-7276-41ce-bc19-639906b0450a'
+                  },
+                  plan: 'enterprise'
+                }
+              }
+            }
+
+            try {
+              const { data } = await apideck.vault.connectionsImport(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

@@ -1,3 +1,9 @@
+## v8.19.0 - (2022-04-04)
+
+### Vault API
+
+- Added [Import Connection](/apis/vault/reference#operation/connectionsImport)
+
 ## v8.18.0 - (2022-04-04)
 
 ### Connector API

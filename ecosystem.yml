@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 0.0.3
+  version: 0.0.4
   title: Ecosystem API
   description: 'Ecosystem API'
   contact:
@@ -34,11 +34,11 @@ components:
     Category:
       type: object
       additionalProperties: false
+      required: [name, slug]
       properties:
         id:
           type: string
         description:
-          nullable: true
           type: string
         name:
           type: string
@@ -48,7 +48,7 @@ components:
           $ref: '#/components/schemas/Translations'
         listing_description_text_template:
           type: string
-        listing_price_text_template:
+        listing_pricing_text_template:
           type: string
         listing_features_text_template:
           type: string
@@ -65,34 +65,29 @@ components:
     Collection:
       type: object
       additionalProperties: false
+      required: [name, slug, visible]
       properties:
         id:
           type: string
         card_background_color:
-          nullable: true
           type: string
         card_background_image:
           $ref: '#/components/schemas/File'
         card_columns:
-          nullable: true
           type: integer
         card_style:
           type: string
         description:
-          nullable: true
           type: string
         logo:
           $ref: '#/components/schemas/File'
         name:
           type: string
         hidden_from_homepage:
-          nullable: true
           type: boolean
         show_max_items_homepage:
-          nullable: true
           type: integer
         sequence:
-          nullable: true
           type: integer
         slug:
           type: string
@@ -105,55 +100,40 @@ components:
       additionalProperties: false
       properties:
         background_color:
-          nullable: true
           type: string
         border_color:
-          nullable: true
           type: string
         border_radius:
-          nullable: true
           type: string
         border_size:
-          nullable: true
           type: string
         color:
-          nullable: true
           type: string
         columns:
-          nullable: true
           type: integer
         description_lines:
-          nullable: true
           type: integer
         icon_border_radius:
-          nullable: true
           type: string
         icon_shadow_enabled:
-          nullable: true
           type: boolean
         icon_size:
-          nullable: true
           type: integer
         shadow_enabled:
-          nullable: true
           type: boolean
         show_action:
-          nullable: true
           type: boolean
         show_badges:
-          nullable: true
           type: boolean
         show_category:
-          nullable: true
           type: boolean
         show_description:
-          nullable: true
           type: boolean
         style:
-          nullable: true
           type: string
     Contact:
       type: object
+      required: [name]
       properties:
         id:
           type: string
@@ -161,161 +141,121 @@ components:
           example: '12345'
         first_name:
           type: string
-          nullable: true
         last_name:
           type: string
-          nullable: true
         name:
           type: string
         email:
           type: string
-          nullable: true
         role:
           type: string
-          nullable: true
         linked_in:
           type: string
-          nullable: true
         twitter:
           type: string
-          nullable: true
+
     CTASettings:
       type: object
       additionalProperties: false
       properties:
         background_color:
-          nullable: true
           type: string
         button_background_color:
-          nullable: true
           type: string
         button_color:
-          nullable: true
           type: string
         button_label:
-          nullable: true
           type: string
         button_link:
-          nullable: true
           type: string
         color:
-          nullable: true
           type: string
         description:
-          nullable: true
           type: string
         enabled:
-          nullable: true
           type: boolean
         title:
-          nullable: true
           type: string
     CustomSettings:
       type: object
       additionalProperties: false
       properties:
         css:
-          nullable: true
           type: string
         css_link:
-          nullable: true
           type: string
         domain:
-          nullable: true
           type: string
         html_footer:
-          nullable: true
           type: string
         html_nav:
-          nullable: true
           type: string
         java_script_link:
-          nullable: true
           type: string
     Ecosystem:
       type: object
       additionalProperties: false
+      required: [name, slug, is_published]
       properties:
         id:
           type: string
           readOnly: true
           example: '12345'
         about:
-          nullable: true
           type: string
         alternatives_background_color:
-          nullable: true
           type: string
         alternatives_color:
-          nullable: true
           type: string
         attribution:
-          nullable: true
           type: boolean
         body_background_color:
-          nullable: true
           type: string
         body_button_background_color:
-          nullable: true
           type: string
         body_button_color:
-          nullable: true
           type: string
         body_color:
-          nullable: true
           type: string
         body_link_color:
-          nullable: true
           type: string
         card_settings:
           $ref: '#/components/schemas/CardSettings'
         categories_count_badge:
-          nullable: true
           type: boolean
         categories_show_max_items:
-          nullable: true
           type: integer
         collections_count_badge:
-          nullable: true
           type: boolean
         collections_title:
-          nullable: true
           type: string
         create_link:
-          nullable: true
           type: string
         cta_settings:
           $ref: '#/components/schemas/CTASettings'
+        custom_domain:
+          type: string
         custom_settings:
           $ref: '#/components/schemas/CustomSettings'
         detail_pages_enabled:
-          nullable: true
           type: boolean
         footer_background_color:
-          nullable: true
           type: string
         footer_color:
-          nullable: true
           type: string
         google_site_verification_id:
-          nullable: true
           type: string
         hide_install_buttons:
-          nullable: true
           type: boolean
         home_page_collection_category_cards:
-          nullable: true
           type: boolean
         home_page_show_all_listings:
-          nullable: true
           type: boolean
         installation_request_flow_enabled:
-          nullable: true
           type: boolean
         integration_settings:
           $ref: '#/components/schemas/IntegrationSettings'
         is_published:
-          nullable: true
           type: boolean
         lead_form_settings:
           $ref: '#/components/schemas/LeadFormSettings'
@@ -329,93 +269,77 @@ components:
             - LEFT
             - RIGHT
             - HIDDEN
-          nullable: true
           type: string
         menu_style:
           enum:
             - LIST
             - PILL
             - FILTER
-          nullable: true
           type: string
         meta_tag_settings:
           $ref: '#/components/schemas/MetaTagSettings'
         name:
           type: string
         navigation_background_color:
-          nullable: true
           type: string
         navigation_color:
-          nullable: true
           type: string
         navigation_logo_post_fix:
-          nullable: true
           type: string
         navigation_mobile_menu_type:
           enum:
             - ICON
             - TEXT
-          nullable: true
           type: string
         navigation_sticky:
-          nullable: true
           type: boolean
         primary_color:
-          nullable: true
           type: string
         privacy_link:
-          nullable: true
           type: string
-        published:
-          type: boolean
         request_link:
-          nullable: true
           type: string
         shadow_page_description:
-          nullable: true
           type: string
         shadow_pages_enabled:
-          nullable: true
           type: boolean
         show_attribution_badge:
-          nullable: true
           type: boolean
         show_requested_listings:
-          nullable: true
           type: boolean
         slug:
-          nullable: false
           type: string
         terms_link:
-          nullable: true
           type: string
         total_published_listings:
-          nullable: true
           type: integer
         unify_application_id:
-          nullable: true
           type: string
         utm_campaign:
-          nullable: true
           type: string
         website:
-          nullable: true
           type: string
         zaps_menu_title:
-          nullable: true
           type: string
         zaps_page_enabled:
-          nullable: true
           type: boolean
+        created_at:
+          type: string
+          readOnly: true
+          format: date-time
+        updated_at:
+          type: string
+          readOnly: true
+          format: date-time
     File:
       type: object
-      nullable: true
+      required: [url]
       properties:
         id:
           type: string
           readOnly: true
           example: '12345'
-        contentType:
+        content_type:
           type: string
           example: 'application/jpeg'
         type:
@@ -423,7 +347,6 @@ components:
             - LOGO
             - BANNER
             - SCREENSHOT
-          nullable: true
           type: string
         url:
           type: string
@@ -440,129 +363,92 @@ components:
       additionalProperties: false
       properties:
         albacross_id:
-          nullable: true
           type: string
         automate_enabled:
-          nullable: true
           type: boolean
         blendr_enabled:
-          nullable: true
           type: boolean
         combidesk_enabled:
-          nullable: true
           type: boolean
         crisp_id:
-          nullable: true
           type: string
         drift_id:
-          nullable: true
           type: string
         google_analytics_id:
-          nullable: true
           type: string
         google_tag_manager_id:
-          nullable: true
           type: string
         heap_id:
-          nullable: true
           type: string
         hubspot_portal_id:
-          nullable: true
           type: string
         integromat_enabled:
-          nullable: true
           type: boolean
         intercom_app_id:
-          nullable: true
           type: string
         iubenda_cookie_policy_id:
-          nullable: true
           type: string
         iubenda_site_id:
-          nullable: true
           type: string
         journy_io_domain:
-          nullable: true
           type: string
         journy_io_id:
-          nullable: true
           type: string
         livechat_id:
-          nullable: true
           type: string
         metomic_id:
-          nullable: true
           type: string
         microsoft_flow_id:
-          nullable: true
           type: string
         microsoft_flow_enabled:
-          nullable: true
           type: boolean
         onetrust_id:
-          nullable: true
           type: string
         piesync_enabled:
-          nullable: true
           type: boolean
         segment_id:
-          nullable: true
           type: string
         segment_enabled:
-          nullable: true
           type: boolean
         tray_io_enabled:
-          nullable: true
           type: boolean
         zapier_beta_link:
-          nullable: true
           type: string
         zapier_enabled:
-          nullable: true
           type: boolean
         zapier_id:
-          nullable: true
           type: string
     LeadFormSettings:
       type: object
       additionalProperties: false
       properties:
         capture_form_enabled:
-          nullable: true
           type: boolean
         first_name_field_enabled:
-          nullable: true
           type: boolean
         first_name_field_required:
-          nullable: true
           type: boolean
         integration_enabled:
-          nullable: true
           type: boolean
         last_name_field_enabled:
-          nullable: true
           type: boolean
         last_name_field_required:
-          nullable: true
           type: boolean
         telephone_field_enabled:
-          nullable: true
           type: boolean
         telephone_field_required:
-          nullable: true
           type: boolean
         work_email_validation:
-          nullable: true
           type: boolean
     Links:
       type: object
       description: Links to navigate to previous or next pages through the API
+      required: [current]
       properties:
         previous:
           type: string
           description: Link to navigate to the previous page through the API
           example: 'https://api.apideck.com/ecosystem/123abc/listings?cursor=em9oby1jcm06OnBhZ2U6OjE%3D'
-          nullable: true
         current:
           type: string
           description: Link to navigate to the current page through the API
@@ -571,10 +457,10 @@ components:
           type: string
           description: Link to navigate to the previous page through the API
           example: 'https://api.apideck.com/ecosystem/123abc/listings?cursor=em9oby1jcm06OnBhZ2U6OjM'
-          nullable: true
     Listing:
       type: object
       additionalProperties: false
+      required: [name, slug]
       properties:
         id:
           type: string
@@ -585,52 +471,46 @@ components:
           readOnly: true
           example: '12345'
         automate_id:
-          nullable: true
           type: string
         blendr_id:
-          nullable: true
           type: string
         card_background_color:
-          nullable: true
           type: string
-        category:
-          $ref: '#/components/schemas/Category'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
         cloud_service_id:
-          nullable: true
           type: string
         combidesk_id:
-          nullable: true
           type: string
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
         description:
-          nullable: true
           type: string
         detail_page_disabled:
-          nullable: true
           type: boolean
         features:
-          nullable: true
           type: string
         integromat_id:
-          nullable: true
           type: string
         logo:
           $ref: '#/components/schemas/Logo'
         meta_tag_description:
-          nullable: true
           type: string
         meta_tag_keywords:
-          nullable: true
           type: string
         meta_tag_title:
-          nullable: true
+          type: string
+        microsoft_flow_id:
           type: string
         name:
           type: string
         native_integration:
-          nullable: true
           type: boolean
         native_integration_link:
-          nullable: true
           type: string
         media:
           type: array
@@ -639,13 +519,14 @@ components:
         partner:
           $ref: '#/components/schemas/Partner'
         piesync_id:
-          nullable: true
           type: string
         pricing:
-          nullable: true
           type: string
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
         published:
-          nullable: true
           type: boolean
         published_at:
           type: string
@@ -656,35 +537,26 @@ components:
           items:
             $ref: '#/components/schemas/Screenshot'
         segment_id:
-          nullable: true
           type: string
         slug:
           type: string
         sticky:
-          nullable: true
           type: boolean
         tag_line:
-          nullable: true
           type: string
         third_party_integration:
-          nullable: true
           type: boolean
         third_party_integration_link:
-          nullable: true
           type: string
         translations:
           $ref: '#/components/schemas/Translations'
         tray_io_id:
-          nullable: true
           type: string
         unify_connector_id:
-          nullable: true
           type: string
         upcoming:
-          nullable: true
           type: boolean
         zapier_id:
-          nullable: true
           type: string
         created_at:
           type: string
@@ -699,22 +571,16 @@ components:
       additionalProperties: false
       properties:
         description_text_template:
-          nullable: true
           type: string
         description_title:
-          nullable: true
           type: string
         features_text_template:
-          nullable: true
           type: string
         features_title:
-          nullable: true
           type: string
         install_button_label:
-          nullable: true
           type: string
         name_postfix:
-          nullable: true
           type: string
         naming:
           enum:
@@ -730,19 +596,15 @@ components:
             - CHANNELS
             - CONNECTIONS
             - EXTENSIONS
-          nullable: true
+
           type: string
         native_integration_link:
-          nullable: true
           type: string
         pricing_disabled:
-          nullable: true
           type: boolean
         pricing_text_template:
-          nullable: true
           type: string
         pricing_title:
-          nullable: true
           type: string
         sidebar_position:
           enum:
@@ -750,14 +612,13 @@ components:
             - LEFT
             - RIGHT
             - HIDDEN
-          nullable: true
           type: string
     Logo:
       type: object
       additionalProperties: false
+      required: [url]
       properties:
         content_type:
-          nullable: true
           type: string
         id:
           type: string
@@ -766,7 +627,6 @@ components:
             - LOGO
             - BANNER
             - SCREENSHOT
-          nullable: true
           type: string
         url:
           type: string
@@ -775,26 +635,21 @@ components:
       additionalProperties: false
       properties:
         background:
-          nullable: true
           type: string
         background_color:
-          nullable: true
           type: string
         color:
-          nullable: true
           type: string
         columns:
-          nullable: true
           type: integer
         description:
-          nullable: true
           type: string
         title:
-          nullable: true
           type: string
     Media:
       type: object
       additionalProperties: false
+      required: [url]
       properties:
         id:
           type: string
@@ -807,7 +662,6 @@ components:
           enum:
             - SCREENSHOT
             - VIDEO
-          nullable: true
           type: string
         url:
           type: string
@@ -848,29 +702,23 @@ components:
       additionalProperties: false
       properties:
         description:
-          nullable: true
           type: string
         description_category_page:
-          nullable: true
           type: string
         description_collection_page:
-          nullable: true
           type: string
         description_listing_page:
-          nullable: true
           type: string
         keywords:
-          nullable: true
           type: string
         title:
-          nullable: true
           type: string
         title_postfix:
-          nullable: true
           type: string
     Partner:
       type: object
       additionalProperties: false
+      required: [company]
       properties:
         id:
           type: string
@@ -885,13 +733,10 @@ components:
         icon:
           $ref: '#/components/schemas/File'
         listed:
-          nullable: true
           type: string
         twitter:
-          nullable: true
           type: string
         website:
-          nullable: true
           type: string
         created_at:
           type: string
@@ -904,6 +749,7 @@ components:
     Product:
       type: 'object'
       additionalProperties: false
+      required: [name, slug, visible]
       properties:
         id:
           type: string
@@ -914,7 +760,6 @@ components:
         slug:
           type: string
         description:
-          nullable: true
           type: string
         visible:
           type: boolean
@@ -946,6 +791,7 @@ components:
     Translations:
       nullable: true
       type: array
+      required: [key, locale, value]
       items:
         properties:
           key:
@@ -953,7 +799,6 @@ components:
           locale:
             type: string
           value:
-            nullable: true
             type: string
         type: object
     GetEcosystemResponse:
@@ -991,6 +836,10 @@ components:
         data:
           type: array
           items: { $ref: '#/components/schemas/Category' }
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
     GetCategoryResponse:
       type: object
       required:
@@ -1061,6 +910,10 @@ components:
         data:
           type: array
           items: { $ref: '#/components/schemas/Product' }
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
     GetProductResponse:
       type: object
       required:
@@ -1130,6 +983,12 @@ components:
       name: ecosystem_id
       in: path
       required: true
+      schema:
+        type: string
+    external_id:
+      name: external_id
+      in: query
+      description: Filter on external_id
       schema:
         type: string
     id:
@@ -1227,6 +1086,7 @@ paths:
         - $ref: '#/components/parameters/ecosystem_id'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/external_id'
       responses:
         '200':
           $ref: '#/components/responses/GetListingsResponse'
@@ -1252,6 +1112,8 @@ paths:
       description: List categories
       parameters:
         - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       responses:
         '200':
           $ref: '#/components/responses/GetCategoriesResponse'
@@ -1272,7 +1134,7 @@ paths:
     get:
       tags:
         - Category
-      operationId: categorylistingsAll
+      operationId: categoryListingsAll
       summary: List category listings
       description: List category listings
       parameters:
@@ -1292,6 +1154,8 @@ paths:
       description: List collections
       parameters:
         - $ref: '#/components/parameters/ecosystem_id'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
       responses:
         '200':
           $ref: '#/components/responses/GetCollectionsResponse'
@@ -1352,7 +1216,7 @@ paths:
     get:
       tags:
         - Product
-      operationId: productlistingsAll
+      operationId: productListingsAll
       summary: List product listings
       description: List product listings
       parameters:

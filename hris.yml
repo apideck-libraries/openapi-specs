@@ -781,41 +781,9 @@ components:
               title:
                 $ref: '#/components/schemas/Title'
               compensation_rate:
-                type: string
+                type: number
                 title: The compensation rate of the job.
-                example: '72000'
-              payment_unit:
-                $ref: '#/components/schemas/PaymentUnit'
-              hired_at:
-                type: string
-                example: '2020-08-12'
-                format: date
-                nullable: true
-              is_primary:
-                title: Primary
-                description: Indicates whether this the employee's primary job
-                type: boolean
-                example: true
-              location:
-                $ref: '#/components/schemas/Address'
-        compensations:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                $ref: '#/components/schemas/Id'
-              job_id:
-                type: string
-                description: The ID of the job to which the compensation belongs.
-                example: '12345'
-                readOnly: true
-              rate:
-                type: string
-                readOnly: false
-                description: The amount paid per payment unit.
-              payment_unit:
-                $ref: '#/components/schemas/PaymentUnit'
+                example: 72000
               currency:
                 type: string
                 title: Currency
@@ -1368,6 +1336,40 @@ components:
                   - name: BTC
                     description: Bitcoin
                 nullable: true
+              payment_unit:
+                $ref: '#/components/schemas/PaymentUnit'
+              hired_at:
+                type: string
+                example: '2020-08-12'
+                format: date
+                nullable: true
+              is_primary:
+                title: Primary
+                description: Indicates whether this the employee's primary job
+                type: boolean
+                example: true
+              location:
+                $ref: '#/components/schemas/Address'
+        compensations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                $ref: '#/components/schemas/Id'
+              job_id:
+                type: string
+                description: The ID of the job to which the compensation belongs.
+                example: '12345'
+                readOnly: true
+              rate:
+                type: number
+                readOnly: false
+                description: The amount paid per payment unit.
+              payment_unit:
+                $ref: '#/components/schemas/PaymentUnit'
+              currency:
+                $ref: '#/components/schemas/Employee/properties/jobs/items/properties/currency'
               flsa_status:
                 type: string
                 readOnly: false
@@ -2473,7 +2475,8 @@ paths:
                 jobs: [
                   {
                     title: 'CEO',
-                    compensation_rate: '72000',
+                    compensation_rate: 72000,
+                    currency: 'USD',
                     payment_unit: 'year',
                     hired_at: '2020-08-12',
                     is_primary: true,
@@ -2730,7 +2733,8 @@ paths:
                 jobs: [
                   {
                     title: 'CEO',
-                    compensation_rate: '72000',
+                    compensation_rate: 72000,
+                    currency: 'USD',
                     payment_unit: 'year',
                     hired_at: '2020-08-12',
                     is_primary: true,

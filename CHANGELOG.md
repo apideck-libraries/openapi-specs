@@ -1,3 +1,8 @@
+## v8.19.1 - (2022-04-08)
+
+- Removed `minLength: 1` limitation because responses can contain empty strings.
+- Set default value of `raw` parameter to `false`, it was `true`.
+
 ## v8.19.0 - (2022-04-04)
 
 ### Vault API

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 0.0.5
+  version: 0.0.6
   title: Ecosystem API
   description: 'Ecosystem API'
   contact:
@@ -482,6 +482,8 @@ components:
           type: string
         card_background_color:
           type: string
+        card_background_image:
+          $ref: '#/components/schemas/File'
         categories:
           type: array
           items:
@@ -799,14 +801,17 @@ components:
       type: array
       required: [key, locale, value]
       items:
-        properties:
-          key:
-            type: string
-          locale:
-            type: string
-          value:
-            type: string
-        type: object
+        $ref: '#/components/schemas/Translation'
+    Translation:
+      type: object
+      required: [key, locale]
+      properties:
+        key:
+          type: string
+        locale:
+          type: string
+        value:
+          type: string
     GetEcosystemResponse:
       type: object
       required:

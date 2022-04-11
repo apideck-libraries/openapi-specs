@@ -1,3 +1,9 @@
+## v8.19.3 - (2022-04-11)
+
+### Vault API
+
+- Added TokenRefreshFailed to Vault spec to include in docs
+
 ## v8.19.2 - (2022-04-08)
 
 - Bump version to initialize PHP SDK

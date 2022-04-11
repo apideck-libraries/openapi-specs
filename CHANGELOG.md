@@ -1,3 +1,7 @@
+## v8.19.2 - (2022-04-08)
+
+- Bump version to initialize PHP SDK
+
 ## v8.19.1 - (2022-04-08)
 
 - Removed `minLength: 1` limitation because responses can contain empty strings.

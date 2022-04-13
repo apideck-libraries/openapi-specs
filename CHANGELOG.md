@@ -1,3 +1,9 @@
+## v8.20.0 - (2022-04-12)
+
+## Connector API
+
+- Added `oauth_scopes` to [Connector](apis/connector/reference#tag/Connectors)
+
 ## v8.19.3 - (2022-04-11)
 
 ### Vault API

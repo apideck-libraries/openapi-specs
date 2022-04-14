@@ -1,3 +1,7 @@
+## v8.21.0 - (2022-04-14)
+
+- Added `Orders` to [Clover](connectors/clover) connector
+
 ## v8.20.0 - (2022-04-12)
 
 ## Connector API

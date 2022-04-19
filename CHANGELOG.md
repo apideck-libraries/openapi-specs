@@ -1,3 +1,7 @@
+## v8.23.0 - (2022-04-19)
+
+- Added [`Tenders`](apis/pos/reference#tag/Tenders) to [Clover](connectors/clover) connector
+
 ## v8.22.0 - (2022-04-17)
 
 - Added `Order Types` and `Modifier Groups` to [Clover](connectors/clover) connector

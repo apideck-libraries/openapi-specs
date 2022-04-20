@@ -1,3 +1,7 @@
+## v8.24.0 - (2022-04-20)
+
+- Add [Company info](apis/accounting/reference#tag/Company-Info) to [QuickBooks](connectors/quickbooks) connector
+
 ## v8.23.0 - (2022-04-19)
 
 - Added [`Tenders`](apis/pos/reference#tag/Tenders) to [Clover](connectors/clover) connector

@@ -1,3 +1,9 @@
+## v8.24.1 - (2022-04-21)
+
+### Accounting API
+
+- Updated [TaxRates](apis/accounting/reference#tag/TaxRates) components.id to be `string`
+
 ## v8.24.0 - (2022-04-20)
 
 - Add [Company info](apis/accounting/reference#tag/Company-Info) to [QuickBooks](connectors/quickbooks) connector

@@ -1,3 +1,9 @@
+## v8.25.0 - (2022-04-22)
+
+### ATS API
+
+- Added [Workable](connectors/workable) connector to ATS
+
 ## v8.24.1 - (2022-04-21)
 
 ### Accounting API

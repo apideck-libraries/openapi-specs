@@ -62,6 +62,13 @@ components:
         type: string
       required: true
       description: ID of the merchant.
+    locationId:
+      in: query
+      name: location_id
+      schema:
+        type: string
+      required: false
+      description: ID of the location.
     limit:
       name: limit
       in: query
@@ -1019,9 +1026,11 @@ components:
           type: string
           enum:
             - open
+            - draft
             - delivered
             - delayed
             - voided
+            - completed
           example: open
         state:
           title: Status
@@ -4724,6 +4733,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/locationId'
       security:
         - apiKey: []
       responses:

@@ -1,3 +1,9 @@
+## v8.26.0 - (2022-04-25)
+
+### HRIS API
+
+- Added [Payrolls](apis/hris/reference#tag/Payrolls) and [EmployeePayrolls](apis/hris/reference#tag/EmployeePayrolls)to HRIS
+
 ## v8.25.0 - (2022-04-22)
 
 ### ATS API

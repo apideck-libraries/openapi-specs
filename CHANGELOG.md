@@ -1,3 +1,9 @@
+## v8.26.1 - (2022-04-26)
+
+### Vault API
+
+- Include connectionsImport when running sdk generation.
+
 ## v8.26.0 - (2022-04-25)
 
 ### HRIS API

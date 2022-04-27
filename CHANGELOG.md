@@ -1,3 +1,9 @@
+## v8.27.1 - (2022-04-27)
+
+### Vault API
+
+- Added docs for `authorize_url` and `revoke_url` to [Connections](apis/vault/reference#tag/Connections)
+
 ## v8.27.0 - (2022-04-27)
 
 - Added [`ConnectorRateLimitError`](errors#connectorratelimiterror)

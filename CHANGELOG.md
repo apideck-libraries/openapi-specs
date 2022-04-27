@@ -1,3 +1,7 @@
+## v8.27.0 - (2022-04-27)
+
+- Added [`ConnectorRateLimitError`](errors#connectorratelimiterror)
+
 ## v8.26.1 - (2022-04-26)
 
 ### Vault API

@@ -1,3 +1,9 @@
+## v8.27.2 - (2022-04-29)
+
+### HRIS API
+
+- Added [Webhook Support](/apis/hris/reference#tag/Webhook-Events)
+
 ## v8.27.1 - (2022-04-27)
 
 ### Vault API

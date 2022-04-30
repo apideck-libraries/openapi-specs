@@ -2538,7 +2538,9 @@ components:
         employee:
           $ref: '#/components/schemas/Employee'
         payrolls:
-          $ref: '#/components/schemas/Payroll'
+          type: array
+          items:
+            $ref: '#/components/schemas/Payroll'
     Compensation:
       type: object
       required:

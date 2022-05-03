@@ -1,3 +1,9 @@
+## v8.28.0 - (2022-05-03)
+
+### HRIS API
+
+- Added [Personio](connectors/personio) connector to HRIS
+
 ## v8.27.2 - (2022-04-29)
 
 ### HRIS API

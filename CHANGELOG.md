@@ -1,3 +1,9 @@
+## v8.28.2 - (2022-05-05)
+
+### Accounting API
+
+- Added optional `tax_code` to [Invoice](apis/accounting/reference#tag/Invoices)
+
 ## v8.28.1 - (2022-05-03)
 
 ### POS API

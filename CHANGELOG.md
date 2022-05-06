@@ -1,8 +1,14 @@
+## v8.29.1 - (2022-05-06)
+
+### Accounting API
+
+- Added [Bills](apis/accounting/reference#tag/Bills)
+
 ## v8.29.0 - (2022-05-05)
 
 ### Accounting API
 
-- Added [Supplier](apis/accounting/reference#tag/Suppliers)
+- Added [Suppliers](apis/accounting/reference#tag/Suppliers)
 
 ## v8.28.2 - (2022-05-05)
 

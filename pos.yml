@@ -3952,6 +3952,8 @@ components:
           type: number
           title: Price amount
           example: 10
+        currency:
+          $ref: '#/components/schemas/Currency'
         modifier_group_id:
           type: string
           title: Modifier group ID
@@ -4157,6 +4159,32 @@ components:
           type: integer
           title: Maximum allowed
           example: 5
+        modifiers:
+          type: array
+          items:
+            properties:
+              id:
+                title: ID
+                type: string
+                example: '12345'
+              name:
+                title: Name
+                type: string
+                example: Modifier
+              alternate_name:
+                title: Alternate name
+                type: string
+                example: Modifier New
+              price_amount:
+                type: number
+                title: Price amount
+                example: 10
+              currency:
+                $ref: '#/components/schemas/Currency'
+              available:
+                $ref: '#/components/schemas/Available'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -4648,7 +4676,7 @@ tags:
     description: ''
     x-apideck-model:
       $ref: '#/components/schemas/Order'
-  - name: PosPayments
+  - name: Payments
     description: ''
     x-apideck-model:
       $ref: '#/components/schemas/PosPayment'
@@ -5685,11 +5713,11 @@ paths:
   /pos/payments:
     get:
       tags:
-        - PosPayments
+        - Payments
       x-graphql-field-name: payments
       operationId: paymentsAll
-      summary: List PosPayments
-      description: List PosPayments
+      summary: List Payments
+      description: List Payments
       x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/raw'
@@ -5736,10 +5764,10 @@ paths:
             }
     post:
       tags:
-        - PosPayments
+        - Payments
       operationId: paymentsAdd
-      summary: Create PosPayment
-      description: Create PosPayment
+      summary: CreateP ayment
+      description: Create Payment
       x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/raw'
@@ -5903,10 +5931,10 @@ paths:
   '/pos/payments/{id}':
     get:
       tags:
-        - PosPayments
+        - Payments
       operationId: paymentsOne
-      summary: Get PosPayment
-      description: Get PosPayment
+      summary: Get Payment
+      description: Get Payment
       x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/id'
@@ -5954,10 +5982,10 @@ paths:
             }
     patch:
       tags:
-        - PosPayments
+        - Payments
       operationId: paymentsUpdate
-      summary: Update PosPayment
-      description: Update PosPayment
+      summary: Update Payment
+      description: Update Payment
       x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/id'
@@ -6122,10 +6150,10 @@ paths:
             }
     delete:
       tags:
-        - PosPayments
+        - Payments
       operationId: paymentsDelete
-      summary: Delete PosPayment
-      description: Delete PosPayment
+      summary: Delete Payment
+      description: Delete Payment
       x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/id'
@@ -7296,6 +7324,7 @@ paths:
                 name: 'Modifier',
                 alternate_name: 'Modifier New',
                 price_amount: 10,
+                currency: 'USD',
                 modifier_group_id: ['123'],
                 available: true
               }
@@ -7412,6 +7441,7 @@ paths:
                 name: 'Modifier',
                 alternate_name: 'Modifier New',
                 price_amount: 10,
+                currency: 'USD',
                 modifier_group_id: ['123'],
                 available: true
               }
@@ -7576,7 +7606,18 @@ paths:
                 name: 'Modifier',
                 alternate_name: 'Modifier New',
                 minimum_required: 1,
-                maximum_allowed: 5
+                maximum_allowed: 5,
+                modifiers: [
+                  {
+                    id: '12345',
+                    name: 'Modifier',
+                    alternate_name: 'Modifier New',
+                    price_amount: 10,
+                    currency: 'USD',
+                    available: true
+                  }
+                ],
+                row_version: '1-12345'
               }
             }
 
@@ -7691,7 +7732,18 @@ paths:
                 name: 'Modifier',
                 alternate_name: 'Modifier New',
                 minimum_required: 1,
-                maximum_allowed: 5
+                maximum_allowed: 5,
+                modifiers: [
+                  {
+                    id: '12345',
+                    name: 'Modifier',
+                    alternate_name: 'Modifier New',
+                    price_amount: 10,
+                    currency: 'USD',
+                    available: true
+                  }
+                ],
+                row_version: '1-12345'
               }
             }
 

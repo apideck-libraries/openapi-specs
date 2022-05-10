@@ -1,3 +1,7 @@
+## v8.29.3 - (2022-05-10)
+
+- Extended [Bills](apis/accounting/reference#tag/Bills) with `paid_date`, `deposit`, `sub_total`, and `total_tax`. If these properties are available in downstream connector response, they will be mapped returned.
+
 ## v8.29.2 - (2022-05-10)
 
 - Added optional `inventory_date` to [InvoiceItem](apis/accounting/reference#tag/InvoiceItems)

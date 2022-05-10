@@ -1,3 +1,7 @@
+## v8.29.2 - (2022-05-10)
+
+- Added optional `inventory_date` to [InvoiceItem](apis/accounting/reference#tag/InvoiceItems)
+
 ## v8.29.1 - (2022-05-06)
 
 ### Accounting API

@@ -1,3 +1,7 @@
+## v8.29.4 - (2022-05-16)
+
+- Made `is_primary` optional for [Employee](apis/hris/reference#tag/Employees) jobs of HRIS API.
+
 ## v8.29.3 - (2022-05-10)
 
 - Extended [Bills](apis/accounting/reference#tag/Bills) with `paid_date`, `deposit`, `sub_total`, and `total_tax`. If these properties are available in downstream connector response, they will be mapped returned.

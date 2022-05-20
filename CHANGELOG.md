@@ -1,3 +1,9 @@
+## v8.29.5 - (2022-05-19)
+
+### Accounting API
+
+- Added [Balance Sheet](apis/accounting/reference#tag/BalanceSheet)
+
 ## v8.29.4 - (2022-05-16)
 
 - Made `is_primary` optional for [Employee](apis/hris/reference#tag/Employees) jobs of HRIS API.

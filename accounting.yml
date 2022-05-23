@@ -790,6 +790,26 @@ components:
                         description: The value of the fixed asset
                         title: Value
                         example: 10000
+          example:
+            total: 200000
+            current_assets:
+              total: 100000
+              accounts:
+                - id: '1'
+                  name: Accounts Receivable (A/R)
+                  value: 10000
+                - id: '2'
+                  name: Accounts Payable (A/P)
+                  value: 10000
+            fixed_assets:
+              total: 100000
+              accounts:
+                - id: '1'
+                  name: Accounts Receivable (A/R)
+                  value: 10000
+                - id: '2'
+                  name: Accounts Payable (A/P)
+                  value: 10000
         liabilities:
           type: object
           required:
@@ -819,6 +839,12 @@ components:
                     description: The value of the liability
                     title: Value
                     example: 10000
+          example:
+            total: 200000
+            accounts:
+              - id: '1'
+                name: Accounts Payable (A/P)
+                value: 10000
         equity:
           type: object
           required:
@@ -842,12 +868,18 @@ components:
                     type: string
                     description: The type of the equity
                     title: Account Name
-                    example: Accounts Payable (A/P)
+                    example: Retained Earnings
                   value:
                     type: number
                     description: The equity amount
                     title: Value
                     example: 10000
+          example:
+            total: 200000
+            items:
+              - id: '1'
+                name: Retained Earnings
+                value: 10000
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:

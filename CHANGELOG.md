@@ -1,3 +1,9 @@
+## v8.30.0 - (2022-05-23)
+
+### [ATS API](apis/ats/reference)
+
+- Added [Freshteam](connectors/freshteam) and [Recruitee](connectors/recruitee)
+
 ## v8.29.5 - (2022-05-19)
 
 ### Accounting API

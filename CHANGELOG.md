@@ -1,3 +1,9 @@
+## v8.30.1 - (2022-05-24)
+
+### Accounting API
+
+- Added `bank_accounts` [Suppliers](apis/accounting/reference#tag/Supplier)
+
 ## v8.30.0 - (2022-05-23)
 
 ### [ATS API](apis/ats/reference)

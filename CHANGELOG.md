@@ -1,3 +1,9 @@
+## v8.31.0 - (2022-05-26)
+
+### CRM API
+
+- Added `pipelines` [Pipelines](apis/crm/reference#tag/Pipelines) for [Salesforce](connectors/salesforce)
+
 ## v8.30.1 - (2022-05-24)
 
 ### Accounting API

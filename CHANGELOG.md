@@ -1,3 +1,15 @@
+## v8.31.1 - (2022-05-31)
+
+- Added [`ConnectorOperationUnsupportedError`](errors#connectoroperationunsupportederror) to provide detail when a Unify call is made that the downstream connector does not support.
+
+### Accounting API
+
+### ACTION REQUIRED
+
+Beta users should note the following breaking changes that may affect existing integrations implementing the `Accounting` API:
+
+- [LedgerAccount](apis/accounting/reference#tag/LedgerAccount) `nominal_code` has been deprecated in favour of `code`.
+
 ## v8.31.0 - (2022-05-26)
 
 ### CRM API

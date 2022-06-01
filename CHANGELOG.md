@@ -1,3 +1,7 @@
+## v8.31.2 - (2022-06-01)
+
+- Added `row_type` [Companies](apis/crm/reference#tag/Company)
+
 ## v8.31.1 - (2022-05-31)
 
 - Added [`ConnectorOperationUnsupportedError`](errors#connectoroperationunsupportederror) to provide detail when a Unify call is made that the downstream connector does not support.

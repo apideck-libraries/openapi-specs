@@ -1,3 +1,9 @@
+## v8.31.3 - (2022-06-02)
+
+### Accounting API
+
+- Added filter[name] to [InvoiceItems](apis/accounting/reference#tag/InvoiceItem)
+
 ## v8.31.2 - (2022-06-01)
 
 - Added `row_type` [Companies](apis/crm/reference#tag/Company)

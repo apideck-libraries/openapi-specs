@@ -1,3 +1,9 @@
+## v8.32.0 - (2022-06-03)
+
+### [HRIS API](apis/hris/reference)
+
+- Added [Humaans](connectors/humaans-io)
+
 ## v8.31.3 - (2022-06-02)
 
 ### Accounting API

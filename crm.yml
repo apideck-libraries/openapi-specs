@@ -699,6 +699,10 @@ components:
           type: string
           example: XXX XXX XXX
           nullable: true
+        first_name:
+          $ref: '#/components/schemas/FirstName'
+        last_name:
+          $ref: '#/components/schemas/LastName'
         parent_id:
           description: Parent ID
           type: string
@@ -3804,15 +3808,9 @@ components:
           example: masterofcoin
           nullable: true
         first_name:
-          type: string
-          title: First name
-          example: Elon
-          nullable: true
+          $ref: '#/components/schemas/FirstName'
         last_name:
-          type: string
-          title: Last name
-          example: Musk
-          nullable: true
+          $ref: '#/components/schemas/LastName'
         title:
           type: string
           title: Job title
@@ -3944,6 +3942,16 @@ components:
             - personal
             - other
           example: primary
+    FirstName:
+      type: string
+      title: First name
+      example: Elon
+      nullable: true
+    LastName:
+      type: string
+      title: Last name
+      example: Musk
+      nullable: true
   parameters:
     applicationId:
       name: x-apideck-app-id
@@ -4603,6 +4611,8 @@ paths:
                 abn_or_tfn: '46 115 614 695',
                 abn_branch: '123',
                 acn: 'XXX XXX XXX',
+                first_name: 'Elon',
+                last_name: 'Musk',
                 bank_accounts: [
                   {
                     iban: 'CH2989144532982975332',
@@ -4817,6 +4827,8 @@ paths:
                 abn_or_tfn: '46 115 614 695',
                 abn_branch: '123',
                 acn: 'XXX XXX XXX',
+                first_name: 'Elon',
+                last_name: 'Musk',
                 bank_accounts: [
                   {
                     iban: 'CH2989144532982975332',

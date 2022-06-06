@@ -68,6 +68,14 @@ components:
         type: string
       required: false
       description: ID of the location.
+    modifierGroupFilter:
+      name: filter
+      in: query
+      description: Apply filters (beta)
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ModifierGroupFilter'
     limit:
       name: limit
       in: query
@@ -4168,6 +4176,17 @@ components:
           type: integer
           title: Maximum allowed
           example: 5
+        selection_type:
+          type: string
+          enum:
+            - single
+            - multiple
+          title: Indicates whether multiple options from the modifier group can be applied to a single or multiple modifiers
+          example: single
+        present_at_all_locations:
+          title: Present at all locations
+          type: boolean
+          example: false
         modifiers:
           type: array
           items:
@@ -4192,6 +4211,8 @@ components:
                 $ref: '#/components/schemas/Currency'
               available:
                 $ref: '#/components/schemas/Available'
+        deleted:
+          $ref: '#/components/schemas/Deleted'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -4656,6 +4677,17 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
+    ModifierGroupFilter:
+      type: object
+      x-graphql-type-name: ModifierGroupFilter
+      example:
+        modifier_group_id: '1234'
+      properties:
+        modifier_group_id:
+          type: string
+          description: Id of the job to filter on
+          example: '1234'
+      additionalProperties: false
   securitySchemes:
     apiKey:
       type: apiKey
@@ -7358,6 +7390,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/modifierGroupFilter'
       security:
         - apiKey: []
       responses:
@@ -7474,6 +7507,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/modifierGroupFilter'
       security:
         - apiKey: []
       responses:
@@ -7616,6 +7650,8 @@ paths:
                 alternate_name: 'Modifier New',
                 minimum_required: 1,
                 maximum_allowed: 5,
+                selection_type: 'single',
+                present_at_all_locations: false,
                 modifiers: [
                   {
                     id: '12345',
@@ -7626,6 +7662,7 @@ paths:
                     available: true
                   }
                 ],
+                deleted: true,
                 row_version: '1-12345'
               }
             }
@@ -7742,6 +7779,8 @@ paths:
                 alternate_name: 'Modifier New',
                 minimum_required: 1,
                 maximum_allowed: 5,
+                selection_type: 'single',
+                present_at_all_locations: false,
                 modifiers: [
                   {
                     id: '12345',
@@ -7752,6 +7791,7 @@ paths:
                     available: true
                   }
                 ],
+                deleted: true,
                 row_version: '1-12345'
               }
             }

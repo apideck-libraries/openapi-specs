@@ -471,6 +471,10 @@ components:
           type: string
           example: XXX XXX XXX
           nullable: true
+        first_name:
+          $ref: '#/components/schemas/FirstName'
+        last_name:
+          $ref: '#/components/schemas/LastName'
         parent_id:
           description: Parent ID
           type: string
@@ -1365,15 +1369,9 @@ components:
         company_name:
           $ref: '#/components/schemas/CompanyName'
         first_name:
-          type: string
-          title: First name
-          example: Elon
-          nullable: true
+          $ref: '#/components/schemas/FirstName'
         last_name:
-          type: string
-          title: Last name
-          example: Musk
-          nullable: true
+          $ref: '#/components/schemas/LastName'
         individual:
           type: boolean
           title: Is individual
@@ -2210,6 +2208,16 @@ components:
             - personal
             - other
           example: primary
+    FirstName:
+      type: string
+      title: First name
+      example: Elon
+      nullable: true
+    LastName:
+      type: string
+      title: Last name
+      example: Musk
+      nullable: true
   securitySchemes:
     apiKey:
       type: apiKey

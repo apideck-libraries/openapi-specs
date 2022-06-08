@@ -93,7 +93,7 @@ components:
       style: deepObject
       explode: true
       schema:
-        type: object
+        $ref: '#/components/schemas/Passthrough'
   responses:
     BadRequestResponse:
       content:
@@ -5103,6 +5103,13 @@ components:
             - personal
             - other
           example: primary
+    Passthrough:
+      type: object
+      additionalProperties: true
+      properties:
+        example_downstream_property:
+          type: string
+          description: 'All passthrough query parameters are passed along to the connector as is (?pass_through[search]=leads becomes ?search=leads)'
   securitySchemes:
     apiKey:
       type: apiKey

@@ -1,3 +1,9 @@
+## v8.32.1 - (2022-06-08)
+
+### [ATS API](apis/ats/reference)
+
+- Extended `department` properties on [Jobs](apis/ats/reference#tag/Job)
+
 ## v8.32.0 - (2022-06-03)
 
 ### [HRIS API](apis/hris/reference)

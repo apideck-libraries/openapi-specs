@@ -1,3 +1,7 @@
+## v8.32.3 - (2022-06-15)
+
+- Added `country`, `sales_tax_enabled` and `default_sales_tax` to [CompanyInfo](apis/accounting/reference#tag/CompanyInfo)
+
 ## v8.32.2 - (2022-06-15)
 
 ### Accounting API

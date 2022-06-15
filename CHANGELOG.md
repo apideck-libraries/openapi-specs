@@ -1,3 +1,9 @@
+## v8.32.2 - (2022-06-15)
+
+### Accounting API
+
+- Added filter[company_name], filter[last_name], filter[email] to [Customers](apis/accounting/reference#tag/Customer)
+
 ## v8.32.1 - (2022-06-08)
 
 ### [ATS API](apis/ats/reference)

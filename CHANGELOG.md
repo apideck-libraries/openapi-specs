@@ -1,3 +1,8 @@
+## v8.32.4 - (2022-06-16)
+
+- Added `filter[first_name]` and `filter[display_name`] to to [Customers](apis/accounting/reference#tag/Customer)
+- Added `automated_sales_tax` to [CompanyInfo](apis/accounting/reference#tag/CompanyInfo)
+
 ## v8.32.3 - (2022-06-15)
 
 - Added `country`, `sales_tax_enabled` and `default_sales_tax` to [CompanyInfo](apis/accounting/reference#tag/CompanyInfo)
@@ -6,7 +11,7 @@
 
 ### Accounting API
 
-- Added filter[company_name], filter[last_name], filter[email] to [Customers](apis/accounting/reference#tag/Customer)
+- Added `filter[company_name]`, `filter[last_name]`, `filter[email]` to [Customers](apis/accounting/reference#tag/Customer)
 
 ## v8.32.1 - (2022-06-08)
 

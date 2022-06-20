@@ -478,6 +478,30 @@ components:
     Address:
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: edge-case
+        name: edge-case
+        type: critical
+        line1: high
+        line2: low
+        line3: edge-case
+        line4: edge-case
+        street_number: low
+        city: high
+        string: low
+        state: high
+        postal_code: high
+        country: high
+        latitude: low
+        longitude: low
+        county: edge-case
+        contact_name: edge-case
+        salutation: edge-case
+        phone_number: edge-case
+        fax: edge-case
+        email: edge-case
+        website: edge-case
+        row_version: edge-case
       properties:
         id:
           type: string
@@ -486,6 +510,7 @@ components:
         type:
           type: string
           x-graphql-type-name: AddressType
+          x-apideck-enum-id: addresses.type
           enum:
             - primary
             - secondary
@@ -764,6 +789,7 @@ components:
         type:
           type: string
           x-graphql-type-name: EmailType
+          x-apideck-enum-id: emails.type
           enum:
             - primary
             - secondary
@@ -786,6 +812,7 @@ components:
           nullable: true
         card_brand:
           type: string
+          x-apideck-enum-id: payment-cards.card_brand
           enum:
             - visa
             - mastercard
@@ -805,6 +832,7 @@ components:
           nullable: true
         card_type:
           type: string
+          x-apideck-enum-id: payment-cards.card_type
           enum:
             - credit
             - debit
@@ -814,6 +842,7 @@ components:
           nullable: true
         prepaid_type:
           type: string
+          x-apideck-enum-id: payment-cards.prepaid_type
           enum:
             - non-prepaid
             - prepaid
@@ -1075,6 +1104,7 @@ components:
         status:
           title: Status
           type: string
+          x-apideck-enum-id: orders.status
           enum:
             - open
             - draft
@@ -1092,6 +1122,7 @@ components:
           title: PosPayment status
           description: Is this order paid or not?
           type: string
+          x-apideck-enum-id: orders.payment_status
           enum:
             - open
             - paid
@@ -1201,6 +1232,7 @@ components:
                 type: string
                 title: Fulfillment status
                 description: The state of the fulfillment.
+                x-apideck-enum-id: orders.fulfillments.status
                 enum:
                   - proposed
                   - reserved
@@ -1211,6 +1243,7 @@ components:
                   - other
               type:
                 type: string
+                x-apideck-enum-id: orders.fulfillments.type
                 enum:
                   - pickup
                   - shipment
@@ -1246,6 +1279,7 @@ components:
                     example: '2016-09-04T23:59:33.123Z'
                   schedule_type:
                     type: string
+                    x-apideck-enum-id: orders.pickup_details.schedule_type
                     enum:
                       - scheduled
                     description: The schedule type of the pickup fulfillment.
@@ -1460,6 +1494,7 @@ components:
                 example: The reason for the refund being issued.
               status:
                 type: string
+                x-apideck-enum-id: orders.refunds.status
                 enum:
                   - pending
                   - approved
@@ -1489,11 +1524,13 @@ components:
                 $ref: '#/components/schemas/Percentage'
               scope:
                 type: string
+                x-apideck-enum-id: orders.taxes.scope
                 enum:
                   - order
                   - line_item
               type:
                 type: string
+                x-apideck-enum-id: orders.taxes.type
                 enum:
                   - unknown
                   - additive
@@ -1516,6 +1553,7 @@ components:
                 example: 10% off
               type:
                 type: string
+                x-apideck-enum-id: orders.discounts.type
                 enum:
                   - fixed_percentage
                 example: fixed_percentage
@@ -1526,6 +1564,7 @@ components:
                 $ref: '#/components/schemas/Currency'
               scope:
                 type: string
+                x-apideck-enum-id: orders.discounts.scope
                 enum:
                   - order
                   - line_item
@@ -1542,6 +1581,7 @@ components:
                 example: 10% off
               type:
                 type: string
+                x-apideck-enum-id: orders.tenders.type
                 enum:
                   - cash
                   - card
@@ -1606,6 +1646,7 @@ components:
               card_status:
                 type: string
                 description: The status of the card. Only applicable when the tender type is card.
+                x-apideck-enum-id: orders.tenders.card_status
                 enum:
                   - authorized
                   - captured
@@ -1616,6 +1657,7 @@ components:
               card_entry_method:
                 type: string
                 description: The entry method of the card. Only applicable when the tender type is card.
+                x-apideck-enum-id: orders.tenders.card_entry_method
                 enum:
                   - evm
                   - swiped
@@ -1633,6 +1675,7 @@ components:
         source:
           type: string
           description: Source of order. Indicates the way that the order was placed.
+          x-apideck-enum-id: orders.source
           enum:
             - in-store
             - online
@@ -1697,6 +1740,8 @@ components:
       title: Currency
       description: 'Indicates the associated currency for an amount of money. Values correspond to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).'
       example: USD
+      x-apideck-enum-id: currencies
+      x-apideck-enum-coverage-ignore: true
       enum:
         - UNKNOWN_CURRENCY
         - AED
@@ -2337,6 +2382,7 @@ components:
         type:
           type: string
           x-graphql-type-name: PhoneType
+          x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
             - secondary
@@ -2580,6 +2626,7 @@ components:
         type:
           type: string
           x-graphql-type-name: WebsiteType
+          x-apideck-enum-id: websites.type
           enum:
             - primary
             - secondary
@@ -2818,6 +2865,7 @@ components:
               processing_type:
                 type: string
                 title: Type
+                x-apideck-enum-id: pos-payments.processing_fees.processing_type
                 enum:
                   - initial
                   - adjustment
@@ -2828,6 +2876,7 @@ components:
         source:
           type: string
           description: Source of this payment.
+          x-apideck-enum-id: pos-payments.source
           enum:
             - card
             - bank_account
@@ -2842,6 +2891,7 @@ components:
           title: Status
           description: Status of this payment.
           x-graphql-type-name: PosPosPaymentStatus
+          x-apideck-enum-id: pos-payments.status
           enum:
             - approved
             - pending
@@ -2926,6 +2976,7 @@ components:
               maxLength: 50
               type: string
               description: 'The status of the wallet payment. The status can be AUTHORIZED, CAPTURED, VOIDED, or FAILED.'
+              x-apideck-enum-id: pos-payments.wallet.status
               enum:
                 - authorized
                 - captured
@@ -2955,6 +3006,7 @@ components:
                 - STORED_BALANCE - Use for house accounts, store credit, and so forth.
                 - FOOD_VOUCHER - Restaurant voucher provided by employers to employees to pay for meals
                 - OTHER - A type not listed here.
+              x-apideck-enum-id: pos-payments.external_details.type
               enum:
                 - check
                 - bank_transfer
@@ -3190,6 +3242,7 @@ components:
           type: string
           title: Status
           description: Status of this merchant.
+          x-apideck-enum-id: merchants.status
           enum:
             - active
             - inactive
@@ -3403,6 +3456,7 @@ components:
           type: string
           title: Status
           description: Status of this location.
+          x-apideck-enum-id: locations.status
           enum:
             - active
             - inactive
@@ -3616,6 +3670,7 @@ components:
         product_type:
           title: Product type
           type: string
+          x-apideck-enum-id: items.product_type
           enum:
             - regular
             - other
@@ -3627,6 +3682,7 @@ components:
         pricing_type:
           type: string
           title: Pricing type
+          x-apideck-enum-id: items.pricing_type
           enum:
             - fixed
             - variable
@@ -3727,6 +3783,7 @@ components:
               pricing_type:
                 type: string
                 title: Pricing type
+                x-apideck-enum-id: items.pricing_type
                 enum:
                   - fixed
                   - variable
@@ -4178,6 +4235,7 @@ components:
           example: 5
         selection_type:
           type: string
+          x-apideck-enum-id: modifier-groups.selection_type
           enum:
             - single
             - multiple
@@ -4277,6 +4335,7 @@ components:
           type:
             type: string
             description: The type of the service charge.
+            x-apideck-enum-id: service-charges.type
             enum:
               - auto_gratuity
               - custom
@@ -4715,38 +4774,47 @@ security:
 tags:
   - name: Orders
     description: ''
+    x-apideck-resource-id: orders
     x-apideck-model:
       $ref: '#/components/schemas/Order'
   - name: Payments
     description: ''
+    x-apideck-resource-id: payments
     x-apideck-model:
       $ref: '#/components/schemas/PosPayment'
   - name: Merchants
     description: ''
+    x-apideck-resource-id: merchants
     x-apideck-model:
       $ref: '#/components/schemas/Merchant'
   - name: Locations
     description: ''
+    x-apideck-resource-id: locations
     x-apideck-model:
       $ref: '#/components/schemas/Location'
   - name: Items
     description: ''
+    x-apideck-resource-id: items
     x-apideck-model:
       $ref: '#/components/schemas/Item'
   - name: Modifiers
     description: ''
+    x-apideck-resource-id: modifiers
     x-apideck-model:
       $ref: '#/components/schemas/Modifier'
   - name: Modifier Groups
     description: ''
+    x-apideck-resource-id: modifier-groups
     x-apideck-model:
       $ref: '#/components/schemas/ModifierGroup'
   - name: Order Types
     description: ''
+    x-apideck-resource-id: order-types
     x-apideck-model:
       $ref: '#/components/schemas/OrderType'
   - name: Tenders
     description: ''
+    x-apideck-resource-id: tenders
     x-apideck-model:
       $ref: '#/components/schemas/Tender'
 paths:

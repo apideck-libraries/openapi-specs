@@ -248,6 +248,8 @@ components:
       title: Currency
       description: 'Indicates the associated currency for an amount of money. Values correspond to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).'
       example: USD
+      x-apideck-enum-id: currencies
+      x-apideck-enum-coverage-ignore: true
       enum:
         - UNKNOWN_CURRENCY
         - AED
@@ -878,6 +880,7 @@ components:
         type:
           type: string
           x-graphql-type-name: EmailType
+          x-apideck-enum-id: emails.type
           enum:
             - primary
             - secondary
@@ -1012,6 +1015,7 @@ components:
           title: Message type
           description: Set to sms for SMS messages and mms for MMS messages.
           type: string
+          x-apideck-enum-id: messages.type
           enum:
             - sms
             - mms
@@ -1033,6 +1037,7 @@ components:
           title: Direction
           description: The direction of the message.
           type: string
+          x-apideck-enum-id: messages.direction
           enum:
             - inbound
             - outbound-api
@@ -1045,6 +1050,7 @@ components:
           description: Status of the delivery of the message.
           type: string
           readOnly: true
+          x-apideck-enum-id: messages.status
           enum:
             - accepted
             - scheduled
@@ -1422,6 +1428,7 @@ security:
 tags:
   - name: Messages
     description: ''
+    x-apideck-resource-id: messages
     x-apideck-model:
       $ref: '#/components/schemas/Message'
 paths:

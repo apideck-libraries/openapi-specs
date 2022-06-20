@@ -161,6 +161,30 @@ components:
     Address:
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: edge-case
+        name: edge-case
+        type: critical
+        line1: high
+        line2: low
+        line3: edge-case
+        line4: edge-case
+        street_number: low
+        city: high
+        string: low
+        state: high
+        postal_code: high
+        country: high
+        latitude: low
+        longitude: low
+        county: edge-case
+        contact_name: edge-case
+        salutation: edge-case
+        phone_number: edge-case
+        fax: edge-case
+        email: edge-case
+        website: edge-case
+        row_version: edge-case
       properties:
         id:
           type: string
@@ -169,6 +193,7 @@ components:
         type:
           type: string
           x-graphql-type-name: AddressType
+          x-apideck-enum-id: addresses.type
           enum:
             - primary
             - secondary
@@ -360,6 +385,7 @@ components:
               type:
                 type: string
                 x-graphql-type-name: WebsiteType
+                x-apideck-enum-id: websites.type
                 enum:
                   - primary
                   - secondary
@@ -572,6 +598,8 @@ components:
       title: Currency
       description: 'Indicates the associated currency for an amount of money. Values correspond to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).'
       example: USD
+      x-apideck-enum-id: currencies
+      x-apideck-enum-coverage-ignore: true
       enum:
         - UNKNOWN_CURRENCY
         - AED
@@ -1223,6 +1251,7 @@ components:
         type:
           type: string
           x-graphql-type-name: EmailType
+          x-apideck-enum-id: emails.type
           enum:
             - primary
             - secondary
@@ -1399,6 +1428,7 @@ components:
           type: array
           items:
             type: string
+            x-apideck-enum-id: jobs.visibility
             enum:
               - public
               - internal
@@ -1410,6 +1440,7 @@ components:
           $ref: '#/components/schemas/Language'
         employment_terms:
           type: string
+          x-apideck-enum-id: jobs.employment_terms
           enum:
             - full-time
             - part-time
@@ -1576,6 +1607,7 @@ components:
       type: string
       description: The status of the job.
       example: completed
+      x-apideck-enum-id: jobs.status
       enum:
         - draft
         - internal
@@ -1773,6 +1805,7 @@ components:
         type:
           type: string
           x-graphql-type-name: PhoneType
+          x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
             - secondary
@@ -1999,14 +2032,17 @@ security:
 tags:
   - name: Jobs
     description: ''
+    x-apideck-resource-id: jobs
     x-apideck-model:
       $ref: '#/components/schemas/Job'
   - name: Applicants
     description: ''
+    x-apideck-resource-id: applicants
     x-apideck-model:
       $ref: '#/components/schemas/Applicant'
   - name: Employees
     description: ''
+    x-apideck-resource-id: employees
     x-apideck-upcoming: true
 paths:
   /ats/jobs:

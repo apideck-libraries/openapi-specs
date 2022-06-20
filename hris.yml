@@ -274,6 +274,30 @@ components:
     Address:
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: edge-case
+        name: edge-case
+        type: critical
+        line1: high
+        line2: low
+        line3: edge-case
+        line4: edge-case
+        street_number: low
+        city: high
+        string: low
+        state: high
+        postal_code: high
+        country: high
+        latitude: low
+        longitude: low
+        county: edge-case
+        contact_name: edge-case
+        salutation: edge-case
+        phone_number: edge-case
+        fax: edge-case
+        email: edge-case
+        website: edge-case
+        row_version: edge-case
       properties:
         id:
           type: string
@@ -282,6 +306,7 @@ components:
         type:
           type: string
           x-graphql-type-name: AddressType
+          x-apideck-enum-id: addresses.type
           enum:
             - primary
             - secondary
@@ -460,6 +485,8 @@ components:
       title: Currency
       description: 'Indicates the associated currency for an amount of money. Values correspond to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).'
       example: USD
+      x-apideck-enum-id: currencies
+      x-apideck-enum-coverage-ignore: true
       enum:
         - UNKNOWN_CURRENCY
         - AED
@@ -1303,6 +1330,7 @@ components:
         type:
           type: string
           x-graphql-type-name: EmailType
+          x-apideck-enum-id: emails.type
           enum:
             - primary
             - secondary
@@ -1392,6 +1420,7 @@ components:
         employment_status:
           type: string
           example: active
+          x-apideck-enum-id: employees.employment_status
           enum:
             - active
             - inactive
@@ -1403,6 +1432,7 @@ components:
           properties:
             type:
               type: string
+              x-apideck-enum-id: employees.employment_role.type
               enum:
                 - contractor
                 - employee
@@ -1413,6 +1443,7 @@ components:
               nullable: true
             sub_type:
               type: string
+              x-apideck-enum-id: employees.employment_role.sub_type
               enum:
                 - full_time
                 - part_time
@@ -1564,6 +1595,7 @@ components:
                 type: string
                 readOnly: false
                 description: The FLSA status for this compensation.
+                x-apideck-enum-id: employees.compensations.flsa_status
                 enum:
                   - exempt
                   - salaried-nonexempt
@@ -1687,6 +1719,7 @@ components:
       nullable: true
     Gender:
       type: string
+      x-apideck-enum-id: genders
       enum:
         - male
         - female
@@ -1933,6 +1966,7 @@ components:
         status:
           type: string
           example: active
+          x-apideck-enum-id: companies.status
           enum:
             - active
             - inactive
@@ -2139,6 +2173,7 @@ components:
           example: 'https://developers.apideck.com/errors#requestlimiterror'
     PaymentUnit:
       type: string
+      x-apideck-enum-id: payment_unit
       enum:
         - hour
         - week
@@ -2197,6 +2232,7 @@ components:
         type:
           type: string
           x-graphql-type-name: PhoneType
+          x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
             - secondary
@@ -2478,6 +2514,7 @@ components:
         type:
           type: string
           x-graphql-type-name: WebsiteType
+          x-apideck-enum-id: websites.type
           enum:
             - primary
             - secondary
@@ -2821,22 +2858,27 @@ security:
 tags:
   - name: Employees
     description: ''
+    x-apideck-resource-id: employees
     x-apideck-model:
       $ref: '#/components/schemas/Employee'
   - name: Companies
     description: ''
+    x-apideck-resource-id: companies
     x-apideck-model:
       $ref: '#/components/schemas/HrisCompany'
   - name: Departments
     description: ''
+    x-apideck-resource-id: departments
     x-apideck-model:
       $ref: '#/components/schemas/Department'
   - name: Payrolls
     description: ''
+    x-apideck-resource-id: payrolls
     x-apideck-model:
       $ref: '#/components/schemas/Payroll'
   - name: Employee Payrolls
     description: ''
+    x-apideck-resource-id: employee-payrolls
     x-apideck-model:
       $ref: '#/components/schemas/EmployeePayroll'
 paths:

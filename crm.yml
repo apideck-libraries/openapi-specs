@@ -26,34 +26,42 @@ security:
 tags:
   - name: Companies
     description: ''
+    x-apideck-resource-id: companies
     x-apideck-model:
       $ref: '#/components/schemas/Company'
   - name: Opportunities
     description: ''
+    x-apideck-resource-id: opportunities
     x-apideck-model:
       $ref: '#/components/schemas/Opportunity'
   - name: Leads
     description: ''
+    x-apideck-resource-id: leads
     x-apideck-model:
       $ref: '#/components/schemas/Lead'
   - name: Contacts
     description: ''
+    x-apideck-resource-id: contacts
     x-apideck-model:
       $ref: '#/components/schemas/Contact'
   - name: Pipelines
     description: ''
+    x-apideck-resource-id: pipelines
     x-apideck-model:
       $ref: '#/components/schemas/Pipeline'
   - name: Notes
     description: ''
+    x-apideck-resource-id: notes
     x-apideck-model:
       $ref: '#/components/schemas/Note'
   - name: Users
     description: ''
+    x-apideck-resource-id: users
     x-apideck-model:
       $ref: '#/components/schemas/User'
   - name: Activities
     description: ''
+    x-apideck-resource-id: activities
     x-apideck-model:
       $ref: '#/components/schemas/Activity'
 components:
@@ -142,6 +150,7 @@ components:
         type:
           x-graphql-type-name: ActivityType
           type: string
+          x-apideck-enum-id: activities.type
           enum:
             - call
             - meeting
@@ -200,6 +209,7 @@ components:
           example: false
         show_as:
           type: string
+          x-apideck-enum-id: activities.show_as
           enum:
             - free
             - busy
@@ -321,6 +331,7 @@ components:
           nullable: true
         status:
           type: string
+          x-apideck-enum-id: activity-attendees.status
           enum:
             - accepted
             - tentative
@@ -349,6 +360,30 @@ components:
     Address:
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: edge-case
+        name: edge-case
+        type: critical
+        line1: high
+        line2: low
+        line3: edge-case
+        line4: edge-case
+        street_number: low
+        city: high
+        string: low
+        state: high
+        postal_code: high
+        country: high
+        latitude: low
+        longitude: low
+        county: edge-case
+        contact_name: edge-case
+        salutation: edge-case
+        phone_number: edge-case
+        fax: edge-case
+        email: edge-case
+        website: edge-case
+        row_version: edge-case
       properties:
         id:
           type: string
@@ -357,6 +392,7 @@ components:
         type:
           type: string
           x-graphql-type-name: AddressType
+          x-apideck-enum-id: addresses.type
           enum:
             - primary
             - secondary
@@ -523,6 +559,8 @@ components:
     BankAccount:
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        account_number: critical
       properties:
         iban:
           type: string
@@ -565,6 +603,7 @@ components:
         account_type:
           type: string
           title: Account Type
+          x-apideck-enum-id: bank-accounts.account_type
           enum:
             - bank_account
             - credit_card
@@ -595,6 +634,7 @@ components:
         by:
           type: string
           x-graphql-type-name: CompaniesSortBy
+          x-apideck-enum-id: companies.sort_by
           description: The field on which to sort the Companies
           enum:
             - created_at
@@ -809,6 +849,7 @@ components:
         type:
           type: string
           example: personal
+          x-apideck-enum-id: contacts.type
           enum:
             - customer
             - supplier
@@ -862,6 +903,7 @@ components:
           nullable: true
         gender:
           type: string
+          x-apideck-enum-id: contacts.gender
           enum:
             - male
             - female
@@ -998,6 +1040,7 @@ components:
         by:
           type: string
           x-graphql-type-name: ContactsSortBy
+          x-apideck-enum-id: contacts.sort_by
           description: The field on which to sort the Contacts
           enum:
             - created_at
@@ -1273,6 +1316,8 @@ components:
       title: Currency
       description: 'Indicates the associated currency for an amount of money. Values correspond to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).'
       example: USD
+      x-apideck-enum-id: currencies
+      x-apideck-enum-coverage-ignore: true
       enum:
         - UNKNOWN_CURRENCY
         - AED
@@ -2127,6 +2172,7 @@ components:
         type:
           type: string
           x-graphql-type-name: EmailType
+          x-apideck-enum-id: emails.type
           enum:
             - primary
             - secondary
@@ -2137,6 +2183,7 @@ components:
           example: primary
     CrmEventType:
       type: string
+      x-apideck-enum-id: crm.events
       enum:
         - '*'
         - crm.activity.created
@@ -2730,6 +2777,7 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Lead:
+      type: object
       required:
         - name
         - company_name
@@ -2876,6 +2924,7 @@ components:
           type: string
           x-graphql-type-name: LeadsSortBy
           description: The field on which to sort the Leads
+          x-apideck-enum-id: leads.sort_by
           enum:
             - created_at
             - updated_at
@@ -3083,6 +3132,7 @@ components:
         by:
           type: string
           x-graphql-type-name: OpportunitiesSortBy
+          x-apideck-enum-id: opportunities.sort_by
           description: The field on which to sort the Opportunities
           enum:
             - created_at
@@ -3332,6 +3382,7 @@ components:
         type:
           type: string
           x-graphql-type-name: PhoneType
+          x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
             - secondary
@@ -3427,6 +3478,7 @@ components:
     SortDirection:
       type: string
       description: The direction in which to sort the results
+      x-apideck-enum-id: sort_direction
       enum:
         - asc
         - desc
@@ -3935,6 +3987,7 @@ components:
         type:
           type: string
           x-graphql-type-name: WebsiteType
+          x-apideck-enum-id: websites.type
           enum:
             - primary
             - secondary

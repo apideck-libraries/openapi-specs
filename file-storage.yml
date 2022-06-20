@@ -725,6 +725,7 @@ components:
     FileType:
       x-graphql-type-name: FileType
       type: string
+      x-apideck-enum-id: files.type
       enum:
         - file
         - folder
@@ -775,6 +776,7 @@ components:
         by:
           type: string
           x-graphql-type-name: FilesSortBy
+          x-apideck-enum-id: files.sort_by
           description: The field on which to sort the Files
           enum:
             - updated_at
@@ -1268,6 +1270,7 @@ components:
           $ref: '#/components/schemas/SharedLinkTarget'
         scope:
           type: string
+          x-apideck-enum-id: files.scope
           enum:
             - public
             - company
@@ -1306,6 +1309,7 @@ components:
     SortDirection:
       type: string
       description: The direction in which to sort the results
+      x-apideck-enum-id: sort_direction
       enum:
         - asc
         - desc
@@ -1618,18 +1622,22 @@ security:
 tags:
   - name: Files
     description: Files
+    x-apideck-resource-id: files
     x-apideck-model:
       $ref: '#/components/schemas/UnifiedFile'
   - name: Folders
     description: ''
+    x-apideck-resource-id: folders
     x-apideck-model:
       $ref: '#/components/schemas/Folder'
   - name: Shared Links
     description: ''
+    x-apideck-resource-id: shared-links
     x-apideck-model:
       $ref: '#/components/schemas/SharedLink'
   - name: Upload Sessions
     description: ''
+    x-apideck-resource-id: upload-sessions
     x-apideck-model:
       $ref: '#/components/schemas/UploadSession'
 paths:

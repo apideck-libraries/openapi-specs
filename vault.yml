@@ -231,6 +231,7 @@ components:
   schemas:
     AuthType:
       type: string
+      x-apideck-enum-id: auth_types
       enum:
         - oauth2
         - apiKey
@@ -242,6 +243,7 @@ components:
       readOnly: true
     OAuthGrantType:
       type: string
+      x-apideck-enum-id: oauth_grant_types
       enum:
         - authorization_code
         - client_credentials
@@ -310,6 +312,7 @@ components:
           $ref: '#/components/schemas/OAuthGrantType'
         status:
           type: string
+          x-apideck-enum-id: connections.status
           enum:
             - live
             - upcoming
@@ -404,6 +407,7 @@ components:
                   properties:
                     target:
                       type: string
+                      x-apideck-enum-id: connections.configuration.defaults.target
                       enum:
                         - custom_fields
                         - resource
@@ -538,6 +542,7 @@ components:
     ConnectionState:
       type: string
       description: '[Connection state flow](#section/Connection-state)'
+      x-apideck-enum-id: connections.state
       enum:
         - available
         - callable
@@ -661,6 +666,7 @@ components:
           nullable: true
         state:
           type: string
+          x-apideck-enum-id: consumer.connections.state
           enum:
             - available
             - callable
@@ -694,6 +700,7 @@ components:
           x-graphql-type-name: WebhookStatus
           description: The status of the webhook.
           example: enabled
+          x-apideck-enum-id: webhooks.status
           enum:
             - enabled
             - disabled
@@ -718,6 +725,7 @@ components:
             - vault.connection.created
             - vault.connection.updated
           items:
+            x-apideck-enum-id: webhooks.event_type
             enum:
               - '*'
               - crm.activity.created
@@ -1239,6 +1247,7 @@ components:
         unified_api:
           description: Which Unified Api request was made to.
           example: vault
+          x-apideck-enum-id: logs.unified_api
           enum:
             - crm
             - lead
@@ -1629,6 +1638,7 @@ components:
           example: 'https://developers.apideck.com/errors#invalidstateerror'
     UnifiedApiId:
       description: Name of Apideck Unified API
+      x-apideck-enum-id: unifies_api
       enum:
         - vault
         - lead
@@ -1705,6 +1715,7 @@ components:
           example: '2021-10-01T03:14:55.419Z'
     VaultEventType:
       type: string
+      x-apideck-enum-id: vault.events
       enum:
         - '*'
         - vault.connection.created

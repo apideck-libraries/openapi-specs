@@ -412,29 +412,29 @@ components:
   schemas:
     AccountingCustomer:
       x-apideck-weights:
-        id: medium
-        display_id: medium
-        display_name: medium
-        company_name: medium
-        title: medium
-        first_name: medium
-        middle_name: medium
-        last_name: medium
-        suffix: medium
+        id: high
+        display_id: edge-case
+        display_name: edge-case
+        company_name: high
+        title: critical
+        first_name: high
+        middle_name: low
+        last_name: high
+        suffix: low
         individual: medium
-        addresses: medium
-        notes: medium
-        phone_numbers: medium
-        emails: medium
+        addresses: high
+        notes: low
+        phone_numbers: high
+        emails: high
         websites: medium
         tax_rate: medium
         tax_number: medium
         currency: medium
-        bank_accounts: medium
-        status: medium
-        row_version: medium
-        updated_by: medium
-        created_by: medium
+        bank_accounts: high
+        status: high
+        row_version: edge-case
+        updated_by: edge-case
+        created_by: edge-case
         updated_at: medium
         created_at: medium
       x-graphql-type-name: Customer
@@ -1004,6 +1004,8 @@ components:
       additionalProperties: false
       x-apideck-weights:
         account_number: critical
+        iban: high
+        bsb_number: edge-case
       properties:
         iban:
           type: string
@@ -1082,7 +1084,7 @@ components:
         row_version: edge-case
         updated_by: low
         created_by: low
-        created_at: high
+        created_at: edge-case
         updated_at: high
       properties:
         id:
@@ -1210,6 +1212,25 @@ components:
     BillLineItem:
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        row_id: edge-case
+        code: high
+        line_number: edge-case
+        description: high
+        type: high
+        tax_amount: low
+        total_amount: critical
+        quantity: medium
+        unit_price: medium
+        unit_of_measure: edge-case
+        discount_percentage: edge-case
+        item: high
+        ledger_account: low
+        tax_rate: low
+        row_version: edge-case
+        created_at: edge-case
+        updated_at: high
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -1280,6 +1301,45 @@ components:
         row_version:
           $ref: '#/components/schemas/RowVersion'
     Company:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        interaction_count: edge-case
+        owner_id: high
+        image: low
+        description: medium
+        vat_number: high
+        currency: medium
+        status: high
+        fax: low
+        annual_revenue: low
+        number_of_employees: low
+        industry: medium
+        ownership: low
+        sales_tax_number: medium
+        payee_number: edge-case
+        abn_or_tfn: edge-case
+        abn_branch: edge-case
+        acn: edge-case
+        first_name: edge-case
+        last_name: edge-case
+        parent_id: edge-case
+        bank_accounts: medium
+        websites: medium
+        addresses: high
+        social_links: low
+        phone_numbers: high
+        emails: high
+        row_type: edge-case
+        custom_fields: medium
+        tags: low
+        read_only: low
+        last_activity_at: low
+        deleted: medium
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: high
+        created_at: medium
       type: object
       required:
         - name
@@ -1406,6 +1466,9 @@ components:
           items:
             $ref: '#/components/schemas/Email'
         row_type:
+          x-apideck-weights:
+            id: critical
+            name: medium
           type: object
           x-graphql-type-name: CompanyRowType
           title: Company Row Type
@@ -1564,6 +1627,44 @@ components:
       example: SpaceX
       nullable: true
     Contact:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        owner_id: medium
+        type: medium
+        company_id: high
+        company_name: medium
+        lead_id: medium
+        first_name: high
+        middle_name: low
+        last_name: high
+        prefix: low
+        suffix: low
+        title: medium
+        department: medium
+        language: medium
+        gender: medium
+        birthday: medium
+        image: medium
+        photo_url: medium
+        lead_source: low
+        fax: low
+        description: low
+        current_balance: edge-case
+        status: edge-case
+        active: edge-case
+        websites: medium
+        addresses: high
+        social_links: low
+        phone_numbers: high
+        emails: high
+        custom_fields: medium
+        tags: low
+        first_call_at: edge-case
+        first_email_at: edge-case
+        last_activity_at: medium
+        updated_at: high
+        created_at: medium
       required:
         - name
       x-pii:
@@ -2577,6 +2678,11 @@ components:
       required:
         - id
       additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        value: critical
+        name: medium
+        description: edge-case
       properties:
         id:
           title: ID
@@ -2877,6 +2983,10 @@ components:
         - email
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        email: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string
@@ -3736,26 +3846,26 @@ components:
           $ref: '#/components/schemas/CreatedAt'
     InvoiceItem:
       x-apideck-weights:
-        id: medium
-        name: medium
+        id: critical
+        name: critical
         description: medium
-        code: medium
-        sold: medium
-        purchased: medium
-        tracked: medium
-        inventory_date: medium
-        type: medium
+        code: high
+        sold: edge-case
+        purchased: edge-case
+        tracked: edge-case
+        inventory_date: high
+        type: high
         sales_details: medium
         purchase_details: medium
-        quantity: medium
-        unit_price: medium
+        quantity: high
+        unit_price: high
         asset_account: medium
-        income_account: medium
+        income_account: high
         expense_account: medium
         active: medium
-        row_version: medium
-        updated_by: medium
-        created_by: medium
+        row_version: edge-case
+        updated_by: edge-case
+        created_by: edge-case
         updated_at: medium
         created_at: medium
       type: object
@@ -4034,7 +4144,7 @@ components:
         row_version: edge-case
         updated_by: edge-case
         created_by: edge-case
-        created_at: high
+        created_at: low
         updated_at: high
       properties:
         id:
@@ -4264,8 +4374,8 @@ components:
       description: The customer this entity is linked to.
       x-graphql-type-name: AccountingLinkedCustomer
       x-apideck-weights:
-        id: high
-        display_id: low
+        id: medium
+        display_id: medium
         display_name: medium
         company_name: medium
       nullable: true
@@ -4299,6 +4409,10 @@ components:
           readOnly: true
     LinkedInvoiceItem:
       x-graphql-type-name: LinkedInvoiceItem
+      x-apideck-weights:
+        id: medium
+        code: medium
+        name: medium
       type: object
       properties:
         id:
@@ -4324,6 +4438,11 @@ components:
     LinkedLedgerAccount:
       x-graphql-type-name: LinkedLedgerAccount
       type: object
+      x-apideck-weights:
+        id: medium
+        nominal_code: medium
+        code: medium
+        name: medium
       nullable: true
       properties:
         id:
@@ -4355,6 +4474,11 @@ components:
       title: LinkedSupplier
       description: The supplier this entity is linked to.
       x-graphql-type-name: AccountingLinkedSupplier
+      x-apideck-weights:
+        id: medium
+        display_name: high
+        company_name: edge-case
+        address: low
       nullable: true
       required:
         - id
@@ -4381,6 +4505,10 @@ components:
           $ref: '#/components/schemas/Address'
     LinkedTaxRate:
       x-graphql-type-name: LinkedTaxRate
+      x-apideck-weights:
+        id: medium
+        code: medium
+        name: medium
       type: object
       properties:
         id:
@@ -4522,24 +4650,24 @@ components:
           description: 'All passthrough query parameters are passed along to the connector as is (?pass_through[search]=leads becomes ?search=leads)'
     Payment:
       x-apideck-weights:
-        id: medium
-        currency: medium
+        id: critical
+        currency: critical
         currency_rate: medium
-        total_amount: medium
+        total_amount: critical
         reference: medium
         payment_method: medium
         payment_method_reference: medium
-        accounts_receivable_account_type: medium
-        accounts_receivable_account_id: medium
-        account: medium
-        transaction_date: medium
-        customer: medium
-        reconciled: medium
-        status: medium
-        type: medium
-        allocations: medium
-        note: medium
-        row_version: medium
+        accounts_receivable_account_type: edge-case
+        accounts_receivable_account_id: edge-case
+        account: critical
+        transaction_date: critical
+        customer: high
+        reconciled: low
+        status: high
+        type: high
+        allocations: critical
+        note: low
+        row_version: edge-case
         created_at: medium
         updated_at: medium
       type: object
@@ -4717,6 +4845,13 @@ components:
         - number
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        number: critical
+        type: critical
+        id: edge-case
+        country_code: edge-case
+        area_code: edge-case
+        extension: edge-case
       properties:
         id:
           type: string
@@ -4779,6 +4914,10 @@ components:
         - url
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: edge-case
+        url: critical
+        type: critical
       properties:
         id:
           type: string
@@ -4799,31 +4938,31 @@ components:
       nullable: true
     Supplier:
       x-apideck-weights:
-        id: medium
-        downstream_id: medium
-        company_name: medium
-        display_name: medium
-        title: medium
-        first_name: medium
-        middle_name: medium
-        last_name: medium
-        suffix: medium
-        addresses: medium
-        notes: medium
-        phone_numbers: medium
-        emails: medium
+        id: critical
+        downstream_id: edge-case
+        company_name: high
+        display_name: edge-case
+        title: high
+        first_name: high
+        middle_name: low
+        last_name: high
+        suffix: low
+        addresses: high
+        notes: low
+        phone_numbers: high
+        emails: high
         websites: medium
-        bank_accounts: medium
-        tax_rate: medium
+        bank_accounts: high
+        tax_rate: high
         tax_number: medium
-        currency: medium
-        account: medium
-        status: medium
-        updated_by: medium
-        created_by: medium
+        currency: high
+        account: edge-case
+        status: high
+        updated_by: edge-case
+        created_by: edge-case
         updated_at: medium
-        created_at: medium
-        row_version: medium
+        created_at: low
+        row_version: edge-case
       x-graphql-type-name: Supplier
       type: object
       properties:
@@ -4925,24 +5064,24 @@ components:
       nullable: true
     TaxRate:
       x-apideck-weights:
-        id: medium
-        name: medium
-        code: medium
-        description: medium
-        effective_tax_rate: medium
-        total_tax_rate: medium
-        tax_payable_account_id: medium
+        id: critical
+        name: high
+        code: edge-case
+        description: low
+        effective_tax_rate: critical
+        total_tax_rate: high
+        tax_payable_account_id: high
         tax_remitted_account_id: medium
         components: medium
-        type: medium
-        report_tax_type: medium
-        original_tax_rate_id: medium
-        status: medium
-        row_version: medium
-        updated_by: medium
-        created_by: medium
+        type: high
+        report_tax_type: edge-case
+        original_tax_rate_id: edge-case
+        status: high
+        updated_by: edge-case
+        created_by: edge-case
         updated_at: medium
-        created_at: medium
+        created_at: low
+        row_version: edge-case
       type: object
       additionalProperties: false
       properties:
@@ -5509,6 +5648,10 @@ components:
       required:
         - url
       additionalProperties: false
+      x-apideck-weights:
+        url: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string

@@ -678,6 +678,17 @@ components:
         - id
         - name
         - type
+      x-apideck-weights:
+        id: critical
+        name: critical
+        type: critical
+        mime_type: high
+        downloadable: high
+        size: high
+        parent_folders: high
+        parent_folders_complete: critical
+        updated_at: critical
+        created_at: high
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -788,6 +799,14 @@ components:
         - by
       additionalProperties: false
     Folder:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        size: low
+        parent_folders: high
+        parent_folders_complete: critical
+        updated_at: critical
+        created_at: high
       type: object
       additionalProperties: false
       required:
@@ -1088,6 +1107,8 @@ components:
       readOnly: true
     LinkedFolder:
       type: object
+      x-apideck-weights:
+        id: critical
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -1205,6 +1226,8 @@ components:
     Owner:
       type: object
       readOnly: true
+      x-apideck-weights:
+        id: critical
       properties:
         id:
           type: string
@@ -1248,6 +1271,17 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestlimiterror'
     SharedLink:
+      x-apideck-weights:
+        url: critical
+        download_url: high
+        target_id: critical
+        target: critical
+        scope: high
+        password_protected: low
+        password: low
+        expires_at: high
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       required:
@@ -1296,6 +1330,8 @@ components:
       additionalProperties: false
       required:
         - id
+      x-apideck-weights:
+        id: critical
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -1568,6 +1604,13 @@ components:
       readOnly: true
       nullable: true
     UploadSession:
+      x-apideck-weights:
+        id: critical
+        success: critical
+        part_size: critical
+        parallel_upload_supported: critical
+        uploaded_byte_range: low
+        expires_at: medium
       type: object
       additionalProperties: false
       properties:

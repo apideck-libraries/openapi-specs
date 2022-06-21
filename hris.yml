@@ -1147,6 +1147,11 @@ components:
       required:
         - id
       additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        value: critical
+        name: medium
+        description: edge-case
       properties:
         id:
           title: ID
@@ -1273,6 +1278,15 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     Department:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        code: medium
+        description: low
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -1318,6 +1332,10 @@ components:
         - email
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        email: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string
@@ -1340,6 +1358,60 @@ components:
             - other
           example: primary
     Employee:
+      x-apideck-weights:
+        id: medium
+        first_name: critical
+        last_name: critical
+        middle_name: medium
+        display_name: edge-case
+        preferred_name: medium
+        initials: low
+        salutation: medium
+        title: critical
+        marital_status: medium
+        division: medium
+        department: medium
+        team: medium
+        company_id: high
+        company_name: medium
+        employment_start_date: high
+        employment_end_date: high
+        employee_number: high
+        employment_status: high
+        employment_role: high
+        manager: medium
+        direct_reports: edge-case
+        social_security_number: edge-case
+        birthday: high
+        country_of_birth: high
+        description: edge-case
+        gender: high
+        pronouns: medium
+        preferred_language: high
+        languages: low
+        nationalities: high
+        photo_url: medium
+        timezone: low
+        source: edge-case
+        source_id: edge-case
+        jobs: high
+        compensations: medium
+        works_remote: low
+        addresses: high
+        phone_numbers: high
+        emails: high
+        custom_fields: edge-case
+        social_links: edge-case
+        tax_code: edge-case
+        tax_id: edge-case
+        dietary_preference: edge-case
+        food_allergies: edge-case
+        row_version: edge-case
+        deleted: medium
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: high
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -1428,6 +1500,9 @@ components:
             - other
           nullable: true
         employment_role:
+          x-apideck-weights:
+            type: critical
+            sub_type: medium
           type: object
           properties:
             type:
@@ -1450,6 +1525,12 @@ components:
                 - hourly
               nullable: true
         manager:
+          x-apideck-weights:
+            id: critical
+            name: medium
+            first_name: medium
+            last_name: medium
+            email: medium
           type: object
           properties:
             id:
@@ -1536,6 +1617,17 @@ components:
         jobs:
           type: array
           items:
+            x-apideck-weights:
+              id: critical
+              employee_id: edge-case
+              title: critical
+              role: medium
+              compensation_rate: medium
+              currency: medium
+              payment_unit: medium
+              hired_at: medium
+              is_primary: medium
+              location: medium
             type: object
             properties:
               id:
@@ -1573,6 +1665,14 @@ components:
         compensations:
           type: array
           items:
+            x-apideck-weights:
+              id: critical
+              job_id: medium
+              rate: high
+              payment_unit: medium
+              currency: high
+              flsa_status: edge-case
+              effective_date: low
             type: object
             properties:
               id:
@@ -1642,6 +1742,10 @@ components:
               - url
             type: object
             additionalProperties: false
+            x-apideck-weights:
+              id: edge-case
+              url: critical
+              type: critical
             properties:
               id:
                 type: string
@@ -1947,6 +2051,13 @@ components:
       type: object
       required:
         - legal_name
+      x-apideck-weights:
+        id: critical
+        legal_name: critical
+        subdomain: low
+        company_number: high
+        updated_at: high
+        debtor_id: edge-case
       additionalProperties: false
       properties:
         id:
@@ -2204,6 +2315,13 @@ components:
         - number
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        number: critical
+        type: critical
+        id: edge-case
+        country_code: edge-case
+        area_code: edge-case
+        extension: edge-case
       properties:
         id:
           type: string
@@ -2502,6 +2620,10 @@ components:
       required:
         - url
       additionalProperties: false
+      x-apideck-weights:
+        url: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string
@@ -2591,6 +2713,16 @@ components:
         data:
           $ref: '#/components/schemas/Payroll'
     Payroll:
+      x-apideck-weights:
+        id: critical
+        company_id: high
+        processed: critical
+        processed_date: medium
+        check_date: critical
+        start_date: critical
+        end_date: critical
+        totals: high
+        compensations: medium
       type: object
       required:
         - id
@@ -2639,6 +2771,9 @@ components:
           items:
             $ref: '#/components/schemas/Compensation'
     EmployeePayroll:
+      x-apideck-weights:
+        employee: critical
+        payroll: critical
       type: object
       properties:
         employee:
@@ -2647,6 +2782,9 @@ components:
           $ref: '#/components/schemas/Payroll'
     EmployeePayrolls:
       type: object
+      x-apideck-weights:
+        employee: critical
+        payrolls: critical
       properties:
         employee:
           $ref: '#/components/schemas/Employee'
@@ -2656,6 +2794,13 @@ components:
             $ref: '#/components/schemas/Payroll'
     Compensation:
       type: object
+      x-apideck-weights:
+        employee_id: critical
+        net_pay: high
+        gross_pay: critical
+        taxes: high
+        deductions: high
+        benefits: high
       required:
         - employee_id
       additionalProperties: false
@@ -2687,6 +2832,10 @@ components:
             $ref: '#/components/schemas/Benefit'
     Tax:
       type: object
+      x-apideck-weights:
+        name: high
+        employer: high
+        amount: high
       properties:
         name:
           type: string
@@ -2702,6 +2851,9 @@ components:
           example: 1.97
     Deduction:
       type: object
+      x-apideck-weights:
+        name: critical
+        amount: critical
       properties:
         name:
           type: string
@@ -2713,6 +2865,10 @@ components:
           example: 10.97
     Benefit:
       type: object
+      x-apideck-weights:
+        name: critical
+        employee_deduction: high
+        employer_contribution: high
       properties:
         name:
           type: string

@@ -301,6 +301,45 @@ components:
       type: boolean
       example: true
     Applicant:
+      x-apideck-weights:
+        id: critical
+        position_id: medium
+        name: critical
+        first_name: high
+        last_name: high
+        middle_name: low
+        initials: low
+        birthday: high
+        job_url: medium
+        photo_url: medium
+        headline: medium
+        title: high
+        emails: high
+        phone_numbers: high
+        addresses: high
+        websites: medium
+        stage_id: low
+        recruiter_id: medium
+        coordinator_id: medium
+        applications: medium
+        followers: low
+        sources: low
+        source_id: low
+        confidential: medium
+        anonymized: low
+        tags: low
+        archived: medium
+        last_interaction_at: medium
+        owner_id: high
+        sourced_by: high
+        cv_url: high
+        record_url: low
+        rejected_at: high
+        deleted: medium
+        deleted_by: medium
+        deleted_at: medium
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -373,6 +412,10 @@ components:
             required:
               - url
             additionalProperties: false
+            x-apideck-weights:
+              url: critical
+              type: critical
+              id: edge-case
             properties:
               id:
                 type: string
@@ -1152,6 +1195,11 @@ components:
       required:
         - id
       additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        value: critical
+        name: medium
+        description: edge-case
       properties:
         id:
           title: ID
@@ -1200,6 +1248,15 @@ components:
       readOnly: true
       nullable: true
     Department:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        code: medium
+        description: low
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -1239,6 +1296,10 @@ components:
         - email
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        email: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string
@@ -1409,6 +1470,45 @@ components:
       example: '12345'
       readOnly: true
     Job:
+      x-apideck-weights:
+        id: high
+        slug: low
+        title: critical
+        sequence: low
+        visibility: low
+        status: high
+        code: low
+        language: medium
+        employment_terms: low
+        experience: low
+        remote: low
+        requisition_id: medium
+        department: medium
+        branch: low
+        recruiters: low
+        hiring_managers: low
+        followers: low
+        description: medium
+        description_html: edge-case
+        blocks: edge-case
+        closing: medium
+        closing_html: edge-case
+        closing_date: high
+        salary: high
+        url: medium
+        job_portal_url: low
+        confidential: medium
+        available_to_employees: medium
+        tags: low
+        addresses: high
+        record_url: low
+        deleted: medium
+        owner_id: high
+        published_at: high
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -1473,6 +1573,9 @@ components:
         department:
           $ref: '#/components/schemas/Department'
         branch:
+          x-apideck-weights:
+            id: medium
+            name: medium
           title: Branch
           description: Details of the branch for which the job is created.
           type: object
@@ -1499,6 +1602,8 @@ components:
         hiring_managers:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
             properties:
               id:
                 type: string
@@ -1526,6 +1631,9 @@ components:
         blocks:
           type: array
           items:
+            x-apideck-weights:
+              title: medium
+              content: medium
             properties:
               title:
                 type: string
@@ -1550,6 +1658,10 @@ components:
           format: date
           nullable: true
         salary:
+          x-apideck-weights:
+            min: medium
+            max: medium
+            currency: medium
           type: object
           properties:
             min:
@@ -1777,6 +1889,13 @@ components:
         - number
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        number: critical
+        type: critical
+        id: edge-case
+        country_code: edge-case
+        area_code: edge-case
+        extension: edge-case
       properties:
         id:
           type: string

@@ -235,6 +235,8 @@ components:
       additionalProperties: false
       x-apideck-weights:
         account_number: critical
+        iban: high
+        bsb_number: edge-case
       properties:
         iban:
           type: string
@@ -878,6 +880,11 @@ components:
       required:
         - id
       additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        value: critical
+        name: medium
+        description: edge-case
       properties:
         id:
           title: ID
@@ -944,6 +951,10 @@ components:
         - email
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        email: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string
@@ -1037,6 +1048,33 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Lead:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        company_name: high
+        owner_id: high
+        company_id: high
+        contact_id: low
+        lead_source: low
+        first_name: high
+        last_name: high
+        description: low
+        prefix: low
+        title: high
+        language: medium
+        status: high
+        monetary_amount: low
+        currency: low
+        fax: low
+        websites: medium
+        addresses: high
+        social_links: low
+        phone_numbers: high
+        emails: high
+        custom_fields: medium
+        tags: low
+        updated_at: medium
+        created_at: medium
       type: object
       required:
         - name
@@ -1343,6 +1381,13 @@ components:
         - number
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        number: critical
+        type: critical
+        id: edge-case
+        country_code: edge-case
+        area_code: edge-case
+        extension: edge-case
       properties:
         id:
           type: string
@@ -1395,6 +1440,10 @@ components:
         - url
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: edge-case
+        url: critical
+        type: critical
       properties:
         id:
           type: string
@@ -1589,6 +1638,10 @@ components:
       required:
         - url
       additionalProperties: false
+      x-apideck-weights:
+        url: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string

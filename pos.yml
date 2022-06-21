@@ -716,6 +716,11 @@ components:
       required:
         - id
       additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        value: critical
+        name: medium
+        description: edge-case
       properties:
         id:
           title: ID
@@ -782,6 +787,10 @@ components:
         - email
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        email: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string
@@ -1079,6 +1088,49 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
     Order:
+      x-apideck-weights:
+        id: critical
+        order_number: high
+        order_date: critical
+        closed_date: high
+        reference_id: low
+        status: high
+        state: high
+        payment_status: high
+        currency: medium
+        title: high
+        note: medium
+        merchant_id: critical
+        customer_id: medium
+        employee_id: medium
+        location_id: critical
+        order_type_id: medium
+        table: medium
+        seat: medium
+        total_amount: high
+        total_tip: medium
+        total_tax: medium
+        total_discount: medium
+        total_refund: medium
+        total_service_charge: medium
+        refunded: medium
+        customers: medium
+        fulfillments: medium
+        line_items: medium
+        payments: medium
+        service_charges: medium
+        refunds: medium
+        taxes: medium
+        discounts: medium
+        tenders: medium
+        source: medium
+        voided: medium
+        voided_at: medium
+        version: low
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       required:
@@ -1200,6 +1252,12 @@ components:
         customers:
           type: array
           items:
+            x-apideck-weights:
+              first_name: medium
+              middle_name: medium
+              last_name: medium
+              phone_numbers: medium
+              emails: medium
             type: object
             properties:
               first_name:
@@ -1225,6 +1283,12 @@ components:
         fulfillments:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
+              status: medium
+              type: medium
+              pickup_details: medium
+              shipment_details: medium
             type: object
             properties:
               id:
@@ -1251,6 +1315,25 @@ components:
                   - shipment
                 example: shipment
               pickup_details:
+                x-apideck-weights:
+                  accepted_at: medium
+                  auto_complete_duration: medium
+                  cancel_reason: medium
+                  expires_at: medium
+                  schedule_type: medium
+                  pickup_at: medium
+                  pickup_window_duration: medium
+                  prep_time_duration: medium
+                  note: medium
+                  placed_at: medium
+                  rejected_at: medium
+                  ready_at: medium
+                  expired_at: medium
+                  picked_up_at: medium
+                  canceled_at: medium
+                  is_curbside_pickup: medium
+                  curbside_pickup_details: medium
+                  recipient: medium
                 type: object
                 properties:
                   accepted_at:
@@ -1360,6 +1443,9 @@ components:
                     type: boolean
                     description: 'If set to `true`, indicates that this pickup order is for curbside pickup, not in-store pickup.'
                   curbside_pickup_details:
+                    x-apideck-weights:
+                      curbside_details: medium
+                      buyer_arrived_at: medium
                     type: object
                     description: Specific details for curbside pickup.
                     properties:
@@ -1375,6 +1461,11 @@ components:
                         format: date-time
                         example: '2016-09-04T23:59:33.123Z'
                   recipient:
+                    x-apideck-weights:
+                      customer_id: medium
+                      address: medium
+                      phone_number: medium
+                      email: medium
                     type: object
                     properties:
                       customer_id:
@@ -1387,11 +1478,24 @@ components:
                       email:
                         $ref: '#/components/schemas/Email'
               shipment_details:
+                x-apideck-weights: {}
                 type: object
                 properties: {}
         line_items:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
+              name: medium
+              item: medium
+              total_tax: medium
+              total_discount: medium
+              total_amount: medium
+              quantity: medium
+              unit_price: medium
+              applied_taxes: medium
+              applied_discounts: medium
+              modifiers: medium
             type: object
             properties:
               id:
@@ -1400,6 +1504,8 @@ components:
                 type: string
                 example: New York Strip Steak
               item:
+                x-apideck-weights:
+                  id: medium
                 properties:
                   id:
                     $ref: '#/components/schemas/Id'
@@ -1425,6 +1531,11 @@ components:
               applied_taxes:
                 type: array
                 items:
+                  x-apideck-weights:
+                    id: medium
+                    tax_id: medium
+                    amount: medium
+                    currency: medium
                   properties:
                     id:
                       $ref: '#/components/schemas/Id'
@@ -1440,6 +1551,11 @@ components:
               applied_discounts:
                 type: array
                 items:
+                  x-apideck-weights:
+                    id: medium
+                    discount_id: medium
+                    amount: medium
+                    currency: medium
                   properties:
                     id:
                       $ref: '#/components/schemas/Id'
@@ -1456,6 +1572,10 @@ components:
                 type: array
                 description: 'Customizable options – toppings, add-ons, or special requests – create item modifiers. Modifiers that are applied to items will display on your customers’ digital receipts'
                 items:
+                  x-apideck-weights:
+                    name: medium
+                    amount: medium
+                    currency: medium
                   properties:
                     name:
                       type: string
@@ -1469,6 +1589,10 @@ components:
         payments:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
+              amount: medium
+              currency: medium
             type: object
             properties:
               id:
@@ -1484,6 +1608,15 @@ components:
         refunds:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
+              location_id: medium
+              amount: medium
+              currency: medium
+              reason: medium
+              status: medium
+              tender_id: medium
+              transaction_id: medium
             type: object
             properties:
               id:
@@ -1514,6 +1647,15 @@ components:
         taxes:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
+              name: medium
+              amount: medium
+              currency: medium
+              percentage: medium
+              scope: medium
+              type: medium
+              auto_applied: medium
             properties:
               id:
                 type: string
@@ -1550,6 +1692,14 @@ components:
         discounts:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
+              product_id: medium
+              name: medium
+              type: medium
+              amount: medium
+              currency: medium
+              scope: medium
             type: object
             properties:
               id:
@@ -1581,6 +1731,28 @@ components:
         tenders:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
+              name: medium
+              type: medium
+              note: medium
+              amount: medium
+              currency: medium
+              total_amount: medium
+              total_tip: medium
+              total_processing_fee: medium
+              total_tax: medium
+              total_discount: medium
+              total_refund: medium
+              total_service_charge: medium
+              buyer_tendered_cash_amount: medium
+              change_back_cash_amount: medium
+              card: medium
+              card_status: medium
+              card_entry_method: medium
+              payment_id: medium
+              location_id: medium
+              transaction_id: medium
             type: object
             properties:
               id:
@@ -2364,6 +2536,13 @@ components:
         - number
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        number: critical
+        type: critical
+        id: edge-case
+        country_code: edge-case
+        area_code: edge-case
+        extension: edge-case
       properties:
         id:
           type: string
@@ -2416,6 +2595,10 @@ components:
         - url
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: edge-case
+        url: critical
+        type: critical
       properties:
         id:
           type: string
@@ -2624,6 +2807,10 @@ components:
       required:
         - url
       additionalProperties: false
+      x-apideck-weights:
+        url: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string
@@ -3225,6 +3412,19 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Merchant:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        address: medium
+        owner_id: medium
+        main_location_id: medium
+        status: high
+        language: medium
+        currency: medium
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -3447,6 +3647,18 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Location:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        business_name: high
+        address: high
+        status: high
+        merchant_id: high
+        currency: high
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -3659,6 +3871,33 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Item:
+      x-apideck-weights:
+        id: critical
+        idempotency_key: medium
+        name: critical
+        description: medium
+        abbreviation: low
+        product_type: high
+        price_amount: high
+        pricing_type: high
+        price_currency: high
+        cost: medium
+        tax_ids: medium
+        absent_at_location_ids: edge-case
+        present_at_all_locations: low
+        sku: high
+        code: high
+        categories: low
+        options: low
+        variations: low
+        available: high
+        hidden: medium
+        version: medium
+        deleted: medium
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       required:
@@ -3744,6 +3983,10 @@ components:
           type: array
           title: Categories
           items:
+            x-apideck-weights:
+              id: medium
+              name: medium
+              image_ids: medium
             properties:
               id:
                 $ref: '#/components/schemas/Id'
@@ -3763,6 +4006,10 @@ components:
           type: array
           description: List of options pertaining to this item's attribute variation
           items:
+            x-apideck-weights:
+              id: medium
+              name: medium
+              attribute_id: medium
             properties:
               id:
                 type: string
@@ -3779,6 +4026,20 @@ components:
           type: array
           title: Variations
           items:
+            x-apideck-weights:
+              id: medium
+              name: medium
+              sku: medium
+              item_id: medium
+              sequence: medium
+              pricing_type: medium
+              price_amount: medium
+              price_currency: medium
+              stockable: medium
+              present_at_all_locations: medium
+              version: medium
+              updated_at: medium
+              created_at: medium
             properties:
               id:
                 $ref: '#/components/schemas/Id'
@@ -4020,6 +4281,18 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Modifier:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        alternate_name: edge-case
+        price_amount: high
+        currency: high
+        modifier_group_id: medium
+        available: high
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       required:
@@ -4225,6 +4498,21 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     ModifierGroup:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        alternate_name: low
+        minimum_required: low
+        maximum_allowed: low
+        selection_type: medium
+        present_at_all_locations: low
+        modifiers: high
+        deleted: medium
+        row_version: edge-case
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -4261,6 +4549,13 @@ components:
         modifiers:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
+              name: medium
+              alternate_name: medium
+              price_amount: medium
+              currency: medium
+              available: medium
             properties:
               id:
                 title: ID
@@ -4329,6 +4624,12 @@ components:
     ServiceCharges:
       type: array
       description: Optional service charges or gratuity tip applied to the order.
+      x-apideck-weights:
+        name: high
+        amount: critical
+        percentage: high
+        currency: high
+        type: high
       items:
         $ref: '#/components/schemas/ServiceCharge'
     ServiceCharge:
@@ -4496,6 +4797,14 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     OrderType:
+      x-apideck-weights:
+        id: medium
+        name: medium
+        default: medium
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -4686,6 +4995,19 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Tender:
+      x-apideck-weights:
+        id: critical
+        key: high
+        label: high
+        active: medium
+        hidden: low
+        editable: low
+        opens_cash_drawer: low
+        allows_tipping: medium
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:

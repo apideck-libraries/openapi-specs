@@ -802,6 +802,11 @@ components:
       required:
         - id
       additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        value: critical
+        name: medium
+        description: edge-case
       properties:
         id:
           title: ID
@@ -868,6 +873,10 @@ components:
         - email
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        email: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string
@@ -982,6 +991,20 @@ components:
     Message:
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        from: critical
+        to: critical
+        subject: medium
+        body: critical
+        type: high
+        status: high
+        price: edge-case
+        error: edge-case
+        messaging_service_id: edge-case
+        number_of_units: low
+        number_of_media_files: edge-case
+        webhook_url: low
       required:
         - from
         - to

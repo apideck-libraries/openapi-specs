@@ -71,6 +71,52 @@ components:
       additionalProperties: false
       required:
         - type
+      x-apideck-weights:
+        id: critical
+        downstream_id: edge-case
+        activity_datetime: high
+        duration_seconds: medium
+        user_id: edge-case
+        account_id: edge-case
+        contact_id: edge-case
+        company_id: edge-case
+        lead_id: edge-case
+        opportunity_id: edge-case
+        owner_id: high
+        campaign_id: edge-case
+        case_id: edge-case
+        asset_id: edge-case
+        contract_id: edge-case
+        product_id: edge-case
+        solution_id: edge-case
+        custom_object_id: edge-case
+        type: critical
+        title: critical
+        description: medium
+        note: medium
+        location: medium
+        location_address: medium
+        all_day_event: medium
+        private: low
+        group_event: edge-case
+        event_sub_type: medium
+        group_event_type: edge-case
+        child: low
+        archived: low
+        deleted: low
+        show_as: edge-case
+        done: medium
+        start_datetime: high
+        end_datetime: high
+        duration_minutes: edge-case
+        activity_date: medium
+        end_date: medium
+        attendees: edge-case
+        reminder_set: edge-case
+        reminder_datetime: edge-case
+        video_conference_url: edge-case
+        video_conference_id: edge-case
+        updated_at: high
       properties:
         id:
           type: string
@@ -292,6 +338,18 @@ components:
         - middle_name
         - last_name
         - email_address
+      x-apideck-weights:
+        id: critical
+        name: critical
+        first_name: high
+        middle_name: low
+        last_name: high
+        prefix: low
+        suffix: edge-case
+        email_address: medium
+        is_organizer: medium
+        status: medium
+        user_id: low
       properties:
         id:
           type: string
@@ -561,6 +619,8 @@ components:
       additionalProperties: false
       x-apideck-weights:
         account_number: critical
+        iban: high
+        bsb_number: edge-case
       properties:
         iban:
           type: string
@@ -647,6 +707,45 @@ components:
         - by
       additionalProperties: false
     Company:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        interaction_count: edge-case
+        owner_id: high
+        image: low
+        description: medium
+        vat_number: high
+        currency: medium
+        status: high
+        fax: low
+        annual_revenue: low
+        number_of_employees: low
+        industry: medium
+        ownership: low
+        sales_tax_number: medium
+        payee_number: edge-case
+        abn_or_tfn: edge-case
+        abn_branch: edge-case
+        acn: edge-case
+        first_name: edge-case
+        last_name: edge-case
+        parent_id: edge-case
+        bank_accounts: medium
+        websites: medium
+        addresses: high
+        social_links: low
+        phone_numbers: high
+        emails: high
+        row_type: edge-case
+        custom_fields: medium
+        tags: low
+        read_only: low
+        last_activity_at: low
+        deleted: medium
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: high
+        created_at: medium
       type: object
       required:
         - name
@@ -773,6 +872,9 @@ components:
           items:
             $ref: '#/components/schemas/Email'
         row_type:
+          x-apideck-weights:
+            id: critical
+            name: medium
           type: object
           x-graphql-type-name: CompanyRowType
           title: Company Row Type
@@ -825,6 +927,44 @@ components:
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
     Contact:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        owner_id: medium
+        type: medium
+        company_id: high
+        company_name: medium
+        lead_id: medium
+        first_name: high
+        middle_name: low
+        last_name: high
+        prefix: low
+        suffix: low
+        title: medium
+        department: medium
+        language: medium
+        gender: medium
+        birthday: medium
+        image: medium
+        photo_url: medium
+        lead_source: low
+        fax: low
+        description: low
+        current_balance: edge-case
+        status: edge-case
+        active: edge-case
+        websites: medium
+        addresses: high
+        social_links: low
+        phone_numbers: high
+        emails: high
+        custom_fields: medium
+        tags: low
+        first_call_at: edge-case
+        first_email_at: edge-case
+        last_activity_at: medium
+        updated_at: high
+        created_at: medium
       required:
         - name
       x-pii:
@@ -1870,6 +2010,11 @@ components:
       required:
         - id
       additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        value: critical
+        name: medium
+        description: edge-case
       properties:
         id:
           title: ID
@@ -2160,6 +2305,10 @@ components:
         - email
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        email: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string
@@ -2777,6 +2926,33 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Lead:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        company_name: high
+        owner_id: high
+        company_id: high
+        contact_id: low
+        lead_source: low
+        first_name: high
+        last_name: high
+        description: low
+        prefix: low
+        title: high
+        language: medium
+        status: high
+        monetary_amount: low
+        currency: low
+        fax: low
+        websites: medium
+        addresses: high
+        social_links: low
+        phone_numbers: high
+        emails: high
+        custom_fields: medium
+        tags: low
+        updated_at: medium
+        created_at: medium
       type: object
       required:
         - name
@@ -3044,6 +3220,20 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
     Note:
+      x-apideck-weights:
+        id: critical
+        title: critical
+        content: critical
+        owner_id: high
+        contact_id: medium
+        company_id: medium
+        opportunity_id: medium
+        lead_id: medium
+        active: low
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       additionalProperties: false
       properties:
@@ -3148,6 +3338,46 @@ components:
         - by
       additionalProperties: false
     Opportunity:
+      x-apideck-weights:
+        id: critical
+        title: critical
+        primary_contact_id: critical
+        description: medium
+        type: high
+        monetary_amount: high
+        currency: high
+        win_probability: high
+        expected_revenue: medium
+        close_date: medium
+        loss_reason_id: edge-case
+        loss_reason: edge-case
+        won_reason_id: edge-case
+        won_reason: edge-case
+        pipeline_id: edge-case
+        pipeline_stage_id: edge-case
+        source_id: medium
+        lead_id: medium
+        lead_source: edge-case
+        contact_id: medium
+        company_id: high
+        company_name: medium
+        owner_id: high
+        priority: medium
+        status: high
+        status_id: edge-case
+        tags: low
+        interaction_count: low
+        custom_fields: medium
+        stage_last_changed_at: edge-case
+        last_activity_at: medium
+        deleted: low
+        date_stage_changed: edge-case
+        date_last_contacted: medium
+        date_lead_created: edge-case
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
       type: object
       required:
         - title
@@ -3354,6 +3584,13 @@ components:
         - number
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        number: critical
+        type: critical
+        id: edge-case
+        country_code: edge-case
+        area_code: edge-case
+        extension: edge-case
       properties:
         id:
           type: string
@@ -3397,6 +3634,15 @@ components:
             - other
           example: primary
     Pipeline:
+      x-apideck-weights:
+        id: critical
+        name: critical
+        currency: low
+        archived: low
+        display_order: edge-case
+        stages: high
+        updated_at: medium
+        created_at: medium
       required:
         - name
       x-pii: []
@@ -3419,6 +3665,12 @@ components:
         stages:
           type: array
           items:
+            x-apideck-weights:
+              id: medium
+              name: medium
+              value: medium
+              win_probability: medium
+              display_order: medium
             type: object
             additionalProperties: false
             properties:
@@ -3462,6 +3714,10 @@ components:
         - url
       type: object
       additionalProperties: false
+      x-apideck-weights:
+        id: edge-case
+        url: critical
+        type: critical
       properties:
         id:
           type: string
@@ -3839,6 +4095,27 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     User:
+      x-apideck-weights:
+        id: critical
+        parent_id: edge-case
+        username: medium
+        first_name: high
+        last_name: high
+        title: high
+        division: medium
+        department: medium
+        company_name: medium
+        employee_number: medium
+        description: low
+        image: medium
+        language: medium
+        status: high
+        password: medium
+        addresses: high
+        phone_numbers: high
+        emails: high
+        updated_at: medium
+        created_at: medium
       required:
         - emails
       x-pii:
@@ -3975,6 +4252,10 @@ components:
       required:
         - url
       additionalProperties: false
+      x-apideck-weights:
+        url: critical
+        type: critical
+        id: edge-case
       properties:
         id:
           type: string

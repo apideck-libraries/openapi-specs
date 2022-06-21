@@ -1,3 +1,7 @@
+## v8.32.5 - (2022-06-21)
+
+- Updated Orders and Payments for the [Clover](connectors/clover) connector
+
 ## v8.32.4 - (2022-06-16)
 
 - Added `filter[first_name]` and `filter[display_name`] to to [Customers](apis/accounting/reference#tag/Customer)

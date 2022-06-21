@@ -30,7 +30,7 @@ components:
     serviceId:
       name: x-apideck-service-id
       in: header
-      description: 'Provide the service id you want to call (e.g., pipedrive). [See the full list in the connector section.](#section/Connectors) Only needed when a consumer has activated multiple integrations for a Unified API.'
+      description: 'Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.'
       schema:
         type: string
     consumerId:
@@ -474,6 +474,11 @@ components:
       type: number
       title: Sequence
       example: 1
+      nullable: true
+    Active:
+      type: boolean
+      title: Is active
+      example: true
       nullable: true
     Address:
       type: object
@@ -1112,11 +1117,8 @@ components:
             - delayed
             - voided
             - completed
-          example: open
-        state:
-          title: Status
-          description: "A string describing the state of the order. Clover specific: If no value is set, the state defaults to null, which indicates a hidden order. A hidden order is not displayed in user interfaces and can only be retrieved by its id. When creating an order via the REST API the value must be manually set to 'open'. More info [https://docs.clover.com/reference/orderupdateorder]()"
-          type: string
+            - hidden
+          description: "Order status. Clover specific: If no value is set, the status defaults to hidden, which indicates a hidden order. A hidden order is not displayed in user interfaces and can only be retrieved by its id. When creating an order via the REST API the value must be manually set to 'open'. More info [https://docs.clover.com/reference/orderupdateorder]()"
           example: open
         payment_status:
           title: PosPayment status
@@ -1164,32 +1166,32 @@ components:
           example: 23F
         total_amount:
           type: number
-          title: Total amount
+          title: Total amount (in cents)
           example: 27.5
           nullable: true
         total_tip:
           type: number
-          title: Total tax
+          title: Total tax (in cents)
           example: 7
           nullable: true
         total_tax:
           type: number
-          title: Total tax
+          title: Total tax (in cents)
           example: 2.75
           nullable: true
         total_discount:
           type: number
-          title: Total discount
+          title: Total discount (in cents)
           example: 3
           nullable: true
         total_refund:
           type: number
-          title: Total refund
+          title: Total refund (in cents)
           example: 0
           nullable: true
         total_service_charge:
           type: number
-          title: Total service charge
+          title: Total service charge (in cents)
           example: 0
           nullable: true
         refunded:
@@ -1403,17 +1405,17 @@ components:
                     $ref: '#/components/schemas/Id'
               total_tax:
                 type: number
-                title: Tax amount
+                title: Tax amount (in cents)
                 example: 2000
                 nullable: true
               total_discount:
                 type: number
-                title: Total discount amount
+                title: Total discount amount (in cents)
                 example: 3000
                 nullable: true
               total_amount:
                 type: number
-                title: Total amount
+                title: Total amount (in cents)
                 example: 27500
                 nullable: true
               quantity:
@@ -1430,6 +1432,7 @@ components:
                       type: string
                       example: sales-tax
                     amount:
+                      title: Amount (in cents)
                       type: number
                       example: 27500
                     currency:
@@ -1444,6 +1447,7 @@ components:
                       type: string
                       example: '12345'
                     amount:
+                      title: Amount (in cents)
                       type: number
                       example: 27500
                     currency:
@@ -1457,6 +1461,7 @@ components:
                       type: string
                       example: New York Strip Steak - no cheese
                     amount:
+                      title: Amount (in cents)
                       type: number
                       example: 27500
                     currency:
@@ -1469,6 +1474,7 @@ components:
               id:
                 $ref: '#/components/schemas/Id'
               amount:
+                title: Amount (in cents)
                 type: number
                 example: 27500
               currency:
@@ -1485,6 +1491,7 @@ components:
               location_id:
                 $ref: '#/components/schemas/Id'
               amount:
+                title: Amount (in cents)
                 type: number
                 example: 27500
               currency:
@@ -1516,6 +1523,7 @@ components:
                 description: The tax's name.
                 example: State Sales Tax
               amount:
+                title: Amount (in cents)
                 type: number
                 example: 27500
               currency:
@@ -1558,6 +1566,7 @@ components:
                   - fixed_percentage
                 example: fixed_percentage
               amount:
+                title: Amount (in cents)
                 type: number
                 example: 27500
               currency:
@@ -1592,53 +1601,54 @@ components:
                 type: string
                 example: An optional note associated with the tender at the time of payment.
               amount:
+                title: Amount
                 type: number
                 example: 27500
               currency:
                 $ref: '#/components/schemas/Currency'
               total_amount:
                 type: number
-                title: Total amount
+                title: Total amount (in cents)
                 example: 27.5
                 nullable: true
               total_tip:
                 type: number
-                title: Total tax
+                title: Total tax (in cents)
                 example: 7
                 nullable: true
               total_processing_fee:
                 type: number
-                title: Total processing fee
+                title: Total processing fee (in cents)
                 example: 0
                 nullable: true
               total_tax:
                 type: number
-                title: Total tax
+                title: Total tax (in cents)
                 example: 2.75
                 nullable: true
               total_discount:
                 type: number
-                title: Total discount
+                title: Total discount (in cents)
                 example: 3
                 nullable: true
               total_refund:
                 type: number
-                title: Total refund
+                title: Total refund (in cents)
                 example: 0
                 nullable: true
               total_service_charge:
                 type: number
-                title: Total service charge
+                title: Total service charge (in cents)
                 example: 0
                 nullable: true
               buyer_tendered_cash_amount:
                 type: number
-                description: The amount of cash tendered by the buyer. Only applicable when the tender type is cash.
+                description: The amount (in cents) of cash tendered by the buyer. Only applicable when the tender type is cash.
                 example: 27500
                 nullable: true
               change_back_cash_amount:
                 type: number
-                description: The amount of cash returned to the buyer. Only applicable when the tender type is cash.
+                description: The amount (in cents) of cash returned to the buyer. Only applicable when the tender type is cash.
                 example: 27500
                 nullable: true
               card:
@@ -2814,21 +2824,21 @@ components:
           $ref: '#/components/schemas/IdempotencyKey'
         amount:
           type: number
-          title: Amount
+          title: Amount (in cents)
           example: 27.5
         currency:
           $ref: '#/components/schemas/Currency'
         tip:
           type: number
-          title: Tip amount
+          title: Tip amount (in cents)
           example: 7
         tax:
           type: number
-          title: Tax amount
+          title: Tax amount (in cents)
           example: 20
         total:
           type: number
-          title: Total amount
+          title: Total amount (in cents)
           example: 37.5
         app_fee:
           type: number
@@ -2837,16 +2847,16 @@ components:
           example: 3
         change_back_cash_amount:
           type: number
-          title: Change back cash amount
+          title: Change back cash amount (in cents)
           example: 20
         approved:
           type: number
-          title: Approved amount
+          title: Approved amount (in cents)
           description: The initial amount of money approved for this payment.
           example: 37.5
         refunded:
           type: number
-          title: The total amount of the payment refunded to date.
+          title: The total amount (in cents) of the payment refunded to date.
           description: The initial amount of money approved for this payment.
           example: 37.5
         processing_fees:
@@ -2855,7 +2865,7 @@ components:
             properties:
               amount:
                 type: number
-                title: Amount
+                title: Amount (in cents)
                 example: 1.05
               effective_at:
                 type: string
@@ -3249,6 +3259,10 @@ components:
             - other
           example: active
           nullable: true
+        service_charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceCharge'
         language:
           type: string
           example: EN
@@ -4031,8 +4045,7 @@ components:
         modifier_group_id:
           type: string
           title: Modifier group ID
-          example:
-            - '123'
+          example: '123'
         available:
           $ref: '#/components/schemas/Available'
         updated_by:
@@ -4317,28 +4330,34 @@ components:
       type: array
       description: Optional service charges or gratuity tip applied to the order.
       items:
-        type: object
-        properties:
-          name:
-            type: string
-            description: Service charge name
-            example: Charge for delivery
-          amount:
-            type: number
-            example: 27500
-          percentage:
-            type: number
-            description: 'Service charge percentage. Use this field to calculate the amount of the service charge. Only pass a percentage or amount, not both at the same time.'
-            example: 12.5
-          currency:
-            $ref: '#/components/schemas/Currency'
-          type:
-            type: string
-            description: The type of the service charge.
-            x-apideck-enum-id: service-charges.type
-            enum:
-              - auto_gratuity
-              - custom
+        $ref: '#/components/schemas/ServiceCharge'
+    ServiceCharge:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+          description: Service charge name
+          example: Charge for delivery
+        amount:
+          title: Amount (in cents)
+          type: number
+          example: 27500
+        percentage:
+          type: number
+          description: Service charge percentage. Use this field to calculate the amount of the service charge. Pass a percentage and amount at the same time.
+          example: 12.5
+        currency:
+          $ref: '#/components/schemas/Currency'
+        active:
+          $ref: '#/components/schemas/Active'
+        type:
+          type: string
+          description: The type of the service charge.
+          enum:
+            - auto_gratuity
+            - custom
     CreateOrderTypeResponse:
       type: object
       required:
@@ -4680,10 +4699,7 @@ components:
           example: Cash
           nullable: true
         active:
-          type: boolean
-          title: Is active
-          example: true
-          nullable: true
+          $ref: '#/components/schemas/Active'
         hidden:
           $ref: '#/components/schemas/Hidden'
         editable:
@@ -4924,7 +4940,6 @@ paths:
                 closed_date: '2022-08-13',
                 reference_id: 'my-order-001',
                 status: 'open',
-                state: 'open',
                 payment_status: 'open',
                 currency: 'USD',
                 title: 'string',
@@ -5046,6 +5061,7 @@ paths:
                     amount: 27500,
                     percentage: 12.5,
                     currency: 'USD',
+                    active: true,
                     type: 'auto_gratuity'
                   }
                 ],
@@ -5258,7 +5274,6 @@ paths:
                 closed_date: '2022-08-13',
                 reference_id: 'my-order-001',
                 status: 'open',
-                state: 'open',
                 payment_status: 'open',
                 currency: 'USD',
                 title: 'string',
@@ -5380,6 +5395,7 @@ paths:
                     amount: 27500,
                     percentage: 12.5,
                     currency: 'USD',
+                    active: true,
                     type: 'auto_gratuity'
                   }
                 ],
@@ -5592,7 +5608,6 @@ paths:
                 closed_date: '2022-08-13',
                 reference_id: 'my-order-001',
                 status: 'open',
-                state: 'open',
                 payment_status: 'open',
                 currency: 'USD',
                 title: 'string',
@@ -5714,6 +5729,7 @@ paths:
                     amount: 27500,
                     percentage: 12.5,
                     currency: 'USD',
+                    active: true,
                     type: 'auto_gratuity'
                   }
                 ],
@@ -5875,7 +5891,7 @@ paths:
       tags:
         - Payments
       operationId: paymentsAdd
-      summary: CreateP ayment
+      summary: Create Payment
       description: Create Payment
       x-graphql-exclude: true
       parameters:
@@ -6025,6 +6041,7 @@ paths:
                     amount: 27500,
                     percentage: 12.5,
                     currency: 'USD',
+                    active: true,
                     type: 'auto_gratuity'
                   }
                 ]
@@ -6245,6 +6262,7 @@ paths:
                     amount: 27500,
                     percentage: 12.5,
                     currency: 'USD',
+                    active: true,
                     type: 'auto_gratuity'
                   }
                 ]
@@ -6437,6 +6455,16 @@ paths:
                 owner_id: '12345',
                 main_location_id: '12345',
                 status: 'active',
+                service_charges: [
+                  {
+                    name: 'Charge for delivery',
+                    amount: 27500,
+                    percentage: 12.5,
+                    currency: 'USD',
+                    active: true,
+                    type: 'auto_gratuity'
+                  }
+                ],
                 language: 'EN',
                 currency: 'USD'
               }
@@ -6579,6 +6607,16 @@ paths:
                 owner_id: '12345',
                 main_location_id: '12345',
                 status: 'active',
+                service_charges: [
+                  {
+                    name: 'Charge for delivery',
+                    amount: 27500,
+                    percentage: 12.5,
+                    currency: 'USD',
+                    active: true,
+                    type: 'auto_gratuity'
+                  }
+                ],
                 language: 'EN',
                 currency: 'USD'
               }
@@ -7434,7 +7472,7 @@ paths:
                 alternate_name: 'Modifier New',
                 price_amount: 10,
                 currency: 'USD',
-                modifier_group_id: ['123'],
+                modifier_group_id: '123',
                 available: true
               }
             }
@@ -7552,7 +7590,7 @@ paths:
                 alternate_name: 'Modifier New',
                 price_amount: 10,
                 currency: 'USD',
-                modifier_group_id: ['123'],
+                modifier_group_id: '123',
                 available: true
               }
             }

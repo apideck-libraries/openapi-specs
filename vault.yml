@@ -1992,8 +1992,8 @@ paths:
   '/vault/consumers/{consumer_id}/stats':
     get:
       summary: Consumer request counts
-      operationId: consumersRequestCounts
-      x-graphql-field-name: consumersRequestCounts
+      operationId: consumerRequestCountsAll
+      x-graphql-field-name: consumerRequestCounts
       description: |
         Get consumer request counts within a given datetime range.
       tags:
@@ -2039,7 +2039,7 @@ paths:
             }
 
             try {
-              const { data } = await apideck.vault.consumersRequestCounts(params)
+              const { data } = await apideck.vault.consumerRequestCountsAll(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -2525,7 +2525,7 @@ paths:
       x-graphql-field-name: connectionSettings
       description: |
         This endpoint returns custom settings and their defaults required by connection for a given resource.
-      operationId: connectionsGetSettings
+      operationId: connectionSettingsAll
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
@@ -2569,7 +2569,7 @@ paths:
             }
 
             try {
-              const { data } = await apideck.vault.connectionsGetSettings(params)
+              const { data } = await apideck.vault.connectionSettingsAll(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -2579,7 +2579,7 @@ paths:
         - Connections
       summary: Update settings
       description: Update default values for a connection's resource settings
-      operationId: connectionsUpdateSettings
+      operationId: connectionSettingsUpdate
       x-graphql-field-name: connectionSettingsUpdate
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
@@ -2657,7 +2657,7 @@ paths:
             }
 
             try {
-              const { data } = await apideck.vault.connectionsUpdateSettings(params)
+              const { data } = await apideck.vault.connectionSettingsUpdate(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

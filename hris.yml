@@ -264,6 +264,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/GetEmployeePayrollsResponse'
+    GetEmployeeSchedulesResponse:
+      description: EmployeeSchedules
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetEmployeeSchedulesResponse'
     TooManyRequestsResponse:
       description: Too Many Requests
       content:
@@ -2770,6 +2776,162 @@ components:
           description: An array of compensations for the payroll.
           items:
             $ref: '#/components/schemas/Compensation'
+    Schedule:
+      type: object
+      required:
+        - id
+        - start_date
+        - end_date
+        - work_pattern
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        start_date:
+          type: string
+          description: 'The start date, inclusive, of the schedule period.'
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+          example: '2022-04-08'
+        end_date:
+          type: string
+          description: 'The end date, inclusive, of the schedule period.'
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+          example: '2022-04-21'
+        work_pattern:
+          type: object
+          properties:
+            odd_weeks:
+              type: object
+              properties:
+                hours_monday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 8
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_tuesday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 8
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_wednesday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 4
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_thursday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 7.5
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_friday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 4
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_saturday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 0
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_sunday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 0
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+            even_weeks:
+              type: object
+              properties:
+                hours_monday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 8
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_tuesday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 8
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_wednesday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 4
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_thursday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 7.5
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_friday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 4
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_saturday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 0
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
+                hours_sunday:
+                  type: number
+                  format: double
+                  pattern: '^(\d{1,2})(\.\d{1,2})?$'
+                  example: 0
+                  minimum: 0
+                  maximum: 24
+                  nullable: false
+                  readOnly: false
     EmployeePayroll:
       x-apideck-weights:
         employee: critical
@@ -2792,6 +2954,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Payroll'
+    EmployeeSchedules:
+      type: object
+      properties:
+        employee:
+          $ref: '#/components/schemas/Employee'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Schedule'
     Compensation:
       type: object
       x-apideck-weights:
@@ -2987,6 +3158,39 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/EmployeePayroll'
+    GetEmployeeSchedulesResponse:
+      x-graphql-type-name: EmployeeSchedulesList
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/EmployeeSchedules'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -4500,6 +4704,58 @@ paths:
 
             try {
               const { data } = await apideck.hris.employeePayrollsOne(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  '/hris/schedules/employees/{employee_id}':
+    get:
+      tags:
+        - Employee Schedules
+      x-graphql-field-name: employeeSchedules
+      operationId: employeeSchedulesAll
+      summary: List Employee Schedules
+      description: 'List schedules for employee, a schedule is a work pattern, not the actual worked hours, for an employee.'
+      parameters:
+        - $ref: '#/components/parameters/employeeId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetEmployeeSchedulesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: hris
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.hris.employeeSchedulesAll({
+                employeeId: 'employee_id_example'
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

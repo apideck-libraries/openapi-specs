@@ -1,3 +1,7 @@
+## v8.32.6 - (2022-06-24)
+
+- Fix faulty examples
+
 ## v8.32.5 - (2022-06-21)
 
 - Updated Orders and Payments for the [Clover](connectors/clover) connector

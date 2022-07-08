@@ -1,3 +1,12 @@
+## v8.34.0 - (2022-07-06)
+
+- Added [Jobs](apis/hris/reference#tag/Employees) on the HRIS API
+
+## v8.33.0 - (2022-07-02)
+
+- Added `deceased_on` and `partner` to [Employee](apis/hris/reference#tag/Employees) on the HRIS API.
+- Added new resource [EmployeeSchedules](https://developers.apideck.com/apis/hris/reference#tag/Employee-Schedules) on the HRIS API.
+
 ## v8.32.6 - (2022-06-24)
 
 - Fix faulty examples

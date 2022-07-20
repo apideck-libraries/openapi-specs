@@ -1,3 +1,7 @@
+## v8.36.0 - (2022-07-20)
+
+- Added `status` property to [Company info](apis/accounting/reference#tag/Company-Info) on the Accounting API and for the [MYOB](connectors/myob) connector.
+
 ## v8.35.1 - (2022-07-20)
 
 - Added docs for [QuickBooks](connectors/quickbooks) as supported connector for [Profit And Loss](apis/accounting/reference#tag/Profit-and-Loss) resource on the Accounting API.

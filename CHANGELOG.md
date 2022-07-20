@@ -1,3 +1,7 @@
+## v8.35.0 - (2022-07-20)
+
+- Added [Profit And Loss](apis/accounting/reference#tag/Profit-and-Loss) resource on the Accounting API
+
 ## v8.34.0 - (2022-07-06)
 
 - Added [Jobs](apis/hris/reference#tag/Employees) on the HRIS API

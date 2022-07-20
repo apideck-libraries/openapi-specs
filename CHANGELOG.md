@@ -1,6 +1,10 @@
+## v8.35.1 - (2022-07-20)
+
+- Added docs for [QuickBooks](connectors/quickbooks) as supported connector for [Profit And Loss](apis/accounting/reference#tag/Profit-and-Loss) resource on the Accounting API.
+
 ## v8.35.0 - (2022-07-20)
 
-- Added [Profit And Loss](apis/accounting/reference#tag/Profit-and-Loss) resource on the Accounting API
+- Added [Profit And Loss](apis/accounting/reference#tag/Profit-and-Loss) resource on the Accounting API.
 
 ## v8.34.0 - (2022-07-06)
 

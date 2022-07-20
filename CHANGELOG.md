@@ -1,3 +1,7 @@
+## v8.37.0 - (2022-07-20)
+
+- Added `modifier_groups` property to [Items](apis/pos/reference#tag/Items) on the POS API.
+
 ## v8.36.0 - (2022-07-20)
 
 - Added `status` property to [Company info](apis/accounting/reference#tag/Company-Info) on the Accounting API and for the [MYOB](connectors/myob) connector.

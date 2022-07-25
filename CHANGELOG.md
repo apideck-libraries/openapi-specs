@@ -1,3 +1,7 @@
+## v8.37.1 - (2022-07-25)
+
+- Mapped `price_amount` property on variations to [Items](apis/pos/reference#tag/Items) on the POS API for the [Square](connectors/square) connector.
+
 ## v8.37.0 - (2022-07-20)
 
 - Added `modifier_groups` property to [Items](apis/pos/reference#tag/Items) on the POS API.

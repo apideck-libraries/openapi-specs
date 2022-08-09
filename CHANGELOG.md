@@ -1,3 +1,8 @@
+## v8.38.0 - (2022-08-03)
+
+- Added [Drives](apis/file-storage/reference#tag/Drives) resource on the File Storage API.
+- Added [Drive Groups](apis/file-storage/reference#tag/DriveGroups) resource on the File Storage API.
+
 ## v8.37.1 - (2022-07-25)
 
 - Mapped `price_amount` property on variations to [Items](apis/pos/reference#tag/Items) on the POS API for the [Square](connectors/square) connector.

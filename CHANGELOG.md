@@ -1,3 +1,9 @@
+## v8.39.0 - (2022-08-09)
+
+## Connector API
+
+- Added `supported_list_fields` to [ConnectorResource](apis/connector/reference#tag/ConnectorResource)
+
 ## v8.38.0 - (2022-08-03)
 
 - Added [Drives](apis/file-storage/reference#tag/Drives) resource on the File Storage API.

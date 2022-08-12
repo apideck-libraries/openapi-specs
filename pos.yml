@@ -1217,32 +1217,32 @@ components:
           type: string
           example: 23F
         total_amount:
-          type: number
+          type: integer
           title: Total amount (in cents)
-          example: 27.5
+          example: 275
           nullable: true
         total_tip:
-          type: number
+          type: integer
           title: Total tax (in cents)
-          example: 7
+          example: 700
           nullable: true
         total_tax:
-          type: number
+          type: integer
           title: Total tax (in cents)
-          example: 2.75
+          example: 275
           nullable: true
         total_discount:
-          type: number
+          type: integer
           title: Total discount (in cents)
-          example: 3
+          example: 300
           nullable: true
         total_refund:
-          type: number
+          type: integer
           title: Total refund (in cents)
           example: 0
           nullable: true
         total_service_charge:
-          type: number
+          type: integer
           title: Total service charge (in cents)
           example: 0
           nullable: true
@@ -1471,6 +1471,10 @@ components:
                       customer_id:
                         type: string
                         example: '12345'
+                      display_name:
+                        type: string
+                        title: Display name
+                        example: Elon Musk
                       address:
                         $ref: '#/components/schemas/Address'
                       phone_number:
@@ -1510,17 +1514,17 @@ components:
                   id:
                     $ref: '#/components/schemas/Id'
               total_tax:
-                type: number
+                type: integer
                 title: Tax amount (in cents)
                 example: 2000
                 nullable: true
               total_discount:
-                type: number
+                type: integer
                 title: Total discount amount (in cents)
                 example: 3000
                 nullable: true
               total_amount:
-                type: number
+                type: integer
                 title: Total amount (in cents)
                 example: 27500
                 nullable: true
@@ -1544,7 +1548,7 @@ components:
                       example: sales-tax
                     amount:
                       title: Amount (in cents)
-                      type: number
+                      type: integer
                       example: 27500
                     currency:
                       $ref: '#/components/schemas/Currency'
@@ -1564,7 +1568,7 @@ components:
                       example: '12345'
                     amount:
                       title: Amount (in cents)
-                      type: number
+                      type: integer
                       example: 27500
                     currency:
                       $ref: '#/components/schemas/Currency'
@@ -1582,7 +1586,7 @@ components:
                       example: New York Strip Steak - no cheese
                     amount:
                       title: Amount (in cents)
-                      type: number
+                      type: integer
                       example: 27500
                     currency:
                       $ref: '#/components/schemas/Currency'
@@ -1599,7 +1603,7 @@ components:
                 $ref: '#/components/schemas/Id'
               amount:
                 title: Amount (in cents)
-                type: number
+                type: integer
                 example: 27500
               currency:
                 $ref: '#/components/schemas/Currency'
@@ -1625,7 +1629,7 @@ components:
                 $ref: '#/components/schemas/Id'
               amount:
                 title: Amount (in cents)
-                type: number
+                type: integer
                 example: 27500
               currency:
                 $ref: '#/components/schemas/Currency'
@@ -1666,7 +1670,7 @@ components:
                 example: State Sales Tax
               amount:
                 title: Amount (in cents)
-                type: number
+                type: integer
                 example: 27500
               currency:
                 $ref: '#/components/schemas/Currency'
@@ -1713,11 +1717,12 @@ components:
                 type: string
                 x-apideck-enum-id: orders.discounts.type
                 enum:
-                  - fixed_percentage
-                example: fixed_percentage
+                  - percentage
+                  - flat_fee
+                example: percentage
               amount:
                 title: Amount (in cents)
-                type: number
+                type: integer
                 example: 27500
               currency:
                 $ref: '#/components/schemas/Currency'
@@ -1773,53 +1778,57 @@ components:
                 type: string
                 example: An optional note associated with the tender at the time of payment.
               amount:
-                title: Amount
+                title: Amount (in cents)
                 type: number
                 example: 27500
+              percentage:
+                title: Percentage
+                type: number
+                example: 10
               currency:
                 $ref: '#/components/schemas/Currency'
               total_amount:
-                type: number
+                type: integer
                 title: Total amount (in cents)
                 example: 27.5
                 nullable: true
               total_tip:
-                type: number
+                type: integer
                 title: Total tax (in cents)
                 example: 7
                 nullable: true
               total_processing_fee:
-                type: number
+                type: integer
                 title: Total processing fee (in cents)
                 example: 0
                 nullable: true
               total_tax:
-                type: number
+                type: integer
                 title: Total tax (in cents)
                 example: 2.75
                 nullable: true
               total_discount:
-                type: number
+                type: integer
                 title: Total discount (in cents)
                 example: 3
                 nullable: true
               total_refund:
-                type: number
+                type: integer
                 title: Total refund (in cents)
                 example: 0
                 nullable: true
               total_service_charge:
-                type: number
+                type: integer
                 title: Total service charge (in cents)
                 example: 0
                 nullable: true
               buyer_tendered_cash_amount:
-                type: number
+                type: integer
                 description: The amount (in cents) of cash tendered by the buyer. Only applicable when the tender type is cash.
                 example: 27500
                 nullable: true
               change_back_cash_amount:
-                type: number
+                type: integer
                 description: The amount (in cents) of cash returned to the buyer. Only applicable when the tender type is cash.
                 example: 27500
                 nullable: true
@@ -5298,10 +5307,10 @@ paths:
                 order_type_id: '12345',
                 table: '1F',
                 seat: '23F',
-                total_amount: 27.5,
-                total_tip: 7,
-                total_tax: 2.75,
-                total_discount: 3,
+                total_amount: 275,
+                total_tip: 700,
+                total_tax: 275,
+                total_discount: 300,
                 total_refund: 0,
                 total_service_charge: 0,
                 refunded: false,
@@ -5356,6 +5365,7 @@ paths:
                       },
                       recipient: {
                         customer_id: '12345',
+                        display_name: 'Elon Musk',
                         address: [Object],
                         phone_number: [Object],
                         email: [Object]
@@ -5435,7 +5445,7 @@ paths:
                 discounts: [
                   {
                     name: '10% off',
-                    type: 'fixed_percentage',
+                    type: 'percentage',
                     amount: 27500,
                     currency: 'USD',
                     scope: 'order'
@@ -5447,6 +5457,7 @@ paths:
                     type: 'cash',
                     note: 'An optional note associated with the tender at the time of payment.',
                     amount: 27500,
+                    percentage: 10,
                     currency: 'USD',
                     total_amount: 27.5,
                     total_tip: 7,
@@ -5632,10 +5643,10 @@ paths:
                 order_type_id: '12345',
                 table: '1F',
                 seat: '23F',
-                total_amount: 27.5,
-                total_tip: 7,
-                total_tax: 2.75,
-                total_discount: 3,
+                total_amount: 275,
+                total_tip: 700,
+                total_tax: 275,
+                total_discount: 300,
                 total_refund: 0,
                 total_service_charge: 0,
                 refunded: false,
@@ -5690,6 +5701,7 @@ paths:
                       },
                       recipient: {
                         customer_id: '12345',
+                        display_name: 'Elon Musk',
                         address: [Object],
                         phone_number: [Object],
                         email: [Object]
@@ -5769,7 +5781,7 @@ paths:
                 discounts: [
                   {
                     name: '10% off',
-                    type: 'fixed_percentage',
+                    type: 'percentage',
                     amount: 27500,
                     currency: 'USD',
                     scope: 'order'
@@ -5781,6 +5793,7 @@ paths:
                     type: 'cash',
                     note: 'An optional note associated with the tender at the time of payment.',
                     amount: 27500,
+                    percentage: 10,
                     currency: 'USD',
                     total_amount: 27.5,
                     total_tip: 7,
@@ -5966,10 +5979,10 @@ paths:
                 order_type_id: '12345',
                 table: '1F',
                 seat: '23F',
-                total_amount: 27.5,
-                total_tip: 7,
-                total_tax: 2.75,
-                total_discount: 3,
+                total_amount: 275,
+                total_tip: 700,
+                total_tax: 275,
+                total_discount: 300,
                 total_refund: 0,
                 total_service_charge: 0,
                 refunded: false,
@@ -6024,6 +6037,7 @@ paths:
                       },
                       recipient: {
                         customer_id: '12345',
+                        display_name: 'Elon Musk',
                         address: [Object],
                         phone_number: [Object],
                         email: [Object]
@@ -6103,7 +6117,7 @@ paths:
                 discounts: [
                   {
                     name: '10% off',
-                    type: 'fixed_percentage',
+                    type: 'percentage',
                     amount: 27500,
                     currency: 'USD',
                     scope: 'order'
@@ -6115,6 +6129,7 @@ paths:
                     type: 'cash',
                     note: 'An optional note associated with the tender at the time of payment.',
                     amount: 27500,
+                    percentage: 10,
                     currency: 'USD',
                     total_amount: 27.5,
                     total_tip: 7,

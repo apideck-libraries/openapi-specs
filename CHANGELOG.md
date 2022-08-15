@@ -1,3 +1,7 @@
+## v8.40.0 - (2022-08-15)
+
+- Added Mock API and SDKs to documentation for all APIs.
+
 ## v8.39.0 - (2022-08-09)
 
 ## Connector API

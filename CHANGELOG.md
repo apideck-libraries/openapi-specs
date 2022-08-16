@@ -1,3 +1,9 @@
+## v8.40.1 - (2022-08-16)
+
+### Accounting API
+
+- Added `filter[start_date]`, `filter[end_date]` to [Customers](apis/accounting/reference#tag/Balance-Sheet)
+
 ## v8.40.0 - (2022-08-15)
 
 - Added Mock API and SDKs to documentation for all APIs.
@@ -121,7 +127,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Added [Balance Sheet](apis/accounting/reference#tag/BalanceSheet)
+- Added [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet)
 
 ## v8.29.4 - (2022-05-16)
 

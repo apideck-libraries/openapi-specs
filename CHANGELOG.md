@@ -1,3 +1,11 @@
+## v8.41.0 - (2022-08-17)
+
+### Accounting API
+
+- Added [Credit Note](apis/accounting/reference#tag/Credit-Notes) support.
+- Added Credit Notes support for [Xero](connectors/xero).
+- Added Credit Notes readOnly support for [Quickbooks](connectors/quickbooks).
+
 ## v8.40.1 - (2022-08-16)
 
 ### Accounting API
@@ -7,6 +15,12 @@
 ## v8.40.0 - (2022-08-15)
 
 - Added Mock API and SDKs to documentation for all APIs.
+
+## v8.39.1 - (2022-08-10)
+
+### Accounting API
+
+- Added [Bills](apis/accounting/reference#tag/Bills)
 
 ## v8.39.0 - (2022-08-09)
 

@@ -1,3 +1,9 @@
+## v8.41.1 - (2022-08-24)
+
+### Accounting API
+
+- Make `invoice_date` and `due_date` nullable on [Invoices](apis/accounting/reference#tag/Invoices)
+
 ## v8.41.0 - (2022-08-17)
 
 ### Accounting API

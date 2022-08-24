@@ -169,6 +169,30 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/AtsActivity'
+    CreateJobResponse:
+      description: Jobs
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateJobResponse'
+    DeleteJobResponse:
+      description: Jobs
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteJobResponse'
+    Job:
+      description: Jobs
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Job'
+    UpdateJobResponse:
+      description: Jobs
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateJobResponse'
   schemas:
     Address:
       type: object
@@ -387,6 +411,10 @@ components:
           example: '2000-08-12'
           format: date
           nullable: true
+        cover_letter:
+          title: Cover letter
+          type: string
+          example: 'I submit this application to express my sincere interest in the API developer position. In the previous role, I was responsible for leadership and ...'
         job_url:
           type: string
           title: Job URL
@@ -448,21 +476,42 @@ components:
                   - personal
                   - other
                 example: primary
+        social_links:
+          type: array
+          items:
+            required:
+              - url
+            type: object
+            additionalProperties: false
+            x-apideck-weights:
+              id: edge-case
+              url: critical
+              type: critical
+            properties:
+              id:
+                type: string
+                example: '12345'
+                nullable: true
+              url:
+                type: string
+                example: 'https://www.twitter.com/apideck-io'
+                minLength: 1
+              type:
+                type: string
+                example: twitter
+                nullable: true
         stage_id:
           title: Stage
           type: string
           example: '12345'
-          readOnly: true
         recruiter_id:
           title: Recruiter ID
           type: string
           example: '12345'
-          readOnly: true
         coordinator_id:
           title: Coordinator ID
           type: string
           example: '12345'
-          readOnly: true
         applications:
           type: array
           items:
@@ -2181,6 +2230,102 @@ components:
               example: ats.job.created
               type: string
       x-sdk-exclude: true
+    CreateJobResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Jobs
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteJobResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Jobs
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    UpdateJobResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Jobs
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/UnifiedId'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -2206,11 +2351,6 @@ components:
 security:
   - apiKey: []
 tags:
-  - name: Jobs
-    description: ''
-    x-apideck-resource-id: jobs
-    x-apideck-model:
-      $ref: '#/components/schemas/Job'
   - name: Applicants
     description: ''
     x-apideck-resource-id: applicants
@@ -2229,112 +2369,15 @@ tags:
   - name: Activities
     description: ''
     x-apideck-upcoming: true
-    x-apideck-resource-id: Activities
+    x-apideck-resource-id: activities
     x-apideck-model:
       $ref: '#/components/schemas/AtsActivity'
+  - name: Jobs
+    description: ''
+    x-apideck-resource-id: jobs
+    x-apideck-model:
+      $ref: '#/components/schemas/Job'
 paths:
-  /ats/jobs:
-    get:
-      tags:
-        - Jobs
-      x-graphql-field-name: jobs
-      operationId: jobsAll
-      summary: List jobs
-      description: List jobs
-      parameters:
-        - $ref: '#/components/parameters/raw'
-        - $ref: '#/components/parameters/consumerId'
-        - $ref: '#/components/parameters/applicationId'
-        - $ref: '#/components/parameters/serviceId'
-        - $ref: '#/components/parameters/cursor'
-        - $ref: '#/components/parameters/limit'
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          $ref: '#/components/responses/GetJobsResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '402':
-          $ref: '#/components/responses/PaymentRequiredResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '422':
-          $ref: '#/components/responses/UnprocessableResponse'
-        default:
-          $ref: '#/components/responses/UnexpectedErrorResponse'
-      x-apideck-api: ats
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.ats.jobsAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
-  '/ats/jobs/{id}':
-    get:
-      tags:
-        - Jobs
-      operationId: jobsOne
-      summary: Get job
-      description: Get job
-      parameters:
-        - $ref: '#/components/parameters/id'
-        - $ref: '#/components/parameters/consumerId'
-        - $ref: '#/components/parameters/applicationId'
-        - $ref: '#/components/parameters/serviceId'
-        - $ref: '#/components/parameters/raw'
-      security:
-        - apiKey: []
-      responses:
-        '200':
-          $ref: '#/components/responses/GetJobResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '402':
-          $ref: '#/components/responses/PaymentRequiredResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '422':
-          $ref: '#/components/responses/UnprocessableResponse'
-        default:
-          $ref: '#/components/responses/UnexpectedErrorResponse'
-      x-apideck-api: ats
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.ats.jobsOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
   /ats/applicants:
     get:
       tags:
@@ -2443,6 +2486,8 @@ paths:
                 middle_name: 'D.',
                 initials: 'EM',
                 birthday: '2000-08-12',
+                cover_letter:
+                  'I submit this application to express my sincere interest in the API developer position. In the previous role, I was responsible for leadership and ...',
                 photo_url: 'https://unavatar.io/elon-musk',
                 headline: 'PepsiCo, Inc, Central Perk',
                 title: 'CEO',
@@ -2497,6 +2542,16 @@ paths:
                     type: 'primary'
                   }
                 ],
+                social_links: [
+                  {
+                    id: '12345',
+                    url: 'https://www.twitter.com/apideck-io',
+                    type: 'twitter'
+                  }
+                ],
+                stage_id: '12345',
+                recruiter_id: '12345',
+                coordinator_id: '12345',
                 applications: ['a0d636c6-43b3-4bde-8c70-85b707d992f4', 'a98lfd96-43b3-4bde-8c70-85b707d992e6'],
                 followers: ['a0d636c6-43b3-4bde-8c70-85b707d992f4', 'a98lfd96-43b3-4bde-8c70-85b707d992e6'],
                 sources: ['Job site'],
@@ -2567,56 +2622,110 @@ paths:
             } catch (error) {
               console.error(error)
             }
+  /ats/jobs:
+    get:
+      tags:
+        - Jobs
+      x-graphql-field-name: jobs
+      operationId: jobsAll
+      summary: List Jobs
+      description: List Jobs
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetJobsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.ats.jobsAll({})
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  '/ats/jobs/{id}':
+    get:
+      tags:
+        - Jobs
+      operationId: jobsOne
+      summary: Get Job
+      description: Get Job
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetJobResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.ats.jobsOne({
+                id: 'id_example'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
 x-webhooks:
   x-sdk-exclude: true
-  JobCreated:
-    post:
-      summary: Job created
-      description: Job created
-      operationId: jobCreated
-      x-apideck-event-type: ats.job.created
-      tags:
-        - Webhook Events
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AtsWebhookEvent'
-      responses:
-        '200':
-          description: Return a 200 status to indicate that the data was received successfully
-  JobUpdated:
-    post:
-      summary: Job updated
-      description: Job updated
-      operationId: jobUpdated
-      x-apideck-event-type: ats.job.updated
-      tags:
-        - Webhook Events
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AtsWebhookEvent'
-      responses:
-        '200':
-          description: Return a 200 status to indicate that the data was received successfully
-  JobDeleted:
-    post:
-      summary: Job deleted
-      description: Job deleted
-      operationId: jobDeleted
-      x-apideck-event-type: ats.job.deleted
-      tags:
-        - Webhook Events
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AtsWebhookEvent'
-      responses:
-        '200':
-          description: Return a 200 status to indicate that the data was received successfully
   ApplicantCreated:
     post:
       summary: Applicant created
@@ -2658,6 +2767,54 @@ x-webhooks:
       operationId: applicantUpdated
       x-apideck-event-type: ats.applicant.updated
       x-apideck-upcoming: true
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtsWebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  JobCreated:
+    post:
+      summary: Job created
+      description: Job created
+      operationId: jobCreated
+      x-apideck-event-type: ats.job.created
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtsWebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  JobUpdated:
+    post:
+      summary: Job updated
+      description: Job updated
+      operationId: jobUpdated
+      x-apideck-event-type: ats.job.updated
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtsWebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  JobDeleted:
+    post:
+      summary: Job deleted
+      description: Job deleted
+      operationId: jobDeleted
+      x-apideck-event-type: ats.job.deleted
       tags:
         - Webhook Events
       requestBody:

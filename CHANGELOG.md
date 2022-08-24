@@ -1,3 +1,9 @@
+## v8.42.0 - (2022-08-24)
+
+### Accounting API
+
+- Added sorting support to [Invoices](apis/accounting/reference#tag/Invoices). To sort results, use the `sort[by]` and `sort[direction]` query parameters. First available `sort[by]` value is `updated_at`. Supported for [Xero](connectors/xero) and [Quickbooks](connectors/quickbooks).
+
 ## v8.41.1 - (2022-08-24)
 
 ### Accounting API

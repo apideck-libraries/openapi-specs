@@ -1,3 +1,13 @@
+## v8.43.0 - (2022-08-30)
+
+## v - (2022-08-30)
+
+## v8.43.0 - (2022-08-30)
+
+### HRIS API
+
+- Added [Freshteam](connectors/freshteam) connector
+
 ## v8.42.0 - (2022-08-24)
 
 ### Accounting API

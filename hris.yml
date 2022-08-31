@@ -1433,6 +1433,7 @@ components:
         tax_id: edge-case
         dietary_preference: edge-case
         food_allergies: edge-case
+        tags: low
         row_version: edge-case
         deleted: medium
         updated_by: edge-case
@@ -1864,6 +1865,12 @@ components:
           example:
             - No allergies
           nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+          example:
+            - New
         row_version:
           $ref: '#/components/schemas/RowVersion'
         deleted:
@@ -3731,6 +3738,7 @@ paths:
                 tax_id: '234-32-0000',
                 dietary_preference: 'Veggie',
                 food_allergies: ['No allergies'],
+                tags: ['New'],
                 row_version: '1-12345',
                 deleted: true
               }
@@ -4016,6 +4024,7 @@ paths:
                 tax_id: '234-32-0000',
                 dietary_preference: 'Veggie',
                 food_allergies: ['No allergies'],
+                tags: ['New'],
                 row_version: '1-12345',
                 deleted: true
               }

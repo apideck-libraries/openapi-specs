@@ -1,6 +1,8 @@
-## v8.43.0 - (2022-08-30)
+## v8.44.0 - (2022-09-01)
 
-## v - (2022-08-30)
+## HRIS API
+
+- Added [Sapling](connectors/sapling) connector
 
 ## v8.43.0 - (2022-08-30)
 

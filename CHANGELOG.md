@@ -1,9 +1,13 @@
 ## v8.46.0 - (2022-09-02)
 
-## HRIS API
+### HRIS API
 
 - Added [Zenefits](connectors/zenefits) connector
 
+## v8.45.0 - (2022-09-02)
+### HRIS API
+
+- Added [Factorial](connectors/factorial) connector.
 ## v8.44.0 - (2022-09-01)
 
 ## HRIS API

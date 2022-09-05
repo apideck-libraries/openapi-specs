@@ -1,3 +1,7 @@
+## v8.48.0 - (2022-09-05)
+
+- Added [UKG Pro](connectors/ukg-pro) connector
+
 ## v8.47.0 - (2022-09-05)
 
 - Added [ADP Workforce Now](connectors/adp-workforce-now) connector

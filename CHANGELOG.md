@@ -1,3 +1,13 @@
+## v8.49.0 - (2022-09-05)
+
+### ACTION REQUIRED
+
+Beta users should note the following breaking changes that may affect existing integrations implementing the `POS` API:
+
+- The schema description for a `bank_account` on the `Payments` object has been defined as `PosBankAccount` to avoid confusion with the `BankAccount` object in other APIs.
+- This change is backwards compatible, but we recommend updating your integrations to use the new name if you are using typed definitions.
+- **Note:** the properties on the `PosBankAccount` object have not changed. [PosPayments](apis/pos/reference#tag/Payments)
+
 ## v8.48.0 - (2022-09-05)
 
 - Added [UKG Pro](connectors/ukg-pro) connector

@@ -1,3 +1,7 @@
+## v8.51.0 - (2022-09-06)
+
+- Expanded support for `Employees` for the [UKG Pro](connectors/ukg-pro) connector
+
 ## v8.50.0 - (2022-09-06)
 
 - Added [Zoho People](connectors/zoho-people) connector

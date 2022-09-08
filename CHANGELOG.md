@@ -1,3 +1,7 @@
+## v8.52.0 - (2022-09-07)
+
+- Added [Paylocity](connectors/paylocity) connector
+
 ## v8.51.0 - (2022-09-06)
 
 - Expanded support for `Employees` for the [UKG Pro](connectors/ukg-pro) connector

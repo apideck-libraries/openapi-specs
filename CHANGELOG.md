@@ -1,3 +1,7 @@
+## v8.52.1 - (2022-09-09)
+
+- Generalize example detail for Unprocessable Entity Error to prevent confusing when using the [Mock API](mock-api).
+
 ## v8.52.0 - (2022-09-07)
 
 - Added [Paylocity](connectors/paylocity) connector

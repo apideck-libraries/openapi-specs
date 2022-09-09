@@ -1899,11 +1899,47 @@ components:
       x-graphql-type-name: EmployeesFilter
       example:
         company_id: '1234'
+        email: elon@tesla.com
+        first_name: Elon
+        title: Manager
+        last_name: Musk
+        manager_id: '1234'
+        employment_status: active
       properties:
         company_id:
           type: string
           description: Company ID to filter on
           example: '1234'
+        email:
+          type: string
+          description: Email to filter on
+          example: elon@tesla.com
+        first_name:
+          type: string
+          description: First Name to filter on
+          example: Elon
+        title:
+          type: string
+          description: Job title to filter on
+          example: Manager
+        last_name:
+          type: string
+          description: Last Name to filter on
+          example: Musk
+        manager_id:
+          type: string
+          description: Manager id to filter on
+          example: '1234'
+        employment_status:
+          x-graphql-type-name: EmploymentStatusFilter
+          type: string
+          description: Employment status to filter on
+          example: active
+          enum:
+            - active
+            - inactive
+            - terminated
+            - other
       additionalProperties: false
     FirstName:
       type: string

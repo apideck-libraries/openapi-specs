@@ -1,3 +1,9 @@
+## v8.56.0 - (2022-09-12)
+
+### HRIS API
+
+- Added [Okta](connectors/okta) connector
+
 ## v8.55.0 - (2022-09-12)
 
 ### HRIS API

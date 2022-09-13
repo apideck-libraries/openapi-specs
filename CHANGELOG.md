@@ -1,3 +1,9 @@
+## v8.55.0 - (2022-09-12)
+
+### HRIS API
+
+- Added [Alexis HR](connectors/alexishr) connector
+
 ## v8.54.0 - (2022-09-12)
 
 ### HRIS API

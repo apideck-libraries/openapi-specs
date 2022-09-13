@@ -1,3 +1,9 @@
+## v8.57.0 - (2022-09-13)
+
+### HRIS API
+
+- Added [PayFit](connectors/payfit) connector
+
 ## v8.56.0 - (2022-09-12)
 
 ### HRIS API

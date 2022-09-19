@@ -1,3 +1,9 @@
+## v8.58.0 - (2022-09-19)
+
+## Connector API
+
+- Added `blind_mapping` to [Connector](apis/connector/reference#tag/Connectors)
+
 ## v8.57.0 - (2022-09-13)
 
 ### HRIS API

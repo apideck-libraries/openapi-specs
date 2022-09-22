@@ -1,3 +1,9 @@
+## v8.59.0 - (2022-09-22)
+
+### TEAM MESSAGING API
+
+- Added [Microsoft Teams](connectors/microsoft-teams) connector
+
 ## v8.58.0 - (2022-09-19)
 
 ## Connector API

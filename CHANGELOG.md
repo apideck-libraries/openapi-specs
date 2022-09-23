@@ -1,3 +1,9 @@
+## v8.60.0 - (2022-09-23)
+
+### HRIS API
+
+- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource.
+
 ## v8.59.0 - (2022-09-22)
 
 ### TEAM MESSAGING API

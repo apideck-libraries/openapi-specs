@@ -170,6 +170,8 @@ components:
       description: ID of your Apideck Application
       example: '1111'
     BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
       properties:
         status_code:
           type: number
@@ -206,6 +208,7 @@ components:
       description: Consumer identifier
     CreateWebhookRequest:
       type: object
+      x-apideck-schema-id: CreateWebhookRequest
       additionalProperties: false
       required:
         - delivery_url
@@ -232,6 +235,7 @@ components:
             $ref: '#/components/schemas/WebhookEventType'
     CreateWebhookResponse:
       type: object
+      x-apideck-schema-id: CreateWebhookResponse
       required:
         - status_code
         - status
@@ -255,6 +259,7 @@ components:
       readOnly: true
     DeleteWebhookResponse:
       type: object
+      x-apideck-schema-id: DeleteWebhookResponse
       required:
         - status_code
         - status
@@ -290,14 +295,17 @@ components:
       example: 'https://unify.apideck.com/webhook/webhooks/1234/execute'
     ExecuteWebhookEventRequest:
       type: object
+      x-apideck-schema-id: ExecuteWebhookEventRequest
       additionalProperties: true
     ExecuteWebhookEventsRequest:
       type: array
+      x-apideck-schema-id: ExecuteWebhookEventsRequest
       items:
         type: object
         additionalProperties: true
     ExecuteWebhookResponse:
       type: object
+      x-apideck-schema-id: ExecuteWebhookResponse
       required:
         - status_code
         - status
@@ -320,8 +328,9 @@ components:
           description: ISO Dtae time webhook event was received
           example: '2021-10-01T08:26:28.039Z'
     GetWebhookEventLogsResponse:
-      x-graphql-type-name: EventLogList
       type: object
+      x-apideck-schema-id: GetWebhookEventLogsResponse
+      x-graphql-type-name: EventLogList
       required:
         - status_code
         - status
@@ -344,8 +353,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetWebhookResponse:
-      x-graphql-type-name: Webhook
       type: object
+      x-apideck-schema-id: GetWebhookResponse
+      x-graphql-type-name: Webhook
       required:
         - status_code
         - status
@@ -362,8 +372,9 @@ components:
         data:
           $ref: '#/components/schemas/Webhook'
     GetWebhooksResponse:
-      x-graphql-type-name: WebhookList
       type: object
+      x-apideck-schema-id: GetWebhooksResponse
+      x-graphql-type-name: WebhookList
       required:
         - status_code
         - status
@@ -387,6 +398,7 @@ components:
           $ref: '#/components/schemas/Links'
     Links:
       type: object
+      x-apideck-schema-id: Links
       description: Links to navigate to previous or next pages through the API
       properties:
         previous:
@@ -405,6 +417,7 @@ components:
           nullable: true
     Meta:
       type: object
+      x-apideck-schema-id: Meta
       description: Response metadata
       properties:
         items_on_page:
@@ -431,6 +444,8 @@ components:
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
     NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
       properties:
         status_code:
           type: number
@@ -463,6 +478,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#entitynotfounderror'
     NotImplementedResponse:
+      type: object
+      x-apideck-schema-id: NotImplemented
       properties:
         status_code:
           type: number
@@ -491,6 +508,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
     PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
       properties:
         status_code:
           type: number
@@ -530,6 +549,8 @@ components:
         - enabled
         - disabled
     UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
       properties:
         status_code:
           type: number
@@ -556,6 +577,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
       properties:
         status_code:
           type: number
@@ -615,6 +638,8 @@ components:
       example: crm
       type: string
     UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
       properties:
         status_code:
           type: number
@@ -642,6 +667,7 @@ components:
           example: 'https://developers.apideck.com/errors#invalidstateerror'
     UpdateWebhookRequest:
       type: object
+      x-apideck-schema-id: UpdateWebhookRequest
       additionalProperties: false
       properties:
         description:
@@ -661,6 +687,7 @@ components:
             $ref: '#/components/schemas/WebhookEventType'
     UpdateWebhookResponse:
       type: object
+      x-apideck-schema-id: UpdateWebhookResponse
       required:
         - status_code
         - status
@@ -684,6 +711,7 @@ components:
       readOnly: true
     Webhook:
       type: object
+      x-apideck-schema-id: Webhook
       additionalProperties: false
       required:
         - delivery_url
@@ -754,6 +782,7 @@ components:
           example: '2021-10-01T03:14:55.419Z'
     WebhookEventLog:
       type: object
+      x-apideck-schema-id: WebhookEventLog
       additionalProperties: false
       properties:
         id:
@@ -851,6 +880,7 @@ components:
                 type: boolean
     WebhookEventLogsFilter:
       type: object
+      x-apideck-schema-id: WebhookEventLogsFilter
       x-graphql-type-name: WebhookEventLogsFilter
       properties:
         exclude_apis:

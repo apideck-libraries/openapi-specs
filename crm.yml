@@ -68,6 +68,7 @@ components:
   schemas:
     Activity:
       type: object
+      x-apideck-schema-id: Activity
       additionalProperties: false
       required:
         - type
@@ -332,6 +333,8 @@ components:
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
     ActivityAttendee:
+      type: object
+      x-apideck-schema-id: ActivityAttendee
       x-pii:
         - name
         - first_name
@@ -417,6 +420,7 @@ components:
       additionalProperties: false
     Address:
       type: object
+      x-apideck-schema-id: Address
       additionalProperties: false
       x-apideck-weights:
         id: edge-case
@@ -554,6 +558,8 @@ components:
         row_version:
           $ref: '#/components/schemas/RowVersion'
     BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
       properties:
         status_code:
           type: number
@@ -585,6 +591,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestvalidationerror'
     TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
       properties:
         status_code:
           type: number
@@ -616,6 +624,7 @@ components:
           example: 'https://developers.apideck.com/errors#connectorratelimiterror'
     BankAccount:
       type: object
+      x-apideck-schema-id: BankAccount
       additionalProperties: false
       x-apideck-weights:
         account_number: critical
@@ -675,6 +684,7 @@ components:
           $ref: '#/components/schemas/Currency'
     CompaniesFilter:
       type: object
+      x-apideck-schema-id: CompaniesFilter
       x-graphql-type-name: CompaniesFilter
       example:
         name: SpaceX
@@ -686,6 +696,7 @@ components:
       additionalProperties: false
     CompaniesSort:
       type: object
+      x-apideck-schema-id: CompaniesSort
       x-graphql-type-name: CompaniesSort
       example:
         by: created_at
@@ -705,6 +716,8 @@ components:
           $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
     Company:
+      type: object
+      x-apideck-schema-id: Company
       x-apideck-weights:
         id: critical
         name: critical
@@ -746,7 +759,6 @@ components:
         created_by: edge-case
         updated_at: high
         created_at: medium
-      type: object
       required:
         - name
       additionalProperties: false
@@ -936,6 +948,8 @@ components:
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
     Contact:
+      type: object
+      x-apideck-schema-id: Contact
       x-apideck-weights:
         id: critical
         name: critical
@@ -1156,6 +1170,7 @@ components:
       additionalProperties: false
     ContactsFilter:
       type: object
+      x-apideck-schema-id: ContactsFilter
       x-graphql-type-name: ContactsFilter
       example:
         first_name: Elon
@@ -1181,6 +1196,7 @@ components:
       additionalProperties: false
     ContactsSort:
       type: object
+      x-apideck-schema-id: ContactsSort
       x-graphql-type-name: ContactsSort
       example:
         by: created_at
@@ -1204,6 +1220,7 @@ components:
       additionalProperties: false
     CreateActivityResponse:
       type: object
+      x-apideck-schema-id: CreateActivityResponse
       required:
         - status_code
         - status
@@ -1236,6 +1253,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateCompanyResponse:
       type: object
+      x-apideck-schema-id: CreateCompanyResponse
       required:
         - status_code
         - status
@@ -1268,6 +1286,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateContactResponse:
       type: object
+      x-apideck-schema-id: CreateContactResponse
       required:
         - status_code
         - status
@@ -1300,6 +1319,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateLeadResponse:
       type: object
+      x-apideck-schema-id: CreateLeadResponse
       required:
         - status_code
         - status
@@ -1332,6 +1352,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateNoteResponse:
       type: object
+      x-apideck-schema-id: CreateNoteResponse
       required:
         - status_code
         - status
@@ -1364,6 +1385,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateOpportunityResponse:
       type: object
+      x-apideck-schema-id: CreateOpportunityResponse
       required:
         - status_code
         - status
@@ -1396,6 +1418,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreatePipelineResponse:
       type: object
+      x-apideck-schema-id: CreatePipelineResponse
       required:
         - status_code
         - status
@@ -1428,6 +1451,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateUserResponse:
       type: object
+      x-apideck-schema-id: CreateUserResponse
       required:
         - status_code
         - status
@@ -2014,6 +2038,7 @@ components:
       nullable: true
     CustomField:
       type: object
+      x-apideck-schema-id: CustomField
       required:
         - id
       additionalProperties: false
@@ -2053,6 +2078,7 @@ components:
                 type: string
     DeleteActivityResponse:
       type: object
+      x-apideck-schema-id: DeleteActivityResponse
       required:
         - status_code
         - status
@@ -2085,6 +2111,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteCompanyResponse:
       type: object
+      x-apideck-schema-id: DeleteCompanyResponse
       required:
         - status_code
         - status
@@ -2117,6 +2144,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteContactResponse:
       type: object
+      x-apideck-schema-id: DeleteContactResponse
       required:
         - status_code
         - status
@@ -2149,6 +2177,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteLeadResponse:
       type: object
+      x-apideck-schema-id: DeleteLeadResponse
       required:
         - status_code
         - status
@@ -2181,6 +2210,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteNoteResponse:
       type: object
+      x-apideck-schema-id: DeleteNoteResponse
       required:
         - status_code
         - status
@@ -2213,6 +2243,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteOpportunityResponse:
       type: object
+      x-apideck-schema-id: DeleteOpportunityResponse
       required:
         - status_code
         - status
@@ -2245,6 +2276,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeletePipelineResponse:
       type: object
+      x-apideck-schema-id: DeletePipelineResponse
       required:
         - status_code
         - status
@@ -2277,6 +2309,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteUserResponse:
       type: object
+      x-apideck-schema-id: DeleteUserResponse
       required:
         - status_code
         - status
@@ -2308,9 +2341,10 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     Email:
+      type: object
+      x-apideck-schema-id: Email
       required:
         - email
-      type: object
       additionalProperties: false
       x-apideck-weights:
         email: critical
@@ -2362,8 +2396,9 @@ components:
         - crm.opportunity.deleted
       example: crm.company.created
     GetActivitiesResponse:
-      x-graphql-type-name: ActivityList
       type: object
+      x-apideck-schema-id: GetActivitiesResponse
+      x-graphql-type-name: ActivityList
       required:
         - status_code
         - status
@@ -2401,8 +2436,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetActivityResponse:
-      x-graphql-type-name: activity
       type: object
+      x-apideck-schema-id: GetActivityResponse
+      x-graphql-type-name: activity
       required:
         - status_code
         - status
@@ -2434,8 +2470,9 @@ components:
         data:
           $ref: '#/components/schemas/Activity'
     GetCompaniesResponse:
-      x-graphql-type-name: CompanyList
       type: object
+      x-apideck-schema-id: GetCompaniesResponse
+      x-graphql-type-name: CompanyList
       required:
         - status_code
         - status
@@ -2473,8 +2510,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetCompanyResponse:
-      x-graphql-type-name: company
       type: object
+      x-apideck-schema-id: GetCompanyResponse
+      x-graphql-type-name: company
       required:
         - status_code
         - status
@@ -2507,6 +2545,7 @@ components:
           $ref: '#/components/schemas/Company'
     GetContactResponse:
       type: object
+      x-apideck-schema-id: GetContactResponse
       required:
         - status_code
         - status
@@ -2538,8 +2577,9 @@ components:
         data:
           $ref: '#/components/schemas/Contact'
     GetContactsResponse:
-      x-graphql-type-name: ContactList
       type: object
+      x-apideck-schema-id: GetContactsResponse
+      x-graphql-type-name: ContactList
       required:
         - status_code
         - status
@@ -2578,6 +2618,7 @@ components:
           $ref: '#/components/schemas/Links'
     GetLeadResponse:
       type: object
+      x-apideck-schema-id: GetLeadResponse
       required:
         - status_code
         - status
@@ -2609,8 +2650,9 @@ components:
         data:
           $ref: '#/components/schemas/Lead'
     GetLeadsResponse:
-      x-graphql-type-name: LeadList
       type: object
+      x-apideck-schema-id: GetLeadsResponse
+      x-graphql-type-name: LeadList
       required:
         - status_code
         - status
@@ -2648,8 +2690,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetNoteResponse:
-      x-graphql-type-name: note
       type: object
+      x-apideck-schema-id: GetNoteResponse
+      x-graphql-type-name: note
       required:
         - status_code
         - status
@@ -2681,8 +2724,9 @@ components:
         data:
           $ref: '#/components/schemas/Note'
     GetNotesResponse:
-      x-graphql-type-name: NoteList
       type: object
+      x-apideck-schema-id: GetNotesResponse
+      x-graphql-type-name: NoteList
       required:
         - status_code
         - status
@@ -2720,8 +2764,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetOpportunitiesResponse:
-      x-graphql-type-name: OpportunityList
       type: object
+      x-apideck-schema-id: GetOpportunitiesResponse
+      x-graphql-type-name: OpportunityList
       required:
         - status_code
         - status
@@ -2760,6 +2805,7 @@ components:
           $ref: '#/components/schemas/Links'
     GetOpportunityResponse:
       type: object
+      x-apideck-schema-id: GetOpportunityResponse
       required:
         - status_code
         - status
@@ -2792,6 +2838,7 @@ components:
           $ref: '#/components/schemas/Opportunity'
     GetPipelineResponse:
       type: object
+      x-apideck-schema-id: GetPipelineResponse
       required:
         - status_code
         - status
@@ -2823,8 +2870,9 @@ components:
         data:
           $ref: '#/components/schemas/Pipeline'
     GetPipelinesResponse:
-      x-graphql-type-name: PipelinesList
       type: object
+      x-apideck-schema-id: GetPipelinesResponse
+      x-graphql-type-name: PipelinesList
       required:
         - status_code
         - status
@@ -2863,6 +2911,7 @@ components:
           $ref: '#/components/schemas/Links'
     GetUserResponse:
       type: object
+      x-apideck-schema-id: GetUserResponse
       required:
         - status_code
         - status
@@ -2894,8 +2943,9 @@ components:
         data:
           $ref: '#/components/schemas/User'
     GetUsersResponse:
-      x-graphql-type-name: UserList
       type: object
+      x-apideck-schema-id: GetUsersResponse
+      x-graphql-type-name: UserList
       required:
         - status_code
         - status
@@ -2933,6 +2983,8 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Lead:
+      type: object
+      x-apideck-schema-id: Lead
       x-apideck-weights:
         id: critical
         name: critical
@@ -2960,7 +3012,6 @@ components:
         tags: low
         updated_at: medium
         created_at: medium
-      type: object
       required:
         - name
         - company_name
@@ -3073,6 +3124,7 @@ components:
           readOnly: true
     LeadsFilter:
       type: object
+      x-apideck-schema-id: LeadsFilter
       x-graphql-type-name: LeadsFilter
       example:
         first_name: Elon
@@ -3098,6 +3150,7 @@ components:
       additionalProperties: false
     LeadsSort:
       type: object
+      x-apideck-schema-id: LeadsSort
       x-graphql-type-name: LeadsSort
       example:
         by: created_at
@@ -3121,6 +3174,7 @@ components:
       additionalProperties: false
     Links:
       type: object
+      x-apideck-schema-id: Links
       description: Links to navigate to previous or next pages through the API
       properties:
         previous:
@@ -3139,6 +3193,7 @@ components:
           nullable: true
     Meta:
       type: object
+      x-apideck-schema-id: Meta
       description: Response metadata
       properties:
         items_on_page:
@@ -3165,6 +3220,8 @@ components:
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
     NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
       properties:
         status_code:
           type: number
@@ -3197,6 +3254,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#entitynotfounderror'
     NotImplementedResponse:
+      type: object
+      x-apideck-schema-id: NotImplemented
       properties:
         status_code:
           type: number
@@ -3225,6 +3284,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
     Note:
+      type: object
+      x-apideck-schema-id: Note
       x-apideck-weights:
         id: critical
         title: critical
@@ -3239,7 +3300,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -3295,6 +3355,7 @@ components:
           readOnly: true
     OpportunitiesFilter:
       type: object
+      x-apideck-schema-id: OpportunitiesFilter
       x-graphql-type-name: OpportunitiesFilter
       example:
         status: Completed
@@ -3319,6 +3380,7 @@ components:
       additionalProperties: false
     OpportunitiesSort:
       type: object
+      x-apideck-schema-id: OpportunitiesSort
       x-graphql-type-name: OpportunitiesSort
       example:
         by: created_at
@@ -3341,6 +3403,8 @@ components:
           $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
     Opportunity:
+      type: object
+      x-apideck-schema-id: Opportunity
       x-apideck-weights:
         id: critical
         title: critical
@@ -3381,7 +3445,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       required:
         - title
         - primary_contact_id
@@ -3557,6 +3620,8 @@ components:
           format: date-time
           readOnly: true
     PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
       properties:
         status_code:
           type: number
@@ -3583,9 +3648,10 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestlimiterror'
     PhoneNumber:
+      type: object
+      x-apideck-schema-id: PhoneNumber
       required:
         - number
-      type: object
       additionalProperties: false
       x-apideck-weights:
         number: critical
@@ -3637,6 +3703,8 @@ components:
             - other
           example: primary
     Pipeline:
+      type: object
+      x-apideck-schema-id: Pipeline
       x-apideck-weights:
         id: critical
         name: critical
@@ -3713,9 +3781,10 @@ components:
       example: 1-12345
       nullable: true
     SocialLink:
+      type: object
+      x-apideck-schema-id: SocialLink
       required:
         - url
-      type: object
       additionalProperties: false
       x-apideck-weights:
         id: edge-case
@@ -3736,6 +3805,7 @@ components:
           nullable: true
     SortDirection:
       type: string
+      x-apideck-schema-id: SortDirection
       description: The direction in which to sort the results
       x-apideck-enum-id: sort_direction
       enum:
@@ -3745,11 +3815,14 @@ components:
       x-graphql-type-name: SortDirection
     Tags:
       type: array
+      x-apideck-schema-id: Tags
       items:
         type: string
       example:
         - New
     UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
       properties:
         status_code:
           type: number
@@ -3776,6 +3849,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
       properties:
         status_code:
           type: number
@@ -3808,6 +3883,8 @@ components:
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnifiedId:
       title: UnifiedId
+      type: object
+      x-apideck-schema-id: Id
       required:
         - id
       properties:
@@ -3816,6 +3893,8 @@ components:
           readOnly: true
           example: '12345'
     UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
       properties:
         status_code:
           type: number
@@ -3843,6 +3922,7 @@ components:
           example: 'https://developers.apideck.com/errors#invalidstateerror'
     UpdateActivityResponse:
       type: object
+      x-apideck-schema-id: UpdateActivityResponse
       required:
         - status_code
         - status
@@ -3875,6 +3955,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateCompanyResponse:
       type: object
+      x-apideck-schema-id: UpdateCompanyResponse
       required:
         - status_code
         - status
@@ -3907,6 +3988,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateContactResponse:
       type: object
+      x-apideck-schema-id: UpdateContactResponse
       required:
         - status_code
         - status
@@ -3939,6 +4021,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateLeadResponse:
       type: object
+      x-apideck-schema-id: UpdateLeadResponse
       required:
         - status_code
         - status
@@ -3971,6 +4054,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateNoteResponse:
       type: object
+      x-apideck-schema-id: UpdateNoteResponse
       required:
         - status_code
         - status
@@ -4003,6 +4087,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateOpportunityResponse:
       type: object
+      x-apideck-schema-id: UpdateOpportunityResponse
       required:
         - status_code
         - status
@@ -4035,6 +4120,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdatePipelineResponse:
       type: object
+      x-apideck-schema-id: UpdatePipelineResponse
       required:
         - status_code
         - status
@@ -4067,6 +4153,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateUserResponse:
       type: object
+      x-apideck-schema-id: UpdateUserResponse
       required:
         - status_code
         - status
@@ -4098,6 +4185,8 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     User:
+      type: object
+      x-apideck-schema-id: User
       x-apideck-weights:
         id: critical
         parent_id: edge-case
@@ -4217,6 +4306,7 @@ components:
       x-sdk-exclude: true
       allOf:
         - type: object
+          x-apideck-schema-id: WebhookEvent
           properties:
             event_id:
               type: string
@@ -4252,6 +4342,7 @@ components:
               $ref: '#/components/schemas/CrmEventType'
     Website:
       type: object
+      x-apideck-schema-id: Website
       required:
         - url
       additionalProperties: false

@@ -151,6 +151,8 @@ components:
             $ref: '#/components/schemas/UpdateMessageResponse'
   schemas:
     BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
       properties:
         status_code:
           type: number
@@ -182,6 +184,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestvalidationerror'
     TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
       properties:
         status_code:
           type: number
@@ -213,6 +217,7 @@ components:
           example: 'https://developers.apideck.com/errors#connectorratelimiterror'
     CreateMessageResponse:
       type: object
+      x-apideck-schema-id: CreateMessageResponse
       required:
         - status_code
         - status
@@ -799,6 +804,7 @@ components:
       nullable: true
     CustomField:
       type: object
+      x-apideck-schema-id: CustomField
       required:
         - id
       additionalProperties: false
@@ -838,6 +844,7 @@ components:
                 type: string
     DeleteMessageResponse:
       type: object
+      x-apideck-schema-id: DeleteMessageResponse
       required:
         - status_code
         - status
@@ -869,9 +876,10 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     Email:
+      type: object
+      x-apideck-schema-id: Email
       required:
         - email
-      type: object
       additionalProperties: false
       x-apideck-weights:
         email: critical
@@ -899,8 +907,9 @@ components:
             - other
           example: primary
     GetMessageResponse:
-      x-graphql-type-name: Message
       type: object
+      x-apideck-schema-id: GetMessageResponse
+      x-graphql-type-name: Message
       required:
         - status_code
         - status
@@ -932,8 +941,9 @@ components:
         data:
           $ref: '#/components/schemas/Message'
     GetMessagesResponse:
-      x-graphql-type-name: MessageList
       type: object
+      x-apideck-schema-id: GetMessagesResponse
+      x-graphql-type-name: MessageList
       required:
         - status_code
         - status
@@ -972,6 +982,7 @@ components:
           $ref: '#/components/schemas/Links'
     Links:
       type: object
+      x-apideck-schema-id: Links
       description: Links to navigate to previous or next pages through the API
       properties:
         previous:
@@ -990,6 +1001,7 @@ components:
           nullable: true
     Message:
       type: object
+      x-apideck-schema-id: Message
       additionalProperties: false
       x-apideck-weights:
         id: critical
@@ -1183,6 +1195,7 @@ components:
           readOnly: true
     Meta:
       type: object
+      x-apideck-schema-id: Meta
       description: Response metadata
       properties:
         items_on_page:
@@ -1209,6 +1222,8 @@ components:
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
     NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
       properties:
         status_code:
           type: number
@@ -1241,6 +1256,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#entitynotfounderror'
     NotImplementedResponse:
+      type: object
+      x-apideck-schema-id: NotImplemented
       properties:
         status_code:
           type: number
@@ -1269,6 +1286,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
     PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
       properties:
         status_code:
           type: number
@@ -1296,11 +1315,14 @@ components:
           example: 'https://developers.apideck.com/errors#requestlimiterror'
     Tags:
       type: array
+      x-apideck-schema-id: Tags
       items:
         type: string
       example:
         - New
     UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
       properties:
         status_code:
           type: number
@@ -1327,6 +1349,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
       properties:
         status_code:
           type: number
@@ -1359,6 +1383,8 @@ components:
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnifiedId:
       title: UnifiedId
+      type: object
+      x-apideck-schema-id: Id
       required:
         - id
       properties:
@@ -1367,6 +1393,8 @@ components:
           readOnly: true
           example: '12345'
     UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
       properties:
         status_code:
           type: number
@@ -1394,6 +1422,7 @@ components:
           example: 'https://developers.apideck.com/errors#invalidstateerror'
     UpdateMessageResponse:
       type: object
+      x-apideck-schema-id: UpdateMessageResponse
       required:
         - status_code
         - status

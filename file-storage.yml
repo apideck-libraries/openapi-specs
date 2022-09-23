@@ -353,6 +353,8 @@ components:
             $ref: '#/components/schemas/UpdateDriveGroupResponse'
   schemas:
     BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
       properties:
         status_code:
           type: number
@@ -384,6 +386,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestvalidationerror'
     TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
       properties:
         status_code:
           type: number
@@ -415,6 +419,7 @@ components:
           example: 'https://developers.apideck.com/errors#connectorratelimiterror'
     CopyFolderRequest:
       type: object
+      x-apideck-schema-id: CopyFolderRequest
       required:
         - parent_folder_id
       additionalProperties: false
@@ -429,6 +434,7 @@ components:
           $ref: '#/components/schemas/ParentFolderId'
     CreateFileRequest:
       type: object
+      x-apideck-schema-id: CreateFileRequest
       additionalProperties: false
       required:
         - name
@@ -450,6 +456,7 @@ components:
           example: My Personal Documents
     CreateFileResponse:
       type: object
+      x-apideck-schema-id: CreateFileResponse
       required:
         - status_code
         - status
@@ -482,6 +489,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateFolderRequest:
       type: object
+      x-apideck-schema-id: CreateFolderRequest
       additionalProperties: false
       required:
         - name
@@ -505,6 +513,7 @@ components:
           example: '1234'
     CreateFolderResponse:
       type: object
+      x-apideck-schema-id: CreateFolderResponse
       required:
         - status_code
         - status
@@ -537,6 +546,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateSharedLinkResponse:
       type: object
+      x-apideck-schema-id: CreateSharedLinkResponse
       required:
         - status_code
         - status
@@ -569,6 +579,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateUploadSessionResponse:
       type: object
+      x-apideck-schema-id: CreateUploadSessionResponse
       required:
         - status_code
         - status
@@ -601,6 +612,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateUploadSessionRequest:
       type: object
+      x-apideck-schema-id: CreateUploadSessionRequest
       additionalProperties: false
       required:
         - name
@@ -633,6 +645,7 @@ components:
       nullable: true
     DeleteFileResponse:
       type: object
+      x-apideck-schema-id: DeleteFileResponse
       required:
         - status_code
         - status
@@ -665,6 +678,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteFolderResponse:
       type: object
+      x-apideck-schema-id: DeleteFolderResponse
       required:
         - status_code
         - status
@@ -697,6 +711,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteSharedLinkResponse:
       type: object
+      x-apideck-schema-id: DeleteSharedLinkResponse
       required:
         - status_code
         - status
@@ -729,6 +744,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteUploadSessionResponse:
       type: object
+      x-apideck-schema-id: DeleteUploadSessionResponse
       required:
         - status_code
         - status
@@ -766,6 +782,7 @@ components:
       nullable: true
     UnifiedFile:
       type: object
+      x-apideck-schema-id: UnifiedFile
       additionalProperties: false
       required:
         - id
@@ -830,8 +847,9 @@ components:
         created_at:
           $ref: '#/components/schemas/CreatedAt'
     FileType:
-      x-graphql-type-name: FileType
       type: string
+      x-apideck-schema-id: FileType
+      x-graphql-type-name: FileType
       x-apideck-enum-id: files.type
       enum:
         - file
@@ -841,16 +859,19 @@ components:
       readOnly: true
       example: file
     FileSize:
-      x-graphql-type-name: FileSize
       type: integer
+      x-apideck-schema-id: FileSize
+      x-graphql-type-name: FileSize
       description: The size of the file in bytes
       example: 1810673
     ParentFolderId:
       type: string
+      x-apideck-schema-id: ParentFolderId
       description: The parent folder to create the new file within.
       example: '1234'
     FilesFilter:
       type: object
+      x-apideck-schema-id: FilesFilter
       x-graphql-type-name: FilesFilter
       properties:
         drive_id:
@@ -867,6 +888,7 @@ components:
       additionalProperties: false
     FilesSearch:
       type: object
+      x-apideck-schema-id: FilesSearch
       example:
         query: logo jpg
       properties:
@@ -883,6 +905,7 @@ components:
         - query
     FilesSort:
       type: object
+      x-apideck-schema-id: FilesSort
       x-graphql-type-name: FilesSort
       example:
         by: updated_at
@@ -901,6 +924,8 @@ components:
           $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
     Folder:
+      type: object
+      x-apideck-schema-id: Folder
       x-apideck-weights:
         id: critical
         name: critical
@@ -909,7 +934,6 @@ components:
         parent_folders_complete: critical
         updated_at: critical
         created_at: high
-      type: object
       additionalProperties: false
       required:
         - name
@@ -955,8 +979,9 @@ components:
         created_at:
           $ref: '#/components/schemas/CreatedAt'
     GetFileResponse:
-      x-graphql-type-name: File
       type: object
+      x-apideck-schema-id: GetFileResponse
+      x-graphql-type-name: File
       required:
         - status_code
         - status
@@ -988,8 +1013,9 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedFile'
     GetFilesResponse:
-      x-graphql-type-name: FileList
       type: object
+      x-apideck-schema-id: GetFilesResponse
+      x-graphql-type-name: FileList
       required:
         - status_code
         - status
@@ -1027,8 +1053,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetFolderResponse:
-      x-graphql-type-name: Folder
       type: object
+      x-apideck-schema-id: GetFolderResponse
+      x-graphql-type-name: Folder
       required:
         - status_code
         - status
@@ -1060,8 +1087,9 @@ components:
         data:
           $ref: '#/components/schemas/Folder'
     GetFoldersResponse:
-      x-graphql-type-name: FolderList
       type: object
+      x-apideck-schema-id: GetFoldersResponse
+      x-graphql-type-name: FolderList
       required:
         - status_code
         - status
@@ -1099,8 +1127,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetSharedLinkResponse:
-      x-graphql-type-name: SharedLink
       type: object
+      x-apideck-schema-id: GetSharedLinkResponse
+      x-graphql-type-name: SharedLink
       required:
         - status_code
         - status
@@ -1132,8 +1161,9 @@ components:
         data:
           $ref: '#/components/schemas/SharedLink'
     GetSharedLinksResponse:
-      x-graphql-type-name: SharedLinkList
       type: object
+      x-apideck-schema-id: GetSharedLinksResponse
+      x-graphql-type-name: SharedLinkList
       required:
         - status_code
         - status
@@ -1171,8 +1201,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetUploadSessionResponse:
-      x-graphql-type-name: UploadSession
       type: object
+      x-apideck-schema-id: GetUploadSessionResponse
+      x-graphql-type-name: UploadSession
       required:
         - status_code
         - status
@@ -1215,6 +1246,7 @@ components:
       readOnly: true
     LinkedFolder:
       type: object
+      x-apideck-schema-id: LinkedFolder
       x-apideck-weights:
         id: critical
       properties:
@@ -1228,6 +1260,7 @@ components:
         - id
     Links:
       type: object
+      x-apideck-schema-id: Links
       description: Links to navigate to previous or next pages through the API
       properties:
         previous:
@@ -1246,6 +1279,7 @@ components:
           nullable: true
     Meta:
       type: object
+      x-apideck-schema-id: Meta
       description: Response metadata
       properties:
         items_on_page:
@@ -1272,6 +1306,8 @@ components:
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
     NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
       properties:
         status_code:
           type: number
@@ -1304,6 +1340,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#entitynotfounderror'
     NotImplementedResponse:
+      type: object
+      x-apideck-schema-id: NotImplemented
       properties:
         status_code:
           type: number
@@ -1333,6 +1371,7 @@ components:
           example: 'https://developers.apideck.com/errors#mappingerror'
     Owner:
       type: object
+      x-apideck-schema-id: Owner
       readOnly: true
       x-apideck-weights:
         id: critical
@@ -1353,6 +1392,8 @@ components:
           example: Elon Musk
           readOnly: true
     PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
       properties:
         status_code:
           type: number
@@ -1379,6 +1420,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestlimiterror'
     SharedLink:
+      type: object
+      x-apideck-schema-id: SharedLink
       x-apideck-weights:
         url: critical
         download_url: high
@@ -1390,7 +1433,6 @@ components:
         expires_at: high
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       required:
         - target_id
@@ -1435,6 +1477,7 @@ components:
           $ref: '#/components/schemas/CreatedAt'
     SharedLinkTarget:
       type: object
+      x-apideck-schema-id: SharedLinkTarget
       additionalProperties: false
       required:
         - id
@@ -1452,6 +1495,7 @@ components:
       readOnly: true
     SortDirection:
       type: string
+      x-apideck-schema-id: SortDirection
       description: The direction in which to sort the results
       x-apideck-enum-id: sort_direction
       enum:
@@ -1460,6 +1504,8 @@ components:
       default: asc
       x-graphql-type-name: SortDirection
     UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
       properties:
         status_code:
           type: number
@@ -1486,6 +1532,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
       properties:
         status_code:
           type: number
@@ -1518,6 +1566,8 @@ components:
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnifiedId:
       title: UnifiedId
+      type: object
+      x-apideck-schema-id: Id
       required:
         - id
       properties:
@@ -1526,6 +1576,8 @@ components:
           readOnly: true
           example: '12345'
     UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
       properties:
         status_code:
           type: number
@@ -1553,6 +1605,7 @@ components:
           example: 'https://developers.apideck.com/errors#invalidstateerror'
     UpdateFileResponse:
       type: object
+      x-apideck-schema-id: UpdateFileResponse
       required:
         - status_code
         - status
@@ -1585,6 +1638,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateFolderRequest:
       type: object
+      x-apideck-schema-id: UpdateFolderRequest
       additionalProperties: false
       properties:
         id:
@@ -1601,6 +1655,7 @@ components:
           $ref: '#/components/schemas/ParentFolderId'
     UpdateFolderResponse:
       type: object
+      x-apideck-schema-id: UpdateFolderResponse
       required:
         - status_code
         - status
@@ -1633,6 +1688,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateSharedLinkResponse:
       type: object
+      x-apideck-schema-id: UpdateSharedLinkResponse
       required:
         - status_code
         - status
@@ -1665,6 +1721,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateUploadSessionResponse:
       type: object
+      x-apideck-schema-id: UpdateUploadSessionResponse
       required:
         - status_code
         - status
@@ -1712,6 +1769,8 @@ components:
       readOnly: true
       nullable: true
     UploadSession:
+      type: object
+      x-apideck-schema-id: UploadSession
       x-apideck-weights:
         id: critical
         success: critical
@@ -1719,7 +1778,6 @@ components:
         parallel_upload_supported: critical
         uploaded_byte_range: low
         expires_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -1748,6 +1806,7 @@ components:
           $ref: '#/components/schemas/ExpiresAt'
     CreateDriveResponse:
       type: object
+      x-apideck-schema-id: CreateDriveResponse
       required:
         - status_code
         - status
@@ -1780,6 +1839,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteDriveResponse:
       type: object
+      x-apideck-schema-id: DeleteDriveResponse
       required:
         - status_code
         - status
@@ -1811,8 +1871,9 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     GetDriveResponse:
-      x-graphql-type-name: Drive
       type: object
+      x-apideck-schema-id: GetDriveResponse
+      x-graphql-type-name: Drive
       required:
         - status_code
         - status
@@ -1844,8 +1905,9 @@ components:
         data:
           $ref: '#/components/schemas/Drive'
     GetDrivesResponse:
-      x-graphql-type-name: DriveList
       type: object
+      x-apideck-schema-id: GetDrivesResponse
+      x-graphql-type-name: DriveList
       required:
         - status_code
         - status
@@ -1884,6 +1946,7 @@ components:
           $ref: '#/components/schemas/Links'
     Drive:
       type: object
+      x-apideck-schema-id: Drive
       additionalProperties: false
       required:
         - id
@@ -1914,6 +1977,7 @@ components:
           $ref: '#/components/schemas/CreatedAt'
     DrivesFilter:
       type: object
+      x-apideck-schema-id: DrivesFilter
       x-graphql-type-name: DrivesFilter
       properties:
         group_id:
@@ -1923,6 +1987,7 @@ components:
       additionalProperties: false
     UpdateDriveResponse:
       type: object
+      x-apideck-schema-id: UpdateDriveResponse
       required:
         - status_code
         - status
@@ -1955,6 +2020,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateDriveGroupResponse:
       type: object
+      x-apideck-schema-id: CreateDriveGroupResponse
       required:
         - status_code
         - status
@@ -1987,6 +2053,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteDriveGroupResponse:
       type: object
+      x-apideck-schema-id: DeleteDriveGroupResponse
       required:
         - status_code
         - status
@@ -2018,8 +2085,9 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     GetDriveGroupResponse:
-      x-graphql-type-name: DriveGroup
       type: object
+      x-apideck-schema-id: GetDriveGroupResponse
+      x-graphql-type-name: DriveGroup
       required:
         - status_code
         - status
@@ -2051,8 +2119,9 @@ components:
         data:
           $ref: '#/components/schemas/DriveGroup'
     GetDriveGroupsResponse:
-      x-graphql-type-name: DriveGroupList
       type: object
+      x-apideck-schema-id: GetDriveGroupsResponse
+      x-graphql-type-name: DriveGroupList
       required:
         - status_code
         - status
@@ -2091,6 +2160,7 @@ components:
           $ref: '#/components/schemas/Links'
     DriveGroup:
       type: object
+      x-apideck-schema-id: DriveGroup
       additionalProperties: false
       required:
         - id
@@ -2125,6 +2195,7 @@ components:
           $ref: '#/components/schemas/CreatedAt'
     DriveGroupsFilter:
       type: object
+      x-apideck-schema-id: DriveGroupsFilter
       x-graphql-type-name: DriveGroupsFilter
       properties:
         parent_group_id:
@@ -2134,6 +2205,7 @@ components:
       additionalProperties: false
     UpdateDriveGroupResponse:
       type: object
+      x-apideck-schema-id: UpdateDriveGroupResponse
       required:
         - status_code
         - status

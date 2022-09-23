@@ -33,6 +33,7 @@ components:
   schemas:
     Address:
       type: object
+      x-apideck-schema-id: Address
       additionalProperties: false
       x-apideck-weights:
         id: edge-case
@@ -170,6 +171,8 @@ components:
         row_version:
           $ref: '#/components/schemas/RowVersion'
     BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
       properties:
         status_code:
           type: number
@@ -201,6 +204,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestvalidationerror'
     TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
       properties:
         status_code:
           type: number
@@ -232,6 +237,7 @@ components:
           example: 'https://developers.apideck.com/errors#connectorratelimiterror'
     BankAccount:
       type: object
+      x-apideck-schema-id: BankAccount
       additionalProperties: false
       x-apideck-weights:
         account_number: critical
@@ -291,6 +297,7 @@ components:
           $ref: '#/components/schemas/Currency'
     CreateLeadResponse:
       type: object
+      x-apideck-schema-id: CreateLeadResponse
       required:
         - status_code
         - status
@@ -877,6 +884,7 @@ components:
       nullable: true
     CustomField:
       type: object
+      x-apideck-schema-id: CustomField
       required:
         - id
       additionalProperties: false
@@ -916,6 +924,7 @@ components:
                 type: string
     DeleteLeadResponse:
       type: object
+      x-apideck-schema-id: DeleteLeadResponse
       required:
         - status_code
         - status
@@ -947,9 +956,10 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     Email:
+      type: object
+      x-apideck-schema-id: Email
       required:
         - email
-      type: object
       additionalProperties: false
       x-apideck-weights:
         email: critical
@@ -978,6 +988,7 @@ components:
           example: primary
     GetLeadResponse:
       type: object
+      x-apideck-schema-id: GetLeadResponse
       required:
         - status_code
         - status
@@ -1009,8 +1020,9 @@ components:
         data:
           $ref: '#/components/schemas/Lead'
     GetLeadsResponse:
-      x-graphql-type-name: LeadList
       type: object
+      x-apideck-schema-id: GetLeadsResponse
+      x-graphql-type-name: LeadList
       required:
         - status_code
         - status
@@ -1048,6 +1060,8 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     Lead:
+      type: object
+      x-apideck-schema-id: Lead
       x-apideck-weights:
         id: critical
         name: critical
@@ -1075,7 +1089,6 @@ components:
         tags: low
         updated_at: medium
         created_at: medium
-      type: object
       required:
         - name
         - company_name
@@ -1197,6 +1210,7 @@ components:
       example: lead.lead.created
     LeadsFilter:
       type: object
+      x-apideck-schema-id: LeadsFilter
       x-graphql-type-name: LeadsFilter
       example:
         first_name: Elon
@@ -1222,6 +1236,7 @@ components:
       additionalProperties: false
     LeadsSort:
       type: object
+      x-apideck-schema-id: LeadsSort
       x-graphql-type-name: LeadsSort
       example:
         by: created_at
@@ -1245,6 +1260,7 @@ components:
       additionalProperties: false
     Links:
       type: object
+      x-apideck-schema-id: Links
       description: Links to navigate to previous or next pages through the API
       properties:
         previous:
@@ -1263,6 +1279,7 @@ components:
           nullable: true
     Meta:
       type: object
+      x-apideck-schema-id: Meta
       description: Response metadata
       properties:
         items_on_page:
@@ -1289,6 +1306,8 @@ components:
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
     NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
       properties:
         status_code:
           type: number
@@ -1321,6 +1340,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#entitynotfounderror'
     NotImplementedResponse:
+      type: object
+      x-apideck-schema-id: NotImplemented
       properties:
         status_code:
           type: number
@@ -1349,6 +1370,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
     PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
       properties:
         status_code:
           type: number
@@ -1375,9 +1398,10 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestlimiterror'
     PhoneNumber:
+      type: object
+      x-apideck-schema-id: PhoneNumber
       required:
         - number
-      type: object
       additionalProperties: false
       x-apideck-weights:
         number: critical
@@ -1434,9 +1458,10 @@ components:
       example: 1-12345
       nullable: true
     SocialLink:
+      type: object
+      x-apideck-schema-id: SocialLink
       required:
         - url
-      type: object
       additionalProperties: false
       x-apideck-weights:
         id: edge-case
@@ -1457,6 +1482,7 @@ components:
           nullable: true
     SortDirection:
       type: string
+      x-apideck-schema-id: SortDirection
       description: The direction in which to sort the results
       x-apideck-enum-id: sort_direction
       enum:
@@ -1466,11 +1492,14 @@ components:
       x-graphql-type-name: SortDirection
     Tags:
       type: array
+      x-apideck-schema-id: Tags
       items:
         type: string
       example:
         - New
     UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
       properties:
         status_code:
           type: number
@@ -1497,6 +1526,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
       properties:
         status_code:
           type: number
@@ -1529,6 +1560,8 @@ components:
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnifiedId:
       title: UnifiedId
+      type: object
+      x-apideck-schema-id: Id
       required:
         - id
       properties:
@@ -1537,6 +1570,8 @@ components:
           readOnly: true
           example: '12345'
     UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
       properties:
         status_code:
           type: number
@@ -1564,6 +1599,7 @@ components:
           example: 'https://developers.apideck.com/errors#invalidstateerror'
     UpdateLeadResponse:
       type: object
+      x-apideck-schema-id: UpdateLeadResponse
       required:
         - status_code
         - status
@@ -1598,6 +1634,7 @@ components:
       x-sdk-exclude: true
       allOf:
         - type: object
+          x-apideck-schema-id: WebhookEvent
           properties:
             event_id:
               type: string
@@ -1633,6 +1670,7 @@ components:
               $ref: '#/components/schemas/LeadEventType'
     Website:
       type: object
+      x-apideck-schema-id: Website
       required:
         - url
       additionalProperties: false

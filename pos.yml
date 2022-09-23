@@ -473,6 +473,7 @@ components:
       nullable: true
     Address:
       type: object
+      x-apideck-schema-id: Address
       additionalProperties: false
       x-apideck-weights:
         id: edge-case
@@ -615,6 +616,8 @@ components:
       example: true
       nullable: true
     BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
       properties:
         status_code:
           type: number
@@ -659,6 +662,7 @@ components:
       nullable: true
     CreateItemResponse:
       type: object
+      x-apideck-schema-id: CreateItemResponse
       required:
         - status_code
         - status
@@ -691,6 +695,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateLocationResponse:
       type: object
+      x-apideck-schema-id: CreateLocationResponse
       required:
         - status_code
         - status
@@ -723,6 +728,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateMerchantResponse:
       type: object
+      x-apideck-schema-id: CreateMerchantResponse
       required:
         - status_code
         - status
@@ -755,6 +761,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateModifierGroupResponse:
       type: object
+      x-apideck-schema-id: CreateModifierGroupResponse
       required:
         - status_code
         - status
@@ -787,6 +794,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateModifierResponse:
       type: object
+      x-apideck-schema-id: CreateModifierResponse
       required:
         - status_code
         - status
@@ -819,6 +827,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateOrderResponse:
       type: object
+      x-apideck-schema-id: CreateOrderResponse
       required:
         - status_code
         - status
@@ -851,6 +860,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateOrderTypeResponse:
       type: object
+      x-apideck-schema-id: CreateOrderTypeResponse
       required:
         - status_code
         - status
@@ -883,6 +893,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreatePosPaymentResponse:
       type: object
+      x-apideck-schema-id: CreatePosPaymentResponse
       required:
         - status_code
         - status
@@ -915,6 +926,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateTenderResponse:
       type: object
+      x-apideck-schema-id: CreateTenderResponse
       required:
         - status_code
         - status
@@ -1501,6 +1513,7 @@ components:
       nullable: true
     CustomField:
       type: object
+      x-apideck-schema-id: CustomField
       required:
         - id
       additionalProperties: false
@@ -1545,6 +1558,7 @@ components:
       nullable: true
     DeleteItemResponse:
       type: object
+      x-apideck-schema-id: DeleteItemResponse
       required:
         - status_code
         - status
@@ -1577,6 +1591,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteLocationResponse:
       type: object
+      x-apideck-schema-id: DeleteLocationResponse
       required:
         - status_code
         - status
@@ -1609,6 +1624,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteMerchantResponse:
       type: object
+      x-apideck-schema-id: DeleteMerchantResponse
       required:
         - status_code
         - status
@@ -1641,6 +1657,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteModifierGroupResponse:
       type: object
+      x-apideck-schema-id: DeleteModifierGroupResponse
       required:
         - status_code
         - status
@@ -1673,6 +1690,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteModifierResponse:
       type: object
+      x-apideck-schema-id: DeleteModifierResponse
       required:
         - status_code
         - status
@@ -1705,6 +1723,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteOrderResponse:
       type: object
+      x-apideck-schema-id: DeleteOrderResponse
       required:
         - status_code
         - status
@@ -1737,6 +1756,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteOrderTypeResponse:
       type: object
+      x-apideck-schema-id: DeleteOrderTypeResponse
       required:
         - status_code
         - status
@@ -1769,6 +1789,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeletePosPaymentResponse:
       type: object
+      x-apideck-schema-id: DeletePosPaymentResponse
       required:
         - status_code
         - status
@@ -1801,6 +1822,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteTenderResponse:
       type: object
+      x-apideck-schema-id: DeleteTenderResponse
       required:
         - status_code
         - status
@@ -1832,9 +1854,10 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     Email:
+      type: object
+      x-apideck-schema-id: Email
       required:
         - email
-      type: object
       additionalProperties: false
       x-apideck-weights:
         email: critical
@@ -1862,8 +1885,9 @@ components:
             - other
           example: primary
     GetItemResponse:
-      x-graphql-type-name: Item
       type: object
+      x-apideck-schema-id: GetItemResponse
+      x-graphql-type-name: Item
       required:
         - status_code
         - status
@@ -1895,8 +1919,9 @@ components:
         data:
           $ref: '#/components/schemas/Item'
     GetItemsResponse:
-      x-graphql-type-name: ItemList
       type: object
+      x-apideck-schema-id: GetItemsResponse
+      x-graphql-type-name: ItemList
       required:
         - status_code
         - status
@@ -1934,8 +1959,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetLocationResponse:
-      x-graphql-type-name: Location
       type: object
+      x-apideck-schema-id: GetLocationResponse
+      x-graphql-type-name: Location
       required:
         - status_code
         - status
@@ -1967,8 +1993,9 @@ components:
         data:
           $ref: '#/components/schemas/Location'
     GetLocationsResponse:
-      x-graphql-type-name: LocationList
       type: object
+      x-apideck-schema-id: GetLocationsResponse
+      x-graphql-type-name: LocationList
       required:
         - status_code
         - status
@@ -2006,8 +2033,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetMerchantResponse:
-      x-graphql-type-name: Merchant
       type: object
+      x-apideck-schema-id: GetMerchantResponse
+      x-graphql-type-name: Merchant
       required:
         - status_code
         - status
@@ -2039,8 +2067,9 @@ components:
         data:
           $ref: '#/components/schemas/Merchant'
     GetMerchantsResponse:
-      x-graphql-type-name: MerchantList
       type: object
+      x-apideck-schema-id: GetMerchantsResponse
+      x-graphql-type-name: MerchantList
       required:
         - status_code
         - status
@@ -2078,8 +2107,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetModifierGroupResponse:
-      x-graphql-type-name: ModifierGroup
       type: object
+      x-apideck-schema-id: GetModifierGroupResponse
+      x-graphql-type-name: ModifierGroup
       required:
         - status_code
         - status
@@ -2111,8 +2141,9 @@ components:
         data:
           $ref: '#/components/schemas/ModifierGroup'
     GetModifierGroupsResponse:
-      x-graphql-type-name: ModifierGroupList
       type: object
+      x-apideck-schema-id: GetModifierGroupsResponse
+      x-graphql-type-name: ModifierGroupList
       required:
         - status_code
         - status
@@ -2150,8 +2181,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetModifierResponse:
-      x-graphql-type-name: Modifier
       type: object
+      x-apideck-schema-id: GetModifierResponse
+      x-graphql-type-name: Modifier
       required:
         - status_code
         - status
@@ -2183,8 +2215,9 @@ components:
         data:
           $ref: '#/components/schemas/Modifier'
     GetModifiersResponse:
-      x-graphql-type-name: ModifierList
       type: object
+      x-apideck-schema-id: GetModifiersResponse
+      x-graphql-type-name: ModifierList
       required:
         - status_code
         - status
@@ -2222,8 +2255,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetOrderResponse:
-      x-graphql-type-name: Order
       type: object
+      x-apideck-schema-id: GetOrderResponse
+      x-graphql-type-name: Order
       required:
         - status_code
         - status
@@ -2255,8 +2289,9 @@ components:
         data:
           $ref: '#/components/schemas/Order'
     GetOrdersResponse:
-      x-graphql-type-name: OrderList
       type: object
+      x-apideck-schema-id: GetOrdersResponse
+      x-graphql-type-name: OrderList
       required:
         - status_code
         - status
@@ -2294,8 +2329,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetOrderTypeResponse:
-      x-graphql-type-name: OrderType
       type: object
+      x-apideck-schema-id: GetOrderTypeResponse
+      x-graphql-type-name: OrderType
       required:
         - status_code
         - status
@@ -2327,8 +2363,9 @@ components:
         data:
           $ref: '#/components/schemas/OrderType'
     GetOrderTypesResponse:
-      x-graphql-type-name: OrderTypeList
       type: object
+      x-apideck-schema-id: GetOrderTypesResponse
+      x-graphql-type-name: OrderTypeList
       required:
         - status_code
         - status
@@ -2366,8 +2403,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetPosPaymentResponse:
-      x-graphql-type-name: PosPayment
       type: object
+      x-apideck-schema-id: GetPosPaymentResponse
+      x-graphql-type-name: PosPayment
       required:
         - status_code
         - status
@@ -2399,8 +2437,9 @@ components:
         data:
           $ref: '#/components/schemas/PosPayment'
     GetPosPaymentsResponse:
-      x-graphql-type-name: PosPaymentList
       type: object
+      x-apideck-schema-id: GetPosPaymentsResponse
+      x-graphql-type-name: PosPaymentList
       required:
         - status_code
         - status
@@ -2438,8 +2477,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetTenderResponse:
-      x-graphql-type-name: Tender
       type: object
+      x-apideck-schema-id: GetTenderResponse
+      x-graphql-type-name: Tender
       required:
         - status_code
         - status
@@ -2471,8 +2511,9 @@ components:
         data:
           $ref: '#/components/schemas/Tender'
     GetTendersResponse:
-      x-graphql-type-name: TenderList
       type: object
+      x-apideck-schema-id: GetTendersResponse
+      x-graphql-type-name: TenderList
       required:
         - status_code
         - status
@@ -2524,6 +2565,8 @@ components:
       description: A value you specify that uniquely identifies this request among requests you have sent.
       example: random_string
     Item:
+      type: object
+      x-apideck-schema-id: Item
       x-apideck-weights:
         id: critical
         idempotency_key: medium
@@ -2554,7 +2597,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       required:
         - name
@@ -2789,6 +2831,7 @@ components:
           $ref: '#/components/schemas/CreatedAt'
     Links:
       type: object
+      x-apideck-schema-id: Links
       description: Links to navigate to previous or next pages through the API
       properties:
         previous:
@@ -2806,6 +2849,8 @@ components:
           example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM'
           nullable: true
     Location:
+      type: object
+      x-apideck-schema-id: Location
       x-apideck-weights:
         id: critical
         name: critical
@@ -2818,7 +2863,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -2862,6 +2906,8 @@ components:
         created_at:
           $ref: '#/components/schemas/CreatedAt'
     Merchant:
+      type: object
+      x-apideck-schema-id: Merchant
       x-apideck-weights:
         id: critical
         name: critical
@@ -2875,7 +2921,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -2930,6 +2975,7 @@ components:
           $ref: '#/components/schemas/CreatedAt'
     Meta:
       type: object
+      x-apideck-schema-id: Meta
       description: Response metadata
       properties:
         items_on_page:
@@ -2956,6 +3002,8 @@ components:
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
     Modifier:
+      type: object
+      x-apideck-schema-id: Modifier
       x-apideck-weights:
         id: critical
         name: critical
@@ -2968,7 +3016,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       required:
         - name
@@ -3007,6 +3054,8 @@ components:
         created_at:
           $ref: '#/components/schemas/CreatedAt'
     ModifierGroup:
+      type: object
+      x-apideck-schema-id: ModifierGroup
       x-apideck-weights:
         id: critical
         name: critical
@@ -3022,7 +3071,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -3100,6 +3148,7 @@ components:
           $ref: '#/components/schemas/CreatedAt'
     ModifierGroupFilter:
       type: object
+      x-apideck-schema-id: ModifierGroupFilter
       x-graphql-type-name: ModifierGroupFilter
       example:
         modifier_group_id: '1234'
@@ -3110,6 +3159,8 @@ components:
           example: '1234'
       additionalProperties: false
     NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
       properties:
         status_code:
           type: number
@@ -3142,6 +3193,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#entitynotfounderror'
     NotImplementedResponse:
+      type: object
+      x-apideck-schema-id: NotImplemented
       properties:
         status_code:
           type: number
@@ -3170,6 +3223,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
     Order:
+      type: object
+      x-apideck-schema-id: Order
       x-apideck-weights:
         id: critical
         idempotency_key: low
@@ -3214,7 +3269,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       required:
         - location_id
@@ -3984,6 +4038,8 @@ components:
         created_at:
           $ref: '#/components/schemas/CreatedAt'
     OrderType:
+      type: object
+      x-apideck-schema-id: OrderType
       x-apideck-weights:
         id: medium
         name: medium
@@ -3992,7 +4048,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -4015,6 +4070,7 @@ components:
           $ref: '#/components/schemas/CreatedAt'
     PaymentCard:
       type: object
+      x-apideck-schema-id: PaymentCard
       description: A card's non-confidential details.
       additionalProperties: false
       properties:
@@ -4112,6 +4168,8 @@ components:
           $ref: '#/components/schemas/Version'
       nullable: true
     PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
       properties:
         status_code:
           type: number
@@ -4142,9 +4200,10 @@ components:
       title: Percentage
       example: 15
     PhoneNumber:
+      type: object
+      x-apideck-schema-id: PhoneNumber
       required:
         - number
-      type: object
       additionalProperties: false
       x-apideck-weights:
         number: critical
@@ -4197,6 +4256,7 @@ components:
           example: primary
     PosBankAccount:
       type: object
+      x-apideck-schema-id: PosBankAccount
       title: Bank Account
       description: Card details for this payment. This field is currently not available. Reach out to our team for more info.
       properties:
@@ -4251,6 +4311,7 @@ components:
           description: ACH-specific details about `BANK_ACCOUNT` type payments with the `transfer_type` of `ACH`.
     PosPayment:
       type: object
+      x-apideck-schema-id: PosPayment
       additionalProperties: false
       required:
         - source_id
@@ -4479,6 +4540,7 @@ components:
       x-sdk-exclude: true
       allOf:
         - type: object
+          x-apideck-schema-id: WebhookEvent
           properties:
             event_id:
               type: string
@@ -4552,6 +4614,7 @@ components:
       nullable: true
     ServiceCharge:
       type: object
+      x-apideck-schema-id: ServiceCharge
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -4580,6 +4643,7 @@ components:
             - custom
     ServiceCharges:
       type: array
+      x-apideck-schema-id: ServiceCharges
       description: Optional service charges or gratuity tip applied to the order.
       x-apideck-weights:
         name: high
@@ -4590,9 +4654,10 @@ components:
       items:
         $ref: '#/components/schemas/ServiceCharge'
     SocialLink:
+      type: object
+      x-apideck-schema-id: SocialLink
       required:
         - url
-      type: object
       additionalProperties: false
       x-apideck-weights:
         id: edge-case
@@ -4613,11 +4678,14 @@ components:
           nullable: true
     Tags:
       type: array
+      x-apideck-schema-id: Tags
       items:
         type: string
       example:
         - New
     Tender:
+      type: object
+      x-apideck-schema-id: Tender
       x-apideck-weights:
         id: critical
         key: high
@@ -4631,7 +4699,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -4667,6 +4734,8 @@ components:
         created_at:
           $ref: '#/components/schemas/CreatedAt'
     TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
       properties:
         status_code:
           type: number
@@ -4697,6 +4766,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#connectorratelimiterror'
     UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
       properties:
         status_code:
           type: number
@@ -4723,6 +4794,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
       properties:
         status_code:
           type: number
@@ -4755,6 +4828,8 @@ components:
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnifiedId:
       title: UnifiedId
+      type: object
+      x-apideck-schema-id: Id
       required:
         - id
       properties:
@@ -4768,6 +4843,8 @@ components:
       example: 27500.5
       nullable: true
     UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
       properties:
         status_code:
           type: number
@@ -4806,6 +4883,7 @@ components:
       nullable: true
     UpdateItemResponse:
       type: object
+      x-apideck-schema-id: UpdateItemResponse
       required:
         - status_code
         - status
@@ -4838,6 +4916,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateLocationResponse:
       type: object
+      x-apideck-schema-id: UpdateLocationResponse
       required:
         - status_code
         - status
@@ -4870,6 +4949,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateMerchantResponse:
       type: object
+      x-apideck-schema-id: UpdateMerchantResponse
       required:
         - status_code
         - status
@@ -4902,6 +4982,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateModifierGroupResponse:
       type: object
+      x-apideck-schema-id: UpdateModifierGroupResponse
       required:
         - status_code
         - status
@@ -4934,6 +5015,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateModifierResponse:
       type: object
+      x-apideck-schema-id: UpdateModifierResponse
       required:
         - status_code
         - status
@@ -4966,6 +5048,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateOrderResponse:
       type: object
+      x-apideck-schema-id: UpdateOrderResponse
       required:
         - status_code
         - status
@@ -4998,6 +5081,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateOrderTypeResponse:
       type: object
+      x-apideck-schema-id: UpdateOrderTypeResponse
       required:
         - status_code
         - status
@@ -5030,6 +5114,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdatePosPaymentResponse:
       type: object
+      x-apideck-schema-id: UpdatePosPaymentResponse
       required:
         - status_code
         - status
@@ -5062,6 +5147,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateTenderResponse:
       type: object
+      x-apideck-schema-id: UpdateTenderResponse
       required:
         - status_code
         - status
@@ -5099,6 +5185,7 @@ components:
       nullable: true
     Website:
       type: object
+      x-apideck-schema-id: Website
       required:
         - url
       additionalProperties: false

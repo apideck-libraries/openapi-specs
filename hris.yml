@@ -342,6 +342,7 @@ components:
   schemas:
     Address:
       type: object
+      x-apideck-schema-id: Address
       additionalProperties: false
       x-apideck-weights:
         id: edge-case
@@ -479,6 +480,8 @@ components:
         row_version:
           $ref: '#/components/schemas/RowVersion'
     BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
       properties:
         status_code:
           type: number
@@ -510,6 +513,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestvalidationerror'
     TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
       properties:
         status_code:
           type: number
@@ -1105,6 +1110,7 @@ components:
       nullable: true
     CreateDepartmentResponse:
       type: object
+      x-apideck-schema-id: CreateDepartmentResponse
       required:
         - status_code
         - status
@@ -1137,6 +1143,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateEmployeeResponse:
       type: object
+      x-apideck-schema-id: CreateEmployeeResponse
       required:
         - status_code
         - status
@@ -1169,6 +1176,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     CreateHrisCompanyResponse:
       type: object
+      x-apideck-schema-id: CreateHrisCompanyResponse
       required:
         - status_code
         - status
@@ -1213,6 +1221,7 @@ components:
       nullable: true
     CustomField:
       type: object
+      x-apideck-schema-id: CustomField
       required:
         - id
       additionalProperties: false
@@ -1252,6 +1261,7 @@ components:
                 type: string
     DeleteDepartmentResponse:
       type: object
+      x-apideck-schema-id: DeleteDepartmentResponse
       required:
         - status_code
         - status
@@ -1284,6 +1294,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteEmployeeResponse:
       type: object
+      x-apideck-schema-id: DeleteEmployeeResponse
       required:
         - status_code
         - status
@@ -1316,6 +1327,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteHrisCompanyResponse:
       type: object
+      x-apideck-schema-id: DeleteHrisCompanyResponse
       required:
         - status_code
         - status
@@ -1347,6 +1359,8 @@ components:
         data:
           $ref: '#/components/schemas/UnifiedId'
     Department:
+      type: object
+      x-apideck-schema-id: Department
       x-apideck-weights:
         id: critical
         name: critical
@@ -1356,7 +1370,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -1397,9 +1410,10 @@ components:
       example: Europe
       nullable: true
     Email:
+      type: object
+      x-apideck-schema-id: Email
       required:
         - email
-      type: object
       additionalProperties: false
       x-apideck-weights:
         email: critical
@@ -1427,6 +1441,8 @@ components:
             - other
           example: primary
     Employee:
+      type: object
+      x-apideck-schema-id: Employee
       x-apideck-weights:
         id: medium
         first_name: critical
@@ -1484,7 +1500,6 @@ components:
         created_by: edge-case
         updated_at: high
         created_at: medium
-      type: object
       additionalProperties: false
       required:
         - id
@@ -1525,6 +1540,7 @@ components:
           nullable: true
         partner:
           type: object
+          x-apideck-schema-id: Person
           x-apideck-weights:
             id: low
             first_name: critical
@@ -1569,6 +1585,7 @@ components:
           nullable: true
         team:
           type: object
+          x-apideck-schema-id: Team
           description: The team the user is currently in.
           additionalProperties: false
           properties:
@@ -1865,9 +1882,10 @@ components:
         social_links:
           type: array
           items:
+            type: object
+            x-apideck-schema-id: SocialLink
             required:
               - url
-            type: object
             additionalProperties: false
             x-apideck-weights:
               id: edge-case
@@ -1913,6 +1931,7 @@ components:
           nullable: true
         tags:
           type: array
+          x-apideck-schema-id: Tags
           items:
             type: string
           example:
@@ -1940,6 +1959,7 @@ components:
       nullable: true
     EmployeesFilter:
       type: object
+      x-apideck-schema-id: EmployeesFilter
       x-graphql-type-name: EmployeesFilter
       example:
         company_id: '1234'
@@ -2002,8 +2022,9 @@ components:
       example: male
       nullable: true
     GetDepartmentResponse:
-      x-graphql-type-name: Department
       type: object
+      x-apideck-schema-id: GetDepartmentResponse
+      x-graphql-type-name: Department
       required:
         - status_code
         - status
@@ -2035,8 +2056,9 @@ components:
         data:
           $ref: '#/components/schemas/Department'
     GetDepartmentsResponse:
-      x-graphql-type-name: DepartmentList
       type: object
+      x-apideck-schema-id: GetDepartmentsResponse
+      x-graphql-type-name: DepartmentList
       required:
         - status_code
         - status
@@ -2074,8 +2096,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetEmployeeResponse:
-      x-graphql-type-name: Employee
       type: object
+      x-apideck-schema-id: GetEmployeeResponse
+      x-graphql-type-name: Employee
       required:
         - status_code
         - status
@@ -2107,8 +2130,9 @@ components:
         data:
           $ref: '#/components/schemas/Employee'
     GetEmployeesResponse:
-      x-graphql-type-name: EmployeeList
       type: object
+      x-apideck-schema-id: GetEmployeesResponse
+      x-graphql-type-name: EmployeeList
       required:
         - status_code
         - status
@@ -2146,8 +2170,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetHrisCompaniesResponse:
-      x-graphql-type-name: HrisCompanyList
       type: object
+      x-apideck-schema-id: GetHrisCompaniesResponse
+      x-graphql-type-name: HrisCompanyList
       required:
         - status_code
         - status
@@ -2185,8 +2210,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetHrisCompanyResponse:
-      x-graphql-type-name: HrisCompany
       type: object
+      x-apideck-schema-id: GetHrisCompanyResponse
+      x-graphql-type-name: HrisCompany
       required:
         - status_code
         - status
@@ -2219,6 +2245,7 @@ components:
           $ref: '#/components/schemas/HrisCompany'
     HrisCompany:
       type: object
+      x-apideck-schema-id: HrisCompany
       required:
         - legal_name
       x-apideck-weights:
@@ -2307,6 +2334,8 @@ components:
       example: '12345'
       readOnly: true
     HrisJob:
+      type: object
+      x-apideck-schema-id: HrisJob
       x-apideck-weights:
         id: critical
         employee_id: critical
@@ -2316,7 +2345,6 @@ components:
         employment_status: high
         location: medium
         department: medium
-      type: object
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -2370,6 +2398,7 @@ components:
       nullable: true
     Links:
       type: object
+      x-apideck-schema-id: Links
       description: Links to navigate to previous or next pages through the API
       properties:
         previous:
@@ -2388,6 +2417,7 @@ components:
           nullable: true
     Meta:
       type: object
+      x-apideck-schema-id: Meta
       description: Response metadata
       properties:
         items_on_page:
@@ -2419,6 +2449,8 @@ components:
       example: D.
       nullable: true
     NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
       properties:
         status_code:
           type: number
@@ -2451,6 +2483,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#entitynotfounderror'
     NotImplementedResponse:
+      type: object
+      x-apideck-schema-id: NotImplemented
       properties:
         status_code:
           type: number
@@ -2479,6 +2513,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
     PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
       properties:
         status_code:
           type: number
@@ -2516,6 +2552,7 @@ components:
       example: year
     PayrollsFilter:
       type: object
+      x-apideck-schema-id: PayrollsFilter
       x-graphql-type-name: PayrollsFilter
       example:
         start_date: '2022-04-08'
@@ -2533,9 +2570,10 @@ components:
           example: '2022-04-21'
       additionalProperties: false
     PhoneNumber:
+      type: object
+      x-apideck-schema-id: PhoneNumber
       required:
         - number
-      type: object
       additionalProperties: false
       x-apideck-weights:
         number: critical
@@ -2602,6 +2640,8 @@ components:
       example: CEO
       nullable: true
     UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
       properties:
         status_code:
           type: number
@@ -2628,6 +2668,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
       properties:
         status_code:
           type: number
@@ -2660,6 +2702,8 @@ components:
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnifiedId:
       title: UnifiedId
+      type: object
+      x-apideck-schema-id: Id
       required:
         - id
       properties:
@@ -2668,6 +2712,8 @@ components:
           readOnly: true
           example: '12345'
     UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
       properties:
         status_code:
           type: number
@@ -2695,6 +2741,7 @@ components:
           example: 'https://developers.apideck.com/errors#invalidstateerror'
     UpdateDepartmentResponse:
       type: object
+      x-apideck-schema-id: UpdateDepartmentResponse
       required:
         - status_code
         - status
@@ -2727,6 +2774,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateEmployeeResponse:
       type: object
+      x-apideck-schema-id: UpdateEmployeeResponse
       required:
         - status_code
         - status
@@ -2759,6 +2807,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateHrisCompanyResponse:
       type: object
+      x-apideck-schema-id: UpdateHrisCompanyResponse
       required:
         - status_code
         - status
@@ -2804,6 +2853,7 @@ components:
       x-sdk-exclude: true
       allOf:
         - type: object
+          x-apideck-schema-id: WebhookEvent
           properties:
             event_id:
               type: string
@@ -2839,6 +2889,7 @@ components:
               $ref: '#/components/schemas/HrisEventType'
     Website:
       type: object
+      x-apideck-schema-id: Website
       required:
         - url
       additionalProperties: false
@@ -2867,8 +2918,9 @@ components:
             - other
           example: primary
     GetPayrollsResponse:
-      x-graphql-type-name: PayrollList
       type: object
+      x-apideck-schema-id: GetPayrollsResponse
+      x-graphql-type-name: PayrollList
       required:
         - status_code
         - status
@@ -2902,8 +2954,9 @@ components:
           items:
             $ref: '#/components/schemas/Payroll'
     GetPayrollResponse:
-      x-graphql-type-name: Payroll
       type: object
+      x-apideck-schema-id: GetPayrollResponse
+      x-graphql-type-name: Payroll
       required:
         - status_code
         - status
@@ -2935,6 +2988,8 @@ components:
         data:
           $ref: '#/components/schemas/Payroll'
     Payroll:
+      type: object
+      x-apideck-schema-id: Payroll
       x-apideck-weights:
         id: critical
         company_id: high
@@ -2945,7 +3000,6 @@ components:
         end_date: critical
         totals: high
         compensations: medium
-      type: object
       required:
         - id
         - processed
@@ -2993,12 +3047,13 @@ components:
           items:
             $ref: '#/components/schemas/Compensation'
     Schedule:
+      type: object
+      x-apideck-schema-id: Schedule
       x-apideck-weights:
         id: critical
         start_date: critical
         end_date: critical
         work_pattern: critical
-      type: object
       required:
         - id
         - start_date
@@ -3154,10 +3209,11 @@ components:
                   nullable: false
                   readOnly: false
     EmployeePayroll:
+      type: object
+      x-apideck-schema-id: EmployeePayroll
       x-apideck-weights:
         employee: critical
         payroll: critical
-      type: object
       properties:
         employee:
           $ref: '#/components/schemas/Employee'
@@ -3165,6 +3221,7 @@ components:
           $ref: '#/components/schemas/Payroll'
     EmployeePayrolls:
       type: object
+      x-apideck-schema-id: EmployeePayrolls
       x-apideck-weights:
         employee: critical
         payrolls: critical
@@ -3177,6 +3234,7 @@ components:
             $ref: '#/components/schemas/Payroll'
     EmployeeSchedules:
       type: object
+      x-apideck-schema-id: EmployeeSchedules
       properties:
         employee:
           $ref: '#/components/schemas/Employee'
@@ -3186,6 +3244,7 @@ components:
             $ref: '#/components/schemas/Schedule'
     HrisJobs:
       type: object
+      x-apideck-schema-id: HrisJobs
       properties:
         employee:
           $ref: '#/components/schemas/Employee'
@@ -3195,6 +3254,7 @@ components:
             $ref: '#/components/schemas/HrisJob'
     Compensation:
       type: object
+      x-apideck-schema-id: Compensation
       x-apideck-weights:
         employee_id: critical
         net_pay: high
@@ -3233,6 +3293,7 @@ components:
             $ref: '#/components/schemas/Benefit'
     Tax:
       type: object
+      x-apideck-schema-id: Tax
       x-apideck-weights:
         name: high
         employer: high
@@ -3252,6 +3313,7 @@ components:
           example: 1.97
     Deduction:
       type: object
+      x-apideck-schema-id: Deduction
       x-apideck-weights:
         name: critical
         amount: critical
@@ -3266,6 +3328,7 @@ components:
           example: 10.97
     Benefit:
       type: object
+      x-apideck-schema-id: Benefit
       x-apideck-weights:
         name: critical
         employee_deduction: high
@@ -3285,6 +3348,7 @@ components:
           example: 141.14
     PayrollTotals:
       type: object
+      x-apideck-schema-id: PayrollTotals
       properties:
         company_debit:
           type: number
@@ -3323,8 +3387,9 @@ components:
           description: The total amount of employee deducted benefits for the payroll.
           example: 0
     GetEmployeePayrollsResponse:
-      x-graphql-type-name: EmployeePayrollList
       type: object
+      x-apideck-schema-id: GetEmployeePayrollsResponse
+      x-graphql-type-name: EmployeePayrollList
       required:
         - status_code
         - status
@@ -3356,8 +3421,9 @@ components:
         data:
           $ref: '#/components/schemas/EmployeePayrolls'
     GetEmployeePayrollResponse:
-      x-graphql-type-name: EmployeePayroll
       type: object
+      x-apideck-schema-id: GetEmployeePayrollResponse
+      x-graphql-type-name: EmployeePayroll
       required:
         - status_code
         - status
@@ -3389,8 +3455,9 @@ components:
         data:
           $ref: '#/components/schemas/EmployeePayroll'
     GetEmployeeSchedulesResponse:
-      x-graphql-type-name: EmployeeSchedulesList
       type: object
+      x-apideck-schema-id: GetEmployeeSchedulesResponse
+      x-graphql-type-name: EmployeeSchedulesList
       required:
         - status_code
         - status
@@ -3422,8 +3489,9 @@ components:
         data:
           $ref: '#/components/schemas/EmployeeSchedules'
     GetHrisJobsResponse:
-      x-graphql-type-name: JobsList
       type: object
+      x-apideck-schema-id: GetHrisJobsResponse
+      x-graphql-type-name: JobsList
       required:
         - status_code
         - status
@@ -3455,8 +3523,9 @@ components:
         data:
           $ref: '#/components/schemas/HrisJobs'
     GetHrisJobResponse:
-      x-graphql-type-name: Job
       type: object
+      x-apideck-schema-id: GetHrisJobResponse
+      x-graphql-type-name: Job
       required:
         - status_code
         - status

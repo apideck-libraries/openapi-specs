@@ -251,6 +251,8 @@ components:
       description: 'OAuth grant type used by the connector. More info: https://oauth.net/2/grant-types'
       readOnly: true
     BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
       properties:
         status_code:
           type: number
@@ -283,6 +285,7 @@ components:
           example: 'https://developers.apideck.com/errors#requestvalidationerror'
     Connection:
       type: object
+      x-apideck-schema-id: Connection
       properties:
         id:
           type: string
@@ -488,6 +491,7 @@ components:
           nullable: true
     ConnectionImportData:
       type: object
+      x-apideck-schema-id: ConnectionImportData
       properties:
         credentials:
           type: object
@@ -536,6 +540,7 @@ components:
             plan: enterprise
     ConnectionMetadata:
       type: object
+      x-apideck-schema-id: ConnectionMetadata
       properties:
         id:
           type: string
@@ -543,6 +548,7 @@ components:
           type: string
     ConnectionState:
       type: string
+      x-apideck-schema-id: ConnectionState
       description: '[Connection state flow](#section/Connection-state)'
       x-apideck-enum-id: connections.state
       enum:
@@ -554,6 +560,7 @@ components:
       readOnly: true
     Consumer:
       type: object
+      x-apideck-schema-id: Consumer
       properties:
         consumer_id:
           type: string
@@ -591,6 +598,7 @@ components:
           example: '2021-05-07T12:55:42.242Z'
     ConsumerMetadata:
       type: object
+      x-apideck-schema-id: ConsumerMetadata
       properties:
         account_name:
           type: string
@@ -606,6 +614,7 @@ components:
           example: 'https://www.spacex.com/static/images/share.jpg'
     ConsumerConnection:
       type: object
+      x-apideck-schema-id: ConsumerConnection
       properties:
         id:
           type: string
@@ -678,6 +687,7 @@ components:
           example: authorized
     ConsumerWebhook:
       type: object
+      x-apideck-schema-id: Webhook
       additionalProperties: false
       required:
         - delivery_url
@@ -832,6 +842,7 @@ components:
           readOnly: true
     ConsumerRequestCountsInDateRangeResponse:
       type: object
+      x-apideck-schema-id: ConsumerRequestCountsInDateRangeResponse
       required:
         - status_code
         - status
@@ -847,6 +858,7 @@ components:
           example: OK
         data:
           type: object
+          x-apideck-schema-id: ConsumerRequestCountsInDateRange
           properties:
             application_id:
               type: string
@@ -867,6 +879,7 @@ components:
               $ref: '#/components/schemas/RequestCountAllocation'
     CreateConnectionResponse:
       type: object
+      x-apideck-schema-id: CreateConnectionResponse
       required:
         - status_code
         - status
@@ -884,6 +897,7 @@ components:
           $ref: '#/components/schemas/Connection'
     CreateSessionResponse:
       type: object
+      x-apideck-schema-id: CreateSessionResponse
       required:
         - status_code
         - status
@@ -915,6 +929,7 @@ components:
           additionalProperties: false
     FormField:
       type: object
+      x-apideck-schema-id: FormField
       x-graphql-type-name: FormField
       properties:
         id:
@@ -980,6 +995,7 @@ components:
         - $ref: '#/components/schemas/FormFieldOptionGroup'
     FormFieldOptionGroup:
       type: object
+      x-apideck-schema-id: FormFieldOptionGroup
       properties:
         id:
           type: string
@@ -993,6 +1009,7 @@ components:
             $ref: '#/components/schemas/SimpleFormFieldOption'
     GetConnectionResponse:
       type: object
+      x-apideck-schema-id: GetConnectionResponse
       required:
         - status_code
         - status
@@ -1010,6 +1027,7 @@ components:
           $ref: '#/components/schemas/Connection'
     GetConnectionsResponse:
       type: object
+      x-apideck-schema-id: GetConnectionsResponse
       required:
         - status_code
         - status
@@ -1029,6 +1047,7 @@ components:
             $ref: '#/components/schemas/Connection'
     GetConsumerResponse:
       type: object
+      x-apideck-schema-id: GetConsumerResponse
       required:
         - status_code
         - status
@@ -1046,6 +1065,7 @@ components:
           $ref: '#/components/schemas/Consumer'
     GetConsumersResponse:
       type: object
+      x-apideck-schema-id: GetConsumersResponse
       required:
         - status_code
         - status
@@ -1100,6 +1120,7 @@ components:
           $ref: '#/components/schemas/Links'
     GetLogsResponse:
       type: object
+      x-apideck-schema-id: GetLogsResponse
       required:
         - status_code
         - status
@@ -1124,6 +1145,7 @@ components:
           $ref: '#/components/schemas/Links'
     Links:
       type: object
+      x-apideck-schema-id: Links
       description: Links to navigate to previous or next pages through the API
       properties:
         previous:
@@ -1141,6 +1163,8 @@ components:
           example: 'https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM'
           nullable: true
     Log:
+      type: object
+      x-apideck-schema-id: Log
       additionalProperties: false
       properties:
         api_style:
@@ -1286,9 +1310,9 @@ components:
         - success
         - timestamp
         - unified_api
-      type: object
     LogsFilter:
       type: object
+      x-apideck-schema-id: LogsFilter
       x-graphql-type-name: LogsFilter
       properties:
         connector_id:
@@ -1305,6 +1329,7 @@ components:
           example: 'vault,proxy'
     Meta:
       type: object
+      x-apideck-schema-id: Meta
       description: Response metadata
       properties:
         items_on_page:
@@ -1331,6 +1356,8 @@ components:
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
     NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
       properties:
         status_code:
           type: number
@@ -1363,6 +1390,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#entitynotfounderror'
     NotImplementedResponse:
+      type: object
+      x-apideck-schema-id: NotImplemented
       properties:
         status_code:
           type: number
@@ -1391,6 +1420,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#mappingerror'
     PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
       properties:
         status_code:
           type: number
@@ -1418,6 +1449,7 @@ components:
           example: 'https://developers.apideck.com/errors#requestlimiterror'
     ProxyRequest:
       type: object
+      x-apideck-schema-id: ProxyRequest
       properties: {}
       example:
         account_sid: ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -1439,6 +1471,7 @@ components:
         uri: /2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages/SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.json
     RequestCountAllocation:
       type: object
+      x-apideck-schema-id: RequestCountAllocation
       properties:
         unify:
           type: number
@@ -1450,8 +1483,9 @@ components:
           type: number
           example: 21
     Session:
-      additionalProperties: false
       type: object
+      x-apideck-schema-id: Session
+      additionalProperties: false
       properties:
         consumer_metadata:
           $ref: '#/components/schemas/ConsumerMetadata'
@@ -1541,6 +1575,7 @@ components:
           type: object
     SimpleFormFieldOption:
       type: object
+      x-apideck-schema-id: SimpleFormFieldOption
       properties:
         label:
           type: string
@@ -1565,6 +1600,8 @@ components:
                 - team
                 - general
     UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
       properties:
         status_code:
           type: number
@@ -1591,6 +1628,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
       properties:
         status_code:
           type: number
@@ -1622,6 +1661,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
       properties:
         status_code:
           type: number
@@ -1677,6 +1718,7 @@ components:
       type: string
     UpdateConnectionResponse:
       type: object
+      x-apideck-schema-id: UpdateConnectionResponse
       required:
         - status_code
         - status

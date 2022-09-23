@@ -196,6 +196,7 @@ components:
   schemas:
     Address:
       type: object
+      x-apideck-schema-id: Address
       additionalProperties: false
       x-apideck-weights:
         id: edge-case
@@ -337,6 +338,8 @@ components:
       type: boolean
       example: true
     Applicant:
+      type: object
+      x-apideck-schema-id: Applicant
       x-apideck-weights:
         id: critical
         position_id: medium
@@ -376,7 +379,6 @@ components:
         deleted_at: medium
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -449,6 +451,7 @@ components:
           type: array
           items:
             type: object
+            x-apideck-schema-id: Website
             required:
               - url
             additionalProperties: false
@@ -479,9 +482,10 @@ components:
         social_links:
           type: array
           items:
+            type: object
+            x-apideck-schema-id: SocialLink
             required:
               - url
-            type: object
             additionalProperties: false
             x-apideck-weights:
               id: edge-case
@@ -589,6 +593,8 @@ components:
       type: boolean
       example: false
     BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
       properties:
         status_code:
           type: number
@@ -620,6 +626,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestvalidationerror'
     TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
       properties:
         status_code:
           type: number
@@ -655,6 +663,7 @@ components:
       example: 123-OC
     CreateApplicantResponse:
       type: object
+      x-apideck-schema-id: CreateApplicantResponse
       required:
         - status_code
         - status
@@ -1253,6 +1262,7 @@ components:
       nullable: true
     CustomField:
       type: object
+      x-apideck-schema-id: CustomField
       required:
         - id
       additionalProperties: false
@@ -1309,6 +1319,8 @@ components:
       readOnly: true
       nullable: true
     Department:
+      type: object
+      x-apideck-schema-id: Department
       x-apideck-weights:
         id: critical
         name: critical
@@ -1318,7 +1330,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -1353,9 +1364,10 @@ components:
       example: A description
       nullable: true
     Email:
+      type: object
+      x-apideck-schema-id: Email
       required:
         - email
-      type: object
       additionalProperties: false
       x-apideck-weights:
         email: critical
@@ -1383,8 +1395,9 @@ components:
             - other
           example: primary
     GetApplicantResponse:
-      x-graphql-type-name: Applicant
       type: object
+      x-apideck-schema-id: GetApplicantResponse
+      x-graphql-type-name: Applicant
       required:
         - status_code
         - status
@@ -1416,8 +1429,9 @@ components:
         data:
           $ref: '#/components/schemas/Applicant'
     GetApplicantsResponse:
-      x-graphql-type-name: ApplicantList
       type: object
+      x-apideck-schema-id: GetApplicantsResponse
+      x-graphql-type-name: ApplicantList
       required:
         - status_code
         - status
@@ -1455,8 +1469,9 @@ components:
         links:
           $ref: '#/components/schemas/Links'
     GetJobResponse:
-      x-graphql-type-name: Job
       type: object
+      x-apideck-schema-id: GetJobResponse
+      x-graphql-type-name: Job
       required:
         - status_code
         - status
@@ -1488,8 +1503,9 @@ components:
         data:
           $ref: '#/components/schemas/Job'
     GetJobsResponse:
-      x-graphql-type-name: JobList
       type: object
+      x-apideck-schema-id: GetJobsResponse
+      x-graphql-type-name: JobList
       required:
         - status_code
         - status
@@ -1531,6 +1547,8 @@ components:
       example: '12345'
       readOnly: true
     Job:
+      type: object
+      x-apideck-schema-id: Job
       x-apideck-weights:
         id: high
         slug: low
@@ -1570,7 +1588,6 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
-      type: object
       additionalProperties: false
       properties:
         id:
@@ -1790,6 +1807,7 @@ components:
         - private
     JobsFilter:
       type: object
+      x-apideck-schema-id: JobsFilter
       x-graphql-type-name: JobsFilter
       example:
         job_id: '1234'
@@ -1812,6 +1830,7 @@ components:
       readOnly: true
     Links:
       type: object
+      x-apideck-schema-id: Links
       description: Links to navigate to previous or next pages through the API
       properties:
         previous:
@@ -1830,6 +1849,7 @@ components:
           nullable: true
     Meta:
       type: object
+      x-apideck-schema-id: Meta
       description: Response metadata
       properties:
         items_on_page:
@@ -1856,6 +1876,8 @@ components:
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
     NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
       properties:
         status_code:
           type: number
@@ -1888,6 +1910,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#entitynotfounderror'
     NotImplementedResponse:
+      type: object
+      x-apideck-schema-id: NotImplemented
       properties:
         status_code:
           type: number
@@ -1920,6 +1944,8 @@ components:
       type: string
       example: '54321'
     PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
       properties:
         status_code:
           type: number
@@ -1946,9 +1972,10 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#requestlimiterror'
     PhoneNumber:
+      type: object
+      x-apideck-schema-id: PhoneNumber
       required:
         - number
-      type: object
       additionalProperties: false
       x-apideck-weights:
         number: critical
@@ -2006,6 +2033,7 @@ components:
       nullable: true
     Tags:
       type: array
+      x-apideck-schema-id: Tags
       items:
         type: string
       example:
@@ -2016,6 +2044,8 @@ components:
       example: CEO
       nullable: true
     UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
       properties:
         status_code:
           type: number
@@ -2042,6 +2072,8 @@ components:
           description: Link to documentation of error type
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
       properties:
         status_code:
           type: number
@@ -2074,6 +2106,8 @@ components:
           example: 'https://developers.apideck.com/errors#unauthorizederror'
     UnifiedId:
       title: UnifiedId
+      type: object
+      x-apideck-schema-id: Id
       required:
         - id
       properties:
@@ -2082,6 +2116,8 @@ components:
           readOnly: true
           example: '12345'
     UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
       properties:
         status_code:
           type: number
@@ -2142,6 +2178,7 @@ components:
       nullable: true
     Offer:
       type: object
+      x-apideck-schema-id: Offer
       additionalProperties: false
       x-apideck-weights:
         id: high
@@ -2166,6 +2203,7 @@ components:
           $ref: '#/components/schemas/CreatedAt'
     AtsActivity:
       type: object
+      x-apideck-schema-id: AtsActivity
       additionalProperties: false
       x-graphql-type-name: AtsActivity
       x-apideck-weights:
@@ -2188,6 +2226,7 @@ components:
     AtsWebhookEvent:
       allOf:
         - type: object
+          x-apideck-schema-id: WebhookEvent
           properties:
             event_id:
               type: string
@@ -2232,6 +2271,7 @@ components:
       x-sdk-exclude: true
     CreateJobResponse:
       type: object
+      x-apideck-schema-id: CreateJobResponse
       required:
         - status_code
         - status
@@ -2264,6 +2304,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     DeleteJobResponse:
       type: object
+      x-apideck-schema-id: DeleteJobResponse
       required:
         - status_code
         - status
@@ -2296,6 +2337,7 @@ components:
           $ref: '#/components/schemas/UnifiedId'
     UpdateJobResponse:
       type: object
+      x-apideck-schema-id: UpdateJobResponse
       required:
         - status_code
         - status

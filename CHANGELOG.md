@@ -1,3 +1,9 @@
+## v8.61.0 - (2022-09-26)
+
+### HRIS API
+
+- Added filter support for employees in [ADP Workforce Now](connectors/adp-workforce-now) connector.
+
 ## v8.60.0 - (2022-09-23)
 
 ### HRIS API

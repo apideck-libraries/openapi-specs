@@ -1,3 +1,9 @@
+## v8.62.0 - (2022-09-27)
+
+### HRIS API
+
+- Added Jobs support for [Officient](connectors/officient-io).
+
 ## v8.61.0 - (2022-09-26)
 
 ### HRIS API

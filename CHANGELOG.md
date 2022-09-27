@@ -1,3 +1,8 @@
+## v8.63.0 - (2022-09-27)
+
+- Added the Project Management API for auth-only connectors.
+- Added [JIRA](connectors/jira) as an auth-only connector.
+
 ## v8.62.0 - (2022-09-27)
 
 ### HRIS API

@@ -1,3 +1,7 @@
+## v8.64.0 - (2022-09-28)
+
+- Added [NetSuite](connectors/netsuite) as an auth-only connector.
+
 ## v8.63.0 - (2022-09-27)
 
 - Added the Project Management API for auth-only connectors.

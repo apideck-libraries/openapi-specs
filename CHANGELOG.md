@@ -1,4 +1,12 @@
+## v8.65.0 - (2022-09-28)
+
+### HRIS API
+
+- Added [SDWorx](connectors/sdworx) as an auth-only connector.
+
 ## v8.64.0 - (2022-09-28)
+
+### Accounting API
 
 - Added [NetSuite](connectors/netsuite) as an auth-only connector.
 
@@ -27,13 +35,13 @@
 
 ## v8.59.0 - (2022-09-22)
 
-### TEAM MESSAGING API
+### Team Messaging API
 
 - Added [Microsoft Teams](connectors/microsoft-teams) connector
 
 ## v8.58.0 - (2022-09-19)
 
-## Connector API
+### Connector API
 
 - Added `blind_mapping` to [Connector](apis/connector/reference#tag/Connectors)
 
@@ -117,7 +125,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ## v8.44.0 - (2022-09-01)
 
-## HRIS API
+### HRIS API
 
 - Added [Sapling](connectors/sapling) connector
 
@@ -165,7 +173,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ## v8.39.0 - (2022-08-09)
 
-## Connector API
+### Connector API
 
 - Added `supported_list_fields` to [ConnectorResource](apis/connector/reference#tag/ConnectorResource)
 

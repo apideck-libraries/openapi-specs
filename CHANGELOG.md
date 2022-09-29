@@ -1,3 +1,8 @@
+## v8.66.0 - (2022-09-28)
+
+- Added filter support for employees in [Loket](connectors/loket-nl) connector.
+- Added support to filter employees by employee number.
+
 ## v8.65.0 - (2022-09-28)
 
 ### HRIS API

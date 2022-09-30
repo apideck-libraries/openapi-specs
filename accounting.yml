@@ -5225,6 +5225,9 @@ components:
         allocations: critical
         note: low
         row_version: edge-case
+        display_id: low
+        updated_by: edge-case
+        created_by: edge-case
         created_at: medium
         updated_at: medium
       required:
@@ -5368,6 +5371,16 @@ components:
           nullable: true
         row_version:
           $ref: '#/components/schemas/RowVersion'
+        display_id:
+          type: string
+          title: Display id
+          description: Payment id to be displayed.
+          example: '123456'
+          nullable: true
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
@@ -9960,7 +9973,8 @@ paths:
                   }
                 ],
                 note: 'Some notes about this payment',
-                row_version: '1-12345'
+                row_version: '1-12345',
+                display_id: '123456'
               }
             }
 
@@ -10101,7 +10115,8 @@ paths:
                   }
                 ],
                 note: 'Some notes about this payment',
-                row_version: '1-12345'
+                row_version: '1-12345',
+                display_id: '123456'
               }
             }
 

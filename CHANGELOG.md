@@ -1,3 +1,9 @@
+## v8.67.0 - (2022-09-29)
+
+### Accounting API
+
+- Added `display_id`, `created_by` and `updated_by` fields to the Payment schema.
+
 ## v8.66.0 - (2022-09-28)
 
 - Added filter support for employees in [Loket](connectors/loket-nl) connector.

@@ -1,3 +1,9 @@
+## v8.66.1 - (2022-09-30)
+
+### Connector API
+
+- extended connector API to return nested filed level coverage
+
 ## v8.67.0 - (2022-09-29)
 
 ### Accounting API

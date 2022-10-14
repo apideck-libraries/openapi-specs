@@ -1,3 +1,9 @@
+## v8.70.2 - (2022-10-14)
+
+### Vault API
+
+- Add `show_sidebar` to settings on [create session](apis/vault/reference#tag/Sessions).
+
 ## v8.70.1 - (2022-10-13)
 
 ### Accounting API

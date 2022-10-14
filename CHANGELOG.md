@@ -1,4 +1,30 @@
-## v8.66.1 - (2022-09-30)
+## v8.70.1 - (2022-10-13)
+
+### Accounting API
+
+- Added `discount_percentage` to root of [Invoice](apis/accounting/reference#tag/Invoices) object. Quickbooks has limited support for LineItem discounts, so this is a workaround to support discounts on invoices.
+
+## v8.70.0 - (2022-10-11)
+
+### HRIS API
+
+- Reworked [Workday](/connectors/workday) auth + mapping to use SOAP API
+
+### Expense management API
+
+- Added [Web Expenses](/connectors/webexpenses) auth-only connector
+
+## v8.69.0 - (2022-10-07)
+
+### HRIS API
+
+- Added [Ceridian Dayforce](connectors/ceridian-dayforce) connector
+
+## v8.68.0 - (2022-10-06)
+
+- Added `create`, `update` and `delete` operations to `credit-notes` resource for [QuickBooks].
+
+## v8.67.1 - (2022-09-30)
 
 ### Connector API
 

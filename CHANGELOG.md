@@ -1,3 +1,10 @@
+## v8.71.0 - (2022-10-17)
+
+### Connector API
+
+- Added `unified_apis[].name` and `unified_apis[].supported_resources` to [Connector](apis/connector/reference#tag/Connectors)
+- Added `?unified_api` parameter to [ConnectorResource](apis/connector/reference#tag/Connector-Resources)
+
 ## v8.70.2 - (2022-10-14)
 
 ### Vault API

@@ -1,3 +1,10 @@
+## v8.72.0 - (2022-10-18)
+### ACCOUNTING API
+- Added `bill`, resource for [Sage Intacct].
+- Improved array mappings for xml cases.
+- Added new fields to the Bill schema.
+
+
 ## v8.71.0 - (2022-10-17)
 
 ### Connector API

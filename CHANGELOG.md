@@ -1,3 +1,7 @@
+## v8.73.0 - (2022-10-27)
+
+- Added [Google Calendar](/connectors/google-calendar) auth-only connector
+- Added [Microsoft Outlook Calendar](/connectors/microsoft-outlook-calendar) auth-only connector
 
 ## v8.72.1 - (2022-10-24)
 

@@ -1,3 +1,10 @@
+## v8.74.0 - (2022-10-27)
+
+### Connector API
+
+- Added `downstream_unsupported_operations` to [ConnectorResource](apis/connector/reference#tag/ConnectorResource)
+- # Added `unified_apis[].downstream_unsupported_resources` to [Connector](apis/connector/reference#tag/Connectors)
+
 ## v8.73.0 - (2022-10-27)
 
 - Added [Google Calendar](/connectors/google-calendar) auth-only connector
@@ -5,11 +12,14 @@
 
 ## v8.72.1 - (2022-10-24)
 
-### ACCOUNTING API
+### Accounting API
+
 - Updated Ledger accounts, invoice items, payments, suppliers to use [QuickBooks] SyncToken
 
 ## v8.72.0 - (2022-10-18)
-### ACCOUNTING API
+
+### Accounting API
+
 - Added `bill`, resource for [Sage Intacct].
 - Improved array mappings for xml cases.
 - Added new fields to the Bill schema.

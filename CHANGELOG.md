@@ -1,3 +1,12 @@
+## v8.75.0 - (2022-10-28)
+### ACCOUNTING API
+- Added `credit-notes` resource to [Sage Intacct].
+- Added create, update and delete operations to payments resource in [Sage Intacct].
+- Added workflows to separate between receivable payments and payable payments in [Sage Intacct].
+- Expanded `invoices` resource mapping in [Sage Intacct].
+- Expanded fields to `Bill`, `BillLineItem`, `CreditNote`, `InvoiceLineItem` and `Payment` schemas.
+- Updated workflow client to support `unified_metadata`.
+
 ## v8.74.0 - (2022-10-27)
 
 ### Connector API

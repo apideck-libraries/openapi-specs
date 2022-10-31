@@ -1,5 +1,17 @@
+## v8.76.0 - (2022-10-31)
+
+- Added Connection Hooks
+- Added support cor Connection based Webhooks
+- Added Connection webhook support [FactorialHR](/connectors/factorialhr)
+
+### Vault API
+
+- Added subscriptions prop to [Connections](apis/vault/reference#tag/Connections)
+
 ## v8.75.0 - (2022-10-28)
+
 ### ACCOUNTING API
+
 - Added `credit-notes` resource to [Sage Intacct].
 - Added create, update and delete operations to payments resource in [Sage Intacct].
 - Added workflows to separate between receivable payments and payable payments in [Sage Intacct].

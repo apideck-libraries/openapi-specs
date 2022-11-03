@@ -1,3 +1,7 @@
+## v8.77.0 - (2022-11-03)
+
+- Updated Orders [Clover](apis/pos) on POS with additional modifier fields on line items.
+
 ## v8.76.0 - (2022-10-31)
 
 - Added Connection Hooks
@@ -8,7 +12,7 @@
 
 - Added subscriptions prop to [Connections](apis/vault/reference#tag/Connections)
 
-## v8.75.0 - (2022-10-28)
+## v8.77.0 - (2022-10-28)
 
 ### ACCOUNTING API
 

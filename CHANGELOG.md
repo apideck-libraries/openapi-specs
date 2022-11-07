@@ -1,3 +1,17 @@
+## v8.79.0 - (2022-11-07)
+
+### Procurement API
+
+- Added [Portt](/connectors/portt) auth-only connector
+-
+### Expense management API
+
+- Moved the [Web Expenses](/connectors/webexpenses) auth-only settings to connection level
+
+### Connector API
+
+- Added `custom_scopes` to [Connector](apis/connector/reference#tag/Connectors)
+
 ## v8.78.0 - (2022-11-07)
 
 - Added webhooksResolve operation to the Webhooks API to provide a shorter route.
@@ -16,7 +30,7 @@
 
 - Added subscriptions prop to [Connections](apis/vault/reference#tag/Connections)
 
-## v8.77.0 - (2022-10-28)
+## v8.75.0 - (2022-10-28)
 
 ### ACCOUNTING API
 

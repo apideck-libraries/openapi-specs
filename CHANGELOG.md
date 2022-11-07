@@ -1,3 +1,7 @@
+## v8.80.0 - (2022-11-07)
+### ATS API
+- Added `jobs` resource to [Greenhouse](connectors/greenhouse).
+
 ## v8.79.0 - (2022-11-07)
 
 ### Procurement API

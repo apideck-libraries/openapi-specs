@@ -1,3 +1,7 @@
+## v8.78.0 - (2022-11-07)
+
+- Added webhooksResolve operation to the Webhooks API to provide a shorter route.
+
 ## v8.77.0 - (2022-11-03)
 
 - Updated Orders [Clover](apis/pos) on POS with additional modifier fields on line items.
@@ -16,10 +20,10 @@
 
 ### ACCOUNTING API
 
-- Added `credit-notes` resource to [Sage Intacct].
-- Added create, update and delete operations to payments resource in [Sage Intacct].
-- Added workflows to separate between receivable payments and payable payments in [Sage Intacct].
-- Expanded `invoices` resource mapping in [Sage Intacct].
+- Added `credit-notes` resource to [Sage Intacct](/connectors/sage-intacct).
+- Added create, update and delete operations to payments resource in [Sage Intacct](/connectors/sage-intacct).
+- Added workflows to separate between receivable payments and payable payments in [Sage Intacct](/connectors/sage-intacct).
+- Expanded `invoices` resource mapping in [Sage Intacct](/connectors/sage-intacct).
 - Expanded fields to `Bill`, `BillLineItem`, `CreditNote`, `InvoiceLineItem` and `Payment` schemas.
 - Updated workflow client to support `unified_metadata`.
 
@@ -45,7 +49,7 @@
 
 ### Accounting API
 
-- Added `bill`, resource for [Sage Intacct].
+- Added `bill`, resource for [Sage Intacct](/connectors/sage-intacct).
 - Improved array mappings for xml cases.
 - Added new fields to the Bill schema.
 

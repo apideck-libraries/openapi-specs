@@ -5615,6 +5615,9 @@ paths:
         - $ref: '#/components/parameters/timeOffRequestsFilter'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: bamboohr
+          description: "BambooHR requires start_date and end_date parameters to successfully retrieve time off requests. These optional Unify parameters can be sent as filters[start_date] and filters[end_date]. If there are not present, they are sent to BambooHR with the default values of '1900-01-01' & '2100-12-31' respectively."
       responses:
         '200':
           $ref: '#/components/responses/GetTimeOffRequestsResponse'

@@ -1,3 +1,7 @@
+## v8.82.0 - (2022-11-09)
+
+- Added [Calendly](/connectors/calendly) and [Google Contacts](/connectors/google-contacts) auth-only connector
+
 ## v8.81.0 - (2022-11-09)
 
 ### HRIS API

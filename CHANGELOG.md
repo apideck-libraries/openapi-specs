@@ -1,3 +1,17 @@
+## v8.81.0 - (2022-11-09)
+
+### HRIS API
+
+- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [ADP Workforce Now](connectors/adp-workforce-now).
+- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [BambooHR](connectors/bamboohr).
+- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [Personio](connectors/personio).
+- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [Sage Hr](connectors/sage-hr).
+- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [SAP SuccessFactors](connectors/sap-successfactors).
+- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [Workday](connectors/workday).
+
+### ATS API
+- Added `job_id` filter to [Recruitee](connectors/recruitee).
+
 ## v8.80.0 - (2022-11-07)
 ### ATS API
 - Added `jobs` resource to [Greenhouse](connectors/greenhouse).
@@ -7,7 +21,7 @@
 ### Procurement API
 
 - Added [Portt](/connectors/portt) auth-only connector
--
+
 ### Expense management API
 
 - Moved the [Web Expenses](/connectors/webexpenses) auth-only settings to connection level

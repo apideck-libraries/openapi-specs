@@ -1,3 +1,7 @@
+## v8.83.0 - (2022-11-10)
+
+- Added [Mollie](/connectors/mollie) and [monday.com](/connectors/monday) auth-only connector
+
 ## v8.82.0 - (2022-11-09)
 
 - Added [Calendly](/connectors/calendly) and [Google Contacts](/connectors/google-contacts) auth-only connector

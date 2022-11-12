@@ -1,3 +1,9 @@
+## v8.84.0 - (2022-11-12)
+
+### ATS API
+- Added [Jobs](apis/ats/reference#tag/Jobs) and [Applicants](apis/ats/reference#tag/Applicants) resource to [SAP SuccessFactors](connectors/sap-successfactors).
+- Added `created_by` and `updated_by` fields to the Applicant schema.
+
 ## v8.83.0 - (2022-11-10)
 
 - Added [Mollie](/connectors/mollie) and [monday.com](/connectors/monday) auth-only connector

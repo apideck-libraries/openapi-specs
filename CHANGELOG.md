@@ -1,6 +1,17 @@
+## v8.85.0 - (2022-11-15)
+
+### Connector API
+
+- Added `free_trial_available`, `signup_url` and `webhook_support` to [Connector](apis/connector/reference#tag/Connectors)
+
+### CRM API
+
+- Added `company_id` filter to [Opportunities](apis/crm/reference#tag/Opportunities)
+
 ## v8.84.0 - (2022-11-12)
 
 ### ATS API
+
 - Added [Jobs](apis/ats/reference#tag/Jobs) and [Applicants](apis/ats/reference#tag/Applicants) resource to [SAP SuccessFactors](connectors/sap-successfactors).
 - Added `created_by` and `updated_by` fields to the Applicant schema.
 
@@ -24,10 +35,13 @@
 - Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [Workday](connectors/workday).
 
 ### ATS API
+
 - Added `job_id` filter to [Recruitee](connectors/recruitee).
 
 ## v8.80.0 - (2022-11-07)
+
 ### ATS API
+
 - Added `jobs` resource to [Greenhouse](connectors/greenhouse).
 
 ## v8.79.0 - (2022-11-07)

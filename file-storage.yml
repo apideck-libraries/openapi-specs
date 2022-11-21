@@ -2236,6 +2236,53 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    WebhookEvent:
+      x-sdk-exclude: true
+      allOf:
+        - type: object
+          x-apideck-schema-id: WebhookEvent
+          properties:
+            event_id:
+              type: string
+              description: Unique reference to this request event
+              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+            service_id:
+              type: string
+              description: Service provider identifier
+              example: close
+            entity_id:
+              type: string
+              description: The service provider's ID of the entity that triggered this event
+              example: 123456ASDF
+            entity_type:
+              type: string
+              description: The type entity that triggered this event
+              example: Company
+            entity_url:
+              type: string
+              description: The url to retrieve entity detail.
+              example: 'https://unify.apideck.com/crm/contacts/123456'
+            execution_attempt:
+              type: number
+              description: The current count this request event has been attempted
+              example: 2
+            occurred_at:
+              type: string
+              description: ISO Datetime for when the original event occurred
+              example: '2021-10-01T03:14:55.419Z'
+        - type: object
+          properties:
+            event_type:
+              $ref: '#/components/schemas/FileStorageEventType'
+    FileStorageEventType:
+      x-apideck-enum-id: file-storage.event_type
+      type: string
+      enum:
+        - '*'
+        - file-storage.file.created
+        - file-storage.file.updated
+        - file-storage.file.deleted
+      example: file-storage.file.created
   securitySchemes:
     apiKey:
       type: apiKey
@@ -4022,3 +4069,73 @@ paths:
             } catch (error) {
               console.error(error)
             }
+x-webhooks:
+  FileCreated:
+    post:
+      summary: File created
+      description: File created
+      operationId: fileCreated
+      x-apideck-event-type: file-storage.file.created
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/FileStorageEventType'
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  FileUpdated:
+    post:
+      summary: File updated
+      description: File updated
+      operationId: fileUpdated
+      x-apideck-event-type: file-storage.file.updated
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/FileStorageEventType'
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+  FileDeleted:
+    post:
+      summary: File deleted
+      description: File deleted
+      operationId: fileDeleted
+      x-apideck-event-type: file-storage.file.deleted
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/FileStorageEventType'
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully

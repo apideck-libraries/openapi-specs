@@ -1092,7 +1092,7 @@ components:
 security:
   - apiKey: []
 tags:
-  - name: Webhooks
+  - name: Webhook subscriptions
     description: ''
     x-apideck-model:
       $ref: '#/components/schemas/Webhook'
@@ -1100,11 +1100,11 @@ paths:
   /webhook/webhooks:
     get:
       tags:
-        - Webhooks
+        - Webhook subscriptions
       x-graphql-field-name: webhooks
       operationId: webhooksAll
       summary: List webhooks
-      description: List webhooks
+      description: List all webhook subscriptions
       parameters:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/cursor'
@@ -1146,10 +1146,10 @@ paths:
             }
     post:
       tags:
-        - Webhooks
+        - Webhook subscriptions
       operationId: webhooksAdd
       summary: Create webhook
-      description: Create webhook
+      description: Create a webhook subscription to receive events
       parameters:
         - $ref: '#/components/parameters/applicationId'
       security:
@@ -1206,10 +1206,10 @@ paths:
   '/webhook/webhooks/{id}':
     get:
       tags:
-        - Webhooks
+        - Webhook subscriptions
       operationId: webhooksOne
       summary: Get webhook
-      description: Get webhook
+      description: Get the webhook subscription details
       parameters:
         - $ref: '#/components/parameters/webhookToken'
         - $ref: '#/components/parameters/applicationId'
@@ -1252,10 +1252,10 @@ paths:
             }
     patch:
       tags:
-        - Webhooks
+        - Webhook subscriptions
       operationId: webhooksUpdate
       summary: Update webhook
-      description: Update webhook
+      description: Update a webhook subscription
       parameters:
         - $ref: '#/components/parameters/webhookToken'
         - $ref: '#/components/parameters/applicationId'
@@ -1312,10 +1312,10 @@ paths:
             }
     delete:
       tags:
-        - Webhooks
+        - Webhooks subscription
       operationId: webhooksDelete
       summary: Delete webhook
-      description: Delete webhook
+      description: Delete a webhook subscription
       parameters:
         - $ref: '#/components/parameters/webhookToken'
         - $ref: '#/components/parameters/applicationId'
@@ -1545,7 +1545,7 @@ paths:
   /webhook/logs:
     get:
       tags:
-        - Webhooks
+        - Webhook subscriptions
       x-graphql-field-name: eventLogs
       operationId: eventLogsAll
       summary: List event logs

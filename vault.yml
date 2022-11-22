@@ -280,14 +280,17 @@ components:
       properties:
         id:
           type: string
+          description: The unique identifier of the connection.
           example: crm+salesforce
           readOnly: true
         service_id:
           type: string
+          description: The ID of the service this connection belongs to.
           example: salesforce
           readOnly: true
         name:
           type: string
+          description: The name of the connection
           example: Salesforce
           readOnly: true
         tag_line:
@@ -296,6 +299,7 @@ components:
           readOnly: true
         unified_api:
           type: string
+          description: The unified API category where the connection belongs to.
           example: crm
           readOnly: true
         state:
@@ -306,6 +310,7 @@ components:
           $ref: '#/components/schemas/OAuthGrantType'
         status:
           type: string
+          description: Status of the connection.
           x-apideck-enum-id: connections.status
           enum:
             - live
@@ -318,14 +323,17 @@ components:
           example: true
         website:
           type: string
+          description: The website URL of the connection
           example: 'https://www.salesforce.com'
           readOnly: true
         icon:
           type: string
+          description: 'A visual icon of the connection, that will be shown in the Vault'
           example: 'https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png'
           readOnly: true
         logo:
           type: string
+          description: 'The logo of the connection, that will be shown in the Vault'
           example: 'https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg'
           readOnly: true
         authorize_url:
@@ -362,6 +370,7 @@ components:
             plan: enterprise
         form_fields:
           type: array
+          description: The settings that are wanted to create a connection.
           items:
             $ref: '#/components/schemas/FormField'
           example:
@@ -966,16 +975,20 @@ components:
       properties:
         id:
           type: string
+          description: The unique identifier of the form field.
           example: channel
         label:
           type: string
+          description: The label of the field
           example: Channel
         placeholder:
           type: string
+          description: The placeholder for the form field
           example: Select a channel
           nullable: true
         description:
           type: string
+          description: The description of the form field
           example: Slack channel to push notification to
           nullable: true
         type:
@@ -995,6 +1008,7 @@ components:
             - number
           example: select
         required:
+          description: 'Indicates if the form field is required, which means it must be filled in before the form can be submitted'
           type: boolean
           example: true
         custom_field:
@@ -1008,10 +1022,17 @@ components:
           default: false
         disabled:
           type: boolean
+          description: Indicates if the form field is displayed in a “read-only” mode.
+          nullable: true
+          example: false
+        hidden:
+          type: boolean
+          description: Indicates if the form field is not displayed but the value that is being stored on the connection.
           nullable: true
           example: false
         sensitive:
           type: boolean
+          description: 'Indicates if the form field contains sensitive data, which will display the value as a masked input.'
           nullable: true
           example: false
         options:

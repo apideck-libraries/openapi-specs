@@ -1092,7 +1092,7 @@ components:
 security:
   - apiKey: []
 tags:
-  - name: Webhook subscriptions
+  - name: Webhooks
     description: ''
     x-apideck-model:
       $ref: '#/components/schemas/Webhook'
@@ -1100,7 +1100,7 @@ paths:
   /webhook/webhooks:
     get:
       tags:
-        - Webhook subscriptions
+        - Webhooks
       x-graphql-field-name: webhooks
       operationId: webhooksAll
       summary: List webhooks
@@ -1146,7 +1146,7 @@ paths:
             }
     post:
       tags:
-        - Webhook subscriptions
+        - Webhooks
       operationId: webhooksAdd
       summary: Create webhook
       description: Create a webhook subscription to receive events
@@ -1206,7 +1206,7 @@ paths:
   '/webhook/webhooks/{id}':
     get:
       tags:
-        - Webhook subscriptions
+        - Webhooks
       operationId: webhooksOne
       summary: Get webhook
       description: Get the webhook subscription details
@@ -1252,7 +1252,7 @@ paths:
             }
     patch:
       tags:
-        - Webhook subscriptions
+        - Webhooks
       operationId: webhooksUpdate
       summary: Update webhook
       description: Update a webhook subscription
@@ -1312,7 +1312,7 @@ paths:
             }
     delete:
       tags:
-        - Webhooks subscription
+        - Webhooks
       operationId: webhooksDelete
       summary: Delete webhook
       description: Delete a webhook subscription
@@ -1545,7 +1545,7 @@ paths:
   /webhook/logs:
     get:
       tags:
-        - Webhook subscriptions
+        - Webhooks
       x-graphql-field-name: eventLogs
       operationId: eventLogsAll
       summary: List event logs

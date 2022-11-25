@@ -3715,6 +3715,7 @@ components:
         currency: low
         archived: low
         display_order: edge-case
+        win_probability_enabled: edge-case
         stages: high
         updated_at: medium
         created_at: medium
@@ -3734,9 +3735,15 @@ components:
         archived:
           type: boolean
           example: false
+        active:
+          type: boolean
+          example: false
         display_order:
           type: integer
           example: 1
+        win_probability_enabled:
+          type: boolean
+          example: true
         stages:
           type: array
           items:
@@ -6748,7 +6755,9 @@ paths:
                 name: 'Sales Pipeline',
                 currency: 'USD',
                 archived: false,
+                active: false,
                 display_order: 1,
+                win_probability_enabled: true,
                 stages: [
                   {
                     name: 'Contract Sent',
@@ -6874,7 +6883,9 @@ paths:
                 name: 'Sales Pipeline',
                 currency: 'USD',
                 archived: false,
+                active: false,
                 display_order: 1,
+                win_probability_enabled: true,
                 stages: [
                   {
                     name: 'Contract Sent',

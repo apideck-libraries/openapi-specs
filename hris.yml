@@ -1462,6 +1462,7 @@ components:
         company_name: medium
         employment_start_date: high
         employment_end_date: high
+        leaving_reason: edge-case
         employee_number: high
         employment_status: high
         employment_role: high
@@ -1625,6 +1626,17 @@ components:
           title: Employee end date
           description: A Start Date is the date that the employee ended working at the company
           example: '2028-10-26'
+          nullable: true
+        leaving_reason:
+          type: string
+          description: The reason because the employment ended
+          example: active
+          x-apideck-enum-id: employees.leaving_reason
+          enum:
+            - dismissed
+            - resigned
+            - redundancy
+            - other
           nullable: true
         employee_number:
           $ref: '#/components/schemas/EmployeeNumber'
@@ -4101,6 +4113,7 @@ paths:
                 company_name: 'SpaceX',
                 employment_start_date: '2021-10-26',
                 employment_end_date: '2028-10-26',
+                leaving_reason: 'active',
                 employee_number: '123456-AB',
                 employment_status: 'active',
                 employment_role: {
@@ -4388,6 +4401,7 @@ paths:
                 company_name: 'SpaceX',
                 employment_start_date: '2021-10-26',
                 employment_end_date: '2028-10-26',
+                leaving_reason: 'active',
                 employee_number: '123456-AB',
                 employment_status: 'active',
                 employment_role: {

@@ -981,6 +981,7 @@ components:
         social_links: low
         phone_numbers: high
         emails: high
+        email_domain: edge
         custom_fields: medium
         tags: low
         first_call_at: edge-case
@@ -1133,6 +1134,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Email'
+        email_domain:
+          type: string
+          example: gmail.com
+          nullable: true
         custom_fields:
           type: array
           items:
@@ -5600,6 +5605,7 @@ paths:
                     type: 'primary'
                   }
                 ],
+                email_domain: 'gmail.com',
                 custom_fields: [
                   {
                     id: '2389328923893298',
@@ -5802,6 +5808,7 @@ paths:
                     type: 'primary'
                   }
                 ],
+                email_domain: 'gmail.com',
                 custom_fields: [
                   {
                     id: '2389328923893298',

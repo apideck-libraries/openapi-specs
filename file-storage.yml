@@ -2325,32 +2325,32 @@ security:
   - apiKey: []
 tags:
   - name: Files
-    description: Files
+    description: 'Files resource represents files stored in the cloud storage services. It provides methods for managing and accessing the files, such as uploading, downloading, and deleting files. For more information on uploads, refer to the [file upload guide](guides/file-upload).'
     x-apideck-resource-id: files
     x-apideck-model:
       $ref: '#/components/schemas/UnifiedFile'
   - name: Folders
-    description: ''
+    description: 'Folders resource represents the folders within a drive in the cloud storage service. It provides methods for managing and accessing the folders, such as creating, deleting, and listing files & folders in a given folder.'
     x-apideck-resource-id: folders
     x-apideck-model:
       $ref: '#/components/schemas/Folder'
   - name: Shared Links
-    description: ''
+    description: 'Shared links resource represents the links to files and folders in the cloud storage service that have been shared with other users. It provides methods for managing and accessing the shared links, such as creating, deleting, and listing shared links. A shared link allows other users to access the file or folder that it points to, either by viewing it online or by downloading it.'
     x-apideck-resource-id: shared-links
     x-apideck-model:
       $ref: '#/components/schemas/SharedLink'
   - name: Upload Sessions
-    description: ''
+    description: 'Upload sessions resource represents the sessions used for uploading files to the cloud storage service. It provides methods for managing and accessing the upload sessions, such as creating and resuming upload sessions. An upload session allows for efficient uploading of large files by breaking them into smaller chunks and uploading each chunk individually.'
     x-apideck-resource-id: upload-sessions
     x-apideck-model:
       $ref: '#/components/schemas/UploadSession'
   - name: Drives
-    description: ''
+    description: 'Drives resource represents logical containers for storing folders and files in the cloud storage service. It provides methods for managing and accessing the drives, such as creating, deleting, and listing drives.'
     x-apideck-resource-id: drives
     x-apideck-model:
       $ref: '#/components/schemas/Drive'
   - name: Drive Groups
-    description: ''
+    description: 'Drive Groups resource represents the groups of drives in the cloud storage service. It provides methods for managing and accessing the drive groups, such as creating, deleting, and listing drive groups. A drive group is a logical grouping of drives, which can be used to manage the drives in the cloud storage service.'
     x-apideck-resource-id: drive-groups
     x-apideck-model:
       $ref: '#/components/schemas/DriveGroup'
@@ -2413,7 +2413,7 @@ paths:
         - Files
       operationId: filesUpload
       summary: Upload file
-      description: 'Upload file (max 100MB). Please use the [Upload Sessions API](#operation/uploadSessionsStart) to upload bigger files.'
+      description: 'Upload file (max 100MB). Please use the [Upload Sessions API](#operation/uploadSessionsStart) to upload bigger files. For more information on uploads, refer to the [file upload guide](guides/file-upload).'
       x-sdk-exclude: true
       x-graphql-exclude: true
       servers:
@@ -3258,7 +3258,7 @@ paths:
         - Upload Sessions
       operationId: uploadSessionsAdd
       summary: Start Upload Session
-      description: 'Start an Upload Session. Upload sessions are used to upload large files, use the [Upload File](#operation/filesUpload) endpoint to upload smaller files (up to 100MB).'
+      description: 'Start an Upload Session. Upload sessions are used to upload large files, use the [Upload File](#operation/filesUpload) endpoint to upload smaller files (up to 100MB). Note that the base URL is upload.apideck.com instead of unify.apideck.com. For more information on uploads, refer to the [file upload guide](guides/file-upload).'
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'
@@ -3323,7 +3323,7 @@ paths:
         - Upload Sessions
       operationId: uploadSessionsOne
       summary: Get Upload Session
-      description: 'Get Upload Session. Use the `part_size` to split your file into parts. Upload the parts to the [Upload part of File](#operation/uploadSessionsUpload) endpoint.'
+      description: 'Get Upload Session. Use the `part_size` to split your file into parts. Upload the parts to the [Upload part of File](#operation/uploadSessionsUpload) endpoint. Note that the base URL is upload.apideck.com instead of unify.apideck.com. For more information on uploads, refer to the [file upload guide](guides/file-upload).'
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'
@@ -3375,7 +3375,7 @@ paths:
         - Upload Sessions
       operationId: uploadSessionsUpload
       summary: Upload part of File to Upload Session
-      description: 'Upload part of File to Upload Session (max 100MB). Get `part_size` from [Get Upload Session](#operation/uploadSessionsOne) first. Every File part (except the last one) uploaded to this endpoint should have Content-Length equal to `part_size`.'
+      description: 'Upload part of File to Upload Session (max 100MB). Get `part_size` from [Get Upload Session](#operation/uploadSessionsOne) first. Every File part (except the last one) uploaded to this endpoint should have Content-Length equal to `part_size`. Note that the base URL is upload.apideck.com instead of unify.apideck.com. For more information on uploads, refer to the [file upload guide](guides/file-upload).'
       x-sdk-exclude: true
       x-graphql-exclude: true
       servers:
@@ -3447,7 +3447,7 @@ paths:
         - Upload Sessions
       operationId: uploadSessionsDelete
       summary: Abort Upload Session
-      description: Abort Upload Session
+      description: 'Abort Upload Session. Note that the base URL is upload.apideck.com instead of unify.apideck.com. For more information on uploads, refer to the [file upload guide](guides/file-upload).'
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'
@@ -3498,7 +3498,7 @@ paths:
         - Upload Sessions
       operationId: uploadSessionsFinish
       summary: Finish Upload Session
-      description: 'Finish Upload Session. Only call this endpoint after all File parts have been uploaded to [Upload part of File](#operation/uploadSessionsUpload).'
+      description: 'Finish Upload Session. Only call this endpoint after all File parts have been uploaded to [Upload part of File](#operation/uploadSessionsUpload). Note that the base URL is upload.apideck.com instead of unify.apideck.com. For more information on uploads, refer to the [file upload guide](guides/file-upload).'
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/raw'

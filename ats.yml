@@ -384,6 +384,7 @@ components:
         cv_url: high
         record_url: low
         rejected_at: high
+        custom_fields: edge-case
         deleted: medium
         deleted_by: medium
         deleted_at: medium
@@ -451,6 +452,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Email'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
         phone_numbers:
           type: array
           items:
@@ -2568,6 +2573,14 @@ paths:
                     id: '123',
                     email: 'elon@musk.com',
                     type: 'primary'
+                  }
+                ],
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
                   }
                 ],
                 phone_numbers: [

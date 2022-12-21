@@ -1,3 +1,9 @@
+## v8.85.1 - (2022-12-19)
+
+### Webhooks API
+
+- Added `disabled_reason` to [Webhook](apis/webhooks/reference#tag/Webhooks) to reflect when a webhook has been automatically disabled.
+
 ## v8.85.0 - (2022-11-15)
 
 ### Connector API

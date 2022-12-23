@@ -955,10 +955,10 @@ components:
             - none
         subscription_level:
           type: string
-          description: Received events are scoped to consumer or across integration.
+          description: Received events are scoped to connection or across integration.
           example: integration
           enum:
-            - consumer
+            - connection
             - integration
         managed_via:
           type: string
@@ -967,6 +967,53 @@ components:
           enum:
             - manual
             - api
+        virtual_webhooks:
+          type: object
+          title: Virtual Webhooks
+          description: Virtual webhook config for the connector.
+          required:
+            - request_rate
+          additionalProperties: false
+          properties:
+            request_rate:
+              type: object
+              title: Request Rate
+              description: The rate at which requests for resources will be made to downstream.
+              required:
+                - rate
+                - size
+                - unit
+              additionalProperties: false
+              properties:
+                rate:
+                  type: integer
+                  title: Rate
+                  description: The number of requests per window unit.
+                size:
+                  type: integer
+                  title: Size of rate window
+                  description: Size of request window.
+                unit:
+                  type: string
+                  title: Unit
+                  description: The window unit for the rate.
+                  enum:
+                    - second
+                    - minute
+                    - hour
+                    - day
+            resources:
+              type: object
+              title: Resources
+              description: The resources that will be requested from downstream.
+              patternProperties:
+                ^.*$:
+                  type: object
+                  properties:
+                    events:
+                      type: array
+                      items:
+                        type: string
     Links:
       type: object
       x-apideck-schema-id: Links

@@ -597,10 +597,7 @@ components:
           items:
             $ref: '#/components/schemas/ConnectorEvent'
         webhook_support:
-          type: object
-          description: 'How webhooks are supported for the connector. Sometimes the connector natively supports webhooks, other times Apideck virtualizes them based on polling.'
-          items:
-            $ref: '#/components/schemas/WebhookSupport'
+          $ref: '#/components/schemas/WebhookSupport'
         docs:
           type: array
           items:
@@ -944,6 +941,7 @@ components:
     WebhookSupport:
       type: object
       x-apideck-schema-id: WebhookSupport
+      description: 'How webhooks are supported for the connector. Sometimes the connector natively supports webhooks, other times Apideck virtualizes them based on polling.'
       properties:
         mode:
           type: string

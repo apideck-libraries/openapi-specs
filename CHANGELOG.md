@@ -1,3 +1,11 @@
+## v8.86.0 - (2023-01-11)
+
+### Vault API
+
+- Added [Create Consumer](/apis/vault/reference#operation/consumersCreate)
+- Added [Update Consumer](/apis/vault/reference#operation/consumersUpdate)
+- Added [Delete Consumer](/apis/vault/reference#operation/consumersDelete)
+
 ## v8.85.1 - (2022-12-19)
 
 ### Webhooks API

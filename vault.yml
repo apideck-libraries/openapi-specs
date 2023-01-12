@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 8.85.1
+  version: 8.86.0
   title: Vault API
   description: |+
     Welcome to the Vault API 👋
@@ -174,19 +174,19 @@ servers:
     description: Production server
 tags:
   - name: Sessions
-    description: ''
+    description: A session represents an authorized session for a consumer. A session is a JWT token that is valid for a short time (1h by default). Use this session token to open Hosted Vault or Vault JS for a consumer.
     x-apideck-model:
       $ref: '#/components/schemas/Session'
   - name: Connections
-    description: ''
+    description: A connection represents an account of a consumer for a connector. For example a consumer with ID "test-consumer" has a Salesforce connection for the CRM API. Connections securely save credentials and settings for a connector.
     x-apideck-model:
       $ref: '#/components/schemas/Connection'
   - name: Consumers
-    description: ''
+    description: A consumer represents an account or user in your system. All connections to connectors are scoped to a consumer.
     x-apideck-model:
       $ref: '#/components/schemas/Consumer'
   - name: Logs
-    description: ''
+    description: A log represents a request made for a given consumer. Logs include requests made to unified APIs, connectors and the Vault API.
     x-apideck-model:
       $ref: '#/components/schemas/Log'
 components:
@@ -384,6 +384,10 @@ components:
         type: string
       example: '2021-05-30T12:00:00.000Z'
   schemas:
+    ApplicationId:
+      type: string
+      description: ID of your Apideck Application
+      example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
     AuthType:
       type: string
       x-apideck-enum-id: auth_types
@@ -750,15 +754,22 @@ components:
         - authorized
       example: authorized
       readOnly: true
+    ConsumerId:
+      type: string
+      example: test_consumer_id
+      description: Unique consumer identifier. You can freely choose a consumer ID yourself. Most of the time, this is an ID of your internal data model that represents a user or account in your system (for example account:12345). If the consumer doesn't exist yet, Vault will upsert a consumer based on your ID.
     Consumer:
       type: object
       x-apideck-schema-id: Consumer
+      required:
+        - consumer_id
       properties:
         consumer_id:
-          type: string
-          example: test_consumer_id
+          $ref: '#/components/schemas/ConsumerId'
         application_id:
           type: string
+          readOnly: true
+          description: ID of your Apideck Application
           example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
         metadata:
           $ref: '#/components/schemas/ConsumerMetadata'
@@ -766,6 +777,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConsumerConnection'
+          readOnly: true
         services:
           type: array
           items:
@@ -774,20 +786,25 @@ components:
           example:
             - salesforce
             - stripe
+          readOnly: true
         aggregated_request_count:
           type: number
           example: 101
+          readOnly: true
         request_counts:
           $ref: '#/components/schemas/RequestCountAllocation'
         created:
           type: string
           example: '2021-05-07T12:55:42.242Z'
+          readOnly: true
         modified:
           type: string
           example: '2021-05-07T12:55:42.242Z'
+          readOnly: true
         request_count_updated:
           type: string
           example: '2021-05-07T12:55:42.242Z'
+          readOnly: true
     ConsumerConnection:
       type: object
       x-apideck-schema-id: ConsumerConnection
@@ -1699,6 +1716,7 @@ components:
     RequestCountAllocation:
       type: object
       x-apideck-schema-id: RequestCountAllocation
+      readOnly: true
       properties:
         unify:
           type: number
@@ -2014,6 +2032,69 @@ components:
           type: string
           description: The date and time the webhook subscription was created downstream
           example: '2020-10-01T12:00:00.000Z'
+    UpdateConsumerRequest:
+      type: object
+      x-apideck-schema-id: UpdateConsumerRequest
+      additionalProperties: false
+      properties:
+        metadata:
+          $ref: '#/components/schemas/ConsumerMetadata'
+    UpdateConsumerResponse:
+      type: object
+      x-apideck-schema-id: GetConsumerResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Consumer'
+    CreateConsumerResponse:
+      type: object
+      x-apideck-schema-id: GetConsumerResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Consumer'
+    DeleteConsumerResponse:
+      type: object
+      x-apideck-schema-id: GetConsumerResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          properties:
+            consumer_id:
+              $ref: '#/components/schemas/ConsumerId'
   responses:
     BadRequestResponse:
       content:
@@ -2069,6 +2150,24 @@ components:
           schema:
             $ref: '#/components/schemas/GetConsumerResponse'
       description: Consumer
+    UpdateConsumerResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateConsumerResponse'
+      description: Consumer updated
+    CreateConsumerResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateConsumerResponse'
+      description: Consumer created
+    DeleteConsumerResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteConsumerResponse'
+      description: Consumer deleted
     GetConsumersResponse:
       content:
         application/json:
@@ -2183,6 +2282,67 @@ security:
     applicationId: []
 paths:
   /vault/consumers:
+    post:
+      summary: Create consumer
+      operationId: consumersAdd
+      description: Create a consumer
+      tags:
+        - Consumers
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-app-id'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Consumer'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateConsumerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID'
+            })
+
+            const params = {
+              consumer: {
+                consumer_id: 'test_consumer_id',
+                metadata: {
+                  account_name: 'SpaceX',
+                  user_name: 'Elon Musk',
+                  email: 'elon@musk.com',
+                  image: 'https://www.spacex.com/static/images/share.jpg'
+                }
+              }
+            }
+
+            try {
+              const { data } = await apideck.vault.consumersAdd(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
     get:
       summary: Get all consumers
       operationId: consumersAll
@@ -2273,6 +2433,114 @@ paths:
 
             try {
               const { data } = await apideck.vault.consumersOne({
+                consumerId: 'test_user_id'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    patch:
+      summary: Update consumer
+      operationId: consumersUpdate
+      description: Update consumer metadata such as name and email.
+      tags:
+        - Consumers
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumer_id'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateConsumerRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateConsumerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID'
+            })
+
+            const params = {
+              consumerId: 'test_user_id',
+              consumer: {
+                metadata: {
+                  account_name: 'SpaceX',
+                  user_name: 'Elon Musk',
+                  email: 'elon@musk.com',
+                  image: 'https://www.spacex.com/static/images/share.jpg'
+                }
+              }
+            }
+
+            try {
+              const { data } = await apideck.vault.consumersUpdate(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    delete:
+      summary: Delete consumer
+      operationId: consumersDelete
+      description: Delete consumer and all their connections, including credentials.
+      tags:
+        - Consumers
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumer_id'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteConsumerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID'
+            })
+
+            try {
+              const { data } = await apideck.vault.consumersDelete({
                 consumerId: 'test_user_id'
               })
               console.log('API called successfully', data)
@@ -3137,7 +3405,7 @@ paths:
       operationId: sessionsCreate
       description: |
         Making a POST request to this endpoint will initiate a Hosted Vault session. Redirect the consumer to the returned
-        url to allow temporary access to manage their integrations and settings.
+        URL to allow temporary access to manage their integrations and settings.
 
         Note: This is a short lived token that will expire after 1 hour (TTL: 3600).
       tags:

@@ -361,9 +361,38 @@ components:
       additionalProperties: false
       x-apideck-weights:
         account_number: critical
+        account_name: medium
+        account_type: medium
         iban: high
+        bic: medium
         bsb_number: edge-case
+        branch_identifier: low
+        bank_code: low
+        currency: medium
       properties:
+        account_number:
+          type: string
+          title: Bank Account Number
+          description: A bank account number is a number that is tied to your bank account. If you have several bank accounts, such as personal, joint, business (and so on), each account will have a different account number.
+          example: '123465'
+          nullable: true
+        account_name:
+          type: string
+          title: Bank Account Name
+          description: The name which you used in opening your bank account.
+          example: SPACEX LLC
+          nullable: true
+        account_type:
+          type: string
+          title: Account Type
+          x-apideck-enum-id: bank-accounts.account_type
+          enum:
+            - bank_account
+            - credit_card
+            - other
+          description: The type of bank account.
+          example: credit_card
+          nullable: true
         iban:
           type: string
           example: CH2989144532982975332
@@ -389,29 +418,6 @@ components:
           title: Bank Code
           description: A bank code is a code assigned by a central bank, a bank supervisory body or a Bankers Association in a country to all its licensed member banks or financial institutions.
           example: BNH
-          nullable: true
-        account_number:
-          type: string
-          title: Bank Account Number
-          description: A bank account number is a number that is tied to your bank account. If you have several bank accounts, such as personal, joint, business (and so on), each account will have a different account number.
-          example: '123465'
-          nullable: true
-        account_name:
-          type: string
-          title: Bank Account Name
-          description: The name which you used in opening your bank account.
-          example: SPACEX LLC
-          nullable: true
-        account_type:
-          type: string
-          title: Account Type
-          x-apideck-enum-id: bank-accounts.account_type
-          enum:
-            - bank_account
-            - credit_card
-            - other
-          description: The type of bank account.
-          example: credit_card
           nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
@@ -2670,14 +2676,14 @@ paths:
                 tax_number: 'US123945459',
                 currency: 'USD',
                 bank_accounts: {
+                  account_number: '123465',
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
                   iban: 'CH2989144532982975332',
                   bic: 'AUDSCHGGXXX',
                   bsb_number: '062-001',
                   branch_identifier: '001',
                   bank_code: 'BNH',
-                  account_number: '123465',
-                  account_name: 'SPACEX LLC',
-                  account_type: 'credit_card',
                   currency: 'USD'
                 },
                 status: 'active'
@@ -2844,14 +2850,14 @@ paths:
                 tax_number: 'US123945459',
                 currency: 'USD',
                 bank_accounts: {
+                  account_number: '123465',
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
                   iban: 'CH2989144532982975332',
                   bic: 'AUDSCHGGXXX',
                   bsb_number: '062-001',
                   branch_identifier: '001',
                   bank_code: 'BNH',
-                  account_number: '123465',
-                  account_name: 'SPACEX LLC',
-                  account_type: 'credit_card',
                   currency: 'USD'
                 },
                 status: 'active'

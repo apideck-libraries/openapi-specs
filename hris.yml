@@ -123,6 +123,14 @@ components:
         type: string
       required: true
       description: ID of the payroll you are acting upon.
+    employeesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/EmployeesSort'
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -2047,6 +2055,28 @@ components:
           description: Employee number to filter on
           example: 123456-AB
       additionalProperties: false
+    EmployeesSort:
+      type: object
+      x-apideck-schema-id: EmployeesSort
+      x-graphql-type-name: EmployeesSort
+      example:
+        by: created_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-graphql-type-name: EmployeesSortBy
+          x-apideck-enum-id: Employees.sort_by
+          description: The field on which to sort the Employees
+          enum:
+            - first_name
+            - last_name
+            - created_at
+            - updated_at
+          example: created_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
     FirstName:
       type: string
       title: First name
@@ -3923,6 +3953,16 @@ components:
             - deleted
             - other
       additionalProperties: false
+    SortDirection:
+      type: string
+      x-apideck-schema-id: SortDirection
+      description: The direction in which to sort the results
+      x-apideck-enum-id: sort_direction
+      enum:
+        - asc
+        - desc
+      default: asc
+      x-graphql-type-name: SortDirection
   securitySchemes:
     apiKey:
       type: apiKey
@@ -4005,6 +4045,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/employeesFilter'
+        - $ref: '#/components/parameters/employeesSort'
       security:
         - apiKey: []
       responses:

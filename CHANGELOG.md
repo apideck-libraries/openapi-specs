@@ -1,3 +1,9 @@
+## v8.87.0 - (2023-01-24)
+
+### CRM API
+
+- Added `filter[updated_since]` to [Activities](apis/crm/reference#tag/Activities)
+
 ## v8.86.0 - (2023-01-11)
 
 ### Vault API

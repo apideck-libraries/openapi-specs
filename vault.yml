@@ -880,20 +880,29 @@ components:
           example: authorized
     ConsumerMetadata:
       type: object
+      description: The metadata of the consumer. This is used to display the consumer in the sidebar. This is optional, but recommended.
       x-apideck-schema-id: ConsumerMetadata
       properties:
         account_name:
-          type: string
           example: SpaceX
+          type: string
+          title: Account name
+          description: The name of the account as shown in the sidebar.
         user_name:
-          type: string
           example: Elon Musk
+          type: string
+          title: User name
+          description: The name of the user as shown in the sidebar.
         email:
-          type: string
           example: elon@musk.com
-        image:
           type: string
+          title: Email
+          description: The email of the user as shown in the sidebar.
+        image:
           example: https://www.spacex.com/static/images/share.jpg
+          type: string
+          title: Image
+          description: The avatar of the user in the sidebar. Must be a valid URL
     ConsumerRequestCountsInDateRangeResponse:
       type: object
       x-apideck-schema-id: ConsumerRequestCountsInDateRangeResponse
@@ -1734,22 +1743,13 @@ components:
       properties:
         consumer_metadata:
           $ref: '#/components/schemas/ConsumerMetadata'
-        custom_consumer_settings:
-          additionalProperties: true
-          description: Custom consumer settings that are passed as part of the session.
-          example:
-            feature_flag_1: true
-            tax_rates:
-              - id: '6'
-                label: 6%
-              - id: '21'
-                label: 21%
-          title: Custom consumer settings
-          type: object
         redirect_uri:
+          title: Redirect URI
           example: https://mysaas.com/dashboard
+          description: The URL to redirect the user to after the session has been configured.
           type: string
         settings:
+          description: Settings to change the way the Vault is displayed.
           additionalProperties: false
           properties:
             unified_apis:
@@ -1801,28 +1801,55 @@ components:
           type: object
           x-graphql-type-name: SessionSettings
         theme:
+          description: Theming options to change the look and feel of Vault.
           properties:
             favicon:
+              title: Favicon
+              description: The URL to the favicon to use for Vault.
               example: https://res.cloudinary.com/apideck/icons/intercom
               type: string
             primary_color:
+              title: Primary color
+              description: The primary color to use for Vault.
               example: '#286efa'
               type: string
-            privacy_url:
-              example: https://compliance.apideck.com/privacy-policy
-              type: string
             sidepanel_background_color:
+              title: Sidebar background color
+              description: The background color to use for the sidebar.
               example: '#286efa'
               type: string
             sidepanel_text_color:
+              title: Sidebar text color
+              description: The text color to use for the sidebar.
               example: '#FFFFFF'
               type: string
-            terms_url:
-              example: https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e
-              type: string
             vault_name:
+              title: Vault name
+              description: The name that will be shown in the sidebar.
               example: Intercom
               type: string
+            privacy_url:
+              title: Privacy URL
+              description: The URL to the privacy policy that will be shown in the sidebar.
+              example: https://compliance.apideck.com/privacy-policy
+              type: string
+            terms_url:
+              title: Terms URL
+              description: The URL to the terms and conditions that will be shown in the sidebar.
+              example: https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e
+              type: string
+          type: object
+        custom_consumer_settings:
+          additionalProperties: true
+          description: Custom consumer settings that are passed as part of the session.
+          example:
+            feature_flag_1: true
+            tax_rates:
+              - id: '6'
+                label: 6%
+              - id: '21'
+                label: 21%
+          title: Custom consumer settings
           type: object
     SimpleFormFieldOption:
       type: object
@@ -3458,19 +3485,6 @@ paths:
                   email: 'elon@musk.com',
                   image: 'https://www.spacex.com/static/images/share.jpg'
                 },
-                custom_consumer_settings: {
-                  feature_flag_1: true,
-                  tax_rates: [
-                    {
-                      id: '6',
-                      label: '6%'
-                    },
-                    {
-                      id: '21',
-                      label: '21%'
-                    }
-                  ]
-                },
                 redirect_uri: 'https://mysaas.com/dashboard',
                 settings: {
                   unified_apis: ['crm'],
@@ -3486,11 +3500,24 @@ paths:
                 theme: {
                   favicon: 'https://res.cloudinary.com/apideck/icons/intercom',
                   primary_color: '#286efa',
-                  privacy_url: 'https://compliance.apideck.com/privacy-policy',
                   sidepanel_background_color: '#286efa',
                   sidepanel_text_color: '#FFFFFF',
-                  terms_url: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e',
-                  vault_name: 'Intercom'
+                  vault_name: 'Intercom',
+                  privacy_url: 'https://compliance.apideck.com/privacy-policy',
+                  terms_url: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e'
+                },
+                custom_consumer_settings: {
+                  feature_flag_1: true,
+                  tax_rates: [
+                    {
+                      id: '6',
+                      label: '6%'
+                    },
+                    {
+                      id: '21',
+                      label: '21%'
+                    }
+                  ]
                 }
               }
             }

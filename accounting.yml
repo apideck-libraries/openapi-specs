@@ -89,7 +89,12 @@ components:
       style: deepObject
       explode: true
       schema:
-        $ref: '#/components/schemas/Passthrough'
+        type: object
+        additionalProperties: true
+        properties:
+          example_downstream_property:
+            type: string
+            description: All passthrough query parameters are passed along to the connector as is (?pass_through[search]=leads becomes ?search=leads)
     profitAndLossFilter:
       name: filter
       in: query
@@ -5294,13 +5299,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#mappingerror
-    Passthrough:
-      type: object
-      additionalProperties: true
-      properties:
-        example_downstream_property:
-          type: string
-          description: All passthrough query parameters are passed along to the connector as is (?pass_through[search]=leads becomes ?search=leads)
     Payment:
       type: object
       x-apideck-schema-id: Payment

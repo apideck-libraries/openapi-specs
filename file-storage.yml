@@ -4130,8 +4130,8 @@ paths:
 x-webhooks:
   FileCreated:
     post:
-      summary: File created
-      description: File created
+      summary: File Created
+      description: Event broadcast when a file has been created.
       operationId: fileCreated
       x-apideck-event-type: file-storage.file.created
       parameters:
@@ -4141,6 +4141,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/FileStorageEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -4148,13 +4156,24 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/WebhookEvent'
+            example:
+              event_type: file-storage.file.created
+              unified_api: file-storage
+              service_id: dropbox
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/file-storage/files/123456ASDF
+              entity_type: file
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   FileUpdated:
     post:
-      summary: File updated
-      description: File updated
+      summary: File Updated
+      description: Event broadcast when a file has been updated.
       operationId: fileUpdated
       x-apideck-event-type: file-storage.file.updated
       parameters:
@@ -4164,6 +4183,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/FileStorageEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -4171,13 +4198,24 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/WebhookEvent'
+            example:
+              event_type: file-storage.file.updated
+              unified_api: file-storage
+              service_id: dropbox
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/file-storage/files/123456ASDF
+              entity_type: file
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   FileDeleted:
     post:
-      summary: File deleted
-      description: File deleted
+      summary: File Deleted
+      description: Event broadcast when a file has been deleted.
       operationId: fileDeleted
       x-apideck-event-type: file-storage.file.deleted
       parameters:
@@ -4187,6 +4225,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/FileStorageEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -4194,6 +4240,17 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/WebhookEvent'
+            example:
+              event_type: file-storage.file.deleted
+              unified_api: file-storage
+              service_id: dropbox
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/file-storage/files/123456ASDF
+              entity_type: file
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []

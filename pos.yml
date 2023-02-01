@@ -9020,8 +9020,8 @@ paths:
 x-webhooks:
   OrderCreated:
     post:
-      summary: Order created
-      description: Order created
+      summary: Order Created
+      description: Event broadcast when an order has been created.
       operationId: orderCreated
       x-apideck-event-type: pos.order.created
       x-apideck-upcoming: true
@@ -9032,13 +9032,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.order.created
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/orders/123456ASDF
+              entity_type: order
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   OrderUpdated:
     post:
-      summary: Order updated
-      description: Order updated
+      summary: Order Updated
+      description: Event broadcast when an order has been updated.
       operationId: orderUpdated
       x-apideck-event-type: pos.order.updated
       x-apideck-upcoming: true
@@ -9049,13 +9068,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.order.updated
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/orders/123456ASDF
+              entity_type: order
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   OrderDeleted:
     post:
-      summary: Order deleted
-      description: Order deleted
+      summary: Order Deleted
+      description: Event broadcast when an order has been deleted.
       operationId: orderDeleted
       x-apideck-event-type: pos.order.deleted
       x-apideck-upcoming: true
@@ -9066,13 +9104,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.order.deleted
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/orders/123456ASDF
+              entity_type: order
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   PosPaymentCreated:
     post:
-      summary: PosPayment created
-      description: PosPayment created
+      summary: Payment Created
+      description: Event broadcast when a payment has been created.
       operationId: paymentCreated
       x-apideck-event-type: pos.payment.created
       tags:
@@ -9082,13 +9139,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.payment.created
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/payments/123456ASDF
+              entity_type: payment
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   PosPaymentUpdated:
     post:
-      summary: PosPayment updated
-      description: PosPayment updated
+      summary: Payment Updated
+      description: Event broadcast when a payment has been updated.
       operationId: paymentUpdated
       x-apideck-event-type: pos.payment.updated
       tags:
@@ -9098,13 +9174,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.payment.updated
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/payments/123456ASDF
+              entity_type: payment
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   PosPaymentDeleted:
     post:
-      summary: PosPayment deleted
-      description: PosPayment deleted
+      summary: Payment Deleted
+      description: Event broadcast when a payment has been deleted.
       operationId: paymentDeleted
       x-apideck-event-type: pos.payment.deleted
       tags:
@@ -9114,13 +9209,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.payment.deleted
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/payments/123456ASDF
+              entity_type: payment
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   MerchantCreated:
     post:
-      summary: Merchant created
-      description: Merchant created
+      summary: Merchant Created
+      description: Event broadcast when a merchant has been created.
       operationId: merchantCreated
       x-apideck-event-type: pos.merchant.created
       tags:
@@ -9130,13 +9244,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.merchant.created
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/merchants/123456ASDF
+              entity_type: merchant
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   MerchantUpdated:
     post:
-      summary: Merchant updated
-      description: Merchant updated
+      summary: Merchant Updated
+      description: Event broadcast when a merchant has been updated.
       operationId: merchantUpdated
       x-apideck-event-type: pos.merchant.updated
       tags:
@@ -9146,13 +9279,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.merchant.updated
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/merchants/123456ASDF
+              entity_type: merchant
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   MerchantDeleted:
     post:
-      summary: Merchant deleted
-      description: Merchant deleted
+      summary: Merchant Deleted
+      description: Event broadcast when a merchant has been deleted.
       operationId: merchantDeleted
       x-apideck-event-type: pos.merchant.deleted
       tags:
@@ -9162,13 +9314,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.merchant.deleted
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/merchants/123456ASDF
+              entity_type: merchant
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   LocationCreated:
     post:
-      summary: Location created
-      description: Location created
+      summary: Location Created
+      description: Event broadcast when a location has been created.
       operationId: locationCreated
       x-apideck-event-type: pos.location.created
       tags:
@@ -9178,13 +9349,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.location.created
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/locations/123456ASDF
+              entity_type: location
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   LocationUpdated:
     post:
-      summary: Location updated
-      description: Location updated
+      summary: Location Updated
+      description: Event broadcast when a location has been updated.
       operationId: locationUpdated
       x-apideck-event-type: pos.location.updated
       tags:
@@ -9194,13 +9384,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.location.updated
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/locations/123456ASDF
+              entity_type: location
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   LocationDeleted:
     post:
-      summary: Location deleted
-      description: Location deleted
+      summary: Location Deleted
+      description: Event broadcast when a location has been deleted.
       operationId: locationDeleted
       x-apideck-event-type: pos.location.deleted
       tags:
@@ -9210,13 +9419,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.location.deleted
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/locations/123456ASDF
+              entity_type: location
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   ItemCreated:
     post:
-      summary: Item created
-      description: Item created
+      summary: Item Created
+      description: Event broadcast when an item has been created.
       operationId: itemCreated
       x-apideck-event-type: pos.item.created
       tags:
@@ -9226,13 +9454,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.item.created
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/items/123456ASDF
+              entity_type: item
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   ItemDeleted:
     post:
-      summary: Item deleted
-      description: Item deleted
+      summary: Item Deleted
+      description: Event broadcast when an item has been deleted.
       operationId: itemDeleted
       x-apideck-event-type: pos.item.deleted
       tags:
@@ -9242,13 +9489,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.item.deleted
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/items/123456ASDF
+              entity_type: item
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   ItemUpdated:
     post:
-      summary: Item updated
-      description: Item updated
+      summary: Item Updated
+      description: Event broadcast when an item has been updated.
       operationId: itemUpdated
       x-apideck-event-type: pos.item.updated
       tags:
@@ -9258,13 +9524,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.item.updated
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/items/123456ASDF
+              entity_type: item
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   ModifierCreated:
     post:
-      summary: Modifier created
-      description: Modifier created
+      summary: Modifier Created
+      description: Event broadcast when a modifier has been created.
       operationId: modifierCreated
       x-apideck-event-type: pos.modifier.created
       tags:
@@ -9274,13 +9559,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.modifier.created
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/modifiers/123456ASDF
+              entity_type: modifier
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   ModifierUpdated:
     post:
-      summary: Modifier updated
-      description: Modifier updated
+      summary: Modifier Updated
+      description: Event broadcast when a modifier has been updated.
       operationId: modifierUpdated
       x-apideck-event-type: pos.modifier.updated
       tags:
@@ -9290,13 +9594,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.modifier.updated
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/modifiers/123456ASDF
+              entity_type: modifier
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   ModifierDeleted:
     post:
-      summary: Modifier deleted
-      description: Modifier deleted
+      summary: Modifier Deleted
+      description: Event broadcast when a modifier has been deleted.
       operationId: modifierDeleted
       x-apideck-event-type: pos.modifier.deleted
       tags:
@@ -9306,13 +9629,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.modifier.deleted
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/modifiers/123456ASDF
+              entity_type: modifier
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   ModifierGroupDeleted:
     post:
-      summary: Modifier Group deleted
-      description: Modifier Group deleted
+      summary: Modifier group Deleted
+      description: Event broadcast when a modifier group has been deleted.
       operationId: modifierGroupDeleted
       x-apideck-event-type: pos.modifier-group.deleted
       tags:
@@ -9322,13 +9664,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.modifier-group.deleted
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/modifier-groups/123456ASDF
+              entity_type: modifier-group
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   ModifierGroupCreated:
     post:
-      summary: Modifier Group created
-      description: Modifier Group created
+      summary: Modifier group Created
+      description: Event broadcast when a modifier group has been created.
       operationId: modifierGroupCreated
       x-apideck-event-type: pos.modifier-group.created
       tags:
@@ -9338,13 +9699,32 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.modifier-group.created
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/modifier-groups/123456ASDF
+              entity_type: modifier-group
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
   ModifierGroupUpdated:
     post:
-      summary: Modifier Group updated
-      description: Modifier Group updated
+      summary: Modifier group Updated
+      description: Event broadcast when a modifier group has been updated.
       operationId: modifierGroupUpdated
       x-apideck-event-type: pos.modifier-group.updated
       tags:
@@ -9354,6 +9734,25 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/PosWebhookEvent'
+            example:
+              event_type: pos.modifier-group.updated
+              unified_api: pos
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/pos/modifier-groups/123456ASDF
+              entity_type: modifier-group
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []

@@ -2820,8 +2820,8 @@ x-webhooks:
   x-sdk-exclude: true
   ApplicantCreated:
     post:
-      summary: Applicant created
-      description: Applicant created
+      summary: Applicant Created
+      description: Event broadcast when an applicant has been created.
       operationId: applicantCreated
       x-apideck-event-type: ats.applicant.created
       x-apideck-upcoming: true
@@ -2832,6 +2832,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/AtsEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -2839,13 +2847,24 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/AtsWebhookEvent'
+            example:
+              event_type: ats.applicant.created
+              unified_api: ats
+              service_id: lever
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/ats/applicants/123456ASDF
+              entity_type: applicant
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   ApplicantUpdated:
     post:
-      summary: Applicant updated
-      description: Applicant updated
+      summary: Applicant Updated
+      description: Event broadcast when an applicant has been updated.
       operationId: applicantUpdated
       x-apideck-event-type: ats.applicant.updated
       x-apideck-upcoming: true
@@ -2856,6 +2875,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/AtsEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -2863,13 +2890,24 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/AtsWebhookEvent'
+            example:
+              event_type: ats.applicant.updated
+              unified_api: ats
+              service_id: lever
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/ats/applicants/123456ASDF
+              entity_type: applicant
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   ApplicantDeleted:
     post:
-      summary: Applicant deleted
-      description: Applicant deleted
+      summary: Applicant Deleted
+      description: Event broadcast when an applicant has been deleted.
       operationId: applicantDeleted
       x-apideck-event-type: ats.applicant.deleted
       x-apideck-upcoming: true
@@ -2880,6 +2918,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/AtsEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -2887,13 +2933,24 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/AtsWebhookEvent'
+            example:
+              event_type: ats.applicant.deleted
+              unified_api: ats
+              service_id: lever
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/ats/applicants/123456ASDF
+              entity_type: applicant
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   JobCreated:
     post:
-      summary: Job created
-      description: Job created
+      summary: Job Created
+      description: Event broadcast when a job has been created.
       operationId: jobCreated
       x-apideck-event-type: ats.job.created
       parameters:
@@ -2903,6 +2960,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/AtsEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -2910,13 +2975,24 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/AtsWebhookEvent'
+            example:
+              event_type: ats.job.created
+              unified_api: ats
+              service_id: lever
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/ats/jobs/123456ASDF
+              entity_type: job
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   JobUpdated:
     post:
-      summary: Job updated
-      description: Job updated
+      summary: Job Updated
+      description: Event broadcast when a job has been updated.
       operationId: jobUpdated
       x-apideck-event-type: ats.job.updated
       parameters:
@@ -2926,6 +3002,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/AtsEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -2933,13 +3017,24 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/AtsWebhookEvent'
+            example:
+              event_type: ats.job.updated
+              unified_api: ats
+              service_id: lever
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/ats/jobs/123456ASDF
+              entity_type: job
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   JobDeleted:
     post:
-      summary: Job deleted
-      description: Job deleted
+      summary: Job Deleted
+      description: Event broadcast when a job has been deleted.
       operationId: jobDeleted
       x-apideck-event-type: ats.job.deleted
       parameters:
@@ -2949,6 +3044,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/AtsEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -2956,6 +3059,17 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/AtsWebhookEvent'
+            example:
+              event_type: ats.job.deleted
+              unified_api: ats
+              service_id: lever
+              consumer_id: test_user_id
+              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+              entity_id: 123456ASDF
+              entity_url: https://unify.apideck.com/ats/jobs/123456ASDF
+              entity_type: job
+              occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []

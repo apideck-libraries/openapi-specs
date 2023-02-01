@@ -3584,7 +3584,7 @@ x-webhooks:
   ConnectionCreated:
     post:
       summary: Connection Created
-      description: Connection Created
+      description: Event broadcast when a connection has been created.
       operationId: connectionCreated
       x-apideck-event-type: vault.connection.created
       parameters:
@@ -3594,6 +3594,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -3601,13 +3609,37 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/ConnectionEvent'
+            example:
+              event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+              event_type: vault.connection.created
+              service_id: apideck-vault
+              entity_id: 1111+test_user_id
+              entity_type: Connection
+              entity:
+                id: 1111+test_user_id
+                consumer_id: test_user_id
+                unified_api: crm
+                service_id: salesforce
+                name: Salesforce
+                icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+                logo: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
+                website: https://www.salesforce.com
+                tag_line: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
+                auth_type: oauth2
+                enabled: true
+                created_at: '2020-09-19T12:18:37.071Z'
+                updated_at: '2020-09-19T12:18:37.071Z'
+                state: added
+              execution_attempt: 2
+              occurred_at: '2021-10-01T03:14:55.419Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   ConnectionUpdated:
     post:
       summary: Connection Updated
-      description: Connection Updated
+      description: Event broadcast when a connection has been updated.
       operationId: connectionUpdated
       x-apideck-event-type: vault.connection.updated
       parameters:
@@ -3617,6 +3649,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -3624,13 +3664,37 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/ConnectionEvent'
+            example:
+              event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+              event_type: vault.connection.updated
+              service_id: apideck-vault
+              entity_id: 1111+test_user_id
+              entity_type: Connection
+              entity:
+                id: 1111+test_user_id
+                consumer_id: test_user_id
+                unified_api: crm
+                service_id: salesforce
+                name: Salesforce
+                icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+                logo: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
+                website: https://www.salesforce.com
+                tag_line: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
+                auth_type: oauth2
+                enabled: true
+                created_at: '2020-09-19T12:18:37.071Z'
+                updated_at: '2020-09-19T12:18:37.071Z'
+                state: authorized
+              execution_attempt: 2
+              occurred_at: '2021-10-01T03:14:55.419Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   ConnectionDisabled:
     post:
       summary: Connection Disabled
-      description: Connection Disabled
+      description: Event broadcast when a connection has been disabled.
       operationId: connectionDisabled
       x-apideck-event-type: vault.connection.disabled
       parameters:
@@ -3640,6 +3704,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -3647,13 +3719,37 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/ConnectionEvent'
+            example:
+              event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+              event_type: vault.connection.disabled
+              service_id: apideck-vault
+              entity_id: 1111+test_user_id
+              entity_type: Connection
+              entity:
+                id: 1111+test_user_id
+                consumer_id: test_user_id
+                unified_api: crm
+                service_id: salesforce
+                name: Salesforce
+                icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+                logo: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
+                website: https://www.salesforce.com
+                tag_line: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
+                auth_type: oauth2
+                enabled: false
+                created_at: '2020-09-19T12:18:37.071Z'
+                updated_at: '2020-09-19T12:18:37.071Z'
+                state: authorized
+              execution_attempt: 2
+              occurred_at: '2021-10-01T03:14:55.419Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   ConnectionDeleted:
     post:
       summary: Connection Deleted
-      description: Connection Deleted
+      description: Event broadcast when a connection has been deleted.
       operationId: connectionDeleted
       x-apideck-event-type: vault.connection.deleted
       parameters:
@@ -3663,6 +3759,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -3670,13 +3774,37 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/ConnectionEvent'
+            example:
+              event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+              event_type: vault.connection.deleted
+              service_id: apideck-vault
+              entity_id: 1111+test_user_id
+              entity_type: Connection
+              entity:
+                id: 1111+test_user_id
+                consumer_id: test_user_id
+                unified_api: crm
+                service_id: salesforce
+                name: Salesforce
+                icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+                logo: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
+                website: https://www.salesforce.com
+                tag_line: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
+                auth_type: oauth2
+                enabled: true
+                created_at: '2020-09-19T12:18:37.071Z'
+                updated_at: '2020-09-19T12:18:37.071Z'
+                state: available
+              execution_attempt: 2
+              occurred_at: '2021-10-01T03:14:55.419Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   ConnectionCallable:
     post:
       summary: Connection Callable
-      description: Connection Callable
+      description: Event broadcast when a connection is now callable.
       operationId: connectionCallable
       x-apideck-event-type: vault.connection.callable
       parameters:
@@ -3686,6 +3814,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -3693,13 +3829,37 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/ConnectionEvent'
+            example:
+              event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+              event_type: vault.connection.callable
+              service_id: apideck-vault
+              entity_id: 1111+test_user_id
+              entity_type: Connection
+              entity:
+                id: 1111+test_user_id
+                consumer_id: test_user_id
+                unified_api: crm
+                service_id: salesforce
+                name: Salesforce
+                icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+                logo: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
+                website: https://www.salesforce.com
+                tag_line: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
+                auth_type: oauth2
+                enabled: true
+                created_at: '2020-09-19T12:18:37.071Z'
+                updated_at: '2020-09-19T12:18:37.071Z'
+                state: callable
+              execution_attempt: 2
+              occurred_at: '2021-10-01T03:14:55.419Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   TokenRefreshFailed:
     post:
-      summary: Token Refresh Failed
-      description: Attempt to refresh the connections access_token failed.
+      summary: Connection Token Refresh Failed
+      description: Event broadcast when a connection token refresh has failed.
       operationId: connectionTokenRefreshFailed
       x-apideck-event-type: vault.connection.token_refresh.failed
       parameters:
@@ -3709,6 +3869,14 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -3716,6 +3884,30 @@ x-webhooks:
           application/json:
             schema:
               $ref: '#/components/schemas/ConnectionEvent'
+            example:
+              event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+              event_type: vault.connection.token_refresh.failed
+              service_id: apideck-vault
+              entity_id: 1111+test_user_id
+              entity_type: Connection
+              entity:
+                id: 1111+test_user_id
+                consumer_id: test_user_id
+                unified_api: crm
+                service_id: salesforce
+                name: Salesforce
+                icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+                logo: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
+                website: https://www.salesforce.com
+                tag_line: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
+                auth_type: oauth2
+                enabled: true
+                created_at: '2020-09-19T12:18:37.071Z'
+                updated_at: '2020-09-19T12:18:37.071Z'
+                state: added
+              execution_attempt: 2
+              occurred_at: '2021-10-01T03:14:55.419Z'
       responses:
         '200':
-          description: Return a 200 status to indicate that the data was received successfully
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []

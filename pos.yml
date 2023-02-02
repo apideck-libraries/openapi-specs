@@ -652,12 +652,14 @@ components:
     CreatedAt:
       type: string
       title: Created at (timestamp)
+      description: The date and time when the object was created.
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
     CreatedBy:
       type: string
       title: Created by
+      description: The user who created the object.
       example: '12345'
       readOnly: true
       nullable: true
@@ -2558,6 +2560,8 @@ components:
       nullable: true
     Id:
       type: string
+      title: ID
+      description: A unique identifier for an object.
       example: '12345'
       readOnly: true
     IdempotencyKey:
@@ -4298,7 +4302,8 @@ components:
         country:
           type: string
           example: US
-          description: country code according to ISO 3166-1 alpha-2.
+          title: Country Code
+          description: Country code according to ISO 3166-1 alpha-2.
           minLength: 2
           maxLength: 2
           nullable: true
@@ -4620,6 +4625,7 @@ components:
     RowVersion:
       type: string
       title: Row version
+      description: A binary value used to detect updates to a object and prevent data conflicts. It is incremented each time an update is made to the object.
       example: 1-12345
       nullable: true
     Sequence:
@@ -4849,6 +4855,8 @@ components:
         - id
       properties:
         id:
+          title: Id
+          description: The unique identifier of the resource
           type: string
           readOnly: true
           example: '12345'
@@ -4888,12 +4896,15 @@ components:
     UpdatedAt:
       type: string
       title: Updated at (timestamp)
+      description: The date and time when the object was last updated.
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
       nullable: true
     UpdatedBy:
       type: string
+      title: Updated by
+      description: The user who last updated the object.
       example: '12345'
       readOnly: true
       nullable: true

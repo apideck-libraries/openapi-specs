@@ -664,12 +664,14 @@ components:
     CreatedAt:
       type: string
       title: Created at (timestamp)
+      description: The date and time when the object was created.
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
     CreatedBy:
       type: string
       title: Created by
+      description: The user who created the object.
       example: '12345'
       readOnly: true
       nullable: true
@@ -808,6 +810,7 @@ components:
     Description:
       type: string
       title: Description
+      description: A description of the object.
       example: A description
       nullable: true
     UnifiedFile:
@@ -1266,6 +1269,8 @@ components:
           $ref: '#/components/schemas/UploadSession'
     Id:
       type: string
+      title: ID
+      description: A unique identifier for an object.
       example: '12345'
       readOnly: true
     DownstreamId:
@@ -1602,6 +1607,8 @@ components:
         - id
       properties:
         id:
+          title: Id
+          description: The unique identifier of the resource
           type: string
           readOnly: true
           example: '12345'
@@ -1785,6 +1792,7 @@ components:
     UpdatedAt:
       type: string
       title: Updated at (timestamp)
+      description: The date and time when the object was last updated.
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
@@ -1796,6 +1804,8 @@ components:
       readOnly: true
     UpdatedBy:
       type: string
+      title: Updated by
+      description: The user who last updated the object.
       example: '12345'
       readOnly: true
       nullable: true

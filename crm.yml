@@ -939,10 +939,13 @@ components:
           readOnly: true
         salutation:
           type: string
+          description: A formal salutation for the person. For example, 'Mr', 'Mrs'
           example: Mr
           nullable: true
         birthday:
           type: string
+          title: Birth Date
+          description: The date of birth of the person.
           example: '2000-08-12'
           format: date
           nullable: true
@@ -1105,6 +1108,7 @@ components:
         photo_url:
           type: string
           title: Photo URL
+          description: The URL of the photo of a person.
           example: https://unavatar.io/elon-musk
           nullable: true
         lead_source:
@@ -3800,6 +3804,7 @@ components:
         updated_at:
           type: string
           title: Updated at (timestamp)
+          description: The date and time when the object was last updated.
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
@@ -3807,6 +3812,7 @@ components:
         created_at:
           type: string
           title: Created at (timestamp)
+          description: The date and time when the object was created.
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
@@ -3814,6 +3820,7 @@ components:
     RowVersion:
       type: string
       title: Row version
+      description: A binary value used to detect updates to a object and prevent data conflicts. It is incremented each time an update is made to the object.
       example: 1-12345
       nullable: true
     SocialLink:
@@ -3925,6 +3932,8 @@ components:
         - id
       properties:
         id:
+          title: Id
+          description: The unique identifier of the resource
           type: string
           readOnly: true
           example: '12345'
@@ -4271,23 +4280,25 @@ components:
         title:
           type: string
           title: Job title
+          description: The job title of the person.
           example: CEO
           nullable: true
         division:
           type: string
           title: Division
-          description: The division the user is currently in.
+          description: The division the person is currently in. Usually a collection of departments or teams or regions.
           example: Europe
           nullable: true
         department:
           type: string
           title: Department
-          description: The department the user is currently in.
+          description: The department the person is currently in.
           example: R&D
           nullable: true
         company_name:
           type: string
           title: Company name
+          description: The name of the company.
           example: SpaceX
           nullable: true
         employee_number:
@@ -4299,6 +4310,7 @@ components:
         description:
           type: string
           title: Description
+          description: A description of the object.
           example: A description
           nullable: true
         image:
@@ -4409,11 +4421,13 @@ components:
     FirstName:
       type: string
       title: First name
+      description: The first name of the person.
       example: Elon
       nullable: true
     LastName:
       type: string
       title: Last name
+      description: The last name of the person.
       example: Musk
       nullable: true
   parameters:

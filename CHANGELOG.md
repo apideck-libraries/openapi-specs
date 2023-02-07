@@ -1,3 +1,9 @@
+## v8.88.0 - (2023-02-07)
+
+### CRM API
+
+- Added the [Users](apis/crm/reference#tag/Users) resource to [HubSpot](connectors/hubspot).
+
 ## v8.87.0 - (2023-01-24)
 
 ### CRM API

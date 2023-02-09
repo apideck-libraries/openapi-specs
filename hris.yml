@@ -1668,18 +1668,7 @@ components:
         employee_number:
           $ref: '#/components/schemas/EmployeeNumber'
         employment_status:
-          type: string
-          example: active
-          title: Employment status
-          description: The employment status of the employee, indicating whether they are currently employed, inactive, terminated, or in another status.
-          x-graphql-type-name: EmployeeEmploymentStatus
-          x-apideck-enum-id: employees.employment_status
-          enum:
-            - active
-            - inactive
-            - terminated
-            - other
-          nullable: true
+          $ref: '#/components/schemas/EmploymentStatus'
         employment_role:
           x-apideck-weights:
             type: critical
@@ -1737,6 +1726,8 @@ components:
               format: email
               example: elon@musk.com
               nullable: true
+            employment_status:
+              $ref: '#/components/schemas/EmploymentStatus'
         direct_reports:
           type: array
           title: Direct reports
@@ -2490,16 +2481,7 @@ components:
           format: date
           nullable: true
         employment_status:
-          type: string
-          example: active
-          x-graphql-type-name: JobEmploymentStatus
-          x-apideck-enum-id: employees.employment_status
-          enum:
-            - active
-            - inactive
-            - terminated
-            - other
-          nullable: true
+          $ref: '#/components/schemas/EmploymentStatus'
         department:
           type: string
           example: Brussels Office
@@ -4030,6 +4012,19 @@ components:
         - desc
       default: asc
       x-graphql-type-name: SortDirection
+    EmploymentStatus:
+      type: string
+      example: active
+      title: Employment status
+      description: The employment status of the employee, indicating whether they are currently employed, inactive, terminated, or in another status.
+      x-graphql-type-name: EmployeeEmploymentStatus
+      x-apideck-enum-id: employees.employment_status
+      enum:
+        - active
+        - inactive
+        - terminated
+        - other
+      nullable: true
   securitySchemes:
     apiKey:
       type: apiKey
@@ -4239,7 +4234,8 @@ paths:
                   name: 'Elon Musk',
                   first_name: 'Elon',
                   last_name: 'Musk',
-                  email: 'elon@musk.com'
+                  email: 'elon@musk.com',
+                  employment_status: 'active'
                 },
                 direct_reports: [
                   'a0d636c6-43b3-4bde-8c70-85b707d992f4',
@@ -4527,7 +4523,8 @@ paths:
                   name: 'Elon Musk',
                   first_name: 'Elon',
                   last_name: 'Musk',
-                  email: 'elon@musk.com'
+                  email: 'elon@musk.com',
+                  employment_status: 'active'
                 },
                 direct_reports: [
                   'a0d636c6-43b3-4bde-8c70-85b707d992f4',

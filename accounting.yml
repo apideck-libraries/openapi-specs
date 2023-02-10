@@ -6785,7 +6785,7 @@ components:
         resource:
           type: string
           description: Unified API resource name
-          example: JournalEntries
+          example: journal-entries
         operation:
           type: string
           description: Operation performed
@@ -6817,7 +6817,7 @@ components:
         resource:
           type: string
           description: Unified API resource name
-          example: JournalEntries
+          example: journal-entries
         operation:
           type: string
           description: Operation performed
@@ -6850,7 +6850,7 @@ components:
         resource:
           type: string
           description: Unified API resource name
-          example: JournalEntries
+          example: journal-entries
         operation:
           type: string
           description: Operation performed
@@ -6883,7 +6883,7 @@ components:
         resource:
           type: string
           description: Unified API resource name
-          example: JournalEntries
+          example: journal-entries
         operation:
           type: string
           description: Operation performed
@@ -6968,7 +6968,7 @@ components:
         resource:
           type: string
           description: Unified API resource name
-          example: JournalEntries
+          example: journal-entries
         operation:
           type: string
           description: Operation performed
@@ -6984,7 +6984,7 @@ components:
         tax_amount: high
         total_amount: critical
         type: critical
-        tracking_category_id: low
+        tracking_category: low
         tax_rate: medium
         ledger_account: critical
       required:
@@ -7031,8 +7031,8 @@ components:
           example: debit
         tax_rate:
           $ref: '#/components/schemas/LinkedTaxRate'
-        linked_tracking_category:
-          $ref: '#/components/schemas/LinkedLedgerAccount'
+        tracking_category:
+          $ref: '#/components/schemas/LinkedTrackingCategory'
         ledger_account:
           $ref: '#/components/schemas/LinkedLedgerAccount'
   securitySchemes:
@@ -7122,7 +7122,7 @@ tags:
       $ref: '#/components/schemas/ProfitAndLoss'
   - name: Journal Entries
     description: ''
-    x-apideck-resource-id: JournalEntries
+    x-apideck-resource-id: journal-entries
     x-apideck-model:
       $ref: '#/components/schemas/JournalEntry'
 paths:
@@ -11016,10 +11016,9 @@ paths:
                     tax_rate: {
                       id: '123456'
                     },
-                    linked_tracking_category: {
+                    tracking_category: {
                       id: '123456',
-                      nominal_code: 'N091',
-                      code: '453'
+                      name: 'New York'
                     },
                     ledger_account: {
                       id: '123456',
@@ -11036,10 +11035,9 @@ paths:
                     tax_rate: {
                       id: '123456'
                     },
-                    linked_tracking_category: {
+                    tracking_category: {
                       id: '123456',
-                      nominal_code: 'N091',
-                      code: '453'
+                      name: 'New York'
                     },
                     ledger_account: {
                       id: '123456',
@@ -11173,10 +11171,9 @@ paths:
                     tax_rate: {
                       id: '123456'
                     },
-                    linked_tracking_category: {
+                    tracking_category: {
                       id: '123456',
-                      nominal_code: 'N091',
-                      code: '453'
+                      name: 'New York'
                     },
                     ledger_account: {
                       id: '123456',
@@ -11193,10 +11190,9 @@ paths:
                     tax_rate: {
                       id: '123456'
                     },
-                    linked_tracking_category: {
+                    tracking_category: {
                       id: '123456',
-                      nominal_code: 'N091',
-                      code: '453'
+                      name: 'New York'
                     },
                     ledger_account: {
                       id: '123456',

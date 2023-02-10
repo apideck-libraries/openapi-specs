@@ -1,3 +1,10 @@
+## v8.89.0 - (2023-02-07)
+
+### Accounting API
+
+- Added the [Journal Entries](apis/accounting/reference#tag/JournalEntries) resource.
+
+
 ## v8.88.0 - (2023-02-07)
 
 ### CRM API

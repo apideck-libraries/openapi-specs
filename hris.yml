@@ -4110,6 +4110,13 @@ paths:
         - $ref: '#/components/parameters/employeesSort'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: nmbrs
+          description: We keep track of the "List Employees" response for NMBRS virtual webhooks events, which contains fewer fields compared to the "Get Employee" response.
+        - connector: ceridian-dayforce
+          description: For virtual webhook events on Ceridian Dayforce, we monitor the "List Employees" response, which has a very small set of fields in comparison of the "Get Employee" response. This is the reason why we only support `hris.employee.created` events for this connector.
+        - connector: paylocity
+          description: For virtual webhook events on Paylocity, we monitor the "List Employees" response, which has a very small set of fields in comparison of the "Get Employee" response. This is the reason why we only support `hris.employee.created` events for this connector.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeesResponse'

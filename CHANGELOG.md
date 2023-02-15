@@ -1,9 +1,31 @@
+## v8.90.0 - (2023-02-15)
+
+### Ecommerce API
+
+Added the [Ecommerce API](apis/ecommerce/reference).
+
+### Resources
+
+- [Orders](apis/ecommerce/reference#tag/Orders)
+- [Customers](apis/ecommerce/reference#tag/Customers)
+- [Products](apis/ecommerce/reference#tag/Products)
+- [Store](apis/ecommerce/reference#tag/Stores)
+
+### Connectors
+
+- [BigCommerce](connectors/bigcommerce)
+- [Lightspeed](connectors/lightspeed)
+- [Picqer](connectors/picqer)
+- [Shopify](connectors/shopify)
+- [Shopware](connectors/shopware)
+- [Wix](connectors/wix)
+- [WooCommerce](connectors/woocommerce)
+
 ## v8.89.0 - (2023-02-07)
 
 ### Accounting API
 
 - Added the [Journal Entries](apis/accounting/reference#tag/JournalEntries) resource.
-
 
 ## v8.88.0 - (2023-02-07)
 

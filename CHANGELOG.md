@@ -1,3 +1,7 @@
+## v8.91.0 - (2023-02-15)
+
+- Added `parent` and `project` fields to the [Customer](apis/accounting/reference#tag/Customer) schema on Accounting.
+
 ## v8.90.0 - (2023-02-15)
 
 ### Ecommerce API

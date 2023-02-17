@@ -58,6 +58,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/CustomersFilter'
+    suppliersFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/SuppliersFilter'
     id:
       in: path
       name: id
@@ -2247,6 +2255,38 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/InvoiceResponse'
+    CreateJournalEntryResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journal-entries
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     CreateLedgerAccountResponse:
       type: object
       x-apideck-schema-id: CreateLedgerAccountResponse
@@ -3339,6 +3379,38 @@ components:
           example: delete
         data:
           $ref: '#/components/schemas/InvoiceResponse'
+    DeleteJournalEntryResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journal-entries
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     DeleteLedgerAccountResponse:
       type: object
       x-apideck-schema-id: DeleteLedgerAccountResponse
@@ -3949,6 +4021,78 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetJournalEntriesResponse:
+      x-graphql-type-name: JournalEntryList
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journal-entries
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalEntry'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetJournalEntryResponse:
+      x-graphql-type-name: JournalEntry
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journal-entries
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/JournalEntry'
     GetLedgerAccountResponse:
       type: object
       x-apideck-schema-id: GetLedgerAccountResponse
@@ -4768,6 +4912,14 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
+    InvoiceResponse:
+      type: object
+      x-apideck-schema-id: InvoiceResponse
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
     InvoicesSort:
       type: object
       x-apideck-schema-id: InvoicesSort
@@ -4787,14 +4939,136 @@ components:
         direction:
           $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
-    InvoiceResponse:
+    JournalEntry:
       type: object
-      x-apideck-schema-id: InvoiceResponse
+      additionalProperties: false
+      x-apideck-weights:
+        id: high
+        title: medium
+        currency_rate: low
+        currency: medium
+        line_items: medium
+        memo: low
+        posted_at: low
+        journal_symbol: edge-case
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
+      x-apideck-strict-required:
+        - line_items
+      x-apideck-strict-any-of:
+        - required:
+            - ''
       properties:
         id:
           $ref: '#/components/schemas/Id'
-        downstream_id:
-          $ref: '#/components/schemas/DownstreamId'
+        title:
+          type: string
+          title: Journal entry title
+          description: Journal entry title
+          example: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry'
+          nullable: true
+        currency_rate:
+          $ref: '#/components/schemas/CurrencyRate'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        line_items:
+          type: array
+          minItems: 2
+          description: Requires a minimum of 2 line items that sum to 0
+          items:
+            $ref: '#/components/schemas/JournalEntryLineItem'
+        memo:
+          type: string
+          title: Memo
+          description: Reference for the journal entry.
+          example: Thank you for your business and have a great day!
+          nullable: true
+        posted_at:
+          type: string
+          title: Posted at (timestamp)
+          description: This is the date on which the journal entry was added. This can be different from the creation date and can also be backdated.
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        journal_symbol:
+          type: string
+          title: Journal symbol
+          description: Journal symbol of the entry. For example IND for indirect costs
+          example: IND
+          nullable: true
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+    JournalEntryLineItem:
+      type: object
+      x-apideck-schema-id: JournalEntryLineItem
+      additionalProperties: false
+      x-apideck-weights:
+        id: high
+        tax_amount: high
+        total_amount: critical
+        type: critical
+        tracking_category: low
+        tax_rate: medium
+        ledger_account: critical
+      required:
+        - ledger_account
+        - total_amount
+        - type
+      x-apideck-strict-required:
+        - ledger_account
+        - total_amount
+        - type
+      x-apideck-strict-any-of:
+        - required:
+            - ''
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        description:
+          type: string
+          title: Description
+          description: User defined description
+          example: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+          nullable: true
+        tax_amount:
+          type: number
+          title: Tax amount
+          description: Tax amount
+          example: 27500
+          nullable: true
+        total_amount:
+          type: number
+          title: Total amount
+          description: Debit entries are considered positive, and credit entries are considered negative.
+          example: 27500
+          nullable: true
+        type:
+          type: string
+          enum:
+            - debit
+            - credit
+          x-graphql-type-name: JournalEntryLineItemType
+          x-apideck-enum-id: JournalEntryLineItemType
+          title: Type
+          description: Debit entries are considered positive, and credit entries are considered negative.
+          example: debit
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        tracking_category:
+          $ref: '#/components/schemas/LinkedTrackingCategory'
+        ledger_account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        department_id:
+          $ref: '#/components/schemas/Id'
+        location_id:
+          $ref: '#/components/schemas/Id'
     Language:
       type: string
       example: EN
@@ -5174,6 +5448,28 @@ components:
           description: The code assigned to the account.
           example: '453'
           nullable: true
+    LinkedParentCustomer:
+      type: object
+      x-apideck-schema-id: LinkedParentCustomer
+      title: LinkedParentCustomer
+      description: The parent customer this entity is linked to.
+      x-graphql-type-name: AccountingLinkedParentCustomer
+      x-apideck-weights:
+        id: critical
+      nullable: true
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          title: Customer ID
+          description: The parent ID of the customer this entity is linked to.
+          example: '12345'
+        name:
+          type: string
+          title: Name
+          description: The name of the parent customer.
+          example: Windsurf Shop
     LinkedSupplier:
       type: object
       x-apideck-schema-id: LinkedSupplier
@@ -5238,28 +5534,6 @@ components:
           example: GST on Purchases
           nullable: true
           readOnly: true
-    LinkedParentCustomer:
-      type: object
-      x-apideck-schema-id: LinkedParentCustomer
-      title: LinkedParentCustomer
-      description: The parent customer this entity is linked to.
-      x-graphql-type-name: AccountingLinkedParentCustomer
-      x-apideck-weights:
-        id: critical
-      nullable: true
-      required:
-        - id
-      properties:
-        id:
-          type: string
-          title: Customer ID
-          description: The parent ID of the customer this entity is linked to.
-          example: '12345'
-        name:
-          type: string
-          title: Name
-          description: The name of the parent customer.
-          example: Windsurf Shop
     LinkedTrackingCategory:
       type: object
       x-apideck-schema-id: LinkedTrackingCategory
@@ -6101,6 +6375,25 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         row_version:
           $ref: '#/components/schemas/RowVersion'
+    SuppliersFilter:
+      type: object
+      x-apideck-schema-id: SuppliersFilter
+      x-graphql-type-name: SuppliersFilter
+      example:
+        company_name: SpaceX
+        email: elon@musk.com
+      properties:
+        company_name:
+          type: string
+          title: Company Name
+          description: Company Name of supplier to search for
+          example: SpaceX
+        email:
+          type: string
+          title: Email
+          description: Email of supplier to search for
+          example: elon@spacex.com
+      additionalProperties: false
     Tags:
       type: array
       x-apideck-schema-id: Tags
@@ -6628,6 +6921,38 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/InvoiceResponse'
+    UpdateJournalEntryResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journal-entries
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     UpdateLedgerAccountResponse:
       type: object
       x-apideck-schema-id: UpdateLedgerAccountResponse
@@ -6790,304 +7115,6 @@ components:
             - personal
             - other
           example: primary
-    CreateJournalEntryResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: quickbooks
-        resource:
-          type: string
-          description: Unified API resource name
-          example: journal-entries
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteJournalEntryResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: quickbooks
-        resource:
-          type: string
-          description: Unified API resource name
-          example: journal-entries
-        operation:
-          type: string
-          description: Operation performed
-          example: delete
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    GetJournalEntryResponse:
-      x-graphql-type-name: JournalEntry
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: quickbooks
-        resource:
-          type: string
-          description: Unified API resource name
-          example: journal-entries
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/JournalEntry'
-    GetJournalEntriesResponse:
-      x-graphql-type-name: JournalEntryList
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: quickbooks
-        resource:
-          type: string
-          description: Unified API resource name
-          example: journal-entries
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/JournalEntry'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-    JournalEntry:
-      type: object
-      additionalProperties: false
-      x-apideck-weights:
-        id: high
-        title: medium
-        currency_rate: low
-        currency: medium
-        line_items: medium
-        memo: low
-        posted_at: low
-        journal_symbol: edge-case
-        updated_by: edge-case
-        created_by: edge-case
-        updated_at: medium
-        created_at: medium
-      x-apideck-strict-required:
-        - line_items
-      x-apideck-strict-any-of:
-        - required:
-            - ''
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        title:
-          type: string
-          title: Journal entry title
-          description: Journal entry title
-          example: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry'
-          nullable: true
-        currency_rate:
-          $ref: '#/components/schemas/CurrencyRate'
-        currency:
-          $ref: '#/components/schemas/Currency'
-        line_items:
-          type: array
-          minItems: 2
-          description: Requires a minimum of 2 line items that sum to 0
-          items:
-            $ref: '#/components/schemas/JournalEntryLineItem'
-        memo:
-          type: string
-          title: Memo
-          description: Reference for the journal entry.
-          example: Thank you for your business and have a great day!
-          nullable: true
-        posted_at:
-          type: string
-          title: Posted at (timestamp)
-          description: This is the date on which the journal entry was added. This can be different from the creation date and can also be backdated.
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
-        journal_symbol:
-          type: string
-          title: Journal symbol
-          description: Journal symbol of the entry. For example IND for indirect costs
-          example: IND
-          nullable: true
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    UpdateJournalEntryResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: quickbooks
-        resource:
-          type: string
-          description: Unified API resource name
-          example: journal-entries
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    JournalEntryLineItem:
-      type: object
-      x-apideck-schema-id: JournalEntryLineItem
-      additionalProperties: false
-      x-apideck-weights:
-        id: high
-        tax_amount: high
-        total_amount: critical
-        type: critical
-        tracking_category: low
-        tax_rate: medium
-        ledger_account: critical
-      required:
-        - ledger_account
-        - total_amount
-        - type
-      x-apideck-strict-required:
-        - ledger_account
-        - total_amount
-        - type
-      x-apideck-strict-any-of:
-        - required:
-            - ''
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        description:
-          type: string
-          title: Description
-          description: User defined description
-          example: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
-          nullable: true
-        tax_amount:
-          type: number
-          title: Tax amount
-          description: Tax amount
-          example: 27500
-          nullable: true
-        total_amount:
-          type: number
-          title: Total amount
-          description: Debit entries are considered positive, and credit entries are considered negative.
-          example: 27500
-          nullable: true
-        type:
-          type: string
-          enum:
-            - debit
-            - credit
-          x-graphql-type-name: JournalEntryLineItemType
-          x-apideck-enum-id: JournalEntryLineItemType
-          title: Type
-          description: Debit entries are considered positive, and credit entries are considered negative.
-          example: debit
-        tax_rate:
-          $ref: '#/components/schemas/LinkedTaxRate'
-        tracking_category:
-          $ref: '#/components/schemas/LinkedTrackingCategory'
-        ledger_account:
-          $ref: '#/components/schemas/LinkedLedgerAccount'
-        department_id:
-          $ref: '#/components/schemas/Id'
-        location_id:
-          $ref: '#/components/schemas/Id'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -9999,6 +10026,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/suppliersFilter'
       security:
         - apiKey: []
       responses:

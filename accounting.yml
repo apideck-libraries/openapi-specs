@@ -6931,6 +6931,13 @@ components:
       additionalProperties: false
       x-apideck-weights:
         id: high
+        title: medium
+        currency_rate: low
+        currency: medium
+        line_items: medium
+        memo: low
+        posted_at: low
+        journal_symbol: edge-case
         updated_by: edge-case
         created_by: edge-case
         updated_at: medium
@@ -6943,8 +6950,14 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/Id'
+        title:
+          type: string
+          title: Journal entry title
+          description: Journal entry title
+          example: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry'
+          nullable: true
         currency_rate:
-          $ref: '#/components/schemas/Currency'
+          $ref: '#/components/schemas/CurrencyRate'
         currency:
           $ref: '#/components/schemas/Currency'
         line_items:
@@ -6959,18 +6972,24 @@ components:
           description: Reference for the journal entry.
           example: Thank you for your business and have a great day!
           nullable: true
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
         posted_at:
           type: string
           title: Posted at (timestamp)
           description: This is the date on which the journal entry was added. This can be different from the creation date and can also be backdated.
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
+        journal_symbol:
+          type: string
+          title: Journal symbol
+          description: Journal symbol of the entry. For example IND for indirect costs
+          example: IND
+          nullable: true
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
     UpdateJournalEntryResponse:
@@ -7065,6 +7084,10 @@ components:
           $ref: '#/components/schemas/LinkedTrackingCategory'
         ledger_account:
           $ref: '#/components/schemas/LinkedLedgerAccount'
+        department_id:
+          $ref: '#/components/schemas/Id'
+        location_id:
+          $ref: '#/components/schemas/Id'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -11044,7 +11067,8 @@ paths:
 
             const params = {
               journalEntry: {
-                currency_rate: 'USD',
+                title: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry',
+                currency_rate: 0.69,
                 currency: 'USD',
                 line_items: [
                   {
@@ -11087,7 +11111,8 @@ paths:
                   }
                 ],
                 memo: 'Thank you for your business and have a great day!',
-                posted_at: '2020-09-30T07:43:32.000Z'
+                posted_at: '2020-09-30T07:43:32.000Z',
+                journal_symbol: 'IND'
               }
             }
 
@@ -11199,7 +11224,8 @@ paths:
             const params = {
               id: 'id_example',
               journalEntry: {
-                currency_rate: 'USD',
+                title: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry',
+                currency_rate: 0.69,
                 currency: 'USD',
                 line_items: [
                   {
@@ -11242,7 +11268,8 @@ paths:
                   }
                 ],
                 memo: 'Thank you for your business and have a great day!',
-                posted_at: '2020-09-30T07:43:32.000Z'
+                posted_at: '2020-09-30T07:43:32.000Z',
+                journal_symbol: 'IND'
               }
             }
 

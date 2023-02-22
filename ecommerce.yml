@@ -1397,6 +1397,19 @@ components:
           type: array
           items:
             type: object
+            additionalProperties: false
+            x-apideck-weights:
+              line1: critical
+              city: critical
+              state: critical
+              postal_code: critical
+              country: critical
+            x-apideck-strict-required:
+              - line1
+              - city
+              - state
+              - postal_code
+              - country
             properties:
               type:
                 type: string
@@ -1407,6 +1420,8 @@ components:
                   - shipping
                   - other
                 example: billing
+              id:
+                $ref: '#/components/schemas/Id'
               line1:
                 type: string
                 example: Main street
@@ -1464,6 +1479,8 @@ components:
       description: An object representing a discount applied to an ecommerce order or product.
       type: object
       x-apideck-schema-id: EcommerceDiscount
+      x-apideck-weights:
+        code: low
       x-apideck-strict-one-of:
         - required:
             - amount

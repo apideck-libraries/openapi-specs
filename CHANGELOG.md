@@ -1,3 +1,9 @@
+## v8.92.0 - (2023-02-22)
+
+### File Storage API
+
+- Added [Rename or move File](apis/file-storage/reference#operation/filesUpdate).
+
 ## v8.91.1 - (2023-02-22)
 
 ### Ecommerce API

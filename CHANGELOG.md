@@ -1,3 +1,13 @@
+## v8.91.1 - (2023-02-22)
+
+### Ecommerce API
+
+- [Product](apis/ecommerce/reference#tag/Product) `inventory` property is now a string instead of number.
+
+### Connectors
+
+- [Magento](connectors/magento)
+
 ## v8.91.0 - (2023-02-15)
 
 - Added `parent` and `project` fields to the [Customer](apis/accounting/reference#tag/Customer) schema on Accounting.
@@ -23,7 +33,7 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 - [Shopify](connectors/shopify)
 - [Shopware](connectors/shopware)
 - [Wix](connectors/wix)
-- [WooCommerce](connectors/woocommerce)
+- [Magento](connectors/woocommerce)
 
 ## v8.89.0 - (2023-02-07)
 

@@ -1,3 +1,33 @@
+## v9.0.0 - (2023-02-24)
+
+### Connector API
+
+- Removed `resource` property in `supported_events` of a [Connector](https://developers.apideck.com/apis/connector/reference).
+- Added `resources` and `entity_type` property in `supported_events` of a [Connector](https://developers.apideck.com/apis/connector/reference).
+
+## v8.93.0 - (2023-02-23)
+
+### Issue Tracking API
+
+Added the [Issue Tracking API](apis/issue-tracking/reference).
+
+### Resources
+
+- [Tickets](apis/issue-tracking/reference#tag/Tickets)
+- [Collections](apis/issue-tracking/reference#tag/Collections)
+- [Users](apis/issue-tracking/reference#tag/Users)
+- [Comments](apis/issue-tracking/reference#tag/Comments)
+
+### Webhooks
+
+- [Webhook Events](apis/issue-tracking/reference#tag/Webhook-Events)
+
+### Connectors
+
+- [GitLab](connectors/gitlab)
+- [GitHub](connectors/github)
+- [Jira](connectors/jira)
+
 ## v8.92.0 - (2023-02-22)
 
 ### File Storage API

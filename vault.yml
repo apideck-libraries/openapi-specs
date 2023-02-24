@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 8.92.0
+  version: 9.0.0
   title: Vault API
   description: |+
     Welcome to the Vault API 👋
@@ -463,6 +463,8 @@ components:
           readOnly: true
         state:
           $ref: '#/components/schemas/ConnectionState'
+        integration_state:
+          $ref: '#/components/schemas/IntegrationState'
         auth_type:
           $ref: '#/components/schemas/AuthType'
         oauth_grant_type:
@@ -1095,6 +1097,9 @@ components:
               - file-storage.file.created
               - file-storage.file.updated
               - file-storage.file.deleted
+              - issue-tracking.ticket.created
+              - issue-tracking.ticket.updated
+              - issue-tracking.ticket.deleted
             example: crm.company.created
             type: string
         updated_at:
@@ -1390,6 +1395,17 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    IntegrationState:
+      type: string
+      x-apideck-schema-id: IntegrationState
+      description: The current state of the Integration.
+      x-apideck-enum-id: integrations.state
+      enum:
+        - disabled
+        - needs_configuration
+        - configured
+      example: configured
+      readOnly: true
     Links:
       type: object
       x-apideck-schema-id: Links
@@ -1534,7 +1550,7 @@ components:
             - hris
             - ats
             - ecommerce
-            - ticketing
+            - issue-tracking
             - pos
             - file-storage
             - sms
@@ -1948,31 +1964,32 @@ components:
       description: Name of Apideck Unified API
       x-apideck-enum-id: unified_api
       enum:
-        - vault
-        - lead
-        - crm
         - accounting
-        - file-storage
-        - spreadsheet
+        - ats
+        - calendar
+        - crm
+        - csp
+        - customer-support
+        - ecommerce
         - email
+        - email-marketing
+        - expense-management
+        - file-storage
+        - form
+        - hris
+        - lead
+        - payroll
+        - pos
+        - procurement
+        - project-management
         - script
         - sms
+        - spreadsheet
         - team-messaging
-        - ecommerce
-        - payroll
-        - customer-support
+        - issue-tracking
         - time-registration
         - transactional-email
-        - form
-        - csp
-        - email-marketing
-        - ats
-        - hris
-        - pos
-        - project-management
-        - expense-management
-        - calendar
-        - procurement
+        - vault
       example: crm
       type: string
     UnprocessableResponse:

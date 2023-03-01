@@ -1,3 +1,7 @@
+## v9.1.0 - (2023-02-28)
+
+- Added `List Tags` endpoint to [Issue Tracking API](apis/issue-tracking/reference).
+
 ## v9.0.0 - (2023-02-24)
 
 ### Connector API

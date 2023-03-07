@@ -1715,10 +1715,10 @@ components:
                 description: The value of the option.
                 example: Silver
         quantity:
-          type: number
+          type: string
           title: Quantity
           description: The quantity of the product or variant associated with the line item.
-          example: 2
+          example: '2'
         unit_price:
           type: string
           title: Unit price
@@ -2393,6 +2393,7 @@ components:
             - last_name
         - required:
             - company_name
+      additionalProperties: false
       properties:
         id:
           type: string
@@ -2434,6 +2435,7 @@ components:
       description: The order this entity is linked to.
       x-apideck-weights:
         id: critical
+      additionalProperties: false
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -3118,6 +3120,9 @@ paths:
         - $ref: '#/components/parameters/limit'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: prestashop
+          description: 'Prestashop primarily uses an `id` field to identify product associations (Ie: categories, variants etc). To maintain performance on the list endpoint, fewer properties are returned than other connectors.'
       responses:
         '200':
           $ref: '#/components/responses/GetProductsResponse'
@@ -3167,6 +3172,9 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: prestashop
+          description: Product images for Prestashop are limited to the default image set on the product.
       responses:
         '200':
           $ref: '#/components/responses/GetProductResponse'

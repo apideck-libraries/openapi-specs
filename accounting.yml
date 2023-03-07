@@ -140,6 +140,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/InvoicesSort'
+    billsSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/BillsSort'
   responses:
     BadRequestResponse:
       content:
@@ -4939,6 +4947,25 @@ components:
         direction:
           $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
+    BillsSort:
+      type: object
+      x-apideck-schema-id: BillsSort
+      x-graphql-type-name: BillsSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-graphql-type-name: BillsSortBy
+          x-apideck-enum-id: bills.sort_by
+          description: The field on which to sort the Bills
+          enum:
+            - updated_at
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
     JournalEntry:
       type: object
       additionalProperties: false
@@ -7533,6 +7560,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/billsSort'
       security:
         - apiKey: []
       responses:

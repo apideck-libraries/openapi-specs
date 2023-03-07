@@ -4813,7 +4813,7 @@ components:
         discount_percentage: low
         location_id: low
         department_id: low
-        item: critical
+        item: high
         tax_rate: medium
         ledger_account: low
         row_version: edge-case
@@ -4955,6 +4955,7 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
+        row_version: edge-case
       x-apideck-strict-required:
         - line_items
       properties:
@@ -5002,6 +5003,8 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
     JournalEntryLineItem:
       type: object
       x-apideck-schema-id: JournalEntryLineItem
@@ -11134,7 +11137,8 @@ paths:
                 ],
                 memo: 'Thank you for your business and have a great day!',
                 posted_at: '2020-09-30T07:43:32.000Z',
-                journal_symbol: 'IND'
+                journal_symbol: 'IND',
+                row_version: '1-12345'
               }
             }
 
@@ -11291,7 +11295,8 @@ paths:
                 ],
                 memo: 'Thank you for your business and have a great day!',
                 posted_at: '2020-09-30T07:43:32.000Z',
-                journal_symbol: 'IND'
+                journal_symbol: 'IND',
+                row_version: '1-12345'
               }
             }
 

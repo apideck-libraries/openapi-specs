@@ -1,3 +1,9 @@
+## v9.1.1 - (2023-03-13)
+
+### Accounting API
+
+- Added `discount_amount` to [Invoices](apis/accounting/reference#tag/Invoices) resource and it's Line Items.
+
 ## v9.1.0 - (2023-02-28)
 
 - Added `List Tags` endpoint to [Issue Tracking API](apis/issue-tracking/reference).

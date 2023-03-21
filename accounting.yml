@@ -103,6 +103,19 @@ components:
           example_downstream_property:
             type: string
             description: All passthrough query parameters are passed along to the connector as is (?pass_through[search]=leads becomes ?search=leads)
+    fields:
+      name: fields
+      in: query
+      description: |-
+        This parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. 
+
+        Example: unify_fields=name,age,email 
+
+         In the example above, the API will only include the fields "name", "age", and "email" in the response. If any other fields are available, they will be excluded.
+      example: id,updated_at
+      schema:
+        type: string
+        nullable: true
     profitAndLossFilter:
       name: filter
       in: query
@@ -7260,6 +7273,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/taxRatesFilter'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -7389,6 +7403,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -7574,6 +7589,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/billsSort'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -7764,6 +7780,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -8011,6 +8028,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/invoicesSort'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -8231,6 +8249,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -8507,6 +8526,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -8653,6 +8673,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -8856,6 +8877,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/invoiceItemsFilter'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -9007,6 +9029,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -9214,6 +9237,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -9386,6 +9410,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -9621,6 +9646,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/customersFilter'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -9819,6 +9845,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -10074,6 +10101,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/suppliersFilter'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -10267,6 +10295,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -10516,6 +10545,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -10684,6 +10714,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -10906,6 +10937,7 @@ paths:
         - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -11006,6 +11038,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/profitAndLossFilter'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -11057,6 +11090,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:
@@ -11211,6 +11245,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       responses:

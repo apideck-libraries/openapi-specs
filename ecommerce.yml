@@ -1631,6 +1631,10 @@ components:
           $ref: '#/components/schemas/EcommerceAddress'
         shipping_address:
           $ref: '#/components/schemas/EcommerceAddress'
+        tracking:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrackingItem'
         line_items:
           type: array
           items:
@@ -2721,6 +2725,43 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#connectorratelimiterror
+    TrackingItem:
+      type: object
+      title: Ecommerce Order Tracking Item
+      description: Represents the tracking information associated with an ecommerce order.
+      x-apideck-schema-id: EcommerceOrderLineItem
+      x-apideck-weights:
+        provider: high
+        number: critical
+        url: medium
+        updated_at: medium
+      required:
+        - provider
+        - number
+      x-apideck-strict-required:
+        - provider
+        - number
+      properties:
+        provider:
+          title: Provider
+          type: string
+          description: The name or code of the carrier or shipping company that is handling the shipment.
+          example: UPS
+          nullable: true
+        number:
+          title: Tracking number
+          type: string
+          description: ' The tracking number associated with the shipment, which can be used to track the progress of the delivery.'
+          example: 1Z9999999999999999
+          nullable: true
+        url:
+          title: Tracking url
+          type: string
+          description: The URL of the carrier's tracking page, which can be used to view detailed information about the shipment's progress.
+          example: https://www.ups.com/track?tracknum=1Z9999999999999999
+          nullable: true
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
     UnauthorizedResponse:
       type: object
       x-apideck-schema-id: Unauthorized

@@ -7099,6 +7099,9 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: salesforce
+          description: When creating a note in Salesforce, you can only associate it with one resource (such as a lead, company or opportunity) at a time. You cannot combine multiple resources or associate the note with more than one resource in a single API call.
       requestBody:
         required: true
         content:

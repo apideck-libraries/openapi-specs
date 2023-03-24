@@ -1,3 +1,11 @@
+## v9.1.2 - (2023-03-24)
+
+### Accounting API
+
+- pass_through parameter is now available on all list endpoints.
+- added `terms` to [Credit Notes](apis/accounting/reference#tag/Credit-Notes) resource.
+- added `rate` to [Tax Rates](apis/accounting/reference#tag/Tax-Rates) resource.
+
 ## v9.1.1 - (2023-03-13)
 
 ### Accounting API

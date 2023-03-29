@@ -1825,6 +1825,20 @@ components:
               default: false
               type: boolean
               description: Hide Apideck connection guides in [Vault](/apis/vault/reference#section/Get-Started). Defaults to `false`.
+            allow_actions:
+              title: Allow actions
+              type: array
+              description: |-
+                Hide actions from your users in [Vault](/apis/vault/reference#section/Get-Started). Actions in `allow_actions` will be shown on a connection in Vault.
+                Available actions are: `delete`, `disconnect`, `reauthorize` and `disable`.
+                Empty array will hide all actions. By default all actions are visible.
+              items:
+                type: string
+                enum:
+                  - delete
+                  - disconnect
+                  - reauthorize
+                  - disable
           type: object
           x-graphql-type-name: SessionSettings
         theme:
@@ -3529,7 +3543,8 @@ paths:
                   show_suggestions: false,
                   show_sidebar: true,
                   auto_redirect: false,
-                  hide_guides: false
+                  hide_guides: false,
+                  allow_actions: ['delete']
                 },
                 theme: {
                   favicon: 'https://res.cloudinary.com/apideck/icons/intercom',

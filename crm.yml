@@ -1204,6 +1204,7 @@ components:
         first_name: Elon
         last_name: Musk
         email: elon@tesla.com
+        company_id: '12345'
       properties:
         name:
           type: string
@@ -1219,8 +1220,12 @@ components:
           example: Musk
         email:
           type: string
-          description: E-mail of the contact to filter on
+          description: Email of the contact to filter on
           example: elon@tesla.com
+        company_id:
+          type: string
+          description: Unique identifier for the associated company of the contact to filter on
+          example: '12345'
       additionalProperties: false
     ContactsSort:
       type: object
@@ -3485,107 +3490,136 @@ components:
         id:
           type: string
           example: '12345'
+          description: A unique identifier for the opportunity.
           readOnly: true
         title:
           type: string
+          description: The title or name of the opportunity.
           example: New Rocket
           minLength: 1
         primary_contact_id:
           type: string
           example: '12345'
+          description: The unique identifier of the primary contact associated with the opportunity.
           nullable: true
         description:
           type: string
+          description: A description of the opportunity.
           example: Opportunities are created for People and Companies that are interested in buying your products or services. Create Opportunities for People and Companies to move them through one of your Pipelines.
           nullable: true
         type:
           type: string
+          description: The type of the opportunity
           example: Existing Customer - Upgrade
           nullable: true
         monetary_amount:
           type: number
+          description: The monetary value associated with the opportunity
           example: 75000
           nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
         win_probability:
           type: number
+          description: The probability of winning the opportunity, expressed as a percentage.
           example: 40
           nullable: true
         expected_revenue:
-          description: Expected Revenue
+          description: The expected revenue from the opportunity
           type: number
           example: 75000
           nullable: true
           readOnly: true
         close_date:
           type: string
+          description: The actual closing date for the opportunity. If close_date is null, the opportunity is not closed yet.
           example: '2020-10-30'
           format: date
           nullable: true
         loss_reason_id:
           type: string
+          description: The unique identifier of the reason why the opportunity was lost.
           example: '12345'
           nullable: true
         loss_reason:
           type: string
+          description: The reason why the opportunity was lost.
           example: No budget
           nullable: true
         won_reason_id:
           type: string
+          description: The unique identifier of the reason why the opportunity was won.
           example: '12345'
           nullable: true
         won_reason:
           type: string
+          description: The reason why the opportunity was won.
           example: Best pitch
           nullable: true
         pipeline_id:
           type: string
+          description: The unique identifier of the pipeline associated with the opportunity
           example: '12345'
           nullable: true
         pipeline_stage_id:
           type: string
+          description: The unique identifier of the stage in the pipeline associated with the opportunity.
           example: '12345'
           nullable: true
         source_id:
           type: string
+          description: The unique identifier of the source of the opportunity.
           example: '12345'
           nullable: true
         lead_id:
           type: string
+          description: The unique identifier of the lead associated with the opportunity.
           example: '12345'
           nullable: true
         lead_source:
-          description: Lead source
+          description: The source of the lead associated with the opportunity.
           type: string
           example: Website
           nullable: true
         contact_id:
           type: string
+          description: The unique identifier of the contact associated with the opportunity.
           example: '12345'
           nullable: true
+        contact_ids:
+          type: array
+          description: An array of unique identifiers of all contacts associated with the opportunity.
+          items:
+            type: string
+            example: '12345'
         company_id:
           type: string
+          description: The unique identifier of the company associated with the opportunity.
           example: '12345'
           nullable: true
         company_name:
           type: string
+          description: The name of the company associated with the opportunity.
           example: Copper
           nullable: true
         owner_id:
           type: string
+          description: The unique identifier of the user who owns the opportunity.
           example: '12345'
           nullable: true
         priority:
           type: string
+          description: The priority level of the opportunity.
           example: None
           nullable: true
         status:
           type: string
+          description: The current status of the opportunity.
           example: Open
           nullable: true
         status_id:
           type: string
+          description: The unique identifier of the current status of the opportunity.
           example: '12345'
           nullable: true
         tags:
@@ -3593,6 +3627,7 @@ components:
         interaction_count:
           type: number
           example: 0
+          description: The number of interactions with the opportunity.
           readOnly: true
           nullable: true
         custom_fields:
@@ -3602,25 +3637,30 @@ components:
         stage_last_changed_at:
           type: string
           example: '2020-09-30T07:43:32.000Z'
+          description: The date and time when the stage of the opportunity was last changed.
           format: date-time
           nullable: true
         last_activity_at:
           type: string
           example: '2020-09-30T07:43:32.000Z'
+          description: The date and time of the last activity associated with the opportunity.
           readOnly: true
           nullable: true
         deleted:
           type: boolean
+          description: Indicates whether the opportunity has been deleted.
           example: false
           readOnly: true
         date_stage_changed:
           type: string
+          description: The date and time when the stage of the opportunity was last changed.
           example: '2020-09-30T00:00:00.000Z'
           format: date-time
           nullable: true
           readOnly: true
         date_last_contacted:
           type: string
+          description: The date and time when the opportunity was last contacted.
           example: '2020-09-30T00:00:00.000Z'
           format: date-time
           nullable: true
@@ -3628,28 +3668,33 @@ components:
         date_lead_created:
           type: string
           example: '2020-09-30T00:00:00.000Z'
+          description: The date and time when the lead associated with the opportunity was created.
           format: date-time
           nullable: true
           readOnly: true
         updated_by:
           type: string
           example: '12345'
+          description: The unique identifier of the user who last updated the opportunity.
           nullable: true
           readOnly: true
         created_by:
           type: string
           example: '12345'
+          description: The unique identifier of the user who created the opportunity.
           nullable: true
           readOnly: true
         updated_at:
           type: string
           example: '2020-09-30T07:43:32.000Z'
           format: date-time
+          description: The date and time when the opportunity was last updated.
           readOnly: true
         created_at:
           type: string
           example: '2020-09-30T07:43:32.000Z'
           format: date-time
+          description: The date and time when the opportunity was created.
           readOnly: true
     PaymentRequiredResponse:
       type: object
@@ -6063,6 +6108,7 @@ paths:
                 lead_id: '12345',
                 lead_source: 'Website',
                 contact_id: '12345',
+                contact_ids: ['12345'],
                 company_id: '12345',
                 company_name: 'Copper',
                 owner_id: '12345',
@@ -6210,6 +6256,7 @@ paths:
                 lead_id: '12345',
                 lead_source: 'Website',
                 contact_id: '12345',
+                contact_ids: ['12345'],
                 company_id: '12345',
                 company_name: 'Copper',
                 owner_id: '12345',

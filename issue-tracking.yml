@@ -399,6 +399,26 @@ components:
           nullable: true
         row_version:
           $ref: '#/components/schemas/RowVersion'
+    Assignee:
+      type: object
+      x-apideck-schema-id: Assignee
+      x-apideck-weights:
+        id: critical
+        username: medium
+      additionalProperties: false
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          title: ID
+          description: A unique identifier for an object.
+          example: '12345'
+        username:
+          type: string
+          title: Name
+          example: Cocoa
+          readOnly: true
     BadRequestResponse:
       type: object
       x-apideck-schema-id: BadRequest
@@ -432,38 +452,43 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#requestvalidationerror
-    TooManyRequestsResponse:
+    Collection:
       type: object
-      x-apideck-schema-id: TooManyRequests
+      x-apideck-schema-id: Collection
+      x-apideck-weights:
+        id: critical
+        name: high
+        updated_at: high
+        created_at: high
+      additionalProperties: false
+      required:
+        - id
       properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 429
-        error:
+        id:
+          $ref: '#/components/schemas/Id'
+        parent_id:
           type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
-          example: Too Many Requests
-        type_name:
+          example: '12345'
+          description: The collections's parent ID
+        type:
           type: string
-          description: The type of error returned
-          example: ConnectorRateLimitError
-        message:
+          title: Type
+          example: Technical
+          description: The collections's type
+        name:
           type: string
-          description: A human-readable message providing more details about the error.
-          example: Connector Rate Limit Error
-        detail:
-          type: object
-          properties:
-            context:
-              type: string
-            error:
-              type: object
-              additionalProperties: true
-        ref:
+          title: name
+          example: Main IT Issues
+          description: Name of the collection
+        description:
           type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#connectorratelimiterror
+          title: Description
+          example: IT Issues
+          description: Description of the collection
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     CollectionsSort:
       type: object
       x-apideck-schema-id: CollectionsSort
@@ -485,6 +510,87 @@ components:
         direction:
           $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
+    CollectionTag:
+      type: object
+      x-apideck-schema-id: Tag
+      x-apideck-weights:
+        id: critical
+        name: medium
+      additionalProperties: false
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          title: ID
+          description: A unique identifier for an object.
+          example: '12345'
+        name:
+          type: string
+          title: Name
+          example: User Experience
+          readOnly: true
+    CollectionTicketComment:
+      type: object
+      x-apideck-schema-id: Comment
+      x-apideck-weights:
+        id: critical
+        body: critical
+        created_by: critical
+        created_at: critical
+        updated_at: medium
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        body:
+          type: string
+          title: Body
+          example: What internet provider do you use?
+          description: Body of the comment
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+    CollectionUser:
+      type: object
+      x-apideck-schema-id: CollectionUser
+      x-apideck-weights:
+        id: high
+        name: critical
+        first_name: high
+        last_name: high
+        email: medium
+        updated_at: medium
+        created_at: medium
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+          title: Name
+          example: Elon Musk
+        first_name:
+          type: string
+          example: Elon
+          nullable: true
+        last_name:
+          type: string
+          example: Musk
+          nullable: true
+        email:
+          type: string
+          example: elon@musk.com
+          nullable: true
+        photo_url:
+          $ref: '#/components/schemas/PhotoUrl'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     CommentsSort:
       type: object
       x-apideck-schema-id: CommentsSort
@@ -517,6 +623,86 @@ components:
       description: The name of the company.
       example: SpaceX
       nullable: true
+    CreateCommentResponse:
+      type: object
+      x-apideck-schema-id: CreateCommentResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: jira
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    CreatedAt:
+      type: string
+      title: Created at (timestamp)
+      description: The date and time when the object was created.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    CreatedBy:
+      type: string
+      title: Created by
+      description: The user who created the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
+    CreateTicketResponse:
+      type: object
+      x-apideck-schema-id: CreateTicketResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: jira
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     Currency:
       type: string
       title: Currency
@@ -1071,20 +1257,6 @@ components:
         - name: BTC
           description: Bitcoin
       nullable: true
-    CreatedAt:
-      type: string
-      title: Created at (timestamp)
-      description: The date and time when the object was created.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-    CreatedBy:
-      type: string
-      title: Created by
-      description: The user who created the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     CustomField:
       type: object
       x-apideck-schema-id: CustomField
@@ -1125,6 +1297,72 @@ components:
             - type: array
               items:
                 type: string
+    DeleteCommentResponse:
+      type: object
+      x-apideck-schema-id: DeleteCommentResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: jira
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteTicketResponse:
+      type: object
+      x-apideck-schema-id: DeleteTicketResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: jira
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     Department:
       type: object
       x-apideck-schema-id: Department
@@ -1232,352 +1470,6 @@ components:
         - not_specified
       example: male
       nullable: true
-    CreateTicketResponse:
-      type: object
-      x-apideck-schema-id: CreateTicketResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: jira
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    UpdateTicketResponse:
-      type: object
-      x-apideck-schema-id: UpdateTicketResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: github
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteTicketResponse:
-      type: object
-      x-apideck-schema-id: DeleteTicketResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: jira
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    GetTicketResponse:
-      type: object
-      x-apideck-schema-id: GetTicketResponse
-      x-graphql-type-name: Ticket
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/Ticket'
-    GetTicketsResponse:
-      type: object
-      x-apideck-schema-id: GetTicketsResponse
-      x-graphql-type-name: TicketList
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: jira
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Ticket'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-    CreateCommentResponse:
-      type: object
-      x-apideck-schema-id: CreateCommentResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: jira
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    UpdateCommentResponse:
-      type: object
-      x-apideck-schema-id: UpdateCommentResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: github
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteCommentResponse:
-      type: object
-      x-apideck-schema-id: DeleteCommentResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: jira
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    GetCommentResponse:
-      type: object
-      x-apideck-schema-id: GetCommentResponse
-      x-graphql-type-name: Ticket
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/CollectionTicketComment'
-    GetCommentsResponse:
-      type: object
-      x-apideck-schema-id: GetCommentsResponse
-      x-graphql-type-name: CommentList
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: jira
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CollectionTicketComment'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
     GetCollectionResponse:
       type: object
       x-apideck-schema-id: GetCollectionResponse
@@ -1648,6 +1540,46 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Collection'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetCollectionTagsResponse:
+      type: object
+      x-apideck-schema-id: GetTagsResponse
+      x-graphql-type-name: TagsList
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: jira
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionTag'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -1726,10 +1658,44 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
-    GetCollectionTagsResponse:
+    GetCommentResponse:
       type: object
-      x-apideck-schema-id: GetTagsResponse
-      x-graphql-type-name: TagsList
+      x-apideck-schema-id: GetCommentResponse
+      x-graphql-type-name: Ticket
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/CollectionTicketComment'
+    GetCommentsResponse:
+      type: object
+      x-apideck-schema-id: GetCommentsResponse
+      x-graphql-type-name: CommentList
       required:
         - status_code
         - status
@@ -1761,7 +1727,81 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/CollectionTag'
+            $ref: '#/components/schemas/CollectionTicketComment'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetTicketResponse:
+      type: object
+      x-apideck-schema-id: GetTicketResponse
+      x-graphql-type-name: Ticket
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Ticket'
+    GetTicketsResponse:
+      type: object
+      x-apideck-schema-id: GetTicketsResponse
+      x-graphql-type-name: TicketList
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: jira
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ticket'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -1772,6 +1812,82 @@ components:
       description: A unique identifier for an object.
       example: '12345'
       readOnly: true
+    IssuesFilter:
+      type: object
+      x-apideck-schema-id: IssuesFilter
+      x-graphql-type-name: IssuesFilter
+      example:
+        status:
+          - open
+      properties:
+        status:
+          type: array
+          title: ticket status
+          example:
+            - closed
+          description: Filter by ticket status, can be `open`, `closed` or `all`. Will passthrough if none of the above match
+          default: []
+          uniqueItems: true
+          items:
+            type: string
+        since:
+          type: string
+          title: Since date (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+          description: Only return tickets since a specific date
+        assignee_id:
+          type: string
+          title: Assignee ID
+          example: 2332bd9c2eaaa5dcfa14721c
+          description: Only return tickets assigned to a specific user
+      additionalProperties: false
+    IssueTrackingEventType:
+      type: string
+      x-apideck-enum-id: issue-tracking.events
+      enum:
+        - '*'
+        - issue-tracking.ticket.created
+        - issue-tracking.ticket.updated
+        - issue-tracking.ticket.deleted
+    IssueTrackingWebhookEvent:
+      x-sdk-exclude: true
+      allOf:
+        - type: object
+          x-apideck-schema-id: WebhookEvent
+          properties:
+            event_id:
+              type: string
+              description: Unique reference to this request event
+              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+            service_id:
+              type: string
+              description: Service provider identifier
+              example: close
+            entity_id:
+              type: string
+              description: The service provider's ID of the entity that triggered this event
+              example: 123456ASDF
+            entity_type:
+              type: string
+              description: The type entity that triggered this event
+              example: Company
+            entity_url:
+              type: string
+              description: The url to retrieve entity detail.
+              example: https://unify.apideck.com/crm/contacts/123456
+            execution_attempt:
+              type: number
+              description: The current count this request event has been attempted
+              example: 2
+            occurred_at:
+              type: string
+              description: ISO Datetime for when the original event occurred
+              example: '2021-10-01T03:14:55.419Z'
+        - type: object
+          properties:
+            event_type:
+              $ref: '#/components/schemas/IssueTrackingEventType'
     Language:
       type: string
       example: EN
@@ -2007,6 +2123,16 @@ components:
       description: A binary value used to detect updates to a object and prevent data conflicts. It is incremented each time an update is made to the object.
       example: 1-12345
       nullable: true
+    SortDirection:
+      type: string
+      x-apideck-schema-id: SortDirection
+      description: The direction in which to sort the results
+      x-apideck-enum-id: sort_direction
+      enum:
+        - asc
+        - desc
+      default: asc
+      x-graphql-type-name: SortDirection
     Ticket:
       type: object
       x-apideck-schema-id: Ticket
@@ -2099,176 +2225,64 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CollectionTag'
-    CollectionTicketComment:
+    TicketsSort:
       type: object
-      x-apideck-schema-id: Comment
-      x-apideck-weights:
-        id: critical
-        body: critical
-        created_by: critical
-        created_at: critical
-        updated_at: medium
-      additionalProperties: false
+      x-apideck-schema-id: TicketsSort
+      x-graphql-type-name: TicketsSort
+      example:
+        by: created_at
+        direction: desc
       properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        body:
+        by:
           type: string
-          title: Body
-          example: What internet provider do you use?
-          description: Body of the comment
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    Collection:
-      type: object
-      x-apideck-schema-id: Collection
-      x-apideck-weights:
-        id: critical
-        name: high
-        updated_at: high
-        created_at: high
+          x-graphql-type-name: TicketsSortBy
+          x-apideck-enum-id: Tickets.sort_by
+          description: The field on which to sort the Tickets
+          enum:
+            - created_at
+            - updated_at
+          example: created_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
-      required:
-        - id
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        parent_id:
-          type: string
-          example: '12345'
-          description: The collections's parent ID
-        type:
-          type: string
-          title: Type
-          example: Technical
-          description: The collections's type
-        name:
-          type: string
-          title: name
-          example: Main IT Issues
-          description: Name of the collection
-        description:
-          type: string
-          title: Description
-          example: IT Issues
-          description: Description of the collection
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    CollectionUser:
-      type: object
-      x-apideck-schema-id: CollectionUser
-      x-apideck-weights:
-        id: high
-        name: critical
-        first_name: high
-        last_name: high
-        email: medium
-        updated_at: medium
-        created_at: medium
-      additionalProperties: false
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        name:
-          type: string
-          title: Name
-          example: Elon Musk
-        first_name:
-          type: string
-          example: Elon
-          nullable: true
-        last_name:
-          type: string
-          example: Musk
-          nullable: true
-        email:
-          type: string
-          example: elon@musk.com
-          nullable: true
-        photo_url:
-          $ref: '#/components/schemas/PhotoUrl'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    CollectionTag:
-      type: object
-      x-apideck-schema-id: Tag
-      x-apideck-weights:
-        id: critical
-        name: medium
-      additionalProperties: false
-      required:
-        - id
-      properties:
-        id:
-          type: string
-          title: ID
-          description: A unique identifier for an object.
-          example: '12345'
-        name:
-          type: string
-          title: Name
-          example: User Experience
-          readOnly: true
-    IssueTrackingEventType:
-      type: string
-      x-apideck-enum-id: issue-tracking.events
-      enum:
-        - '*'
-        - issue-tracking.ticket.created
-        - issue-tracking.ticket.updated
-        - issue-tracking.ticket.deleted
-    IssueTrackingWebhookEvent:
-      x-sdk-exclude: true
-      allOf:
-        - type: object
-          x-apideck-schema-id: WebhookEvent
-          properties:
-            event_id:
-              type: string
-              description: Unique reference to this request event
-              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-            service_id:
-              type: string
-              description: Service provider identifier
-              example: close
-            entity_id:
-              type: string
-              description: The service provider's ID of the entity that triggered this event
-              example: 123456ASDF
-            entity_type:
-              type: string
-              description: The type entity that triggered this event
-              example: Company
-            entity_url:
-              type: string
-              description: The url to retrieve entity detail.
-              example: https://unify.apideck.com/crm/contacts/123456
-            execution_attempt:
-              type: number
-              description: The current count this request event has been attempted
-              example: 2
-            occurred_at:
-              type: string
-              description: ISO Datetime for when the original event occurred
-              example: '2021-10-01T03:14:55.419Z'
-        - type: object
-          properties:
-            event_type:
-              $ref: '#/components/schemas/IssueTrackingEventType'
     Title:
       type: string
       title: Job title
       description: The job title of the person.
       example: CEO
       nullable: true
+    TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 429
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
+          example: Too Many Requests
+        type_name:
+          type: string
+          description: The type of error returned
+          example: ConnectorRateLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Connector Rate Limit Error
+        detail:
+          type: object
+          properties:
+            context:
+              type: string
+            error:
+              type: object
+              additionalProperties: true
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#connectorratelimiterror
     UnauthorizedResponse:
       type: object
       x-apideck-schema-id: Unauthorized
@@ -2371,6 +2385,39 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#invalidstateerror
+    UpdateCommentResponse:
+      type: object
+      x-apideck-schema-id: UpdateCommentResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: github
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     UpdatedAt:
       type: string
       title: Updated at (timestamp)
@@ -2386,6 +2433,39 @@ components:
       example: '12345'
       readOnly: true
       nullable: true
+    UpdateTicketResponse:
+      type: object
+      x-apideck-schema-id: UpdateTicketResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: github
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     Website:
       type: object
       x-apideck-schema-id: Website
@@ -2416,86 +2496,6 @@ components:
             - personal
             - other
           example: primary
-    IssuesFilter:
-      type: object
-      x-apideck-schema-id: IssuesFilter
-      x-graphql-type-name: IssuesFilter
-      example:
-        status:
-          - open
-      properties:
-        status:
-          type: array
-          title: ticket status
-          example:
-            - closed
-          description: Filter by ticket status, can be `open`, `closed` or `all`. Will passthrough if none of the above match
-          default: []
-          uniqueItems: true
-          items:
-            type: string
-        since:
-          type: string
-          title: Since date (timestamp)
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
-          description: Only return tickets since a specific date
-        assignee_id:
-          type: string
-          title: Assignee ID
-          example: 2332bd9c2eaaa5dcfa14721c
-          description: Only return tickets assigned to a specific user
-      additionalProperties: false
-    TicketsSort:
-      type: object
-      x-apideck-schema-id: TicketsSort
-      x-graphql-type-name: TicketsSort
-      example:
-        by: created_at
-        direction: desc
-      properties:
-        by:
-          type: string
-          x-graphql-type-name: TicketsSortBy
-          x-apideck-enum-id: Tickets.sort_by
-          description: The field on which to sort the Tickets
-          enum:
-            - created_at
-            - updated_at
-          example: created_at
-        direction:
-          $ref: '#/components/schemas/SortDirection'
-      additionalProperties: false
-    Assignee:
-      type: object
-      x-apideck-schema-id: Assignee
-      x-apideck-weights:
-        id: critical
-        username: medium
-      additionalProperties: false
-      required:
-        - id
-      properties:
-        id:
-          type: string
-          title: ID
-          description: A unique identifier for an object.
-          example: '12345'
-        username:
-          type: string
-          title: Name
-          example: Cocoa
-          readOnly: true
-    SortDirection:
-      type: string
-      x-apideck-schema-id: SortDirection
-      description: The direction in which to sort the results
-      x-apideck-enum-id: sort_direction
-      enum:
-        - asc
-        - desc
-      default: asc
-      x-graphql-type-name: SortDirection
   securitySchemes:
     apiKey:
       type: apiKey

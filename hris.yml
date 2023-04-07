@@ -529,38 +529,26 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#requestvalidationerror
-    TooManyRequestsResponse:
+    Benefit:
       type: object
-      x-apideck-schema-id: TooManyRequests
+      x-apideck-schema-id: Benefit
+      x-apideck-weights:
+        name: critical
+        employee_deduction: high
+        employer_contribution: high
       properties:
-        status_code:
+        name:
+          type: string
+          description: The name of the benefit.
+          example: Health Insurance
+        employee_deduction:
           type: number
-          description: HTTP status code
-          example: 429
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
-          example: Too Many Requests
-        type_name:
-          type: string
-          description: The type of error returned
-          example: ConnectorRateLimitError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Connector Rate Limit Error
-        detail:
-          type: object
-          properties:
-            context:
-              type: string
-            error:
-              type: object
-              additionalProperties: true
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#connectorratelimiterror
+          description: The amount deducted for benefit.
+          example: 142.94
+        employer_contribution:
+          type: number
+          description: The amount of employer contribution.
+          example: 141.14
     CompanyId:
       type: string
       title: Company ID
@@ -573,6 +561,190 @@ components:
       description: The name of the company.
       example: SpaceX
       nullable: true
+    Compensation:
+      type: object
+      x-apideck-schema-id: Compensation
+      x-apideck-weights:
+        employee_id: critical
+        net_pay: high
+        gross_pay: critical
+        taxes: high
+        deductions: high
+        benefits: high
+      required:
+        - employee_id
+      additionalProperties: false
+      properties:
+        employee_id:
+          $ref: '#/components/schemas/Id'
+        net_pay:
+          type: number
+          description: The employee's net pay. Only available when payroll has been processed
+          example: 2199.93
+        gross_pay:
+          type: number
+          description: The employee's gross pay. Only available when payroll has been processed
+          example: 3000
+        taxes:
+          type: array
+          description: An array of employer and employee taxes for the pay period.
+          items:
+            $ref: '#/components/schemas/Tax'
+        deductions:
+          type: array
+          description: An array of employee deductions for the pay period.
+          items:
+            $ref: '#/components/schemas/Deduction'
+        benefits:
+          type: array
+          description: An array of employee benefits for the pay period.
+          items:
+            $ref: '#/components/schemas/Benefit'
+    CreatedAt:
+      type: string
+      title: Created at (timestamp)
+      description: The date and time when the object was created.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    CreatedBy:
+      type: string
+      title: Created by
+      description: The user who created the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
+    CreateDepartmentResponse:
+      type: object
+      x-apideck-schema-id: CreateDepartmentResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: workday
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Departments
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    CreateEmployeeResponse:
+      type: object
+      x-apideck-schema-id: CreateEmployeeResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    CreateHrisCompanyResponse:
+      type: object
+      x-apideck-schema-id: CreateHrisCompanyResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: undefined
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Companies
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    CreateTimeOffRequestResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: bamboohr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: time-off-requests
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     Currency:
       type: string
       title: Currency
@@ -1127,119 +1299,6 @@ components:
         - name: BTC
           description: Bitcoin
       nullable: true
-    CreateDepartmentResponse:
-      type: object
-      x-apideck-schema-id: CreateDepartmentResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: workday
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Departments
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    CreateEmployeeResponse:
-      type: object
-      x-apideck-schema-id: CreateEmployeeResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Employees
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    CreateHrisCompanyResponse:
-      type: object
-      x-apideck-schema-id: CreateHrisCompanyResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: undefined
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Companies
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    CreatedAt:
-      type: string
-      title: Created at (timestamp)
-      description: The date and time when the object was created.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-    CreatedBy:
-      type: string
-      title: Created by
-      description: The user who created the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     CustomField:
       type: object
       x-apideck-schema-id: CustomField
@@ -1280,6 +1339,21 @@ components:
             - type: array
               items:
                 type: string
+    Deduction:
+      type: object
+      x-apideck-schema-id: Deduction
+      x-apideck-weights:
+        name: critical
+        amount: critical
+      properties:
+        name:
+          type: string
+          description: The name of the deduction.
+          example: Company Car
+        amount:
+          type: number
+          description: The amount deducted.
+          example: 10.97
     DeleteDepartmentResponse:
       type: object
       x-apideck-schema-id: DeleteDepartmentResponse
@@ -1373,6 +1447,38 @@ components:
           type: string
           description: Unified API resource name
           example: Companies
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteTimeOffRequestResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: bamboohr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: time-off-requests
         operation:
           type: string
           description: Operation performed
@@ -2045,6 +2151,40 @@ components:
       description: An Employee Number, Employee ID or Employee Code, is a unique number that has been assigned to each individual staff member within a company.
       example: 123456-AB
       nullable: true
+    EmployeePayroll:
+      type: object
+      x-apideck-schema-id: EmployeePayroll
+      x-apideck-weights:
+        employee: critical
+        payroll: critical
+      properties:
+        employee:
+          $ref: '#/components/schemas/Employee'
+        payroll:
+          $ref: '#/components/schemas/Payroll'
+    EmployeePayrolls:
+      type: object
+      x-apideck-schema-id: EmployeePayrolls
+      x-apideck-weights:
+        employee: critical
+        payrolls: critical
+      properties:
+        employee:
+          $ref: '#/components/schemas/Employee'
+        payrolls:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payroll'
+    EmployeeSchedules:
+      type: object
+      x-apideck-schema-id: EmployeeSchedules
+      properties:
+        employee:
+          $ref: '#/components/schemas/Employee'
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Schedule'
     EmployeesFilter:
       type: object
       x-apideck-schema-id: EmployeesFilter
@@ -2125,6 +2265,19 @@ components:
         direction:
           $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
+    EmploymentStatus:
+      type: string
+      example: active
+      title: Employment status
+      description: The employment status of the employee, indicating whether they are currently employed, inactive, terminated, or in another status.
+      x-graphql-type-name: EmployeeEmploymentStatus
+      x-apideck-enum-id: employees.employment_status
+      enum:
+        - active
+        - inactive
+        - terminated
+        - other
+      nullable: true
     FirstName:
       type: string
       title: First name
@@ -2218,6 +2371,74 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetEmployeePayrollResponse:
+      type: object
+      x-apideck-schema-id: GetEmployeePayrollResponse
+      x-graphql-type-name: EmployeePayroll
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: undefined
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Companies
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/EmployeePayroll'
+    GetEmployeePayrollsResponse:
+      type: object
+      x-apideck-schema-id: GetEmployeePayrollsResponse
+      x-graphql-type-name: EmployeePayrollList
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          $ref: '#/components/schemas/EmployeePayrolls'
     GetEmployeeResponse:
       type: object
       x-apideck-schema-id: GetEmployeeResponse
@@ -2252,6 +2473,40 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Employee'
+    GetEmployeeSchedulesResponse:
+      type: object
+      x-apideck-schema-id: GetEmployeeSchedulesResponse
+      x-graphql-type-name: EmployeeSchedulesList
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          $ref: '#/components/schemas/EmployeeSchedules'
     GetEmployeesResponse:
       type: object
       x-apideck-schema-id: GetEmployeesResponse
@@ -2366,6 +2621,216 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/HrisCompany'
+    GetHrisJobResponse:
+      type: object
+      x-apideck-schema-id: GetHrisJobResponse
+      x-graphql-type-name: Job
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/HrisJob'
+    GetHrisJobsResponse:
+      type: object
+      x-apideck-schema-id: GetHrisJobsResponse
+      x-graphql-type-name: JobsList
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          $ref: '#/components/schemas/HrisJobs'
+    GetPayrollResponse:
+      type: object
+      x-apideck-schema-id: GetPayrollResponse
+      x-graphql-type-name: Payroll
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: undefined
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Companies
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Payroll'
+    GetPayrollsResponse:
+      type: object
+      x-apideck-schema-id: GetPayrollsResponse
+      x-graphql-type-name: PayrollList
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payroll'
+    GetTimeOffRequestResponse:
+      x-graphql-type-name: TimeOffRequest
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: bamboohr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: time-off-requests
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/TimeOffRequest'
+    GetTimeOffRequestsResponse:
+      x-graphql-type-name: TimeOffRequestList
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: bamboohr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: time-off-requests
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeOffRequest'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
     HrisCompany:
       type: object
       x-apideck-schema-id: HrisCompany
@@ -2452,12 +2917,6 @@ components:
         - hris.company.updated
         - hris.company.deleted
       example: hris.employee.created
-    Id:
-      type: string
-      title: ID
-      description: A unique identifier for an object.
-      example: '12345'
-      readOnly: true
     HrisJob:
       type: object
       x-apideck-schema-id: HrisJob
@@ -2510,6 +2969,22 @@ components:
               type: string
               example: HQ US
               nullable: true
+    HrisJobs:
+      type: object
+      x-apideck-schema-id: HrisJobs
+      properties:
+        employee:
+          $ref: '#/components/schemas/Employee'
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/HrisJob'
+    Id:
+      type: string
+      title: ID
+      description: A unique identifier for an object.
+      example: '12345'
+      readOnly: true
     Language:
       type: string
       example: EN
@@ -2678,6 +3153,65 @@ components:
         - year
         - paycheck
       example: year
+    Payroll:
+      type: object
+      x-apideck-schema-id: Payroll
+      x-apideck-weights:
+        id: critical
+        company_id: high
+        processed: critical
+        processed_date: medium
+        check_date: critical
+        start_date: critical
+        end_date: critical
+        totals: high
+        compensations: medium
+      required:
+        - id
+        - processed
+        - check_date
+        - start_date
+        - end_date
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        company_id:
+          $ref: '#/components/schemas/CompanyId'
+        processed:
+          type: boolean
+          description: Whether or not the payroll has been successfully processed. Note that processed payrolls cannot be updated.
+          example: false
+        processed_date:
+          type: string
+          description: The date the payroll was processed.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-08'
+          nullable: true
+        check_date:
+          type: string
+          description: The date on which employees will be paid for the payroll.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-08'
+        start_date:
+          type: string
+          description: The start date, inclusive, of the pay period.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-08'
+        end_date:
+          type: string
+          description: The end date, inclusive, of the pay period.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-21'
+        totals:
+          type: object
+          description: The overview of the payroll totals.
+          $ref: '#/components/schemas/PayrollTotals'
+        compensations:
+          type: array
+          description: An array of compensations for the payroll.
+          items:
+            $ref: '#/components/schemas/Compensation'
     PayrollsFilter:
       type: object
       x-apideck-schema-id: PayrollsFilter
@@ -2697,6 +3231,46 @@ components:
           pattern: ^\d{4}-\d{2}-\d{2}$
           example: '2022-04-21'
       additionalProperties: false
+    PayrollTotals:
+      type: object
+      x-apideck-schema-id: PayrollTotals
+      properties:
+        company_debit:
+          type: number
+          description: The total company debit for the payroll.
+          example: 27992.49
+        tax_debit:
+          type: number
+          description: The total tax debit for the payroll.
+          example: 8655.32
+        check_amount:
+          type: number
+          description: The total check amount for the payroll.
+          example: 27966.23
+        net_pay:
+          type: number
+          description: The net pay amount for the payroll.
+          example: 19337.17
+        gross_pay:
+          type: number
+          description: The gross pay amount for the payroll.
+          example: 27966.23
+        employer_taxes:
+          type: number
+          description: The total amount of employer paid taxes for the payroll.
+          example: 2038.93
+        employee_taxes:
+          type: number
+          description: The total amount of employee paid taxes for the payroll.
+          example: 6616.39
+        employer_benefit_contributions:
+          type: number
+          description: The total amount of company contributed benefits for the payroll.
+          example: 0
+        employee_benefit_deductions:
+          type: number
+          description: The total amount of employee deducted benefits for the payroll.
+          example: 0
     PhoneNumber:
       type: object
       x-apideck-schema-id: PhoneNumber
@@ -2764,425 +3338,6 @@ components:
       description: A binary value used to detect updates to a object and prevent data conflicts. It is incremented each time an update is made to the object.
       example: 1-12345
       nullable: true
-    Title:
-      type: string
-      title: Job title
-      description: The job title of the person.
-      example: CEO
-      nullable: true
-    UnauthorizedResponse:
-      type: object
-      x-apideck-schema-id: Unauthorized
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 401
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Unauthorized
-        type_name:
-          type: string
-          description: The type of error returned
-          example: UnauthorizedError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Unauthorized Request
-        detail:
-          type: string
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-          example: Failed to generate valid JWT Session. Verify applicationId is correct
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#unauthorizederror
-    UnexpectedErrorResponse:
-      type: object
-      x-apideck-schema-id: Error
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 400
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Bad Request
-        type_name:
-          type: string
-          description: The type of error returned
-          example: RequestHeadersValidationError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid Params
-        detail:
-          anyOf:
-            - type: string
-              example: 'Missing Header: x-apideck-consumer-id'
-            - type: object
-              example:
-                missing:
-                  - x-apideck-consumer-id: required
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#unauthorizederror
-    UnifiedId:
-      title: UnifiedId
-      type: object
-      x-apideck-schema-id: Id
-      required:
-        - id
-      properties:
-        id:
-          title: Id
-          description: The unique identifier of the resource
-          type: string
-          readOnly: true
-          example: '12345'
-    UnprocessableResponse:
-      type: object
-      x-apideck-schema-id: Unprocessable
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 422
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Unprocessable Entity
-        type_name:
-          type: string
-          description: The type of error returned
-          example: InvalidStateError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid State
-        detail:
-          type: string
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-          example: Unprocessable request, please verify your request headers and body.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#invalidstateerror
-    UpdateDepartmentResponse:
-      type: object
-      x-apideck-schema-id: UpdateDepartmentResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: workday
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Departments
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    UpdateEmployeeResponse:
-      type: object
-      x-apideck-schema-id: UpdateEmployeeResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Employees
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    UpdateHrisCompanyResponse:
-      type: object
-      x-apideck-schema-id: UpdateHrisCompanyResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: undefined
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Companies
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    UpdatedAt:
-      type: string
-      title: Updated at (timestamp)
-      description: The date and time when the object was last updated.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-      nullable: true
-    UpdatedBy:
-      type: string
-      title: Updated by
-      description: The user who last updated the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
-    WebhookEvent:
-      x-sdk-exclude: true
-      allOf:
-        - type: object
-          x-apideck-schema-id: WebhookEvent
-          properties:
-            event_id:
-              type: string
-              description: Unique reference to this request event
-              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-            service_id:
-              type: string
-              description: Service provider identifier
-              example: close
-            entity_id:
-              type: string
-              description: The service provider's ID of the entity that triggered this event
-              example: 123456ASDF
-            entity_type:
-              type: string
-              description: The type entity that triggered this event
-              example: Company
-            entity_url:
-              type: string
-              description: The url to retrieve entity detail.
-              example: https://unify.apideck.com/crm/contacts/123456
-            execution_attempt:
-              type: number
-              description: The current count this request event has been attempted
-              example: 2
-            occurred_at:
-              type: string
-              description: ISO Datetime for when the original event occurred
-              example: '2021-10-01T03:14:55.419Z'
-        - type: object
-          properties:
-            event_type:
-              $ref: '#/components/schemas/HrisEventType'
-    Website:
-      type: object
-      x-apideck-schema-id: Website
-      required:
-        - url
-      additionalProperties: false
-      x-apideck-weights:
-        url: critical
-        type: critical
-        id: edge-case
-      properties:
-        id:
-          type: string
-          example: '12345'
-          nullable: true
-        url:
-          type: string
-          example: http://example.com
-          minLength: 1
-        type:
-          type: string
-          x-graphql-type-name: WebsiteType
-          x-apideck-enum-id: websites.type
-          enum:
-            - primary
-            - secondary
-            - work
-            - personal
-            - other
-          example: primary
-    GetPayrollsResponse:
-      type: object
-      x-apideck-schema-id: GetPayrollsResponse
-      x-graphql-type-name: PayrollList
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Employees
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payroll'
-    GetPayrollResponse:
-      type: object
-      x-apideck-schema-id: GetPayrollResponse
-      x-graphql-type-name: Payroll
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: undefined
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Companies
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/Payroll'
-    Payroll:
-      type: object
-      x-apideck-schema-id: Payroll
-      x-apideck-weights:
-        id: critical
-        company_id: high
-        processed: critical
-        processed_date: medium
-        check_date: critical
-        start_date: critical
-        end_date: critical
-        totals: high
-        compensations: medium
-      required:
-        - id
-        - processed
-        - check_date
-        - start_date
-        - end_date
-      additionalProperties: false
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        company_id:
-          $ref: '#/components/schemas/CompanyId'
-        processed:
-          type: boolean
-          description: Whether or not the payroll has been successfully processed. Note that processed payrolls cannot be updated.
-          example: false
-        processed_date:
-          type: string
-          description: The date the payroll was processed.
-          pattern: ^\d{4}-\d{2}-\d{2}$
-          example: '2022-04-08'
-          nullable: true
-        check_date:
-          type: string
-          description: The date on which employees will be paid for the payroll.
-          pattern: ^\d{4}-\d{2}-\d{2}$
-          example: '2022-04-08'
-        start_date:
-          type: string
-          description: The start date, inclusive, of the pay period.
-          pattern: ^\d{4}-\d{2}-\d{2}$
-          example: '2022-04-08'
-        end_date:
-          type: string
-          description: The end date, inclusive, of the pay period.
-          pattern: ^\d{4}-\d{2}-\d{2}$
-          example: '2022-04-21'
-        totals:
-          type: object
-          description: The overview of the payroll totals.
-          $ref: '#/components/schemas/PayrollTotals'
-        compensations:
-          type: array
-          description: An array of compensations for the payroll.
-          items:
-            $ref: '#/components/schemas/Compensation'
     Schedule:
       type: object
       x-apideck-schema-id: Schedule
@@ -3345,89 +3500,16 @@ components:
                   maximum: 24
                   nullable: false
                   readOnly: false
-    EmployeePayroll:
-      type: object
-      x-apideck-schema-id: EmployeePayroll
-      x-apideck-weights:
-        employee: critical
-        payroll: critical
-      properties:
-        employee:
-          $ref: '#/components/schemas/Employee'
-        payroll:
-          $ref: '#/components/schemas/Payroll'
-    EmployeePayrolls:
-      type: object
-      x-apideck-schema-id: EmployeePayrolls
-      x-apideck-weights:
-        employee: critical
-        payrolls: critical
-      properties:
-        employee:
-          $ref: '#/components/schemas/Employee'
-        payrolls:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payroll'
-    EmployeeSchedules:
-      type: object
-      x-apideck-schema-id: EmployeeSchedules
-      properties:
-        employee:
-          $ref: '#/components/schemas/Employee'
-        schedules:
-          type: array
-          items:
-            $ref: '#/components/schemas/Schedule'
-    HrisJobs:
-      type: object
-      x-apideck-schema-id: HrisJobs
-      properties:
-        employee:
-          $ref: '#/components/schemas/Employee'
-        jobs:
-          type: array
-          items:
-            $ref: '#/components/schemas/HrisJob'
-    Compensation:
-      type: object
-      x-apideck-schema-id: Compensation
-      x-apideck-weights:
-        employee_id: critical
-        net_pay: high
-        gross_pay: critical
-        taxes: high
-        deductions: high
-        benefits: high
-      required:
-        - employee_id
-      additionalProperties: false
-      properties:
-        employee_id:
-          $ref: '#/components/schemas/Id'
-        net_pay:
-          type: number
-          description: The employee's net pay. Only available when payroll has been processed
-          example: 2199.93
-        gross_pay:
-          type: number
-          description: The employee's gross pay. Only available when payroll has been processed
-          example: 3000
-        taxes:
-          type: array
-          description: An array of employer and employee taxes for the pay period.
-          items:
-            $ref: '#/components/schemas/Tax'
-        deductions:
-          type: array
-          description: An array of employee deductions for the pay period.
-          items:
-            $ref: '#/components/schemas/Deduction'
-        benefits:
-          type: array
-          description: An array of employee benefits for the pay period.
-          items:
-            $ref: '#/components/schemas/Benefit'
+    SortDirection:
+      type: string
+      x-apideck-schema-id: SortDirection
+      description: The direction in which to sort the results
+      x-apideck-enum-id: sort_direction
+      enum:
+        - asc
+        - desc
+      default: asc
+      x-graphql-type-name: SortDirection
     Tax:
       type: object
       x-apideck-schema-id: Tax
@@ -3448,387 +3530,6 @@ components:
           type: number
           description: The amount of the tax.
           example: 1.97
-    Deduction:
-      type: object
-      x-apideck-schema-id: Deduction
-      x-apideck-weights:
-        name: critical
-        amount: critical
-      properties:
-        name:
-          type: string
-          description: The name of the deduction.
-          example: Company Car
-        amount:
-          type: number
-          description: The amount deducted.
-          example: 10.97
-    Benefit:
-      type: object
-      x-apideck-schema-id: Benefit
-      x-apideck-weights:
-        name: critical
-        employee_deduction: high
-        employer_contribution: high
-      properties:
-        name:
-          type: string
-          description: The name of the benefit.
-          example: Health Insurance
-        employee_deduction:
-          type: number
-          description: The amount deducted for benefit.
-          example: 142.94
-        employer_contribution:
-          type: number
-          description: The amount of employer contribution.
-          example: 141.14
-    PayrollTotals:
-      type: object
-      x-apideck-schema-id: PayrollTotals
-      properties:
-        company_debit:
-          type: number
-          description: The total company debit for the payroll.
-          example: 27992.49
-        tax_debit:
-          type: number
-          description: The total tax debit for the payroll.
-          example: 8655.32
-        check_amount:
-          type: number
-          description: The total check amount for the payroll.
-          example: 27966.23
-        net_pay:
-          type: number
-          description: The net pay amount for the payroll.
-          example: 19337.17
-        gross_pay:
-          type: number
-          description: The gross pay amount for the payroll.
-          example: 27966.23
-        employer_taxes:
-          type: number
-          description: The total amount of employer paid taxes for the payroll.
-          example: 2038.93
-        employee_taxes:
-          type: number
-          description: The total amount of employee paid taxes for the payroll.
-          example: 6616.39
-        employer_benefit_contributions:
-          type: number
-          description: The total amount of company contributed benefits for the payroll.
-          example: 0
-        employee_benefit_deductions:
-          type: number
-          description: The total amount of employee deducted benefits for the payroll.
-          example: 0
-    GetEmployeePayrollsResponse:
-      type: object
-      x-apideck-schema-id: GetEmployeePayrollsResponse
-      x-graphql-type-name: EmployeePayrollList
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Employees
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          $ref: '#/components/schemas/EmployeePayrolls'
-    GetEmployeePayrollResponse:
-      type: object
-      x-apideck-schema-id: GetEmployeePayrollResponse
-      x-graphql-type-name: EmployeePayroll
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: undefined
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Companies
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/EmployeePayroll'
-    GetEmployeeSchedulesResponse:
-      type: object
-      x-apideck-schema-id: GetEmployeeSchedulesResponse
-      x-graphql-type-name: EmployeeSchedulesList
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Employees
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          $ref: '#/components/schemas/EmployeeSchedules'
-    GetHrisJobsResponse:
-      type: object
-      x-apideck-schema-id: GetHrisJobsResponse
-      x-graphql-type-name: JobsList
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Employees
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          $ref: '#/components/schemas/HrisJobs'
-    GetHrisJobResponse:
-      type: object
-      x-apideck-schema-id: GetHrisJobResponse
-      x-graphql-type-name: Job
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Employees
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/HrisJob'
-    CreateTimeOffRequestResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: bamboohr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: time-off-requests
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteTimeOffRequestResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: bamboohr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: time-off-requests
-        operation:
-          type: string
-          description: Operation performed
-          example: delete
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    GetTimeOffRequestResponse:
-      x-graphql-type-name: TimeOffRequest
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: bamboohr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: time-off-requests
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/TimeOffRequest'
-    GetTimeOffRequestsResponse:
-      x-graphql-type-name: TimeOffRequestList
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: bamboohr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: time-off-requests
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeOffRequest'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
     TimeOffRequest:
       type: object
       additionalProperties: false
@@ -3949,38 +3650,6 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
-    UpdateTimeOffRequestResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: bamboohr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: time-off-requests
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
     TimeOffRequestsFilter:
       type: object
       x-graphql-type-name: TimeOffRequestsFilter
@@ -4017,29 +3686,360 @@ components:
             - deleted
             - other
       additionalProperties: false
-    SortDirection:
+    Title:
       type: string
-      x-apideck-schema-id: SortDirection
-      description: The direction in which to sort the results
-      x-apideck-enum-id: sort_direction
-      enum:
-        - asc
-        - desc
-      default: asc
-      x-graphql-type-name: SortDirection
-    EmploymentStatus:
-      type: string
-      example: active
-      title: Employment status
-      description: The employment status of the employee, indicating whether they are currently employed, inactive, terminated, or in another status.
-      x-graphql-type-name: EmployeeEmploymentStatus
-      x-apideck-enum-id: employees.employment_status
-      enum:
-        - active
-        - inactive
-        - terminated
-        - other
+      title: Job title
+      description: The job title of the person.
+      example: CEO
       nullable: true
+    TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 429
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
+          example: Too Many Requests
+        type_name:
+          type: string
+          description: The type of error returned
+          example: ConnectorRateLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Connector Rate Limit Error
+        detail:
+          type: object
+          properties:
+            context:
+              type: string
+            error:
+              type: object
+              additionalProperties: true
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#connectorratelimiterror
+    UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 401
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Unauthorized
+        type_name:
+          type: string
+          description: The type of error returned
+          example: UnauthorizedError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unauthorized Request
+        detail:
+          type: string
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+          example: Failed to generate valid JWT Session. Verify applicationId is correct
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#unauthorizederror
+    UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Bad Request
+        type_name:
+          type: string
+          description: The type of error returned
+          example: RequestHeadersValidationError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+              example: 'Missing Header: x-apideck-consumer-id'
+            - type: object
+              example:
+                missing:
+                  - x-apideck-consumer-id: required
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#unauthorizederror
+    UnifiedId:
+      title: UnifiedId
+      type: object
+      x-apideck-schema-id: Id
+      required:
+        - id
+      properties:
+        id:
+          title: Id
+          description: The unique identifier of the resource
+          type: string
+          readOnly: true
+          example: '12345'
+    UnprocessableResponse:
+      type: object
+      x-apideck-schema-id: Unprocessable
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 422
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Unprocessable Entity
+        type_name:
+          type: string
+          description: The type of error returned
+          example: InvalidStateError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid State
+        detail:
+          type: string
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+          example: Unprocessable request, please verify your request headers and body.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#invalidstateerror
+    UpdatedAt:
+      type: string
+      title: Updated at (timestamp)
+      description: The date and time when the object was last updated.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+      nullable: true
+    UpdatedBy:
+      type: string
+      title: Updated by
+      description: The user who last updated the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
+    UpdateDepartmentResponse:
+      type: object
+      x-apideck-schema-id: UpdateDepartmentResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: workday
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Departments
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    UpdateEmployeeResponse:
+      type: object
+      x-apideck-schema-id: UpdateEmployeeResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    UpdateHrisCompanyResponse:
+      type: object
+      x-apideck-schema-id: UpdateHrisCompanyResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: undefined
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Companies
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    UpdateTimeOffRequestResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: bamboohr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: time-off-requests
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    WebhookEvent:
+      x-sdk-exclude: true
+      allOf:
+        - type: object
+          x-apideck-schema-id: WebhookEvent
+          properties:
+            event_id:
+              type: string
+              description: Unique reference to this request event
+              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+            service_id:
+              type: string
+              description: Service provider identifier
+              example: close
+            entity_id:
+              type: string
+              description: The service provider's ID of the entity that triggered this event
+              example: 123456ASDF
+            entity_type:
+              type: string
+              description: The type entity that triggered this event
+              example: Company
+            entity_url:
+              type: string
+              description: The url to retrieve entity detail.
+              example: https://unify.apideck.com/crm/contacts/123456
+            execution_attempt:
+              type: number
+              description: The current count this request event has been attempted
+              example: 2
+            occurred_at:
+              type: string
+              description: ISO Datetime for when the original event occurred
+              example: '2021-10-01T03:14:55.419Z'
+        - type: object
+          properties:
+            event_type:
+              $ref: '#/components/schemas/HrisEventType'
+    Website:
+      type: object
+      x-apideck-schema-id: Website
+      required:
+        - url
+      additionalProperties: false
+      x-apideck-weights:
+        url: critical
+        type: critical
+        id: edge-case
+      properties:
+        id:
+          type: string
+          example: '12345'
+          nullable: true
+        url:
+          type: string
+          example: http://example.com
+          minLength: 1
+        type:
+          type: string
+          x-graphql-type-name: WebsiteType
+          x-apideck-enum-id: websites.type
+          enum:
+            - primary
+            - secondary
+            - work
+            - personal
+            - other
+          example: primary
   securitySchemes:
     apiKey:
       type: apiKey

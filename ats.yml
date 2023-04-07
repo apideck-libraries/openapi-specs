@@ -640,6 +640,76 @@ components:
       title: Archived
       type: boolean
       example: false
+    AtsActivity:
+      type: object
+      x-apideck-schema-id: AtsActivity
+      additionalProperties: false
+      x-graphql-type-name: AtsActivity
+      x-apideck-weights:
+        id: high
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+    AtsEventType:
+      enum:
+        - ats.job.created
+        - ats.job.updated
+        - ats.job.deleted
+        - ats.applicant.created
+        - ats.applicant.updated
+        - ats.applicant.deleted
+      example: ats.job.created
+      type: string
+    AtsWebhookEvent:
+      allOf:
+        - type: object
+          x-apideck-schema-id: WebhookEvent
+          properties:
+            event_id:
+              type: string
+              description: Unique reference to this request event
+              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+            service_id:
+              type: string
+              description: Service provider identifier
+              example: close
+            entity_id:
+              type: string
+              description: The service provider's ID of the entity that triggered this event
+              example: 123456ASDF
+            entity_type:
+              type: string
+              description: The type entity that triggered this event
+              example: Company
+            entity_url:
+              type: string
+              description: The url to retrieve entity detail.
+              example: https://unify.apideck.com/crm/contacts/123456
+            execution_attempt:
+              type: number
+              description: The current count this request event has been attempted
+              example: 2
+            occurred_at:
+              type: string
+              description: ISO Datetime for when the original event occurred
+              example: '2021-10-01T03:14:55.419Z'
+        - type: object
+          properties:
+            event_type:
+              $ref: '#/components/schemas/AtsEventType'
+      x-sdk-exclude: true
     BadRequestResponse:
       type: object
       x-apideck-schema-id: BadRequest
@@ -673,38 +743,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#requestvalidationerror
-    TooManyRequestsResponse:
-      type: object
-      x-apideck-schema-id: TooManyRequests
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 429
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
-          example: Too Many Requests
-        type_name:
-          type: string
-          description: The type of error returned
-          example: ConnectorRateLimitError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Connector Rate Limit Error
-        detail:
-          type: object
-          properties:
-            context:
-              type: string
-            error:
-              type: object
-              additionalProperties: true
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#connectorratelimiterror
     Code:
       type: string
       description: The code of the job.
@@ -756,6 +794,39 @@ components:
       example: '12345'
       readOnly: true
       nullable: true
+    CreateJobResponse:
+      type: object
+      x-apideck-schema-id: CreateJobResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Jobs
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     Currency:
       type: string
       title: Currency
@@ -1370,6 +1441,39 @@ components:
       example: '12345'
       readOnly: true
       nullable: true
+    DeleteJobResponse:
+      type: object
+      x-apideck-schema-id: DeleteJobResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sage-hr
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Jobs
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     Department:
       type: object
       x-apideck-schema-id: Department
@@ -1606,6 +1710,12 @@ components:
       description: A unique identifier for an object.
       example: '12345'
       readOnly: true
+    Initials:
+      type: string
+      title: Initials
+      description: The initials of the person, usually derived from their first, middle, and last names.
+      example: EM
+      nullable: true
     Job:
       type: object
       x-apideck-schema-id: Job
@@ -1853,18 +1963,6 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
-    JobStatus:
-      type: string
-      description: The status of the job.
-      example: completed
-      x-apideck-enum-id: jobs.status
-      enum:
-        - draft
-        - internal
-        - published
-        - completed
-        - on-hold
-        - private
     JobsFilter:
       type: object
       x-apideck-schema-id: JobsFilter
@@ -1877,6 +1975,18 @@ components:
           description: Id of the job to filter on
           example: '1234'
       additionalProperties: false
+    JobStatus:
+      type: string
+      description: The status of the job.
+      example: completed
+      x-apideck-enum-id: jobs.status
+      enum:
+        - draft
+        - internal
+        - published
+        - completed
+        - on-hold
+        - private
     Language:
       type: string
       example: EN
@@ -1999,6 +2109,31 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#mappingerror
+    Offer:
+      type: object
+      x-apideck-schema-id: Offer
+      additionalProperties: false
+      x-apideck-weights:
+        id: high
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        application_id:
+          title: Application ID
+          type: string
+          example: abc123
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     OwnerId:
       title: Owner ID
       type: string
@@ -2086,6 +2221,17 @@ components:
             - personal
             - other
           example: primary
+    PublishedAt:
+      type: string
+      title: Published at (timestamp)
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    RecordUrl:
+      type: string
+      title: Record URL
+      example: https://app.intercom.io/contacts/12345
+      nullable: true
     RowVersion:
       type: string
       title: Row version
@@ -2105,6 +2251,38 @@ components:
       description: The job title of the person.
       example: CEO
       nullable: true
+    TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 429
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
+          example: Too Many Requests
+        type_name:
+          type: string
+          description: The type of error returned
+          example: ConnectorRateLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Connector Rate Limit Error
+        detail:
+          type: object
+          properties:
+            context:
+              type: string
+            error:
+              type: object
+              additionalProperties: true
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#connectorratelimiterror
     UnauthorizedResponse:
       type: object
       x-apideck-schema-id: Unauthorized
@@ -2222,190 +2400,6 @@ components:
       example: '12345'
       readOnly: true
       nullable: true
-    Url:
-      type: string
-      format: uri
-      description: The url pointing to the job.
-      pattern: ^(https?)://
-      example: https://downstreamconnector.com/job?id=123
-    PublishedAt:
-      type: string
-      title: Published at (timestamp)
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-    RecordUrl:
-      type: string
-      title: Record URL
-      example: https://app.intercom.io/contacts/12345
-      nullable: true
-    Initials:
-      type: string
-      title: Initials
-      description: The initials of the person, usually derived from their first, middle, and last names.
-      example: EM
-      nullable: true
-    Offer:
-      type: object
-      x-apideck-schema-id: Offer
-      additionalProperties: false
-      x-apideck-weights:
-        id: high
-        updated_by: edge-case
-        created_by: edge-case
-        updated_at: medium
-        created_at: medium
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        application_id:
-          title: Application ID
-          type: string
-          example: abc123
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    AtsActivity:
-      type: object
-      x-apideck-schema-id: AtsActivity
-      additionalProperties: false
-      x-graphql-type-name: AtsActivity
-      x-apideck-weights:
-        id: high
-        updated_by: edge-case
-        created_by: edge-case
-        updated_at: medium
-        created_at: medium
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    AtsEventType:
-      enum:
-        - ats.job.created
-        - ats.job.updated
-        - ats.job.deleted
-        - ats.applicant.created
-        - ats.applicant.updated
-        - ats.applicant.deleted
-      example: ats.job.created
-      type: string
-    AtsWebhookEvent:
-      allOf:
-        - type: object
-          x-apideck-schema-id: WebhookEvent
-          properties:
-            event_id:
-              type: string
-              description: Unique reference to this request event
-              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-            service_id:
-              type: string
-              description: Service provider identifier
-              example: close
-            entity_id:
-              type: string
-              description: The service provider's ID of the entity that triggered this event
-              example: 123456ASDF
-            entity_type:
-              type: string
-              description: The type entity that triggered this event
-              example: Company
-            entity_url:
-              type: string
-              description: The url to retrieve entity detail.
-              example: https://unify.apideck.com/crm/contacts/123456
-            execution_attempt:
-              type: number
-              description: The current count this request event has been attempted
-              example: 2
-            occurred_at:
-              type: string
-              description: ISO Datetime for when the original event occurred
-              example: '2021-10-01T03:14:55.419Z'
-        - type: object
-          properties:
-            event_type:
-              $ref: '#/components/schemas/AtsEventType'
-      x-sdk-exclude: true
-    CreateJobResponse:
-      type: object
-      x-apideck-schema-id: CreateJobResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Jobs
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteJobResponse:
-      type: object
-      x-apideck-schema-id: DeleteJobResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sage-hr
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Jobs
-        operation:
-          type: string
-          description: Operation performed
-          example: delete
-        data:
-          $ref: '#/components/schemas/UnifiedId'
     UpdateJobResponse:
       type: object
       x-apideck-schema-id: UpdateJobResponse
@@ -2439,6 +2433,12 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    Url:
+      type: string
+      format: uri
+      description: The url pointing to the job.
+      pattern: ^(https?)://
+      example: https://downstreamconnector.com/job?id=123
   securitySchemes:
     apiKey:
       type: apiKey

@@ -1648,19 +1648,6 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
-    EcommerceOrderStatus:
-      type: string
-      x-apideck-enum-id: order.status
-      x-graphql-type-name: EcommerceOrderStatus
-      title: Order Status
-      description: Current status of the order.
-      enum:
-        - active
-        - completed
-        - cancelled
-        - archived
-        - unknown
-      example: active
     EcommerceOrderLineItem:
       type: object
       title: Ecommerce Order Line Item
@@ -1772,6 +1759,19 @@ components:
           description: Customer email address to filter on
           example: elon@musk.com
       additionalProperties: false
+    EcommerceOrderStatus:
+      type: string
+      x-apideck-enum-id: order.status
+      x-graphql-type-name: EcommerceOrderStatus
+      title: Order Status
+      description: Current status of the order.
+      enum:
+        - active
+        - completed
+        - cancelled
+        - archived
+        - unknown
+      example: active
     EcommerceProduct:
       type: object
       x-apideck-schema-id: EcommerceProduct

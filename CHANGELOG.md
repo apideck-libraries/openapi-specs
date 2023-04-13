@@ -1,3 +1,7 @@
+## v9.1.3 - (2023-04-13)
+
+- Unify shared field representing `currency` enum extended to include `ETH`
+
 ## v9.1.2 - (2023-03-24)
 
 ### Accounting API

@@ -1,3 +1,10 @@
+## v9.1.4 - (2023-04-14)
+
+### Accounting API
+
+- added optional `payment_method_id` to [Payments](apis/accounting/reference#tag/Payments) resource.
+- added `taxable` to [InvoiceItems](apis/accounting/reference#tag/InvoiceItems) resource.
+
 ## v9.1.3 - (2023-04-13)
 
 - Unify shared field representing `currency` enum extended to include `ETH`

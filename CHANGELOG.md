@@ -1,3 +1,13 @@
+## v9.1.5 - (2023-04-17)
+
+### HRIS API
+
+- Improved Sage-HR mapping
+
+### Unify
+
+- Updated Unify specs by referencing the PassThrough query parameter required for the Unify SDKs
+
 ## v9.1.4 - (2023-04-14)
 
 ### Accounting API

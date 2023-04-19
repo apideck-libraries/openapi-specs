@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 9.2.0
+  version: 9.3.0
   title: Vault API
   description: |+
     Welcome to the Vault API 👋
@@ -627,6 +627,9 @@ components:
           readOnly: true
           example:
             - leads
+        validation_support:
+          type: boolean
+          readOnly: true
         settings_required_for_authorization:
           type: array
           items:
@@ -754,6 +757,7 @@ components:
         - callable
         - added
         - authorized
+        - invalid
       example: authorized
       readOnly: true
     ConsumerId:
@@ -1234,6 +1238,16 @@ components:
           description: Indicates if the form field contains sensitive data, which will display the value as a masked input.
           nullable: true
           example: false
+        prefix:
+          type: string
+          description: Prefix to display in front of the form field.
+          nullable: true
+          example: https://
+        suffix:
+          type: string
+          description: Suffix to display next to the form field.
+          nullable: true
+          example: .shopify.com
         options:
           type: array
           items:

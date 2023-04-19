@@ -1,3 +1,10 @@
+## v9.3.0 - (2023-04-18)
+
+### Vault API
+
+- Added new `invalid` state and new `validation_support` field on [Connections](apis/vault/reference#tag/Connections) to support connection validation.
+- Added `prefix` and `suffix` to `form_fields` on [Connections](apis/vault/reference#tag/Connections)
+
 ## v9.2.0 - (2023-04-17)
 
 - Depecrate the `department` field in favor of the dedicated `department_id` and `department_name` field on the [Employee](apis/hris/reference#tag/Employees) resource.

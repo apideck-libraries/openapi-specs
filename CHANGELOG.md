@@ -7,7 +7,7 @@
 
 ## v9.2.0 - (2023-04-17)
 
-- Depecrate the `department` field in favor of the dedicated `department_id` and `department_name` field on the [Employee](apis/hris/reference#tag/Employees) resource.
+- Deprecate the `department` field in favor of the dedicated `department_id` and `department_name` field on the [Employee](apis/hris/reference#tag/Employees) resource.
 
 ## v9.1.5 - (2023-04-17)
 

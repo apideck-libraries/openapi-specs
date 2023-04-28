@@ -2671,6 +2671,15 @@ components:
           example:
             - '12345'
             - '67890'
+        is_revenue:
+          title: Is Revenue
+          description: True if this item should be counted as revenue. For example, gift cards and donations would not be counted as revenue.
+          type: boolean
+          example: false
+        use_default_tax_rates:
+          title: Use default tax rates
+          type: boolean
+          example: false
         absent_at_location_ids:
           description: A list of locations where the object is not present, even if present_at_all_locations is true. This can include locations that are deactivated.
           type: array
@@ -3879,6 +3888,8 @@ components:
               currency: medium
               scope: medium
             type: object
+            required:
+              - type
             properties:
               id:
                 $ref: '#/components/schemas/Id'
@@ -7647,6 +7658,8 @@ paths:
                 price_currency: 'USD',
                 cost: 2,
                 tax_ids: ['12345', '67890'],
+                is_revenue: false,
+                use_default_tax_rates: false,
                 absent_at_location_ids: ['12345', '67890'],
                 present_at_all_locations: false,
                 available_for_pickup: false,
@@ -7811,6 +7824,8 @@ paths:
                 price_currency: 'USD',
                 cost: 2,
                 tax_ids: ['12345', '67890'],
+                is_revenue: false,
+                use_default_tax_rates: false,
                 absent_at_location_ids: ['12345', '67890'],
                 present_at_all_locations: false,
                 available_for_pickup: false,

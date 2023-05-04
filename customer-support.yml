@@ -194,7 +194,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: AddressType
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -602,7 +601,6 @@ components:
             id: critical
             name: medium
           type: object
-          x-graphql-type-name: CompanyRowType
           title: Company Row Type
           properties:
             id:
@@ -1583,7 +1581,6 @@ components:
           description: Customer status
           nullable: true
           example: active
-          x-graphql-type-name: CustomerStatus
           x-apideck-enum-id: customers.status
           enum:
             - active
@@ -1673,7 +1670,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: EmailType
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -1686,7 +1682,6 @@ components:
     GetCustomerSupportCustomerResponse:
       type: object
       x-apideck-schema-id: GetCustomerSupportCustomerResponse
-      x-graphql-type-name: CustomerSupportCustomer
       required:
         - status_code
         - status
@@ -1720,7 +1715,6 @@ components:
     GetCustomerSupportCustomersResponse:
       type: object
       x-apideck-schema-id: GetCustomerSupportCustomersResponse
-      x-graphql-type-name: CustomerSupportCustomerList
       required:
         - status_code
         - status
@@ -2333,7 +2327,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: PhoneType
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -2540,7 +2533,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: WebsiteType
           x-apideck-enum-id: websites.type
           enum:
             - primary
@@ -2596,7 +2588,6 @@ paths:
     get:
       tags:
         - Customers
-      x-graphql-field-name: customerSupportCustomers
       operationId: customersAll
       summary: List Customer Support Customers
       description: List Customer Support Customers

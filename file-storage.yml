@@ -885,7 +885,6 @@ components:
     FileType:
       type: string
       x-apideck-schema-id: FileType
-      x-graphql-type-name: FileType
       x-apideck-enum-id: files.type
       enum:
         - file
@@ -897,7 +896,6 @@ components:
     FileSize:
       type: integer
       x-apideck-schema-id: FileSize
-      x-graphql-type-name: FileSize
       description: The size of the file in bytes
       example: 1810673
     ParentFolderId:
@@ -908,7 +906,6 @@ components:
     FilesFilter:
       type: object
       x-apideck-schema-id: FilesFilter
-      x-graphql-type-name: FilesFilter
       properties:
         drive_id:
           type: string
@@ -942,14 +939,12 @@ components:
     FilesSort:
       type: object
       x-apideck-schema-id: FilesSort
-      x-graphql-type-name: FilesSort
       example:
         by: updated_at
         direction: desc
       properties:
         by:
           type: string
-          x-graphql-type-name: FilesSortBy
           x-apideck-enum-id: files.sort_by
           description: The field on which to sort the Files
           enum:
@@ -1017,7 +1012,6 @@ components:
     GetFileResponse:
       type: object
       x-apideck-schema-id: GetFileResponse
-      x-graphql-type-name: File
       required:
         - status_code
         - status
@@ -1051,7 +1045,6 @@ components:
     GetFilesResponse:
       type: object
       x-apideck-schema-id: GetFilesResponse
-      x-graphql-type-name: FileList
       required:
         - status_code
         - status
@@ -1091,7 +1084,6 @@ components:
     GetFolderResponse:
       type: object
       x-apideck-schema-id: GetFolderResponse
-      x-graphql-type-name: Folder
       required:
         - status_code
         - status
@@ -1125,7 +1117,6 @@ components:
     GetFoldersResponse:
       type: object
       x-apideck-schema-id: GetFoldersResponse
-      x-graphql-type-name: FolderList
       required:
         - status_code
         - status
@@ -1165,7 +1156,6 @@ components:
     GetSharedLinkResponse:
       type: object
       x-apideck-schema-id: GetSharedLinkResponse
-      x-graphql-type-name: SharedLink
       required:
         - status_code
         - status
@@ -1199,7 +1189,6 @@ components:
     GetSharedLinksResponse:
       type: object
       x-apideck-schema-id: GetSharedLinksResponse
-      x-graphql-type-name: SharedLinkList
       required:
         - status_code
         - status
@@ -1239,7 +1228,6 @@ components:
     GetUploadSessionResponse:
       type: object
       x-apideck-schema-id: GetUploadSessionResponse
-      x-graphql-type-name: UploadSession
       required:
         - status_code
         - status
@@ -1547,7 +1535,6 @@ components:
         - asc
         - desc
       default: asc
-      x-graphql-type-name: SortDirection
     UnauthorizedResponse:
       type: object
       x-apideck-schema-id: Unauthorized
@@ -1939,7 +1926,6 @@ components:
     GetDriveResponse:
       type: object
       x-apideck-schema-id: GetDriveResponse
-      x-graphql-type-name: Drive
       required:
         - status_code
         - status
@@ -1973,7 +1959,6 @@ components:
     GetDrivesResponse:
       type: object
       x-apideck-schema-id: GetDrivesResponse
-      x-graphql-type-name: DriveList
       required:
         - status_code
         - status
@@ -2044,7 +2029,6 @@ components:
     DrivesFilter:
       type: object
       x-apideck-schema-id: DrivesFilter
-      x-graphql-type-name: DrivesFilter
       properties:
         group_id:
           type: string
@@ -2153,7 +2137,6 @@ components:
     GetDriveGroupResponse:
       type: object
       x-apideck-schema-id: GetDriveGroupResponse
-      x-graphql-type-name: DriveGroup
       required:
         - status_code
         - status
@@ -2187,7 +2170,6 @@ components:
     GetDriveGroupsResponse:
       type: object
       x-apideck-schema-id: GetDriveGroupsResponse
-      x-graphql-type-name: DriveGroupList
       required:
         - status_code
         - status
@@ -2262,7 +2244,6 @@ components:
     DriveGroupsFilter:
       type: object
       x-apideck-schema-id: DriveGroupsFilter
-      x-graphql-type-name: DriveGroupsFilter
       properties:
         parent_group_id:
           type: string
@@ -2409,7 +2390,6 @@ paths:
     get:
       tags:
         - Files
-      x-graphql-field-name: files
       operationId: filesAll
       summary: List Files
       description: List Files
@@ -2467,7 +2447,6 @@ paths:
       summary: Upload file
       description: Upload file (max 100MB). Please use the [Upload Sessions API](#operation/uploadSessionsStart) to upload bigger files. For more information on uploads, refer to the [file upload guide](/guides/file-upload).
       x-sdk-exclude: true
-      x-graphql-exclude: true
       servers:
         - url: https://upload.apideck.com
       parameters:
@@ -2752,7 +2731,6 @@ paths:
             }
   /file-storage/files/{id}/download:
     get:
-      x-graphql-exclude: true
       tags:
         - Files
       operationId: filesDownload
@@ -3036,7 +3014,6 @@ paths:
             }
   /file-storage/folders/{id}/copy:
     post:
-      x-graphql-exclude: true
       tags:
         - Folders
       operationId: foldersCopy
@@ -3103,7 +3080,6 @@ paths:
     get:
       tags:
         - Shared Links
-      x-graphql-field-name: sharedLinks
       operationId: sharedLinksAll
       summary: List SharedLinks
       description: List SharedLinks
@@ -3505,7 +3481,6 @@ paths:
       summary: Upload part of File to Upload Session
       description: Upload part of File to Upload Session (max 100MB). Get `part_size` from [Get Upload Session](#operation/uploadSessionsOne) first. Every File part (except the last one) uploaded to this endpoint should have Content-Length equal to `part_size`. Note that the base URL is upload.apideck.com instead of unify.apideck.com. For more information on uploads, refer to the [file upload guide](/guides/file-upload).
       x-sdk-exclude: true
-      x-graphql-exclude: true
       servers:
         - url: https://upload.apideck.com
       parameters:
@@ -3690,7 +3665,6 @@ paths:
     get:
       tags:
         - Drives
-      x-graphql-field-name: drives
       operationId: drivesAll
       summary: List Drives
       description: List Drives
@@ -3967,7 +3941,6 @@ paths:
     get:
       tags:
         - Drive Groups
-      x-graphql-field-name: driveGroups
       operationId: driveGroupsAll
       summary: List DriveGroups
       description: List DriveGroups

@@ -246,7 +246,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: AddressType
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -502,7 +501,6 @@ components:
                 minLength: 1
               type:
                 type: string
-                x-graphql-type-name: WebsiteType
                 x-apideck-enum-id: websites.type
                 enum:
                   - primary
@@ -627,7 +625,6 @@ components:
     ApplicantsFilter:
       type: object
       x-apideck-schema-id: ApplicantsFilter
-      x-graphql-type-name: ApplicantsFilter
       example:
         job_id: '1234'
       properties:
@@ -644,7 +641,6 @@ components:
       type: object
       x-apideck-schema-id: AtsActivity
       additionalProperties: false
-      x-graphql-type-name: AtsActivity
       x-apideck-weights:
         id: high
         updated_by: edge-case
@@ -1549,7 +1545,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: EmailType
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -1562,7 +1557,6 @@ components:
     GetApplicantResponse:
       type: object
       x-apideck-schema-id: GetApplicantResponse
-      x-graphql-type-name: Applicant
       required:
         - status_code
         - status
@@ -1596,7 +1590,6 @@ components:
     GetApplicantsResponse:
       type: object
       x-apideck-schema-id: GetApplicantsResponse
-      x-graphql-type-name: ApplicantList
       required:
         - status_code
         - status
@@ -1636,7 +1629,6 @@ components:
     GetJobResponse:
       type: object
       x-apideck-schema-id: GetJobResponse
-      x-graphql-type-name: Job
       required:
         - status_code
         - status
@@ -1670,7 +1662,6 @@ components:
     GetJobsResponse:
       type: object
       x-apideck-schema-id: GetJobsResponse
-      x-graphql-type-name: JobList
       required:
         - status_code
         - status
@@ -1969,7 +1960,6 @@ components:
     JobsFilter:
       type: object
       x-apideck-schema-id: JobsFilter
-      x-graphql-type-name: JobsFilter
       example:
         job_id: '1234'
       properties:
@@ -2209,7 +2199,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: PhoneType
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -2498,7 +2487,6 @@ paths:
     get:
       tags:
         - Applicants
-      x-graphql-field-name: applicants
       operationId: applicantsAll
       summary: List applicants
       description: List applicants
@@ -2752,7 +2740,6 @@ paths:
     get:
       tags:
         - Jobs
-      x-graphql-field-name: jobs
       operationId: jobsAll
       summary: List Jobs
       description: List Jobs

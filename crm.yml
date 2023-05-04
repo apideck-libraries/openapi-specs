@@ -195,7 +195,6 @@ components:
           example: '12345'
           nullable: true
         type:
-          x-graphql-type-name: ActivityType
           type: string
           x-apideck-enum-id: activities.type
           enum:
@@ -453,7 +452,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: AddressType
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -691,7 +689,6 @@ components:
     CompaniesFilter:
       type: object
       x-apideck-schema-id: CompaniesFilter
-      x-graphql-type-name: CompaniesFilter
       example:
         name: SpaceX
       properties:
@@ -703,7 +700,6 @@ components:
     ActivitiesFilter:
       type: object
       x-apideck-schema-id: ActivitiesFilter
-      x-graphql-type-name: ActivitiesFilter
       example:
         updated_since: '2020-09-30T07:43:32.000Z'
       properties:
@@ -716,14 +712,12 @@ components:
     CompaniesSort:
       type: object
       x-apideck-schema-id: CompaniesSort
-      x-graphql-type-name: CompaniesSort
       example:
         by: created_at
         direction: desc
       properties:
         by:
           type: string
-          x-graphql-type-name: CompaniesSortBy
           x-apideck-enum-id: companies.sort_by
           description: The field on which to sort the Companies
           enum:
@@ -907,7 +901,6 @@ components:
             id: critical
             name: medium
           type: object
-          x-graphql-type-name: CompanyRowType
           title: Company Row Type
           properties:
             id:
@@ -1199,7 +1192,6 @@ components:
     ContactsFilter:
       type: object
       x-apideck-schema-id: ContactsFilter
-      x-graphql-type-name: ContactsFilter
       example:
         first_name: Elon
         last_name: Musk
@@ -1230,14 +1222,12 @@ components:
     ContactsSort:
       type: object
       x-apideck-schema-id: ContactsSort
-      x-graphql-type-name: ContactsSort
       example:
         by: created_at
         direction: desc
       properties:
         by:
           type: string
-          x-graphql-type-name: ContactsSortBy
           x-apideck-enum-id: contacts.sort_by
           description: The field on which to sort the Contacts
           enum:
@@ -2397,7 +2387,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: EmailType
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -2434,7 +2423,6 @@ components:
     GetActivitiesResponse:
       type: object
       x-apideck-schema-id: GetActivitiesResponse
-      x-graphql-type-name: ActivityList
       required:
         - status_code
         - status
@@ -2474,7 +2462,6 @@ components:
     GetActivityResponse:
       type: object
       x-apideck-schema-id: GetActivityResponse
-      x-graphql-type-name: activity
       required:
         - status_code
         - status
@@ -2508,7 +2495,6 @@ components:
     GetCompaniesResponse:
       type: object
       x-apideck-schema-id: GetCompaniesResponse
-      x-graphql-type-name: CompanyList
       required:
         - status_code
         - status
@@ -2548,7 +2534,6 @@ components:
     GetCompanyResponse:
       type: object
       x-apideck-schema-id: GetCompanyResponse
-      x-graphql-type-name: company
       required:
         - status_code
         - status
@@ -2615,7 +2600,6 @@ components:
     GetContactsResponse:
       type: object
       x-apideck-schema-id: GetContactsResponse
-      x-graphql-type-name: ContactList
       required:
         - status_code
         - status
@@ -2688,7 +2672,6 @@ components:
     GetLeadsResponse:
       type: object
       x-apideck-schema-id: GetLeadsResponse
-      x-graphql-type-name: LeadList
       required:
         - status_code
         - status
@@ -2728,7 +2711,6 @@ components:
     GetNoteResponse:
       type: object
       x-apideck-schema-id: GetNoteResponse
-      x-graphql-type-name: note
       required:
         - status_code
         - status
@@ -2762,7 +2744,6 @@ components:
     GetNotesResponse:
       type: object
       x-apideck-schema-id: GetNotesResponse
-      x-graphql-type-name: NoteList
       required:
         - status_code
         - status
@@ -2802,7 +2783,6 @@ components:
     GetOpportunitiesResponse:
       type: object
       x-apideck-schema-id: GetOpportunitiesResponse
-      x-graphql-type-name: OpportunityList
       required:
         - status_code
         - status
@@ -2908,7 +2888,6 @@ components:
     GetPipelinesResponse:
       type: object
       x-apideck-schema-id: GetPipelinesResponse
-      x-graphql-type-name: PipelinesList
       required:
         - status_code
         - status
@@ -2981,7 +2960,6 @@ components:
     GetUsersResponse:
       type: object
       x-apideck-schema-id: GetUsersResponse
-      x-graphql-type-name: UserList
       required:
         - status_code
         - status
@@ -3161,7 +3139,6 @@ components:
     LeadsFilter:
       type: object
       x-apideck-schema-id: LeadsFilter
-      x-graphql-type-name: LeadsFilter
       example:
         first_name: Elon
         last_name: Musk
@@ -3187,14 +3164,12 @@ components:
     LeadsSort:
       type: object
       x-apideck-schema-id: LeadsSort
-      x-graphql-type-name: LeadsSort
       example:
         by: created_at
         direction: desc
       properties:
         by:
           type: string
-          x-graphql-type-name: LeadsSortBy
           description: The field on which to sort the Leads
           x-apideck-enum-id: leads.sort_by
           enum:
@@ -3392,7 +3367,6 @@ components:
     OpportunitiesFilter:
       type: object
       x-apideck-schema-id: OpportunitiesFilter
-      x-graphql-type-name: OpportunitiesFilter
       example:
         status: Completed
         monetary_amount: 75000
@@ -3421,14 +3395,12 @@ components:
     OpportunitiesSort:
       type: object
       x-apideck-schema-id: OpportunitiesSort
-      x-graphql-type-name: OpportunitiesSort
       example:
         by: created_at
         direction: desc
       properties:
         by:
           type: string
-          x-graphql-type-name: OpportunitiesSortBy
           x-apideck-enum-id: opportunities.sort_by
           description: The field on which to sort the Opportunities
           enum:
@@ -3767,7 +3739,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: PhoneType
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -3903,7 +3874,6 @@ components:
         - asc
         - desc
       default: asc
-      x-graphql-type-name: SortDirection
     Tags:
       type: array
       x-apideck-schema-id: Tags
@@ -4458,7 +4428,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: WebsiteType
           x-apideck-enum-id: websites.type
           enum:
             - primary
@@ -5040,7 +5009,6 @@ paths:
       tags:
         - Companies
       operationId: companiesAll
-      x-graphql-field-name: companies
       summary: List companies
       description: List companies
       parameters:
@@ -5530,7 +5498,6 @@ paths:
     get:
       tags:
         - Contacts
-      x-graphql-field-name: contacts
       operationId: contactsAll
       summary: List contacts
       description: List contacts
@@ -5991,7 +5958,6 @@ paths:
     get:
       tags:
         - Opportunities
-      x-graphql-field-name: opportunities
       operationId: opportunitiesAll
       summary: List opportunities
       description: List opportunities
@@ -6340,7 +6306,6 @@ paths:
     get:
       tags:
         - Leads
-      x-graphql-field-name: leads
       operationId: leadsAll
       summary: List leads
       description: List leads
@@ -6783,7 +6748,6 @@ paths:
     get:
       tags:
         - Pipelines
-      x-graphql-field-name: pipelines
       operationId: pipelinesAll
       summary: List pipelines
       description: List pipelines
@@ -7089,7 +7053,6 @@ paths:
     get:
       tags:
         - Notes
-      x-graphql-field-name: notes
       operationId: notesAll
       summary: List notes
       description: List notes
@@ -7380,7 +7343,6 @@ paths:
     get:
       tags:
         - Users
-      x-graphql-field-name: users
       operationId: usersAll
       summary: List users
       description: List users
@@ -7771,7 +7733,6 @@ paths:
     get:
       tags:
         - Activities
-      x-graphql-field-name: activities
       operationId: activitiesAll
       summary: List activities
       description: List activities

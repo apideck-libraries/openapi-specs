@@ -295,7 +295,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: AddressType
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -492,14 +491,12 @@ components:
     CollectionsSort:
       type: object
       x-apideck-schema-id: CollectionsSort
-      x-graphql-type-name: CollectionsSort
       example:
         by: name
         direction: desc
       properties:
         by:
           type: string
-          x-graphql-type-name: CollectionsSortBy
           x-apideck-enum-id: Collections.sort_by
           description: The field on which to sort the Collections
           enum:
@@ -594,14 +591,12 @@ components:
     CommentsSort:
       type: object
       x-apideck-schema-id: CommentsSort
-      x-graphql-type-name: CommentsSort
       example:
         by: created_at
         direction: desc
       properties:
         by:
           type: string
-          x-graphql-type-name: CommentsSortBy
           x-apideck-enum-id: Comments.sort_by
           description: The field on which to sort the Comments
           enum:
@@ -1444,7 +1439,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: EmailType
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -1476,7 +1470,6 @@ components:
     GetCollectionResponse:
       type: object
       x-apideck-schema-id: GetCollectionResponse
-      x-graphql-type-name: Collection
       required:
         - status_code
         - status
@@ -1510,7 +1503,6 @@ components:
     GetCollectionsResponse:
       type: object
       x-apideck-schema-id: GetCollectionsResponse
-      x-graphql-type-name: CollectionList
       required:
         - status_code
         - status
@@ -1550,7 +1542,6 @@ components:
     GetCollectionTagsResponse:
       type: object
       x-apideck-schema-id: GetTagsResponse
-      x-graphql-type-name: TagsList
       required:
         - status_code
         - status
@@ -1590,7 +1581,6 @@ components:
     GetCollectionUserResponse:
       type: object
       x-apideck-schema-id: GetCollectionUserResponse
-      x-graphql-type-name: CollectionUser
       required:
         - status_code
         - status
@@ -1624,7 +1614,6 @@ components:
     GetCollectionUsersResponse:
       type: object
       x-apideck-schema-id: GetCollectionUsersResponse
-      x-graphql-type-name: CollectionUserList
       required:
         - status_code
         - status
@@ -1664,7 +1653,6 @@ components:
     GetCommentResponse:
       type: object
       x-apideck-schema-id: GetCommentResponse
-      x-graphql-type-name: Ticket
       required:
         - status_code
         - status
@@ -1698,7 +1686,6 @@ components:
     GetCommentsResponse:
       type: object
       x-apideck-schema-id: GetCommentsResponse
-      x-graphql-type-name: CommentList
       required:
         - status_code
         - status
@@ -1738,7 +1725,6 @@ components:
     GetTicketResponse:
       type: object
       x-apideck-schema-id: GetTicketResponse
-      x-graphql-type-name: Ticket
       required:
         - status_code
         - status
@@ -1772,7 +1758,6 @@ components:
     GetTicketsResponse:
       type: object
       x-apideck-schema-id: GetTicketsResponse
-      x-graphql-type-name: TicketList
       required:
         - status_code
         - status
@@ -1818,7 +1803,6 @@ components:
     IssuesFilter:
       type: object
       x-apideck-schema-id: IssuesFilter
-      x-graphql-type-name: IssuesFilter
       example:
         status:
           - open
@@ -2106,7 +2090,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: PhoneType
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -2142,7 +2125,6 @@ components:
         - asc
         - desc
       default: asc
-      x-graphql-type-name: SortDirection
     Ticket:
       type: object
       x-apideck-schema-id: Ticket
@@ -2204,7 +2186,6 @@ components:
             - urgent
           title: Priority
           description: Priority of the ticket
-          x-graphql-type-name: Priority
           x-apideck-enum-id: tickets.priority
         assignees:
           type: array
@@ -2238,14 +2219,12 @@ components:
     TicketsSort:
       type: object
       x-apideck-schema-id: TicketsSort
-      x-graphql-type-name: TicketsSort
       example:
         by: created_at
         direction: desc
       properties:
         by:
           type: string
-          x-graphql-type-name: TicketsSortBy
           x-apideck-enum-id: Tickets.sort_by
           description: The field on which to sort the Tickets
           enum:
@@ -2497,7 +2476,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: WebsiteType
           x-apideck-enum-id: websites.type
           enum:
             - primary
@@ -2561,7 +2539,6 @@ paths:
     get:
       tags:
         - Collections
-      x-graphql-field-name: collections
       operationId: collectionsAll
       summary: List Collections
       description: List Collections
@@ -2666,7 +2643,6 @@ paths:
     get:
       tags:
         - Tickets
-      x-graphql-field-name: collectionTickets
       operationId: collectionTicketsAll
       summary: List Tickets
       description: List Tickets
@@ -2800,7 +2776,6 @@ paths:
     get:
       tags:
         - Tickets
-      x-graphql-field-name: collectionTicket
       operationId: collectionTicketsOne
       summary: Get Ticket
       description: Get Ticket
@@ -2990,7 +2965,6 @@ paths:
     get:
       tags:
         - Comments
-      x-graphql-field-name: collectionTicketComments
       operationId: collectionTicketCommentsAll
       summary: List Comments
       description: List Comments
@@ -3113,7 +3087,6 @@ paths:
     get:
       tags:
         - Comments
-      x-graphql-field-name: collectionTicketComment
       operationId: collectionTicketCommentsOne
       summary: Get Comment
       description: Get Comment
@@ -3295,7 +3268,6 @@ paths:
     get:
       tags:
         - Users
-      x-graphql-field-name: collectionUsers
       operationId: collectionUsersAll
       summary: List Users
       description: List Users
@@ -3406,7 +3378,6 @@ paths:
     get:
       tags:
         - Tags
-      x-graphql-field-name: collectionTag
       operationId: collectionTagsAll
       summary: List Tags
       description: List Tags

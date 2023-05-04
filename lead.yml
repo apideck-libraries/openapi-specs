@@ -66,7 +66,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: AddressType
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -985,7 +984,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: EmailType
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -1031,7 +1029,6 @@ components:
     GetLeadsResponse:
       type: object
       x-apideck-schema-id: GetLeadsResponse
-      x-graphql-type-name: LeadList
       required:
         - status_code
         - status
@@ -1220,7 +1217,6 @@ components:
     LeadsFilter:
       type: object
       x-apideck-schema-id: LeadsFilter
-      x-graphql-type-name: LeadsFilter
       example:
         first_name: Elon
         last_name: Musk
@@ -1246,14 +1242,12 @@ components:
     LeadsSort:
       type: object
       x-apideck-schema-id: LeadsSort
-      x-graphql-type-name: LeadsSort
       example:
         by: created_at
         direction: desc
       properties:
         by:
           type: string
-          x-graphql-type-name: LeadsSortBy
           x-apideck-enum-id: leads.sort_by
           description: The field on which to sort the Leads
           enum:
@@ -1446,7 +1440,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: PhoneType
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -1499,7 +1492,6 @@ components:
         - asc
         - desc
       default: asc
-      x-graphql-type-name: SortDirection
     Tags:
       type: array
       x-apideck-schema-id: Tags
@@ -1701,7 +1693,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: WebsiteType
           x-apideck-enum-id: websites.type
           enum:
             - primary
@@ -1902,7 +1893,6 @@ paths:
     get:
       tags:
         - Leads
-      x-graphql-field-name: leads
       operationId: leadsAll
       summary: List leads
       description: List leads

@@ -362,7 +362,6 @@ components:
     GetWebhookEventLogsResponse:
       type: object
       x-apideck-schema-id: GetWebhookEventLogsResponse
-      x-graphql-type-name: EventLogList
       required:
         - status_code
         - status
@@ -387,7 +386,6 @@ components:
     GetWebhookResponse:
       type: object
       x-apideck-schema-id: GetWebhookResponse
-      x-graphql-type-name: Webhook
       required:
         - status_code
         - status
@@ -406,7 +404,6 @@ components:
     GetWebhooksResponse:
       type: object
       x-apideck-schema-id: GetWebhooksResponse
-      x-graphql-type-name: WebhookList
       required:
         - status_code
         - status
@@ -607,7 +604,6 @@ components:
       example: close
     Status:
       type: string
-      x-graphql-type-name: WebhookStatus
       description: The status of the webhook.
       example: enabled
       x-apideck-enum-id: webhooks.status
@@ -963,7 +959,6 @@ components:
     WebhookEventLogsFilter:
       type: object
       x-apideck-schema-id: WebhookEventLogsFilter
-      x-graphql-type-name: WebhookEventLogsFilter
       properties:
         exclude_apis:
           type: string
@@ -1120,7 +1115,6 @@ paths:
     get:
       tags:
         - Webhooks
-      x-graphql-field-name: webhooks
       operationId: webhooksAll
       summary: List webhook subscriptions
       description: List all webhook subscriptions
@@ -1382,7 +1376,6 @@ paths:
       operationId: webhooksExecute
       summary: Execute a webhook
       description: Execute a webhook
-      x-graphql-exclude: true
       x-sdk-exclude: true
       x-internal: true
       parameters:
@@ -1443,7 +1436,6 @@ paths:
       operationId: webhooksShortExecute
       summary: Execute a webhook
       description: Execute a webhook
-      x-graphql-exclude: true
       x-sdk-exclude: true
       x-internal: true
       parameters:
@@ -1506,7 +1498,6 @@ paths:
       operationId: webhooksResolve
       summary: Resolve and Execute a connection webhook
       description: Resolve a webhook based on lookup_id and then execute it
-      x-graphql-exclude: true
       x-sdk-exclude: true
       x-internal: true
       parameters:
@@ -1565,7 +1556,6 @@ paths:
     get:
       tags:
         - Webhooks
-      x-graphql-field-name: eventLogs
       operationId: eventLogsAll
       summary: List event logs
       description: List event logs

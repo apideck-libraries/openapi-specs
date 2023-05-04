@@ -276,7 +276,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: AddressType
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -1388,7 +1387,6 @@ components:
             - archived
           title: Customer status
           description: The current status of the customer
-          x-graphql-type-name: EcommerceCustomerStatus
           x-apideck-enum-id: ecommerce.customer.status
         currency:
           $ref: '#/components/schemas/Currency'
@@ -1424,7 +1422,6 @@ components:
             properties:
               type:
                 type: string
-                x-graphql-type-name: EcommerceCustomerAddressType
                 x-apideck-enum-id: ecommerce.customer.addresses.type
                 enum:
                   - billing
@@ -1476,7 +1473,6 @@ components:
     EcommerceCustomersFilter:
       type: object
       x-apideck-schema-id: EcommerceCustomersFilter
-      x-graphql-type-name: EcommerceCustomersFilter
       example:
         email: elon@musk.com
         phone_number: 111-111-1111
@@ -1596,7 +1592,6 @@ components:
         payment_status:
           type: string
           x-apideck-enum-id: ecommerce.order.payment_status
-          x-graphql-type-name: EcommercePaymentStatus
           title: Payment status
           description: Current payment status of the order.
           enum:
@@ -1611,7 +1606,6 @@ components:
         fulfillment_status:
           type: string
           x-apideck-enum-id: ecommerce.order.fulfillment_status
-          x-graphql-type-name: EcommerceFulfillmentStatus
           title: Fulfillment status
           description: Current fulfillment status of the order.
           enum:
@@ -1753,7 +1747,6 @@ components:
     EcommerceOrdersFilter:
       type: object
       x-apideck-schema-id: EcommerceOrdersFilter
-      x-graphql-type-name: EcommerceOrdersFilter
       example:
         email: elon@musk.com
       properties:
@@ -1765,7 +1758,6 @@ components:
     EcommerceOrderStatus:
       type: string
       x-apideck-enum-id: order.status
-      x-graphql-type-name: EcommerceOrderStatus
       title: Order Status
       description: Current status of the order.
       enum:
@@ -1813,7 +1805,6 @@ components:
           example: active
           title: Product Status
           description: The current status of the product (active or archived).
-          x-graphql-type-name: EcommerceProductStatus
           x-apideck-enum-id: ecommerce.products.status
         price:
           type: string
@@ -1834,7 +1825,6 @@ components:
           type: array
           items:
             type: object
-            x-graphql-type-name: EcommerceProductImage
             x-apideck-strict-required:
               - url
             properties:
@@ -1861,7 +1851,6 @@ components:
           type: array
           items:
             type: object
-            x-graphql-type-name: EcommerceProductOption
             x-apideck-strict-required:
               - name
               - values
@@ -1934,7 +1923,6 @@ components:
                 type: array
                 items:
                   type: object
-                  x-graphql-type-name: EcommerceVariantOption
                   properties:
                     id:
                       type: string
@@ -1955,7 +1943,6 @@ components:
                 type: array
                 items:
                   type: object
-                  x-graphql-type-name: EcommerceVariantImage
                   x-apideck-strict-required:
                     - url
                   properties:
@@ -1977,7 +1964,6 @@ components:
           type: array
           items:
             type: object
-            x-graphql-type-name: EcommerceProductCategory
             x-apideck-strict-required:
               - name
             properties:
@@ -2047,7 +2033,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: EmailType
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -2079,7 +2064,6 @@ components:
     GetEcommerceCustomerResponse:
       type: object
       x-apideck-schema-id: GetEcommerceCustomerResponse
-      x-graphql-type-name: EcommerceCustomer
       required:
         - status_code
         - status
@@ -2113,7 +2097,6 @@ components:
     GetEcommerceCustomersResponse:
       type: object
       x-apideck-schema-id: GetEcommerceCustomersResponse
-      x-graphql-type-name: EcommerceCustomerList
       required:
         - status_code
         - status
@@ -2153,7 +2136,6 @@ components:
     GetEcommerceOrderResponse:
       type: object
       x-apideck-schema-id: GetEcommerceOrderResponse
-      x-graphql-type-name: EcommerceOrder
       required:
         - status_code
         - status
@@ -2187,7 +2169,6 @@ components:
     GetEcommerceOrdersResponse:
       type: object
       x-apideck-schema-id: GetEcommerceOrdersResponse
-      x-graphql-type-name: EcommerceOrderList
       required:
         - status_code
         - status
@@ -2227,7 +2208,6 @@ components:
     GetProductResponse:
       type: object
       x-apideck-schema-id: GetProductResponse
-      x-graphql-type-name: EcommerceProduct
       required:
         - status_code
         - status
@@ -2261,7 +2241,6 @@ components:
     GetProductsResponse:
       type: object
       x-apideck-schema-id: GetProductsResponse
-      x-graphql-type-name: EcommerceProductList
       required:
         - status_code
         - status
@@ -2301,7 +2280,6 @@ components:
     GetStoreResponse:
       type: object
       x-apideck-schema-id: GetStoreResponse
-      x-graphql-type-name: EcommerceStore
       required:
         - status_code
         - status
@@ -2335,7 +2313,6 @@ components:
     GetStoresResponse:
       type: object
       x-apideck-schema-id: GetStoresResponse
-      x-graphql-type-name: EcommerceStoreList
       required:
         - status_code
         - status
@@ -2394,7 +2371,6 @@ components:
       x-apideck-schema-id: LinkedEcommerceCustomer
       title: LinkedEcommerceCustomer
       description: The customer this entity is linked to.
-      x-graphql-type-name: LinkedEcommerceCustomer
       x-apideck-weights:
         id: critical
         first_name: medium
@@ -2663,7 +2639,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: PhoneType
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -3002,7 +2977,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: WebsiteType
           x-apideck-enum-id: websites.type
           enum:
             - primary
@@ -3061,7 +3035,6 @@ paths:
     get:
       tags:
         - Orders
-      x-graphql-field-name: orders
       operationId: ordersAll
       summary: List Orders
       description: List Orders
@@ -3166,7 +3139,6 @@ paths:
     get:
       tags:
         - Products
-      x-graphql-field-name: products
       operationId: productsAll
       summary: List Products
       description: List Products
@@ -3276,7 +3248,6 @@ paths:
     get:
       tags:
         - Customers
-      x-graphql-field-name: customers
       operationId: customersAll
       summary: List Customers
       description: List Customers

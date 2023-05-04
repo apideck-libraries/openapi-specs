@@ -515,7 +515,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: AddressType
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -1888,7 +1887,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: EmailType
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -1901,7 +1899,6 @@ components:
     GetItemResponse:
       type: object
       x-apideck-schema-id: GetItemResponse
-      x-graphql-type-name: Item
       required:
         - status_code
         - status
@@ -1935,7 +1932,6 @@ components:
     GetItemsResponse:
       type: object
       x-apideck-schema-id: GetItemsResponse
-      x-graphql-type-name: ItemList
       required:
         - status_code
         - status
@@ -1975,7 +1971,6 @@ components:
     GetLocationResponse:
       type: object
       x-apideck-schema-id: GetLocationResponse
-      x-graphql-type-name: Location
       required:
         - status_code
         - status
@@ -2009,7 +2004,6 @@ components:
     GetLocationsResponse:
       type: object
       x-apideck-schema-id: GetLocationsResponse
-      x-graphql-type-name: LocationList
       required:
         - status_code
         - status
@@ -2049,7 +2043,6 @@ components:
     GetMerchantResponse:
       type: object
       x-apideck-schema-id: GetMerchantResponse
-      x-graphql-type-name: Merchant
       required:
         - status_code
         - status
@@ -2083,7 +2076,6 @@ components:
     GetMerchantsResponse:
       type: object
       x-apideck-schema-id: GetMerchantsResponse
-      x-graphql-type-name: MerchantList
       required:
         - status_code
         - status
@@ -2123,7 +2115,6 @@ components:
     GetModifierGroupResponse:
       type: object
       x-apideck-schema-id: GetModifierGroupResponse
-      x-graphql-type-name: ModifierGroup
       required:
         - status_code
         - status
@@ -2157,7 +2148,6 @@ components:
     GetModifierGroupsResponse:
       type: object
       x-apideck-schema-id: GetModifierGroupsResponse
-      x-graphql-type-name: ModifierGroupList
       required:
         - status_code
         - status
@@ -2197,7 +2187,6 @@ components:
     GetModifierResponse:
       type: object
       x-apideck-schema-id: GetModifierResponse
-      x-graphql-type-name: Modifier
       required:
         - status_code
         - status
@@ -2231,7 +2220,6 @@ components:
     GetModifiersResponse:
       type: object
       x-apideck-schema-id: GetModifiersResponse
-      x-graphql-type-name: ModifierList
       required:
         - status_code
         - status
@@ -2271,7 +2259,6 @@ components:
     GetOrderResponse:
       type: object
       x-apideck-schema-id: GetOrderResponse
-      x-graphql-type-name: Order
       required:
         - status_code
         - status
@@ -2305,7 +2292,6 @@ components:
     GetOrdersResponse:
       type: object
       x-apideck-schema-id: GetOrdersResponse
-      x-graphql-type-name: OrderList
       required:
         - status_code
         - status
@@ -2345,7 +2331,6 @@ components:
     GetOrderTypeResponse:
       type: object
       x-apideck-schema-id: GetOrderTypeResponse
-      x-graphql-type-name: OrderType
       required:
         - status_code
         - status
@@ -2379,7 +2364,6 @@ components:
     GetOrderTypesResponse:
       type: object
       x-apideck-schema-id: GetOrderTypesResponse
-      x-graphql-type-name: OrderTypeList
       required:
         - status_code
         - status
@@ -2419,7 +2403,6 @@ components:
     GetPosPaymentResponse:
       type: object
       x-apideck-schema-id: GetPosPaymentResponse
-      x-graphql-type-name: PosPayment
       required:
         - status_code
         - status
@@ -2453,7 +2436,6 @@ components:
     GetPosPaymentsResponse:
       type: object
       x-apideck-schema-id: GetPosPaymentsResponse
-      x-graphql-type-name: PosPaymentList
       required:
         - status_code
         - status
@@ -2493,7 +2475,6 @@ components:
     GetTenderResponse:
       type: object
       x-apideck-schema-id: GetTenderResponse
-      x-graphql-type-name: Tender
       required:
         - status_code
         - status
@@ -2527,7 +2508,6 @@ components:
     GetTendersResponse:
       type: object
       x-apideck-schema-id: GetTendersResponse
-      x-graphql-type-name: TenderList
       required:
         - status_code
         - status
@@ -3174,7 +3154,6 @@ components:
     ModifierGroupFilter:
       type: object
       x-apideck-schema-id: ModifierGroupFilter
-      x-graphql-type-name: ModifierGroupFilter
       example:
         modifier_group_id: '1234'
       properties:
@@ -4285,7 +4264,6 @@ components:
           nullable: true
         type:
           type: string
-          x-graphql-type-name: PhoneType
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -4478,7 +4456,6 @@ components:
           type: string
           title: Status
           description: Status of this payment.
-          x-graphql-type-name: PosPosPaymentStatus
           x-apideck-enum-id: pos-payments.status
           enum:
             - approved
@@ -5258,7 +5235,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: WebsiteType
           x-apideck-enum-id: websites.type
           enum:
             - primary
@@ -5342,7 +5318,6 @@ paths:
     get:
       tags:
         - Orders
-      x-graphql-field-name: orders
       operationId: ordersAll
       summary: List Orders
       description: List Orders
@@ -6371,11 +6346,9 @@ paths:
     get:
       tags:
         - Payments
-      x-graphql-field-name: payments
       operationId: paymentsAll
       summary: List Payments
       description: List Payments
-      x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'
@@ -6426,7 +6399,6 @@ paths:
       operationId: paymentsAdd
       summary: Create Payment
       description: Create Payment
-      x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'
@@ -6594,7 +6566,6 @@ paths:
       operationId: paymentsOne
       summary: Get Payment
       description: Get Payment
-      x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'
@@ -6646,7 +6617,6 @@ paths:
       operationId: paymentsUpdate
       summary: Update Payment
       description: Update Payment
-      x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'
@@ -6815,7 +6785,6 @@ paths:
       operationId: paymentsDelete
       summary: Delete Payment
       description: Delete Payment
-      x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'
@@ -6864,7 +6833,6 @@ paths:
     get:
       tags:
         - Merchants
-      x-graphql-field-name: merchants
       operationId: merchantsAll
       summary: List Merchants
       description: List Merchants
@@ -7218,7 +7186,6 @@ paths:
     get:
       tags:
         - Locations
-      x-graphql-field-name: locations
       operationId: locationsAll
       summary: List Locations
       description: List Locations
@@ -7550,7 +7517,6 @@ paths:
     get:
       tags:
         - Items
-      x-graphql-field-name: items
       operationId: itemsAll
       summary: List Items
       description: List Items
@@ -7930,7 +7896,6 @@ paths:
     get:
       tags:
         - Modifiers
-      x-graphql-field-name: modifiers
       operationId: modifiersAll
       summary: List Modifiers
       description: List Modifiers
@@ -8218,7 +8183,6 @@ paths:
     get:
       tags:
         - Modifier Groups
-      x-graphql-field-name: modifierGroups
       operationId: modifierGroupsAll
       summary: List Modifier Groups
       description: List Modifier Groups
@@ -8526,7 +8490,6 @@ paths:
     get:
       tags:
         - Order Types
-      x-graphql-field-name: orderTypes
       operationId: orderTypesAll
       summary: List Order Types
       description: List Order Types
@@ -8802,7 +8765,6 @@ paths:
     get:
       tags:
         - Tenders
-      x-graphql-field-name: tenders
       operationId: tendersAll
       summary: List Tenders
       description: List Tenders

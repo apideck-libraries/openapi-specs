@@ -971,7 +971,6 @@ components:
           $ref: '#/components/schemas/UnifiedApiId'
         status:
           type: string
-          x-graphql-type-name: WebhookStatus
           description: The status of the webhook.
           example: enabled
           x-apideck-enum-id: webhooks.status
@@ -1174,7 +1173,6 @@ components:
     FormField:
       type: object
       x-apideck-schema-id: FormField
-      x-graphql-type-name: FormField
       properties:
         id:
           type: string
@@ -1391,7 +1389,6 @@ components:
         - status_code
         - status
         - data
-      x-graphql-type-name: LogList
       properties:
         status_code:
           type: integer
@@ -1592,7 +1589,6 @@ components:
     LogsFilter:
       type: object
       x-apideck-schema-id: LogsFilter
-      x-graphql-type-name: LogsFilter
       properties:
         connector_id:
           type: string
@@ -1854,7 +1850,6 @@ components:
                   - reauthorize
                   - disable
           type: object
-          x-graphql-type-name: SessionSettings
         theme:
           description: Theming options to change the look and feel of Vault.
           properties:
@@ -2435,7 +2430,6 @@ paths:
     get:
       summary: Get all consumers
       operationId: consumersAll
-      x-graphql-field-name: consumers
       description: |
         This endpoint includes all application consumers, along with an aggregated count of requests made.
       tags:
@@ -2483,7 +2477,6 @@ paths:
     get:
       summary: Get consumer
       operationId: consumersOne
-      x-graphql-field-name: consumer
       description: |
         Consumer detail including their aggregated counts with the connections they have authorized.
       tags:
@@ -2640,7 +2633,6 @@ paths:
     get:
       summary: Consumer request counts
       operationId: consumerRequestCountsAll
-      x-graphql-field-name: consumerRequestCounts
       description: |
         Get consumer request counts within a given datetime range.
       tags:
@@ -2695,7 +2687,6 @@ paths:
     get:
       summary: Get all connections
       operationId: connectionsAll
-      x-graphql-field-name: connections
       description: |
         This endpoint includes all the configured integrations and contains the required assets
         to build an integrations page where your users can install integrations.
@@ -2801,7 +2792,6 @@ paths:
         Create an authorized connection
       tags:
         - Connections
-      x-graphql-exclude: true
       x-sdk-exclude: true
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
@@ -2973,7 +2963,6 @@ paths:
       summary: Deletes a connection
       description: Deletes a connection
       operationId: connectionsDelete
-      x-graphql-field-name: connectionsDelete
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
@@ -3026,7 +3015,6 @@ paths:
         Import an authorized connection.
       tags:
         - Connections
-      x-graphql-exclude: true
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
@@ -3104,7 +3092,6 @@ paths:
         - Connections
       summary: Get Access Token
       operationId: connectionsToken
-      x-graphql-exclude: true
       x-sdk-exclude: true
       description: |
         Get an access token for a connection and store it in Vault. Currently only supported for connections with the client_credentials OAuth grant type.
@@ -3169,7 +3156,6 @@ paths:
       tags:
         - Connections
       summary: Get resource settings
-      x-graphql-field-name: connectionSettings
       description: |
         This endpoint returns custom settings and their defaults required by connection for a given resource.
       operationId: connectionSettingsAll
@@ -3227,7 +3213,6 @@ paths:
       summary: Update settings
       description: Update default values for a connection's resource settings
       operationId: connectionSettingsUpdate
-      x-graphql-field-name: connectionSettingsUpdate
       parameters:
         - $ref: '#/components/parameters/x-apideck-consumer-id'
         - $ref: '#/components/parameters/x-apideck-app-id'
@@ -3315,7 +3300,6 @@ paths:
         - Connections
       summary: Authorize
       operationId: connectionsAuthorize
-      x-graphql-exclude: true
       x-sdk-exclude: true
       description: |
         __In most cases the authorize link is provided in the ``/connections`` endpoint. Normally you don't need to manually generate these links.__
@@ -3378,7 +3362,6 @@ paths:
         - Connections
       summary: Revoke connection
       operationId: connectionsRevoke
-      x-graphql-exclude: true
       x-sdk-exclude: true
       description: |
         __In most cases the authorize link is provided in the ``/connections`` endpoint. Normally you don't need to manually generate these links.__
@@ -3440,7 +3423,6 @@ paths:
         - Connections
       summary: Callback
       operationId: connectionsCallback
-      x-graphql-exclude: true
       x-sdk-exclude: true
       description: |
         This endpoint gets called after the triggering the authorize flow.
@@ -3597,7 +3579,6 @@ paths:
     get:
       summary: Get all consumer request logs
       operationId: logsAll
-      x-graphql-field-name: logs
       description: |
         This endpoint includes all consumer request logs.
       tags:

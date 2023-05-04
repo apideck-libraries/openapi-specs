@@ -908,7 +908,6 @@ components:
           minLength: 1
         type:
           type: string
-          x-graphql-type-name: EmailType
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -921,7 +920,6 @@ components:
     GetMessageResponse:
       type: object
       x-apideck-schema-id: GetMessageResponse
-      x-graphql-type-name: Message
       required:
         - status_code
         - status
@@ -955,7 +953,6 @@ components:
     GetMessagesResponse:
       type: object
       x-apideck-schema-id: GetMessagesResponse
-      x-graphql-type-name: MessageList
       required:
         - status_code
         - status
@@ -1510,7 +1507,6 @@ paths:
     get:
       tags:
         - Messages
-      x-graphql-field-name: messages
       operationId: messagesAll
       summary: List Messages
       description: List Messages

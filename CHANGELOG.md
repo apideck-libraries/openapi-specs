@@ -1,3 +1,9 @@
+## v9.3.1 - (2023-05-07)
+
+### ATS API
+
+- Added `job_id` filter to [Teamtailor](connectors/teamtailor).
+
 ## v9.3.0 - (2023-04-18)
 
 ### Vault API

@@ -1,3 +1,9 @@
+## v9.4.0 - (2023-05-09)
+
+### ATS API
+
+- Added [Create Applicant](/apis/ats/reference#operation/applicantsCreate) and Added [Delete Applicant](/apis/ats/reference#operation/applicantsUpdate)
+
 ## v9.3.1 - (2023-05-07)
 
 ### ATS API

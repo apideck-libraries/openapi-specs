@@ -58,6 +58,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/CustomersFilter'
+    paymentsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/PaymentsFilter'
     suppliersFilter:
       name: filter
       in: query
@@ -5912,6 +5920,19 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
+    PaymentsFilter:
+      type: object
+      x-apideck-schema-id: PaymentsFilter
+      x-graphql-type-name: PaymentsFilter
+      example:
+        invoice_number: '456'
+      properties:
+        invoice_number:
+          type: string
+          title: Invoice number
+          description: Invoice number for payments to filter on
+          example: SpaceX
+      additionalProperties: false
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -10586,10 +10607,14 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/paymentsFilter'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: kashflow
+          description: Kashflow only allows to retrieve payments by invoice, so in order to use this endpoint the filter[invoice_number] parameter is required.
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentsResponse'

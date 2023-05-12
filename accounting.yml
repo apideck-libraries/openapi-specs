@@ -1278,6 +1278,13 @@ components:
         created_at: edge-case
         updated_at: high
         row_version: edge-case
+      x-apideck-strict-required:
+        - id
+        - bill_date
+        - due_date
+        - line_items
+        - total
+        - status
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -1411,23 +1418,24 @@ components:
       x-apideck-schema-id: BillLineItem
       additionalProperties: false
       x-apideck-weights:
-        id: critical
+        id: high
         row_id: edge-case
-        code: high
-        line_number: edge-case
+        code: medium
+        line_number: medium
         description: high
-        type: high
-        tax_amount: low
+        type: medium
+        tax_amount: high
         total_amount: critical
-        quantity: medium
-        unit_price: medium
+        quantity: high
+        unit_price: high
         unit_of_measure: edge-case
-        discount_percentage: edge-case
+        discount_percentage: low
+        discount_amount: low
         location_id: low
         department_id: low
         item: high
+        tax_rate: medium
         ledger_account: low
-        tax_rate: low
         row_version: edge-case
         created_at: edge-case
         updated_at: high
@@ -1489,9 +1497,15 @@ components:
           $ref: '#/components/schemas/UnitOfMeasure'
         discount_percentage:
           type: number
-          title: Discount amount
-          description: Discount percentage
+          title: Discount Percentage
+          description: Discount percentage applied to the line item when supported downstream.
           example: 0.01
+          nullable: true
+        discount_amount:
+          type: number
+          title: Discount Amount
+          description: Discount amount applied to the line item when supported downstream.
+          example: 19.99
           nullable: true
         location_id:
           type: string
@@ -1507,10 +1521,10 @@ components:
           nullable: true
         item:
           $ref: '#/components/schemas/LinkedInvoiceItem'
-        ledger_account:
-          $ref: '#/components/schemas/LinkedLedgerAccount'
         tax_rate:
           $ref: '#/components/schemas/LinkedTaxRate'
+        ledger_account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -4836,6 +4850,7 @@ components:
         unit_price: high
         unit_of_measure: edge-case
         discount_percentage: low
+        discount_amount: low
         location_id: low
         department_id: low
         item: high
@@ -7769,18 +7784,19 @@ paths:
                     unit_price: 27500.5,
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
+                    discount_amount: 19.99,
                     location_id: '1234',
                     department_id: '1234',
                     item: {
                       id: '12344'
                     },
+                    tax_rate: {
+                      id: '123456'
+                    },
                     ledger_account: {
                       id: '123456',
                       nominal_code: 'N091',
                       code: '453'
-                    },
-                    tax_rate: {
-                      id: '123456'
                     },
                     row_version: '1-12345'
                   }
@@ -7967,18 +7983,19 @@ paths:
                     unit_price: 27500.5,
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
+                    discount_amount: 19.99,
                     location_id: '1234',
                     department_id: '1234',
                     item: {
                       id: '12344'
                     },
+                    tax_rate: {
+                      id: '123456'
+                    },
                     ledger_account: {
                       id: '123456',
                       nominal_code: 'N091',
                       code: '453'
-                    },
-                    tax_rate: {
-                      id: '123456'
                     },
                     row_version: '1-12345'
                   }

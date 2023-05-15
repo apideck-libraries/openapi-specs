@@ -2357,16 +2357,20 @@ x-webhooks:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LeadWebhookEvent'
+              type: object
+              properties:
+                payload:
+                  $ref: '#/components/schemas/LeadWebhookEvent'
             example:
-              event_type: lead.lead.created
-              unified_api: lead
-              consumer_id: test_user_id
-              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
-              entity_id: 123456ASDF
-              entity_url: https://unify.apideck.com/lead/leads/123456ASDF
-              entity_type: lead
-              occurred_at: '2020-01-01T00:00:00.000Z'
+              payload:
+                event_type: lead.lead.created
+                unified_api: lead
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/lead/leads/123456ASDF
+                entity_type: lead
+                occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.
@@ -2398,16 +2402,20 @@ x-webhooks:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LeadWebhookEvent'
+              type: object
+              properties:
+                payload:
+                  $ref: '#/components/schemas/LeadWebhookEvent'
             example:
-              event_type: lead.lead.updated
-              unified_api: lead
-              consumer_id: test_user_id
-              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
-              entity_id: 123456ASDF
-              entity_url: https://unify.apideck.com/lead/leads/123456ASDF
-              entity_type: lead
-              occurred_at: '2020-01-01T00:00:00.000Z'
+              payload:
+                event_type: lead.lead.updated
+                unified_api: lead
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/lead/leads/123456ASDF
+                entity_type: lead
+                occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.
@@ -2439,16 +2447,20 @@ x-webhooks:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LeadWebhookEvent'
+              type: object
+              properties:
+                payload:
+                  $ref: '#/components/schemas/LeadWebhookEvent'
             example:
-              event_type: lead.lead.deleted
-              unified_api: lead
-              consumer_id: test_user_id
-              event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
-              entity_id: 123456ASDF
-              entity_url: https://unify.apideck.com/lead/leads/123456ASDF
-              entity_type: lead
-              occurred_at: '2020-01-01T00:00:00.000Z'
+              payload:
+                event_type: lead.lead.deleted
+                unified_api: lead
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/lead/leads/123456ASDF
+                entity_type: lead
+                occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.

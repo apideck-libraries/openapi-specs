@@ -1,8 +1,19 @@
+## v9.5.0 - (2023-05-15)
+
+### Accounting API
+
+- Added new connectors for [Kashflow](connectors/kashflow) and [Clearbooks](connectors/clearbooks-uk)
+- Updated [Exact Online](connectors/exact-online) connector
+
+### HRIS API
+
+- Added [Employee Terminated](/apis/hris/reference#operation/employeeTerminated) event.
+
 ## v9.4.0 - (2023-05-09)
 
 ### ATS API
 
-- Added [Create Applicant](/apis/ats/reference#operation/applicantsCreate) and Added [Delete Applicant](/apis/ats/reference#operation/applicantsUpdate)
+- Added [Create Applicant](/apis/ats/reference#operation/applicantsCreate) and added [Delete Applicant](/apis/ats/reference#operation/applicantsUpdate)
 
 ## v9.3.1 - (2023-05-07)
 

@@ -6166,6 +6166,49 @@ x-webhooks:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.
       security: []
+  EmployeeTerminated:
+    post:
+      summary: Employee Terminated
+      description: Event broadcast when an employee has been terminated.
+      operationId: employeeTerminated
+      x-apideck-event-type: hris.employee.terminated
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/HrisEventType'
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+            example:
+              payload:
+                event_type: hris.employee.terminated
+                unified_api: hris
+                service_id: bamboo
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/hris/employees/123456ASDF
+                entity_type: employee
+                occurred_at: '2020-01-01T00:00:00.000Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
   EmployeeDeleted:
     post:
       summary: Employee Deleted

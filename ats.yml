@@ -228,6 +228,36 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateApplicantResponse'
+    CreateApplicationResponse:
+      description: Applications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateApplicationResponse'
+    DeleteApplicationResponse:
+      description: Applications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteApplicationResponse'
+    GetApplicationResponse:
+      description: Applications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetApplicationResponse'
+    GetApplicationsResponse:
+      description: Applications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetApplicationsResponse'
+    UpdateApplicationResponse:
+      description: Applications
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateApplicationResponse'
   schemas:
     Address:
       type: object
@@ -564,6 +594,14 @@ components:
           title: Coordinator ID
           type: string
           example: '12345'
+        application_ids:
+          type: array
+          items:
+            type: string
+          example:
+            - a0d636c6-43b3-4bde-8c70-85b707d992f4
+            - a98lfd96-43b3-4bde-8c70-85b707d992e6
+          nullable: true
         applications:
           type: array
           items:
@@ -684,41 +722,14 @@ components:
         - ats.applicant.created
         - ats.applicant.updated
         - ats.applicant.deleted
+        - ats.application.created
+        - ats.application.updated
+        - ats.application.deleted
       example: ats.job.created
       type: string
     AtsWebhookEvent:
       allOf:
-        - type: object
-          x-apideck-schema-id: WebhookEvent
-          properties:
-            event_id:
-              type: string
-              description: Unique reference to this request event
-              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-            service_id:
-              type: string
-              description: Service provider identifier
-              example: close
-            entity_id:
-              type: string
-              description: The service provider's ID of the entity that triggered this event
-              example: 123456ASDF
-            entity_type:
-              type: string
-              description: The type entity that triggered this event
-              example: Company
-            entity_url:
-              type: string
-              description: The url to retrieve entity detail.
-              example: https://unify.apideck.com/crm/contacts/123456
-            execution_attempt:
-              type: number
-              description: The current count this request event has been attempted
-              example: 2
-            occurred_at:
-              type: string
-              description: ISO Datetime for when the original event occurred
-              example: '2021-10-01T03:14:55.419Z'
+        - $ref: '#/components/schemas/WebhookEvent/allOf/0'
         - type: object
           properties:
             event_type:
@@ -2512,6 +2523,272 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    WebhookEvent:
+      x-sdk-exclude: true
+      allOf:
+        - type: object
+          x-apideck-schema-id: WebhookEvent
+          properties:
+            event_id:
+              type: string
+              description: Unique reference to this request event
+              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+            service_id:
+              type: string
+              description: Service provider identifier
+              example: close
+            entity_id:
+              type: string
+              description: The service provider's ID of the entity that triggered this event
+              example: 123456ASDF
+            entity_type:
+              type: string
+              description: The type entity that triggered this event
+              example: Company
+            entity_url:
+              type: string
+              description: The url to retrieve entity detail.
+              example: https://unify.apideck.com/crm/contacts/123456
+            execution_attempt:
+              type: number
+              description: The current count this request event has been attempted
+              example: 2
+            occurred_at:
+              type: string
+              description: ISO Datetime for when the original event occurred
+              example: '2021-10-01T03:14:55.419Z'
+        - type: object
+          properties:
+            event_type:
+              $ref: '#/components/schemas/AtsEventType'
+    CreateApplicationResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteApplicationResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    GetApplicationResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Application'
+    GetApplicationsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    Application:
+      type: object
+      additionalProperties: false
+      x-apideck-weights:
+        id: high
+        applicant_id: critical
+        job_id: critical
+        status: high
+        stage: high
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
+      required:
+        - applicant_id
+        - job_id
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        applicant_id:
+          type: string
+          title: Applicant ID
+          example: '12345'
+          nullable: true
+        job_id:
+          type: string
+          title: Job ID
+          example: '12345'
+          nullable: true
+        status:
+          type: string
+          title: Status
+          example: open
+          enum:
+            - open
+            - rejected
+            - hired
+            - converted
+            - other
+          nullable: true
+        stage:
+          type: object
+          properties:
+            id:
+              type: string
+              title: Stage ID
+              description: Stage the candidate should be in. If omitted, the default stage for this job will be used.
+              example: '12345'
+              nullable: true
+            name:
+              type: string
+              title: Stage name
+              example: '12345'
+              nullable: true
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+    UpdateApplicationResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -2559,6 +2836,11 @@ tags:
     x-apideck-resource-id: applicants
     x-apideck-model:
       $ref: '#/components/schemas/Applicant'
+  - name: Applications
+    description: ''
+    x-apideck-resource-id: Applications
+    x-apideck-model:
+      $ref: '#/components/schemas/Application'
 paths:
   /ats/jobs:
     get:
@@ -2845,6 +3127,10 @@ paths:
                 stage_id: '12345',
                 recruiter_id: '12345',
                 coordinator_id: '12345',
+                application_ids: [
+                  'a0d636c6-43b3-4bde-8c70-85b707d992f4',
+                  'a98lfd96-43b3-4bde-8c70-85b707d992e6'
+                ],
                 applications: ['a0d636c6-43b3-4bde-8c70-85b707d992f4', 'a98lfd96-43b3-4bde-8c70-85b707d992e6'],
                 followers: ['a0d636c6-43b3-4bde-8c70-85b707d992f4', 'a98lfd96-43b3-4bde-8c70-85b707d992e6'],
                 sources: ['Job site'],
@@ -3048,6 +3334,10 @@ paths:
                 stage_id: '12345',
                 recruiter_id: '12345',
                 coordinator_id: '12345',
+                application_ids: [
+                  'a0d636c6-43b3-4bde-8c70-85b707d992f4',
+                  'a98lfd96-43b3-4bde-8c70-85b707d992e6'
+                ],
                 applications: ['a0d636c6-43b3-4bde-8c70-85b707d992f4', 'a98lfd96-43b3-4bde-8c70-85b707d992e6'],
                 followers: ['a0d636c6-43b3-4bde-8c70-85b707d992f4', 'a98lfd96-43b3-4bde-8c70-85b707d992e6'],
                 sources: ['Job site'],
@@ -3111,6 +3401,289 @@ paths:
 
             try {
               const { data } = await apideck.ats.applicantsDelete({
+                id: 'id_example'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /ats/applications:
+    get:
+      tags:
+        - Applications
+      operationId: applicationsAll
+      summary: List Applications
+      description: List Applications
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetApplicationsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.ats.applicationsAll({})
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    post:
+      tags:
+        - Applications
+      operationId: applicationsAdd
+      summary: Create Application
+      description: Create Application
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateApplicationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              application: {
+                applicant_id: '12345',
+                job_id: '12345',
+                status: 'open',
+                stage: {
+                  id: '12345',
+                  name: '12345'
+                }
+              }
+            }
+
+            try {
+              const { data } = await apideck.ats.applicationsAdd(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /ats/applications/{id}:
+    get:
+      tags:
+        - Applications
+      operationId: applicationsOne
+      summary: Get Application
+      description: Get Application
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetApplicationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.ats.applicationsOne({
+                id: 'id_example'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    patch:
+      tags:
+        - Applications
+      operationId: applicationsUpdate
+      summary: Update Application
+      description: Update Application
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Application'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateApplicationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              id: 'id_example',
+              application: {
+                applicant_id: '12345',
+                job_id: '12345',
+                status: 'open',
+                stage: {
+                  id: '12345',
+                  name: '12345'
+                }
+              }
+            }
+
+            try {
+              const { data } = await apideck.ats.applicationsUpdate(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    delete:
+      tags:
+        - Applications
+      operationId: applicationsDelete
+      summary: Delete Application
+      description: Delete Application
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteApplicationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: ats
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.ats.applicationsDelete({
                 id: 'id_example'
               })
               console.log('API called successfully', data)
@@ -3397,4 +3970,115 @@ x-webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.
+      security: []
+  ApplicationUpdated:
+    post:
+      summary: Application Updated
+      description: Event broadcast when an application has been updated.
+      operationId: applicationUpdated
+      x-apideck-event-type: ats.application.updated
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+            example:
+              payload:
+                event_type: ats.application.updated
+                unified_api: ats
+                service_id: lever
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/ats/applications/123456ASDF
+                entity_type: application
+                occurred_at: '2020-01-01T00:00:00.000Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
+  ApplicationDeleted:
+    post:
+      summary: Application Deleted
+      description: Event broadcast when an application has been deleted.
+      operationId: applicationDeleted
+      x-apideck-event-type: ats.application.deleted
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+            example:
+              payload:
+                event_type: ats.application.deleted
+                unified_api: ats
+                service_id: lever
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/ats/applications/123456ASDF
+                entity_type: application
+                occurred_at: '2020-01-01T00:00:00.000Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
+  ApplicationCreated:
+    post:
+      summary: Application Created
+      description: Event broadcast when an application has been created.
+      operationId: applicationCreated
+      x-apideck-event-type: ats.application.created
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookEvent'
+            example:
+              payload:
+                event_type: ats.application.created
+                unified_api: ats
+                service_id: lever
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/ats/applications/123456ASDF
+                entity_type: application
+                occurred_at: '2020-01-01T00:00:00.000Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       security: []

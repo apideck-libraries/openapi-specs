@@ -1748,7 +1748,7 @@ components:
         title: critical
         sequence: low
         visibility: low
-        status: high
+        status: critical
         code: low
         language: medium
         employment_terms: low
@@ -1756,23 +1756,25 @@ components:
         remote: low
         requisition_id: medium
         department: medium
+        location: critical
         branch: low
         recruiters: low
         hiring_managers: low
         followers: low
-        description: medium
-        description_html: edge-case
+        description: critical
+        description_html: critical
         blocks: edge-case
         closing: medium
         closing_html: edge-case
         closing_date: high
-        salary: high
-        url: medium
-        job_portal_url: low
+        salary: critical
+        url: critical
+        job_portal_url: medium
         confidential: medium
         available_to_employees: medium
         tags: low
-        addresses: high
+        addresses: low
+        custom_fields: critical
         record_url: low
         deleted: medium
         owner_id: high
@@ -1780,7 +1782,7 @@ components:
         updated_by: edge-case
         created_by: edge-case
         updated_at: medium
-        created_at: medium
+        created_at: critical
       additionalProperties: false
       properties:
         id:
@@ -1830,6 +1832,12 @@ components:
           title: Experience
           description: Level of experience required for the job role.
           example: Director/ Vice President
+        location:
+          type: string
+          title: Location
+          description: Specifies the location for the job posting.
+          example: San Francisco
+          nullable: true
         remote:
           type: boolean
           title: Remote
@@ -1970,6 +1978,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Address'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
         record_url:
           $ref: '#/components/schemas/RecordUrl'
         deleted:
@@ -2735,7 +2747,6 @@ components:
             - hired
             - converted
             - other
-          apideck-enum-id: applications.status
           nullable: true
         stage:
           type: object
@@ -2840,7 +2851,7 @@ tags:
       $ref: '#/components/schemas/Applicant'
   - name: Applications
     description: ''
-    x-apideck-resource-id: Applications
+    x-apideck-resource-id: applications
     x-apideck-model:
       $ref: '#/components/schemas/Application'
 paths:

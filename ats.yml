@@ -1784,6 +1784,15 @@ components:
         updated_at: medium
         created_at: critical
       additionalProperties: false
+      x-apideck-strict-required:
+        - title
+        - status
+        - location
+      x-apideck-strict-any-of:
+        - required:
+            - description_html
+        - required:
+            - description
       properties:
         id:
           $ref: '#/components/schemas/Id'

@@ -1451,6 +1451,10 @@ components:
             - type: boolean
               example: true
               nullable: true
+            - type: object
+              example:
+                foo: bar
+              nullable: true
             - type: array
               items:
                 type: string
@@ -1766,19 +1770,20 @@ components:
         recruiters: low
         hiring_managers: low
         followers: low
-        description: critical
+        description: high
         description_html: high
         blocks: edge-case
         closing: medium
         closing_html: edge-case
         closing_date: high
         salary: critical
-        url: critical
+        url: high
         job_portal_url: medium
         confidential: medium
         available_to_employees: medium
         tags: low
         addresses: low
+        links: critical
         custom_fields: critical
         record_url: low
         deleted: medium
@@ -1789,11 +1794,7 @@ components:
         updated_at: medium
         created_at: critical
       additionalProperties: false
-      x-apideck-strict-required:
-        - title
-        - status
-        - location
-      x-apideck-strict-any-of:
+      x-apideck-strict-one-of:
         - required:
             - description_html
         - required:
@@ -1971,12 +1972,38 @@ components:
           type: string
           title: URL
           description: URL of the job description
+          deprecated: true
           nullable: true
         job_portal_url:
           type: string
           title: URL
           description: URL of the job portal
+          deprecated: true
           nullable: true
+        record_url:
+          type: string
+          title: Record URL
+          example: https://app.intercom.io/contacts/12345
+          deprecated: true
+          nullable: true
+        links:
+          type: array
+          minLength: 1
+          items:
+            type: object
+            x-apideck-weights:
+              type: critical
+              url: critical
+            properties:
+              type:
+                type: string
+                enum:
+                  - job_portal
+                  - job_description
+                example: job_portal
+              url:
+                type: string
+                example: https://app.intercom.io/contacts/12345
         confidential:
           title: Confidential
           type: boolean
@@ -1996,8 +2023,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomField'
-        record_url:
-          $ref: '#/components/schemas/RecordUrl'
         deleted:
           $ref: '#/components/schemas/Deleted'
         owner_id:

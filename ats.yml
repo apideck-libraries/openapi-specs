@@ -1794,7 +1794,7 @@ components:
         updated_at: medium
         created_at: critical
       additionalProperties: false
-      x-apideck-strict-one-of:
+      x-apideck-strict-any-of:
         - required:
             - description_html
         - required:
@@ -1956,6 +1956,7 @@ components:
             min: medium
             max: medium
             currency: medium
+            interval: edge-case
           type: object
           properties:
             min:
@@ -1968,6 +1969,10 @@ components:
               example: 10000
             currency:
               $ref: '#/components/schemas/Currency'
+            interval:
+              type: string
+              example: year
+              nullable: true
         url:
           type: string
           title: URL

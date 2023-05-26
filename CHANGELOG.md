@@ -1,3 +1,9 @@
+## v9.6.0 - (2023-05-25)
+
+### HRIS API
+
+- Add the `probation_period` field on the [Employee](apis/hris/reference#tag/Employees) resource.
+
 ## v9.5.0 - (2023-05-15)
 
 ### Accounting API
@@ -29,6 +35,8 @@
 - Added `prefix` and `suffix` to `form_fields` on [Connections](apis/vault/reference#tag/Connections)
 
 ## v9.2.0 - (2023-04-17)
+
+### HRIS API
 
 - Deprecate the `department` field in favor of the dedicated `department_id` and `department_name` field on the [Employee](apis/hris/reference#tag/Employees) resource.
 

@@ -1,3 +1,29 @@
+## v9.7.0 - (2023-05-31)
+
+### Accounting API
+
+### Resources
+- [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders)
+
+### Connectors
+- Added new [Procountor](connectors/procountor-fi) connector 
+- Added new [Netvisor](connectors/visma-netvisor) connector
+- Updated [Quickbooks](connectors/quickbooks) connector with Purchase Order support
+- Updated [Xero](connectors/xero) connector with Purchase Order support
+
+### ATS API
+
+### Connectors
+- Updated [Lever](connectors/lever) connector
+- Updated [Teamtailor](connectors/teamtailor) connector
+- Updated [Workable](connectors/workable) connector
+- Updated [Greenhouse](connectors/greenhouse) connector
+- Updated [Workday](connectors/workday) connector
+- Updated [SAP-Successfactors](connectors/sap-successfactors) connector
+- Updated [Freshteam](connectors/freshteam) connector
+- Updated [Sage HR](connectors/sage-hr) connector
+- Updated [Recruitee](connectors/recruitee) connector
+
 ## v9.6.0 - (2023-05-25)
 
 ### HRIS API

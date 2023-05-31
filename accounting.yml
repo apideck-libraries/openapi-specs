@@ -575,152 +575,14 @@ components:
           schema:
             $ref: '#/components/schemas/UpdatePurchaseOrderResponse'
   schemas:
+    AccountingByRow:
+      type: boolean
+      title: Accounting by Row
+      description: Indicates if accounting by row is used (true) or not (false). Accounting by row means that a separate ledger transaction is created for each row.
+      nullable: true
+      example: false
     AccountingCustomer:
-      type: object
-      x-apideck-schema-id: Customer
-      x-apideck-weights:
-        id: critical
-        downstream_id: edge-case
-        display_id: edge-case
-        display_name: edge-case
-        company_name: high
-        title: high
-        first_name: high
-        middle_name: low
-        last_name: high
-        suffix: low
-        individual: medium
-        addresses: high
-        phone_numbers: high
-        emails: high
-        websites: medium
-        bank_accounts: high
-        notes: low
-        tax_rate: medium
-        tax_number: medium
-        currency: medium
-        account: medium
-        status: high
-        updated_by: edge-case
-        created_by: edge-case
-        updated_at: medium
-        created_at: medium
-        row_version: edge-case
-      additionalProperties: false
-      required:
-        - id
-      x-apideck-strict-required:
-        - emails
-        - addresses
-        - phone_numbers
-        - status
-        - updated_at
-      x-apideck-strict-any-of:
-        - required:
-            - first_name
-            - last_name
-        - required:
-            - company_name
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        downstream_id:
-          $ref: '#/components/schemas/DownstreamId'
-        display_id:
-          type: string
-          title: Display ID
-          description: Display ID
-          example: EMP00101
-          nullable: true
-        display_name:
-          type: string
-          title: Display Name
-          description: Display name
-          example: Windsurf Shop
-          nullable: true
-        company_name:
-          $ref: '#/components/schemas/CompanyName'
-        title:
-          $ref: '#/components/schemas/Title'
-        first_name:
-          $ref: '#/components/schemas/FirstName'
-        middle_name:
-          $ref: '#/components/schemas/MiddleName'
-        last_name:
-          $ref: '#/components/schemas/LastName'
-        suffix:
-          $ref: '#/components/schemas/Suffix'
-        individual:
-          type: boolean
-          title: Is individual
-          description: Is this an individual or business customer
-          example: true
-          nullable: true
-        project:
-          type: boolean
-          title: Is project
-          description: If true, indicates this is a Project.
-          example: false
-          nullable: true
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/Address'
-        phone_numbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        emails:
-          type: array
-          items:
-            $ref: '#/components/schemas/Email'
-        websites:
-          type: array
-          items:
-            $ref: '#/components/schemas/Website'
-        bank_accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankAccount'
-        notes:
-          type: string
-          title: Notes
-          description: Some notes about this customer
-          example: Some notes about this customer
-          nullable: true
-        tax_rate:
-          $ref: '#/components/schemas/LinkedTaxRate'
-        tax_number:
-          $ref: '#/components/schemas/TaxNumber'
-        currency:
-          $ref: '#/components/schemas/Currency'
-        account:
-          $ref: '#/components/schemas/LinkedLedgerAccount'
-        parent:
-          $ref: '#/components/schemas/LinkedParentCustomer'
-        status:
-          type: string
-          title: Status
-          description: Customer status
-          nullable: true
-          example: active
-          x-apideck-enum-id: customers.status
-          enum:
-            - active
-            - inactive
-            - archived
-            - gdpr-erasure-request
-            - unknown
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-        row_version:
-          $ref: '#/components/schemas/RowVersion'
+      $ref: '#/components/schemas/Customer'
     AccountingEventType:
       type: string
       x-apideck-enum-id: accounting.events
@@ -813,7 +675,7 @@ components:
           example: primary
         string:
           type: string
-          title: The address string. Some APIs don't provide structured address data.
+          description: The address string. Some APIs don't provide structured address data.
           example: 25 Spring Street, Blackburn, VIC 3130
           nullable: true
         name:
@@ -1287,6 +1149,12 @@ components:
         notes: low
         status: critical
         ledger_account: low
+        payment_method: low
+        channel: low
+        language: low
+        accounting_by_row: edge-case
+        bank_account: low
+        discount_percentage: medium
         updated_by: low
         created_by: low
         created_at: edge-case
@@ -1324,11 +1192,7 @@ components:
           format: date
           example: '2020-09-30'
         due_date:
-          type: string
-          title: Due date
-          description: The due date is the date on which a payment is scheduled to be received by the supplier - YYYY-MM-DD.
-          format: date
-          example: '2020-10-30'
+          $ref: '#/components/schemas/DueDate'
         paid_date:
           type: string
           title: Paid date
@@ -1389,11 +1253,7 @@ components:
           example: 27500
           nullable: true
         tax_code:
-          type: string
-          title: Tax Code
-          description: Applicable tax id/code override if tax is not supplied on a line item basis.
-          example: '1234'
-          nullable: true
+          $ref: '#/components/schemas/TaxCode'
         notes:
           type: string
           title: Notes
@@ -1417,6 +1277,18 @@ components:
           nullable: true
         ledger_account:
           $ref: '#/components/schemas/LinkedLedgerAccount'
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        channel:
+          $ref: '#/components/schemas/Channel'
+        language:
+          $ref: '#/components/schemas/Language'
+        accounting_by_row:
+          $ref: '#/components/schemas/AccountingByRow'
+        bank_account:
+          $ref: '#/components/schemas/BankAccount'
+        discount_percentage:
+          $ref: '#/components/schemas/DiscountPercentage'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -1429,6 +1301,7 @@ components:
           $ref: '#/components/schemas/RowVersion'
     BillLineItem:
       type: object
+      title: Bill Line Item
       x-apideck-schema-id: BillLineItem
       additionalProperties: false
       x-apideck-weights:
@@ -1549,6 +1422,12 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
+    Channel:
+      type: string
+      title: Channel
+      description: The channel through which the transaction is processed.
+      nullable: true
+      example: email
     BillsSort:
       type: object
       x-apideck-schema-id: BillsSort
@@ -3281,6 +3160,158 @@ components:
       description: Currency Exchange Rate at the time entity was recorded/generated.
       nullable: true
       example: 0.69
+    Customer:
+      type: object
+      x-apideck-schema-id: Customer
+      x-apideck-weights:
+        id: critical
+        downstream_id: edge-case
+        display_id: edge-case
+        display_name: edge-case
+        company_name: high
+        title: high
+        first_name: high
+        middle_name: low
+        last_name: high
+        suffix: low
+        individual: medium
+        addresses: high
+        phone_numbers: high
+        emails: high
+        websites: medium
+        bank_accounts: high
+        notes: low
+        tax_rate: medium
+        tax_number: medium
+        currency: medium
+        account: medium
+        status: high
+        payment_method: edge-case
+        channel: edge-case
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
+        row_version: edge-case
+      additionalProperties: false
+      required:
+        - id
+      x-apideck-strict-required:
+        - emails
+        - addresses
+        - phone_numbers
+        - status
+        - updated_at
+      x-apideck-strict-any-of:
+        - required:
+            - first_name
+            - last_name
+        - required:
+            - company_name
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID
+          example: EMP00101
+          nullable: true
+        display_name:
+          type: string
+          title: Display Name
+          description: Display name
+          example: Windsurf Shop
+          nullable: true
+        company_name:
+          $ref: '#/components/schemas/CompanyName'
+        title:
+          $ref: '#/components/schemas/Title'
+        first_name:
+          $ref: '#/components/schemas/FirstName'
+        middle_name:
+          $ref: '#/components/schemas/MiddleName'
+        last_name:
+          $ref: '#/components/schemas/LastName'
+        suffix:
+          $ref: '#/components/schemas/Suffix'
+        individual:
+          type: boolean
+          title: Is individual
+          description: Is this an individual or business customer
+          example: true
+          nullable: true
+        project:
+          type: boolean
+          title: Is project
+          description: If true, indicates this is a Project.
+          example: false
+          nullable: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        phone_numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+        websites:
+          type: array
+          items:
+            $ref: '#/components/schemas/Website'
+        bank_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccount'
+        notes:
+          type: string
+          title: Notes
+          description: Some notes about this customer
+          example: Some notes about this customer
+          nullable: true
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        tax_number:
+          $ref: '#/components/schemas/TaxNumber'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        parent:
+          $ref: '#/components/schemas/LinkedParentCustomer'
+        status:
+          type: string
+          title: Status
+          description: Customer status
+          nullable: true
+          example: active
+          x-apideck-enum-id: customers.status
+          enum:
+            - active
+            - inactive
+            - archived
+            - gdpr-erasure-request
+            - unknown
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        channel:
+          $ref: '#/components/schemas/Channel'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
     CustomField:
       type: object
       x-apideck-schema-id: CustomField
@@ -3691,12 +3722,24 @@ components:
           example: delete
         data:
           $ref: '#/components/schemas/UnifiedId'
+    DiscountPercentage:
+      type: number
+      title: Discount Percentage
+      description: Discount percentage applied to this transaction.
+      example: 5.5
+      nullable: true
     DownstreamId:
       type: string
       description: The third-party API ID of original entity
       example: '12345'
       nullable: true
       readOnly: true
+    DueDate:
+      type: string
+      title: Due date
+      description: The due date is the date on which a payment is scheduled to be received - YYYY-MM-DD.
+      format: date
+      example: '2020-10-30'
     Email:
       type: object
       x-apideck-schema-id: Email
@@ -3975,7 +4018,7 @@ components:
           description: Operation performed
           example: one
         data:
-          $ref: '#/components/schemas/AccountingCustomer'
+          $ref: '#/components/schemas/Customer'
     GetCustomersResponse:
       type: object
       x-apideck-schema-id: GetCustomersResponse
@@ -4010,7 +4053,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/AccountingCustomer'
+            $ref: '#/components/schemas/Customer'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -4660,6 +4703,11 @@ components:
         shipping_address: medium
         template_id: edge-case
         source_document_url: edge-case
+        payment_method: low
+        channel: low
+        language: low
+        accounting_by_row: edge-case
+        bank_account: low
         row_version: edge-case
         updated_by: low
         created_by: low
@@ -4825,6 +4873,16 @@ components:
           description: URL link to a source document - shown as 'Go to [appName]' in the downstream app. Currently only supported for Xero.
           example: https://www.invoicesolution.com/invoice/123456
           nullable: true
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        channel:
+          $ref: '#/components/schemas/Channel'
+        language:
+          $ref: '#/components/schemas/Language'
+        accounting_by_row:
+          $ref: '#/components/schemas/AccountingByRow'
+        bank_account:
+          $ref: '#/components/schemas/BankAccount'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -5004,6 +5062,7 @@ components:
       additionalProperties: false
     InvoiceLineItem:
       type: object
+      title: Invoice Line Item
       x-apideck-schema-id: InvoiceLineItem
       additionalProperties: false
       x-apideck-weights:
@@ -5163,6 +5222,8 @@ components:
         memo: low
         posted_at: low
         journal_symbol: edge-case
+        tax_type: edge-case
+        tax_code: edge-case
         updated_by: edge-case
         created_by: edge-case
         updated_at: medium
@@ -5207,6 +5268,14 @@ components:
           description: Journal symbol of the entry. For example IND for indirect costs
           example: IND
           nullable: true
+        tax_type:
+          type: string
+          title: Tax Type
+          description: The specific category of tax associated with a transaction like sales or purchase
+          example: sales
+          nullable: true
+        tax_code:
+          $ref: '#/components/schemas/TaxCode'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -5223,20 +5292,27 @@ components:
       additionalProperties: false
       x-apideck-weights:
         id: high
+        description: medium
         tax_amount: high
-        total_amount: critical
+        sub_total: medium
+        total_amount: high
         type: critical
-        tracking_category: low
         tax_rate: medium
+        tracking_category: low
+        department_id: edge-case
+        location_id: edge-case
         ledger_account: critical
       required:
         - ledger_account
-        - total_amount
         - type
       x-apideck-strict-required:
         - ledger_account
-        - total_amount
         - type
+      x-apideck-strict-any-of:
+        - required:
+            - total_amount
+        - required:
+            - sub_total
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -5250,6 +5326,12 @@ components:
           type: number
           title: Tax amount
           description: Tax amount
+          example: 27500
+          nullable: true
+        sub_total:
+          title: Sub-total amount
+          description: Sub-total amount, normally before tax.
+          type: number
           example: 27500
           nullable: true
         total_amount:
@@ -5608,14 +5690,12 @@ components:
           title: Item code
           description: User defined item code
           example: 120-C
-          readOnly: true
           nullable: true
         name:
           type: string
           title: Item name
           description: User defined item name
           example: Model Y
-          readOnly: true
           nullable: true
     LinkedLedgerAccount:
       type: object
@@ -5679,6 +5759,7 @@ components:
       description: The supplier this entity is linked to.
       x-apideck-weights:
         id: medium
+        display_id: medium
         display_name: high
         company_name: edge-case
         address: low
@@ -5691,6 +5772,13 @@ components:
           title: Supplier ID
           description: The ID of the supplier this entity is linked to.
           example: '12345'
+        display_id:
+          type: string
+          title: Display ID
+          description: The display ID of the supplier.
+          example: SUPP00101
+          nullable: true
+          readOnly: true
         display_name:
           type: string
           title: Display Name
@@ -5740,7 +5828,6 @@ components:
           description: Rate of the tax rate
           example: 10
           nullable: true
-          readOnly: true
     LinkedTrackingCategory:
       type: object
       x-apideck-schema-id: LinkedTrackingCategory
@@ -6087,6 +6174,12 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
+    PaymentMethod:
+      type: string
+      title: Payment method
+      description: Payment method used for the transaction, such as cash, credit card, bank transfer, or check
+      nullable: true
+      example: cash
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -6441,6 +6534,7 @@ components:
         id: critical
         downstream_id: low
         po_number: low
+        reference: low
         supplier: high
         status: critical
         issued_date: edge-case
@@ -6455,6 +6549,13 @@ components:
         line_items: critical
         shipping_address: medium
         ledger_account: edge-case
+        discount_percentage: low
+        bank_account: low
+        accounting_by_row: edge-case
+        due_date: low
+        payment_method: low
+        tax_code: medium
+        channel: low
         row_version: edge-case
         updated_by: low
         created_by: low
@@ -6551,6 +6652,20 @@ components:
           description: Optional purchase order template
           example: '123456'
           nullable: true
+        discount_percentage:
+          $ref: '#/components/schemas/DiscountPercentage'
+        bank_account:
+          $ref: '#/components/schemas/BankAccount'
+        accounting_by_row:
+          $ref: '#/components/schemas/AccountingByRow'
+        due_date:
+          $ref: '#/components/schemas/DueDate'
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        tax_code:
+          $ref: '#/components/schemas/TaxCode'
+        channel:
+          $ref: '#/components/schemas/Channel'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -6640,6 +6755,8 @@ components:
         currency: medium
         account: medium
         status: high
+        payment_method: edge-case
+        channel: edge-case
         updated_by: edge-case
         created_by: edge-case
         updated_at: medium
@@ -6742,6 +6859,10 @@ components:
             - archived
             - gdpr-erasure-request
             - unknown
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        channel:
+          $ref: '#/components/schemas/Channel'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -6757,6 +6878,9 @@ components:
       x-apideck-schema-id: SuppliersFilter
       example:
         company_name: SpaceX
+        display_name: Elon Musk
+        first_name: Elon
+        last_name: Musk
         email: elon@musk.com
       properties:
         company_name:
@@ -6764,6 +6888,21 @@ components:
           title: Company Name
           description: Company Name of supplier to search for
           example: SpaceX
+        display_name:
+          type: string
+          title: Display Name
+          description: Display Name of supplier to search for
+          example: Techno King
+        first_name:
+          type: string
+          title: First Name
+          description: First name of supplier to search for
+          example: Elon
+        last_name:
+          type: string
+          title: Last Name
+          description: Last name of supplier to search for
+          example: Musk
         email:
           type: string
           title: Email
@@ -6777,6 +6916,12 @@ components:
         type: string
       example:
         - New
+    TaxCode:
+      type: string
+      title: Tax Code
+      description: Applicable tax id/code override if tax is not supplied on a line item basis.
+      example: '1234'
+      nullable: true
     TaxInclusive:
       type: boolean
       title: Tax inclusive
@@ -7611,7 +7756,7 @@ tags:
     description: ''
     x-apideck-resource-id: customers
     x-apideck-model:
-      $ref: '#/components/schemas/AccountingCustomer'
+      $ref: '#/components/schemas/Customer'
   - name: Invoices
     description: ''
     x-apideck-resource-id: invoices
@@ -8051,6 +8196,12 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:
@@ -8144,10 +8295,13 @@ paths:
                     location_id: '1234',
                     department_id: '1234',
                     item: {
-                      id: '12344'
+                      id: '12344',
+                      code: '120-C',
+                      name: 'Model Y'
                     },
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     ledger_account: {
                       id: '123456',
@@ -8171,6 +8325,22 @@ paths:
                   nominal_code: 'N091',
                   code: '453'
                 },
+                payment_method: 'cash',
+                channel: 'email',
+                language: 'EN',
+                accounting_by_row: false,
+                bank_account: {
+                  account_number: '123465',
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  iban: 'CH2989144532982975332',
+                  bic: 'AUDSCHGGXXX',
+                  bsb_number: '062-001',
+                  branch_identifier: '001',
+                  bank_code: 'BNH',
+                  currency: 'USD'
+                },
+                discount_percentage: 5.5,
                 row_version: '1-12345'
               }
             }
@@ -8250,6 +8420,12 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:
@@ -8344,10 +8520,13 @@ paths:
                     location_id: '1234',
                     department_id: '1234',
                     item: {
-                      id: '12344'
+                      id: '12344',
+                      code: '120-C',
+                      name: 'Model Y'
                     },
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     ledger_account: {
                       id: '123456',
@@ -8371,6 +8550,22 @@ paths:
                   nominal_code: 'N091',
                   code: '453'
                 },
+                payment_method: 'cash',
+                channel: 'email',
+                language: 'EN',
+                accounting_by_row: false,
+                bank_account: {
+                  account_number: '123465',
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  iban: 'CH2989144532982975332',
+                  bic: 'AUDSCHGGXXX',
+                  bsb_number: '062-001',
+                  branch_identifier: '001',
+                  bank_code: 'BNH',
+                  currency: 'USD'
+                },
+                discount_percentage: 5.5,
                 row_version: '1-12345'
               }
             }
@@ -8502,6 +8697,11 @@ paths:
           description: Clearbooks does not support setting the pagination size.
         - connector: quickbooks
           description: Quickbooks offers limited (regional) support for applying discount on a Line Item. Including discount_percentage or discount_amount applies to entire invoice.
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:
@@ -8582,10 +8782,13 @@ paths:
                     location_id: '1234',
                     department_id: '1234',
                     item: {
-                      id: '12344'
+                      id: '12344',
+                      code: '120-C',
+                      name: 'Model Y'
                     },
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     ledger_account: {
                       id: '123456',
@@ -8649,6 +8852,21 @@ paths:
                 },
                 template_id: '123456',
                 source_document_url: 'https://www.invoicesolution.com/invoice/123456',
+                payment_method: 'cash',
+                channel: 'email',
+                language: 'EN',
+                accounting_by_row: false,
+                bank_account: {
+                  account_number: '123465',
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  iban: 'CH2989144532982975332',
+                  bic: 'AUDSCHGGXXX',
+                  bsb_number: '062-001',
+                  branch_identifier: '001',
+                  bank_code: 'BNH',
+                  currency: 'USD'
+                },
                 row_version: '1-12345'
               }
             }
@@ -8728,6 +8946,11 @@ paths:
       x-apideck-gotchas:
         - connector: quickbooks
           description: Quickbooks offers limited (regional) support for applying discount on a Line Item. Including discount_percentage or discount_amount applies to entire invoice.
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:
@@ -8809,10 +9032,13 @@ paths:
                     location_id: '1234',
                     department_id: '1234',
                     item: {
-                      id: '12344'
+                      id: '12344',
+                      code: '120-C',
+                      name: 'Model Y'
                     },
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     ledger_account: {
                       id: '123456',
@@ -8876,6 +9102,21 @@ paths:
                 },
                 template_id: '123456',
                 source_document_url: 'https://www.invoicesolution.com/invoice/123456',
+                payment_method: 'cash',
+                channel: 'email',
+                language: 'EN',
+                accounting_by_row: false,
+                bank_account: {
+                  account_number: '123465',
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  iban: 'CH2989144532982975332',
+                  bic: 'AUDSCHGGXXX',
+                  bsb_number: '062-001',
+                  branch_identifier: '001',
+                  bank_code: 'BNH',
+                  currency: 'USD'
+                },
                 row_version: '1-12345'
               }
             }
@@ -9054,7 +9295,8 @@ paths:
                 currency: 'USD',
                 tax_type: 'NONE',
                 tax_rate: {
-                  id: '123456'
+                  id: '123456',
+                  rate: 10
                 },
                 level: 1,
                 active: true,
@@ -9205,7 +9447,8 @@ paths:
                 currency: 'USD',
                 tax_type: 'NONE',
                 tax_rate: {
-                  id: '123456'
+                  id: '123456',
+                  rate: 10
                 },
                 level: 1,
                 active: true,
@@ -9406,7 +9649,8 @@ paths:
                   unit_of_measure: 'pc.',
                   tax_inclusive: true,
                   tax_rate: {
-                    id: '123456'
+                    id: '123456',
+                    rate: 10
                   }
                 },
                 purchase_details: {
@@ -9414,7 +9658,8 @@ paths:
                   unit_of_measure: 'pc.',
                   tax_inclusive: true,
                   tax_rate: {
-                    id: '123456'
+                    id: '123456',
+                    rate: 10
                   }
                 },
                 quantity: 1,
@@ -9563,7 +9808,8 @@ paths:
                   unit_of_measure: 'pc.',
                   tax_inclusive: true,
                   tax_rate: {
-                    id: '123456'
+                    id: '123456',
+                    rate: 10
                   }
                 },
                 purchase_details: {
@@ -9571,7 +9817,8 @@ paths:
                   unit_of_measure: 'pc.',
                   tax_inclusive: true,
                   tax_rate: {
-                    id: '123456'
+                    id: '123456',
+                    rate: 10
                   }
                 },
                 quantity: 1,
@@ -9799,10 +10046,13 @@ paths:
                     location_id: '1234',
                     department_id: '1234',
                     item: {
-                      id: '12344'
+                      id: '12344',
+                      code: '120-C',
+                      name: 'Model Y'
                     },
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     ledger_account: {
                       id: '123456',
@@ -9980,10 +10230,13 @@ paths:
                     location_id: '1234',
                     department_id: '1234',
                     item: {
-                      id: '12344'
+                      id: '12344',
+                      code: '120-C',
+                      name: 'Model Y'
                     },
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     ledger_account: {
                       id: '123456',
@@ -10134,12 +10387,17 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccountingCustomer'
+              $ref: '#/components/schemas/Customer'
       responses:
         '201':
           $ref: '#/components/responses/CreateCustomerResponse'
@@ -10247,7 +10505,8 @@ paths:
                 ],
                 notes: 'Some notes about this customer',
                 tax_rate: {
-                  id: '123456'
+                  id: '123456',
+                  rate: 10
                 },
                 tax_number: 'US123945459',
                 currency: 'USD',
@@ -10261,6 +10520,8 @@ paths:
                   name: 'Windsurf Shop'
                 },
                 status: 'active',
+                payment_method: 'cash',
+                channel: 'email',
                 row_version: '1-12345'
               }
             }
@@ -10337,12 +10598,17 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AccountingCustomer'
+              $ref: '#/components/schemas/Customer'
       responses:
         '200':
           $ref: '#/components/responses/UpdateCustomerResponse'
@@ -10451,7 +10717,8 @@ paths:
                 ],
                 notes: 'Some notes about this customer',
                 tax_rate: {
-                  id: '123456'
+                  id: '123456',
+                  rate: 10
                 },
                 tax_number: 'US123945459',
                 currency: 'USD',
@@ -10465,6 +10732,8 @@ paths:
                   name: 'Windsurf Shop'
                 },
                 status: 'active',
+                payment_method: 'cash',
+                channel: 'email',
                 row_version: '1-12345'
               }
             }
@@ -10547,6 +10816,10 @@ paths:
       x-apideck-gotchas:
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       responses:
         '200':
           $ref: '#/components/responses/GetSuppliersResponse'
@@ -10706,7 +10979,8 @@ paths:
                 ],
                 notes: 'Some notes about this supplier',
                 tax_rate: {
-                  id: '123456'
+                  id: '123456',
+                  rate: 10
                 },
                 tax_number: 'US123945459',
                 currency: 'USD',
@@ -10716,6 +10990,8 @@ paths:
                   code: '453'
                 },
                 status: 'active',
+                payment_method: 'cash',
+                channel: 'email',
                 row_version: '1-12345'
               }
             }
@@ -10792,6 +11068,11 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:
@@ -10905,7 +11186,8 @@ paths:
                 ],
                 notes: 'Some notes about this supplier',
                 tax_rate: {
-                  id: '123456'
+                  id: '123456',
+                  rate: 10
                 },
                 tax_number: 'US123945459',
                 currency: 'USD',
@@ -10915,6 +11197,8 @@ paths:
                   code: '453'
                 },
                 status: 'active',
+                payment_method: 'cash',
+                channel: 'email',
                 row_version: '1-12345'
               }
             }
@@ -11592,6 +11876,10 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: procountor-fi
+          description: |
+            Procountor only accepts the following values for the tax_code field: SALES, PURCHASE.
       requestBody:
         required: true
         content:
@@ -11636,10 +11924,12 @@ paths:
                     description:
                       'Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.',
                     tax_amount: 27500,
+                    sub_total: 27500,
                     total_amount: 27500,
                     type: 'debit',
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     tracking_category: {
                       id: '123456',
@@ -11655,10 +11945,12 @@ paths:
                     description:
                       'Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.',
                     tax_amount: 27500,
+                    sub_total: 27500,
                     total_amount: 27500,
                     type: 'debit',
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     tracking_category: {
                       id: '123456',
@@ -11674,6 +11966,8 @@ paths:
                 memo: 'Thank you for your business and have a great day!',
                 posted_at: '2020-09-30T07:43:32.000Z',
                 journal_symbol: 'IND',
+                tax_type: 'sales',
+                tax_code: '1234',
                 row_version: '1-12345'
               }
             }
@@ -11750,6 +12044,11 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: procountor-fi
+          description: |
+            Procountor only accepts the following values for the tax_code field: SALES, PURCHASE.
+            Procountor requires row_version to be set when updating a journal entry. The row_version should be equivalent to the current row_version of the resource
       requestBody:
         required: true
         content:
@@ -11795,10 +12094,12 @@ paths:
                     description:
                       'Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.',
                     tax_amount: 27500,
+                    sub_total: 27500,
                     total_amount: 27500,
                     type: 'debit',
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     tracking_category: {
                       id: '123456',
@@ -11814,10 +12115,12 @@ paths:
                     description:
                       'Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.',
                     tax_amount: 27500,
+                    sub_total: 27500,
                     total_amount: 27500,
                     type: 'debit',
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     tracking_category: {
                       id: '123456',
@@ -11833,6 +12136,8 @@ paths:
                 memo: 'Thank you for your business and have a great day!',
                 posted_at: '2020-09-30T07:43:32.000Z',
                 journal_symbol: 'IND',
+                tax_type: 'sales',
+                tax_code: '1234',
                 row_version: '1-12345'
               }
             }
@@ -11959,6 +12264,10 @@ paths:
       x-apideck-gotchas:
         - connector: xero
           description: "Xero accepts a shipping address as a string instead of separate fields. Ie: `23 Main Street\r\nCentral City\r\nMarineville\r\n1234\r\n`"
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:
@@ -12055,10 +12364,13 @@ paths:
                     location_id: '1234',
                     department_id: '1234',
                     item: {
-                      id: '12344'
+                      id: '12344',
+                      code: '120-C',
+                      name: 'Model Y'
                     },
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     ledger_account: {
                       id: '123456',
@@ -12100,6 +12412,23 @@ paths:
                   code: '453'
                 },
                 template_id: '123456',
+                discount_percentage: 5.5,
+                bank_account: {
+                  account_number: '123465',
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  iban: 'CH2989144532982975332',
+                  bic: 'AUDSCHGGXXX',
+                  bsb_number: '062-001',
+                  branch_identifier: '001',
+                  bank_code: 'BNH',
+                  currency: 'USD'
+                },
+                accounting_by_row: false,
+                due_date: '2020-10-30',
+                payment_method: 'cash',
+                tax_code: '1234',
+                channel: 'email',
                 row_version: '1-12345'
               }
             }
@@ -12178,6 +12507,10 @@ paths:
       x-apideck-gotchas:
         - connector: xero
           description: "Xero accepts a shipping address as a string instead of separate fields. Ie: `23 Main Street\r\nCentral City\r\nMarineville\r\n1234\r\n`"
+        - connector: procountor-fi
+          description: ''
+          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:
@@ -12275,10 +12608,13 @@ paths:
                     location_id: '1234',
                     department_id: '1234',
                     item: {
-                      id: '12344'
+                      id: '12344',
+                      code: '120-C',
+                      name: 'Model Y'
                     },
                     tax_rate: {
-                      id: '123456'
+                      id: '123456',
+                      rate: 10
                     },
                     ledger_account: {
                       id: '123456',
@@ -12320,6 +12656,23 @@ paths:
                   code: '453'
                 },
                 template_id: '123456',
+                discount_percentage: 5.5,
+                bank_account: {
+                  account_number: '123465',
+                  account_name: 'SPACEX LLC',
+                  account_type: 'credit_card',
+                  iban: 'CH2989144532982975332',
+                  bic: 'AUDSCHGGXXX',
+                  bsb_number: '062-001',
+                  branch_identifier: '001',
+                  bank_code: 'BNH',
+                  currency: 'USD'
+                },
+                accounting_by_row: false,
+                due_date: '2020-10-30',
+                payment_method: 'cash',
+                tax_code: '1234',
+                channel: 'email',
                 row_version: '1-12345'
               }
             }

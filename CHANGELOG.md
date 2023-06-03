@@ -1,12 +1,20 @@
+## v9.7.1 - (2023-06-03)
+
+### ACCOUNTING API
+
+- Added `status` filter to [Quickbooks](connectors/quickbooks).
+
 ## v9.7.0 - (2023-05-31)
 
 ### Accounting API
 
 ### Resources
+
 - [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders)
 
 ### Connectors
-- Added new [Procountor](connectors/procountor-fi) connector 
+
+- Added new [Procountor](connectors/procountor-fi) connector
 - Added new [Netvisor](connectors/visma-netvisor) connector
 - Updated [Quickbooks](connectors/quickbooks) connector with Purchase Order support
 - Updated [Xero](connectors/xero) connector with Purchase Order support
@@ -14,6 +22,7 @@
 ### ATS API
 
 ### Connectors
+
 - Updated [Lever](connectors/lever) connector
 - Updated [Teamtailor](connectors/teamtailor) connector
 - Updated [Workable](connectors/workable) connector

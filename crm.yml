@@ -66,6 +66,18 @@ tags:
       $ref: '#/components/schemas/Activity'
 components:
   schemas:
+    ActivitiesFilter:
+      type: object
+      x-apideck-schema-id: ActivitiesFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
     Activity:
       type: object
       x-apideck-schema-id: Activity
@@ -593,38 +605,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#requestvalidationerror
-    TooManyRequestsResponse:
-      type: object
-      x-apideck-schema-id: TooManyRequests
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 429
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
-          example: Too Many Requests
-        type_name:
-          type: string
-          description: The type of error returned
-          example: ConnectorRateLimitError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Connector Rate Limit Error
-        detail:
-          type: object
-          properties:
-            context:
-              type: string
-            error:
-              type: object
-              additionalProperties: true
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#connectorratelimiterror
     BankAccount:
       type: object
       x-apideck-schema-id: BankAccount
@@ -701,18 +681,6 @@ components:
           type: string
           description: Name of the company to filter on
           example: SpaceX
-      additionalProperties: false
-    ActivitiesFilter:
-      type: object
-      x-apideck-schema-id: ActivitiesFilter
-      example:
-        updated_since: '2020-09-30T07:43:32.000Z'
-      properties:
-        updated_since:
-          type: string
-          title: Updated since (timestamp)
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
       additionalProperties: false
     CompaniesSort:
       type: object
@@ -1510,6 +1478,68 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+    CrmEventType:
+      type: string
+      x-apideck-enum-id: crm.events
+      enum:
+        - '*'
+        - crm.activity.created
+        - crm.activity.updated
+        - crm.activity.deleted
+        - crm.company.created
+        - crm.company.updated
+        - crm.company.deleted
+        - crm.contact.created
+        - crm.contact.updated
+        - crm.contact.deleted
+        - crm.lead.created
+        - crm.lead.updated
+        - crm.lead.deleted
+        - crm.note.created
+        - crm.note.updated
+        - crm.note.deleted
+        - crm.opportunity.created
+        - crm.opportunity.updated
+        - crm.opportunity.deleted
+      example: crm.company.created
+    CrmWebhookEvent:
+      x-sdk-exclude: true
+      allOf:
+        - type: object
+          x-apideck-schema-id: WebhookEvent
+          properties:
+            event_id:
+              type: string
+              description: Unique reference to this request event
+              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+            service_id:
+              type: string
+              description: Service provider identifier
+              example: close
+            entity_id:
+              type: string
+              description: The service provider's ID of the entity that triggered this event
+              example: 123456ASDF
+            entity_type:
+              type: string
+              description: The type entity that triggered this event
+              example: Company
+            entity_url:
+              type: string
+              description: The url to retrieve entity detail.
+              example: https://unify.apideck.com/crm/contacts/123456
+            execution_attempt:
+              type: number
+              description: The current count this request event has been attempted
+              example: 2
+            occurred_at:
+              type: string
+              description: ISO Datetime for when the original event occurred
+              example: '2021-10-01T03:14:55.419Z'
+        - type: object
+          properties:
+            event_type:
+              $ref: '#/components/schemas/CrmEventType'
     Currency:
       type: string
       title: Currency
@@ -2405,30 +2435,12 @@ components:
             - billing
             - other
           example: primary
-    CrmEventType:
+    FirstName:
       type: string
-      x-apideck-enum-id: crm.events
-      enum:
-        - '*'
-        - crm.activity.created
-        - crm.activity.updated
-        - crm.activity.deleted
-        - crm.company.created
-        - crm.company.updated
-        - crm.company.deleted
-        - crm.contact.created
-        - crm.contact.updated
-        - crm.contact.deleted
-        - crm.lead.created
-        - crm.lead.updated
-        - crm.lead.deleted
-        - crm.note.created
-        - crm.note.updated
-        - crm.note.deleted
-        - crm.opportunity.created
-        - crm.opportunity.updated
-        - crm.opportunity.deleted
-      example: crm.company.created
+      title: First name
+      description: The first name of the person.
+      example: Elon
+      nullable: true
     GetActivitiesResponse:
       type: object
       x-apideck-schema-id: GetActivitiesResponse
@@ -3005,6 +3017,12 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    LastName:
+      type: string
+      title: Last name
+      description: The last name of the person.
+      example: Musk
+      nullable: true
     Lead:
       type: object
       x-apideck-schema-id: Lead
@@ -3680,6 +3698,11 @@ components:
           format: date-time
           description: The date and time when the opportunity was created.
           readOnly: true
+    PassThroughQuery:
+      type: object
+      additionalProperties: true
+      example:
+        search: San Francisco
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -3890,6 +3913,38 @@ components:
         type: string
       example:
         - New
+    TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 429
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
+          example: Too Many Requests
+        type_name:
+          type: string
+          description: The type of error returned
+          example: ConnectorRateLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Connector Rate Limit Error
+        detail:
+          type: object
+          properties:
+            context:
+              type: string
+            error:
+              type: object
+              additionalProperties: true
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#connectorratelimiterror
     UnauthorizedResponse:
       type: object
       x-apideck-schema-id: Unauthorized
@@ -4378,44 +4433,6 @@ components:
           type: string
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
-    CrmWebhookEvent:
-      x-sdk-exclude: true
-      allOf:
-        - type: object
-          x-apideck-schema-id: WebhookEvent
-          properties:
-            event_id:
-              type: string
-              description: Unique reference to this request event
-              example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-            service_id:
-              type: string
-              description: Service provider identifier
-              example: close
-            entity_id:
-              type: string
-              description: The service provider's ID of the entity that triggered this event
-              example: 123456ASDF
-            entity_type:
-              type: string
-              description: The type entity that triggered this event
-              example: Company
-            entity_url:
-              type: string
-              description: The url to retrieve entity detail.
-              example: https://unify.apideck.com/crm/contacts/123456
-            execution_attempt:
-              type: number
-              description: The current count this request event has been attempted
-              example: 2
-            occurred_at:
-              type: string
-              description: ISO Datetime for when the original event occurred
-              example: '2021-10-01T03:14:55.419Z'
-        - type: object
-          properties:
-            event_type:
-              $ref: '#/components/schemas/CrmEventType'
     Website:
       type: object
       x-apideck-schema-id: Website
@@ -4445,19 +4462,15 @@ components:
             - personal
             - other
           example: primary
-    FirstName:
-      type: string
-      title: First name
-      description: The first name of the person.
-      example: Elon
-      nullable: true
-    LastName:
-      type: string
-      title: Last name
-      description: The last name of the person.
-      example: Musk
-      nullable: true
   parameters:
+    activitiesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ActivitiesFilter'
     applicationId:
       name: x-apideck-app-id
       in: header
@@ -4466,12 +4479,22 @@ components:
       schema:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
-    serviceId:
-      name: x-apideck-service-id
-      in: header
-      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
+    companiesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
       schema:
-        type: string
+        $ref: '#/components/schemas/CompaniesFilter'
+    companiesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/CompaniesSort'
     consumerId:
       name: x-apideck-consumer-id
       in: header
@@ -4479,44 +4502,6 @@ components:
       description: ID of the consumer which you want to get or push data from
       schema:
         type: string
-    raw:
-      name: raw
-      in: query
-      description: Include raw response. Mostly used for debugging purposes
-      schema:
-        type: boolean
-        default: false
-    id:
-      in: path
-      name: id
-      schema:
-        type: string
-      required: true
-      description: ID of the record you are acting upon.
-    limit:
-      name: limit
-      in: query
-      description: Number of results to return. Minimum 1, Maximum 200, Default 20
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 200
-        default: 20
-    cursor:
-      name: cursor
-      in: query
-      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
-      schema:
-        type: string
-        nullable: true
-    fields:
-      name: fields
-      in: query
-      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
-      example: id,updated_at
-      schema:
-        type: string
-        nullable: true
     contactsFilter:
       name: filter
       in: query
@@ -4533,46 +4518,28 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ContactsSort'
-    opportunitiesFilter:
-      name: filter
+    cursor:
+      name: cursor
       in: query
-      description: Apply filters
-      style: deepObject
-      explode: true
+      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
       schema:
-        $ref: '#/components/schemas/OpportunitiesFilter'
-    opportunitiesSort:
-      name: sort
+        type: string
+        nullable: true
+    fields:
+      name: fields
       in: query
-      description: Apply sorting
-      style: deepObject
-      explode: true
+      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
+      example: id,updated_at
       schema:
-        $ref: '#/components/schemas/OpportunitiesSort'
-    companiesFilter:
-      name: filter
-      in: query
-      description: Apply filters
-      style: deepObject
-      explode: true
+        type: string
+        nullable: true
+    id:
+      in: path
+      name: id
       schema:
-        $ref: '#/components/schemas/CompaniesFilter'
-    activitiesFilter:
-      name: filter
-      in: query
-      description: Apply filters
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/ActivitiesFilter'
-    companiesSort:
-      name: sort
-      in: query
-      description: Apply sorting
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/CompaniesSort'
+        type: string
+      required: true
+      description: ID of the record you are acting upon.
     leadsFilter:
       name: filter
       in: query
@@ -4589,6 +4556,52 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/LeadsSort'
+    limit:
+      name: limit
+      in: query
+      description: Number of results to return. Minimum 1, Maximum 200, Default 20
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 20
+    opportunitiesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/OpportunitiesFilter'
+    opportunitiesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/OpportunitiesSort'
+    raw:
+      name: raw
+      in: query
+      description: Include raw response. Mostly used for debugging purposes
+      schema:
+        type: boolean
+        default: false
+    serviceId:
+      name: x-apideck-service-id
+      in: header
+      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
+      schema:
+        type: string
+    passThrough:
+      name: pass_through
+      in: query
+      description: 'Optional unmapped key/values that will be passed through to downstream as query parameters. Ie: ?pass_through[search]=leads becomes ?search=leads'
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/PassThroughQuery'
   responses:
     BadRequestResponse:
       content:
@@ -5029,6 +5042,7 @@ paths:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/companiesFilter'
         - $ref: '#/components/parameters/companiesSort'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -5521,6 +5535,7 @@ paths:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/contactsFilter'
         - $ref: '#/components/parameters/contactsSort'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -5983,6 +5998,7 @@ paths:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/opportunitiesFilter'
         - $ref: '#/components/parameters/opportunitiesSort'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -6331,6 +6347,7 @@ paths:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/leadsFilter'
         - $ref: '#/components/parameters/leadsSort'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -6773,6 +6790,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -7078,6 +7096,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -7368,6 +7387,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -7761,6 +7781,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/activitiesFilter'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []

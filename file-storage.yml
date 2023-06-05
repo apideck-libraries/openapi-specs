@@ -28,12 +28,6 @@ components:
       schema:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
-    serviceId:
-      name: x-apideck-service-id
-      in: header
-      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
-      schema:
-        type: string
     consumerId:
       name: x-apideck-consumer-id
       in: header
@@ -41,29 +35,6 @@ components:
       description: ID of the consumer which you want to get or push data from
       schema:
         type: string
-    raw:
-      name: raw
-      in: query
-      description: Include raw response. Mostly used for debugging purposes
-      schema:
-        type: boolean
-        default: false
-    id:
-      in: path
-      name: id
-      schema:
-        type: string
-      required: true
-      description: ID of the record you are acting upon.
-    limit:
-      name: limit
-      in: query
-      description: Number of results to return. Minimum 1, Maximum 200, Default 20
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 200
-        default: 20
     cursor:
       name: cursor
       in: query
@@ -71,31 +42,6 @@ components:
       schema:
         type: string
         nullable: true
-    fields:
-      name: fields
-      in: query
-      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
-      example: id,updated_at
-      schema:
-        type: string
-        nullable: true
-    passThrough:
-      name: pass_through
-      in: query
-      description: Optional unmapped key/values that will be passed through to downstream as query parameters
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/PassThroughQuery'
-    metadata:
-      name: x-apideck-metadata
-      in: header
-      description: Metadata to attach to the file
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateFileRequest'
     digest:
       name: digest
       in: header
@@ -112,6 +58,71 @@ components:
       schema:
         type: string
         example: sha=fpRyg5eVQletdZqEKaFlqwBXJzM=
+    driveGroupsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/DriveGroupsFilter'
+    drivesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/DrivesFilter'
+    fields:
+      name: fields
+      in: query
+      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
+      example: id,updated_at
+      schema:
+        type: string
+        nullable: true
+    filesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/FilesFilter'
+    filesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/FilesSort'
+    id:
+      in: path
+      name: id
+      schema:
+        type: string
+      required: true
+      description: ID of the record you are acting upon.
+    limit:
+      name: limit
+      in: query
+      description: Number of results to return. Minimum 1, Maximum 200, Default 20
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 20
+    metadata:
+      name: x-apideck-metadata
+      in: header
+      description: Metadata to attach to the file
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateFileRequest'
     partNumber:
       name: part_number
       in: query
@@ -122,38 +133,27 @@ components:
         minimum: 0
         maximum: 10000
         example: 0
-    filesFilter:
-      name: filter
+    passThrough:
+      name: pass_through
       in: query
-      description: Apply filters
+      description: 'Optional unmapped key/values that will be passed through to downstream as query parameters. Ie: ?pass_through[search]=leads becomes ?search=leads'
       style: deepObject
       explode: true
       schema:
-        $ref: '#/components/schemas/FilesFilter'
-    drivesFilter:
-      name: filter
+        $ref: '#/components/schemas/PassThroughQuery'
+    raw:
+      name: raw
       in: query
-      description: Apply filters
-      style: deepObject
-      explode: true
+      description: Include raw response. Mostly used for debugging purposes
       schema:
-        $ref: '#/components/schemas/DrivesFilter'
-    driveGroupsFilter:
-      name: filter
-      in: query
-      description: Apply filters
-      style: deepObject
-      explode: true
+        type: boolean
+        default: false
+    serviceId:
+      name: x-apideck-service-id
+      in: header
+      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
       schema:
-        $ref: '#/components/schemas/DriveGroupsFilter'
-    filesSort:
-      name: sort
-      in: query
-      description: Apply sorting
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/FilesSort'
+        type: string
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -418,38 +418,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#requestvalidationerror
-    TooManyRequestsResponse:
-      type: object
-      x-apideck-schema-id: TooManyRequests
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 429
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
-          example: Too Many Requests
-        type_name:
-          type: string
-          description: The type of error returned
-          example: ConnectorRateLimitError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Connector Rate Limit Error
-        detail:
-          type: object
-          properties:
-            context:
-              type: string
-            error:
-              type: object
-              additionalProperties: true
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#connectorratelimiterror
     CopyFolderRequest:
       type: object
       x-apideck-schema-id: CopyFolderRequest
@@ -465,6 +433,72 @@ components:
           example: Documents
         parent_folder_id:
           $ref: '#/components/schemas/ParentFolderId'
+    CreateDriveGroupResponse:
+      type: object
+      x-apideck-schema-id: CreateDriveGroupResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: DriveGroups
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    CreateDriveResponse:
+      type: object
+      x-apideck-schema-id: CreateDriveResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Drives
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     CreateFileRequest:
       type: object
       x-apideck-schema-id: CreateFileRequest
@@ -610,6 +644,27 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+    CreateUploadSessionRequest:
+      type: object
+      x-apideck-schema-id: CreateUploadSessionRequest
+      additionalProperties: false
+      required:
+        - name
+        - parent_folder_id
+        - size
+      properties:
+        name:
+          type: string
+          description: The name of the file.
+          example: Documents
+        parent_folder_id:
+          $ref: '#/components/schemas/ParentFolderId'
+        drive_id:
+          type: string
+          description: ID of the drive to upload to.
+          example: '1234'
+        size:
+          $ref: '#/components/schemas/FileSize'
     CreateUploadSessionResponse:
       type: object
       x-apideck-schema-id: CreateUploadSessionResponse
@@ -643,27 +698,6 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/UnifiedId'
-    CreateUploadSessionRequest:
-      type: object
-      x-apideck-schema-id: CreateUploadSessionRequest
-      additionalProperties: false
-      required:
-        - name
-        - parent_folder_id
-        - size
-      properties:
-        name:
-          type: string
-          description: The name of the file.
-          example: Documents
-        parent_folder_id:
-          $ref: '#/components/schemas/ParentFolderId'
-        drive_id:
-          type: string
-          description: ID of the drive to upload to.
-          example: '1234'
-        size:
-          $ref: '#/components/schemas/FileSize'
     CreatedAt:
       type: string
       title: Created at (timestamp)
@@ -678,6 +712,72 @@ components:
       example: '12345'
       readOnly: true
       nullable: true
+    DeleteDriveGroupResponse:
+      type: object
+      x-apideck-schema-id: DeleteDriveGroupResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: DriveGroups
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteDriveResponse:
+      type: object
+      x-apideck-schema-id: DeleteDriveResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Drives
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     DeleteFileResponse:
       type: object
       x-apideck-schema-id: DeleteFileResponse
@@ -816,64 +916,35 @@ components:
       description: A description of the object.
       example: A description
       nullable: true
-    UnifiedFile:
+    DownstreamId:
+      type: string
+      description: The third-party API ID of original entity
+      example: '12345'
+      nullable: true
+      readOnly: true
+    Drive:
       type: object
-      x-apideck-schema-id: UnifiedFile
+      x-apideck-schema-id: Drive
       additionalProperties: false
       required:
         - id
         - name
-        - type
       x-apideck-weights:
         id: critical
         name: critical
-        type: critical
-        mime_type: high
-        downloadable: high
-        size: high
-        parent_folders: high
-        parent_folders_complete: critical
         updated_at: critical
-        created_at: high
-        downstream_id: edge-case
+        updated_by: edge-case
+        created_at: critical
+        created_by: edge-case
       properties:
         id:
           $ref: '#/components/schemas/Id'
-        downstream_id:
-          $ref: '#/components/schemas/DownstreamId'
         name:
           type: string
-          description: The name of the file
-          example: sample.jpg
+          description: The name of the drive
+          example: Project Resources
         description:
-          type: string
-          description: Optional description of the file
-          example: A sample image
-        type:
-          $ref: '#/components/schemas/FileType'
-        path:
-          type: string
-          description: The full path of the file or folder (includes the file name)
-          example: /Documents/sample.jpg
-        mime_type:
-          type: string
-          description: The MIME type of the file.
-          example: image/jpeg
-        downloadable:
-          type: boolean
-          description: Whether the current user can download this file
-        size:
-          $ref: '#/components/schemas/FileSize'
-        owner:
-          $ref: '#/components/schemas/Owner'
-        parent_folders:
-          type: array
-          description: The parent folders of the file, starting from the root
-          items:
-            $ref: '#/components/schemas/LinkedFolder'
-        parent_folders_complete:
-          type: boolean
-          description: Whether the list of parent folder is complete. Some connectors only return the direct parent of a file
+          $ref: '#/components/schemas/Description'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -882,6 +953,78 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+    DriveGroup:
+      type: object
+      x-apideck-schema-id: DriveGroup
+      additionalProperties: false
+      required:
+        - id
+        - name
+      x-apideck-weights:
+        id: critical
+        name: critical
+        updated_at: critical
+        updated_by: edge-case
+        created_at: critical
+        created_by: edge-case
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+          description: The name of the drive group
+          example: accounting
+        display_name:
+          type: string
+          description: The display name of the drive group
+          example: accounting
+        description:
+          $ref: '#/components/schemas/Description'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+    DriveGroupsFilter:
+      type: object
+      x-apideck-schema-id: DriveGroupsFilter
+      properties:
+        parent_group_id:
+          type: string
+          description: ID of the drive group to filter on
+          example: '1234'
+      additionalProperties: false
+    DrivesFilter:
+      type: object
+      x-apideck-schema-id: DrivesFilter
+      properties:
+        group_id:
+          type: string
+          description: ID of the drive group to filter on
+          example: '1234'
+      additionalProperties: false
+    ExpiresAt:
+      type: string
+      format: date-time
+      example: '2022-09-30T07:43:32.000Z'
+      readOnly: true
+    FileSize:
+      type: integer
+      x-apideck-schema-id: FileSize
+      description: The size of the file in bytes
+      example: 1810673
+    FileStorageEventType:
+      x-apideck-enum-id: file-storage.event_type
+      type: string
+      enum:
+        - '*'
+        - file-storage.file.created
+        - file-storage.file.updated
+        - file-storage.file.deleted
+      example: file-storage.file.created
     FileType:
       type: string
       x-apideck-schema-id: FileType
@@ -893,16 +1036,6 @@ components:
       description: The type of resource. Could be file, folder or url
       readOnly: true
       example: file
-    FileSize:
-      type: integer
-      x-apideck-schema-id: FileSize
-      description: The size of the file in bytes
-      example: 1810673
-    ParentFolderId:
-      type: string
-      x-apideck-schema-id: ParentFolderId
-      description: The parent folder to create the new file within.
-      example: '1234'
     FilesFilter:
       type: object
       x-apideck-schema-id: FilesFilter
@@ -1009,6 +1142,150 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+    GetDriveGroupResponse:
+      type: object
+      x-apideck-schema-id: GetDriveGroupResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: DriveGroups
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/DriveGroup'
+    GetDriveGroupsResponse:
+      type: object
+      x-apideck-schema-id: GetDriveGroupsResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: DriveGroups
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DriveGroup'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetDriveResponse:
+      type: object
+      x-apideck-schema-id: GetDriveResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Drives
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Drive'
+    GetDrivesResponse:
+      type: object
+      x-apideck-schema-id: GetDrivesResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Drives
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Drive'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
     GetFileResponse:
       type: object
       x-apideck-schema-id: GetFileResponse
@@ -1264,12 +1541,6 @@ components:
       description: A unique identifier for an object.
       example: '12345'
       readOnly: true
-    DownstreamId:
-      type: string
-      description: The third-party API ID of original entity
-      example: '12345'
-      nullable: true
-      readOnly: true
     LinkedFolder:
       type: object
       x-apideck-schema-id: LinkedFolder
@@ -1417,13 +1688,16 @@ components:
           description: Name of the owner
           example: Elon Musk
           readOnly: true
+    ParentFolderId:
+      type: string
+      x-apideck-schema-id: ParentFolderId
+      description: The parent folder to create the new file within.
+      example: '1234'
     PassThroughQuery:
       type: object
       additionalProperties: true
-      properties:
-        example_downstream_property:
-          type: string
-          description: All passthrough query parameters are passed along to the connector as is (?pass_through[search]=leads becomes ?search=leads)
+      example:
+        search: San Francisco
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -1535,6 +1809,38 @@ components:
         - asc
         - desc
       default: asc
+    TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 429
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
+          example: Too Many Requests
+        type_name:
+          type: string
+          description: The type of error returned
+          example: ConnectorRateLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Connector Rate Limit Error
+        detail:
+          type: object
+          properties:
+            context:
+              type: string
+            error:
+              type: object
+              additionalProperties: true
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#connectorratelimiterror
     UnauthorizedResponse:
       type: object
       x-apideck-schema-id: Unauthorized
@@ -1596,6 +1902,72 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#unauthorizederror
+    UnifiedFile:
+      type: object
+      x-apideck-schema-id: UnifiedFile
+      additionalProperties: false
+      required:
+        - id
+        - name
+        - type
+      x-apideck-weights:
+        id: critical
+        name: critical
+        type: critical
+        mime_type: high
+        downloadable: high
+        size: high
+        parent_folders: high
+        parent_folders_complete: critical
+        updated_at: critical
+        created_at: high
+        downstream_id: edge-case
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
+        name:
+          type: string
+          description: The name of the file
+          example: sample.jpg
+        description:
+          type: string
+          description: Optional description of the file
+          example: A sample image
+        type:
+          $ref: '#/components/schemas/FileType'
+        path:
+          type: string
+          description: The full path of the file or folder (includes the file name)
+          example: /Documents/sample.jpg
+        mime_type:
+          type: string
+          description: The MIME type of the file.
+          example: image/jpeg
+        downloadable:
+          type: boolean
+          description: Whether the current user can download this file
+        size:
+          $ref: '#/components/schemas/FileSize'
+        owner:
+          $ref: '#/components/schemas/Owner'
+        parent_folders:
+          type: array
+          description: The parent folders of the file, starting from the root
+          items:
+            $ref: '#/components/schemas/LinkedFolder'
+        parent_folders_complete:
+          type: boolean
+          description: Whether the list of parent folder is complete. Some connectors only return the direct parent of a file
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     UnifiedId:
       title: UnifiedId
       type: object
@@ -1637,6 +2009,87 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#invalidstateerror
+    UpdateDriveGroupResponse:
+      type: object
+      x-apideck-schema-id: UpdateDriveGroupResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: DriveGroups
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    UpdateDriveResponse:
+      type: object
+      x-apideck-schema-id: UpdateDriveResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Drives
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    UpdateFileRequest:
+      type: object
+      x-apideck-schema-id: UpdateFileRequest
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The name of the file.
+          example: New Name.pdf
+        description:
+          type: string
+          description: Optional description of the file.
+          example: Renamed PDF Document
+        parent_folder_id:
+          $ref: '#/components/schemas/ParentFolderId'
     UpdateFileResponse:
       type: object
       x-apideck-schema-id: UpdateFileResponse
@@ -1685,21 +2138,6 @@ components:
           type: string
           description: Optional description of the folder.
           example: My Personal Documents
-        parent_folder_id:
-          $ref: '#/components/schemas/ParentFolderId'
-    UpdateFileRequest:
-      type: object
-      x-apideck-schema-id: UpdateFileRequest
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-          description: The name of the file.
-          example: New Name.pdf
-        description:
-          type: string
-          description: Optional description of the file.
-          example: Renamed PDF Document
         parent_folder_id:
           $ref: '#/components/schemas/ParentFolderId'
     UpdateFolderResponse:
@@ -1809,11 +2247,6 @@ components:
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
       nullable: true
-    ExpiresAt:
-      type: string
-      format: date-time
-      example: '2022-09-30T07:43:32.000Z'
-      readOnly: true
     UpdatedBy:
       type: string
       title: Updated by
@@ -1857,432 +2290,6 @@ components:
           readOnly: true
         expires_at:
           $ref: '#/components/schemas/ExpiresAt'
-    CreateDriveResponse:
-      type: object
-      x-apideck-schema-id: CreateDriveResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Drives
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteDriveResponse:
-      type: object
-      x-apideck-schema-id: DeleteDriveResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Drives
-        operation:
-          type: string
-          description: Operation performed
-          example: delete
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    GetDriveResponse:
-      type: object
-      x-apideck-schema-id: GetDriveResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Drives
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/Drive'
-    GetDrivesResponse:
-      type: object
-      x-apideck-schema-id: GetDrivesResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Drives
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Drive'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-    Drive:
-      type: object
-      x-apideck-schema-id: Drive
-      additionalProperties: false
-      required:
-        - id
-        - name
-      x-apideck-weights:
-        id: critical
-        name: critical
-        updated_at: critical
-        updated_by: edge-case
-        created_at: critical
-        created_by: edge-case
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        name:
-          type: string
-          description: The name of the drive
-          example: Project Resources
-        description:
-          $ref: '#/components/schemas/Description'
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    DrivesFilter:
-      type: object
-      x-apideck-schema-id: DrivesFilter
-      properties:
-        group_id:
-          type: string
-          description: ID of the drive group to filter on
-          example: '1234'
-      additionalProperties: false
-    UpdateDriveResponse:
-      type: object
-      x-apideck-schema-id: UpdateDriveResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Drives
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    CreateDriveGroupResponse:
-      type: object
-      x-apideck-schema-id: CreateDriveGroupResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: DriveGroups
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteDriveGroupResponse:
-      type: object
-      x-apideck-schema-id: DeleteDriveGroupResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: DriveGroups
-        operation:
-          type: string
-          description: Operation performed
-          example: delete
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    GetDriveGroupResponse:
-      type: object
-      x-apideck-schema-id: GetDriveGroupResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: DriveGroups
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/DriveGroup'
-    GetDriveGroupsResponse:
-      type: object
-      x-apideck-schema-id: GetDriveGroupsResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: DriveGroups
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DriveGroup'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-    DriveGroup:
-      type: object
-      x-apideck-schema-id: DriveGroup
-      additionalProperties: false
-      required:
-        - id
-        - name
-      x-apideck-weights:
-        id: critical
-        name: critical
-        updated_at: critical
-        updated_by: edge-case
-        created_at: critical
-        created_by: edge-case
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        name:
-          type: string
-          description: The name of the drive group
-          example: accounting
-        display_name:
-          type: string
-          description: The display name of the drive group
-          example: accounting
-        description:
-          $ref: '#/components/schemas/Description'
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    DriveGroupsFilter:
-      type: object
-      x-apideck-schema-id: DriveGroupsFilter
-      properties:
-        parent_group_id:
-          type: string
-          description: ID of the drive group to filter on
-          example: '1234'
-      additionalProperties: false
-    UpdateDriveGroupResponse:
-      type: object
-      x-apideck-schema-id: UpdateDriveGroupResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: google-drive
-        resource:
-          type: string
-          description: Unified API resource name
-          example: DriveGroups
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
     WebhookEvent:
       x-sdk-exclude: true
       allOf:
@@ -2321,15 +2328,6 @@ components:
           properties:
             event_type:
               $ref: '#/components/schemas/FileStorageEventType'
-    FileStorageEventType:
-      x-apideck-enum-id: file-storage.event_type
-      type: string
-      enum:
-        - '*'
-        - file-storage.file.created
-        - file-storage.file.updated
-        - file-storage.file.deleted
-      example: file-storage.file.created
   securitySchemes:
     apiKey:
       type: apiKey
@@ -3090,6 +3088,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -3952,6 +3951,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/driveGroupsFilter'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []

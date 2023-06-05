@@ -28,10 +28,11 @@ components:
       schema:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
-    serviceId:
-      name: x-apideck-service-id
-      in: header
-      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
+    companyId:
+      description: ID of the company you are acting upon.
+      in: path
+      name: company_id
+      required: true
       schema:
         type: string
     consumerId:
@@ -41,13 +42,44 @@ components:
       description: ID of the consumer which you want to get or push data from
       schema:
         type: string
-    raw:
-      name: raw
+    cursor:
+      name: cursor
       in: query
-      description: Include raw response. Mostly used for debugging purposes
+      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
       schema:
-        type: boolean
-        default: false
+        type: string
+        nullable: true
+    employeeId:
+      description: ID of the employee you are acting upon.
+      in: path
+      name: employee_id
+      required: true
+      schema:
+        type: string
+    employeesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/EmployeesFilter'
+    employeesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/EmployeesSort'
+    fields:
+      name: fields
+      in: query
+      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
+      example: id,updated_at
+      schema:
+        type: string
+        nullable: true
     id:
       in: path
       name: id
@@ -55,6 +87,13 @@ components:
         type: string
       required: true
       description: ID of the record you are acting upon.
+    jobId:
+      description: ID of the job you are acting upon.
+      in: path
+      name: job_id
+      required: true
+      schema:
+        type: string
     limit:
       name: limit
       in: query
@@ -64,21 +103,13 @@ components:
         minimum: 1
         maximum: 200
         default: 20
-    cursor:
-      name: cursor
-      in: query
-      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
+    payrollId:
+      description: ID of the payroll you are acting upon.
+      in: path
+      name: payroll_id
+      required: true
       schema:
         type: string
-        nullable: true
-    employeesFilter:
-      name: filter
-      in: query
-      description: Apply filters
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/EmployeesFilter'
     payrollsFilter:
       name: filter
       in: query
@@ -87,6 +118,27 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/PayrollsFilter'
+    passThrough:
+      name: pass_through
+      in: query
+      description: 'Optional unmapped key/values that will be passed through to downstream as query parameters. Ie: ?pass_through[search]=leads becomes ?search=leads'
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/PassThroughQuery'
+    raw:
+      name: raw
+      in: query
+      description: Include raw response. Mostly used for debugging purposes
+      schema:
+        type: boolean
+        default: false
+    serviceId:
+      name: x-apideck-service-id
+      in: header
+      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
+      schema:
+        type: string
     timeOffRequestsFilter:
       name: filter
       in: query
@@ -95,50 +147,6 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/TimeOffRequestsFilter'
-    fields:
-      name: fields
-      in: query
-      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
-      example: id,updated_at
-      schema:
-        type: string
-        nullable: true
-    companyId:
-      in: path
-      name: company_id
-      schema:
-        type: string
-      required: true
-      description: ID of the company you are acting upon.
-    employeeId:
-      in: path
-      name: employee_id
-      schema:
-        type: string
-      required: true
-      description: ID of the employee you are acting upon.
-    jobId:
-      in: path
-      name: job_id
-      schema:
-        type: string
-      required: true
-      description: ID of the job you are acting upon.
-    payrollId:
-      in: path
-      name: payroll_id
-      schema:
-        type: string
-      required: true
-      description: ID of the payroll you are acting upon.
-    employeesSort:
-      name: sort
-      in: query
-      description: Apply sorting
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/EmployeesSort'
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -604,20 +612,6 @@ components:
           description: An array of employee benefits for the pay period.
           items:
             $ref: '#/components/schemas/Benefit'
-    CreatedAt:
-      type: string
-      title: Created at (timestamp)
-      description: The date and time when the object was created.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-    CreatedBy:
-      type: string
-      title: Created by
-      description: The user who created the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     CreateDepartmentResponse:
       type: object
       x-apideck-schema-id: CreateDepartmentResponse
@@ -749,6 +743,20 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+    CreatedAt:
+      type: string
+      title: Created at (timestamp)
+      description: The date and time when the object was created.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    CreatedBy:
+      type: string
+      title: Created by
+      description: The user who created the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Currency:
       type: string
       title: Currency
@@ -3135,6 +3143,11 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#mappingerror
+    PassThroughQuery:
+      type: object
+      additionalProperties: true
+      example:
+        search: San Francisco
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -3234,24 +3247,6 @@ components:
           description: An array of compensations for the payroll.
           items:
             $ref: '#/components/schemas/Compensation'
-    PayrollsFilter:
-      type: object
-      x-apideck-schema-id: PayrollsFilter
-      example:
-        start_date: '2022-04-08'
-        end_date: '2022-04-21'
-      properties:
-        start_date:
-          type: string
-          description: Return payrolls whose pay period is after the start date
-          pattern: ^\d{4}-\d{2}-\d{2}$
-          example: '2022-04-08'
-        end_date:
-          type: string
-          description: Return payrolls whose pay period is before the end date
-          pattern: ^\d{4}-\d{2}-\d{2}$
-          example: '2022-04-21'
-      additionalProperties: false
     PayrollTotals:
       type: object
       x-apideck-schema-id: PayrollTotals
@@ -3292,6 +3287,24 @@ components:
           type: number
           description: The total amount of employee deducted benefits for the payroll.
           example: 0
+    PayrollsFilter:
+      type: object
+      x-apideck-schema-id: PayrollsFilter
+      example:
+        start_date: '2022-04-08'
+        end_date: '2022-04-21'
+      properties:
+        start_date:
+          type: string
+          description: Return payrolls whose pay period is after the start date
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-08'
+        end_date:
+          type: string
+          description: Return payrolls whose pay period is before the end date
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-21'
+      additionalProperties: false
     PhoneNumber:
       type: object
       x-apideck-schema-id: PhoneNumber
@@ -3840,21 +3853,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#invalidstateerror
-    UpdatedAt:
-      type: string
-      title: Updated at (timestamp)
-      description: The date and time when the object was last updated.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-      nullable: true
-    UpdatedBy:
-      type: string
-      title: Updated by
-      description: The user who last updated the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     UpdateDepartmentResponse:
       type: object
       x-apideck-schema-id: UpdateDepartmentResponse
@@ -3986,6 +3984,21 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    UpdatedAt:
+      type: string
+      title: Updated at (timestamp)
+      description: The date and time when the object was last updated.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+      nullable: true
+    UpdatedBy:
+      type: string
+      title: Updated by
+      description: The user who last updated the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     WebhookEvent:
       allOf:
         - type: object
@@ -4137,6 +4150,7 @@ paths:
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/employeesFilter'
         - $ref: '#/components/parameters/employeesSort'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -4789,6 +4803,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -5176,6 +5191,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -5452,6 +5468,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/payrollsFilter'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -5555,6 +5572,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/payrollsFilter'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -5663,6 +5681,7 @@ paths:
         - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -5717,6 +5736,7 @@ paths:
         - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -5829,6 +5849,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/timeOffRequestsFilter'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []

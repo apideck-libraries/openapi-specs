@@ -28,12 +28,6 @@ components:
       schema:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
-    serviceId:
-      name: x-apideck-service-id
-      in: header
-      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
-      schema:
-        type: string
     consumerId:
       name: x-apideck-consumer-id
       in: header
@@ -41,13 +35,29 @@ components:
       description: ID of the consumer which you want to get or push data from
       schema:
         type: string
-    raw:
-      name: raw
+    cursor:
+      name: cursor
       in: query
-      description: Include raw response. Mostly used for debugging purposes
+      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
       schema:
-        type: boolean
-        default: false
+        type: string
+        nullable: true
+    customersFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/EcommerceCustomersFilter'
+    fields:
+      name: fields
+      in: query
+      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
+      example: id,updated_at
+      schema:
+        type: string
+        nullable: true
     id:
       in: path
       name: id
@@ -64,21 +74,6 @@ components:
         minimum: 1
         maximum: 200
         default: 20
-    cursor:
-      name: cursor
-      in: query
-      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
-      schema:
-        type: string
-        nullable: true
-    fields:
-      name: fields
-      in: query
-      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
-      example: id,updated_at
-      schema:
-        type: string
-        nullable: true
     ordersFilter:
       name: filter
       in: query
@@ -87,14 +82,27 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/EcommerceOrdersFilter'
-    customersFilter:
-      name: filter
+    raw:
+      name: raw
       in: query
-      description: Apply filters
+      description: Include raw response. Mostly used for debugging purposes
+      schema:
+        type: boolean
+        default: false
+    serviceId:
+      name: x-apideck-service-id
+      in: header
+      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
+      schema:
+        type: string
+    passThrough:
+      name: pass_through
+      in: query
+      description: 'Optional unmapped key/values that will be passed through to downstream as query parameters. Ie: ?pass_through[search]=leads becomes ?search=leads'
       style: deepObject
       explode: true
       schema:
-        $ref: '#/components/schemas/EcommerceCustomersFilter'
+        $ref: '#/components/schemas/PassThroughQuery'
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -417,20 +425,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#requestvalidationerror
-    CreatedAt:
-      type: string
-      title: Created at (timestamp)
-      description: The date and time when the object was created.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-    CreatedBy:
-      type: string
-      title: Created by
-      description: The user who created the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     CreateEcommerceCustomerResponse:
       type: object
       x-apideck-schema-id: CreateEcommerceCustomerResponse
@@ -530,6 +524,20 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+    CreatedAt:
+      type: string
+      title: Created at (timestamp)
+      description: The date and time when the object was created.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    CreatedBy:
+      type: string
+      title: Created by
+      description: The user who created the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Currency:
       type: string
       title: Currency
@@ -1753,17 +1761,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EcommerceDiscount'
-    EcommerceOrdersFilter:
-      type: object
-      x-apideck-schema-id: EcommerceOrdersFilter
-      example:
-        email: elon@musk.com
-      properties:
-        email:
-          type: string
-          description: Customer email address to filter on
-          example: elon@musk.com
-      additionalProperties: false
     EcommerceOrderStatus:
       type: string
       x-apideck-enum-id: order.status
@@ -1776,6 +1773,17 @@ components:
         - archived
         - unknown
       example: active
+    EcommerceOrdersFilter:
+      type: object
+      x-apideck-schema-id: EcommerceOrdersFilter
+      example:
+        email: elon@musk.com
+      properties:
+        email:
+          type: string
+          description: Customer email address to filter on
+          example: elon@musk.com
+      additionalProperties: false
     EcommerceProduct:
       type: object
       x-apideck-schema-id: EcommerceProduct
@@ -2568,6 +2576,11 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#mappingerror
+    PassThroughQuery:
+      type: object
+      additionalProperties: true
+      example:
+        search: San Francisco
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -2851,21 +2864,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#invalidstateerror
-    UpdatedAt:
-      type: string
-      title: Updated at (timestamp)
-      description: The date and time when the object was last updated.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-      nullable: true
-    UpdatedBy:
-      type: string
-      title: Updated by
-      description: The user who last updated the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     UpdateEcommerceCustomerResponse:
       type: object
       x-apideck-schema-id: UpdateEcommerceCustomerResponse
@@ -2965,6 +2963,21 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    UpdatedAt:
+      type: string
+      title: Updated at (timestamp)
+      description: The date and time when the object was last updated.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+      nullable: true
+    UpdatedBy:
+      type: string
+      title: Updated by
+      description: The user who last updated the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Website:
       type: object
       x-apideck-schema-id: Website
@@ -3055,6 +3068,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/ordersFilter'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -3158,6 +3172,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -3268,6 +3283,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/customersFilter'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []

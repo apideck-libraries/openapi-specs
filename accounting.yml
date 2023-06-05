@@ -36,6 +36,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/BalanceSheetFilter'
+    billsSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/BillsSort'
     consumerId:
       name: x-apideck-consumer-id
       in: header
@@ -58,22 +66,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/CustomersFilter'
-    paymentsFilter:
-      name: filter
+    fields:
+      name: fields
       in: query
-      description: Apply filters
-      style: deepObject
-      explode: true
+      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
+      example: id,updated_at
       schema:
-        $ref: '#/components/schemas/PaymentsFilter'
-    suppliersFilter:
-      name: filter
-      in: query
-      description: Apply filters
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/SuppliersFilter'
+        type: string
+        nullable: true
     id:
       in: path
       name: id
@@ -89,6 +89,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/InvoiceItemsFilter'
+    invoicesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/InvoicesSort'
     limit:
       name: limit
       in: query
@@ -101,19 +109,19 @@ components:
     passThrough:
       name: pass_through
       in: query
-      description: Optional unmapped key/values that will be passed through to downstream as query parameters
+      description: 'Optional unmapped key/values that will be passed through to downstream as query parameters. Ie: ?pass_through[search]=leads becomes ?search=leads'
       style: deepObject
       explode: true
       schema:
         $ref: '#/components/schemas/PassThroughQuery'
-    fields:
-      name: fields
+    paymentsFilter:
+      name: filter
       in: query
-      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
-      example: id,updated_at
+      description: Apply filters
+      style: deepObject
+      explode: true
       schema:
-        type: string
-        nullable: true
+        $ref: '#/components/schemas/PaymentsFilter'
     profitAndLossFilter:
       name: filter
       in: query
@@ -135,6 +143,14 @@ components:
       description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
       schema:
         type: string
+    suppliersFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/SuppliersFilter'
     taxRatesFilter:
       name: filter
       in: query
@@ -143,22 +159,6 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/TaxRatesFilter'
-    invoicesSort:
-      name: sort
-      in: query
-      description: Apply sorting
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/InvoicesSort'
-    billsSort:
-      name: sort
-      in: query
-      description: Apply sorting
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/BillsSort'
   responses:
     BadRequestResponse:
       content:
@@ -5979,10 +5979,8 @@ components:
     PassThroughQuery:
       type: object
       additionalProperties: true
-      properties:
-        example_downstream_property:
-          type: string
-          description: All passthrough query parameters are passed along to the connector as is (?pass_through[search]=leads becomes ?search=leads)
+      example:
+        search: San Francisco
     Payment:
       type: object
       x-apideck-schema-id: Payment
@@ -12224,6 +12222,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/limit'
       security:
         - apiKey: []

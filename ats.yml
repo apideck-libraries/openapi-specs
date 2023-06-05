@@ -20,6 +20,14 @@ servers:
   - url: https://unify.apideck.com
 components:
   parameters:
+    applicantsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ApplicantsFilter'
     applicationId:
       name: x-apideck-app-id
       in: header
@@ -28,12 +36,6 @@ components:
       schema:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
-    serviceId:
-      name: x-apideck-service-id
-      in: header
-      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
-      schema:
-        type: string
     consumerId:
       name: x-apideck-consumer-id
       in: header
@@ -41,13 +43,21 @@ components:
       description: ID of the consumer which you want to get or push data from
       schema:
         type: string
-    raw:
-      name: raw
+    cursor:
+      name: cursor
       in: query
-      description: Include raw response. Mostly used for debugging purposes
+      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
       schema:
-        type: boolean
-        default: false
+        type: string
+        nullable: true
+    fields:
+      name: fields
+      in: query
+      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
+      example: id,updated_at
+      schema:
+        type: string
+        nullable: true
     id:
       in: path
       name: id
@@ -64,37 +74,27 @@ components:
         minimum: 1
         maximum: 200
         default: 20
-    cursor:
-      name: cursor
+    passThrough:
+      name: pass_through
       in: query
-      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
-      schema:
-        type: string
-        nullable: true
-    fields:
-      name: fields
-      in: query
-      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
-      example: id,updated_at
-      schema:
-        type: string
-        nullable: true
-    jobsFilter:
-      name: filter
-      in: query
-      description: Apply filters
+      description: 'Optional unmapped key/values that will be passed through to downstream as query parameters. Ie: ?pass_through[search]=leads becomes ?search=leads'
       style: deepObject
       explode: true
       schema:
-        $ref: '#/components/schemas/JobsFilter'
-    applicantsFilter:
-      name: filter
+        $ref: '#/components/schemas/PassThroughQuery'
+    raw:
+      name: raw
       in: query
-      description: Apply filters
-      style: deepObject
-      explode: true
+      description: Include raw response. Mostly used for debugging purposes
       schema:
-        $ref: '#/components/schemas/ApplicantsFilter'
+        type: boolean
+        default: false
+    serviceId:
+      name: x-apideck-service-id
+      in: header
+      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
+      schema:
+        type: string
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -694,6 +694,68 @@ components:
           description: Id of the job to filter on
           example: '1234'
       additionalProperties: false
+    Application:
+      type: object
+      additionalProperties: false
+      x-apideck-weights:
+        id: high
+        applicant_id: critical
+        job_id: critical
+        status: high
+        stage: high
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
+      required:
+        - applicant_id
+        - job_id
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        applicant_id:
+          type: string
+          title: Applicant ID
+          example: '12345'
+          nullable: true
+        job_id:
+          type: string
+          title: Job ID
+          example: '12345'
+          nullable: true
+        status:
+          type: string
+          title: Status
+          example: open
+          enum:
+            - open
+            - rejected
+            - hired
+            - converted
+            - other
+          nullable: true
+        stage:
+          type: object
+          properties:
+            id:
+              type: string
+              title: Stage ID
+              description: Stage the candidate should be in. If omitted, the default stage for this job will be used.
+              example: '12345'
+              nullable: true
+            name:
+              type: string
+              title: Stage name
+              example: '12345'
+              nullable: true
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     Archived:
       title: Archived
       type: boolean
@@ -810,20 +872,38 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
-    CreatedAt:
-      type: string
-      title: Created at (timestamp)
-      description: The date and time when the object was created.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-    CreatedBy:
-      type: string
-      title: Created by
-      description: The user who created the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
+    CreateApplicationResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     CreateJobResponse:
       type: object
       x-apideck-schema-id: CreateJobResponse
@@ -857,6 +937,20 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+    CreatedAt:
+      type: string
+      title: Created at (timestamp)
+      description: The date and time when the object was created.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+    CreatedBy:
+      type: string
+      title: Created by
+      description: The user who created the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Currency:
       type: string
       title: Currency
@@ -1458,26 +1552,70 @@ components:
             - type: array
               items:
                 type: string
-    Deleted:
-      type: boolean
-      title: Deleted
-      example: true
-      nullable: true
-    DeletedAt:
-      type: string
-      title: Deleted at (timestamp)
-      description: The time at which the object was deleted.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-      nullable: true
-    DeletedBy:
-      type: string
-      title: Deleted by
-      description: The user who deleted the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
+    DeleteApplicantResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: lever
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applicants
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteApplicationResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     DeleteJobResponse:
       type: object
       x-apideck-schema-id: DeleteJobResponse
@@ -1511,6 +1649,26 @@ components:
           example: delete
         data:
           $ref: '#/components/schemas/UnifiedId'
+    Deleted:
+      type: boolean
+      title: Deleted
+      example: true
+      nullable: true
+    DeletedAt:
+      type: string
+      title: Deleted at (timestamp)
+      description: The time at which the object was deleted.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+      nullable: true
+    DeletedBy:
+      type: string
+      title: Deleted by
+      description: The user who deleted the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Department:
       type: object
       x-apideck-schema-id: Department
@@ -1660,6 +1818,76 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Applicant'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetApplicationResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Application'
+    GetApplicationsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Application'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -2041,17 +2269,6 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
-    JobsFilter:
-      type: object
-      x-apideck-schema-id: JobsFilter
-      example:
-        job_id: '1234'
-      properties:
-        job_id:
-          type: string
-          description: Id of the job to filter on
-          example: '1234'
-      additionalProperties: false
     JobStatus:
       type: string
       description: The status of the job.
@@ -2215,6 +2432,11 @@ components:
       title: Owner ID
       type: string
       example: '54321'
+    PassThroughQuery:
+      type: object
+      additionalProperties: true
+      example:
+        search: San Francisco
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -2461,21 +2683,70 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#invalidstateerror
-    UpdatedAt:
-      type: string
-      title: Updated at (timestamp)
-      description: The date and time when the object was last updated.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-      nullable: true
-    UpdatedBy:
-      type: string
-      title: Updated by
-      description: The user who last updated the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
+    UpdateApplicantResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: lever
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applicants
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    UpdateApplicationResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: sap-successfactors
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Applications
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     UpdateJobResponse:
       type: object
       x-apideck-schema-id: UpdateJobResponse
@@ -2509,76 +2780,27 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    UpdatedAt:
+      type: string
+      title: Updated at (timestamp)
+      description: The date and time when the object was last updated.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+      nullable: true
+    UpdatedBy:
+      type: string
+      title: Updated by
+      description: The user who last updated the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Url:
       type: string
       format: uri
       description: The url pointing to the job.
       pattern: ^(https?)://
       example: https://downstreamconnector.com/job?id=123
-    DeleteApplicantResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: lever
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Applicants
-        operation:
-          type: string
-          description: Operation performed
-          example: delete
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    UpdateApplicantResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: lever
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Applicants
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
     WebhookEvent:
       x-sdk-exclude: true
       allOf:
@@ -2617,234 +2839,6 @@ components:
           properties:
             event_type:
               $ref: '#/components/schemas/AtsEventType'
-    CreateApplicationResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sap-successfactors
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Applications
-        operation:
-          type: string
-          description: Operation performed
-          example: add
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    DeleteApplicationResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sap-successfactors
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Applications
-        operation:
-          type: string
-          description: Operation performed
-          example: delete
-        data:
-          $ref: '#/components/schemas/UnifiedId'
-    GetApplicationResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sap-successfactors
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Applications
-        operation:
-          type: string
-          description: Operation performed
-          example: one
-        data:
-          $ref: '#/components/schemas/Application'
-    GetApplicationsResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sap-successfactors
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Applications
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Application'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
-    Application:
-      type: object
-      additionalProperties: false
-      x-apideck-weights:
-        id: high
-        applicant_id: critical
-        job_id: critical
-        status: high
-        stage: high
-        updated_by: edge-case
-        created_by: edge-case
-        updated_at: medium
-        created_at: medium
-      required:
-        - applicant_id
-        - job_id
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        applicant_id:
-          type: string
-          title: Applicant ID
-          example: '12345'
-          nullable: true
-        job_id:
-          type: string
-          title: Job ID
-          example: '12345'
-          nullable: true
-        status:
-          type: string
-          title: Status
-          example: open
-          enum:
-            - open
-            - rejected
-            - hired
-            - converted
-            - other
-          nullable: true
-        stage:
-          type: object
-          properties:
-            id:
-              type: string
-              title: Stage ID
-              description: Stage the candidate should be in. If omitted, the default stage for this job will be used.
-              example: '12345'
-              nullable: true
-            name:
-              type: string
-              title: Stage name
-              example: '12345'
-              nullable: true
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    UpdateApplicationResponse:
-      type: object
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: sap-successfactors
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Applications
-        operation:
-          type: string
-          description: Operation performed
-          example: update
-        data:
-          $ref: '#/components/schemas/UnifiedId'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -2912,6 +2906,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -3015,7 +3010,8 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
-        - $ref: '#/components/parameters/jobsFilter'
+        - $ref: '#/components/parameters/applicantsFilter'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -3478,6 +3474,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/limit'
       security:
         - apiKey: []

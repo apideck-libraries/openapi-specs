@@ -28,80 +28,14 @@ components:
       schema:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
-    serviceId:
-      name: x-apideck-service-id
-      in: header
-      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
-      schema:
-        type: string
-    consumerId:
-      name: x-apideck-consumer-id
-      in: header
-      required: true
-      description: ID of the consumer which you want to get or push data from
-      schema:
-        type: string
-    raw:
-      name: raw
-      in: query
-      description: Include raw response. Mostly used for debugging purposes
-      schema:
-        type: boolean
-        default: false
-    id:
-      in: path
-      name: id
-      schema:
-        type: string
-      required: true
-      description: ID of the record you are acting upon.
-    limit:
-      name: limit
-      in: query
-      description: Number of results to return. Minimum 1, Maximum 200, Default 20
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 200
-        default: 20
-    cursor:
-      name: cursor
-      in: query
-      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
-      schema:
-        type: string
-        nullable: true
-    fields:
-      name: fields
-      in: query
-      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
-      example: id,updated_at
-      schema:
-        type: string
-        nullable: true
     collectionId:
+      description: The collection ID
       in: path
       name: collection_id
+      required: true
       schema:
-        type: string
         example: apideck-io
-      required: true
-      description: The collection ID
-    ticketId:
-      in: path
-      name: ticket_id
-      schema:
         type: string
-      required: true
-      description: ID of the ticket you are acting upon.
-    ticketsSort:
-      name: sort
-      in: query
-      description: Apply sorting
-      style: deepObject
-      explode: true
-      schema:
-        $ref: '#/components/schemas/TicketsSort'
     collectionsSort:
       name: sort
       in: query
@@ -118,6 +52,35 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/CommentsSort'
+    consumerId:
+      name: x-apideck-consumer-id
+      in: header
+      required: true
+      description: ID of the consumer which you want to get or push data from
+      schema:
+        type: string
+    cursor:
+      name: cursor
+      in: query
+      description: Cursor to start from. You can find cursors for next/previous pages in the meta.cursors property of the response.
+      schema:
+        type: string
+        nullable: true
+    fields:
+      name: fields
+      in: query
+      description: 'The ''fields'' parameter allows API users to specify the fields they want to include in the API response. If this parameter is not present, the API will return all available fields. If this parameter is present, only the fields specified in the comma-separated string will be included in the response. Nested properties can also be requested by using a dot notation. <br /><br />Example: `fields=name,email,addresses.city`<br /><br />In the example above, the response will only include the fields "name", "email" and "addresses.city". If any other fields are available, they will be excluded.'
+      example: id,updated_at
+      schema:
+        type: string
+        nullable: true
+    id:
+      in: path
+      name: id
+      schema:
+        type: string
+      required: true
+      description: ID of the record you are acting upon.
     issuesFilter:
       name: filter
       in: query
@@ -126,6 +89,51 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/IssuesFilter'
+    limit:
+      name: limit
+      in: query
+      description: Number of results to return. Minimum 1, Maximum 200, Default 20
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 20
+    passThrough:
+      name: pass_through
+      in: query
+      description: 'Optional unmapped key/values that will be passed through to downstream as query parameters. Ie: ?pass_through[search]=leads becomes ?search=leads'
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/PassThroughQuery'
+    raw:
+      name: raw
+      in: query
+      description: Include raw response. Mostly used for debugging purposes
+      schema:
+        type: boolean
+        default: false
+    serviceId:
+      name: x-apideck-service-id
+      in: header
+      description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
+      schema:
+        type: string
+    ticketId:
+      description: ID of the ticket you are acting upon.
+      in: path
+      name: ticket_id
+      required: true
+      schema:
+        type: string
+    ticketsSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/TicketsSort'
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -2015,10 +2023,8 @@ components:
     PassThroughQuery:
       type: object
       additionalProperties: true
-      properties:
-        example_downstream_property:
-          type: string
-          description: All passthrough query parameters are passed along to the connector as is (?pass_through[search]=leads becomes ?search=leads)
+      example:
+        search: San Francisco
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -2559,6 +2565,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/collectionsSort'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -2665,6 +2672,7 @@ paths:
         - $ref: '#/components/parameters/collectionId'
         - $ref: '#/components/parameters/ticketsSort'
         - $ref: '#/components/parameters/issuesFilter'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -2987,6 +2995,7 @@ paths:
         - $ref: '#/components/parameters/collectionId'
         - $ref: '#/components/parameters/ticketId'
         - $ref: '#/components/parameters/commentsSort'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -3288,6 +3297,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
@@ -3398,6 +3408,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []

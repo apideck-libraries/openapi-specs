@@ -1,3 +1,7 @@
+## v9.7.2 - (2023-06-05)
+
+- Fix webhook schema object names to align across APIs
+
 ## v9.7.1 - (2023-06-03)
 
 ### ACCOUNTING API

@@ -1,3 +1,9 @@
+## v9.7.3 - (2023-06-06)
+
+### Vault API
+
+- New webhook event `vault.connection.revoked` is now available to subscribe to. Event is broadcast when a call to revoke an access token down stream is successful.
+
 ## v9.7.2 - (2023-06-05)
 
 - Fix webhook schema object names to align across APIs

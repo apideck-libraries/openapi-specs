@@ -1,3 +1,7 @@
+## v9.7.4 - (2023-06-06)
+
+- Adding properties object to PassThroughQuery as it is required for OpenAPI Generator.
+
 ## v9.7.3 - (2023-06-06)
 
 ### Vault API

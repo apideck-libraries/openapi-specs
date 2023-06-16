@@ -1512,10 +1512,47 @@ components:
               type: string
               description: Unique reference to this request event
               example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+            unified_api:
+              description: Name of Apideck Unified API
+              x-apideck-enum-id: unified_api
+              enum:
+                - accounting
+                - ats
+                - calendar
+                - crm
+                - csp
+                - customer-support
+                - ecommerce
+                - email
+                - email-marketing
+                - expense-management
+                - file-storage
+                - form
+                - hris
+                - lead
+                - payroll
+                - pos
+                - procurement
+                - project-management
+                - script
+                - sms
+                - spreadsheet
+                - team-messaging
+                - issue-tracking
+                - time-registration
+                - transactional-email
+                - vault
+                - data-warehouse
+              example: crm
+              type: string
             service_id:
               type: string
               description: Service provider identifier
               example: close
+            consumer_id:
+              type: string
+              example: test_consumer_id
+              description: Unique consumer identifier. You can freely choose a consumer ID yourself. Most of the time, this is an ID of your internal data model that represents a user or account in your system (for example account:12345). If the consumer doesn't exist yet, Vault will upsert a consumer based on your ID.
             entity_id:
               type: string
               description: The service provider's ID of the entity that triggered this event

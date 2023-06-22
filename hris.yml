@@ -1855,7 +1855,11 @@ components:
           type: object
           properties:
             id:
-              $ref: '#/components/schemas/Id'
+              type: string
+              title: ID
+              description: A unique identifier for an object.
+              example: '12345'
+              readOnly: false
             name:
               title: Manager name
               description: The name of the manager, often a combination of their first and last names.
@@ -1978,6 +1982,7 @@ components:
               location: medium
               start_date: high
               end_date: high
+            title: job
             type: object
             properties:
               id:
@@ -2033,6 +2038,7 @@ components:
         compensations:
           type: array
           items:
+            title: compensation
             x-apideck-weights:
               id: critical
               job_id: medium
@@ -3197,6 +3203,7 @@ components:
         - month
         - year
         - paycheck
+        - other
       example: year
     Payroll:
       type: object
@@ -4334,6 +4341,7 @@ paths:
                   sub_type: 'full_time'
                 },
                 manager: {
+                  id: '12345',
                   name: 'Elon Musk',
                   first_name: 'Elon',
                   last_name: 'Musk',
@@ -4631,6 +4639,7 @@ paths:
                   sub_type: 'full_time'
                 },
                 manager: {
+                  id: '12345',
                   name: 'Elon Musk',
                   first_name: 'Elon',
                   last_name: 'Musk',

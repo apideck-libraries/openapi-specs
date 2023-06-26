@@ -1379,7 +1379,7 @@ components:
         description: high
         type: medium
         tax_amount: high
-        total_amount: critical
+        total_amount: high
         quantity: high
         unit_price: high
         unit_of_measure: edge-case
@@ -5153,7 +5153,7 @@ components:
         description: high
         type: medium
         tax_amount: high
-        total_amount: critical
+        total_amount: high
         quantity: high
         unit_price: high
         unit_of_measure: edge-case
@@ -8470,6 +8470,8 @@ paths:
           Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
+        - connector: Quickbooks
+          description: Quickbooks requires the supplier.id to be sent in order to make update operations.
       requestBody:
         required: true
         content:

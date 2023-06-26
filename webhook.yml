@@ -1560,6 +1560,55 @@ paths:
             } catch (error) {
               console.error(error)
             }
+    get:
+      tags:
+        - Webhooks
+      operationId: webhookVerify
+      summary: Resolve and Execute a connection webhook
+      description: Resolve a webhook based on lookup_id and then execute it
+      x-sdk-exclude: true
+      x-internal: true
+      parameters:
+        - $ref: '#/components/parameters/lookupIdToken'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/downstreamEventType'
+      responses:
+        '200':
+          $ref: '#/components/responses/ResolveWebhookResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: webhook
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY'
+            })
+
+            const params = {
+              id: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk2MDAwYzIzLWI1NmItNGRlOC1iZmEzLTMxNTAzMTE3YzBmNyJ9.rAXnsmZ4O7eF0aDwdflkxAJQwMUfWs5989WfmspNZ6Q',
+              serviceId: 'factorialhr'
+            }
+
+            try {
+              const { data } = await apideck.webhook.webhookVerify(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
   /webhook/logs:
     get:
       tags:

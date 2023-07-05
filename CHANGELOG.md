@@ -1,3 +1,7 @@
+## v9.7.5 - (2023-07-05)
+
+- Add the `payment_frequency` field on the [Employee](apis/hris/reference#tag/Employees) compensations resource.
+
 ## v9.7.4 - (2023-06-06)
 
 - Adding properties object to PassThroughQuery as it is required for OpenAPI Generator.

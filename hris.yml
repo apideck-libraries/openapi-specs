@@ -1613,7 +1613,6 @@ components:
         department_id: low
         department_name: low
         team: medium
-        teams: medium
         company_id: high
         company_name: medium
         employment_start_date: high
@@ -1770,11 +1769,22 @@ components:
           example: '12345'
           nullable: true
         team:
-          $ref: '#/components/schemas/Team'
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/Team'
+          type: object
+          x-apideck-schema-id: Team
+          description: The team the person is currently in.
+          additionalProperties: false
+          properties:
+            id:
+              type: string
+              description: The unique identifier of the team.
+              example: '1234'
+              nullable: true
+            name:
+              type: string
+              description: The name of the team.
+              example: Full Stack Engineers
+              nullable: true
+          nullable: true
         company_id:
           $ref: '#/components/schemas/CompanyId'
         company_name:
@@ -4208,23 +4218,6 @@ components:
             - personal
             - other
           example: primary
-    Team:
-      type: object
-      x-apideck-schema-id: Team
-      description: The team the person is currently in.
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the team.
-          example: '1234'
-          nullable: true
-        name:
-          type: string
-          description: The name of the team.
-          example: Full Stack Engineers
-          nullable: true
-      nullable: true
   securitySchemes:
     apiKey:
       type: apiKey
@@ -4439,12 +4432,6 @@ paths:
                   id: '1234',
                   name: 'Full Stack Engineers'
                 },
-                teams: [
-                  {
-                    id: '1234',
-                    name: 'Full Stack Engineers'
-                  }
-                ],
                 company_id: '23456',
                 company_name: 'SpaceX',
                 employment_start_date: '2021-10-26',
@@ -4761,12 +4748,6 @@ paths:
                   id: '1234',
                   name: 'Full Stack Engineers'
                 },
-                teams: [
-                  {
-                    id: '1234',
-                    name: 'Full Stack Engineers'
-                  }
-                ],
                 company_id: '23456',
                 company_name: 'SpaceX',
                 employment_start_date: '2021-10-26',

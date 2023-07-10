@@ -1,3 +1,7 @@
+## v9.7.6 - (2023-07-10)
+
+- Add `bank_accounts` support to the [Employee](apis/hris/reference#tag/Employees) resource.
+
 ## v9.7.5 - (2023-07-05)
 
 - Add the `payment_frequency` field on the [Employee](apis/hris/reference#tag/Employees) compensations resource.

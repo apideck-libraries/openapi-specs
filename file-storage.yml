@@ -2038,7 +2038,28 @@ components:
             $ref: '#/components/schemas/LinkedFolder'
         parent_folders_complete:
           type: boolean
-          description: Whether the list of parent folder is complete. Some connectors only return the direct parent of a file
+          description: Whether the list of parent folders is complete. Some connectors only return the direct parent of a file
+        permissions:
+          type: object
+          description: Permissions the current user has on this file.
+          properties:
+            download:
+              type: boolean
+              description: Whether the current user can download this file.
+        exportable:
+          type: boolean
+          description: Whether the current file is exportable to other file formats. This property is relevant for proprietary file formats such as Google Docs or Dropbox Paper.
+        export_formats:
+          type: array
+          description: The available file formats when exporting this file.
+          example:
+            - application/pdf
+            - application/vnd.oasis.opendocument.presentation
+            - text/plain
+          items:
+            type: string
+            example: application/pdf
+            description: An available file format (typically MIME type) to export this file.
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:

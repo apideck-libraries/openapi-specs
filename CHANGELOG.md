@@ -1,3 +1,9 @@
+## v9.8.0 - (2023-07-19)
+
+### File Storage API
+
+- Added [Export File](apis/file-storage/reference#operation/filesExport) endpoint. This endpoint lets you convert files into other formats and download them. Handy for working with Google Docs, Slides, and Sheets. Right now, it's only supported for Google Drive.
+
 ## v9.7.6 - (2023-07-10)
 
 - Add `bank_accounts` support to the [Employee](apis/hris/reference#tag/Employees) resource.

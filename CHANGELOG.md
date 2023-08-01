@@ -1,3 +1,31 @@
+## Release Notes (2023-07-28)
+
+### ACCOUNTING API
+
+- Released [Netsuite](connectors/netsuite) with additional resources: Invoices, Customers, Payments, Suppliers, Journal Entries, Ledger Accounts, Bills, Products, Credit notes, Purchase Orders
+
+### HRIS API
+
+- Released [People HR](connectors/people-hr) connector with support for Employees
+- Released [Deel](connectors/deel) connector with support for Employees
+- Released [Employment Hero](connectors/employmenthero) connector with support for Employees
+
+- Extended employee resource properties with nullable
+- Improved employees [SAP SuccessFactors](connectors/sap-successfactors) mapping
+- Enhanced employees [Workday](connectors/workday) mapping
+- Performance & employee mapping improvements + updated the connection guide for [HiBob](connectors/hibob)
+- Introduced write (create,update, delete) support for [HiBob](connectors/hibob)
+- Extended [Breathe HR](connectors/breathehr) mapping for employees
+- Implemented native webhook events for [Okta](connectors/okta)
+
+### Ecommmerce API
+
+- Changed the authentication for [Shopify](connectors/shopify) from OAuth to API key
+
+### CRM
+
+- Improved updating leads & contacts for [Salesforce](connectors/salesforce)
+
 ## v9.8.0 - (2023-07-19)
 
 ### File Storage API

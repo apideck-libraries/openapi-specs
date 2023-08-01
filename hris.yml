@@ -631,14 +631,17 @@ components:
         name:
           type: string
           description: The name of the benefit.
+          nullable: true
           example: Health Insurance
         employee_deduction:
           type: number
           description: The amount deducted for benefit.
+          nullable: true
           example: 142.94
         employer_contribution:
           type: number
           description: The amount of employer contribution.
+          nullable: true
           example: 141.14
     CompanyId:
       type: string
@@ -671,24 +674,29 @@ components:
         net_pay:
           type: number
           description: The employee's net pay. Only available when payroll has been processed
+          nullable: true
           example: 2199.93
         gross_pay:
           type: number
           description: The employee's gross pay. Only available when payroll has been processed
+          nullable: true
           example: 3000
         taxes:
           type: array
           description: An array of employer and employee taxes for the pay period.
+          nullable: true
           items:
             $ref: '#/components/schemas/Tax'
         deductions:
           type: array
           description: An array of employee deductions for the pay period.
+          nullable: true
           items:
             $ref: '#/components/schemas/Deduction'
         benefits:
           type: array
           description: An array of employee benefits for the pay period.
+          nullable: true
           items:
             $ref: '#/components/schemas/Benefit'
     CreateDepartmentResponse:
@@ -1483,10 +1491,12 @@ components:
           type: string
           description: The name of the deduction.
           example: Company Car
+          nullable: true
         amount:
           type: number
           description: The amount deducted.
           example: 10.97
+          nullable: true
     Deleted:
       type: boolean
       title: Deleted
@@ -1644,6 +1654,7 @@ components:
           description: Parent ID
           type: string
           readOnly: true
+          nullable: true
           example: '22345'
         name:
           title: Name
@@ -1993,10 +2004,12 @@ components:
           $ref: '#/components/schemas/RecordUrl'
         jobs:
           type: array
+          nullable: true
           items:
             $ref: '#/components/schemas/EmployeeJob'
         compensations:
           type: array
+          nullable: true
           items:
             $ref: '#/components/schemas/EmployeeCompensation'
         works_remote:
@@ -2131,6 +2144,7 @@ components:
           title: The compensation rate of the job.
           description: The rate of pay for the employee in their current job role.
           example: 72000
+          nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
         payment_unit:
@@ -2174,12 +2188,14 @@ components:
           title: Job ID
           description: The ID of the job to which the compensation belongs.
           example: '12345'
+          nullable: true
           readOnly: true
         rate:
           type: number
           title: Rate
           description: The amount paid per payment unit.
           readOnly: false
+          nullable: true
           example: 72000
         payment_unit:
           $ref: '#/components/schemas/PaymentUnit'
@@ -2188,6 +2204,7 @@ components:
         flsa_status:
           type: string
           readOnly: false
+          nullable: true
           description: The FLSA status for this compensation.
           x-apideck-enum-id: employees.compensations.flsa_status
           enum:
@@ -2199,6 +2216,7 @@ components:
         effective_date:
           type: string
           readOnly: false
+          nullable: true
           title: Effective date
           description: The date on which a change to an employee's compensation takes effect.
           example: '2020-08-12'
@@ -2239,6 +2257,7 @@ components:
           $ref: '#/components/schemas/Employee'
         payrolls:
           type: array
+          nullable: true
           items:
             $ref: '#/components/schemas/Payroll'
     EmployeeSchedules:
@@ -2249,6 +2268,7 @@ components:
           $ref: '#/components/schemas/Employee'
         schedules:
           type: array
+          nullable: true
           items:
             $ref: '#/components/schemas/Schedule'
     EmployeesFilter:
@@ -2897,14 +2917,17 @@ components:
           type: string
           example: SpaceX
           minLength: 1
+          nullable: true
         display_name:
           type: string
           example: SpaceX
           minLength: 1
+          nullable: true
         subdomain:
           type: string
           example: company
           minLength: 1
+          nullable: true
         status:
           type: string
           example: active
@@ -2940,6 +2963,7 @@ components:
           type: string
           example: '12345'
           minLength: 1
+          nullable: true
         deleted:
           type: boolean
           example: false
@@ -2983,6 +3007,7 @@ components:
         employee_id:
           type: string
           description: Id of the employee
+          nullable: true
         title:
           $ref: '#/components/schemas/Title'
         start_date:
@@ -3024,6 +3049,7 @@ components:
           $ref: '#/components/schemas/Employee'
         jobs:
           type: array
+          nullable: true
           items:
             $ref: '#/components/schemas/HrisJob'
     Id:
@@ -3239,6 +3265,7 @@ components:
           type: boolean
           description: Whether or not the payroll has been successfully processed. Note that processed payrolls cannot be updated.
           example: false
+          nullable: true
         processed_date:
           type: string
           description: The date the payroll was processed.
@@ -3250,16 +3277,19 @@ components:
           description: The date on which employees will be paid for the payroll.
           pattern: ^\d{4}-\d{2}-\d{2}$
           example: '2022-04-08'
+          nullable: true
         start_date:
           type: string
           description: The start date, inclusive, of the pay period.
           pattern: ^\d{4}-\d{2}-\d{2}$
           example: '2022-04-08'
+          nullable: true
         end_date:
           type: string
           description: The end date, inclusive, of the pay period.
           pattern: ^\d{4}-\d{2}-\d{2}$
           example: '2022-04-21'
+          nullable: true
         totals:
           type: object
           description: The overview of the payroll totals.
@@ -3277,18 +3307,22 @@ components:
           type: number
           description: The total company debit for the payroll.
           example: 27992.49
+          nullable: true
         tax_debit:
           type: number
           description: The total tax debit for the payroll.
           example: 8655.32
+          nullable: true
         check_amount:
           type: number
           description: The total check amount for the payroll.
           example: 27966.23
+          nullable: true
         net_pay:
           type: number
           description: The net pay amount for the payroll.
           example: 19337.17
+          nullable: true
         gross_pay:
           type: number
           description: The gross pay amount for the payroll.
@@ -3297,18 +3331,22 @@ components:
           type: number
           description: The total amount of employer paid taxes for the payroll.
           example: 2038.93
+          nullable: true
         employee_taxes:
           type: number
           description: The total amount of employee paid taxes for the payroll.
           example: 6616.39
+          nullable: true
         employer_benefit_contributions:
           type: number
           description: The total amount of company contributed benefits for the payroll.
           example: 0
+          nullable: true
         employee_benefit_deductions:
           type: number
           description: The total amount of employee deducted benefits for the payroll.
           example: 0
+          nullable: true
     PayrollsFilter:
       type: object
       x-apideck-schema-id: PayrollsFilter
@@ -3783,14 +3821,17 @@ components:
           type: string
           description: The name of the tax.
           example: CA State Income Tax
+          nullable: true
         employer:
           type: boolean
           description: Paid by employer.
           example: false
+          nullable: true
         amount:
           type: number
           description: The amount of the tax.
           example: 1.97
+          nullable: true
     TimeOffRequest:
       type: object
       additionalProperties: false

@@ -4804,6 +4804,7 @@ components:
         accounting_by_row: edge-case
         bank_account: low
         ledger_account: edge-case
+        tracking_category: low
         row_version: edge-case
         updated_by: low
         created_by: low
@@ -4949,6 +4950,8 @@ components:
           description: Customer memo
           example: Thank you for your business and have a great day!
           nullable: true
+        tracking_category:
+          $ref: '#/components/schemas/LinkedTrackingCategory'
         line_items:
           type: array
           items:
@@ -5013,6 +5016,7 @@ components:
         income_account: high
         expense_account: medium
         active: medium
+        tracking_category: low
         row_version: edge-case
         updated_by: edge-case
         created_by: edge-case
@@ -5128,6 +5132,8 @@ components:
           $ref: '#/components/schemas/LinkedLedgerAccount'
         expense_account:
           $ref: '#/components/schemas/LinkedLedgerAccount'
+        tracking_category:
+          $ref: '#/components/schemas/LinkedTrackingCategory'
         active:
           $ref: '#/components/schemas/Active'
         row_version:
@@ -8843,6 +8849,10 @@ paths:
                 balance: 27500,
                 deposit: 0,
                 customer_memo: 'Thank you for your business and have a great day!',
+                tracking_category: {
+                  id: '123456',
+                  name: 'New York'
+                },
                 line_items: [
                   {
                     row_id: '12345',
@@ -9100,6 +9110,10 @@ paths:
                 balance: 27500,
                 deposit: 0,
                 customer_memo: 'Thank you for your business and have a great day!',
+                tracking_category: {
+                  id: '123456',
+                  name: 'New York'
+                },
                 line_items: [
                   {
                     row_id: '12345',
@@ -9781,6 +9795,10 @@ paths:
                   nominal_code: 'N091',
                   code: '453'
                 },
+                tracking_category: {
+                  id: '123456',
+                  name: 'New York'
+                },
                 active: true,
                 row_version: '1-12345'
               }
@@ -9939,6 +9957,10 @@ paths:
                   id: '123456',
                   nominal_code: 'N091',
                   code: '453'
+                },
+                tracking_category: {
+                  id: '123456',
+                  name: 'New York'
                 },
                 active: true,
                 row_version: '1-12345'

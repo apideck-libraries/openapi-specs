@@ -61,11 +61,13 @@ components:
         row_version: edge-case
       properties:
         id:
+          description: Unique identifier for the address.
           type: string
           example: '123'
           nullable: true
         type:
           type: string
+          description: The type of address.
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -76,12 +78,14 @@ components:
             - billing
             - other
           example: primary
+          nullable: true
         string:
           type: string
           description: The address string. Some APIs don't provide structured address data.
           example: 25 Spring Street, Blackburn, VIC 3130
           nullable: true
         name:
+          description: The name of the address.
           type: string
           example: HQ US
           nullable: true
@@ -131,10 +135,12 @@ components:
           description: country code according to ISO 3166-1 alpha-2.
           nullable: true
         latitude:
+          description: Latitude of the address
           type: string
           example: '40.759211'
           nullable: true
         longitude:
+          description: Longitude of the address
           type: string
           example: '-73.984638'
           nullable: true
@@ -144,30 +150,37 @@ components:
           description: Address field that holds a sublocality, such as a county
           nullable: true
         contact_name:
+          description: Name of the contact person at the address
           type: string
           example: Elon Musk
           nullable: true
         salutation:
+          description: Salutation of the contact person at the address
           type: string
           example: Mr
           nullable: true
         phone_number:
+          description: Phone number of the address
           type: string
           example: 111-111-1111
           nullable: true
         fax:
+          description: Fax number of the address
           type: string
           example: 122-111-1111
           nullable: true
         email:
+          description: Email address of the address
           type: string
           example: elon@musk.com
           nullable: true
         website:
+          description: Website of the address
           type: string
           example: https://elonmusk.com
           nullable: true
         notes:
+          description: Additional notes
           type: string
           title: Notes
           example: Address notes or delivery instructions.
@@ -285,10 +298,12 @@ components:
           example: credit_card
           nullable: true
         iban:
+          description: The International Bank Account Number (IBAN).
           type: string
           example: CH2989144532982975332
           nullable: true
         bic:
+          description: The Bank Identifier Code (BIC).
           type: string
           example: AUDSCHGGXXX
           nullable: true
@@ -1024,6 +1039,7 @@ components:
             - billing
             - other
           example: primary
+          nullable: true
     GetLeadResponse:
       type: object
       x-apideck-schema-id: GetLeadResponse
@@ -1137,50 +1153,62 @@ components:
       additionalProperties: false
       properties:
         id:
+          description: Unique identifier for the contact.
           type: string
           example: '12345'
           readOnly: true
         name:
+          description: Full name of the lead.
           type: string
           example: Elon Musk
           minLength: 1
         company_name:
+          description: The name of the company the lead is associated with.
           type: string
           example: Spacex
           nullable: true
         owner_id:
+          description: The owner of the lead.
           type: string
           example: '54321'
           nullable: true
         company_id:
+          description: The company the lead is associated with.
           type: string
           example: '2'
           nullable: true
-        contact_id:
+        lead_id:
+          description: The identifier of the lead.
           type: string
           example: '2'
           nullable: true
         lead_source:
+          description: The source of the lead.
           type: string
           example: Cold Call
           nullable: true
         first_name:
+          description: The first name of the lead.
           type: string
           example: Elon
           nullable: true
         last_name:
+          description: The last name of the lead.
           type: string
           example: Musk
           nullable: true
         description:
+          description: The description of the lead.
           type: string
           example: A thinker
           nullable: true
         prefix:
+          description: The prefix of the lead.
           type: string
           example: Sir
           nullable: true
         title:
+          description: The job title of the lead.
           type: string
           example: CEO
           nullable: true
@@ -1194,12 +1222,14 @@ components:
           example: New
           nullable: true
         monetary_amount:
+          description: The monetary amount of the lead.
           type: number
           example: 75000
           nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
         fax:
+          description: The fax number of the lead.
           type: string
           example: '+12129876543'
           nullable: true
@@ -1235,12 +1265,14 @@ components:
           example: '2020-09-30T07:43:32.000Z'
           pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$
           readOnly: true
+          nullable: true
         created_at:
           type: string
           description: Date created in ISO 8601 format
           example: '2020-09-30T07:43:32.000Z'
           pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$
           readOnly: true
+          nullable: true
     LeadEventType:
       type: string
       x-apideck-enum-id: lead.events
@@ -1452,30 +1484,36 @@ components:
       properties:
         id:
           type: string
+          description: Unique identifier of the phone number
           example: '12345'
           nullable: true
         country_code:
           title: Country code
+          description: The country code of the phone number, e.g. +1
           type: string
           example: '1'
           nullable: true
         area_code:
           title: Area code
+          description: The area code of the phone number, e.g. 323
           type: string
           example: '323'
           nullable: true
         number:
           type: string
           title: Phone number
+          description: The phone number
           example: 111-111-1111
           minLength: 1
         extension:
           type: string
           title: Phone extension
+          description: The extension of the phone number
           example: '105'
           nullable: true
         type:
           type: string
+          description: The type of phone number
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -1490,6 +1528,7 @@ components:
             - personal
             - other
           example: primary
+          nullable: true
     RowVersion:
       type: string
       title: Row version
@@ -1508,14 +1547,17 @@ components:
         type: critical
       properties:
         id:
+          description: Unique identifier of the social link
           type: string
           example: '12345'
           nullable: true
         url:
+          description: URL of the social link, e.g. https://www.twitter.com/apideck
           type: string
-          example: https://www.twitter.com/apideck-io
+          example: https://www.twitter.com/apideck
           minLength: 1
         type:
+          description: Type of the social link, e.g. twitter
           type: string
           example: twitter
           nullable: true
@@ -1758,14 +1800,17 @@ components:
         id: edge-case
       properties:
         id:
+          description: Unique identifier for the website
           type: string
           example: '12345'
           nullable: true
         url:
+          description: The website URL
           type: string
           example: http://example.com
           minLength: 1
         type:
+          description: The type of website
           type: string
           x-apideck-enum-id: websites.type
           enum:
@@ -1775,6 +1820,7 @@ components:
             - personal
             - other
           example: primary
+          nullable: true
   parameters:
     applicationId:
       name: x-apideck-app-id
@@ -2069,7 +2115,7 @@ paths:
                 company_name: 'Spacex',
                 owner_id: '54321',
                 company_id: '2',
-                contact_id: '2',
+                lead_id: '2',
                 lead_source: 'Cold Call',
                 first_name: 'Elon',
                 last_name: 'Musk',
@@ -2119,7 +2165,7 @@ paths:
                 social_links: [
                   {
                     id: '12345',
-                    url: 'https://www.twitter.com/apideck-io',
+                    url: 'https://www.twitter.com/apideck',
                     type: 'twitter'
                   }
                 ],
@@ -2265,7 +2311,7 @@ paths:
                 company_name: 'Spacex',
                 owner_id: '54321',
                 company_id: '2',
-                contact_id: '2',
+                lead_id: '2',
                 lead_source: 'Cold Call',
                 first_name: 'Elon',
                 last_name: 'Musk',
@@ -2315,7 +2361,7 @@ paths:
                 social_links: [
                   {
                     id: '12345',
-                    url: 'https://www.twitter.com/apideck-io',
+                    url: 'https://www.twitter.com/apideck',
                     type: 'twitter'
                   }
                 ],

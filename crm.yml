@@ -132,6 +132,7 @@ components:
         updated_at: high
       properties:
         id:
+          description: The unique identifier of the activity
           type: string
           readOnly: true
           example: '12345'
@@ -142,71 +143,88 @@ components:
           nullable: true
           readOnly: true
         activity_datetime:
+          description: The date and time of the activity
           type: string
           example: '2021-05-01T12:00:00.000Z'
           nullable: true
         duration_seconds:
+          description: The duration of the activity in seconds
           type: integer
           example: 1800
           minimum: 0
           nullable: true
         user_id:
+          description: The user related to the activity
           type: string
           example: '12345'
           nullable: true
         account_id:
+          description: The account related to the activity
           type: string
           example: '12345'
           nullable: true
         contact_id:
+          description: The contact related to the activity
           type: string
           example: '12345'
           nullable: true
         company_id:
+          description: The company related to the activity
           type: string
           example: '12345'
           nullable: true
         opportunity_id:
+          description: The opportunity related to the activity
           type: string
           example: '12345'
           nullable: true
         lead_id:
+          description: The lead related to the activity
           type: string
           example: '12345'
           nullable: true
         owner_id:
+          description: The owner of the activity
           type: string
           example: '12345'
           nullable: true
         campaign_id:
+          description: The campaign related to the activity
           type: string
           example: '12345'
           nullable: true
         case_id:
+          description: The case related to the activity
           type: string
           example: '12345'
           nullable: true
         asset_id:
+          description: The asset related to the activity
           type: string
           example: '12345'
           nullable: true
         contract_id:
+          description: The contract related to the activity
           type: string
           example: '12345'
           nullable: true
         product_id:
+          description: The product related to the activity
           type: string
           example: '12345'
           nullable: true
         solution_id:
+          description: The solution related to the activity
           type: string
           example: '12345'
           nullable: true
         custom_object_id:
+          description: The custom object related to the activity
           type: string
           example: '12345'
           nullable: true
         type:
+          description: The type of the activity
           type: string
           x-apideck-enum-id: activities.type
           enum:
@@ -220,51 +238,70 @@ components:
             - send-quote
             - other
           example: meeting
+          nullable: true
         title:
+          description: The title of the activity
           type: string
           example: Meeting
           nullable: true
         description:
+          description: A description of the activity
           type: string
           example: More info about the meeting
           nullable: true
         note:
+          description: An internal note about the activity
           title: Note (internal)
           type: string
           example: An internal note about the meeting
           nullable: true
         location:
+          description: The location of the activity
           type: string
           example: Space
           nullable: true
         location_address:
           $ref: '#/components/schemas/Address'
         all_day_event:
+          description: Whether the Activity is an all day event or not
           type: boolean
           example: false
+          nullable: true
         private:
+          description: Whether the Activity is private or not
           type: boolean
           example: true
+          nullable: true
         group_event:
+          description: Whether the Activity is a group event or not
           type: boolean
           example: true
+          nullable: true
         event_sub_type:
+          description: The sub type of the group event
           type: string
           example: debrief
           nullable: true
         group_event_type:
+          description: The type of the group event
           type: string
           example: Proposed
           nullable: true
         child:
+          description: Whether the activity is a child of another activity or not
           type: boolean
           example: false
+          nullable: true
         archived:
+          description: Whether the activity is archived or not
           type: boolean
           example: false
+          nullable: true
         deleted:
+          description: Whether the activity is deleted or not
           type: boolean
           example: false
+          nullable: true
         show_as:
           type: string
           x-apideck-enum-id: activities.show_as
@@ -272,52 +309,67 @@ components:
             - free
             - busy
           example: busy
+          nullable: true
         done:
           title: Done
           description: Whether the Activity is done or not
           type: boolean
           example: false
+          nullable: true
         start_datetime:
+          description: The start date and time of the activity
           type: string
           example: '2021-05-01T12:00:00.000Z'
           nullable: true
         end_datetime:
+          description: The end date and time of the activity
           type: string
           example: '2021-05-01T12:30:00.000Z'
           nullable: true
         duration_minutes:
+          description: The duration of the activity in minutes
           type: integer
           example: 30
           nullable: true
           readOnly: true
         activity_date:
+          description: The date of the activity
           type: string
           example: '2021-05-01'
           nullable: true
         end_date:
+          description: The end date of the activity
           type: string
           example: '2021-05-01'
           nullable: true
         recurrent:
+          description: Whether the activity is recurrent or not
           type: boolean
           example: false
         reminder_datetime:
+          description: The date and time of the reminder
           type: string
           example: '2021-05-01T17:00:00.000Z'
           nullable: true
         reminder_set:
+          description: Whether the reminder is set or not
           type: boolean
           example: false
           nullable: true
         video_conference_url:
+          description: The URL of the video conference
           title: Meeting URL
           type: string
           example: https://us02web.zoom.us/j/88120759396
+          nullable: true
         video_conference_id:
+          description: The ID of the video conference
           title: Meeting ID
           type: string
           example: zoom:88120759396
+          nullable: true
         custom_fields:
+          description: Custom fields of the activity
           type: array
           items:
             $ref: '#/components/schemas/CustomField'
@@ -326,23 +378,29 @@ components:
           items:
             $ref: '#/components/schemas/ActivityAttendee'
         updated_by:
+          description: The user who last updated the activity
           type: string
           example: '12345'
           readOnly: true
           nullable: true
         created_by:
+          description: The user who created the activity
           type: string
           example: '12345'
           readOnly: true
           nullable: true
         updated_at:
+          description: The date and time when the activity was last updated
           type: string
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+          nullable: true
         created_at:
+          description: The date and time when the activity was created
           type: string
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+          nullable: true
     ActivityAttendee:
       type: object
       x-apideck-schema-id: ActivityAttendee
@@ -366,42 +424,54 @@ components:
         user_id: low
       properties:
         id:
+          description: Unique identifier for the attendee
           type: string
           example: '12345'
           readOnly: true
+          nullable: true
         name:
+          description: Full name of the attendee
           type: string
           example: Elon Musk
           minLength: 1
+          nullable: true
         first_name:
+          description: First name of the attendee
           type: string
           example: Elon
           nullable: true
         middle_name:
+          description: Middle name of the attendee
           type: string
           example: D.
           nullable: true
         last_name:
+          description: Last name of the attendee
           type: string
           example: Musk
           nullable: true
         prefix:
+          description: Prefix of the attendee
           type: string
           example: Mr.
           nullable: true
         suffix:
+          description: Suffix of the attendee
           type: string
           example: PhD
           nullable: true
         email_address:
+          description: Email address of the attendee
           type: string
           example: elon@musk.com
           nullable: true
         is_organizer:
+          description: Whether the attendee is the organizer of the activity
           type: boolean
           example: true
           nullable: true
         status:
+          description: Status of the attendee
           type: string
           x-apideck-enum-id: activity-attendees.status
           enum:
@@ -411,23 +481,31 @@ components:
           example: accepted
           nullable: true
         user_id:
+          description: The identifier for a related user
           type: string
           example: '12345'
           readOnly: true
+          nullable: true
         contact_id:
+          description: The identifier for a related contact
           type: string
           example: '12345'
           readOnly: true
+          nullable: true
         updated_at:
+          description: The last time the attendee was updated (ISO 8601)
           type: string
           format: date-time
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
+          nullable: true
         created_at:
+          description: The time the attendee was created (ISO 8601)
           type: string
           format: date-time
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
+          nullable: true
       additionalProperties: false
     Address:
       type: object
@@ -459,11 +537,13 @@ components:
         row_version: edge-case
       properties:
         id:
+          description: Unique identifier for the address.
           type: string
           example: '123'
           nullable: true
         type:
           type: string
+          description: The type of address.
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -474,12 +554,14 @@ components:
             - billing
             - other
           example: primary
+          nullable: true
         string:
           type: string
           description: The address string. Some APIs don't provide structured address data.
           example: 25 Spring Street, Blackburn, VIC 3130
           nullable: true
         name:
+          description: The name of the address.
           type: string
           example: HQ US
           nullable: true
@@ -529,10 +611,12 @@ components:
           description: country code according to ISO 3166-1 alpha-2.
           nullable: true
         latitude:
+          description: Latitude of the address
           type: string
           example: '40.759211'
           nullable: true
         longitude:
+          description: Longitude of the address
           type: string
           example: '-73.984638'
           nullable: true
@@ -542,30 +626,37 @@ components:
           description: Address field that holds a sublocality, such as a county
           nullable: true
         contact_name:
+          description: Name of the contact person at the address
           type: string
           example: Elon Musk
           nullable: true
         salutation:
+          description: Salutation of the contact person at the address
           type: string
           example: Mr
           nullable: true
         phone_number:
+          description: Phone number of the address
           type: string
           example: 111-111-1111
           nullable: true
         fax:
+          description: Fax number of the address
           type: string
           example: 122-111-1111
           nullable: true
         email:
+          description: Email address of the address
           type: string
           example: elon@musk.com
           nullable: true
         website:
+          description: Website of the address
           type: string
           example: https://elonmusk.com
           nullable: true
         notes:
+          description: Additional notes
           type: string
           title: Notes
           example: Address notes or delivery instructions.
@@ -651,10 +742,12 @@ components:
           example: credit_card
           nullable: true
         iban:
+          description: The International Bank Account Number (IBAN).
           type: string
           example: CH2989144532982975332
           nullable: true
         bic:
+          description: The Bank Identifier Code (BIC).
           type: string
           example: AUDSCHGGXXX
           nullable: true
@@ -763,46 +856,56 @@ components:
       additionalProperties: false
       properties:
         id:
+          description: Unique identifier for the company
           type: string
           readOnly: true
           example: '12345'
         name:
+          title: Name
+          description: Name of the company
           type: string
           example: SpaceX
           minLength: 1
         interaction_count:
+          description: Number of interactions
           type: integer
           example: 1
           readOnly: true
           nullable: true
         owner_id:
+          description: Owner ID
           type: string
           example: '12345'
+          nullable: true
         image:
+          description: The Image URL of the company
           type: string
           example: https://www.spacex.com/static/images/share.jpg
           nullable: true
         description:
+          description: A description of the company
           type: string
           example: Space Exploration Technologies Corp. is an American aerospace manufacturer, space transportation services and communications company headquartered in Hawthorne, California.
           nullable: true
         vat_number:
-          description: VAT number
+          description: The VAT number of the company
           type: string
           example: BE0689615164
           nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
         status:
+          description: The status of the company
           type: string
           example: Open
           nullable: true
         fax:
+          description: The fax number of the company
           type: string
           example: '+12129876543'
           nullable: true
         annual_revenue:
-          description: Annual revenue
+          description: The annual revenue of the company
           type: string
           example: +$35m
           nullable: true
@@ -812,22 +915,24 @@ components:
           example: 500-1000
           nullable: true
         industry:
-          description: Industry
+          description: The industry represents the type of business the company is in.
           type: string
           example: Apparel
           nullable: true
         ownership:
-          description: Ownership
+          description: The ownership indicates the type of ownership of the company.
           type: string
           example: Public
           nullable: true
         sales_tax_number:
           title: Sales tax number
+          description: A sales tax number is a unique number that identifies a company for tax purposes.
           type: string
           example: 12456EN
           nullable: true
         payee_number:
           title: Payee number
+          description: A payee number is a unique number that identifies a payee for tax purposes.
           type: string
           example: 78932EN
           nullable: true
@@ -893,9 +998,11 @@ components:
             id:
               type: string
               example: '12345'
+              nullable: true
             name:
               type: string
               example: Customer Account
+              nullable: true
         custom_fields:
           type: array
           items:
@@ -903,17 +1010,20 @@ components:
         tags:
           $ref: '#/components/schemas/Tags'
         read_only:
+          description: Whether the company is read-only or not
           type: boolean
           title: Read-only
           example: false
           nullable: true
         last_activity_at:
+          description: Last activity date
           type: string
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
           nullable: true
         deleted:
+          description: Whether the company is deleted or not
           type: boolean
           example: false
           readOnly: true
@@ -930,25 +1040,31 @@ components:
           format: date
           nullable: true
         updated_by:
+          description: Updated by user ID
           type: string
           example: '12345'
           readOnly: true
           nullable: true
         created_by:
+          description: Created by user ID
           type: string
           example: '12345'
           readOnly: true
           nullable: true
         updated_at:
+          description: Last updated date
           type: string
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+          nullable: true
         created_at:
+          description: Creation date
           type: string
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+          nullable: true
     Contact:
       type: object
       x-apideck-schema-id: Contact
@@ -1001,19 +1117,23 @@ components:
         - email
       properties:
         id:
+          description: Unique identifier for the contact.
           type: string
           example: '12345'
           readOnly: true
         name:
+          description: Full name of the contact.
           type: string
           example: Elon Musk
           minLength: 1
           nullable: true
         owner_id:
+          description: The owner of the contact.
           type: string
           example: '54321'
           nullable: true
         type:
+          description: The type of the contact.
           type: string
           example: personal
           x-apideck-enum-id: contacts.type
@@ -1024,42 +1144,52 @@ components:
             - personal
           nullable: true
         company_id:
+          description: The company the contact is associated with.
           type: string
           example: '23456'
           nullable: true
         company_name:
+          description: The name of the company the contact is associated with.
           type: string
           example: '23456'
           nullable: true
         lead_id:
+          description: The lead the contact is associated with.
           type: string
           example: '34567'
           nullable: true
         first_name:
+          description: The first name of the contact.
           type: string
           example: Elon
           nullable: true
         middle_name:
+          description: The middle name of the contact.
           type: string
           example: D.
           nullable: true
         last_name:
+          description: The last name of the contact.
           type: string
           example: Musk
           nullable: true
         prefix:
+          description: The prefix of the contact.
           type: string
           example: Mr.
           nullable: true
         suffix:
+          description: The suffix of the contact.
           type: string
           example: PhD
           nullable: true
         title:
+          description: The job title of the contact.
           type: string
           example: CEO
           nullable: true
         department:
+          description: The department of the contact.
           type: string
           example: Engineering
           nullable: true
@@ -1075,9 +1205,11 @@ components:
             - male
             - female
             - unisex
+          description: The gender of the contact.
           example: female
           nullable: true
         birthday:
+          description: The birthday of the contact.
           type: string
           example: '2000-08-12'
           nullable: true
@@ -1093,28 +1225,34 @@ components:
           example: https://unavatar.io/elon-musk
           nullable: true
         lead_source:
+          description: The lead source of the contact.
           type: string
           example: Cold Call
           nullable: true
         fax:
+          description: The fax number of the contact.
           type: string
           example: '+12129876543'
           nullable: true
         description:
+          description: The description of the contact.
           type: string
           title: Description
           example: Internal champion
           nullable: true
         current_balance:
+          description: The current balance of the contact.
           type: number
           title: Current Balance
           example: 10.5
           nullable: true
         status:
+          description: The status of the contact.
           type: string
           example: open
           nullable: true
         active:
+          description: The active status of the contact.
           type: boolean
           example: true
           nullable: true
@@ -1149,30 +1287,35 @@ components:
         tags:
           $ref: '#/components/schemas/Tags'
         first_call_at:
+          description: The first call date of the contact.
           type: string
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
           nullable: true
         first_email_at:
+          description: The first email date of the contact.
           type: string
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
           nullable: true
         last_activity_at:
+          description: The last activity date of the contact.
           type: string
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
           nullable: true
         updated_at:
+          description: The last update date of the contact.
           type: string
           format: date-time
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
           nullable: true
         created_at:
+          description: The creation date of the contact.
           type: string
           format: date-time
           example: '2017-08-12T20:43:21.291Z'
@@ -2498,6 +2641,7 @@ components:
             - billing
             - other
           example: primary
+          nullable: true
     FirstName:
       type: string
       title: First name
@@ -3127,50 +3271,62 @@ components:
       additionalProperties: false
       properties:
         id:
+          description: Unique identifier for the contact.
           type: string
           example: '12345'
           readOnly: true
         name:
+          description: Full name of the lead.
           type: string
           example: Elon Musk
           minLength: 1
         company_name:
+          description: The name of the company the lead is associated with.
           type: string
           example: Spacex
           nullable: true
         owner_id:
+          description: The owner of the lead.
           type: string
           example: '54321'
           nullable: true
         company_id:
+          description: The company the lead is associated with.
           type: string
           example: '2'
           nullable: true
-        contact_id:
+        lead_id:
+          description: The identifier of the lead.
           type: string
           example: '2'
           nullable: true
         lead_source:
+          description: The source of the lead.
           type: string
           example: Cold Call
           nullable: true
         first_name:
+          description: The first name of the lead.
           type: string
           example: Elon
           nullable: true
         last_name:
+          description: The last name of the lead.
           type: string
           example: Musk
           nullable: true
         description:
+          description: The description of the lead.
           type: string
           example: A thinker
           nullable: true
         prefix:
+          description: The prefix of the lead.
           type: string
           example: Sir
           nullable: true
         title:
+          description: The job title of the lead.
           type: string
           example: CEO
           nullable: true
@@ -3184,12 +3340,14 @@ components:
           example: New
           nullable: true
         monetary_amount:
+          description: The monetary amount of the lead.
           type: number
           example: 75000
           nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
         fax:
+          description: The fax number of the lead.
           type: string
           example: '+12129876543'
           nullable: true
@@ -3225,12 +3383,14 @@ components:
           example: '2020-09-30T07:43:32.000Z'
           pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$
           readOnly: true
+          nullable: true
         created_at:
           type: string
           description: Date created in ISO 8601 format
           example: '2020-09-30T07:43:32.000Z'
           pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$
           readOnly: true
+          nullable: true
     LeadsFilter:
       type: object
       x-apideck-schema-id: LeadsFilter
@@ -3409,56 +3569,74 @@ components:
       additionalProperties: false
       properties:
         id:
+          description: The unique identifier of the note
           type: string
           readOnly: true
           example: '12345'
         title:
+          description: The title of the note
           type: string
           example: Meeting Notes
+          nullable: true
         content:
+          description: The content of the note.
           type: string
           example: Office hours are 9AM-6PM
+          nullable: true
         owner_id:
+          description: The user that owns the note.
           type: string
           example: '12345'
+          nullable: true
         contact_id:
+          description: The contact that is related to the note.
           type: string
           example: '12345'
           nullable: true
         company_id:
+          description: The company that is related to the note.
           type: string
           example: '12345'
           nullable: true
         opportunity_id:
+          description: The opportunity that is related to the note.
           type: string
           example: '12345'
           nullable: true
         lead_id:
+          description: The lead that is related to the note.
           type: string
           example: '12345'
           nullable: true
         active:
+          description: Whether the Note is active or not.
           type: boolean
           example: true
           nullable: true
         updated_by:
+          description: The user that last updated the note.
           type: string
           example: '12345'
           readOnly: true
           nullable: true
         created_by:
+          description: The user that created the note.
           type: string
           example: '12345'
           readOnly: true
           nullable: true
         updated_at:
+          description: The timestamp when the note was last updated
           type: string
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+          nullable: true
         created_at:
+          description: The timestamp when the note was created
           type: string
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+          nullable: true
     OpportunitiesFilter:
       type: object
       x-apideck-schema-id: OpportunitiesFilter
@@ -3760,12 +3938,14 @@ components:
           format: date-time
           description: The date and time when the opportunity was last updated.
           readOnly: true
+          nullable: true
         created_at:
           type: string
           example: '2020-09-30T07:43:32.000Z'
           format: date-time
           description: The date and time when the opportunity was created.
           readOnly: true
+          nullable: true
     PassThroughQuery:
       type: object
       additionalProperties: true
@@ -3819,30 +3999,36 @@ components:
       properties:
         id:
           type: string
+          description: Unique identifier of the phone number
           example: '12345'
           nullable: true
         country_code:
           title: Country code
+          description: The country code of the phone number, e.g. +1
           type: string
           example: '1'
           nullable: true
         area_code:
           title: Area code
+          description: The area code of the phone number, e.g. 323
           type: string
           example: '323'
           nullable: true
         number:
           type: string
           title: Phone number
+          description: The phone number
           example: 111-111-1111
           minLength: 1
         extension:
           type: string
           title: Phone extension
+          description: The extension of the phone number
           example: '105'
           nullable: true
         type:
           type: string
+          description: The type of phone number
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -3857,6 +4043,7 @@ components:
             - personal
             - other
           example: primary
+          nullable: true
     Pipeline:
       type: object
       x-apideck-schema-id: Pipeline
@@ -3875,28 +4062,35 @@ components:
       x-pii: []
       properties:
         id:
+          description: The unique identifier of the Pipeline.
           type: string
           example: default
         name:
+          description: The name of the Pipeline.
           type: string
           example: Sales Pipeline
           minLength: 1
         currency:
           $ref: '#/components/schemas/Currency'
         archived:
+          description: Whether the Pipeline is archived or not.
           type: boolean
           example: false
         active:
+          description: Whether the Pipeline is active or not.
           type: boolean
           example: false
         display_order:
+          description: The order in which the Pipeline is displayed in the UI.
           type: integer
           example: 1
           nullable: true
         win_probability_enabled:
+          description: Whether the Pipeline has win probability enabled or not.
           type: boolean
           example: true
         stages:
+          description: The Pipeline Stages.
           type: array
           items:
             x-apideck-weights:
@@ -3909,22 +4103,31 @@ components:
             additionalProperties: false
             properties:
               id:
+                description: The unique identifier of the Pipeline Stage.
                 type: string
                 example: contractsent
                 readOnly: true
+                nullable: true
               name:
+                description: The name of the Pipeline Stage.
                 type: string
                 example: Contract Sent
+                nullable: true
               value:
+                description: The value of the Pipeline Stage.
                 type: string
                 example: CONTRACT_SENT
+                nullable: true
               win_probability:
                 type: integer
                 example: 50
                 description: The expected probability of winning an Opportunity in this Pipeline Stage. Valid values are [0-100].
+                nullable: true
               display_order:
+                description: The order in which the Pipeline Stage is displayed in the UI.
                 type: integer
                 example: 1
+                nullable: true
         updated_at:
           type: string
           title: Updated at (timestamp)
@@ -3960,14 +4163,17 @@ components:
         type: critical
       properties:
         id:
+          description: Unique identifier of the social link
           type: string
           example: '12345'
           nullable: true
         url:
+          description: URL of the social link, e.g. https://www.twitter.com/apideck
           type: string
-          example: https://www.twitter.com/apideck-io
+          example: https://www.twitter.com/apideck
           minLength: 1
         type:
+          description: Type of the social link, e.g. twitter
           type: string
           example: twitter
           nullable: true
@@ -4419,14 +4625,17 @@ components:
         - email
       properties:
         id:
+          description: The unique identifier for the user
           type: string
           example: '12345'
           readOnly: true
         parent_id:
+          description: The parent user id
           type: string
           example: '54321'
           nullable: true
         username:
+          description: The username of the user
           type: string
           example: masterofcoin
           nullable: true
@@ -4472,6 +4681,7 @@ components:
           example: A description
           nullable: true
         image:
+          description: The URL of the user's avatar
           type: string
           example: https://logo.clearbit.com/spacex.com?s=128
           nullable: true
@@ -4481,13 +4691,16 @@ components:
           description: language code according to ISO 639-1. For the United States - EN
           nullable: true
         status:
+          description: The status of the user
           type: string
           example: active
           nullable: true
         password:
+          description: The password of the user
           type: string
           example: supersecretpassword
           writeOnly: true
+          nullable: true
         addresses:
           type: array
           items:
@@ -4501,11 +4714,13 @@ components:
           items:
             $ref: '#/components/schemas/Email'
         updated_at:
+          description: The date and time when the user was last updated.
           type: string
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
           nullable: true
         created_at:
+          description: The date and time when the user was created.
           type: string
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
@@ -4522,14 +4737,17 @@ components:
         id: edge-case
       properties:
         id:
+          description: Unique identifier for the website
           type: string
           example: '12345'
           nullable: true
         url:
+          description: The website URL
           type: string
           example: http://example.com
           minLength: 1
         type:
+          description: The type of website
           type: string
           x-apideck-enum-id: websites.type
           enum:
@@ -4539,6 +4757,7 @@ components:
             - personal
             - other
           example: primary
+          nullable: true
   parameters:
     activitiesFilter:
       name: filter
@@ -5284,7 +5503,7 @@ paths:
                 social_links: [
                   {
                     id: '12345',
-                    url: 'https://www.twitter.com/apideck-io',
+                    url: 'https://www.twitter.com/apideck',
                     type: 'twitter'
                   }
                 ],
@@ -5506,7 +5725,7 @@ paths:
                 social_links: [
                   {
                     id: '12345',
-                    url: 'https://www.twitter.com/apideck-io',
+                    url: 'https://www.twitter.com/apideck',
                     type: 'twitter'
                   }
                 ],
@@ -5775,7 +5994,7 @@ paths:
                 social_links: [
                   {
                     id: '12345',
-                    url: 'https://www.twitter.com/apideck-io',
+                    url: 'https://www.twitter.com/apideck',
                     type: 'twitter'
                   }
                 ],
@@ -5980,7 +6199,7 @@ paths:
                 social_links: [
                   {
                     id: '12345',
-                    url: 'https://www.twitter.com/apideck-io',
+                    url: 'https://www.twitter.com/apideck',
                     type: 'twitter'
                   }
                 ],
@@ -6538,7 +6757,7 @@ paths:
                 company_name: 'Spacex',
                 owner_id: '54321',
                 company_id: '2',
-                contact_id: '2',
+                lead_id: '2',
                 lead_source: 'Cold Call',
                 first_name: 'Elon',
                 last_name: 'Musk',
@@ -6588,7 +6807,7 @@ paths:
                 social_links: [
                   {
                     id: '12345',
-                    url: 'https://www.twitter.com/apideck-io',
+                    url: 'https://www.twitter.com/apideck',
                     type: 'twitter'
                   }
                 ],
@@ -6734,7 +6953,7 @@ paths:
                 company_name: 'Spacex',
                 owner_id: '54321',
                 company_id: '2',
-                contact_id: '2',
+                lead_id: '2',
                 lead_source: 'Cold Call',
                 first_name: 'Elon',
                 last_name: 'Musk',
@@ -6784,7 +7003,7 @@ paths:
                 social_links: [
                   {
                     id: '12345',
-                    url: 'https://www.twitter.com/apideck-io',
+                    url: 'https://www.twitter.com/apideck',
                     type: 'twitter'
                   }
                 ],

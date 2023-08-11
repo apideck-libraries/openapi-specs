@@ -1123,6 +1123,7 @@ components:
       description: The type of resource. Could be file, folder or url
       readOnly: true
       example: file
+      nullable: true
     FilesFilter:
       type: object
       x-apideck-schema-id: FilesFilter
@@ -1846,14 +1847,17 @@ components:
           example: https://www.box.com/s/vspke7y05sb214wjokpk
           description: The URL that can be used to view the file.
           readOnly: true
+          nullable: true
         download_url:
           type: string
           example: https://www.box.com/shared/static/rh935iit6ewrmw0unyul.jpeg
           description: The URL that can be used to download the file.
+          nullable: true
         target_id:
           type: string
           writeOnly: true
           description: The ID of the file or folder to link.
+          nullable: true
         target:
           $ref: '#/components/schemas/SharedLinkTarget'
         scope:
@@ -1864,10 +1868,12 @@ components:
             - company
           example: company
           description: The scope of the shared link.
+          nullable: true
         password_protected:
           type: boolean
           readOnly: true
           description: Indicated if the shared link is password protected.
+          nullable: true
         password:
           type: string
           writeOnly: true
@@ -1894,6 +1900,7 @@ components:
           type: string
           description: The name of the file
           example: sample.jpg
+          nullable: true
         type:
           $ref: '#/components/schemas/FileType'
       readOnly: true
@@ -2028,6 +2035,7 @@ components:
           type: string
           description: The name of the file
           example: sample.jpg
+          nullable: true
         description:
           type: string
           description: Optional description of the file
@@ -2039,6 +2047,7 @@ components:
           type: string
           description: The full path of the file or folder (includes the file name)
           example: /Documents/sample.jpg
+          nullable: true
         mime_type:
           type: string
           description: The MIME type of the file.
@@ -2080,6 +2089,7 @@ components:
             type: string
             example: application/pdf
             description: An available file format (typically MIME type) to export this file.
+          nullable: true
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:

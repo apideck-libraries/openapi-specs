@@ -279,11 +279,13 @@ components:
         row_version: edge-case
       properties:
         id:
+          description: Unique identifier for the address.
           type: string
           example: '123'
           nullable: true
         type:
           type: string
+          description: The type of address.
           x-apideck-enum-id: addresses.type
           enum:
             - primary
@@ -294,12 +296,14 @@ components:
             - billing
             - other
           example: primary
+          nullable: true
         string:
           type: string
           description: The address string. Some APIs don't provide structured address data.
           example: 25 Spring Street, Blackburn, VIC 3130
           nullable: true
         name:
+          description: The name of the address.
           type: string
           example: HQ US
           nullable: true
@@ -349,10 +353,12 @@ components:
           description: country code according to ISO 3166-1 alpha-2.
           nullable: true
         latitude:
+          description: Latitude of the address
           type: string
           example: '40.759211'
           nullable: true
         longitude:
+          description: Longitude of the address
           type: string
           example: '-73.984638'
           nullable: true
@@ -362,30 +368,37 @@ components:
           description: Address field that holds a sublocality, such as a county
           nullable: true
         contact_name:
+          description: Name of the contact person at the address
           type: string
           example: Elon Musk
           nullable: true
         salutation:
+          description: Salutation of the contact person at the address
           type: string
           example: Mr
           nullable: true
         phone_number:
+          description: Phone number of the address
           type: string
           example: 111-111-1111
           nullable: true
         fax:
+          description: Fax number of the address
           type: string
           example: 122-111-1111
           nullable: true
         email:
+          description: Email address of the address
           type: string
           example: elon@musk.com
           nullable: true
         website:
+          description: Website of the address
           type: string
           example: https://elonmusk.com
           nullable: true
         notes:
+          description: Additional notes
           type: string
           title: Notes
           example: Address notes or delivery instructions.
@@ -2147,6 +2160,7 @@ components:
             - billing
             - other
           example: primary
+          nullable: true
     FirstName:
       type: string
       title: First name
@@ -2744,30 +2758,36 @@ components:
       properties:
         id:
           type: string
+          description: Unique identifier of the phone number
           example: '12345'
           nullable: true
         country_code:
           title: Country code
+          description: The country code of the phone number, e.g. +1
           type: string
           example: '1'
           nullable: true
         area_code:
           title: Area code
+          description: The area code of the phone number, e.g. 323
           type: string
           example: '323'
           nullable: true
         number:
           type: string
           title: Phone number
+          description: The phone number
           example: 111-111-1111
           minLength: 1
         extension:
           type: string
           title: Phone extension
+          description: The extension of the phone number
           example: '105'
           nullable: true
         type:
           type: string
+          description: The type of phone number
           x-apideck-enum-id: phone_numbers.type
           enum:
             - primary
@@ -2782,6 +2802,7 @@ components:
             - personal
             - other
           example: primary
+          nullable: true
     PhotoUrl:
       type: string
       title: Photo URL
@@ -3097,14 +3118,17 @@ components:
         id: edge-case
       properties:
         id:
+          description: Unique identifier for the website
           type: string
           example: '12345'
           nullable: true
         url:
+          description: The website URL
           type: string
           example: http://example.com
           minLength: 1
         type:
+          description: The type of website
           type: string
           x-apideck-enum-id: websites.type
           enum:
@@ -3114,6 +3138,7 @@ components:
             - personal
             - other
           example: primary
+          nullable: true
   securitySchemes:
     apiKey:
       type: apiKey

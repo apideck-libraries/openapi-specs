@@ -713,6 +713,7 @@ components:
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
+      nullable: true
     CreatedBy:
       type: string
       title: Created by
@@ -986,6 +987,7 @@ components:
           type: string
           description: The display name of the drive group
           example: accounting
+          nullable: true
         description:
           $ref: '#/components/schemas/Description'
         updated_by:
@@ -1019,11 +1021,13 @@ components:
       format: date-time
       example: '2022-09-30T07:43:32.000Z'
       readOnly: true
+      nullable: true
     FileSize:
       type: integer
       x-apideck-schema-id: FileSize
       description: The size of the file in bytes
       example: 1810673
+      nullable: true
     FileStorageEventType:
       x-apideck-enum-id: file-storage.event_type
       type: string
@@ -1196,16 +1200,19 @@ components:
           type: string
           description: Optional description of the folder
           example: My Personal Documents
+          nullable: true
         path:
           type: string
           description: The full path of the folder (includes the folder name)
           example: /Personal/Documents
           readOnly: true
+          nullable: true
         size:
           type: integer
           description: The size of the folder in bytes
           example: 1810673
           readOnly: true
+          nullable: true
         owner:
           $ref: '#/components/schemas/Owner'
         parent_folders:
@@ -1636,6 +1643,7 @@ components:
           type: string
           description: The name of the folder
           example: Personal
+          nullable: true
       required:
         - id
     Links:
@@ -1766,11 +1774,13 @@ components:
           description: Email of the owner
           example: hello@apideck.com
           readOnly: true
+          nullable: true
         name:
           type: string
           description: Name of the owner
           example: Elon Musk
           readOnly: true
+          nullable: true
     ParentFolderId:
       type: string
       x-apideck-schema-id: ParentFolderId
@@ -2022,6 +2032,7 @@ components:
           type: string
           description: Optional description of the file
           example: A sample image
+          nullable: true
         type:
           $ref: '#/components/schemas/FileType'
         path:
@@ -2032,6 +2043,7 @@ components:
           type: string
           description: The MIME type of the file.
           example: image/jpeg
+          nullable: true
         downloadable:
           type: boolean
           description: Whether the current user can download this file

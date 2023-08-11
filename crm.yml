@@ -1008,6 +1008,7 @@ components:
           type: string
           example: Elon Musk
           minLength: 1
+          nullable: true
         owner_id:
           type: string
           example: '54321'
@@ -1170,11 +1171,13 @@ components:
           format: date-time
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
+          nullable: true
         created_at:
           type: string
           format: date-time
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
+          nullable: true
       additionalProperties: false
     ContactsFilter:
       type: object
@@ -2162,18 +2165,22 @@ components:
       properties:
         id:
           title: ID
+          description: Unique identifier for the custom field.
           type: string
           example: '2389328923893298'
+          nullable: true
         name:
           title: Name
           type: string
           description: Name of the custom field.
           example: employee_level
+          nullable: true
         description:
           title: Description
           type: string
           description: More information about the custom field
           example: Employee Level
+          nullable: true
         value:
           anyOf:
             - type: string
@@ -2470,13 +2477,18 @@ components:
         id:
           type: string
           example: '123'
+          description: Unique identifier for the email address
+          nullable: true
         email:
           type: string
           format: email
+          description: Email address
           example: elon@musk.com
           minLength: 1
+          nullable: true
         type:
           type: string
+          description: Email type
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -3129,6 +3141,7 @@ components:
         owner_id:
           type: string
           example: '54321'
+          nullable: true
         company_id:
           type: string
           example: '2'
@@ -3879,6 +3892,7 @@ components:
         display_order:
           type: integer
           example: 1
+          nullable: true
         win_probability_enabled:
           type: boolean
           example: true
@@ -3926,6 +3940,7 @@ components:
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+          nullable: true
       additionalProperties: false
     RowVersion:
       type: string
@@ -3972,6 +3987,7 @@ components:
         type: string
       example:
         - New
+      nullable: true
     TooManyRequestsResponse:
       type: object
       x-apideck-schema-id: TooManyRequests
@@ -4488,10 +4504,12 @@ components:
           type: string
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
+          nullable: true
         created_at:
           type: string
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
+          nullable: true
     Website:
       type: object
       x-apideck-schema-id: Website

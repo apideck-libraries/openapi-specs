@@ -670,7 +670,7 @@ components:
       additionalProperties: false
       properties:
         employee_id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdOrNull'
         net_pay:
           type: number
           description: The employee's net pay. Only available when payroll has been processed
@@ -837,6 +837,7 @@ components:
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
+      nullable: true
     CreatedBy:
       type: string
       title: Created by
@@ -1428,18 +1429,22 @@ components:
       properties:
         id:
           title: ID
+          description: Unique identifier for the custom field.
           type: string
           example: '2389328923893298'
+          nullable: true
         name:
           title: Name
           type: string
           description: Name of the custom field.
           example: employee_level
+          nullable: true
         description:
           title: Description
           type: string
           description: More information about the custom field
           example: Employee Level
+          nullable: true
         value:
           anyOf:
             - type: string
@@ -1714,13 +1719,18 @@ components:
         id:
           type: string
           example: '123'
+          description: Unique identifier for the email address
+          nullable: true
         email:
           type: string
           format: email
+          description: Email address
           example: elon@musk.com
           minLength: 1
+          nullable: true
         type:
           type: string
+          description: Email type
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -1931,7 +1941,7 @@ components:
           type: object
           properties:
             id:
-              $ref: '#/components/schemas/WritableId'
+              $ref: '#/components/schemas/IdOrNull'
             name:
               title: Manager name
               description: The name of the manager, often a combination of their first and last names.
@@ -2119,9 +2129,9 @@ components:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdOrNull'
         employee_id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdOrNull'
         title:
           $ref: '#/components/schemas/Title'
         role:
@@ -2183,7 +2193,7 @@ components:
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdOrNull'
         job_id:
           type: string
           title: Job ID
@@ -3004,7 +3014,7 @@ components:
         department: medium
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdOrNull'
         employee_id:
           type: string
           description: Id of the employee
@@ -3059,6 +3069,13 @@ components:
       description: A unique identifier for an object.
       example: '12345'
       readOnly: true
+    IdOrNull:
+      type: string
+      title: ID
+      description: A unique identifier for an object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Language:
       type: string
       example: EN
@@ -3260,7 +3277,7 @@ components:
       additionalProperties: false
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdOrNull'
         company_id:
           $ref: '#/components/schemas/CompanyId'
         processed:
@@ -3329,6 +3346,7 @@ components:
           type: number
           description: The gross pay amount for the payroll.
           example: 27966.23
+          nullable: true
         employer_taxes:
           type: number
           description: The total amount of employer paid taxes for the payroll.
@@ -3620,7 +3638,7 @@ components:
       additionalProperties: false
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdOrNull'
         first_name:
           $ref: '#/components/schemas/FirstName'
         last_name:
@@ -3632,15 +3650,18 @@ components:
         initials:
           type: string
           title: Initials
+          description: Initials of the person
           example: EM
           nullable: true
         birthday:
           type: string
+          description: Date of birth
           example: '2000-08-12'
           format: date
           nullable: true
         deceased_on:
           type: string
+          description: Date of death
           example: '2000-08-12'
           format: date
           nullable: true
@@ -3662,6 +3683,7 @@ components:
         type: string
       example:
         - New
+      nullable: true
     Team:
       type: object
       x-apideck-schema-id: Team
@@ -3863,11 +3885,13 @@ components:
           title: Employee ID
           description: ID of the employee
           example: '12345'
+          nullable: true
         policy_id:
           type: string
           title: Policy ID
           description: ID of the policy
           example: '12345'
+          nullable: true
         status:
           type: string
           title: Status
@@ -3881,26 +3905,31 @@ components:
           description: The status of the time off request.
           x-apideck-enum-id: time-off-requests.status
           example: approved
+          nullable: true
         description:
           type: string
           title: Description
           description: Description of the time off request.
           example: Enjoying some sun.
+          nullable: true
         start_date:
           type: string
           description: The start date of the time off request.
           pattern: ^\d{4}-\d{2}-\d{2}$
           example: '2022-04-01'
+          nullable: true
         end_date:
           type: string
           description: The end date of the time off request.
           pattern: ^\d{4}-\d{2}-\d{2}$
           example: '2022-04-01'
+          nullable: true
         request_date:
           type: string
           description: The date the request was made.
           pattern: ^\d{4}-\d{2}-\d{2}$
           example: '2022-03-21'
+          nullable: true
         request_type:
           type: string
           enum:
@@ -3914,11 +3943,13 @@ components:
           description: The type of request
           x-apideck-enum-id: time-off-requests.type
           example: vacation
+          nullable: true
         approval_date:
           type: string
           description: The date the request was approved
           pattern: ^\d{4}-\d{2}-\d{2}$
           example: '2022-03-21'
+          nullable: true
         units:
           type: string
           enum:
@@ -3928,10 +3959,12 @@ components:
           description: 'The unit of time off requested. Possible values include: `hours`, `days`, or `other`.'
           x-apideck-enum-id: time-off-requests.units
           example: hours
+          nullable: true
         amount:
           type: number
           description: The amount of time off requested.
           example: 3.5
+          nullable: true
         notes:
           type: object
           properties:
@@ -3939,10 +3972,12 @@ components:
               type: string
               title: Employee note
               example: Relaxing on the beach for a few hours.
+              nullable: true
             manager:
               type: string
               title: Manager note
               example: Enjoy!
+              nullable: true
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -4527,7 +4562,6 @@ paths:
                   sub_type: 'full_time'
                 },
                 manager: {
-                  id: '12345',
                   name: 'Elon Musk',
                   first_name: 'Elon',
                   last_name: 'Musk',
@@ -4843,7 +4877,6 @@ paths:
                   sub_type: 'full_time'
                 },
                 manager: {
-                  id: '12345',
                   name: 'Elon Musk',
                   first_name: 'Elon',
                   last_name: 'Musk',

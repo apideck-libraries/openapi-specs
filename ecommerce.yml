@@ -531,6 +531,7 @@ components:
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
+      nullable: true
     CreatedBy:
       type: string
       title: Created by
@@ -1109,18 +1110,22 @@ components:
       properties:
         id:
           title: ID
+          description: Unique identifier for the custom field.
           type: string
           example: '2389328923893298'
+          nullable: true
         name:
           title: Name
           type: string
           description: Name of the custom field.
           example: employee_level
+          nullable: true
         description:
           title: Description
           type: string
           description: More information about the custom field
           example: Employee Level
+          nullable: true
         value:
           anyOf:
             - type: string
@@ -1321,37 +1326,44 @@ components:
           title: Address line 1
           description: Address line 1 of the billing address.
           example: 123 Main Street
+          nullable: true
         line2:
           type: string
           title: Address line 2
           description: Address line 2 of the billing address.
           example: Apt 1
+          nullable: true
         company_name:
           type: string
           example: Acme Inc.
           title: Company Name
           description: Company name of the customer
+          nullable: true
         city:
           type: string
           title: City
           description: City of the billing address.
           example: New York
+          nullable: true
         state:
           type: string
           title: State
           description: State/province of the billing address.
           example: NY
+          nullable: true
         postal_code:
           type: string
           title: Postal code
           description: Postal/ZIP code of the billing address.
           example: '10001'
+          nullable: true
         country:
           type: string
           title: Country
           description: Country of the billing address.
           maxLength: 2
           example: US
+          nullable: true
     EcommerceCustomer:
       type: object
       x-apideck-schema-id: EcommerceCustomer
@@ -1383,21 +1395,25 @@ components:
           example: John Doe
           title: Full Name
           description: Full name of the customer
+          nullable: true
         first_name:
           type: string
           example: John
           title: First Name
           description: First name of the customer
+          nullable: true
         last_name:
           type: string
           example: Doe
           title: Last Name
           description: Last name of the customer
+          nullable: true
         company_name:
           type: string
           example: Acme Inc.
           title: Company Name
           description: Company name of the customer
+          nullable: true
         status:
           type: string
           example: active
@@ -1406,6 +1422,7 @@ components:
             - archived
           title: Customer status
           description: The current status of the customer
+          nullable: true
           x-apideck-enum-id: ecommerce.customer.status
         currency:
           $ref: '#/components/schemas/Currency'
@@ -1415,12 +1432,14 @@ components:
             $ref: '#/components/schemas/Email'
           title: Email Addresses
           description: An array of email addresses for the customer.
+          nullable: true
         phone_numbers:
           type: array
           items:
             $ref: '#/components/schemas/PhoneNumber'
           title: Phone Numbers
           description: An array of phone numbers for the customer.
+          nullable: true
         addresses:
           type: array
           items:
@@ -1448,37 +1467,43 @@ components:
                   - other
                 example: billing
               id:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/IdOrNull'
               line1:
                 type: string
                 example: Main street
                 title: Address Line 1
                 description: First line of the street address of the customer
+                nullable: true
               line2:
                 type: string
                 example: 'apt #'
                 title: Address Line 2
                 description: Second line of the street address of the customer
+                nullable: true
               city:
                 type: string
                 example: Anytown
                 title: City
                 description: City of the customer
+                nullable: true
               state:
                 type: string
                 example: Ohio
                 title: State
                 description: State of the customer
+                nullable: true
               postal_code:
                 type: string
                 example: '12345'
                 title: Postal Code
                 description: Postal code of the customer
+                nullable: true
               country:
                 type: string
                 example: US
                 title: Country
                 description: Country of the customer
+                nullable: true
           title: Addresses
           description: An array of addresses for the customer.
         orders:
@@ -1523,16 +1548,19 @@ components:
           title: Discount code
           description: The code used to apply the discount.
           example: SUMMER20
+          nullable: true
         amount:
           type: string
           title: Discount amount
           description: The fixed amount of the discount.
           example: '5.99'
+          nullable: true
         percentage:
           type: string
           title: Discount percentage
           description: The percentage of the discount.
           example: '0.1'
+          nullable: true
     EcommerceOrder:
       type: object
       x-apideck-schema-id: EcommerceOrder
@@ -1575,6 +1603,7 @@ components:
           title: Order number
           description: Order number, if any.
           example: '123456789'
+          nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
         discounts:
@@ -1586,26 +1615,31 @@ components:
           title: Sub-total amount
           description: Sub-total amount, normally before tax.
           example: '45.17'
+          nullable: true
         shipping_cost:
           type: string
           title: Shipping cost
           description: Shipping cost, if any.
           example: '5.17'
+          nullable: true
         total_discount:
           type: string
           title: Total discount
           description: Total discount, if any.
           example: '5.5'
+          nullable: true
         total_tax:
           type: string
           title: Total tax
           description: Total tax, if any.
           example: '5.16'
+          nullable: true
         total_amount:
           type: string
           title: Total amount
           description: Total amount due.
           example: '50.17'
+          nullable: true
         status:
           $ref: '#/components/schemas/EcommerceOrderStatus'
         payment_status:
@@ -1622,6 +1656,7 @@ components:
             - voided
             - unknown
           example: paid
+          nullable: true
         fulfillment_status:
           type: string
           x-apideck-enum-id: ecommerce.order.fulfillment_status
@@ -1636,11 +1671,13 @@ components:
             - returned
             - unknown
           example: shipped
+          nullable: true
         payment_method:
           type: string
           title: Payment method
           description: Payment method used for this order.
           example: credit_card
+          nullable: true
         customer:
           $ref: '#/components/schemas/LinkedEcommerceCustomer'
         billing_address:
@@ -1660,6 +1697,7 @@ components:
           title: Note
           description: Note for the order.
           example: Special instructions for delivery
+          nullable: true
         created_at:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
@@ -1689,32 +1727,37 @@ components:
             - product_id
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/IdOrNull'
         product_id:
           type: string
           title: Product ID
           description: A unique identifier for the product associated with the line item.
           example: def456
+          nullable: true
         variant_id:
           type: string
           title: Variant ID
           description: A unique identifier for the variant of the product associated with the line item, if applicable.
           example: ghi789
+          nullable: true
         sku:
           type: string
           title: SKU
           description: The SKU of the product or variant associated with the line item.
           example: MBP123-16GB-SILVER-13
+          nullable: true
         name:
           type: string
           title: Name
           description: The name of the product or variant associated with the line item.
           example: Midnight 16inch MacBook Pro
+          nullable: true
         description:
           type: string
           title: Description
           description: The description of the product or variant associated with the line item.
           example: Powerful and portable, the MacBook Pro is perfect for professionals and creatives.
+          nullable: true
         options:
           type: array
           items:
@@ -1724,41 +1767,49 @@ components:
                 title: Option identifier
                 description: A unique identifier for the option.
                 example: jkl012
+                nullable: true
               name:
                 type: string
                 title: Option Name
                 description: The name of the option.
                 example: Color
+                nullable: true
               value:
                 type: string
                 title: Option Value
                 description: The value of the option.
                 example: Silver
+                nullable: true
         quantity:
           type: string
           title: Quantity
           description: The quantity of the product or variant associated with the line item.
           example: '2'
+          nullable: true
         unit_price:
           type: string
           title: Unit price
           description: The unit price of the product or variant associated with the line item.
           example: '19.99'
+          nullable: true
         tax_rate:
           type: string
           title: Tax rate
           description: The tax rate applied to the product or variant associated with the line item.
           example: '0.08'
+          nullable: true
         tax_amount:
           type: string
           title: Tax amount
           description: The total tax amount applied to the product or variant associated with the line item.
           example: '1.6'
+          nullable: true
         total_amount:
           type: string
           title: Total amount
           description: The total amount for the product(s) or variant associated with the line item, including taxes and discounts.
           example: '43.18'
+          nullable: true
         discounts:
           type: array
           items:
@@ -1775,6 +1826,7 @@ components:
         - archived
         - unknown
       example: active
+      nullable: true
     EcommerceOrdersFilter:
       type: object
       x-apideck-schema-id: EcommerceOrdersFilter
@@ -1811,11 +1863,13 @@ components:
           example: MacBook Pro
           title: Product Name
           description: The name of the product as it should be displayed to customers.
+          nullable: true
         description:
           type: string
           example: Powerful and portable, the MacBook Pro is perfect for professionals and creatives.
           title: Product Description
           description: A detailed description of the product.
+          nullable: true
         status:
           type: string
           enum:
@@ -1824,22 +1878,26 @@ components:
           example: active
           title: Product Status
           description: The current status of the product (active or archived).
+          nullable: true
           x-apideck-enum-id: ecommerce.products.status
         price:
           type: string
           example: '1999.99'
           title: Product Price
           description: The price of the product.
+          nullable: true
         sku:
           type: string
           example: MBP123
           title: Product SKU
           description: The stock keeping unit of the product.
+          nullable: true
         inventory_quantity:
           type: string
           example: '10'
           title: Inventory Quantity
           description: The quantity of the product in stock.
+          nullable: true
         images:
           type: array
           items:
@@ -1848,24 +1906,28 @@ components:
               - url
             properties:
               id:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/IdOrNull'
               url:
                 type: string
                 example: https://example.com/macbook-pro.jpg
                 title: Image URL
                 description: The URL of an image of the product.
+                nullable: true
           title: Product Images
           description: An array of image URLs for the product.
+          nullable: true
         weight:
           type: string
           example: '1.25'
           title: Product Weight
           description: The weight of the product.
+          nullable: true
         weight_unit:
           type: string
           example: lb
           title: Weight Unit
           description: The unit of measurement for the weight of the product.
+          nullable: true
         options:
           type: array
           items:
@@ -1879,11 +1941,13 @@ components:
                 example: '1'
                 title: Option ID
                 description: A unique identifier for the option of the product.
+                nullable: true
               name:
                 type: string
                 example: Color
                 title: Option Name
                 description: The name of the option for the product.
+                nullable: true
               values:
                 type: array
                 items:
@@ -1891,6 +1955,7 @@ components:
                   example: Red
                   title: Option Values
                   description: The possible values of the option for the product.
+                  nullable: true
           title: Product Options
           description: An array of options for the product.
         variants:
@@ -1908,36 +1973,43 @@ components:
                 example: '1'
                 title: Variant ID
                 description: A unique identifier for the variant of the product.
+                nullable: true
               name:
                 type: string
                 example: Midnight 16inch MacBook Pro
                 title: Variant Name
                 description: The name for the variant, used for displaying to customers.
+                nullable: true
               price:
                 type: string
                 example: '1999.99'
                 title: Variant Price
                 description: The price of the variant.
+                nullable: true
               sku:
                 type: string
                 example: MBP123-16GB-SILVER-13
                 title: Variant SKU
                 description: The stock keeping unit of the variant.
+                nullable: true
               inventory_quantity:
                 type: string
                 example: '5'
                 title: Inventory Quantity
                 description: The quantity of the variant in stock.
+                nullable: true
               weight:
                 type: string
                 example: '1.25'
                 title: Weight
                 description: The weight of the variant.
+                nullable: true
               weight_unit:
                 type: string
                 example: lb
                 title: Weight Unit
                 description: The unit of measurement for the weight of the variant.
+                nullable: true
               options:
                 type: array
                 items:
@@ -1948,16 +2020,19 @@ components:
                       example: '1'
                       title: Option ID
                       description: A unique identifier for the option of the variant.
+                      nullable: true
                     name:
                       type: string
                       example: Color
                       title: Option Name
                       description: The name of the option for the variant.
+                      nullable: true
                     value:
                       type: string
                       example: Silver
                       title: Option Value
                       description: The value of the option for the variant.
+                      nullable: true
               images:
                 type: array
                 items:
@@ -1966,17 +2041,19 @@ components:
                     - url
                   properties:
                     id:
-                      $ref: '#/components/schemas/Id'
+                      $ref: '#/components/schemas/IdOrNull'
                     url:
                       type: string
                       example: https://example.com/macbook-pro.jpg
                       title: Image URL
                       description: The URL of an image of the variant.
+                      nullable: true
         tags:
           type: array
           items:
             type: string
             example: Apple
+            nullable: true
           title: Product Tags
           description: An array of tags for the product, used for organization and searching.
         categories:
@@ -1987,12 +2064,13 @@ components:
               - name
             properties:
               id:
-                $ref: '#/components/schemas/Id'
+                $ref: '#/components/schemas/IdOrNull'
               name:
                 type: string
                 example: Laptops
                 title: Product Category Name
                 description: The name of the category.
+                nullable: true
           title: Product Categories
           description: An array of categories for the product, used for organization and searching.
         created_at:
@@ -2013,6 +2091,7 @@ components:
           title: Store name
           description: The store's name
           example: My Store
+          nullable: true
         store_url:
           type: string
           title: Store URL
@@ -2020,6 +2099,7 @@ components:
           format: uri
           pattern: ^https?://
           example: https://mybrand.com/shop
+          nullable: true
         admin_url:
           type: string
           title: Store Admin URL
@@ -2027,6 +2107,7 @@ components:
           format: uri
           pattern: ^https?://
           example: https://mybrand.com/admin
+          nullable: true
         created_at:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
@@ -2045,13 +2126,18 @@ components:
         id:
           type: string
           example: '123'
+          description: Unique identifier for the email address
+          nullable: true
         email:
           type: string
           format: email
+          description: Email address
           example: elon@musk.com
           minLength: 1
+          nullable: true
         type:
           type: string
+          description: Email type
           x-apideck-enum-id: emails.type
           enum:
             - primary
@@ -2374,6 +2460,13 @@ components:
       description: A unique identifier for an object.
       example: '12345'
       readOnly: true
+    IdOrNull:
+      type: string
+      title: ID
+      description: A unique identifier for an object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Language:
       type: string
       example: EN
@@ -2415,26 +2508,31 @@ components:
           title: Customer ID
           description: The ID of the customer this entity is linked to.
           example: '12345'
+          nullable: true
         name:
           type: string
           example: John Doe
           title: Full Name
           description: Full name of the customer
+          nullable: true
         first_name:
           type: string
           example: John
           title: First Name
           description: First name of the customer
+          nullable: true
         last_name:
           type: string
           example: Doe
           title: Last Name
           description: Last name of the customer
+          nullable: true
         company_name:
           type: string
           example: Acme Inc.
           title: Company Name
           description: Company name of the customer
+          nullable: true
         phone_numbers:
           type: array
           items:
@@ -2459,6 +2557,7 @@ components:
           example: '199.99'
           title: Order Total
           description: The total amount of the order.
+          nullable: true
         status:
           $ref: '#/components/schemas/EcommerceOrderStatus'
     Links:

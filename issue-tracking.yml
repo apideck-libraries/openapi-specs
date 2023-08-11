@@ -671,6 +671,7 @@ components:
       format: date-time
       example: '2020-09-30T07:43:32.000Z'
       readOnly: true
+      nullable: true
     CreatedBy:
       type: string
       title: Created by
@@ -1282,18 +1283,22 @@ components:
       properties:
         id:
           title: ID
+          description: Unique identifier for the custom field.
           type: string
           example: '2389328923893298'
+          nullable: true
         name:
           title: Name
           type: string
           description: Name of the custom field.
           example: employee_level
+          nullable: true
         description:
           title: Description
           type: string
           description: More information about the custom field
           example: Employee Level
+          nullable: true
         value:
           anyOf:
             - type: string
@@ -1451,13 +1456,18 @@ components:
         id:
           type: string
           example: '123'
+          description: Unique identifier for the email address
+          nullable: true
         email:
           type: string
           format: email
+          description: Email address
           example: elon@musk.com
           minLength: 1
+          nullable: true
         type:
           type: string
+          description: Email type
           x-apideck-enum-id: emails.type
           enum:
             - primary

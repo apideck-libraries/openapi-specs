@@ -1,3 +1,14 @@
+## Released changes
+
+### HRIS API
+
+- Additional employee resource properties with null support
+- Improved employee_status logic for [Personio](connectors/personio) 
+
+### File Storage API
+
+- Improved calculation of the downloadable detection
+
 ## v9.8.1 - (2023-08-02)
 
 ### ACCOUNTING API
@@ -9,6 +20,7 @@
 - Released [People HR](connectors/people-hr) connector with support for Employees
 - Released [Deel](connectors/deel) connector with support for Employees
 - Released [Employment Hero](connectors/employmenthero) connector with support for Employees
+- Overall improvements of the coverage for employee properties for integrations: ADP Run, ADP Workforce Now, Afas, Alexis HR, BambooHr, BeatheHr, Cascade HR, Ceridian Dayforce, Deel, Employment hero, Factorial HR, Freshteam, Google Workspace, Gusto, Hibob, Humaans, Lokket, Lucca HR, Namely, Nmbrs, Officient, Payfit, Paylocity, People-hr, Personio, Rippling, Sage-hr, Sap-successfactors, Sapling, SD Worx, UKG Pro, Workday, Zenefits, Zoho-people 
 
 - Extended employee resource properties with nullable
 - Improved employees [SAP SuccessFactors](connectors/sap-successfactors) mapping

@@ -1,13 +1,42 @@
-## Released changes
+## v9.9.0 - (2023-08-21)
 
 ### HRIS API
 
-- Additional employee resource properties with null support
+- Release of the [Paycheck](connectors/paycheck) connector with support for the resources: Employee, Department, Company
+- Early-access release of the [Silae](connectors/silae-fr) connector with support for the Employee resource
+- Early-access release of the [Cegid talentsoft](connectors/cegid-talentsoft) connector with support for the Employee resource
+
+- Enhanced additional employee resource properties with null support
 - Improved employee_status logic for [Personio](connectors/personio) 
+- Improved country field mapping for [SD Worx](connectors/sdworx)
+- Extended mapping of [Workday](connectors/workday) with custom fields, photo URL and locations
+- Added employee_status mapping for [Paylocity](connectors/paylocity)
+- Added custom field support for [Sage HR](connectors/sage-hr)
+
+### Issue Tracking API
+
+- Improved handling of null values for the Issue Tracking API
+
+### CRM API
+
+- Improved handling of null values for the Issue Tracking API
 
 ### File Storage API
 
 - Improved calculation of the downloadable detection
+- Improved handling of null values for the File Storage API
+
+### E-commerce API
+
+- Improved handling of null values for the Ecommerce API
+
+### ATS API
+
+- Added the job description field to the [Job](apis/ats/reference#tag/Jobs) resource for [Greenhouse](connectors/greenhouse)
+
+### Accounting API
+
+- Added category tracking support  and improved the supplier mapping for [Quickbooks](connectors/quickbooks)
 
 ## v9.8.1 - (2023-08-02)
 

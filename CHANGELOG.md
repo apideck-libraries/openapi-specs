@@ -1,3 +1,23 @@
+## Released
+
+### HRIS API
+
+- Added jobs fields mappings for [SD Worx](connectors/sdworx)
+- Added support for custom fields for [Sage HR](connectors/sage-hr)
+
+### Accounting API
+
+- Added option to write journal entries for [Xero](connectors/xero)
+- Improved tax rate, company & suppliers mapping for [Quickbooks](connectors/quickbooks)
+
+### CRM API
+
+- Added filter contacts by Company ID for [Salesforce](connectors/salesforce)
+
+### ATS API
+
+- Added custom job board URL setting for [Greenhouse](connectors/greenhouse)
+
 ## v9.9.0 - (2023-08-21)
 
 ### HRIS API

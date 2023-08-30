@@ -25,11 +25,13 @@
 - Release of the [Paycheck](connectors/paycheck) connector with support for the resources: Employee, Department, Company
 - Early-access release of the [Silae](connectors/silae-fr) connector with support for the Employee resource
 - Early-access release of the [Cegid talentsoft](connectors/cegid-talentsoft) connector with support for the Employee resource
+- Early-access release of the [Justworks](connectors/justworks) connector with support for the Employee resource
+- Early-access release of the [Trinet](connectors/trinet) connector with support for the Employee resource
 
 - Enhanced additional employee resource properties with null support
 - Improved employee_status logic for [Personio](connectors/personio) 
 - Improved country field mapping for [SD Worx](connectors/sdworx)
-- Extended mapping of [Workday](connectors/workday) with custom fields, photo URL and locations
+- Extended mapping of [Workday](connectors/workday) with custom fields and locations
 - Added employee_status mapping for [Paylocity](connectors/paylocity)
 - Added custom field support for [Sage HR](connectors/sage-hr)
 

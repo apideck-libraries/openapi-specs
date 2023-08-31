@@ -6739,11 +6739,12 @@ components:
         currency_rate: low
         sub_total: high
         total_tax: high
-        tax_inclusive: low
         total: critical
+        tax_inclusive: low
         line_items: critical
         shipping_address: medium
         ledger_account: edge-case
+        template_id: low
         discount_percentage: low
         bank_account: low
         accounting_by_row: edge-case
@@ -6751,6 +6752,7 @@ components:
         payment_method: low
         tax_code: medium
         channel: low
+        memo: low
         row_version: edge-case
         updated_by: low
         created_by: low
@@ -6861,6 +6863,12 @@ components:
           $ref: '#/components/schemas/TaxCode'
         channel:
           $ref: '#/components/schemas/Channel'
+        memo:
+          type: string
+          title: Memo
+          description: Message for the supplier. This text appears on the Purchase Order.
+          example: Thank you for the partnership and have a great day!
+          nullable: true
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -12672,6 +12680,7 @@ paths:
                 payment_method: 'cash',
                 tax_code: '1234',
                 channel: 'email',
+                memo: 'Thank you for the partnership and have a great day!',
                 row_version: '1-12345'
               }
             }
@@ -12918,6 +12927,7 @@ paths:
                 payment_method: 'cash',
                 tax_code: '1234',
                 channel: 'email',
+                memo: 'Thank you for the partnership and have a great day!',
                 row_version: '1-12345'
               }
             }

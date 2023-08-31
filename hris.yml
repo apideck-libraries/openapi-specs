@@ -1961,7 +1961,7 @@ components:
           type: object
           properties:
             id:
-              $ref: '#/components/schemas/IdOrNull'
+              $ref: '#/components/schemas/WritableId'
             name:
               title: Manager name
               description: The name of the manager, often a combination of their first and last names.
@@ -3734,6 +3734,7 @@ components:
       description: A unique identifier for an object.
       example: '12345'
       readOnly: false
+      nullable: true
     SocialSecurityNumber:
       type: string
       title: Social Security Number
@@ -4509,8 +4510,9 @@ paths:
       x-apideck-gotchas:
         - connector: hibob
           description: |
+            When creating an employee is required by Hibob to include the following Unifiy fields: first_name, last_name, employment_start_date, jobs[0].location.name and an email with a primary type must be provided within the emails field.
             For countries hibob doesn't accept iso code or name values so just the country common name. Example 'United States'
-            HiBob just API just accepts one compensation, so for the request it will be considered the first one sent in the array and the payment unit is sent yearly by default.
+            HiBob API just accepts one compensation, so for the request it will be considered the first one sent in the array and the payment unit is sent yearly by default.
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'
@@ -4593,6 +4595,7 @@ paths:
                   sub_type: 'full_time'
                 },
                 manager: {
+                  id: '12345',
                   name: 'Elon Musk',
                   first_name: 'Elon',
                   last_name: 'Musk',
@@ -4908,6 +4911,7 @@ paths:
                   sub_type: 'full_time'
                 },
                 manager: {
+                  id: '12345',
                   name: 'Elon Musk',
                   first_name: 'Elon',
                   last_name: 'Musk',

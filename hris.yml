@@ -1777,22 +1777,22 @@ components:
         partner: low
         division: medium
         division_id: low
-        department: medium
-        department_id: low
+        department: low
+        department_id: critical
         department_name: low
-        team: medium
-        company_id: high
+        team: critical
+        company_id: critical
         company_name: medium
-        employment_start_date: high
-        employment_end_date: high
+        employment_start_date: critical
+        employment_end_date: critical
         leaving_reason: edge-case
-        employee_number: high
-        employment_status: high
-        employment_role: high
-        manager: medium
+        employee_number: critical
+        employment_status: critical
+        employment_role: critical
+        manager: critical
         direct_reports: edge-case
         social_security_number: edge-case
-        birthday: high
+        birthday: critical
         deceased_on: low
         country_of_birth: high
         description: edge-case
@@ -1805,14 +1805,14 @@ components:
         timezone: low
         source: edge-case
         source_id: edge-case
-        jobs: high
+        jobs: critical
         record_url: low
-        compensations: medium
+        compensations: critical
         works_remote: low
-        addresses: high
-        phone_numbers: high
-        emails: high
-        custom_fields: edge-case
+        addresses: critical
+        phone_numbers: critical
+        emails: critical
+        custom_fields: critical
         social_links: edge-case
         tax_code: edge-case
         tax_id: edge-case
@@ -2126,6 +2126,27 @@ components:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
           $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+    EmployeeList:
+      type: object
+      x-apideck-schema-id: EmployeeList
+      x-apideck-weights:
+        id: medium
+        first_name: critical
+        last_name: critical
+        updated_at: high
+        created_at: medium
+      additionalProperties: true
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        first_name:
+          $ref: '#/components/schemas/FirstName'
+        last_name:
+          $ref: '#/components/schemas/LastName'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
@@ -2647,7 +2668,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Employee'
+            $ref: '#/components/schemas/EmployeeList'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -4442,7 +4463,7 @@ paths:
         - Employees
       operationId: employeesAll
       summary: List Employees
-      description: List Employees
+      description: Apideck operates as a stateless Unified API, which means that the list endpoint only provides a portion of the employee model. This is due to the fact that most HRIS systems do not readily provide all data in every call. However, you can access the complete employee model through an employee detail call.
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'

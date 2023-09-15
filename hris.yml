@@ -2961,6 +2961,7 @@ components:
         company_number: high
         updated_at: high
         debtor_id: edge-case
+        currency: low
       additionalProperties: false
       properties:
         id:
@@ -2995,6 +2996,8 @@ components:
           description: An Company Number, Company ID or Company Code, is a unique number that has been assigned to each company.
           example: 123456-AB
           nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
         addresses:
           type: array
           items:
@@ -5264,6 +5267,7 @@ paths:
                 subdomain: 'company',
                 status: 'active',
                 company_number: '123456-AB',
+                currency: 'USD',
                 addresses: [
                   {
                     id: '123',
@@ -5434,6 +5438,7 @@ paths:
                 subdomain: 'company',
                 status: 'active',
                 company_number: '123456-AB',
+                currency: 'USD',
                 addresses: [
                   {
                     id: '123',

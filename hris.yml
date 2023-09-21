@@ -1814,6 +1814,7 @@ components:
         emails: critical
         custom_fields: critical
         social_links: edge-case
+        bank_accounts: high
         tax_code: edge-case
         tax_id: edge-case
         dietary_preference: edge-case
@@ -2281,6 +2282,12 @@ components:
         payment_unit: hour
         flsa_status: nonexempt
         effective_date: '2021-06-11'
+    EmployeeId:
+      type: string
+      title: Employee ID
+      description: ID of the employee
+      example: '12345'
+      nullable: true
     EmployeeNumber:
       type: string
       title: Employee number
@@ -2291,27 +2298,68 @@ components:
       type: object
       x-apideck-schema-id: EmployeePayroll
       x-apideck-weights:
-        employee: critical
-        payroll: critical
+        id: critical
+        employee_id: critical
+        company_id: high
+        processed: critical
+        processed_date: medium
+        check_date: critical
+        start_date: critical
+        end_date: critical
+        totals: high
+        compensations: medium
+      required:
+        - id
+        - processed
+        - check_date
+        - start_date
+        - end_date
+      additionalProperties: false
       properties:
-        employee:
-          $ref: '#/components/schemas/Employee'
-        payroll:
-          $ref: '#/components/schemas/Payroll'
-    EmployeePayrolls:
-      type: object
-      x-apideck-schema-id: EmployeePayrolls
-      x-apideck-weights:
-        employee: critical
-        payrolls: critical
-      properties:
-        employee:
-          $ref: '#/components/schemas/Employee'
-        payrolls:
-          type: array
+        id:
+          $ref: '#/components/schemas/IdOrNull'
+        employee_id:
+          $ref: '#/components/schemas/EmployeeId'
+        company_id:
+          $ref: '#/components/schemas/CompanyId'
+        processed:
+          type: boolean
+          description: Whether or not the payroll has been successfully processed. Note that processed payrolls cannot be updated.
+          example: false
           nullable: true
+        processed_date:
+          type: string
+          description: The date the payroll was processed.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-08'
+          nullable: true
+        check_date:
+          type: string
+          description: The date on which employees will be paid for the payroll.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-08'
+          nullable: true
+        start_date:
+          type: string
+          description: The start date, inclusive, of the pay period.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-08'
+          nullable: true
+        end_date:
+          type: string
+          description: The end date, inclusive, of the pay period.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2022-04-21'
+          nullable: true
+        totals:
+          type: object
+          description: The overview of the payroll totals.
+          $ref: '#/components/schemas/PayrollTotals'
+        compensations:
+          type: array
+          description: An array of compensations for the payroll.
           items:
-            $ref: '#/components/schemas/Payroll'
+            $ref: '#/components/schemas/Compensation'
     EmployeeSchedules:
       type: object
       x-apideck-schema-id: EmployeeSchedules
@@ -2567,7 +2615,9 @@ components:
           description: Operation performed
           example: all
         data:
-          $ref: '#/components/schemas/EmployeePayrolls'
+          type: array
+          items:
+            $ref: '#/components/schemas/EmployeePayroll'
     GetEmployeeResponse:
       type: object
       x-apideck-schema-id: GetEmployeeResponse
@@ -3933,11 +3983,7 @@ components:
         id:
           $ref: '#/components/schemas/Id'
         employee_id:
-          type: string
-          title: Employee ID
-          description: ID of the employee
-          example: '12345'
-          nullable: true
+          $ref: '#/components/schemas/EmployeeId'
         policy_id:
           type: string
           title: Policy ID

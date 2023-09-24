@@ -5618,6 +5618,9 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: humaans-io
+          description: Departments are mapped to teams in Humaans. Increase the limit for this API call to 200 to get the most accurate data back. The teams are inferred from number of employees defined by the limit parameter (default 20).
       responses:
         '200':
           $ref: '#/components/responses/GetDepartmentsResponse'

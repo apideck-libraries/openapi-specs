@@ -1790,6 +1790,7 @@ components:
         employment_status: critical
         employment_role: critical
         manager: critical
+        ethnicity: critical
         direct_reports: edge-case
         social_security_number: edge-case
         birthday: critical
@@ -1950,6 +1951,11 @@ components:
                 - hourly
                 - other
               nullable: true
+        ethnicity:
+          type: string
+          description: The ethnicity of the employee
+          example: African American
+          nullable: true
         manager:
           x-apideck-weights:
             id: critical
@@ -4669,6 +4675,7 @@ paths:
                   type: 'contractor',
                   sub_type: 'full_time'
                 },
+                ethnicity: 'African American',
                 manager: {
                   id: '12345',
                   name: 'Elon Musk',
@@ -4988,6 +4995,7 @@ paths:
                   type: 'contractor',
                   sub_type: 'full_time'
                 },
+                ethnicity: 'African American',
                 manager: {
                   id: '12345',
                   name: 'Elon Musk',

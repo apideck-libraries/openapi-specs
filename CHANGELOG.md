@@ -1,22 +1,52 @@
 ## Released
 
+## v9.9.1 - (2023-09-25)
+
 ### HRIS API
+
+- Added a new property `ethnicity` to the [Employee](apis/hris/reference#tag/Employees) resource
 
 - Added jobs fields mappings for [SD Worx](connectors/sdworx)
 - Added support for custom fields for [Sage HR](connectors/sage-hr)
+- Improved pagination for [UKG Pro](connectors/ukg-pro)
+- Extended [Cascade HR](connectors/cascade-hr) mapping with middle_name, preferred_name, initials, marital_status, division, department, team, company, employment_role, manager, jobs, compensations information
+- Extended [AlexisHR](connectors/alexishr) mapping with initials, company_name, pronouns, custom_fields, compensation information
+- Extended [Humaans](connectors/humaans-io) mapping with display_name, initials, department, team, manager, ssn, pronouns, languages, photo_url, jobs, custom_fields, compensation information
+- Added custom_fields mapping for [SAP Successfactors](connectors/sap-successfactors)
+- Added custom_fields mapping for [Okta](connectors/okta)
+- Added departments resource mapping for [SAP Successfactors](connectors/sap-successfactors)
+- Added departments resource mapping for [Azure AD](connectors/azure-active-directory)
+- Added departments resource mapping for [Humaans](connectors/humaans-io)
+- Added departments resource mapping for [Google Workspace](connectors/google-workspace)
+
+- Mapped the ethnicity field for the connectors that support it: [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [BambooHR](connectors/bamboohr), [Breathe HR](connectors/breathehr]), [Cascade HR](connectors/cascade-hr]), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Hibob](connectors/hibob), [Justworks](connectors/justworks), [Namely](connectors/namely), [Paychex](connectors/paychex), [Trinet](connectors/trinet), [UKG Pro](connectors/ukg-pro), [Workday](connectors/workday)
 
 ### Accounting API
 
-- Added option to write journal entries for [Xero](connectors/xero)
-- Improved tax rate, company & suppliers mapping for [Quickbooks](connectors/quickbooks)
+- Added option to write journal entries and improved pagination for journal entries for [Xero](connectors/xero)
+- Improved bills, tax rate, company & suppliers mapping for [Quickbooks](connectors/quickbooks)
+- Improved bill_number mapping for [Sage Business Cloud](connectors/sage-business-cloud-accounting)
+- Improved bill_number mapping for [Sage Intacct](connectors/sage-intacct)
+- Added the option to create and update invoices for [Sage Business Cloud](connectors/sage-business-cloud-accounting)
 
 ### CRM API
 
 - Added filter contacts by Company ID for [Salesforce](connectors/salesforce)
+- Improved custom fields logic for companies, contacts/leads for [Hubspot](connectors/hubspot)
+- Improved address mapping for companies for [Pipedrive](connectors/pipedrive)
 
 ### ATS API
 
 - Added custom job board URL setting for [Greenhouse](connectors/greenhouse)
+
+### Issue tracking API
+
+- Added Zendesk as auth-only integration
+- Added Linear as auth-only integration
+- Added ClickUp as auth-only integration
+- Added Asana as auth-only integration
+- Added Intercom as auth-only integration
+- Added Monday as auth-only integration
 
 ## v9.9.0 - (2023-08-21)
 

@@ -4591,6 +4591,9 @@ paths:
             When creating an employee is required by Hibob to include the following Unifiy fields: first_name, last_name, employment_start_date, jobs[0].location.name and an email with a primary type must be provided within the emails field.
             For countries hibob doesn't accept iso code or name values so just the country common name. Example 'United States'
             HiBob API just accepts one compensation, so for the request it will be considered the first one sent in the array and the payment unit is sent yearly by default.
+        - connector: humaans-io
+          description: |
+            When creating an employee in Humaans, it is mandatory to include the following Unify fields: first_name, last_name, title, employment_start_date, jobs[0].location.id. Additionally, within the 'emails' field, you must provide an email with a 'primary' type. Furthermore, if the employee is remote, the primary address city will be used as the remote city, and this value should be valid."
         - connector: nmbrs
           description: |
             When creating an employee, the `employment_role.type` values accepted for NMbrs are `employee`, `contractor` and `freelance`.

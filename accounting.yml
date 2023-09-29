@@ -5408,6 +5408,7 @@ components:
         journal_symbol: edge-case
         tax_type: edge-case
         tax_code: edge-case
+        number: medium
         updated_by: edge-case
         created_by: edge-case
         updated_at: medium
@@ -5460,6 +5461,12 @@ components:
           nullable: true
         tax_code:
           $ref: '#/components/schemas/TaxCode'
+        number:
+          type: string
+          title: Journal entry number
+          description: Journal entry number.
+          example: OIT00546
+          nullable: true
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -12220,6 +12227,7 @@ paths:
                 journal_symbol: 'IND',
                 tax_type: 'sales',
                 tax_code: '1234',
+                number: 'OIT00546',
                 row_version: '1-12345'
               }
             }
@@ -12390,6 +12398,7 @@ paths:
                 journal_symbol: 'IND',
                 tax_type: 'sales',
                 tax_code: '1234',
+                number: 'OIT00546',
                 row_version: '1-12345'
               }
             }

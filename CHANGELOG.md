@@ -1,5 +1,11 @@
 ## Released
 
+## v9.9.2 - (2023-09-29)
+
+### HRIS API
+
+- Corrected employees model for GetEmployeesResponse, which impacted the SDKs
+
 ## v9.9.1 - (2023-09-25)
 
 ### HRIS API

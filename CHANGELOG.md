@@ -1,4 +1,8 @@
-## Released
+## v9.9.3 - (2023-10-23)
+
+### Accounting API
+
+- Extended [Journal Entries](https://developers.apideck.com/apis/accounting/reference#tag/Journal-Entries) with customer.
 
 ## v9.9.2 - (2023-09-29)
 

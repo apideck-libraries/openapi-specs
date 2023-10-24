@@ -1262,6 +1262,8 @@ components:
             $ref: '#/components/schemas/CustomField'
         tags:
           $ref: '#/components/schemas/Tags'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_at:
           type: string
           description: Date updated in ISO 8601 format
@@ -1824,6 +1826,11 @@ components:
             - other
           example: primary
           nullable: true
+    CustomMappings:
+      type: object
+      x-apideck-schema-id: CustomMappings
+      description: When custom mappings are configured on the resource, the result is included here.
+      nullable: true
   parameters:
     applicationId:
       name: x-apideck-app-id
@@ -2197,7 +2204,8 @@ paths:
                     value: 'Uses Salesforce and Marketo'
                   }
                 ],
-                tags: ['New']
+                tags: ['New'],
+                custom_mappings: {}
               }
             }
 
@@ -2393,7 +2401,8 @@ paths:
                     value: 'Uses Salesforce and Marketo'
                   }
                 ],
-                tags: ['New']
+                tags: ['New'],
+                custom_mappings: {}
               }
             }
 

@@ -954,6 +954,8 @@ components:
           example: Project Resources
         description:
           $ref: '#/components/schemas/Description'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -990,6 +992,8 @@ components:
           nullable: true
         description:
           $ref: '#/components/schemas/Description'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -1225,6 +1229,8 @@ components:
           type: boolean
           description: Whether the list of parent folder is complete. Some connectors only return the direct parent of a folder
           readOnly: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -1913,6 +1919,11 @@ components:
         - asc
         - desc
       default: asc
+    CustomMappings:
+      type: object
+      x-apideck-schema-id: CustomMappings
+      description: When custom mappings are configured on the resource, the result is included here.
+      nullable: true
     TooManyRequestsResponse:
       type: object
       x-apideck-schema-id: TooManyRequests
@@ -2090,6 +2101,8 @@ components:
             example: application/pdf
             description: An available file format (typically MIME type) to export this file.
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -3915,7 +3928,8 @@ paths:
             const params = {
               drive: {
                 name: 'Project Resources',
-                description: 'A description'
+                description: 'A description',
+                custom_mappings: {}
               }
             }
 
@@ -4029,7 +4043,8 @@ paths:
               id: 'id_example',
               drive: {
                 name: 'Project Resources',
-                description: 'A description'
+                description: 'A description',
+                custom_mappings: {}
               }
             }
 
@@ -4193,7 +4208,8 @@ paths:
               driveGroup: {
                 name: 'accounting',
                 display_name: 'accounting',
-                description: 'A description'
+                description: 'A description',
+                custom_mappings: {}
               }
             }
 
@@ -4308,7 +4324,8 @@ paths:
               driveGroup: {
                 name: 'accounting',
                 display_name: 'accounting',
-                description: 'A description'
+                description: 'A description',
+                custom_mappings: {}
               }
             }
 

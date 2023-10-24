@@ -658,6 +658,13 @@ components:
           description: The amount of employer contribution.
           nullable: true
           example: 141.14
+    Birthday:
+      type: string
+      title: Birth Date
+      description: The date of birth of the person.
+      example: '2000-08-12'
+      format: date
+      nullable: true
     CompanyId:
       type: string
       title: Company ID
@@ -714,6 +721,14 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/Benefit'
+    Country:
+      type: string
+      example: US
+      title: Country Code
+      description: Country code according to ISO 3166-1 alpha-2.
+      minLength: 2
+      maxLength: 2
+      nullable: true
     CreateDepartmentResponse:
       type: object
       x-apideck-schema-id: CreateDepartmentResponse
@@ -1417,19 +1432,6 @@ components:
         - name: ETH
           description: Ether
       nullable: true
-    PaymentFrequency:
-      type: string
-      title: Payment Frequency
-      description: Frequency of employee compensation.
-      x-apideck-enum-id: payment_frequency
-      enum:
-        - weekly
-        - biweekly
-        - monthly
-        - pro-rata
-        - other
-      example: year
-      nullable: true
     CustomField:
       type: object
       x-apideck-schema-id: CustomField
@@ -1481,32 +1483,18 @@ components:
             - type: array
               items:
                 type: object
-    SocialLink:
+    CustomMappings:
       type: object
-      x-apideck-schema-id: SocialLink
-      required:
-        - url
-      additionalProperties: false
-      x-apideck-weights:
-        id: edge-case
-        url: critical
-        type: critical
-      properties:
-        id:
-          description: Unique identifier of the social link
-          type: string
-          example: '12345'
-          nullable: true
-        url:
-          description: URL of the social link, e.g. https://www.twitter.com/apideck
-          type: string
-          example: https://www.twitter.com/apideck
-          minLength: 1
-        type:
-          description: Type of the social link, e.g. twitter
-          type: string
-          example: twitter
-          nullable: true
+      x-apideck-schema-id: CustomMappings
+      description: When custom mappings are configured on the resource, the result is included here.
+      nullable: true
+    DeceasedOn:
+      type: string
+      title: Deceased Date
+      description: The date the person deceased.
+      example: '2000-08-12'
+      format: date
+      nullable: true
     Deduction:
       type: object
       x-apideck-schema-id: Deduction
@@ -1524,12 +1512,6 @@ components:
           description: The amount deducted.
           example: 10.97
           nullable: true
-    Deleted:
-      type: boolean
-      title: Deleted
-      description: Flag to indicate if the object is deleted.
-      example: true
-      nullable: true
     DeleteDepartmentResponse:
       type: object
       x-apideck-schema-id: DeleteDepartmentResponse
@@ -1661,6 +1643,12 @@ components:
           example: delete
         data:
           $ref: '#/components/schemas/UnifiedId'
+    Deleted:
+      type: boolean
+      title: Deleted
+      description: Flag to indicate if the object is deleted.
+      example: true
+      nullable: true
     Department:
       type: object
       x-apideck-schema-id: Department
@@ -1700,6 +1688,8 @@ components:
           type: string
           example: R&D
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -2128,6 +2118,8 @@ components:
               nullable: true
         tags:
           $ref: '#/components/schemas/Tags'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         deleted:
@@ -2140,92 +2132,6 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
-    EmployeeList:
-      type: object
-      x-apideck-schema-id: EmployeeList
-      x-apideck-weights:
-        id: medium
-        first_name: critical
-        last_name: critical
-        updated_at: high
-        created_at: medium
-      additionalProperties: true
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        first_name:
-          $ref: '#/components/schemas/FirstName'
-        last_name:
-          $ref: '#/components/schemas/LastName'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-    EmployeeJob:
-      x-apideck-weights:
-        id: critical
-        employee_id: edge-case
-        title: critical
-        role: medium
-        start_date: high
-        end_date: high
-        compensation_rate: medium
-        currency: medium
-        payment_unit: medium
-        hired_at: medium
-        is_primary: medium
-        location: medium
-      x-apideck-schema-id: EmployeeJob
-      title: job
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/IdOrNull'
-        employee_id:
-          $ref: '#/components/schemas/IdOrNull'
-        title:
-          $ref: '#/components/schemas/Title'
-        role:
-          $ref: '#/components/schemas/JobRole'
-        start_date:
-          type: string
-          title: The start date of the job.
-          description: The date on which the employee starts working in their current job role.
-          example: '2020-08-12'
-          format: date
-          nullable: true
-        end_date:
-          type: string
-          title: The end date of the job.
-          description: The date on which the employee leaves or is expected to leave their current job role.
-          example: '2020-08-12'
-          format: date
-          nullable: true
-        compensation_rate:
-          type: number
-          title: The compensation rate of the job.
-          description: The rate of pay for the employee in their current job role.
-          example: 72000
-          nullable: true
-        currency:
-          $ref: '#/components/schemas/Currency'
-        payment_unit:
-          $ref: '#/components/schemas/PaymentUnit'
-        hired_at:
-          type: string
-          title: Hired date
-          description: The date on which the employee was hired by the organization
-          example: '2020-08-12'
-          format: date
-          nullable: true
-        is_primary:
-          title: Primary
-          description: Indicates whether this the employee's primary job.
-          type: boolean
-          example: true
-          nullable: true
-        location:
-          $ref: '#/components/schemas/Address'
     EmployeeCompensation:
       title: compensation
       x-apideck-weights:
@@ -2291,6 +2197,92 @@ components:
         payment_unit: hour
         flsa_status: nonexempt
         effective_date: '2021-06-11'
+    EmployeeJob:
+      x-apideck-weights:
+        id: critical
+        employee_id: edge-case
+        title: critical
+        role: medium
+        start_date: high
+        end_date: high
+        compensation_rate: medium
+        currency: medium
+        payment_unit: medium
+        hired_at: medium
+        is_primary: medium
+        location: medium
+      x-apideck-schema-id: EmployeeJob
+      title: job
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/IdOrNull'
+        employee_id:
+          $ref: '#/components/schemas/IdOrNull'
+        title:
+          $ref: '#/components/schemas/Title'
+        role:
+          $ref: '#/components/schemas/JobRole'
+        start_date:
+          type: string
+          title: The start date of the job.
+          description: The date on which the employee starts working in their current job role.
+          example: '2020-08-12'
+          format: date
+          nullable: true
+        end_date:
+          type: string
+          title: The end date of the job.
+          description: The date on which the employee leaves or is expected to leave their current job role.
+          example: '2020-08-12'
+          format: date
+          nullable: true
+        compensation_rate:
+          type: number
+          title: The compensation rate of the job.
+          description: The rate of pay for the employee in their current job role.
+          example: 72000
+          nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
+        payment_unit:
+          $ref: '#/components/schemas/PaymentUnit'
+        hired_at:
+          type: string
+          title: Hired date
+          description: The date on which the employee was hired by the organization
+          example: '2020-08-12'
+          format: date
+          nullable: true
+        is_primary:
+          title: Primary
+          description: Indicates whether this the employee's primary job.
+          type: boolean
+          example: true
+          nullable: true
+        location:
+          $ref: '#/components/schemas/Address'
+    EmployeeList:
+      type: object
+      x-apideck-schema-id: EmployeeList
+      x-apideck-weights:
+        id: medium
+        first_name: critical
+        last_name: critical
+        updated_at: high
+        created_at: medium
+      additionalProperties: true
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        first_name:
+          $ref: '#/components/schemas/FirstName'
+        last_name:
+          $ref: '#/components/schemas/LastName'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     EmployeeId:
       type: string
       title: Employee ID
@@ -3078,6 +3070,8 @@ components:
           example: '12345'
           minLength: 1
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         deleted:
           type: boolean
           example: false
@@ -3155,6 +3149,8 @@ components:
               type: string
               example: HQ US
               nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
     HrisJobs:
       type: object
       x-apideck-schema-id: HrisJobs
@@ -3166,6 +3162,14 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/HrisJob'
+    HrisWebhookEvent:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEvent'
+        - properties:
+            event_type:
+              $ref: '#/components/schemas/HrisEventType'
+          type: object
+      x-sdk-exclude: true
     Id:
       type: string
       title: ID
@@ -3178,6 +3182,18 @@ components:
       description: A unique identifier for an object.
       example: '12345'
       readOnly: true
+      nullable: true
+    Initials:
+      type: string
+      title: Initials
+      description: The initials of the person, usually derived from their first, middle, and last names.
+      example: EM
+      nullable: true
+    JobRole:
+      type: string
+      title: Job role
+      description: The position and responsibilities of the person within the organization.
+      example: Sales
       nullable: true
     Language:
       type: string
@@ -3242,6 +3258,12 @@ components:
       title: Middle name
       description: Middle name of the person.
       example: D.
+      nullable: true
+    Nationality:
+      title: Nationality
+      type: string
+      example: US
+      description: The nationality of the person, represented as a two-letter country code according to ISO 3166-1 alpha-2.
       nullable: true
     NotFoundResponse:
       type: object
@@ -3316,6 +3338,19 @@ components:
           description: All passthrough query parameters are passed along to the connector as is (?pass_through[search]=leads becomes ?search=leads)
       example:
         search: San Francisco
+    PaymentFrequency:
+      type: string
+      title: Payment Frequency
+      description: Frequency of employee compensation.
+      x-apideck-enum-id: payment_frequency
+      enum:
+        - weekly
+        - biweekly
+        - monthly
+        - pro-rata
+        - other
+      example: year
+      nullable: true
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -3421,6 +3456,8 @@ components:
           description: An array of compensations for the payroll.
           items:
             $ref: '#/components/schemas/Compensation'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
     PayrollTotals:
       type: object
       x-apideck-schema-id: PayrollTotals
@@ -3488,6 +3525,51 @@ components:
           pattern: ^\d{4}-\d{2}-\d{2}$
           example: '2022-04-21'
       additionalProperties: false
+    Person:
+      type: object
+      title: Person
+      x-apideck-schema-id: Person
+      x-apideck-weights:
+        id: low
+        first_name: critical
+        last_name: critical
+        middle_name: low
+        gender: medium
+        initials: medium
+        birthday: low
+        deceased_on: low
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/IdOrNull'
+        first_name:
+          $ref: '#/components/schemas/FirstName'
+        last_name:
+          $ref: '#/components/schemas/LastName'
+        middle_name:
+          $ref: '#/components/schemas/MiddleName'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        initials:
+          type: string
+          title: Initials
+          description: Initials of the person
+          example: EM
+          nullable: true
+        birthday:
+          type: string
+          description: Date of birth
+          example: '2000-08-12'
+          format: date
+          nullable: true
+        deceased_on:
+          type: string
+          description: Date of death
+          example: '2000-08-12'
+          format: date
+          nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
     PhoneNumber:
       type: object
       x-apideck-schema-id: PhoneNumber
@@ -3555,11 +3637,27 @@ components:
       description: The URL of the photo of a person.
       example: https://unavatar.io/elon-musk
       nullable: true
+    Pronouns:
+      title: Pronouns
+      description: The preferred pronouns of the person.
+      type: string
+      example: she,her
+      nullable: true
+    RecordUrl:
+      type: string
+      title: Record URL
+      example: https://app.intercom.io/contacts/12345
+      nullable: true
     RowVersion:
       type: string
       title: Row version
       description: A binary value used to detect updates to a object and prevent data conflicts. It is incremented each time an update is made to the object.
       example: 1-12345
+      nullable: true
+    Salutation:
+      type: string
+      description: A formal salutation for the person. For example, 'Mr', 'Mrs'
+      example: Mr
       nullable: true
     Schedule:
       type: object
@@ -3723,6 +3821,38 @@ components:
                   maximum: 24
                   nullable: false
                   readOnly: false
+    SocialLink:
+      type: object
+      x-apideck-schema-id: SocialLink
+      required:
+        - url
+      additionalProperties: false
+      x-apideck-weights:
+        id: edge-case
+        url: critical
+        type: critical
+      properties:
+        id:
+          description: Unique identifier of the social link
+          type: string
+          example: '12345'
+          nullable: true
+        url:
+          description: URL of the social link, e.g. https://www.twitter.com/apideck
+          type: string
+          example: https://www.twitter.com/apideck
+          minLength: 1
+        type:
+          description: Type of the social link, e.g. twitter
+          type: string
+          example: twitter
+          nullable: true
+    SocialSecurityNumber:
+      type: string
+      title: Social Security Number
+      description: A unique identifier assigned by the government. This field is considered sensitive information and may be subject to special security and privacy restrictions.
+      example: '123456789'
+      nullable: true
     SortDirection:
       type: string
       x-apideck-schema-id: SortDirection
@@ -3732,60 +3862,6 @@ components:
         - asc
         - desc
       default: asc
-    Person:
-      type: object
-      title: Person
-      x-apideck-schema-id: Person
-      x-apideck-weights:
-        id: low
-        first_name: critical
-        last_name: critical
-        middle_name: low
-        gender: medium
-        initials: medium
-        birthday: low
-        deceased_on: low
-      additionalProperties: false
-      properties:
-        id:
-          $ref: '#/components/schemas/IdOrNull'
-        first_name:
-          $ref: '#/components/schemas/FirstName'
-        last_name:
-          $ref: '#/components/schemas/LastName'
-        middle_name:
-          $ref: '#/components/schemas/MiddleName'
-        gender:
-          $ref: '#/components/schemas/Gender'
-        initials:
-          type: string
-          title: Initials
-          description: Initials of the person
-          example: EM
-          nullable: true
-        birthday:
-          type: string
-          description: Date of birth
-          example: '2000-08-12'
-          format: date
-          nullable: true
-        deceased_on:
-          type: string
-          description: Date of death
-          example: '2000-08-12'
-          format: date
-          nullable: true
-    Initials:
-      type: string
-      title: Initials
-      description: The initials of the person, usually derived from their first, middle, and last names.
-      example: EM
-      nullable: true
-    Salutation:
-      type: string
-      description: A formal salutation for the person. For example, 'Mr', 'Mrs'
-      example: Mr
-      nullable: true
     Tags:
       type: array
       x-apideck-schema-id: Tags
@@ -3794,156 +3870,6 @@ components:
       example:
         - New
       nullable: true
-    Team:
-      type: object
-      x-apideck-schema-id: Team
-      description: The team the person is currently in.
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the team.
-          example: '1234'
-          nullable: true
-        name:
-          type: string
-          description: The name of the team.
-          example: Full Stack Engineers
-          nullable: true
-      nullable: true
-    WritableId:
-      type: string
-      title: ID
-      description: A unique identifier for an object.
-      example: '12345'
-      readOnly: false
-      nullable: true
-    SocialSecurityNumber:
-      type: string
-      title: Social Security Number
-      description: A unique identifier assigned by the government. This field is considered sensitive information and may be subject to special security and privacy restrictions.
-      example: '123456789'
-      nullable: true
-    Birthday:
-      type: string
-      title: Birth Date
-      description: The date of birth of the person.
-      example: '2000-08-12'
-      format: date
-      nullable: true
-    DeceasedOn:
-      type: string
-      title: Deceased Date
-      description: The date the person deceased.
-      example: '2000-08-12'
-      format: date
-      nullable: true
-    Country:
-      type: string
-      example: US
-      title: Country Code
-      description: Country code according to ISO 3166-1 alpha-2.
-      minLength: 2
-      maxLength: 2
-      nullable: true
-    Pronouns:
-      title: Pronouns
-      description: The preferred pronouns of the person.
-      type: string
-      example: she,her
-      nullable: true
-    Nationality:
-      title: Nationality
-      type: string
-      example: US
-      description: The nationality of the person, represented as a two-letter country code according to ISO 3166-1 alpha-2.
-      nullable: true
-    Timezone:
-      title: Timezone
-      description: The time zone related to the resource. The value is a string containing a standard time zone identifier, e.g. Europe/London.
-      type: string
-      example: Europe/London
-      nullable: true
-    RecordUrl:
-      type: string
-      title: Record URL
-      example: https://app.intercom.io/contacts/12345
-      nullable: true
-    JobRole:
-      type: string
-      title: Job role
-      description: The position and responsibilities of the person within the organization.
-      example: Sales
-      nullable: true
-    WebhookEvent:
-      type: object
-      x-apideck-schema-id: WebhookEvent
-      properties:
-        event_id:
-          type: string
-          description: Unique reference to this request event
-          example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-        unified_api:
-          description: Name of Apideck Unified API
-          x-apideck-enum-id: unified_api
-          enum:
-            - accounting
-            - ats
-            - calendar
-            - crm
-            - csp
-            - customer-support
-            - ecommerce
-            - email
-            - email-marketing
-            - expense-management
-            - file-storage
-            - form
-            - hris
-            - lead
-            - payroll
-            - pos
-            - procurement
-            - project-management
-            - script
-            - sms
-            - spreadsheet
-            - team-messaging
-            - issue-tracking
-            - time-registration
-            - transactional-email
-            - vault
-            - data-warehouse
-          example: crm
-          type: string
-        service_id:
-          type: string
-          description: Service provider identifier
-          example: close
-        consumer_id:
-          type: string
-          example: test_consumer_id
-          description: Unique consumer identifier. You can freely choose a consumer ID yourself. Most of the time, this is an ID of your internal data model that represents a user or account in your system (for example account:12345). If the consumer doesn't exist yet, Vault will upsert a consumer based on your ID.
-        entity_id:
-          type: string
-          description: The service provider's ID of the entity that triggered this event
-          example: 123456ASDF
-        entity_type:
-          type: string
-          description: The type entity that triggered this event
-          example: Company
-        entity_url:
-          type: string
-          description: The url to retrieve entity detail.
-          example: https://unify.apideck.com/crm/contacts/123456
-        execution_attempt:
-          type: number
-          description: The current count this request event has been attempted
-          example: 2
-        occurred_at:
-          type: string
-          description: ISO Datetime for when the original event occurred
-          example: '2021-10-01T03:14:55.419Z'
     Tax:
       type: object
       x-apideck-schema-id: Tax
@@ -3967,6 +3893,23 @@ components:
           description: The amount of the tax.
           example: 1.97
           nullable: true
+    Team:
+      type: object
+      x-apideck-schema-id: Team
+      description: The team the person is currently in.
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the team.
+          example: '1234'
+          nullable: true
+        name:
+          type: string
+          description: The name of the team.
+          example: Full Stack Engineers
+          nullable: true
+      nullable: true
     TimeOffRequest:
       type: object
       additionalProperties: false
@@ -4085,6 +4028,8 @@ components:
               title: Manager note
               example: Enjoy!
               nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -4127,6 +4072,12 @@ components:
             - deleted
             - other
       additionalProperties: false
+    Timezone:
+      title: Timezone
+      description: The time zone related to the resource. The value is a string containing a standard time zone identifier, e.g. Europe/London.
+      type: string
+      example: Europe/London
+      nullable: true
     Title:
       type: string
       title: Job title
@@ -4413,14 +4364,75 @@ components:
       example: '12345'
       readOnly: true
       nullable: true
-    HrisWebhookEvent:
-      allOf:
-        - $ref: '#/components/schemas/WebhookEvent'
-        - properties:
-            event_type:
-              $ref: '#/components/schemas/HrisEventType'
-          type: object
-      x-sdk-exclude: true
+    WebhookEvent:
+      type: object
+      x-apideck-schema-id: WebhookEvent
+      properties:
+        event_id:
+          type: string
+          description: Unique reference to this request event
+          example: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+        unified_api:
+          description: Name of Apideck Unified API
+          x-apideck-enum-id: unified_api
+          enum:
+            - accounting
+            - ats
+            - calendar
+            - crm
+            - csp
+            - customer-support
+            - ecommerce
+            - email
+            - email-marketing
+            - expense-management
+            - file-storage
+            - form
+            - hris
+            - lead
+            - payroll
+            - pos
+            - procurement
+            - project-management
+            - script
+            - sms
+            - spreadsheet
+            - team-messaging
+            - issue-tracking
+            - time-registration
+            - transactional-email
+            - vault
+            - data-warehouse
+          example: crm
+          type: string
+        service_id:
+          type: string
+          description: Service provider identifier
+          example: close
+        consumer_id:
+          type: string
+          example: test_consumer_id
+          description: Unique consumer identifier. You can freely choose a consumer ID yourself. Most of the time, this is an ID of your internal data model that represents a user or account in your system (for example account:12345). If the consumer doesn't exist yet, Vault will upsert a consumer based on your ID.
+        entity_id:
+          type: string
+          description: The service provider's ID of the entity that triggered this event
+          example: 123456ASDF
+        entity_type:
+          type: string
+          description: The type entity that triggered this event
+          example: Company
+        entity_url:
+          type: string
+          description: The url to retrieve entity detail.
+          example: https://unify.apideck.com/crm/contacts/123456
+        execution_attempt:
+          type: number
+          description: The current count this request event has been attempted
+          example: 2
+        occurred_at:
+          type: string
+          description: ISO Datetime for when the original event occurred
+          example: '2021-10-01T03:14:55.419Z'
     Website:
       type: object
       x-apideck-schema-id: Website
@@ -4454,6 +4466,13 @@ components:
             - other
           example: primary
           nullable: true
+    WritableId:
+      type: string
+      title: ID
+      description: A unique identifier for an object.
+      example: '12345'
+      readOnly: false
+      nullable: true
   securitySchemes:
     apiKey:
       type: apiKey
@@ -4659,7 +4678,8 @@ paths:
                   gender: 'male',
                   initials: 'EM',
                   birthday: '2000-08-12',
-                  deceased_on: '2000-08-12'
+                  deceased_on: '2000-08-12',
+                  custom_mappings: {}
                 },
                 division: 'Europe',
                 division_id: '12345',
@@ -4843,6 +4863,7 @@ paths:
                   end_date: '2021-11-28'
                 },
                 tags: ['New'],
+                custom_mappings: {},
                 row_version: '1-12345',
                 deleted: true
               }
@@ -4979,7 +5000,8 @@ paths:
                   gender: 'male',
                   initials: 'EM',
                   birthday: '2000-08-12',
-                  deceased_on: '2000-08-12'
+                  deceased_on: '2000-08-12',
+                  custom_mappings: {}
                 },
                 division: 'Europe',
                 division_id: '12345',
@@ -5163,6 +5185,7 @@ paths:
                   end_date: '2021-11-28'
                 },
                 tags: ['New'],
+                custom_mappings: {},
                 row_version: '1-12345',
                 deleted: true
               }
@@ -5383,7 +5406,8 @@ paths:
                     type: 'primary'
                   }
                 ],
-                debtor_id: '12345'
+                debtor_id: '12345',
+                custom_mappings: {}
               }
             }
 
@@ -5554,7 +5578,8 @@ paths:
                     type: 'primary'
                   }
                 ],
-                debtor_id: '12345'
+                debtor_id: '12345',
+                custom_mappings: {}
               }
             }
 
@@ -5720,7 +5745,8 @@ paths:
               department: {
                 name: 'R&D',
                 code: '2',
-                description: 'R&D'
+                description: 'R&D',
+                custom_mappings: {}
               }
             }
 
@@ -5835,7 +5861,8 @@ paths:
               department: {
                 name: 'R&D',
                 code: '2',
-                description: 'R&D'
+                description: 'R&D',
+                custom_mappings: {}
               }
             }
 
@@ -6280,7 +6307,8 @@ paths:
                 notes: {
                   employee: 'Relaxing on the beach for a few hours.',
                   manager: 'Enjoy!'
-                }
+                },
+                custom_mappings: {}
               }
             }
 
@@ -6407,7 +6435,8 @@ paths:
                 notes: {
                   employee: 'Relaxing on the beach for a few hours.',
                   manager: 'Enjoy!'
-                }
+                },
+                custom_mappings: {}
               }
             }
 

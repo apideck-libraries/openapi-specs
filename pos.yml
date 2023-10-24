@@ -674,21 +674,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#requestvalidationerror
-    CreatedAt:
-      type: string
-      title: Created at (timestamp)
-      description: The date and time when the object was created.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-      nullable: true
-    CreatedBy:
-      type: string
-      title: Created by
-      description: The user who created the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     CreateItemResponse:
       type: object
       x-apideck-schema-id: CreateItemResponse
@@ -986,6 +971,21 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+    CreatedAt:
+      type: string
+      title: Created at (timestamp)
+      description: The date and time when the object was created.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+      nullable: true
+    CreatedBy:
+      type: string
+      title: Created by
+      description: The user who created the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Currency:
       type: string
       title: Currency
@@ -1594,12 +1594,6 @@ components:
             - type: array
               items:
                 type: object
-    Deleted:
-      type: boolean
-      title: Deleted
-      description: Flag to indicate if the object is deleted.
-      example: true
-      nullable: true
     DeleteItemResponse:
       type: object
       x-apideck-schema-id: DeleteItemResponse
@@ -1897,6 +1891,12 @@ components:
           example: delete
         data:
           $ref: '#/components/schemas/UnifiedId'
+    Deleted:
+      type: boolean
+      title: Deleted
+      description: Flag to indicate if the object is deleted.
+      example: true
+      nullable: true
     Email:
       type: object
       x-apideck-schema-id: Email
@@ -2326,45 +2326,6 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Order'
-    GetOrdersResponse:
-      type: object
-      x-apideck-schema-id: GetOrdersResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: clover
-        resource:
-          type: string
-          description: Unified API resource name
-          example: orders
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
     GetOrderTypeResponse:
       type: object
       x-apideck-schema-id: GetOrderTypeResponse
@@ -2433,6 +2394,45 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OrderType'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetOrdersResponse:
+      type: object
+      x-apideck-schema-id: GetOrdersResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: clover
+        resource:
+          type: string
+          description: Unified API resource name
+          example: orders
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -2861,6 +2861,8 @@ components:
           $ref: '#/components/schemas/Hidden'
         version:
           $ref: '#/components/schemas/UpdatedBy'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         deleted:
           $ref: '#/components/schemas/Deleted'
         updated_by:
@@ -2939,6 +2941,8 @@ components:
           example: '12345'
         currency:
           $ref: '#/components/schemas/Currency'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -3007,6 +3011,8 @@ components:
           nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -3087,6 +3093,8 @@ components:
           example: '123'
         available:
           $ref: '#/components/schemas/Available'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -3178,6 +3186,8 @@ components:
                 $ref: '#/components/schemas/Available'
         deleted:
           $ref: '#/components/schemas/Deleted'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -4089,6 +4099,8 @@ components:
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         version:
           $ref: '#/components/schemas/Version'
         updated_by:
@@ -4596,6 +4608,8 @@ components:
           description: Details about an external payment.
         service_charges:
           $ref: '#/components/schemas/ServiceCharges'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -4793,6 +4807,11 @@ components:
       example:
         - New
       nullable: true
+    CustomMappings:
+      type: object
+      x-apideck-schema-id: CustomMappings
+      description: When custom mappings are configured on the resource, the result is included here.
+      nullable: true
     Tender:
       type: object
       x-apideck-schema-id: Tender
@@ -4835,6 +4854,8 @@ components:
           type: boolean
           description: Allow tipping on payment from tender
           default: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -4982,21 +5003,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#invalidstateerror
-    UpdatedAt:
-      type: string
-      title: Updated at (timestamp)
-      description: The date and time when the object was last updated.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-      nullable: true
-    UpdatedBy:
-      type: string
-      title: Updated by
-      description: The user who last updated the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     UpdateItemResponse:
       type: object
       x-apideck-schema-id: UpdateItemResponse
@@ -5294,6 +5300,21 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    UpdatedAt:
+      type: string
+      title: Updated at (timestamp)
+      description: The date and time when the object was last updated.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+      nullable: true
+    UpdatedBy:
+      type: string
+      title: Updated by
+      description: The user who last updated the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Version:
       type: string
       title: Version
@@ -5737,6 +5758,7 @@ paths:
                   }
                 ],
                 voided: false,
+                custom_mappings: {},
                 version: '230320320320'
               }
             }
@@ -6081,6 +6103,7 @@ paths:
                   }
                 ],
                 voided: false,
+                custom_mappings: {},
                 version: '230320320320'
               }
             }
@@ -6424,6 +6447,7 @@ paths:
                   }
                 ],
                 voided: false,
+                custom_mappings: {},
                 version: '230320320320'
               }
             }
@@ -6642,7 +6666,8 @@ paths:
                     active: true,
                     type: 'auto_gratuity'
                   }
-                ]
+                ],
+                custom_mappings: {}
               }
             }
 
@@ -6863,7 +6888,8 @@ paths:
                     active: true,
                     type: 'auto_gratuity'
                   }
-                ]
+                ],
+                custom_mappings: {}
               }
             }
 
@@ -7064,7 +7090,8 @@ paths:
                   }
                 ],
                 language: 'EN',
-                currency: 'USD'
+                currency: 'USD',
+                custom_mappings: {}
               }
             }
 
@@ -7218,7 +7245,8 @@ paths:
                   }
                 ],
                 language: 'EN',
-                currency: 'USD'
+                currency: 'USD',
+                custom_mappings: {}
               }
             }
 
@@ -7408,7 +7436,8 @@ paths:
                 },
                 status: 'active',
                 merchant_id: '12345',
-                currency: 'USD'
+                currency: 'USD',
+                custom_mappings: {}
               }
             }
 
@@ -7551,7 +7580,8 @@ paths:
                 },
                 status: 'active',
                 merchant_id: '12345',
-                currency: 'USD'
+                currency: 'USD',
+                custom_mappings: {}
               }
             }
 
@@ -7764,6 +7794,7 @@ paths:
                 ],
                 available: true,
                 hidden: true,
+                custom_mappings: {},
                 deleted: true
               }
             }
@@ -7930,6 +7961,7 @@ paths:
                 ],
                 available: true,
                 hidden: true,
+                custom_mappings: {},
                 deleted: true
               }
             }
@@ -8096,7 +8128,8 @@ paths:
                 price_amount: 10,
                 currency: 'USD',
                 modifier_group_id: '123',
-                available: true
+                available: true,
+                custom_mappings: {}
               }
             }
 
@@ -8216,7 +8249,8 @@ paths:
                 price_amount: 10,
                 currency: 'USD',
                 modifier_group_id: '123',
-                available: true
+                available: true,
+                custom_mappings: {}
               }
             }
 
@@ -8394,6 +8428,7 @@ paths:
                   }
                 ],
                 deleted: true,
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -8524,6 +8559,7 @@ paths:
                   }
                 ],
                 deleted: true,
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -8965,7 +9001,8 @@ paths:
                 hidden: true,
                 editable: true,
                 opens_cash_drawer: true,
-                allows_tipping: true
+                allows_tipping: true,
+                custom_mappings: {}
               }
             }
 
@@ -9084,7 +9121,8 @@ paths:
                 hidden: true,
                 editable: true,
                 opens_cash_drawer: true,
-                allows_tipping: true
+                allows_tipping: true,
+                custom_mappings: {}
               }
             }
 

@@ -1298,6 +1298,8 @@ components:
           type: string
           example: R&D
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -1526,6 +1528,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LinkedEcommerceOrder'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
@@ -1714,6 +1718,8 @@ components:
           description: Note for the order.
           example: Special instructions for delivery
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
@@ -2089,6 +2095,8 @@ components:
                 nullable: true
           title: Product Categories
           description: An array of categories for the product, used for organization and searching.
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
@@ -2124,6 +2132,8 @@ components:
           pattern: ^https?://
           example: https://mybrand.com/admin
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
@@ -2817,6 +2827,11 @@ components:
       title: Row version
       description: A binary value used to detect updates to a object and prevent data conflicts. It is incremented each time an update is made to the object.
       example: 1-12345
+      nullable: true
+    CustomMappings:
+      type: object
+      x-apideck-schema-id: CustomMappings
+      description: When custom mappings are configured on the resource, the result is included here.
       nullable: true
     Title:
       type: string

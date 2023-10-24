@@ -689,6 +689,8 @@ components:
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         deleted:
           $ref: '#/components/schemas/Deleted'
         deleted_by:
@@ -768,6 +770,8 @@ components:
               title: Stage name
               example: '12345'
               nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -794,6 +798,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/Id'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -1805,6 +1811,8 @@ components:
           type: string
           example: R&D
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -2366,6 +2374,8 @@ components:
           $ref: '#/components/schemas/OwnerId'
         published_at:
           $ref: '#/components/schemas/PublishedAt'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -2526,6 +2536,8 @@ components:
           title: Application ID
           type: string
           example: abc123
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -2662,6 +2674,11 @@ components:
         type: string
       example:
         - New
+      nullable: true
+    CustomMappings:
+      type: object
+      x-apideck-schema-id: CustomMappings
+      description: When custom mappings are configured on the resource, the result is included here.
       nullable: true
     Title:
       type: string
@@ -3275,6 +3292,7 @@ paths:
                 archived: false,
                 owner_id: '54321',
                 record_url: 'https://app.intercom.io/contacts/12345',
+                custom_mappings: {},
                 deleted: true
               }
             }
@@ -3483,6 +3501,7 @@ paths:
                 archived: false,
                 owner_id: '54321',
                 record_url: 'https://app.intercom.io/contacts/12345',
+                custom_mappings: {},
                 deleted: true
               }
             }
@@ -3649,7 +3668,8 @@ paths:
                 stage: {
                   id: '12345',
                   name: '12345'
-                }
+                },
+                custom_mappings: {}
               }
             }
 
@@ -3767,7 +3787,8 @@ paths:
                 stage: {
                   id: '12345',
                   name: '12345'
-                }
+                },
+                custom_mappings: {}
               }
             }
 

@@ -515,29 +515,12 @@ components:
           example: IT Issues
           description: Description of the collection
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
-    CollectionsSort:
-      type: object
-      x-apideck-schema-id: CollectionsSort
-      example:
-        by: name
-        direction: desc
-      properties:
-        by:
-          type: string
-          x-apideck-enum-id: Collections.sort_by
-          description: The field on which to sort the Collections
-          enum:
-            - name
-            - created_at
-            - updated_at
-          example: name
-        direction:
-          $ref: '#/components/schemas/SortDirection'
-      additionalProperties: false
     CollectionTag:
       type: object
       x-apideck-schema-id: Tag
@@ -561,6 +544,8 @@ components:
           example: User Experience
           readOnly: true
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
     CollectionTicketComment:
       type: object
       x-apideck-schema-id: Comment
@@ -580,6 +565,8 @@ components:
           example: What internet provider do you use?
           description: Body of the comment
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         created_by:
           $ref: '#/components/schemas/CreatedBy'
         updated_at:
@@ -624,10 +611,31 @@ components:
           nullable: true
         photo_url:
           $ref: '#/components/schemas/PhotoUrl'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+    CollectionsSort:
+      type: object
+      x-apideck-schema-id: CollectionsSort
+      example:
+        by: name
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: Collections.sort_by
+          description: The field on which to sort the Collections
+          enum:
+            - name
+            - created_at
+            - updated_at
+          example: name
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
     CommentsSort:
       type: object
       x-apideck-schema-id: CommentsSort
@@ -691,21 +699,6 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
-    CreatedAt:
-      type: string
-      title: Created at (timestamp)
-      description: The date and time when the object was created.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-      nullable: true
-    CreatedBy:
-      type: string
-      title: Created by
-      description: The user who created the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     CreateTicketResponse:
       type: object
       x-apideck-schema-id: CreateTicketResponse
@@ -739,6 +732,21 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+    CreatedAt:
+      type: string
+      title: Created at (timestamp)
+      description: The date and time when the object was created.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+      nullable: true
+    CreatedBy:
+      type: string
+      title: Created by
+      description: The user who created the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Currency:
       type: string
       title: Currency
@@ -1452,6 +1460,8 @@ components:
           type: string
           example: R&D
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -1560,45 +1570,6 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Collection'
-    GetCollectionsResponse:
-      type: object
-      x-apideck-schema-id: GetCollectionsResponse
-      required:
-        - status_code
-        - status
-        - service
-        - resource
-        - operation
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        service:
-          type: string
-          description: Apideck ID of service provider
-          example: jira
-        resource:
-          type: string
-          description: Unified API resource name
-          example: Tickets
-        operation:
-          type: string
-          description: Operation performed
-          example: all
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Collection'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        links:
-          $ref: '#/components/schemas/Links'
     GetCollectionTagsResponse:
       type: object
       x-apideck-schema-id: GetTagsResponse
@@ -1706,6 +1677,45 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CollectionUser'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetCollectionsResponse:
+      type: object
+      x-apideck-schema-id: GetCollectionsResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: jira
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Tickets
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -1867,35 +1877,6 @@ components:
       example: '12345'
       readOnly: true
       nullable: true
-    IssuesFilter:
-      type: object
-      x-apideck-schema-id: IssuesFilter
-      example:
-        status:
-          - open
-      properties:
-        status:
-          type: array
-          title: ticket status
-          example:
-            - closed
-          description: Filter by ticket status, can be `open`, `closed` or `all`. Will passthrough if none of the above match
-          default: []
-          uniqueItems: true
-          items:
-            type: string
-        since:
-          type: string
-          title: Since date (timestamp)
-          format: date-time
-          example: '2020-09-30T07:43:32.000Z'
-          description: Only return tickets since a specific date
-        assignee_id:
-          type: string
-          title: Assignee ID
-          example: 2332bd9c2eaaa5dcfa14721c
-          description: Only return tickets assigned to a specific user
-      additionalProperties: false
     IssueTrackingEventType:
       type: string
       x-apideck-enum-id: issue-tracking.events
@@ -1979,6 +1960,35 @@ components:
           properties:
             event_type:
               $ref: '#/components/schemas/IssueTrackingEventType'
+    IssuesFilter:
+      type: object
+      x-apideck-schema-id: IssuesFilter
+      example:
+        status:
+          - open
+      properties:
+        status:
+          type: array
+          title: ticket status
+          example:
+            - closed
+          description: Filter by ticket status, can be `open`, `closed` or `all`. Will passthrough if none of the above match
+          default: []
+          uniqueItems: true
+          items:
+            type: string
+        since:
+          type: string
+          title: Since date (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+          description: Only return tickets since a specific date
+        assignee_id:
+          type: string
+          title: Assignee ID
+          example: 2332bd9c2eaaa5dcfa14721c
+          description: Only return tickets assigned to a specific user
+      additionalProperties: false
     Language:
       type: string
       example: EN
@@ -2240,6 +2250,11 @@ components:
         - asc
         - desc
       default: asc
+    CustomMappings:
+      type: object
+      x-apideck-schema-id: CustomMappings
+      description: When custom mappings are configured on the resource, the result is included here.
+      nullable: true
     Ticket:
       type: object
       x-apideck-schema-id: Ticket
@@ -2337,6 +2352,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CollectionTag'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
     TicketsSort:
       type: object
       x-apideck-schema-id: TicketsSort
@@ -2528,21 +2545,6 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
-    UpdatedAt:
-      type: string
-      title: Updated at (timestamp)
-      description: The date and time when the object was last updated.
-      format: date-time
-      example: '2020-09-30T07:43:32.000Z'
-      readOnly: true
-      nullable: true
-    UpdatedBy:
-      type: string
-      title: Updated by
-      description: The user who last updated the object.
-      example: '12345'
-      readOnly: true
-      nullable: true
     UpdateTicketResponse:
       type: object
       x-apideck-schema-id: UpdateTicketResponse
@@ -2576,6 +2578,21 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    UpdatedAt:
+      type: string
+      title: Updated at (timestamp)
+      description: The date and time when the object was last updated.
+      format: date-time
+      example: '2020-09-30T07:43:32.000Z'
+      readOnly: true
+      nullable: true
+    UpdatedBy:
+      type: string
+      title: Updated by
+      description: The user who last updated the object.
+      example: '12345'
+      readOnly: true
+      nullable: true
     Website:
       type: object
       x-apideck-schema-id: Website
@@ -2887,9 +2904,11 @@ paths:
                 due_date: '2020-09-30T07:43:32.000Z',
                 tags: [
                   {
-                    id: '12345'
+                    id: '12345',
+                    custom_mappings: {}
                   }
-                ]
+                ],
+                custom_mappings: {}
               }
             }
 
@@ -3022,9 +3041,11 @@ paths:
                 due_date: '2020-09-30T07:43:32.000Z',
                 tags: [
                   {
-                    id: '12345'
+                    id: '12345',
+                    custom_mappings: {}
                   }
-                ]
+                ],
+                custom_mappings: {}
               }
             }
 
@@ -3201,7 +3222,8 @@ paths:
               collectionId: 'collection_id_example',
               ticketId: 'ticket_id_example',
               collectionTicketComment: {
-                body: 'What internet provider do you use?'
+                body: 'What internet provider do you use?',
+                custom_mappings: {}
               }
             }
 
@@ -3326,7 +3348,8 @@ paths:
               collectionId: 'collection_id_example',
               ticketId: 'ticket_id_example',
               collectionTicketComment: {
-                body: 'What internet provider do you use?'
+                body: 'What internet provider do you use?',
+                custom_mappings: {}
               }
             }
 

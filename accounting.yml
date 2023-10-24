@@ -1109,6 +1109,8 @@ components:
                     description: The equity amount
                     title: Value
                     example: 10000
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -1395,6 +1397,8 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         row_version:
           $ref: '#/components/schemas/RowVersion'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
     BillLineItem:
       type: object
       title: Bill Line Item
@@ -1773,6 +1777,8 @@ components:
           example: '2000-08-12'
           format: date
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           description: Updated by user ID
           type: string
@@ -1901,6 +1907,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Email'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -2159,6 +2167,8 @@ components:
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_at:
           description: The last update date of the contact.
           type: string
@@ -2739,6 +2749,8 @@ components:
           description: Optional terms to be associated with the credit note.
           example: Some terms about this credit note
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -3505,6 +3517,8 @@ components:
           $ref: '#/components/schemas/PaymentMethod'
         channel:
           $ref: '#/components/schemas/Channel'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -5067,6 +5081,8 @@ components:
           $ref: '#/components/schemas/BankAccount'
         ledger_account:
           $ref: '#/components/schemas/LinkedLedgerAccount'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -5219,6 +5235,8 @@ components:
           $ref: '#/components/schemas/LinkedTrackingCategory'
         active:
           $ref: '#/components/schemas/Active'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -5362,6 +5380,8 @@ components:
           $ref: '#/components/schemas/LinkedTaxRate'
         ledger_account:
           $ref: '#/components/schemas/LinkedLedgerAccount'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -5470,6 +5490,8 @@ components:
           description: Journal entry number.
           example: OIT00546
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -5811,6 +5833,8 @@ components:
           format: date
           example: '2020-09-30'
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -6369,6 +6393,8 @@ components:
           description: Payment id to be displayed.
           example: '123456'
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -6648,6 +6674,8 @@ components:
               example: 100000
             records:
               $ref: '#/components/schemas/ProfitAndLossRecords'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
     ProfitAndLossFilter:
       type: object
       x-apideck-schema-id: ProfitAndLossFilter
@@ -6884,6 +6912,8 @@ components:
           description: Message for the supplier. This text appears on the Purchase Order.
           example: Thank you for the partnership and have a great day!
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -7084,6 +7114,8 @@ components:
           $ref: '#/components/schemas/PaymentMethod'
         channel:
           $ref: '#/components/schemas/Channel'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         updated_by:
           $ref: '#/components/schemas/UpdatedBy'
         created_by:
@@ -7137,6 +7169,11 @@ components:
         type: string
       example:
         - New
+      nullable: true
+    CustomMappings:
+      type: object
+      x-apideck-schema-id: CustomMappings
+      description: When custom mappings are configured on the resource, the result is included here.
       nullable: true
     TaxCode:
       type: string
@@ -7294,6 +7331,8 @@ components:
           description: Tax rate status
           example: active
           nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -8122,6 +8161,7 @@ paths:
                 report_tax_type: 'NONE',
                 original_tax_rate_id: '12345',
                 status: 'active',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -8256,6 +8296,7 @@ paths:
                 report_tax_type: 'NONE',
                 original_tax_rate_id: '12345',
                 status: 'active',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -8536,7 +8577,8 @@ paths:
                   currency: 'USD'
                 },
                 discount_percentage: 5.5,
-                row_version: '1-12345'
+                row_version: '1-12345',
+                custom_mappings: {}
               }
             }
 
@@ -8765,7 +8807,8 @@ paths:
                   currency: 'USD'
                 },
                 discount_percentage: 5.5,
-                row_version: '1-12345'
+                row_version: '1-12345',
+                custom_mappings: {}
               }
             }
 
@@ -9001,6 +9044,7 @@ paths:
                       nominal_code: 'N091',
                       code: '453'
                     },
+                    custom_mappings: {},
                     row_version: '1-12345'
                   }
                 ],
@@ -9080,6 +9124,7 @@ paths:
                   nominal_code: 'N091',
                   code: '453'
                 },
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -9264,6 +9309,7 @@ paths:
                       nominal_code: 'N091',
                       code: '453'
                     },
+                    custom_mappings: {},
                     row_version: '1-12345'
                   }
                 ],
@@ -9343,6 +9389,7 @@ paths:
                   nominal_code: 'N091',
                   code: '453'
                 },
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -9550,6 +9597,7 @@ paths:
                 },
                 sub_account: false,
                 last_reconciliation_date: '2020-09-30',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -9704,6 +9752,7 @@ paths:
                 },
                 sub_account: false,
                 last_reconciliation_date: '2020-09-30',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -9919,6 +9968,7 @@ paths:
                   name: 'New York'
                 },
                 active: true,
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -10082,6 +10132,7 @@ paths:
                   name: 'New York'
                 },
                 active: true,
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -10304,6 +10355,7 @@ paths:
                       nominal_code: 'N091',
                       code: '453'
                     },
+                    custom_mappings: {},
                     row_version: '1-12345'
                   }
                 ],
@@ -10316,6 +10368,7 @@ paths:
                 ],
                 note: 'Some notes about this credit note',
                 terms: 'Some terms about this credit note',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -10488,6 +10541,7 @@ paths:
                       nominal_code: 'N091',
                       code: '453'
                     },
+                    custom_mappings: {},
                     row_version: '1-12345'
                   }
                 ],
@@ -10500,6 +10554,7 @@ paths:
                 ],
                 note: 'Some notes about this credit note',
                 terms: 'Some terms about this credit note',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -10771,6 +10826,7 @@ paths:
                 status: 'active',
                 payment_method: 'cash',
                 channel: 'email',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -10985,6 +11041,7 @@ paths:
                 status: 'active',
                 payment_method: 'cash',
                 channel: 'email',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -11247,6 +11304,7 @@ paths:
                 status: 'active',
                 payment_method: 'cash',
                 channel: 'email',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -11456,6 +11514,7 @@ paths:
                 status: 'active',
                 payment_method: 'cash',
                 channel: 'email',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -11685,7 +11744,8 @@ paths:
                 ],
                 note: 'Some notes about this payment',
                 row_version: '1-12345',
-                display_id: '123456'
+                display_id: '123456',
+                custom_mappings: {}
               }
             }
 
@@ -11860,7 +11920,8 @@ paths:
                 ],
                 note: 'Some notes about this payment',
                 row_version: '1-12345',
-                display_id: '123456'
+                display_id: '123456',
+                custom_mappings: {}
               }
             }
 
@@ -12305,6 +12366,7 @@ paths:
                 tax_type: 'sales',
                 tax_code: '1234',
                 number: 'OIT00546',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -12546,6 +12608,7 @@ paths:
                 tax_type: 'sales',
                 tax_code: '1234',
                 number: 'OIT00546',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -12789,6 +12852,7 @@ paths:
                       nominal_code: 'N091',
                       code: '453'
                     },
+                    custom_mappings: {},
                     row_version: '1-12345'
                   }
                 ],
@@ -12844,6 +12908,7 @@ paths:
                 tax_code: '1234',
                 channel: 'email',
                 memo: 'Thank you for the partnership and have a great day!',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }
@@ -13036,6 +13101,7 @@ paths:
                       nominal_code: 'N091',
                       code: '453'
                     },
+                    custom_mappings: {},
                     row_version: '1-12345'
                   }
                 ],
@@ -13091,6 +13157,7 @@ paths:
                 tax_code: '1234',
                 channel: 'email',
                 memo: 'Thank you for the partnership and have a great day!',
+                custom_mappings: {},
                 row_version: '1-12345'
               }
             }

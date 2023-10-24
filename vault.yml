@@ -115,7 +115,7 @@ info:
 
     ### How do I migrate existing data?
 
-    Using our migration API, you can migrate the access tokens and accounts to Apideck Vault. 
+    Using our migration API, you can migrate the access tokens and accounts to Apideck Vault.
 
     ### Can I use Vault in combination with existing integrations?
 
@@ -191,6 +191,10 @@ tags:
     description: A log represents a request made for a given consumer. Logs include requests made to unified APIs, connectors and the Vault API.
     x-apideck-model:
       $ref: '#/components/schemas/Log'
+  - name: Custom Mappings
+    description: A custom mapping represents a mapping between a connector and a Unified API. Custom mappings allow you to map downstream properties to the Unified API response.
+    x-apideck-model:
+      $ref: '#/components/schemas/CustomMapping'
 components:
   parameters:
     id:
@@ -254,6 +258,14 @@ components:
       schema:
         type: string
       example: test_user_id
+    target_field_id:
+      name: target_field_id
+      in: path
+      description: ID of the target field to return as a custom mapping.
+      example: hris+employees+first_aid_training
+      required: true
+      schema:
+        type: string
     x-apideck-downstream-url:
       name: x-apideck-downstream-url
       in: header
@@ -289,7 +301,7 @@ components:
       name: resource
       in: path
       required: true
-      description: Resource Name
+      description: Name of the resource (plural)
       schema:
         type: string
       example: leads
@@ -632,6 +644,9 @@ components:
         validation_support:
           type: boolean
           readOnly: true
+        schema_support:
+          type: boolean
+          readOnly: true
         settings_required_for_authorization:
           type: array
           items:
@@ -655,6 +670,11 @@ components:
           type: number
           readOnly: true
           example: 1615563533390
+        custom_mappings:
+          type: array
+          description: List of custom mappings configured for this connection
+          items:
+            $ref: '#/components/schemas/CustomMapping'
         updated_at:
           type: number
           example: 1616662325753
@@ -762,192 +782,6 @@ components:
         - invalid
       example: authorized
       readOnly: true
-    ConsumerId:
-      type: string
-      example: test_consumer_id
-      description: Unique consumer identifier. You can freely choose a consumer ID yourself. Most of the time, this is an ID of your internal data model that represents a user or account in your system (for example account:12345). If the consumer doesn't exist yet, Vault will upsert a consumer based on your ID.
-    Consumer:
-      type: object
-      x-apideck-schema-id: Consumer
-      required:
-        - consumer_id
-      properties:
-        consumer_id:
-          $ref: '#/components/schemas/ConsumerId'
-        application_id:
-          type: string
-          readOnly: true
-          description: ID of your Apideck Application
-          example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
-        metadata:
-          $ref: '#/components/schemas/ConsumerMetadata'
-        connections:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConsumerConnection'
-          readOnly: true
-        services:
-          type: array
-          items:
-            type: string
-            example: salesforce
-          example:
-            - salesforce
-            - stripe
-          readOnly: true
-        aggregated_request_count:
-          type: number
-          example: 101
-          readOnly: true
-        request_counts:
-          $ref: '#/components/schemas/RequestCountAllocation'
-        created:
-          type: string
-          example: '2021-05-07T12:55:42.242Z'
-          readOnly: true
-        modified:
-          type: string
-          example: '2021-05-07T12:55:42.242Z'
-          readOnly: true
-        request_count_updated:
-          type: string
-          example: '2021-05-07T12:55:42.242Z'
-          readOnly: true
-    ConsumerConnection:
-      type: object
-      x-apideck-schema-id: ConsumerConnection
-      properties:
-        id:
-          type: string
-          example: 1111+test_user_id
-          readOnly: true
-        name:
-          type: string
-          example: Salesforce
-        icon:
-          type: string
-          example: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
-        logo:
-          type: string
-          example: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
-        website:
-          type: string
-          example: https://www.salesforce.com
-          readOnly: true
-        tag_line:
-          type: string
-          example: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
-          readOnly: true
-        service_id:
-          type: string
-          example: teamleader
-        unified_api:
-          type: string
-          example: crm
-        consumer_id:
-          type: string
-          example: test_user_id
-        auth_type:
-          $ref: '#/components/schemas/AuthType'
-        enabled:
-          type: boolean
-          example: true
-        settings:
-          type: object
-          description: Connection settings. Values will persist to `form_fields` with corresponding id
-          nullable: true
-          example:
-            instance_url: https://eu28.salesforce.com
-        metadata:
-          type: object
-          description: Attach your own consumer specific metadata
-          additionalProperties: true
-          properties: {}
-          nullable: true
-          example:
-            account:
-              name: My Company
-              id: c01458a5-7276-41ce-bc19-639906b0450a
-            plan: enterprise
-        created_at:
-          type: string
-          example: '2020-09-19T12:18:37.071Z'
-        updated_at:
-          type: string
-          example: '2020-09-19T12:18:37.071Z'
-          nullable: true
-        state:
-          type: string
-          x-apideck-enum-id: consumer.connections.state
-          enum:
-            - available
-            - callable
-            - added
-            - configured
-            - authorized
-          example: authorized
-    ConsumerMetadata:
-      type: object
-      description: The metadata of the consumer. This is used to display the consumer in the sidebar. This is optional, but recommended.
-      x-apideck-schema-id: ConsumerMetadata
-      properties:
-        account_name:
-          example: SpaceX
-          type: string
-          title: Account name
-          description: The name of the account as shown in the sidebar.
-        user_name:
-          example: Elon Musk
-          type: string
-          title: User name
-          description: The name of the user as shown in the sidebar.
-        email:
-          example: elon@musk.com
-          type: string
-          title: Email
-          description: The email of the user as shown in the sidebar.
-        image:
-          example: https://www.spacex.com/static/images/share.jpg
-          type: string
-          title: Image
-          description: The avatar of the user in the sidebar. Must be a valid URL
-    ConsumerRequestCountsInDateRangeResponse:
-      type: object
-      x-apideck-schema-id: ConsumerRequestCountsInDateRangeResponse
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          type: object
-          x-apideck-schema-id: ConsumerRequestCountsInDateRange
-          properties:
-            application_id:
-              type: string
-              example: '1111'
-            consumer_id:
-              type: string
-              example: test_user_id
-            start_datetime:
-              type: string
-              example: '2021-05-01T12:00:00.000Z'
-            end_datetime:
-              type: string
-              example: '2021-05-10T12:00:00.000Z'
-            aggregated_request_count:
-              type: number
-              example: 40
-            request_counts:
-              $ref: '#/components/schemas/RequestCountAllocation'
     ConnectionWebhook:
       type: object
       x-apideck-schema-id: Webhook
@@ -1131,6 +965,192 @@ components:
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
           nullable: true
+    Consumer:
+      type: object
+      x-apideck-schema-id: Consumer
+      required:
+        - consumer_id
+      properties:
+        consumer_id:
+          $ref: '#/components/schemas/ConsumerId'
+        application_id:
+          type: string
+          readOnly: true
+          description: ID of your Apideck Application
+          example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
+        metadata:
+          $ref: '#/components/schemas/ConsumerMetadata'
+        connections:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsumerConnection'
+          readOnly: true
+        services:
+          type: array
+          items:
+            type: string
+            example: salesforce
+          example:
+            - salesforce
+            - stripe
+          readOnly: true
+        aggregated_request_count:
+          type: number
+          example: 101
+          readOnly: true
+        request_counts:
+          $ref: '#/components/schemas/RequestCountAllocation'
+        created:
+          type: string
+          example: '2021-05-07T12:55:42.242Z'
+          readOnly: true
+        modified:
+          type: string
+          example: '2021-05-07T12:55:42.242Z'
+          readOnly: true
+        request_count_updated:
+          type: string
+          example: '2021-05-07T12:55:42.242Z'
+          readOnly: true
+    ConsumerConnection:
+      type: object
+      x-apideck-schema-id: ConsumerConnection
+      properties:
+        id:
+          type: string
+          example: 1111+test_user_id
+          readOnly: true
+        name:
+          type: string
+          example: Salesforce
+        icon:
+          type: string
+          example: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+        logo:
+          type: string
+          example: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
+        website:
+          type: string
+          example: https://www.salesforce.com
+          readOnly: true
+        tag_line:
+          type: string
+          example: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
+          readOnly: true
+        service_id:
+          type: string
+          example: teamleader
+        unified_api:
+          type: string
+          example: crm
+        consumer_id:
+          type: string
+          example: test_user_id
+        auth_type:
+          $ref: '#/components/schemas/AuthType'
+        enabled:
+          type: boolean
+          example: true
+        settings:
+          type: object
+          description: Connection settings. Values will persist to `form_fields` with corresponding id
+          nullable: true
+          example:
+            instance_url: https://eu28.salesforce.com
+        metadata:
+          type: object
+          description: Attach your own consumer specific metadata
+          additionalProperties: true
+          properties: {}
+          nullable: true
+          example:
+            account:
+              name: My Company
+              id: c01458a5-7276-41ce-bc19-639906b0450a
+            plan: enterprise
+        created_at:
+          type: string
+          example: '2020-09-19T12:18:37.071Z'
+        updated_at:
+          type: string
+          example: '2020-09-19T12:18:37.071Z'
+          nullable: true
+        state:
+          type: string
+          x-apideck-enum-id: consumer.connections.state
+          enum:
+            - available
+            - callable
+            - added
+            - configured
+            - authorized
+          example: authorized
+    ConsumerId:
+      type: string
+      example: test_consumer_id
+      description: Unique consumer identifier. You can freely choose a consumer ID yourself. Most of the time, this is an ID of your internal data model that represents a user or account in your system (for example account:12345). If the consumer doesn't exist yet, Vault will upsert a consumer based on your ID.
+    ConsumerMetadata:
+      type: object
+      description: The metadata of the consumer. This is used to display the consumer in the sidebar. This is optional, but recommended.
+      x-apideck-schema-id: ConsumerMetadata
+      properties:
+        account_name:
+          example: SpaceX
+          type: string
+          title: Account name
+          description: The name of the account as shown in the sidebar.
+        user_name:
+          example: Elon Musk
+          type: string
+          title: User name
+          description: The name of the user as shown in the sidebar.
+        email:
+          example: elon@musk.com
+          type: string
+          title: Email
+          description: The email of the user as shown in the sidebar.
+        image:
+          example: https://www.spacex.com/static/images/share.jpg
+          type: string
+          title: Image
+          description: The avatar of the user in the sidebar. Must be a valid URL
+    ConsumerRequestCountsInDateRangeResponse:
+      type: object
+      x-apideck-schema-id: ConsumerRequestCountsInDateRangeResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: object
+          x-apideck-schema-id: ConsumerRequestCountsInDateRange
+          properties:
+            application_id:
+              type: string
+              example: '1111'
+            consumer_id:
+              type: string
+              example: test_user_id
+            start_datetime:
+              type: string
+              example: '2021-05-01T12:00:00.000Z'
+            end_datetime:
+              type: string
+              example: '2021-05-10T12:00:00.000Z'
+            aggregated_request_count:
+              type: number
+              example: 40
+            request_counts:
+              $ref: '#/components/schemas/RequestCountAllocation'
     CreateConnectionResponse:
       type: object
       x-apideck-schema-id: CreateConnectionResponse
@@ -1149,6 +1169,53 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Connection'
+    CreateConsumerResponse:
+      type: object
+      x-apideck-schema-id: GetConsumerResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Consumer'
+    CreateCustomMappingRequest:
+      type: object
+      x-apideck-schema-id: CreateCustomMappingRequest
+      additionalProperties: false
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          description: Target Field Mapping value
+          example: $.root.training.first_aid
+    CreateCustomMappingResponse:
+      type: object
+      x-apideck-schema-id: CreateCustomMappingResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 201
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/CustomMapping'
     CreateSessionResponse:
       type: object
       x-apideck-schema-id: CreateSessionResponse
@@ -1181,6 +1248,102 @@ components:
               readOnly: true
               type: string
           additionalProperties: false
+    CustomFieldFinder:
+      type: object
+      x-apideck-schema-id: CustomFieldFinder
+      properties:
+        id:
+          type: string
+          description: Custom Field ID
+          example: '123456'
+          readOnly: true
+        name:
+          type: string
+          description: Custom Field name to use as a label if provided
+          example: SSN
+          readOnly: true
+          nullable: true
+        description:
+          title: Description
+          type: string
+          description: More information about the custom field
+          example: Employee Level
+          nullable: true
+        value:
+          description: Custom Field value
+          example: '495172776'
+        finder:
+          type: string
+          description: JSONPath finder for retrieving this value when mapping a response payload from downstream
+          example: $['data']['custom_fields'][?(@['custom_field_id']===123456)]
+          readOnly: true
+      additionalProperties: false
+    CustomMapping:
+      type: object
+      x-apideck-schema-id: CustomMapping
+      properties:
+        id:
+          type: string
+          description: Target Field ID
+          example: hris+employees+first_aid_training
+          readOnly: true
+        label:
+          type: string
+          description: Target Field name to use as a label
+          example: First Aid Training
+          readOnly: true
+        description:
+          type: string
+          description: Target Field description
+          example: First Aid Training completed after 2019-01-01
+          readOnly: true
+          nullable: true
+        value:
+          type: string
+          description: Target Field Mapping value
+          example: $.root.training.first_aid
+        key:
+          type: string
+          description: Target Field Key
+          example: first_aid_training
+          readOnly: true
+        required:
+          type: boolean
+          description: Target Field Mapping is required
+          example: false
+          readOnly: true
+        custom_field:
+          type: boolean
+          description: This mapping represents a finder for a custom field
+          example: true
+          readOnly: true
+        consumer_id:
+          type: string
+          description: Consumer ID
+          example: test_user_id
+          readOnly: true
+          nullable: true
+      additionalProperties: false
+    DeleteConsumerResponse:
+      type: object
+      x-apideck-schema-id: GetConsumerResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          properties:
+            consumer_id:
+              $ref: '#/components/schemas/ConsumerId'
     FormField:
       type: object
       x-apideck-schema-id: FormField
@@ -1393,6 +1556,44 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetCustomFieldsResponse:
+      type: object
+      x-apideck-schema-id: GetCustomFieldsResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldFinder'
+    GetCustomMappingResponse:
+      type: object
+      x-apideck-schema-id: GetCustomMappingResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/CustomMapping'
     GetLogsResponse:
       type: object
       x-apideck-schema-id: GetLogsResponse
@@ -1417,6 +1618,42 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetResourceExampleResponse:
+      type: object
+      x-apideck-schema-id: GetResourceExampleResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/ResourceExample'
+    GetResourceSchemaResponse:
+      type: object
+      x-apideck-schema-id: GetResourceSchemaResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/ResourceSchema'
     IntegrationState:
       type: string
       x-apideck-schema-id: IntegrationState
@@ -1428,6 +1665,26 @@ components:
         - configured
       example: configured
       readOnly: true
+    LinkedConnectorResource:
+      type: object
+      x-apideck-schema-id: LinkedConnectorResource
+      properties:
+        id:
+          $ref: '#/components/schemas/ResourceId'
+        name:
+          type: string
+          description: Name of the resource (plural)
+          example: Companies
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+        downstream_id:
+          type: string
+          description: ID of the resource in the Connector's API (downstream)
+          example: accounts
+        downstream_name:
+          type: string
+          description: Name of the resource in the Connector's API (downstream)
+          example: Accounts
     Links:
       type: object
       x-apideck-schema-id: Links
@@ -1779,6 +2036,40 @@ components:
         vault:
           type: number
           example: 21
+    ResourceExample:
+      type: object
+      x-apideck-schema-id: ResourceExample
+      properties:
+        unified_api:
+          $ref: '#/components/schemas/UnifiedApiId'
+        service_id:
+          $ref: '#/components/schemas/ServiceId'
+        resource:
+          $ref: '#/components/schemas/LinkedConnectorResource'
+        example_response:
+          type: object
+          description: Example response from the downstream API
+    ResourceSchema:
+      type: object
+      x-apideck-schema-id: ResourceSchema
+    ResourceId:
+      type: string
+      description: ID of the resource, typically a lowercased version of name.
+      example: companies
+    ResourceStatus:
+      x-apideck-enum-id: connector.resource.status
+      type: string
+      enum:
+        - live
+        - beta
+        - development
+        - upcoming
+        - considering
+      description: Status of the resource. Resources with status live or beta are callable.
+    ServiceId:
+      type: string
+      description: Service provider identifier
+      example: close
     Session:
       type: object
       x-apideck-schema-id: Session
@@ -2083,6 +2374,60 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Connection'
+    UpdateConsumerRequest:
+      type: object
+      x-apideck-schema-id: UpdateConsumerRequest
+      additionalProperties: false
+      properties:
+        metadata:
+          $ref: '#/components/schemas/ConsumerMetadata'
+    UpdateConsumerResponse:
+      type: object
+      x-apideck-schema-id: GetConsumerResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/Consumer'
+    UpdateCustomMappingRequest:
+      type: object
+      x-apideck-schema-id: UpdateCustomMappingRequest
+      additionalProperties: false
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          description: Target Field Mapping value
+          example: $.root.training.first_aid
+    UpdateCustomMappingResponse:
+      type: object
+      x-apideck-schema-id: UpdateCustomMappingResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/CustomMapping'
     VaultEventType:
       type: string
       x-apideck-enum-id: vault.events
@@ -2128,69 +2473,6 @@ components:
           type: string
           description: The date and time the webhook subscription was created downstream
           example: '2020-10-01T12:00:00.000Z'
-    UpdateConsumerRequest:
-      type: object
-      x-apideck-schema-id: UpdateConsumerRequest
-      additionalProperties: false
-      properties:
-        metadata:
-          $ref: '#/components/schemas/ConsumerMetadata'
-    UpdateConsumerResponse:
-      type: object
-      x-apideck-schema-id: GetConsumerResponse
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          $ref: '#/components/schemas/Consumer'
-    CreateConsumerResponse:
-      type: object
-      x-apideck-schema-id: GetConsumerResponse
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          $ref: '#/components/schemas/Consumer'
-    DeleteConsumerResponse:
-      type: object
-      x-apideck-schema-id: GetConsumerResponse
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          properties:
-            consumer_id:
-              $ref: '#/components/schemas/ConsumerId'
   responses:
     BadRequestResponse:
       content:
@@ -2210,18 +2492,36 @@ components:
           schema:
             $ref: '#/components/schemas/CreateConnectionResponse'
       description: Connection created
-    Created:
+    CreateConsumerResponse:
       content:
         application/json:
-          example: {}
-          schema: {}
-      description: Resource created
+          schema:
+            $ref: '#/components/schemas/CreateConsumerResponse'
+      description: Consumer created
+    CreateCustomMappingResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateCustomMappingResponse'
+      description: Custom mapping created
     CreateSessionResponse:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateSessionResponse'
       description: Session created
+    Created:
+      content:
+        application/json:
+          example: {}
+          schema: {}
+      description: Resource created
+    DeleteConsumerResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteConsumerResponse'
+      description: Consumer deleted
     Deleted:
       content:
         application/json:
@@ -2246,36 +2546,42 @@ components:
           schema:
             $ref: '#/components/schemas/GetConsumerResponse'
       description: Consumer
-    UpdateConsumerResponse:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UpdateConsumerResponse'
-      description: Consumer updated
-    CreateConsumerResponse:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateConsumerResponse'
-      description: Consumer created
-    DeleteConsumerResponse:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/DeleteConsumerResponse'
-      description: Consumer deleted
     GetConsumersResponse:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetConsumersResponse'
       description: Consumers
+    GetCustomFieldsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetCustomFieldsResponse'
+      description: Custom mapping
+    GetCustomMappingResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetCustomMappingResponse'
+      description: Custom mapping
     GetLogsResponse:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetLogsResponse'
       description: Logs
+    GetResourceExampleResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetResourceExampleResponse'
+      description: Resource Schema
+    GetResourceSchemaResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetResourceSchemaResponse'
+      description: Resource Schema
     NoContent:
       content:
         application/json:
@@ -2340,6 +2646,18 @@ components:
           schema:
             $ref: '#/components/schemas/UpdateConnectionResponse'
       description: Connection updated
+    UpdateConsumerResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateConsumerResponse'
+      description: Consumer updated
+    UpdateCustomMappingResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateCustomMappingResponse'
+      description: Custom mapping updated
     Updated:
       content:
         application/json:
@@ -2874,6 +3192,11 @@ paths:
                       }
                     ]
                   }
+                ],
+                custom_mappings: [
+                  {
+                    value: '$.root.training.first_aid'
+                  }
                 ]
               }
             }
@@ -2958,6 +3281,11 @@ paths:
                         value: 'GC5000 series'
                       }
                     ]
+                  }
+                ],
+                custom_mappings: [
+                  {
+                    value: '$.root.training.first_aid'
                   }
                 ]
               }
@@ -3296,12 +3624,189 @@ paths:
                       }
                     ]
                   }
+                ],
+                custom_mappings: [
+                  {
+                    value: '$.root.training.first_aid'
+                  }
                 ]
               }
             }
 
             try {
               const { data } = await apideck.vault.connectionSettingsUpdate(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /vault/connections/{unified_api}/{service_id}/{resource}/schema:
+    get:
+      tags:
+        - Connections
+      summary: Get resource schema
+      description: |
+        This endpoint returns an approximate JSONSchema of a given resource.
+      x-sdk-exclude: true
+      x-internal: true
+      operationId: connectionsSchema
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/resource'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetResourceSchemaResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              unifiedApi: 'crm',
+              serviceId: 'pipedrive',
+              resource: 'leads'
+            }
+
+            try {
+              const { data } = await apideck.vault.connectionsSchema(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /vault/connections/{unified_api}/{service_id}/{resource}/example:
+    get:
+      tags:
+        - Connections
+      summary: Get resource example
+      description: |
+        This endpoint returns a downstream example of a given resource.
+      x-sdk-exclude: true
+      x-internal: true
+      operationId: connectionsExample
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/resource'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetResourceExampleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              unifiedApi: 'crm',
+              serviceId: 'pipedrive',
+              resource: 'leads'
+            }
+
+            try {
+              const { data } = await apideck.vault.connectionsExample(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /vault/connections/{unified_api}/{service_id}/{resource}/custom-fields:
+    get:
+      tags:
+        - Connections
+      summary: Get resource custom fields
+      description: |
+        This endpoint returns an custom fields on a connection resource.
+      operationId: customFieldsAll
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/resource'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCustomFieldsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              unifiedApi: 'crm',
+              serviceId: 'pipedrive',
+              resource: 'leads'
+            }
+
+            try {
+              const { data } = await apideck.vault.customFieldsAll(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -3425,6 +3930,251 @@ paths:
 
             try {
               const { data } = await apideck.vault.connectionsRevoke(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /vault/custom-mappings/{unified_api}/{service_id}/{target_field_id}:
+    get:
+      tags:
+        - Custom Mappings
+      summary: Get custom mapping
+      description: Get a custom mapping
+      operationId: customMappingsOne
+      x-sdk-exclude: true
+      x-internal: true
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/target_field_id'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCustomMappingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              unifiedApi: 'crm',
+              serviceId: 'pipedrive',
+              targetFieldId: 'hris+employees+first_aid_training'
+            }
+
+            try {
+              const { data } = await apideck.vault.customMappingsOne(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    post:
+      tags:
+        - Custom Mappings
+      summary: Create custom mapping
+      description: Create a custom mapping
+      operationId: customMappingsAdd
+      x-sdk-exclude: true
+      x-internal: true
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/target_field_id'
+      security:
+        - apiKey: []
+      requestBody:
+        description: Fields that need to be updated on the resource
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomMappingRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateCustomMappingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              unifiedApi: 'crm',
+              serviceId: 'pipedrive',
+              targetFieldId: 'hris+employees+first_aid_training',
+              customMapping: {
+                value: '$.root.training.first_aid'
+              }
+            }
+
+            try {
+              const { data } = await apideck.vault.customMappingsAdd(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    patch:
+      tags:
+        - Custom Mappings
+      summary: Update custom mapping
+      description: Update a custom mapping
+      operationId: customMappingsUpdate
+      x-sdk-exclude: true
+      x-internal: true
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/target_field_id'
+      security:
+        - apiKey: []
+      requestBody:
+        description: Fields that need to be updated on the resource
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCustomMappingRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateCustomMappingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              unifiedApi: 'crm',
+              serviceId: 'pipedrive',
+              targetFieldId: 'hris+employees+first_aid_training',
+              customMapping: {
+                value: '$.root.training.first_aid'
+              }
+            }
+
+            try {
+              const { data } = await apideck.vault.customMappingsUpdate(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    delete:
+      tags:
+        - Custom Mappings
+      summary: Deletes a custom mapping
+      description: Deletes a custom mapping
+      operationId: customMappingsDelete
+      x-sdk-exclude: true
+      x-internal: true
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/target_field_id'
+      security:
+        - apiKey: []
+      responses:
+        '204':
+          description: Resource deleted
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              unifiedApi: 'crm',
+              serviceId: 'pipedrive',
+              targetFieldId: 'hris+employees+first_aid_training'
+            }
+
+            try {
+              const { data } = await apideck.vault.customMappingsDelete(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

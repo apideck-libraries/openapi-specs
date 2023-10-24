@@ -58,6 +58,13 @@ components:
       schema:
         type: string
         nullable: true
+    apiId:
+      in: path
+      name: api_id
+      schema:
+        type: string
+      required: true
+      description: ID of the Unified API
     doc_id:
       in: path
       name: doc_id
@@ -65,6 +72,7 @@ components:
         type: string
       required: true
       description: ID of the Doc
+      example: application_owner+oauth_credentials
     unifiedApi:
       in: query
       name: unified_api
@@ -113,6 +121,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/GetConnectorResourceResponse'
+    GetConnectorResourceExampleResponse:
+      description: Connector Resource Example
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConnectorResourceExampleResponse'
+    GetConnectorResourceSchemaResponse:
+      description: Connector Resource Schema
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConnectorResourceSchemaResponse'
     GetApiResourceResponse:
       description: ApiResources
       content:
@@ -377,23 +397,6 @@ components:
                 description: Supported fields on the list endpoint.
                 items:
                   $ref: '#/components/schemas/SupportedProperty'
-    PaginationCoverage:
-      type: object
-      x-apideck-schema-id: ConnectorResource
-      properties:
-        mode:
-          type: string
-          enum:
-            - native
-            - virtual
-          description: How pagination is implemented on this connector. Native mode means Apideck is using the pagination parameters of the connector. With virtual pagination, the connector does not support pagination, but Apideck emulates it.
-          example: native
-        paging_support:
-          type: boolean
-          description: Indicates whether the connector supports paging through results using the cursor parameter.
-        limit_support:
-          type: boolean
-          description: Indicates whether the connector supports changing the page size by using the limit parameter.
     ApisFilter:
       type: object
       x-apideck-schema-id: ApisFilter
@@ -411,6 +414,39 @@ components:
         - development
         - considering
       description: Status of the API. APIs with status live or beta are callable.
+    BadRequestResponse:
+      type: object
+      x-apideck-schema-id: BadRequest
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Bad Request
+        type_name:
+          type: string
+          description: The type of error returned
+          example: RequestValidationError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+              example: Missing property foobar
+            - type: object
+              example:
+                missing:
+                  - foobar: required
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#requestvalidationerror
     Connector:
       type: object
       x-apideck-schema-id: Connector
@@ -536,9 +572,7 @@ components:
           items:
             $ref: '#/components/schemas/ConnectorSetting'
         service_id:
-          type: string
-          description: Service provider identifier
-          example: close
+          $ref: '#/components/schemas/ServiceId'
         unified_apis:
           type: array
           description: List of Unified APIs that feature this connector.
@@ -608,6 +642,8 @@ components:
             $ref: '#/components/schemas/ConnectorEvent'
         webhook_support:
           $ref: '#/components/schemas/WebhookSupport'
+        schema_support:
+          $ref: '#/components/schemas/SchemaSupport'
         docs:
           type: array
           items:
@@ -646,6 +682,34 @@ components:
           format: uri
           description: Link to fetch the content of the doc.
           example: https://unify.apideck.com/connector/connectors/workday/docs/consumer+connection
+    ConnectorEvent:
+      type: object
+      x-apideck-schema-id: ConnectorEvent
+      description: Unify event that is supported on the connector. Events are delivered via Webhooks.
+      properties:
+        event_type:
+          type: string
+          description: Unify event type
+          example: employee.created
+        event_source:
+          type: string
+          description: Unify event source
+          example: native
+          enum:
+            - native
+            - virtual
+        downstream_event_type:
+          type: string
+          description: Downstream event type
+          example: person_created
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceId'
+        entity_type:
+          type: string
+          description: Unify entity type
+          example: employee
     ConnectorResource:
       type: object
       x-apideck-schema-id: ConnectorResource
@@ -719,34 +783,12 @@ components:
           description: Supported fields on the list endpoint.
           items:
             $ref: '#/components/schemas/SupportedProperty'
-    ConnectorEvent:
+    ConnectorResourceExample:
       type: object
-      x-apideck-schema-id: ConnectorEvent
-      description: Unify event that is supported on the connector. Events are delivered via Webhooks.
-      properties:
-        event_type:
-          type: string
-          description: Unify event type
-          example: employee.created
-        event_source:
-          type: string
-          description: Unify event source
-          example: native
-          enum:
-            - native
-            - virtual
-        downstream_event_type:
-          type: string
-          description: Downstream event type
-          example: person_created
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResourceId'
-        entity_type:
-          type: string
-          description: Unify entity type
-          example: employee
+      x-apideck-schema-id: ConnectorResourceExample
+    ConnectorResourceSchema:
+      type: object
+      x-apideck-schema-id: ConnectorResourceSchema
     ConnectorSetting:
       type: object
       x-apideck-schema-id: ConnectorSetting
@@ -883,6 +925,33 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetConnectorResourceExampleResponse:
+      type: object
+      x-apideck-schema-id: GetConnectorResourceExampleResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: object
+          properties:
+            unified_api:
+              $ref: '#/components/schemas/UnifiedApiId'
+            service_id:
+              $ref: '#/components/schemas/ServiceId'
+            resource:
+              $ref: '#/components/schemas/LinkedConnectorResource'
+            example_response:
+              $ref: '#/components/schemas/ConnectorResourceExample'
     GetConnectorResourceResponse:
       type: object
       x-apideck-schema-id: GetConnectorResourceResponse
@@ -905,6 +974,24 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetConnectorResourceSchemaResponse:
+      type: object
+      x-apideck-schema-id: GetConnectorResourceSchemaResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/ConnectorResourceSchema'
     GetConnectorResponse:
       type: object
       x-apideck-schema-id: GetConnectorResponse
@@ -951,6 +1038,328 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    Id:
+      type: string
+      title: ID
+      description: A unique identifier for an object.
+      example: '12345'
+      readOnly: true
+    LinkedConnectorResource:
+      type: object
+      x-apideck-schema-id: LinkedConnectorResource
+      properties:
+        id:
+          $ref: '#/components/schemas/ResourceId'
+        name:
+          type: string
+          description: Name of the resource (plural)
+          example: Companies
+        status:
+          $ref: '#/components/schemas/ResourceStatus'
+        downstream_id:
+          type: string
+          description: ID of the resource in the Connector's API (downstream)
+          example: accounts
+        downstream_name:
+          type: string
+          description: Name of the resource in the Connector's API (downstream)
+          example: Accounts
+    Links:
+      type: object
+      x-apideck-schema-id: Links
+      description: Links to navigate to previous or next pages through the API
+      properties:
+        previous:
+          type: string
+          description: Link to navigate to the previous page through the API
+          example: https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjE%3D
+          nullable: true
+        current:
+          type: string
+          description: Link to navigate to the current page through the API
+          example: https://unify.apideck.com/crm/companies
+        next:
+          type: string
+          description: Link to navigate to the previous page through the API
+          example: https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM
+          nullable: true
+    Meta:
+      type: object
+      x-apideck-schema-id: Meta
+      description: Response metadata
+      properties:
+        items_on_page:
+          type: integer
+          description: Number of items returned in the data property of the response
+          example: 50
+        cursors:
+          type: object
+          description: Cursors to navigate to previous or next pages through the API
+          properties:
+            previous:
+              type: string
+              description: Cursor to navigate to the previous page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjE=
+              nullable: true
+            current:
+              type: string
+              description: Cursor to navigate to the current page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjI=
+              nullable: true
+            next:
+              type: string
+              description: Cursor to navigate to the next page of results through the API
+              example: em9oby1jcm06OnBhZ2U6OjM=
+              nullable: true
+    NotFoundResponse:
+      type: object
+      x-apideck-schema-id: NotFound
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 404
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Not Found
+        type_name:
+          type: string
+          description: The type of error returned
+          example: EntityNotFoundError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unknown Widget
+        detail:
+          anyOf:
+            - type: string
+              example: "Could not find widget with id: '123'"
+            - type: object
+              example:
+                not_found:
+                  entity: widget
+                  id: '123'
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#entitynotfounderror
+    PaginationCoverage:
+      type: object
+      x-apideck-schema-id: ConnectorResource
+      properties:
+        mode:
+          type: string
+          enum:
+            - native
+            - virtual
+          description: How pagination is implemented on this connector. Native mode means Apideck is using the pagination parameters of the connector. With virtual pagination, the connector does not support pagination, but Apideck emulates it.
+          example: native
+        paging_support:
+          type: boolean
+          description: Indicates whether the connector supports paging through results using the cursor parameter.
+        limit_support:
+          type: boolean
+          description: Indicates whether the connector supports changing the page size by using the limit parameter.
+    PaymentRequiredResponse:
+      type: object
+      x-apideck-schema-id: PaymentRequired
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 402
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Payment Required
+        type_name:
+          type: string
+          description: The type of error returned
+          example: RequestLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Request Limit Reached
+        detail:
+          type: string
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+          example: You have reached your limit of 2000
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#requestlimiterror
+    ResourceId:
+      type: string
+      description: ID of the resource, typically a lowercased version of name.
+      example: companies
+    ResourceStatus:
+      x-apideck-enum-id: connector.resource.status
+      type: string
+      enum:
+        - live
+        - beta
+        - development
+        - upcoming
+        - considering
+      description: Status of the resource. Resources with status live or beta are callable.
+    ServiceId:
+      type: string
+      description: Service provider identifier
+      example: close
+    SchemaSupport:
+      type: object
+      x-apideck-schema-id: SchemaSupport
+      description: When a connector has schema_support, a call can be made to retrieve a json schema that describes a downstream resource.
+      properties:
+        supported:
+          type: boolean
+          description: Can a resource schema be retrieved for this connector?
+          example: true
+    SupportedProperty:
+      type: object
+      properties:
+        unified_property:
+          $ref: '#/components/schemas/UnifiedProperty'
+        child_properties:
+          type: array
+          description: List of child properties of the unified property.
+          items:
+            type: object
+            properties:
+              unified_property:
+                $ref: '#/components/schemas/SupportedProperty'
+    TooManyRequestsResponse:
+      type: object
+      x-apideck-schema-id: TooManyRequests
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 429
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
+          example: Too Many Requests
+        type_name:
+          type: string
+          description: The type of error returned
+          example: ConnectorRateLimitError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Connector Rate Limit Error
+        detail:
+          type: object
+          properties:
+            context:
+              type: string
+            error:
+              type: object
+              additionalProperties: true
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#connectorratelimiterror
+    UnauthorizedResponse:
+      type: object
+      x-apideck-schema-id: Unauthorized
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 401
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Unauthorized
+        type_name:
+          type: string
+          description: The type of error returned
+          example: UnauthorizedError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Unauthorized Request
+        detail:
+          type: string
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+          example: Failed to generate valid JWT Session. Verify applicationId is correct
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#unauthorizederror
+    UnexpectedErrorResponse:
+      type: object
+      x-apideck-schema-id: Error
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 400
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Bad Request
+        type_name:
+          type: string
+          description: The type of error returned
+          example: RequestHeadersValidationError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Invalid Params
+        detail:
+          anyOf:
+            - type: string
+              example: 'Missing Header: x-apideck-consumer-id'
+            - type: object
+              example:
+                missing:
+                  - x-apideck-consumer-id: required
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#unauthorizederror
+    UnifiedApiId:
+      description: Name of Apideck Unified API
+      x-apideck-enum-id: unified_api
+      enum:
+        - accounting
+        - ats
+        - calendar
+        - crm
+        - csp
+        - customer-support
+        - ecommerce
+        - email
+        - email-marketing
+        - expense-management
+        - file-storage
+        - form
+        - hris
+        - lead
+        - payroll
+        - pos
+        - procurement
+        - project-management
+        - script
+        - sms
+        - spreadsheet
+        - team-messaging
+        - issue-tracking
+        - time-registration
+        - transactional-email
+        - vault
+        - data-warehouse
+      example: crm
+      type: string
+    UnifiedProperty:
+      type: string
+      description: Name of the property in our Unified API.
+      example: owner_id
     WebhookSupport:
       type: object
       x-apideck-schema-id: WebhookSupport
@@ -1025,330 +1434,6 @@ components:
                       type: array
                       items:
                         type: string
-    Links:
-      type: object
-      x-apideck-schema-id: Links
-      description: Links to navigate to previous or next pages through the API
-      properties:
-        previous:
-          type: string
-          description: Link to navigate to the previous page through the API
-          example: https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjE%3D
-          nullable: true
-        current:
-          type: string
-          description: Link to navigate to the current page through the API
-          example: https://unify.apideck.com/crm/companies
-        next:
-          type: string
-          description: Link to navigate to the previous page through the API
-          example: https://unify.apideck.com/crm/companies?cursor=em9oby1jcm06OnBhZ2U6OjM
-          nullable: true
-    Meta:
-      type: object
-      x-apideck-schema-id: Meta
-      description: Response metadata
-      properties:
-        items_on_page:
-          type: integer
-          description: Number of items returned in the data property of the response
-          example: 50
-        cursors:
-          type: object
-          description: Cursors to navigate to previous or next pages through the API
-          properties:
-            previous:
-              type: string
-              description: Cursor to navigate to the previous page of results through the API
-              example: em9oby1jcm06OnBhZ2U6OjE=
-              nullable: true
-            current:
-              type: string
-              description: Cursor to navigate to the current page of results through the API
-              example: em9oby1jcm06OnBhZ2U6OjI=
-              nullable: true
-            next:
-              type: string
-              description: Cursor to navigate to the next page of results through the API
-              example: em9oby1jcm06OnBhZ2U6OjM=
-              nullable: true
-    Id:
-      type: string
-      title: ID
-      description: A unique identifier for an object.
-      example: '12345'
-      readOnly: true
-    ResourceId:
-      type: string
-      description: ID of the resource, typically a lowercased version of name.
-      example: companies
-    ResourceStatus:
-      type: string
-      enum:
-        - live
-        - beta
-        - development
-        - upcoming
-        - considering
-      description: Status of the resource. Resources with status live or beta are callable.
-    LinkedConnectorResource:
-      type: object
-      x-apideck-schema-id: LinkedConnectorResource
-      properties:
-        id:
-          $ref: '#/components/schemas/ResourceId'
-        name:
-          type: string
-          description: Name of the resource (plural)
-          example: Companies
-        status:
-          $ref: '#/components/schemas/ResourceStatus'
-        downstream_id:
-          type: string
-          description: ID of the resource in the Connector's API (downstream)
-          example: accounts
-        downstream_name:
-          type: string
-          description: Name of the resource in the Connector's API (downstream)
-          example: Accounts
-    UnifiedApiId:
-      description: Name of Apideck Unified API
-      x-apideck-enum-id: unified_api
-      enum:
-        - accounting
-        - ats
-        - calendar
-        - crm
-        - csp
-        - customer-support
-        - ecommerce
-        - email
-        - email-marketing
-        - expense-management
-        - file-storage
-        - form
-        - hris
-        - lead
-        - payroll
-        - pos
-        - procurement
-        - project-management
-        - script
-        - sms
-        - spreadsheet
-        - team-messaging
-        - issue-tracking
-        - time-registration
-        - transactional-email
-        - vault
-        - data-warehouse
-      example: crm
-      type: string
-    UnifiedProperty:
-      type: string
-      description: Name of the property in our Unified API.
-      example: owner_id
-    UnauthorizedResponse:
-      type: object
-      x-apideck-schema-id: Unauthorized
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 401
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Unauthorized
-        type_name:
-          type: string
-          description: The type of error returned
-          example: UnauthorizedError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Unauthorized Request
-        detail:
-          type: string
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-          example: Failed to generate valid JWT Session. Verify applicationId is correct
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#unauthorizederror
-    UnexpectedErrorResponse:
-      type: object
-      x-apideck-schema-id: Error
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 400
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Bad Request
-        type_name:
-          type: string
-          description: The type of error returned
-          example: RequestHeadersValidationError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid Params
-        detail:
-          anyOf:
-            - type: string
-              example: 'Missing Header: x-apideck-consumer-id'
-            - type: object
-              example:
-                missing:
-                  - x-apideck-consumer-id: required
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#unauthorizederror
-    SupportedProperty:
-      type: object
-      properties:
-        unified_property:
-          $ref: '#/components/schemas/UnifiedProperty'
-        child_properties:
-          type: array
-          description: List of child properties of the unified property.
-          items:
-            type: object
-            properties:
-              unified_property:
-                $ref: '#/components/schemas/SupportedProperty'
-    BadRequestResponse:
-      type: object
-      x-apideck-schema-id: BadRequest
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 400
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Bad Request
-        type_name:
-          type: string
-          description: The type of error returned
-          example: RequestValidationError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Invalid Params
-        detail:
-          anyOf:
-            - type: string
-              example: Missing property foobar
-            - type: object
-              example:
-                missing:
-                  - foobar: required
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#requestvalidationerror
-    TooManyRequestsResponse:
-      type: object
-      x-apideck-schema-id: TooManyRequests
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 429
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 6585)
-          example: Too Many Requests
-        type_name:
-          type: string
-          description: The type of error returned
-          example: ConnectorRateLimitError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Connector Rate Limit Error
-        detail:
-          type: object
-          properties:
-            context:
-              type: string
-            error:
-              type: object
-              additionalProperties: true
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#connectorratelimiterror
-    PaymentRequiredResponse:
-      type: object
-      x-apideck-schema-id: PaymentRequired
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 402
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Payment Required
-        type_name:
-          type: string
-          description: The type of error returned
-          example: RequestLimitError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Request Limit Reached
-        detail:
-          type: string
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-          example: You have reached your limit of 2000
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#requestlimiterror
-    NotFoundResponse:
-      type: object
-      x-apideck-schema-id: NotFound
-      properties:
-        status_code:
-          type: number
-          description: HTTP status code
-          example: 404
-        error:
-          type: string
-          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
-          example: Not Found
-        type_name:
-          type: string
-          description: The type of error returned
-          example: EntityNotFoundError
-        message:
-          type: string
-          description: A human-readable message providing more details about the error.
-          example: Unknown Widget
-        detail:
-          anyOf:
-            - type: string
-              example: "Could not find widget with id: '123'"
-            - type: object
-              example:
-                not_found:
-                  entity: widget
-                  id: '123'
-          description: Contains parameter or domain specific information related to the error and why it occurred.
-        ref:
-          type: string
-          description: Link to documentation of error type
-          example: https://developers.apideck.com/errors#entitynotfounderror
   securitySchemes:
     apiKey:
       type: apiKey
@@ -1394,6 +1479,10 @@ tags:
     description: ''
     x-apideck-model:
       $ref: '#/components/schemas/ApiResource'
+  - name: Connector Resource Schema
+    description: ''
+    x-apideck-model:
+      $ref: '#/components/schemas/ConnectorResourceSchema'
 paths:
   /connector/connectors:
     get:
@@ -1517,11 +1606,13 @@ paths:
               appId: 'REPLACE_WITH_APP_ID'
             })
 
+            const params = {
+              id: 'id_example',
+              docId: 'application_owner+oauth_credentials'
+            }
+
             try {
-              const { data } = await apideck.connector.connectorDocsOne({
-                id: 'id_example',
-                docId: 'doc_id_example'
-              })
+              const { data } = await apideck.connector.connectorDocsOne(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -1570,6 +1661,108 @@ paths:
 
             try {
               const { data } = await apideck.connector.connectorResourcesOne(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /connector/connectors/{id}/resources/{resource_id}/unified_api/{api_id}/schema:
+    get:
+      tags:
+        - Connector Resource Schema
+      operationId: connectorResourcesSchema
+      summary: Get Connector Resource Schema
+      description: Get Connector Resource Schema
+      x-sdk-exclude: true
+      x-internal: true
+      parameters:
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/resourceId'
+        - $ref: '#/components/parameters/apiId'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetConnectorResourceSchemaResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: connector
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID'
+            })
+
+            const params = {
+              id: 'id_example',
+              resourceId: 'resource_id_example',
+              apiId: 'api_id_example'
+            }
+
+            try {
+              const { data } = await apideck.connector.connectorResourcesSchema(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /connector/connectors/{id}/resources/{resource_id}/unified_api/{api_id}/example:
+    get:
+      tags:
+        - Connector Resource Example
+      operationId: connectorResourcesExample
+      summary: Get Connector Resource Example
+      description: Get Connector Resource Example
+      x-sdk-exclude: true
+      x-internal: true
+      parameters:
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/resourceId'
+        - $ref: '#/components/parameters/apiId'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetConnectorResourceExampleResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: connector
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID'
+            })
+
+            const params = {
+              id: 'id_example',
+              resourceId: 'resource_id_example',
+              apiId: 'api_id_example'
+            }
+
+            try {
+              const { data } = await apideck.connector.connectorResourcesExample(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

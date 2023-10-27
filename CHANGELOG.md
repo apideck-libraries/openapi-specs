@@ -1,10 +1,30 @@
+## Released
+
+- Release of the [Charlie HR](connectors/charliehr) connector with support for the resources: Employee, Department, Time-off
+
 ## v10.0.0 - (2023-10-24)
+
+### Unify
+
+- Introduction of the `custom_mappings` property as part of the Custom Mapping field feature
 
 ## v9.9.3 - (2023-10-23)
 
 ### Accounting API
 
 - Extended [Journal Entries](https://developers.apideck.com/apis/accounting/reference#tag/Journal-Entries) with customer.
+
+### HRIS API
+
+- Release of the [CatalystOne](connectors/catalystone) connector with support for the resources: Employee, Department
+- Improvement of the employment status for [People HR](connectors/people-hr)
+- Extended [Rippling](connectors/rippling) mapping with custom_fields and company information
+- Added custom_fields mapping for [Lucca HR](connectors/lucca-hr)
+- Added custom_fields mapping for [Google Workspace](connectors/google-workspace)
+
+### File Storage API
+
+- Fix for the search operation for the [Dropbox](connectors/dropbox) connector
 
 ## v9.9.2 - (2023-09-29)
 

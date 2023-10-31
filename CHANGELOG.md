@@ -1,3 +1,7 @@
+## v10.0.1 - (2023-10-31)
+
+- remove `custom_mappings` from `InvoiceLineItem` as only belongs on too of resources
+
 ## Released
 
 - Release of the [Charlie HR](connectors/charliehr) connector with support for the resources: Employee, Department, Time-off
@@ -91,7 +95,7 @@
 - Early-access release of the [Trinet](connectors/trinet) connector with support for the Employee resource
 
 - Enhanced additional employee resource properties with null support
-- Improved employee_status logic for [Personio](connectors/personio) 
+- Improved employee_status logic for [Personio](connectors/personio)
 - Improved country field mapping for [SD Worx](connectors/sdworx)
 - Extended mapping of [Workday](connectors/workday) with custom fields and locations
 - Added employee_status mapping for [Paylocity](connectors/paylocity)
@@ -120,7 +124,7 @@
 
 ### Accounting API
 
-- Added category tracking support  and improved the supplier mapping for [Quickbooks](connectors/quickbooks)
+- Added category tracking support and improved the supplier mapping for [Quickbooks](connectors/quickbooks)
 
 ## v9.8.1 - (2023-08-02)
 
@@ -133,7 +137,7 @@
 - Released [People HR](connectors/people-hr) connector with support for Employees
 - Released [Deel](connectors/deel) connector with support for Employees
 - Released [Employment Hero](connectors/employmenthero) connector with support for Employees
-- Overall improvements of the coverage for employee properties for integrations: ADP Run, ADP Workforce Now, Afas, Alexis HR, BambooHr, BeatheHr, Cascade HR, Ceridian Dayforce, Deel, Employment hero, Factorial HR, Freshteam, Google Workspace, Gusto, Hibob, Humaans, Lokket, Lucca HR, Namely, Nmbrs, Officient, Payfit, Paylocity, People-hr, Personio, Rippling, Sage-hr, Sap-successfactors, Sapling, SD Worx, UKG Pro, Workday, Zenefits, Zoho-people 
+- Overall improvements of the coverage for employee properties for integrations: ADP Run, ADP Workforce Now, Afas, Alexis HR, BambooHr, BeatheHr, Cascade HR, Ceridian Dayforce, Deel, Employment hero, Factorial HR, Freshteam, Google Workspace, Gusto, Hibob, Humaans, Lokket, Lucca HR, Namely, Nmbrs, Officient, Payfit, Paylocity, People-hr, Personio, Rippling, Sage-hr, Sap-successfactors, Sapling, SD Worx, UKG Pro, Workday, Zenefits, Zoho-people
 
 - Extended employee resource properties with nullable
 - Improved employees [SAP SuccessFactors](connectors/sap-successfactors) mapping

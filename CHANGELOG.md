@@ -1,6 +1,6 @@
 ## v10.0.1 - (2023-10-31)
 
-- remove `custom_mappings` from `InvoiceLineItem` as only belongs on too of resources
+- remove `custom_mappings` from `InvoiceLineItem` as only belongs on root of resources
 
 ## Released
 

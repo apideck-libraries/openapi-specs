@@ -4562,6 +4562,8 @@ paths:
           description: For virtual webhook events on Ceridian Dayforce, we monitor the "List Employees" response, which has a very small set of fields in comparison to the "Get Employee" response. This is the reason why we only support `hris.employee.created` events for this connector.
         - connector: freshteam
           description: The minimum pagination `limit` is 50, since Freshteam does not support pagination with a lower limit. Pagination for Freshteam only support per 50 limits.
+        - connector: hibob
+          description: Hibob allows you to define employee fields that aren't included by default on the 'List Employees' response. By using the fields parameter, you can specifically request these properties to be part of your response. Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
         - connector: paylocity
           description: For virtual webhook events on Paylocity, we monitor the "List Employees" response, which has a very small set of fields in comparison of the "Get Employee" response.
         - connector: sage-hr
@@ -4891,6 +4893,8 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: hibob
+          description: Hibob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response. Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
         - connector: sap-successfactors
           description: The custom fields are mapped only when they are in the personalInfoNav.
       responses:

@@ -36,6 +36,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/BalanceSheetFilter'
+    billsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/BillsFilter'
     billsSort:
       name: sort
       in: query
@@ -58,6 +66,22 @@ components:
       schema:
         type: string
         nullable: true
+    creditNotesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/CreditNotesFilter'
+    creditNotesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/CreditNotesSort'
     customersFilter:
       name: filter
       in: query
@@ -66,6 +90,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/CustomersFilter'
+    customersSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/CustomersSort'
     fields:
       name: fields
       in: query
@@ -89,6 +121,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/InvoiceItemsFilter'
+    invoicesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/InvoicesFilter'
     invoicesSort:
       name: sort
       in: query
@@ -97,6 +137,22 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/InvoicesSort'
+    ledgerAccountsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/LedgerAccountsFilter'
+    ledgerAccountsSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/LedgerAccountsSort'
     limit:
       name: limit
       in: query
@@ -130,6 +186,22 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ProfitAndLossFilter'
+    purchaseOrdersFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/PurchaseOrdersFilter'
+    purchaseOrdersSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/PurchaseOrdersSort'
     raw:
       name: raw
       in: query
@@ -151,6 +223,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/SuppliersFilter'
+    suppliersSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/SuppliersSort'
     taxRatesFilter:
       name: filter
       in: query
@@ -1522,6 +1602,18 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
+    BillsFilter:
+      type: object
+      x-apideck-schema-id: BillsFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
     BillsSort:
       type: object
       x-apideck-schema-id: BillsSort
@@ -1535,6 +1627,7 @@ components:
           description: The field on which to sort the Bills
           enum:
             - updated_at
+            - created_at
           example: updated_at
         direction:
           $ref: '#/components/schemas/SortDirection'
@@ -2761,6 +2854,36 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+    CreditNotesFilter:
+      type: object
+      x-apideck-schema-id: CreditNotesFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
+    CreditNotesSort:
+      type: object
+      x-apideck-schema-id: CreditNotesSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: customers.sort_by
+          description: The field on which to sort the Customers
+          enum:
+            - created_at
+            - updated_at
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
     Currency:
       type: string
       title: Currency
@@ -3577,6 +3700,29 @@ components:
             - inactive
             - archived
             - all
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
+    CustomersSort:
+      type: object
+      x-apideck-schema-id: CustomersSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: customers.sort_by
+          description: The field on which to sort the Customers
+          enum:
+            - created_at
+            - updated_at
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
     DeleteBillResponse:
       type: object
@@ -5398,6 +5544,18 @@ components:
           $ref: '#/components/schemas/Id'
         downstream_id:
           $ref: '#/components/schemas/DownstreamId'
+    InvoicesFilter:
+      type: object
+      x-apideck-schema-id: InvoicesFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
     InvoicesSort:
       type: object
       x-apideck-schema-id: InvoicesSort
@@ -5410,6 +5568,7 @@ components:
           x-apideck-enum-id: invoices.sort_by
           description: The field on which to sort the Invoices
           enum:
+            - created_at
             - updated_at
           example: updated_at
         direction:
@@ -5847,6 +6006,36 @@ components:
       items:
         $ref: '#/components/schemas/LedgerAccount'
       type: array
+    LedgerAccountsFilter:
+      type: object
+      x-apideck-schema-id: LedgerAccountsFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
+    LedgerAccountsSort:
+      type: object
+      x-apideck-schema-id: LedgerAccountsSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: ledger_accounts.sort_by
+          description: The field on which to sort the Ledger Accounts
+          enum:
+            - created_at
+            - updated_at
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
     LinkedCustomer:
       type: object
       x-apideck-schema-id: LinkedCustomer
@@ -6922,6 +7111,35 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+    PurchaseOrdersFilter:
+      type: object
+      x-apideck-schema-id: PurchaseOrdersFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
+    PurchaseOrdersSort:
+      type: object
+      x-apideck-schema-id: PurchaseOrdersSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: purchase_orders.sort_by
+          description: The field on which to sort the Purchase Orders
+          enum:
+            - updated_at
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
     Quantity:
       type: number
       title: Quantity
@@ -7159,6 +7377,29 @@ components:
           title: Email
           description: Email of supplier to search for
           example: elon@spacex.com
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
+    SuppliersSort:
+      type: object
+      x-apideck-schema-id: SuppliersSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: suppliers.sort_by
+          description: The field on which to sort the Suppliers
+          enum:
+            - created_at
+            - updated_at
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
     Tags:
       type: array
@@ -8368,6 +8609,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/billsFilter'
         - $ref: '#/components/parameters/billsSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
@@ -8877,6 +9119,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/invoicesFilter'
         - $ref: '#/components/parameters/invoicesSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
@@ -9455,6 +9698,8 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/ledgerAccountsFilter'
+        - $ref: '#/components/parameters/ledgerAccountsSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
@@ -10194,6 +10439,8 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/creditNotesFilter'
+        - $ref: '#/components/parameters/creditNotesSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
@@ -10616,6 +10863,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/customersFilter'
+        - $ref: '#/components/parameters/customersSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
@@ -11098,6 +11346,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/suppliersFilter'
+        - $ref: '#/components/parameters/suppliersSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
@@ -11106,9 +11355,9 @@ paths:
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: procountor-fi
-          description: ''
-          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
-          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
+          description: |
+            Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
+            Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
         - connector: netsuite
           description: The minimun page size accepted for Netsuite is 5.
       responses:
@@ -12659,11 +12908,13 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/purchaseOrdersFilter'
+        - $ref: '#/components/parameters/purchaseOrdersSort'
       security:
         - apiKey: []
       x-apideck-gotchas:
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: The minimum page size accepted for Netsuite is 5.
       responses:
         '200':
           $ref: '#/components/responses/GetPurchaseOrdersResponse'
@@ -12715,9 +12966,9 @@ paths:
         - connector: xero
           description: "Xero accepts a shipping address as a string instead of separate fields. Ie: `23 Main Street\r\nCentral City\r\nMarineville\r\n1234\r\n`"
         - connector: procountor-fi
-          description: ''
-          Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
-          Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
+          description: |
+            Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS. 
+            Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
       requestBody:
         required: true
         content:

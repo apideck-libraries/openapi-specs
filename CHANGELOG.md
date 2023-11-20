@@ -1,10 +1,42 @@
+## Released
+
+### HRIS API
+
+- Improved employee mapping for [UKG Pro](connectors/ukg-pro)
+- Deprecated API key authentication & "people" endpoint for [Hibob](connectors/hibob) in favor a new faster "people/search" endpoint and Service User authentication.
+- Improved employee mapping for [Hibob](connectors/hibob)
+- Extended the employee mapping for [Ceridian Dayforce](connectors/ceridian-dayforce])
+- Overall improvements of the coverage for employee properties for integrations: [Officient](connectors/officient-io),  [Namely](connectors/namely), [Paychex](connectors/paychex), [PayFit](connectors/payfit), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Cegid talentsoft](connectors/cegid-talentsoft), [Employment Hero](connectors/employmenthero), 
+
+### Accounting API
+
+- Added write support for Journal Entries for [Exact Online](connectors/exact-online)
+- Added filtering & sorting options for [Netsuite](connectors/netsuite)
+
+### ATS API
+
+- Added support for writing Job applications for [Teamtailor](connectors/teamtailor)
+
+### CRM API
+
+- Added [Attio](connectors/attio) as auth-only integration
+
 ## v10.0.1 - (2023-10-31)
+
+### Accounting API
 
 - remove `custom_mappings` from `InvoiceLineItem` as only belongs on root of resources
 
-## Released
+### HRIS API
 
 - Release of the [Charlie HR](connectors/charliehr) connector with support for the resources: Employee, Department, Time-off
+- The [Humaans](connectors/humaans)-io includes inactive employees by default.
+- Overall improvements of the coverage for employee properties for integrations:  [Google Workspace](connectors/google-workspace), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) ,[SD Worx](connectors/sdworx), [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [Breathe HR](connectors/breathehr]), [Deel](connectors/deel), [Freshteam](connectors/freshteam), [Loket](connectors/loket-nl), [Paylocity](connectors/paylocity), [NMBRS](connectors/nmbrs), [Sage HR](connectors/sage-hr), [Zenefits](connectors/zenefits)
+
+### Filestorage API
+
+- Improved the filtering for [Dropbox](connectors/dropbox)
+- Reviewed the for [OneDrive](connectors/onedrive) & [Sharepoint](connectors/sharepoint) connectors
 
 ## v10.0.0 - (2023-10-24)
 
@@ -77,12 +109,12 @@
 
 ### Issue tracking API
 
-- Added Zendesk as auth-only integration
-- Added Linear as auth-only integration
-- Added ClickUp as auth-only integration
-- Added Asana as auth-only integration
-- Added Intercom as auth-only integration
-- Added Monday as auth-only integration
+- Added [Zendesk](connectors/zendesk) as auth-only integration
+- Added [Linear](connectors/linear) as auth-only integration
+- Added [ClickUp](connectors/clickup) as auth-only integration
+- Added [Asana](connectors/asana) as auth-only integration
+- Added [Intercom](connectors/intercom) as auth-only integration
+- Added [Monday](connectors/monday) as auth-only integration
 
 ## v9.9.0 - (2023-08-21)
 

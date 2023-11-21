@@ -137,6 +137,22 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/InvoicesSort'
+    journalEntriesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/JournalEntriesFilter'
+    journalEntriesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/JournalEntriesSort'
     ledgerAccountsFilter:
       name: filter
       in: query
@@ -178,6 +194,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/PaymentsFilter'
+    paymentsSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/PaymentsSort'
     profitAndLossFilter:
       name: filter
       in: query
@@ -5659,6 +5683,36 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         row_version:
           $ref: '#/components/schemas/RowVersion'
+    JournalEntriesFilter:
+      type: object
+      x-apideck-schema-id: JournalEntriesFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
+    JournalEntriesSort:
+      type: object
+      x-apideck-schema-id: JournalEntriesSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: journal_entries.sort_by
+          description: The field on which to sort the Journal Entries.
+          enum:
+            - created_at
+            - updated_at
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
     JournalEntryLineItem:
       type: object
       x-apideck-schema-id: JournalEntryLineItem
@@ -6629,13 +6683,31 @@ components:
       x-apideck-schema-id: PaymentsFilter
       x-graphql-type-name: PaymentsFilter
       example:
-        invoice_number: '456'
+        updated_since: '2020-09-30T07:43:32.000Z'
       properties:
-        invoice_number:
+        updated_since:
           type: string
-          title: Invoice number
-          description: Invoice number for payments to filter on
-          example: SpaceX
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
+    PaymentsSort:
+      type: object
+      x-apideck-schema-id: PaymentsSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: payments.sort_by
+          description: The field on which to sort the Payments
+          enum:
+            - updated_at
+            - created_at
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
     PhoneNumber:
       type: object
@@ -7136,6 +7208,7 @@ components:
           description: The field on which to sort the Purchase Orders
           enum:
             - updated_at
+            - created_at
           example: updated_at
         direction:
           $ref: '#/components/schemas/SortDirection'
@@ -11818,6 +11891,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/paymentsFilter'
+        - $ref: '#/components/parameters/paymentsSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
@@ -12371,6 +12445,8 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/journalEntriesFilter'
+        - $ref: '#/components/parameters/journalEntriesSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:

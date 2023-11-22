@@ -1791,7 +1791,7 @@ components:
     ParentFolderId:
       type: string
       x-apideck-schema-id: ParentFolderId
-      description: The parent folder to create the new file within.
+      description: The parent folder to create the new file within. This can be an ID or a path depending on the downstream folder. Please see the connector section below to see downstream specific gotchas.
       example: '1234'
     PassThroughQuery:
       type: object
@@ -2957,6 +2957,9 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: dropbox
+          description: To create a new folder at the top level in Dropbox via its API, use "root" as the parent_folder_id. For a subfolder, use "/ParentFolder" as the parent_folder_id, including the initial "/". Omitting this slash leads to a regex error from Dropbox.
       requestBody:
         required: true
         content:

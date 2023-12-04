@@ -1,21 +1,30 @@
-## v10.1.0 - (2023-12-01)
+## Released
+
+## v10.1.0 - (2023-12-04)
 
 - Added `customer_id` filter to E-Commerce: [Orders](apis/ecommerce/reference#tag/Orders)
 
-## Released
-
 ### HRIS API
 
-- Improved employee mapping for [UKG Pro](connectors/ukg-pro)
+- Improved employee mapping & pagination for [UKG Pro](connectors/ukg-pro)
 - Deprecated API key authentication & "people" endpoint for [Hibob](connectors/hibob) in favor a new faster "people/search" endpoint and Service User authentication.
 - Improved employee mapping for [Hibob](connectors/hibob)
 - Extended the employee mapping for [Ceridian Dayforce](connectors/ceridian-dayforce])
-- Overall improvements of the coverage for employee properties for integrations: [Officient](connectors/officient-io), [Namely](connectors/namely), [Paychex](connectors/paychex), [PayFit](connectors/payfit), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Cegid talentsoft](connectors/cegid-talentsoft), [Employment Hero](connectors/employmenthero),
+- Overall improvements of the coverage for employee properties for integrations: [Officient](connectors/officient-io),  [Namely](connectors/namely), [Paychex](connectors/paychex), [PayFit](connectors/payfit), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Cegid talentsoft](connectors/cegid-talentsoft), [Employment Hero](connectors/employmenthero)
+- Employee model `leaving_reason` can be null
 
 ### Accounting API
 
 - Added write support for Journal Entries for [Exact Online](connectors/exact-online)
 - Added filtering & sorting options for [Netsuite](connectors/netsuite)
+
+### Proxy API
+
+- Added automatic HMAC authentication for [Netsuite](connectors/netsuite)
+
+### Ecommerce API
+
+- Added orders filter by customer_id on [Shopify](connectors/shopify), [Picqer](connectors/picqer), [Shopware](connectors/shopware), [BigCommerce](connectors/bigcommerce), [Prestashop](connectors/prestashop), [Magento](connectors/woocommerce)
 
 ### ATS API
 
@@ -407,6 +416,7 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 - [Shopware](connectors/shopware)
 - [Wix](connectors/wix)
 - [Magento](connectors/woocommerce)
+- [Prestashop](connectors/prestashop)
 
 ## v8.89.0 - (2023-02-07)
 

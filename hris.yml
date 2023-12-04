@@ -1901,16 +1901,17 @@ components:
           example: '2028-10-26'
           nullable: true
         leaving_reason:
-          type: string
-          description: The reason because the employment ended.
-          example: resigned
-          x-apideck-enum-id: employees.leaving_reason
-          enum:
-            - dismissed
-            - resigned
-            - redundancy
-            - other
-          nullable: true
+          oneOf:
+            - type: string
+              description: The reason because the employment ended.
+              example: resigned
+              x-apideck-enum-id: employees.leaving_reason
+              enum:
+                - dismissed
+                - resigned
+                - redundancy
+                - other
+            - type: 'null'
         employee_number:
           $ref: '#/components/schemas/EmployeeNumber'
         employment_status:

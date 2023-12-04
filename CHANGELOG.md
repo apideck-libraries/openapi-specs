@@ -1,3 +1,7 @@
+## v10.1.0 - (2023-12-01)
+
+- Added `customer_id` filter to E-Commerce: [Orders](apis/ecommerce/reference#tag/Orders)
+
 ## Released
 
 ### HRIS API
@@ -6,7 +10,7 @@
 - Deprecated API key authentication & "people" endpoint for [Hibob](connectors/hibob) in favor a new faster "people/search" endpoint and Service User authentication.
 - Improved employee mapping for [Hibob](connectors/hibob)
 - Extended the employee mapping for [Ceridian Dayforce](connectors/ceridian-dayforce])
-- Overall improvements of the coverage for employee properties for integrations: [Officient](connectors/officient-io),  [Namely](connectors/namely), [Paychex](connectors/paychex), [PayFit](connectors/payfit), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Cegid talentsoft](connectors/cegid-talentsoft), [Employment Hero](connectors/employmenthero), 
+- Overall improvements of the coverage for employee properties for integrations: [Officient](connectors/officient-io), [Namely](connectors/namely), [Paychex](connectors/paychex), [PayFit](connectors/payfit), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Cegid talentsoft](connectors/cegid-talentsoft), [Employment Hero](connectors/employmenthero),
 
 ### Accounting API
 
@@ -31,7 +35,7 @@
 
 - Release of the [Charlie HR](connectors/charliehr) connector with support for the resources: Employee, Department, Time-off
 - The [Humaans](connectors/humaans)-io includes inactive employees by default.
-- Overall improvements of the coverage for employee properties for integrations:  [Google Workspace](connectors/google-workspace), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) ,[SD Worx](connectors/sdworx), [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [Breathe HR](connectors/breathehr]), [Deel](connectors/deel), [Freshteam](connectors/freshteam), [Loket](connectors/loket-nl), [Paylocity](connectors/paylocity), [NMBRS](connectors/nmbrs), [Sage HR](connectors/sage-hr), [Zenefits](connectors/zenefits)
+- Overall improvements of the coverage for employee properties for integrations: [Google Workspace](connectors/google-workspace), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) ,[SD Worx](connectors/sdworx), [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [Breathe HR](connectors/breathehr]), [Deel](connectors/deel), [Freshteam](connectors/freshteam), [Loket](connectors/loket-nl), [Paylocity](connectors/paylocity), [NMBRS](connectors/nmbrs), [Sage HR](connectors/sage-hr), [Zenefits](connectors/zenefits)
 
 ### Filestorage API
 

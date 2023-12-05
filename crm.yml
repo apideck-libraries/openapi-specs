@@ -72,11 +72,41 @@ components:
       example:
         updated_since: '2020-09-30T07:43:32.000Z'
       properties:
+        company_id:
+          type: string
+          description: Company ID to filter on
+          example: '1234'
+        owner_id:
+          type: string
+          description: Owner ID to filter on
+          example: '1234'
+        contact_id:
+          type: string
+          description: Primary contact ID to filter on
+          example: '1234'
         updated_since:
           type: string
           title: Updated since (timestamp)
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
+      additionalProperties: false
+    ActivitiesSort:
+      type: object
+      x-apideck-schema-id: ActivitiesSort
+      example:
+        by: created_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: activities.sort_by
+          description: The field on which to sort the Activities
+          enum:
+            - created_at
+            - updated_at
+          example: created_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
     Activity:
       type: object
@@ -3677,6 +3707,14 @@ components:
           type: string
           description: Company ID to filter on
           example: '1234'
+        owner_id:
+          type: string
+          description: Owner ID to filter on
+          example: '1234'
+        primary_contact_id:
+          type: string
+          description: Primary contact ID to filter on
+          example: '1234'
       additionalProperties: false
     OpportunitiesSort:
       type: object
@@ -4790,6 +4828,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ActivitiesFilter'
+    activitiesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ActivitiesSort'
     applicationId:
       name: x-apideck-app-id
       in: header
@@ -8125,6 +8171,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/activitiesFilter'
+        - $ref: '#/components/parameters/activitiesSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:

@@ -7538,6 +7538,8 @@ paths:
       x-apideck-gotchas:
         - connector: salesforce
           description: When creating a note in Salesforce, you can only associate it with one resource (such as a lead, company or opportunity) at a time. You cannot combine multiple resources or associate the note with more than one resource in a single API call.
+        - connector: close
+          description: When creating a note in Close, the content of the note should be sent in html surrounded by the <body> tags and at least other inner element. If these tags are not sent, unify will surround the note with <body> and <p> tags.
       requestBody:
         required: true
         content:
@@ -7657,6 +7659,9 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: close
+          description: When updating a note in Close, the content of the note should be sent in html surrounded by the <body> tags and at least other inner element. If these tags are not sent, unify will surround the note with <body> and <p> tags.
       requestBody:
         required: true
         content:

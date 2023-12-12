@@ -1,6 +1,30 @@
 ## Released
 
+## v10.1.1 - (2023-12-06)
+
+### HRIS API
+
+- Overall improvements of the coverage for department properties for integrations: [Gusto](connectors/gusta), [Cascade HR](connectors/cascade-hr)
+
+### CRM API
+
+- Added sorting capabilities for the Unify Activities
+- Added filtering by `company_id`, `owner_id`, `contact_id` for the Unify resource Activity
+- Added filtering by `owner_id`, `primary_contact_id` for the Unify resource Opportunity
+- Added sorting & filtering for Opportunities and Activities for [Microsoft Dynamics CRM](connectors/microsoft-dynamics)
+- Added mapping for reading/writing Notes for [Microsoft Dynamics CRM](connectors/microsoft-dynamics)
+- Added mapping for reading/writing Notes for [Close](connectors/close)
+- Removed minLength for a Unify Contact
+
+### Accounting API
+
+- Added the option to write Journal Entries for [Netsuite](connectors/netsuite)
+- Added the option to write Journal Entries for [Sage Intacct](connectors/sage-intacct)
+- Improved the [Xero](connectors/xero) mapping for Bills
+
 ## v10.1.0 - (2023-12-04)
+
+### Ecommerce API
 
 - Added `customer_id` filter to E-Commerce: [Orders](apis/ecommerce/reference#tag/Orders)
 

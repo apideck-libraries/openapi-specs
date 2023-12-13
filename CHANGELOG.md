@@ -1,5 +1,16 @@
 ## Released
 
+## v10.1.2 - (2023-12-12)
+
+### Accounting API
+
+- Improved the write Journal Entry mapping for [Netsuite](connectors/netsuite)
+- Added `company_id` to the Journal Entry model
+
+### CRM API
+
+- Added additional filtering for Contacts for [Microsoft Dynamics CRM](connectors/microsoft-dynamics)
+
 ## v10.1.1 - (2023-12-06)
 
 ### HRIS API

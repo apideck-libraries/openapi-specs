@@ -2,6 +2,17 @@
 
 ## v10.1.3 - (2023-12-18)
 
+### HRIS API
+
+- Release of the [Holded](connectors/holded) connector with support for the Employee resources
+- Added manager info for an employee for [AFAS](connectors/afas)
+- Improved employee mapping for [BambooHR](connectors/bamboohr)
+- Improved employee mapping for [NMBRS](connectors/nmbrs)
+
+### Issue tracking
+
+- Added [Basecamp](connectors/basecamp) as an auth-only connector
+
 ### Connector API
 
 - Fix [Connector Resource](apis/connector/reference#operation/connectorResourcesOne) to describe supported_properties as circular reference
@@ -12,10 +23,14 @@
 
 - Improved the write Journal Entry mapping for [Netsuite](connectors/netsuite)
 - Added `company_id` to the Journal Entry model
+- Added the option to enter Sender ID & Password in Vault for [Sage Intacct](connectors/sage-intacct)
 
 ### CRM API
 
 - Added additional filtering for Contacts for [Microsoft Dynamics CRM](connectors/microsoft-dynamics)
+- Added mapping for reading/writing Notes for [Zoho CRM](connectors/zoho-crm)
+- Added mapping for Users for [Zoho CRM](connectors/zoho-crm)
+- Added mapping for Users for [Pipedrive](connectors/pipedrive)
 
 ## v10.1.1 - (2023-12-06)
 

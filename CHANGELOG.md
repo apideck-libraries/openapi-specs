@@ -1,5 +1,11 @@
 ## Released
 
+## v10.1.3 - (2023-12-18)
+
+### Connector API
+
+- Fix [Connector Resource](apis/connector/reference#operation/connectorResourcesOne) to describe supported_properties as circular reference
+
 ## v10.1.2 - (2023-12-12)
 
 ### Accounting API
@@ -45,7 +51,7 @@
 - Deprecated API key authentication & "people" endpoint for [Hibob](connectors/hibob) in favor a new faster "people/search" endpoint and Service User authentication.
 - Improved employee mapping for [Hibob](connectors/hibob)
 - Extended the employee mapping for [Ceridian Dayforce](connectors/ceridian-dayforce])
-- Overall improvements of the coverage for employee properties for integrations: [Officient](connectors/officient-io),  [Namely](connectors/namely), [Paychex](connectors/paychex), [PayFit](connectors/payfit), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Cegid talentsoft](connectors/cegid-talentsoft), [Employment Hero](connectors/employmenthero)
+- Overall improvements of the coverage for employee properties for integrations: [Officient](connectors/officient-io), [Namely](connectors/namely), [Paychex](connectors/paychex), [PayFit](connectors/payfit), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Cegid talentsoft](connectors/cegid-talentsoft), [Employment Hero](connectors/employmenthero)
 - Employee model `leaving_reason` can be null
 
 ### Accounting API

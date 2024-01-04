@@ -1586,7 +1586,12 @@ components:
       x-apideck-schema-id: EcommerceOrder
       x-apideck-weights:
         id: critical
+        order_number: medium
         currency: critical
+        discounts: low
+        sub_total: medium
+        shipping_cost: medium
+        total_discount: medium
         total_tax: critical
         total_amount: critical
         status: critical
@@ -1596,7 +1601,11 @@ components:
         customer: critical
         billing_address: critical
         shipping_address: critical
+        tracking: medium
         line_items: critical
+        note: medium
+        created_at: medium
+        updated_at: medium
       additionalProperties: false
       required:
         - id
@@ -1730,10 +1739,19 @@ components:
       description: A single line item of an ecommerce order, representing a product or variant with associated options, quantity, and pricing information.
       x-apideck-schema-id: EcommerceOrderLineItem
       x-apideck-weights:
+        id: high
+        product_id: medium
+        variant_id: medium
+        sku: medium
         name: critical
+        description: medium
+        options: medium
         quantity: critical
         unit_price: critical
+        tax_rate: medium
+        tax_amount: medium
         total_amount: critical
+        discounts: medium
       required:
         - name
         - quantity
@@ -1847,6 +1865,7 @@ components:
         - cancelled
         - archived
         - unknown
+        - other
       example: active
       nullable: true
     EcommerceOrdersFilter:
@@ -1871,7 +1890,20 @@ components:
       x-apideck-weights:
         id: critical
         name: critical
+        description: medium
+        status: medium
         price: critical
+        sku: medium
+        inventory_quantity: medium
+        images: medium
+        weight: medium
+        weight_unit: medium
+        options: medium
+        variants: medium
+        tags: medium
+        categories: medium
+        created_at: medium
+        updated_at: medium
       additionalProperties: false
       required:
         - id

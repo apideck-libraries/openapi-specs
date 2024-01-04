@@ -1,5 +1,28 @@
 ## Released
 
+### HRIS API
+
+- Added of the [Kenjo](connectors/kenjo) connector as early-access
+- Added of the [Sesame HR](connectors/kenjo) connector as early-access
+- Added of the [Cezanne HR](connectors/cezannehr) connector as early-access
+- Improved mapping manager for employee for [AFAS](connectors/afas)
+
+- Added and improved of the mapping for departments for integrations: [AFAS](connectors/afas), [AlexisHR](connectors/alexishr), [BambooHR](connectors/bamboohr), [Breathe HR](connectors/breathehr]), [Deel](connectors/deel), [Loket](connectors/loket-nl), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) , [NMBRS](connectors/nmbrs), [Officient](connectors/officient-io),
+
+### Issue tracking
+
+- Added [Shortcut](connectors/shortcut) as an auth-only connector
+
+### CRM API
+
+- Updated filtering & sorting for Activities for [Salesforce](connectors/salesforce)
+- Updated filtering & sorting for Opportunities for [Salesforce](connectors/salesforce)
+- Added filtering for Activities for [Pipedrive](connectors/pipedrive)
+
+### Ecommerce API
+
+- Added [Amazon Seller Central](connectors/amazon-seller-central) with resources: orders, products
+
 ## v10.1.3 - (2023-12-18)
 
 ### HRIS API
@@ -31,6 +54,7 @@
 - Added mapping for reading/writing Notes for [Zoho CRM](connectors/zoho-crm)
 - Added mapping for Users for [Zoho CRM](connectors/zoho-crm)
 - Added mapping for Users for [Pipedrive](connectors/pipedrive)
+- Added filtering for Contacts for [Pipedrive](connectors/pipedrive)
 
 ## v10.1.1 - (2023-12-06)
 

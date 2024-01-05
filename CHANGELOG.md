@@ -1,5 +1,12 @@
 ## Released
 
+## v10.2.0 - (2024-01-05)
+
+### Accounting API
+
+- Added get and list Subsidiaries endpoint
+- Release Subsidiaries endpoint for [Sage Intacct](connectors/sage-intacct)
+
 ### HRIS API
 
 - Added of the [Kenjo](connectors/kenjo) connector as early-access

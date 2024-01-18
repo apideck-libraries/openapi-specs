@@ -1,5 +1,11 @@
 ## Released
 
+## v10.2.1 - (2024-01-18)
+
+### Proxy API
+
+- Added 2 new `static IPs`
+
 ## v10.2.0 - (2024-01-05)
 
 ### Accounting API

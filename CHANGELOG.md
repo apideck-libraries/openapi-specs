@@ -1,5 +1,12 @@
 ## Released
 
+## v10.2.2 - (2024-01-19)
+
+### Accounting API
+
+- Added create, update and delete Subsidiaries endpoint
+- Release Subsidiaries endpoint for [Netsuite](connectors/sage-netsuite)
+
 ## v10.2.1 - (2024-01-18)
 
 ### Proxy API

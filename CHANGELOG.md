@@ -1,4 +1,9 @@
-## Released
+## v10.3.0 - (2024-01-31)
+
+### Accounting API
+
+- Added all, one, create, update and delete Departments and Locations endpoint
+- Release Departments and Locations endpoint for [Netsuite](connectors/sage-netsuite)
 
 ## v10.2.2 - (2024-01-19)
 

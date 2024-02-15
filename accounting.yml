@@ -1437,6 +1437,7 @@ components:
         downstream_id: low
         bill_number: high
         supplier: high
+        company_id: middle
         currency: medium
         currency_rate: low
         tax_inclusive: low
@@ -1487,6 +1488,8 @@ components:
           nullable: true
         supplier:
           $ref: '#/components/schemas/LinkedSupplier'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
         currency:
           $ref: '#/components/schemas/Currency'
         currency_rate:
@@ -2029,6 +2032,12 @@ components:
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
           nullable: true
+    AccountingCompanyId:
+      type: string
+      title: CompanyId
+      description: The company or subsidiary id the transaction belongs to
+      example: '12345'
+      nullable: true
     CompanyInfo:
       type: object
       x-apideck-schema-id: CompanyInfo
@@ -2790,6 +2799,7 @@ components:
         id: critical
         number: low
         customer: high
+        company_id: middle
         currency: critical
         currency_rate: medium
         tax_inclusive: low
@@ -2837,6 +2847,8 @@ components:
           nullable: true
         customer:
           $ref: '#/components/schemas/LinkedCustomer'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
         currency:
           $ref: '#/components/schemas/Currency'
         currency_rate:
@@ -3637,6 +3649,7 @@ components:
         display_id: edge-case
         display_name: edge-case
         company_name: high
+        company_id: medium
         title: high
         first_name: high
         middle_name: low
@@ -3695,6 +3708,8 @@ components:
           nullable: true
         company_name:
           $ref: '#/components/schemas/CompanyName'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
         title:
           $ref: '#/components/schemas/Title'
         first_name:
@@ -5690,6 +5705,7 @@ components:
         type: high
         number: high
         customer: high
+        company_id: middle
         invoice_date: edge-case
         due_date: edge-case
         terms: low
@@ -5753,6 +5769,8 @@ components:
           nullable: true
         customer:
           $ref: '#/components/schemas/LinkedCustomer'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
         invoice_date:
           type: string
           title: Invoice date
@@ -6256,6 +6274,7 @@ components:
         title: medium
         currency_rate: low
         currency: medium
+        company_id: medium
         line_items: medium
         memo: low
         posted_at: low
@@ -6284,11 +6303,7 @@ components:
         currency:
           $ref: '#/components/schemas/Currency'
         company_id:
-          type: string
-          title: Company
-          description: The company or subsidiary the journal entry belongs to
-          example: '12345'
-          nullable: true
+          $ref: '#/components/schemas/AccountingCompanyId'
         line_items:
           type: array
           minItems: 2
@@ -7165,6 +7180,7 @@ components:
         transaction_date: critical
         customer: high
         supplier: high
+        company_id: medium
         reconciled: low
         status: high
         type: high
@@ -7253,6 +7269,8 @@ components:
           $ref: '#/components/schemas/LinkedCustomer'
         supplier:
           $ref: '#/components/schemas/LinkedSupplier'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
         reconciled:
           type: boolean
           title: Reconciled
@@ -7741,6 +7759,7 @@ components:
         po_number: low
         reference: low
         supplier: high
+        company_id: middle
         status: critical
         issued_date: edge-case
         delivery_date: medium
@@ -7787,6 +7806,8 @@ components:
           nullable: true
         supplier:
           $ref: '#/components/schemas/LinkedSupplier'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
         status:
           type: string
           title: Purchase order status
@@ -8034,6 +8055,7 @@ components:
         display_id: edge-case
         display_name: edge-case
         company_name: high
+        company_id: middle
         title: high
         first_name: high
         middle_name: low
@@ -8092,6 +8114,8 @@ components:
           nullable: true
         company_name:
           $ref: '#/components/schemas/CompanyName'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
         title:
           $ref: '#/components/schemas/Title'
         first_name:
@@ -9626,6 +9650,7 @@ paths:
                     row_version: '1-12345'
                   }
                 },
+                company_id: '12345',
                 currency: 'USD',
                 currency_rate: 0.69,
                 tax_inclusive: true,
@@ -9855,6 +9880,7 @@ paths:
                     row_version: '1-12345'
                   }
                 },
+                company_id: '12345',
                 currency: 'USD',
                 currency_rate: 0.69,
                 tax_inclusive: true,
@@ -10112,6 +10138,7 @@ paths:
                   display_name: 'Windsurf Shop',
                   name: 'Windsurf Shop'
                 },
+                company_id: '12345',
                 invoice_date: '2020-09-30',
                 due_date: '2020-09-30',
                 terms: 'Net 30 days',
@@ -10375,6 +10402,7 @@ paths:
                   display_name: 'Windsurf Shop',
                   name: 'Windsurf Shop'
                 },
+                company_id: '12345',
                 invoice_date: '2020-09-30',
                 due_date: '2020-09-30',
                 terms: 'Net 30 days',
@@ -11423,6 +11451,7 @@ paths:
                   display_name: 'Windsurf Shop',
                   name: 'Windsurf Shop'
                 },
+                company_id: '12345',
                 currency: 'USD',
                 currency_rate: 0.69,
                 tax_inclusive: true,
@@ -11607,6 +11636,7 @@ paths:
                   display_name: 'Windsurf Shop',
                   name: 'Windsurf Shop'
                 },
+                company_id: '12345',
                 currency: 'USD',
                 currency_rate: 0.69,
                 tax_inclusive: true,
@@ -11848,6 +11878,7 @@ paths:
                 display_id: 'EMP00101',
                 display_name: 'Windsurf Shop',
                 company_name: 'SpaceX',
+                company_id: '12345',
                 title: 'CEO',
                 first_name: 'Elon',
                 middle_name: 'D.',
@@ -12062,6 +12093,7 @@ paths:
                 display_id: 'EMP00101',
                 display_name: 'Windsurf Shop',
                 company_name: 'SpaceX',
+                company_id: '12345',
                 title: 'CEO',
                 first_name: 'Elon',
                 middle_name: 'D.',
@@ -12330,6 +12362,7 @@ paths:
                 display_id: 'EMP00101',
                 display_name: 'Windsurf Shop',
                 company_name: 'SpaceX',
+                company_id: '12345',
                 title: 'CEO',
                 first_name: 'Elon',
                 middle_name: 'D.',
@@ -12539,6 +12572,7 @@ paths:
                 display_id: 'EMP00101',
                 display_name: 'Windsurf Shop',
                 company_name: 'SpaceX',
+                company_id: '12345',
                 title: 'CEO',
                 first_name: 'Elon',
                 middle_name: 'D.',
@@ -12845,6 +12879,7 @@ paths:
                     row_version: '1-12345'
                   }
                 },
+                company_id: '12345',
                 reconciled: true,
                 status: 'authorised',
                 type: 'accounts_receivable',
@@ -13020,6 +13055,7 @@ paths:
                     row_version: '1-12345'
                   }
                 },
+                company_id: '12345',
                 reconciled: true,
                 status: 'authorised',
                 type: 'accounts_receivable',
@@ -13926,6 +13962,7 @@ paths:
                     row_version: '1-12345'
                   }
                 },
+                company_id: '12345',
                 status: 'open',
                 issued_date: '2020-09-30',
                 delivery_date: '2020-09-30',
@@ -14173,6 +14210,7 @@ paths:
                     row_version: '1-12345'
                   }
                 },
+                company_id: '12345',
                 status: 'open',
                 issued_date: '2020-09-30',
                 delivery_date: '2020-09-30',

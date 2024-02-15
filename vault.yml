@@ -344,6 +344,14 @@ components:
       schema:
         type: string
       example: http://example.com/integrations
+    redirect_uri_revoke:
+      name: redirect_uri
+      in: query
+      description: The redirect uri to redirect to after the revoke flow is completed.
+      required: true
+      schema:
+        type: string
+      example: http://example.com/integrations
     state:
       name: state
       in: query
@@ -3891,12 +3899,12 @@ paths:
 
         Auth links will have a state parameter included to verify the validity of the request. This is the url your users will use to activate OAuth supported integration providers.
 
-        Vault handles the complete revoke flow for you and will redirect you to the dynamic redirect uri you have appended to the url in case this is missing the default redirect uri you have configured for your Unify application.
+        Vault handles the complete revoke flow for you and will redirect you to the dynamic redirect uri you have appended to the url.
       parameters:
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/application_id'
         - $ref: '#/components/parameters/state'
-        - $ref: '#/components/parameters/redirect_uri'
+        - $ref: '#/components/parameters/redirect_uri_revoke'
       security: []
       responses:
         '301':

@@ -1,3 +1,9 @@
+## v10.3.1 - (2024-02-20)
+
+### Unify
+
+- When a `ConnectorExecutionError` occurs, we attempt to proxy as much detail from downstream as we can. An update to the UnauthorizedError Schema now correctly reflects that the downstream error can be provided as a string OR an object.
+
 ## v10.3.0 - (2024-01-31)
 
 ### Accounting API

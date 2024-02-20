@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.3.0
+  version: 10.3.1
   title: Proxy API
   description: |+
     Welcome to the Proxy API.
@@ -332,9 +332,15 @@ components:
                 description: A human-readable message providing more details about the error.
                 example: Unauthorized Request
               detail:
-                type: string
+                anyOf:
+                  - type: string
+                    example: Missing authentication
+                  - type: object
+                    example:
+                      statusCode: 401
+                      error: Unauthorized
+                      message: Missing authentication
                 description: Contains parameter or domain specific information related to the error and why it occurred.
-                example: Failed to generate valid JWT Session. Verify applicationId is correct
               ref:
                 type: string
                 description: Link to documentation of error type

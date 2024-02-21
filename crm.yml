@@ -8592,6 +8592,9 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: salesforce
+          description: This endpoint is mapped to Salesforce Events; tasks are not included. As a workaround we recommended using the Proxy API.
       responses:
         '200':
           $ref: '#/components/responses/DeleteActivityResponse'

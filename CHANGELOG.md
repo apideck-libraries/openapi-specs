@@ -1,3 +1,15 @@
+## v10.3.2 - (2024-02-21)
+
+### Accounting API
+
+- Added [Microsoft Dynamics Business Central](connectors/microsoft-dynamics-365-business-central) connector
+- Added filtering resources by update_since support for [Quickbooks](connectors/quickbook) connector
+- Added `company_id` field to [Bill](apis/accounting/reference#tag/Bills), [Credit Note](apis/accounting/reference#tag/Credit-Notes), [Customer](apis/accounting/reference#tag/Customers), [Invoice](apis/accounting/reference#tag/Invoices), [Journal Entry](apis/accounting/reference#tag/Journal-Entries), [Payment](apis/accounting/reference#tag/Payments), [Purchase Order](apis/accounting/reference#tag/Purchase-Orders), [Supplier](apis/accounting/reference#tag/Suppliers),
+
+### Ecommerce API
+
+- Added sorting orders support for [Wix](connectors/wix) connector
+
 ## v10.3.1 - (2024-02-20)
 
 ### Unify

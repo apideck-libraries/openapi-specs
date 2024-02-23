@@ -1,3 +1,10 @@
+## v10.3.3 - (2024-02-23)
+
+### Vault
+
+- Including the [connectionsToken](apis/vault/reference#operation/connectionsToken) in SDK supported operations.
+- Only connections with `auth_type` `oauth2` and `grant_type` `authorization_code` will have the `authorize_url` and `revoke_url` in the response.
+
 ## v10.3.2 - (2024-02-21)
 
 ### Accounting API

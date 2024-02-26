@@ -405,6 +405,13 @@ components:
       schema:
         type: string
       example: '2021-05-30T12:00:00.000Z'
+    resource_id:
+      name: resource_id
+      in: query
+      description: This is the id of the resource you want to fetch when listing custom fields. For example, if you want to fetch custom fields for a specific contact, you would use the contact id.
+      schema:
+        type: string
+      example: '1234'
   schemas:
     ApplicationId:
       type: string
@@ -3794,6 +3801,7 @@ paths:
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/resource'
+        - $ref: '#/components/parameters/resource_id'
       security:
         - apiKey: []
       responses:

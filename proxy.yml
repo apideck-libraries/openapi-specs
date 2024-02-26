@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.3.3
+  version: 10.3.4
   title: Proxy API
   description: |+
     Welcome to the Proxy API.
@@ -489,6 +489,12 @@ paths:
                         zipcode: '94103'
                         country: US
                 - type: string
+                - type: array
+                  items:
+                    type: object
+                    properties: {}
+                    example:
+                      $ref: '#/paths/~1proxy/post/requestBody/content/*~1*/schema/anyOf/0/example'
       responses:
         '200':
           $ref: '#/components/responses/Ok'
@@ -544,6 +550,12 @@ paths:
                         zipcode: '94103'
                         country: US
                 - type: string
+                - type: array
+                  items:
+                    type: object
+                    properties: {}
+                    example:
+                      $ref: '#/paths/~1proxy/put/requestBody/content/*~1*/schema/anyOf/0/example'
       responses:
         '200':
           $ref: '#/components/responses/Ok'
@@ -599,6 +611,12 @@ paths:
                         zipcode: '94103'
                         country: US
                 - type: string
+                - type: array
+                  items:
+                    type: object
+                    properties: {}
+                    example:
+                      $ref: '#/paths/~1proxy/patch/requestBody/content/*~1*/schema/anyOf/0/example'
       responses:
         '200':
           $ref: '#/components/responses/Ok'

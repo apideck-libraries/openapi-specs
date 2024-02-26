@@ -1,3 +1,9 @@
+## v10.3.4 - (2024-02-26)
+
+### Proxy
+
+- Schema description for Proxy request bodies [`POST`, `PUT`, `PATCH`] extended to allow for `object`, `string` or `array`.
+
 ## v10.3.3 - (2024-02-23)
 
 ### Vault

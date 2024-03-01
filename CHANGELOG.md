@@ -1,3 +1,9 @@
+## v10.3.5 - (2024-03-01)
+
+### HRIS
+
+- Employee job `is_manager` field is now supported for [Hibob](connectors/hibob)
+
 ## v10.3.4 - (2024-02-26)
 
 ### Proxy

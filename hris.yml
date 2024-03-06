@@ -72,6 +72,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/EmployeesSort'
+    employeesOneFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/EmployeesOneFilter'
     fields:
       name: fields
       in: query
@@ -2433,6 +2441,17 @@ components:
         department_id:
           type: string
           description: ID of the department to filter on
+          example: '1234'
+      additionalProperties: false
+    EmployeesOneFilter:
+      type: object
+      x-apideck-schema-id: EmployeesOneFilter
+      example:
+        company_id: '1234'
+      properties:
+        company_id:
+          type: string
+          description: Company ID to filter on
           example: '1234'
       additionalProperties: false
     EmployeesSort:
@@ -4908,6 +4927,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/employeesOneFilter'
       security:
         - apiKey: []
       x-apideck-gotchas:

@@ -2819,6 +2819,8 @@ components:
         allocations: medium
         note: low
         terms: low
+        billing_address: low
+        shipping_address: low
         row_version: edge-case
         updated_by: low
         created_by: low
@@ -2986,6 +2988,10 @@ components:
           description: Optional terms to be associated with the credit note.
           example: Some terms about this credit note
           nullable: true
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
         custom_mappings:
           $ref: '#/components/schemas/CustomMappings'
         row_version:
@@ -5740,6 +5746,7 @@ components:
         ledger_account: edge-case
         tracking_category: low
         row_version: edge-case
+        custom_fields: medium
         updated_by: low
         created_by: low
         created_at: high
@@ -5922,6 +5929,10 @@ components:
           $ref: '#/components/schemas/LinkedLedgerAccount'
         custom_mappings:
           $ref: '#/components/schemas/CustomMappings'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:
@@ -7188,6 +7199,8 @@ components:
         type: high
         allocations: critical
         note: low
+        number: medium
+        custom_fields: medium
         row_version: edge-case
         display_id: low
         updated_by: edge-case
@@ -7354,6 +7367,16 @@ components:
           description: Optional note to be associated with the payment.
           example: Some notes about this payment
           nullable: true
+        number:
+          type: string
+          title: Note
+          description: Payment number.
+          example: Some notes about this payment
+          nullable: true
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
         row_version:
           $ref: '#/components/schemas/RowVersion'
         display_id:
@@ -10294,6 +10317,14 @@ paths:
                   nominal_code: 'N091',
                   code: '453'
                 },
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
+                  }
+                ],
                 row_version: '1-12345'
               }
             }
@@ -10558,6 +10589,14 @@ paths:
                   nominal_code: 'N091',
                   code: '453'
                 },
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
+                  }
+                ],
                 row_version: '1-12345'
               }
             }
@@ -11536,6 +11575,58 @@ paths:
                 ],
                 note: 'Some notes about this credit note',
                 terms: 'Some terms about this credit note',
+                billing_address: {
+                  id: '123',
+                  type: 'primary',
+                  string: '25 Spring Street, Blackburn, VIC 3130',
+                  name: 'HQ US',
+                  line1: 'Main street',
+                  line2: 'apt #',
+                  line3: 'Suite #',
+                  line4: 'delivery instructions',
+                  street_number: '25',
+                  city: 'San Francisco',
+                  state: 'CA',
+                  postal_code: '94104',
+                  country: 'US',
+                  latitude: '40.759211',
+                  longitude: '-73.984638',
+                  county: 'Santa Clara',
+                  contact_name: 'Elon Musk',
+                  salutation: 'Mr',
+                  phone_number: '111-111-1111',
+                  fax: '122-111-1111',
+                  email: 'elon@musk.com',
+                  website: 'https://elonmusk.com',
+                  notes: 'Address notes or delivery instructions.',
+                  row_version: '1-12345'
+                },
+                shipping_address: {
+                  id: '123',
+                  type: 'primary',
+                  string: '25 Spring Street, Blackburn, VIC 3130',
+                  name: 'HQ US',
+                  line1: 'Main street',
+                  line2: 'apt #',
+                  line3: 'Suite #',
+                  line4: 'delivery instructions',
+                  street_number: '25',
+                  city: 'San Francisco',
+                  state: 'CA',
+                  postal_code: '94104',
+                  country: 'US',
+                  latitude: '40.759211',
+                  longitude: '-73.984638',
+                  county: 'Santa Clara',
+                  contact_name: 'Elon Musk',
+                  salutation: 'Mr',
+                  phone_number: '111-111-1111',
+                  fax: '122-111-1111',
+                  email: 'elon@musk.com',
+                  website: 'https://elonmusk.com',
+                  notes: 'Address notes or delivery instructions.',
+                  row_version: '1-12345'
+                },
                 row_version: '1-12345'
               }
             }
@@ -11721,6 +11812,58 @@ paths:
                 ],
                 note: 'Some notes about this credit note',
                 terms: 'Some terms about this credit note',
+                billing_address: {
+                  id: '123',
+                  type: 'primary',
+                  string: '25 Spring Street, Blackburn, VIC 3130',
+                  name: 'HQ US',
+                  line1: 'Main street',
+                  line2: 'apt #',
+                  line3: 'Suite #',
+                  line4: 'delivery instructions',
+                  street_number: '25',
+                  city: 'San Francisco',
+                  state: 'CA',
+                  postal_code: '94104',
+                  country: 'US',
+                  latitude: '40.759211',
+                  longitude: '-73.984638',
+                  county: 'Santa Clara',
+                  contact_name: 'Elon Musk',
+                  salutation: 'Mr',
+                  phone_number: '111-111-1111',
+                  fax: '122-111-1111',
+                  email: 'elon@musk.com',
+                  website: 'https://elonmusk.com',
+                  notes: 'Address notes or delivery instructions.',
+                  row_version: '1-12345'
+                },
+                shipping_address: {
+                  id: '123',
+                  type: 'primary',
+                  string: '25 Spring Street, Blackburn, VIC 3130',
+                  name: 'HQ US',
+                  line1: 'Main street',
+                  line2: 'apt #',
+                  line3: 'Suite #',
+                  line4: 'delivery instructions',
+                  street_number: '25',
+                  city: 'San Francisco',
+                  state: 'CA',
+                  postal_code: '94104',
+                  country: 'US',
+                  latitude: '40.759211',
+                  longitude: '-73.984638',
+                  county: 'Santa Clara',
+                  contact_name: 'Elon Musk',
+                  salutation: 'Mr',
+                  phone_number: '111-111-1111',
+                  fax: '122-111-1111',
+                  email: 'elon@musk.com',
+                  website: 'https://elonmusk.com',
+                  notes: 'Address notes or delivery instructions.',
+                  row_version: '1-12345'
+                },
                 row_version: '1-12345'
               }
             }
@@ -12830,6 +12973,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Payment'
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            The number property could be used to override the Netsuite tranId property.
       responses:
         '201':
           $ref: '#/components/responses/CreatePaymentResponse'
@@ -12922,6 +13069,15 @@ paths:
                   }
                 ],
                 note: 'Some notes about this payment',
+                number: 'Some notes about this payment',
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
+                  }
+                ],
                 row_version: '1-12345',
                 display_id: '123456'
               }
@@ -13098,6 +13254,15 @@ paths:
                   }
                 ],
                 note: 'Some notes about this payment',
+                number: 'Some notes about this payment',
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
+                  }
+                ],
                 row_version: '1-12345',
                 display_id: '123456'
               }

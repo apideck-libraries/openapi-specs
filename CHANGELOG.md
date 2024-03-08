@@ -1,3 +1,9 @@
+## v10.3.6 - (2024-03-07)
+
+### Vault API
+
+- Remove required `refresh_token` when calling [Import Connection](apis/vault/reference#operation/connectionsImport) operation. This allows import of ApiKey based connections as well as those with long lived tokens, or tokens that are obtained via client credentials.
+
 ## v10.3.5 - (2024-03-01)
 
 ### HRIS

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.3.5
+  version: 10.3.6
   title: Vault API
   description: |+
     Welcome to the Vault API 👋
@@ -734,12 +734,11 @@ components:
         credentials:
           type: object
           additionalProperties: false
-          required:
-            - refresh_token
           properties:
             refresh_token:
               type: string
               description: The refresh token can be used to obtain a new access token.
+              nullable: true
               example: 1234567890abcdefghijklmnopqrstuvwxyz
             access_token:
               type: string

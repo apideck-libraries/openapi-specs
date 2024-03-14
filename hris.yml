@@ -4935,6 +4935,8 @@ paths:
           description: Hibob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response. Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses. Important to know is that Hibob has permission controls for users to determine which data will be available on their API. This can lead to the `birthday` not being available.
         - connector: sap-successfactors
           description: The custom fields are mapped only when they are in the personalInfoNav.
+        - connector: charliehr
+          description: The jobs array compensation data includes only the data related to the first compensation. For more comprehensive compensation data, please refer to the compensations array.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeeResponse'

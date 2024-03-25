@@ -9251,7 +9251,8 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
       responses:
         '200':
           $ref: '#/components/responses/GetTaxRatesResponse'
@@ -9575,7 +9576,8 @@ paths:
         - connector: freshbooks
           description: The Freshbooks Bills api is currently in beta.
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: exact-online
           description: |
             Limit parameter for pagination is not supported for this resource.
@@ -9640,6 +9642,9 @@ paths:
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
         - connector: quickbooks
           description: When creating a bill in QuickBooks, each line item must be accompanied by a type designation. If the type is set to "expense_item," an item ID is required. Conversely, if the type is "expense_account," a ledger account ID must be provided.
+        - connector: netsuite
+          description: |
+            For creating or updating a bill in Netsuite, its required to provide the line type.
       requestBody:
         required: true
         content:
@@ -10096,7 +10101,8 @@ paths:
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoicesResponse'
@@ -10707,7 +10713,8 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
       responses:
@@ -11069,7 +11076,8 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoiceItemsResponse'
@@ -11450,7 +11458,8 @@ paths:
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNotesResponse'
@@ -12009,7 +12018,8 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
       responses:
@@ -12500,7 +12510,8 @@ paths:
             Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
             Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
       responses:
         '200':
           $ref: '#/components/responses/GetSuppliersResponse'
@@ -12968,7 +12979,8 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: kashflow
           description: Kashflow only allows to retrieve payments by invoice, so in order to use this endpoint the filter[invoice_number] parameter is required.
         - connector: exact-online
@@ -13556,7 +13568,8 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: netsuite
-          description: The minimun page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: xero
           description: Xero will return 100 items for each call, so the limit parameter is ignored.
         - connector: exact-online
@@ -14104,7 +14117,8 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: netsuite
-          description: The minimum page size accepted for Netsuite is 5.
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
       responses:
         '200':
           $ref: '#/components/responses/GetPurchaseOrdersResponse'
@@ -14665,6 +14679,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
       responses:
         '200':
           $ref: '#/components/responses/GetSubsidiariesResponse'
@@ -14947,6 +14965,10 @@ paths:
         - $ref: '#/components/parameters/accountingLocationsFilter'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
       responses:
         '200':
           $ref: '#/components/responses/GetAccountingLocationsResponse'
@@ -15297,6 +15319,10 @@ paths:
         - $ref: '#/components/parameters/accountingDepartmentsFilter'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
       responses:
         '200':
           $ref: '#/components/responses/GetAccountingDepartmentsResponse'

@@ -15938,6 +15938,9 @@ paths:
       operationId: attachmentsUpload
       summary: Upload attachment
       description: Upload attachment
+      x-sdk-exclude: true
+      servers:
+        - url: https://upload.apideck.com
       parameters:
         - $ref: '#/components/parameters/referenceType'
         - $ref: '#/components/parameters/referenceId'
@@ -15954,6 +15957,11 @@ paths:
             schema:
               type: string
               format: binary
+      x-api-deck-gotchas:
+        - connector: quickbooks
+          description: Quickbooks limits attachment uploads to 100MB.
+        - connector: xero
+          description: Xero limits to 10 attachments per resource (invoices/bills) of 3.5MB each.
       responses:
         '201':
           $ref: '#/components/responses/CreateAttachmentResponse'

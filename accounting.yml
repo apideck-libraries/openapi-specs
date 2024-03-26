@@ -279,6 +279,31 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/AccountingLocationsFilter'
+    referenceType:
+      in: path
+      name: reference_type
+      schema:
+        $ref: '#/components/schemas/AttachmentReferenceType'
+      required: true
+      description: The reference type of the document.
+      example: invoice
+    referenceId:
+      in: path
+      name: reference_id
+      schema:
+        $ref: '#/components/schemas/Id'
+      required: true
+      description: The reference id of the object to retrieve.
+      example: '123456'
+    attachmentMetadata:
+      name: x-apideck-metadata
+      in: header
+      description: Metadata to attach to the attachment file
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateAttachmentRequest'
   responses:
     BadRequestResponse:
       content:
@@ -784,6 +809,37 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdatePurchaseOrderResponse'
+    GetAttachmentsResponse:
+      description: Attachments
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetAttachmentsResponse'
+    CreateAttachmentResponse:
+      description: Attachments
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateAttachmentResponse'
+    DeleteAttachmentResponse:
+      description: Attachments
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteAttachmentResponse'
+    GetAttachmentResponse:
+      description: Attachments
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetAttachmentResponse'
+    GetAttachmentDownloadResponse:
+      description: Attachment Download
+      content:
+        '*/*':
+          schema:
+            type: string
+            format: binary
   schemas:
     AccountingByRow:
       type: boolean
@@ -9118,6 +9174,222 @@ components:
       example: '12345'
       readOnly: false
       nullable: true
+    Attachment:
+      type: object
+      x-apideck-schema-id: Attachment
+      x-apideck-weights:
+        id: critical
+        name: critical
+        mime_type: medium
+        size: medium
+        reference: critical
+        description: medium
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
+      additionalProperties: false
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+          description: The name of the file
+          example: sample.jpg
+          nullable: true
+        mime_type:
+          type: string
+          description: The MIME type of the file.
+          example: image/jpeg
+          nullable: true
+        size:
+          type: integer
+          x-apideck-schema-id: AttachmentSize
+          description: The size of the file in bytes
+          example: 1810673
+          nullable: true
+        reference:
+          $ref: '#/components/schemas/AttachmentReference'
+        description:
+          type: string
+          description: Optional description of the file
+          example: A sample image
+          nullable: true
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+    AttachmentReference:
+      type: object
+      x-apideck-schema-id: AttachmentReference
+      properties:
+        type:
+          $ref: '#/components/schemas/AttachmentReferenceType'
+        id:
+          $ref: '#/components/schemas/Id'
+      additionalProperties: false
+    AttachmentReferenceType:
+      x-apideck-enum-id: attachment.reference_type
+      type: string
+      enum:
+        - invoice
+        - bill
+    GetAttachmentsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: PurchaseOrders
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    CreateAttachmentRequest:
+      type: object
+      x-apideck-schema-id: CreateAttachmentRequest
+      additionalProperties: false
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The name of the file
+          example: sample.jpg
+        description:
+          type: string
+          description: Optional description of the file.
+          example: My Personal Documents
+    CreateAttachmentResponse:
+      type: object
+      x-apideck-schema-id: CreateAttachmentResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: files
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteAttachmentResponse:
+      type: object
+      x-apideck-schema-id: DeleteAttachmentResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: google-drive
+        resource:
+          type: string
+          description: Unified API resource name
+          example: files
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    GetAttachmentResponse:
+      type: object
+      x-apideck-schema-id: GetAttachmentResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: xero
+        resource:
+          type: string
+          description: Unified API resource name
+          example: payments
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Attachment'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -9228,6 +9500,11 @@ tags:
     x-apideck-resource-id: departments
     x-apideck-model:
       $ref: '#/components/schemas/AccountingDepartment'
+  - name: Attachments
+    description: ''
+    x-apideck-resource-id: attachments
+    x-apideck-model:
+      $ref: '#/components/schemas/Attachment'
 paths:
   /accounting/tax-rates:
     get:
@@ -15593,6 +15870,298 @@ paths:
               const { data } = await apideck.accounting.departmentsDelete({
                 id: 'id_example'
               })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /accounting/attachments/{reference_type}/{reference_id}:
+    get:
+      tags:
+        - Attachments
+      operationId: attachmentsAll
+      summary: List Attachments
+      description: List Attachments
+      parameters:
+        - $ref: '#/components/parameters/referenceType'
+        - $ref: '#/components/parameters/referenceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetAttachmentsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              referenceType: 'invoice',
+              referenceId: '123456'
+            }
+
+            try {
+              const { data } = await apideck.accounting.attachmentsAll(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    post:
+      tags:
+        - Attachments
+      operationId: attachmentsUpload
+      summary: Upload attachment
+      description: Upload attachment
+      parameters:
+        - $ref: '#/components/parameters/referenceType'
+        - $ref: '#/components/parameters/referenceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/attachmentMetadata'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: string
+              format: binary
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateAttachmentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID',
+              metadata: 'REPLACE_WITH_METADATA'
+            })
+
+            const params = {
+              referenceType: 'invoice',
+              referenceId: '123456',
+              attachmentsUpload: 'string'
+            }
+
+            try {
+              const { data } = await apideck.accounting.attachmentsUpload(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /accounting/attachments/{reference_type}/{reference_id}/{id}:
+    get:
+      tags:
+        - Attachments
+      operationId: attachmentsOne
+      summary: Get Attachment
+      description: Get Attachment
+      parameters:
+        - $ref: '#/components/parameters/referenceType'
+        - $ref: '#/components/parameters/referenceId'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetAttachmentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              referenceType: 'invoice',
+              referenceId: '123456',
+              id: 'id_example'
+            }
+
+            try {
+              const { data } = await apideck.accounting.attachmentsOne(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    delete:
+      tags:
+        - Attachments
+      operationId: attachmentsDelete
+      summary: Delete Attachment
+      description: Delete Attachment
+      parameters:
+        - $ref: '#/components/parameters/referenceType'
+        - $ref: '#/components/parameters/referenceId'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteAttachmentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              referenceType: 'invoice',
+              referenceId: '123456',
+              id: 'id_example'
+            }
+
+            try {
+              const { data } = await apideck.accounting.attachmentsDelete(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /accounting/attachments/{reference_type}/{reference_id}/{id}/download:
+    get:
+      tags:
+        - Attachments
+      operationId: attachmentsDownload
+      summary: Download Attachment
+      description: Download Attachment
+      parameters:
+        - $ref: '#/components/parameters/referenceType'
+        - $ref: '#/components/parameters/referenceId'
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetAttachmentDownloadResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              referenceType: 'invoice',
+              referenceId: '123456',
+              id: 'id_example'
+            }
+
+            try {
+              const { data } = await apideck.accounting.attachmentsDownload(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

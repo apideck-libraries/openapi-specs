@@ -1,3 +1,11 @@
+## v10.4.0 - (2024-03-26)
+
+### Accounting API
+
+- Add endpoints for Attachments (all, one, delete, download, upload)
+- Add support for attachments to [Quickbooks](connectors/quickbooks)
+- Add support for attachments to [Xero](connectors/xero)
+
 ## v10.3.6 - (2024-03-07)
 
 ### Vault API

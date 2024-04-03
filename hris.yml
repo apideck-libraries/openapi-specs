@@ -6252,6 +6252,9 @@ paths:
           description: BambooHR requires start_date and end_date parameters to successfully retrieve time off requests. These optional Unify parameters can be sent as filters[start_date] and filters[end_date]. If there are not present, they are sent to BambooHR with the default values of '1900-01-01' & '2100-12-31' respectively.
         - connector: hr-works
           description: In HR Works the start_date and end_date are required fields and the maximum date interval is one year between start_date and end_date. It doesn't support pagination right now, it can be created as per customer request.
+        - connector: kenjo
+          description: |
+            In Kenjo the start_date and end_date are required fields and the maximum date interval is 92 days. We do not support Processed, inApproval and CancelledAfterProcessed filters from Kenjo.
       responses:
         '200':
           $ref: '#/components/responses/GetTimeOffRequestsResponse'

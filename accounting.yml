@@ -13326,6 +13326,9 @@ paths:
         - connector: netsuite
           description: |
             The number property could be used to override the Netsuite tranId property.
+        - connector: xero
+          description: |
+            Xero supports creating payments against multiple allocation types in a single request. However, the response will provide the ID of the first payment only. To access all payment IDs, inspect the raw data.
       responses:
         '201':
           $ref: '#/components/responses/CreatePaymentResponse'

@@ -6255,6 +6255,9 @@ paths:
         - connector: kenjo
           description: |
             In Kenjo the start_date and end_date are required fields and the maximum date interval is 92 days. We do not support Processed, inApproval and CancelledAfterProcessed filters from Kenjo.
+        - connector: payfit
+          description: |
+            In Payfit the start_date parameter is supported only and will provide data of that specific month only. This endpoint is only available for French companies.
       responses:
         '200':
           $ref: '#/components/responses/GetTimeOffRequestsResponse'

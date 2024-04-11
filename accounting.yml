@@ -12299,6 +12299,9 @@ paths:
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
+        - connector: xero
+          description: |
+            In Xero, contacts are not specifically identified as customers or suppliers until an associated financial document is linked to them. This means that within the customer data response, you will find contacts in two categories: those who have been linked to an invoice and thus are recognized as customers, and those who have no invoices or bills associated, remaining uncategorized. For example, a contact is only considered a Customer if there is an invoice connected to them. Similarly, a contact is recognized as a Supplier only when a bill has been associated with their account.
       responses:
         '200':
           $ref: '#/components/responses/GetCustomersResponse'
@@ -12789,6 +12792,9 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+        - connector: xero
+          description: |
+            In Xero, contacts are not specifically identified as customers or suppliers until an associated financial document is linked to them. This means that within the customer data response, you will find contacts in two categories: those who have been linked to an invoice and thus are recognized as customers, and those who have no invoices or bills associated, remaining uncategorized. For example, a contact is only considered a Customer if there is an invoice connected to them. Similarly, a contact is recognized as a Supplier only when a bill has been associated with their account.
       responses:
         '200':
           $ref: '#/components/responses/GetSuppliersResponse'

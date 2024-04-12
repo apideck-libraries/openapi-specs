@@ -12354,6 +12354,8 @@ paths:
           description: ''
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
+        - connector: quickbooks
+          description: QuickBooks supports only billing and shipping addresses. Therefore, when creating addresses, it is required to specify the type as 'billing' or 'shipping' in the address object within the addresses array.
       requestBody:
         required: true
         content:
@@ -12568,6 +12570,8 @@ paths:
           description: ''
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
+        - connector: quickbooks
+          description: QuickBooks supports only billing and shipping addresses. Therefore, when creating or updating addresses, it is required to specify the type as 'billing' or 'shipping' in the address object within the addresses array.
       requestBody:
         required: true
         content:
@@ -12848,6 +12852,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Supplier'
+      x-apideck-gotchas:
+        - connector: quickbooks
+          description: QuickBooks only supports a single billing address. Therefore, the first item in the addresses array will always be mapped as the billing address, regardless of its original type.
       responses:
         '201':
           $ref: '#/components/responses/CreateSupplierResponse'
@@ -13051,6 +13058,8 @@ paths:
           description: ''
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
+        - connector: quickbooks
+          description: QuickBooks only supports a single billing address. Therefore, the first item in the addresses array will always be mapped as the billing address, regardless of its original type.
       requestBody:
         required: true
         content:

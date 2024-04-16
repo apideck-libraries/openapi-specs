@@ -82,6 +82,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/EcommerceOrdersFilter'
+    ordersSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/OrdersSort'
     raw:
       name: raw
       in: query
@@ -3206,6 +3214,34 @@ components:
             - other
           example: primary
           nullable: true
+    SortDirection:
+      type: string
+      x-apideck-schema-id: SortDirection
+      description: The direction in which to sort the results
+      x-apideck-enum-id: sort_direction
+      enum:
+        - asc
+        - desc
+      default: asc
+    OrdersSort:
+      type: object
+      x-apideck-schema-id: OrdersSort
+      example:
+        by: created_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: orders.sort_by
+          description: The field on which to sort the Orders
+          enum:
+            - created_at
+            - updated_at
+            - name
+          example: created_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
   securitySchemes:
     apiKey:
       type: apiKey
@@ -3267,6 +3303,7 @@ paths:
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
         - $ref: '#/components/parameters/ordersFilter'
+        - $ref: '#/components/parameters/ordersSort'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:

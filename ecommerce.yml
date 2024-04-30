@@ -3308,6 +3308,9 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: bigcommerce
+          description: In the pagination, the limit value should be in additions of 10. E.g. 10, 20, 30, etc.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrdersResponse'
@@ -3415,6 +3418,8 @@ paths:
       x-apideck-gotchas:
         - connector: prestashop
           description: 'PrestaShop primarily uses an `id` field to identify product associations (Ie: categories, variants etc). To maintain performance on the list endpoint, fewer properties are returned than other connectors.'
+        - connector: bigcommerce
+          description: In the pagination, the limit value should be in additions of 10. E.g. 10, 20, 30, etc.
       responses:
         '200':
           $ref: '#/components/responses/GetProductsResponse'
@@ -3526,6 +3531,8 @@ paths:
       x-apideck-gotchas:
         - connector: woocommerce
           description: Woocommerce will only return customers that have placed an order and created and account.
+        - connector: bigcommerce
+          description: In the pagination, the limit value should be in additions of 10. E.g. 10, 20, 30, etc.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceCustomersResponse'

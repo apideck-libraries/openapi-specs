@@ -1141,6 +1141,7 @@ components:
         last_activity_at: medium
         updated_at: high
         created_at: medium
+        opportunity_ids: low
       required:
         - name
       x-pii:
@@ -1356,6 +1357,11 @@ components:
           example: '2017-08-12T20:43:21.291Z'
           readOnly: true
           nullable: true
+        opportunity_ids:
+          description: The opportunity ids of the contact.
+          type: array
+          items:
+            type: string
       additionalProperties: false
     ContactsFilter:
       type: object
@@ -6107,7 +6113,8 @@ paths:
                     value: 'Uses Salesforce and Marketo'
                   }
                 ],
-                tags: ['New']
+                tags: ['New'],
+                opportunity_ids: ['string']
               }
             }
 
@@ -6312,7 +6319,8 @@ paths:
                     value: 'Uses Salesforce and Marketo'
                   }
                 ],
-                tags: ['New']
+                tags: ['New'],
+                opportunity_ids: ['string']
               }
             }
 

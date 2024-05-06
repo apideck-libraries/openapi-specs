@@ -1,3 +1,10 @@
+## v10.4.1 - (2024-05-06)
+
+### Accounting API
+
+- Added `opportunity_ids` field to [Contacts](apis/accounting/reference#tag/Contacts)
+- Updated Balance Sheet schema.
+
 ## v10.4.0 - (2024-03-26)
 
 ### Accounting API

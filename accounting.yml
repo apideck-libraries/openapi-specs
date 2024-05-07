@@ -11701,6 +11701,9 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: For adding invoice allocations, use the proxy API.
       requestBody:
         required: true
         content:
@@ -11952,7 +11955,11 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: xero
-          description: Xero will only allow updating a Credit Note when it has not yet been allocated.
+          description: |
+            Authorised Credit Note can only be updated to voided status and cannot be deleted once authorised.
+            Any invoice allocation and payment must be deleted before updating the authorised Credit Note to status voided.
+            To delete payments, use the payment ID from the raw data and delete it using the Delete Payment endpoint.
+            For adding and removing invoice allocations, use the proxy API.
       requestBody:
         required: true
         content:
@@ -12153,7 +12160,11 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: xero
-          description: Xero will only allow deleting a Credit Note if it is in draft status.
+          description: |
+            Xero will only allow deleting a Credit Note if it is in draft status.
+            Credit notes with "authorised" status cannot be deleted directly. Instead:
+            - If the credit note is empty (i.e., has no invoice allocations and payments), its status can be updated to "voided" by update Credit Note endpoint.
+            - If the credit note has invoice allocations and payments, these must be removed first. Once all invoice allocations and payments are deleted, the credit note's status can be updated to "Voided" by update Credit Note endpoint.
       responses:
         '200':
           $ref: '#/components/responses/DeleteCreditNoteResponse'

@@ -9839,6 +9839,9 @@ paths:
         - connector: netsuite
           description: |
             For creating or updating a bill in Netsuite, its required to provide the line type.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central.
       requestBody:
         required: true
         content:
@@ -10352,6 +10355,9 @@ paths:
           Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central.
       requestBody:
         required: true
         content:
@@ -12783,6 +12789,9 @@ paths:
       x-apideck-gotchas:
         - connector: quickbooks
           description: QuickBooks only supports a single billing address. Therefore, the first item in the addresses array will always be mapped as the billing address, regardless of its original type.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central.
       responses:
         '201':
           $ref: '#/components/responses/CreateSupplierResponse'
@@ -14396,6 +14405,9 @@ paths:
           description: |
             Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS. 
             Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central.
       requestBody:
         required: true
         content:

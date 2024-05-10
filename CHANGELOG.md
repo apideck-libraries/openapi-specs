@@ -1,3 +1,13 @@
+## v10.4.2 - (2024-05-10)
+
+### Ecommerce API
+
+- Added `updated_since` and `created_since` filter support for [Orders](apis/ecommerce/reference#tag/EcommerceOrders).
+
+### Accounting API
+
+- Added `created_since` filter support for [Invoices](apis/accounting/reference#tag/Invoices).
+
 ## v10.4.1 - (2024-05-06)
 
 ### Accounting API

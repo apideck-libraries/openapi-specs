@@ -424,7 +424,6 @@ components:
       x-apideck-schema-id: Applicant
       x-apideck-weights:
         id: critical
-        position_id: medium
         name: critical
         first_name: high
         last_name: high
@@ -470,10 +469,6 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/Id'
-        position_id:
-          type: string
-          description: The PositionId the applicant applied for.
-          example: '123'
         name:
           type: string
           description: The name of an applicant.
@@ -3209,7 +3204,6 @@ paths:
 
             const params = {
               applicant: {
-                position_id: '123',
                 name: 'Elon Musk',
                 first_name: 'Elon',
                 last_name: 'Musk',
@@ -3417,7 +3411,6 @@ paths:
             const params = {
               id: 'id_example',
               applicant: {
-                position_id: '123',
                 name: 'Elon Musk',
                 first_name: 'Elon',
                 last_name: 'Musk',

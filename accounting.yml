@@ -10649,6 +10649,8 @@ paths:
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
         - connector: exact-online
           description: To configure the shipping address for invoices, it is recommended to update the customer resource. If there is a need to change this property, modifying the customer information is advised.
+        - connector: xero
+          description: For updating invoices, there are some limitations. Check out [here](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#1-limitations-and-rules-for-updating-xero-invoices)
       requestBody:
         required: true
         content:
@@ -11722,7 +11724,7 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: xero
-          description: For adding invoice allocations, use the proxy API.
+          description: For adding invoice allocations, use the proxy API. [Know more](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#2-curl-requests-for-adding-and-removing-allocations-from-xero-credit-note)
       requestBody:
         required: true
         content:
@@ -11976,10 +11978,10 @@ paths:
       x-apideck-gotchas:
         - connector: xero
           description: |
-            Authorised Credit Note can only be updated to voided status and cannot be deleted once authorised.
-            Any invoice allocation and payment must be deleted before updating the authorised Credit Note to status voided.
-            To delete payments, use the payment ID from the raw data and delete it using the Delete Payment endpoint.
-            For adding and removing invoice allocations, use the proxy API.
+            - Authorised Credit Note can only be updated to voided status and cannot be deleted once authorised.
+            - Any invoice allocation and payment must be deleted before updating the authorised Credit Note to status voided.
+            - To delete payments, use the payment ID from the raw data and delete it using the Delete Payment endpoint.
+            - For adding and removing invoice allocations, use the proxy API. [Know more](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#2-curl-requests-for-adding-and-removing-allocations-from-xero-credit-note)
       requestBody:
         required: true
         content:
@@ -12186,6 +12188,7 @@ paths:
             Credit notes with "authorised" status cannot be deleted directly. Instead:
             - If the credit note is empty (i.e., has no invoice allocations and payments), its status can be updated to "voided" by update Credit Note endpoint.
             - If the credit note has invoice allocations and payments, these must be removed first. Once all invoice allocations and payments are deleted, the credit note's status can be updated to "Voided" by update Credit Note endpoint.
+              [Know more](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#2-curl-requests-for-adding-and-removing-allocations-from-xero-credit-note)
       responses:
         '200':
           $ref: '#/components/responses/DeleteCreditNoteResponse'

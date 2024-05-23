@@ -304,6 +304,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateAttachmentRequest'
+    contentType:
+      name: content-type
+      in: header
+      description: The content-type of the file being uploaded
+      required: true
+      schema:
+        type: string
   responses:
     BadRequestResponse:
       content:
@@ -15939,6 +15946,7 @@ paths:
         - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/contentType'
       security:
         - apiKey: []
       requestBody:
@@ -15978,6 +15986,7 @@ paths:
               apiKey: 'REPLACE_WITH_API_KEY',
               appId: 'REPLACE_WITH_APP_ID',
               consumerId: 'REPLACE_WITH_CONSUMER_ID',
+              contentType: 'REPLACE_WITH_CONTENT_TYPE',
               metadata: 'REPLACE_WITH_METADATA'
             })
 

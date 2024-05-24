@@ -2916,41 +2916,7 @@ components:
         allocations:
           type: array
           items:
-            x-apideck-weights:
-              id: medium
-              type: medium
-              code: medium
-              amount: medium
-            properties:
-              id:
-                type: string
-                title: Linked entity ID
-                description: Unique identifier of entity this payment should be attributed to.
-                example: '123456'
-              type:
-                type: string
-                title: Allocation type
-                description: Type of entity this payment should be attributed to.
-                x-apideck-enum-id: allocations.type
-                enum:
-                  - invoice
-                  - order
-                  - expense
-                  - credit_memo
-                  - over_payment
-                  - pre_payment
-                  - journal_entry
-                  - other
-              code:
-                type: string
-                example: N091
-                readOnly: true
-              amount:
-                type: number
-                title: Amount
-                description: Amount of payment that should be attributed to this allocation. If null, the total_amount will be used.
-                example: 49.99
-                nullable: true
+            $ref: '#/components/schemas/Allocation'
         note:
           type: string
           title: Note
@@ -7315,47 +7281,7 @@ components:
         allocations:
           type: array
           items:
-            type: object
-            x-apideck-weights:
-              id: medium
-              type: medium
-              code: medium
-              amount: critical
-            x-apideck-strict-required:
-              - amount
-            x-apideck-strict-any-of:
-              - required:
-                  - id
-              - required:
-                  - code
-            properties:
-              id:
-                type: string
-                title: Linked entity ID
-                description: Unique identifier of entity this payment should be attributed to.
-                example: '123456'
-              type:
-                type: string
-                title: Allocation type
-                description: Type of entity this payment should be attributed to.
-                x-apideck-enum-id: allocations.type
-                enum:
-                  - invoice
-                  - order
-                  - expense
-                  - credit_memo
-                  - over_payment
-                  - pre_payment
-              code:
-                type: string
-                example: N091
-                readOnly: true
-              amount:
-                type: number
-                title: Amount
-                description: Amount of payment that should be attributed to this allocation. If null, the total_amount will be used.
-                example: 49.99
-                nullable: true
+            $ref: '#/components/schemas/Allocation'
         note:
           type: string
           title: Note
@@ -9325,6 +9251,55 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Attachment'
+    Allocation:
+      type: object
+      x-apideck-schema-id: Allocation
+      x-apideck-weights:
+        id: medium
+        type: medium
+        code: medium
+        amount: medium
+        allocation_id: medium
+      x-apideck-strict-any-of:
+        - required:
+            - id
+        - required:
+            - code
+      properties:
+        id:
+          type: string
+          title: Linked entity ID
+          description: Unique identifier of entity this payment should be attributed to.
+          example: '123456'
+        type:
+          type: string
+          title: Allocation type
+          description: Type of entity this payment should be attributed to.
+          x-apideck-enum-id: allocations.type
+          enum:
+            - invoice
+            - order
+            - expense
+            - credit_memo
+            - over_payment
+            - pre_payment
+            - journal_entry
+            - other
+        code:
+          type: string
+          example: N091
+          readOnly: true
+        amount:
+          type: number
+          title: Amount
+          description: Amount of payment that should be attributed to this allocation. If null, the total_amount will be used.
+          example: 49.99
+          nullable: true
+        allocation_id:
+          type: string
+          title: Allocation ID
+          description: Unique identifier of the allocation
+          example: '123456'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -11849,7 +11824,8 @@ paths:
                   {
                     id: '123456',
                     type: 'invoice',
-                    amount: 49.99
+                    amount: 49.99,
+                    allocation_id: '123456'
                   }
                 ],
                 note: 'Some notes about this credit note',
@@ -12107,7 +12083,8 @@ paths:
                   {
                     id: '123456',
                     type: 'invoice',
-                    amount: 49.99
+                    amount: 49.99,
+                    allocation_id: '123456'
                   }
                 ],
                 note: 'Some notes about this credit note',
@@ -13403,7 +13380,8 @@ paths:
                   {
                     id: '123456',
                     type: 'invoice',
-                    amount: 49.99
+                    amount: 49.99,
+                    allocation_id: '123456'
                   }
                 ],
                 note: 'Some notes about this payment',
@@ -13589,7 +13567,8 @@ paths:
                   {
                     id: '123456',
                     type: 'invoice',
-                    amount: 49.99
+                    amount: 49.99,
+                    allocation_id: '123456'
                   }
                 ],
                 note: 'Some notes about this payment',

@@ -1600,8 +1600,10 @@ components:
         sub_total: medium
         shipping_cost: medium
         total_discount: medium
+        coupon_discount: medium
         total_tax: critical
         total_amount: critical
+        refunded_amount: medium
         status: critical
         payment_status: critical
         fulfillment_status: critical
@@ -1659,6 +1661,12 @@ components:
           description: Shipping cost, if any.
           example: '5.17'
           nullable: true
+        coupon_discount:
+          type: string
+          title: Coupon discount
+          description: Coupon discount, if any.
+          example: '5.5'
+          nullable: true
         total_discount:
           type: string
           title: Total discount
@@ -1676,6 +1684,12 @@ components:
           title: Total amount
           description: Total amount due.
           example: '50.17'
+          nullable: true
+        refunded_amount:
+          type: string
+          title: Refunded amount
+          description: Refunded amount, if any.
+          example: '5.5'
           nullable: true
         status:
           $ref: '#/components/schemas/EcommerceOrderStatus'
@@ -1758,6 +1772,10 @@ components:
         unit_price: critical
         tax_rate: medium
         tax_amount: medium
+        is_refunded: medium
+        refunded_amount: medium
+        refunded_quantity: medium
+        sub_total: medium
         total_amount: critical
         discounts: medium
       required:
@@ -1851,6 +1869,30 @@ components:
           title: Tax amount
           description: The total tax amount applied to the product or variant associated with the line item.
           example: '1.6'
+          nullable: true
+        is_refunded:
+          type: boolean
+          title: Is refunded
+          description: Whether the line item has been refunded.
+          example: false
+          nullable: true
+        refunded_amount:
+          type: string
+          title: Refunded amount
+          description: The amount of the line item that has been refunded.
+          example: '0'
+          nullable: true
+        refunded_quantity:
+          type: string
+          title: Refunded quantity
+          description: The quantity of the line item that has been refunded.
+          example: '0'
+          nullable: true
+        sub_total:
+          type: string
+          title: Sub total
+          description: The sub total for the product(s) or variant associated with the line item, excluding taxes and discounts.
+          example: '43.18'
           nullable: true
         total_amount:
           type: string

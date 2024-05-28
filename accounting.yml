@@ -1188,6 +1188,7 @@ components:
               created_by: edge-case
               updated_at: low
               created_at: edge-case
+              uncategorized_items: edge-case
             additionalProperties: false
             required:
               - end_date
@@ -1237,6 +1238,16 @@ components:
                 $ref: '#/components/schemas/UpdatedAt'
               created_at:
                 $ref: '#/components/schemas/CreatedAt'
+              uncategorized_items:
+                type: array
+                x-apideck-schema-id: BalanceSheetUncategorizedItems
+                title: Uncategorized Items
+                description: Items that are not categorized in the balance sheet
+                additionalProperties: false
+                items:
+                  anyOf:
+                    - $ref: '#/components/schemas/BalanceSheetAccount'
+                    - $ref: '#/components/schemas/BalanceSheetAccountRecord'
     BalanceSheetAccount:
       type: object
       x-apideck-schema-id: BalanceSheetAccount
@@ -1245,6 +1256,8 @@ components:
         name: high
         value: critical
         items: medium
+      title: Balance Sheet Account
+      description: A balance sheet account represents the financial position of a company at a specific point in time.
       additionalProperties: false
       properties:
         account_id:

@@ -9851,7 +9851,9 @@ paths:
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
         - connector: quickbooks
-          description: When creating a bill in QuickBooks, each line item must be accompanied by a type designation. If the type is set to "expense_item," an item ID is required. Conversely, if the type is "expense_account," a ledger account ID must be provided.
+          description: |
+            When creating a bill in QuickBooks, each line item must be accompanied by a type designation. If the type is set to "expense_item," an item ID is required. Conversely, if the type is "expense_account," a ledger account ID must be provided.
+            Additionally, multicurrency needs to be enabled in your QBO account. If creating a bill in your default currency, you do not need to send the currency value as long as the supplier uses the same currency. For bills with suppliers using a different currency than your default, you must include the currency value, matching the supplier's configured currency. To change the currency of a customer or vendor, a new one must be created with the desired currency. Foreign currencies can only be sent to suppliers configured with that currency.
         - connector: netsuite
           description: |
             For creating or updating a bill in Netsuite, its required to provide the line type.

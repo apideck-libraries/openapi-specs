@@ -1,3 +1,9 @@
+## v10.6.0 - (2024-06-19)
+
+### HRIS and ATS API
+
+- Added support for OAuth 2.0 for [SAP SuccessFactors](connectors/sap-successfactors)
+
 ## v10.5.0 - (2024-06-19)
 
 ### Unify

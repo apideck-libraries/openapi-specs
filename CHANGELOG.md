@@ -1,3 +1,9 @@
+## v10.5.0 - (2024-06-19)
+
+### Unify
+
+- Introduction of the `pass_though` property as part of the [Unified Pass Through](https://developers.apideck.com/guides/pass-through) feature
+
 ## v10.4.2 - (2024-05-10)
 
 ### Ecommerce API

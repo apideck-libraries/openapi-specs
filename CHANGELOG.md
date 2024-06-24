@@ -1,3 +1,9 @@
+## v10.6.1 - (2024-06-24)
+
+### Accounting API
+
+- Updated [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) schema.
+
 ## v10.6.0 - (2024-06-19)
 
 ### HRIS and ATS API

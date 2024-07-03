@@ -14086,6 +14086,9 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: quickbooks
+          description: When using start and end date filters, QuickBooks requires both to be sent. However, the report only reflects the balance sheet situation as of the end date.
       responses:
         '200':
           $ref: '#/components/responses/GetBalanceSheetResponse'

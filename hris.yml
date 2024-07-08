@@ -3715,6 +3715,10 @@ components:
       type: string
       example: she,her
       nullable: true
+    PolicyType:
+      type: string
+      description: The policy type of the time off request
+      example: sick
     RecordUrl:
       type: string
       title: Record URL
@@ -4003,6 +4007,7 @@ components:
         created_by: edge-case
         updated_at: medium
         created_at: medium
+        policy_type: edge-case
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -4112,6 +4117,8 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         pass_through:
           $ref: '#/components/schemas/PassThroughBody'
+        policy_type:
+          $ref: '#/components/schemas/PolicyType'
     TimeOffRequestsFilter:
       type: object
       example:
@@ -6496,7 +6503,8 @@ paths:
                       }
                     ]
                   }
-                ]
+                ],
+                policy_type: 'sick'
               }
             }
 
@@ -6506,7 +6514,7 @@ paths:
             } catch (error) {
               console.error(error)
             }
-  /hris/time-off-requests/{id}:
+  /hris/time-off-requests/employees/{employee_id}/time-off-requests/{id}:
     get:
       tags:
         - Time Off Requests
@@ -6520,6 +6528,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/employeeId'
       security:
         - apiKey: []
       responses:
@@ -6550,10 +6559,13 @@ paths:
               consumerId: 'REPLACE_WITH_CONSUMER_ID'
             })
 
+            const params = {
+              id: 'id_example',
+              employeeId: 'employee_id_example'
+            }
+
             try {
-              const { data } = await apideck.hris.timeOffRequestsOne({
-                id: 'id_example'
-              })
+              const { data } = await apideck.hris.timeOffRequestsOne(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)
@@ -6570,6 +6582,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/employeeId'
       security:
         - apiKey: []
       requestBody:
@@ -6608,6 +6621,7 @@ paths:
 
             const params = {
               id: 'id_example',
+              employeeId: 'employee_id_example',
               timeOffRequest: {
                 employee_id: '12345',
                 policy_id: '12345',
@@ -6636,7 +6650,8 @@ paths:
                       }
                     ]
                   }
-                ]
+                ],
+                policy_type: 'sick'
               }
             }
 
@@ -6658,6 +6673,7 @@ paths:
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/employeeId'
       security:
         - apiKey: []
       responses:
@@ -6688,10 +6704,13 @@ paths:
               consumerId: 'REPLACE_WITH_CONSUMER_ID'
             })
 
+            const params = {
+              id: 'id_example',
+              employeeId: 'employee_id_example'
+            }
+
             try {
-              const { data } = await apideck.hris.timeOffRequestsDelete({
-                id: 'id_example'
-              })
+              const { data } = await apideck.hris.timeOffRequestsDelete(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

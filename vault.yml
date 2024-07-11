@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.6.2
+  version: 10.6.3
   title: Vault API
   description: |+
     Welcome to the Vault API 👋
@@ -2032,6 +2032,32 @@ components:
           media: /2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages/SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Media.json
         to: '+15558675310'
         uri: /2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages/SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.json
+    ValidateConnectionStateResponse:
+      type: object
+      x-apideck-schema-id: ValidateConnectionStateResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The unique identifier of the connection.
+              example: crm+salesforce
+              readOnly: true
+            state:
+              $ref: '#/components/schemas/ConnectionState'
     RequestCountAllocation:
       type: object
       x-apideck-schema-id: RequestCountAllocation
@@ -2059,13 +2085,13 @@ components:
         example_response:
           type: object
           description: Example response from the downstream API
-    ResourceSchema:
-      type: object
-      x-apideck-schema-id: ResourceSchema
     ResourceId:
       type: string
       description: ID of the resource, typically a lowercased version of name.
       example: companies
+    ResourceSchema:
+      type: object
+      x-apideck-schema-id: ResourceSchema
     ResourceStatus:
       x-apideck-enum-id: connector.resource.status
       type: string
@@ -2525,18 +2551,18 @@ components:
           schema:
             $ref: '#/components/schemas/CreateCustomMappingResponse'
       description: Custom mapping created
-    CreateSessionResponse:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateSessionResponse'
-      description: Session created
     Created:
       content:
         application/json:
           example: {}
           schema: {}
       description: Resource created
+    CreateSessionResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateSessionResponse'
+      description: Session created
     DeleteConsumerResponse:
       content:
         application/json:
@@ -2643,6 +2669,12 @@ components:
           schema:
             description: Indicates if the error returned in the body is from the downstream
             type: boolean
+    ValidateConnectionStateResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidateConnectionStateResponse'
+      description: Connection access token refreshed
     UnauthorizedResponse:
       content:
         application/json:
@@ -3510,6 +3542,73 @@ paths:
 
             try {
               const { data } = await apideck.vault.connectionsToken(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /vault/connections/{unified_api}/{service_id}/validate:
+    post:
+      tags:
+        - Connections
+      summary: Validate Connection State
+      operationId: validateConnectionState
+      description: |
+        This endpoint validates the current state of a given connection. This will perform different checks based on the connection auth type. For basic and apiKey auth types, the presence of required fields is checked.
+        For connectors that implement OAuth2, this operation forces the refresh flow for an access token regardless of its expiry.
+
+        Note:
+          - Do not include any credentials in the request body. This operation does not persist changes, but only triggers the validation of connection state.
+          - If a refresh token flow was performed and successful, the new access token will then be used for subsequent API requests.
+      security:
+        - apiKey: []
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unified_api'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+              additionalProperties: false
+      responses:
+        '200':
+          $ref: '#/components/responses/ValidateConnectionStateResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              serviceId: 'pipedrive',
+              unifiedApi: 'crm',
+              validateConnectionState: {}
+            }
+
+            try {
+              const { data } = await apideck.vault.validateConnectionState(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

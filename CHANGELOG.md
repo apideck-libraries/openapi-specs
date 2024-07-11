@@ -1,3 +1,9 @@
+## v10.6.3 - (2024-07-11)
+
+### Vault API
+
+- Added `validate` [Validate Connection State](/apis/vault/reference#operation/validateConnectionState) to validate the state of a connection is set to 'callable'.
+
 ## v10.6.2 - (2024-06-25)
 
 ### Accounting API

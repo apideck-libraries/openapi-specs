@@ -1,3 +1,10 @@
+## v10.7.0 - (2024-07-16)
+
+### Accounting API
+
+- Added [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) schema.
+- Added [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) support for [Quickbooks](connectors/quickbook) connector.
+
 ## v10.6.3 - (2024-07-11)
 
 ### Vault API

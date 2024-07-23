@@ -10261,6 +10261,9 @@ paths:
         - connector: microsoft-dynamics-365-business-central
           description: |
             If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central.
+        - connector: zoho-books
+          description: |
+            The status of the bill will be "submitted" by default when creating a bill.
       requestBody:
         required: true
         content:
@@ -10515,6 +10518,10 @@ paths:
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
         - connector: Quickbooks
           description: Quickbooks requires the supplier.id to be sent in order to make update operations.
+        - connector: zoho-books
+          description: |
+            The allowed values for the status field are "draft", "submitted" and "void" when using the update method.
+            Please send status updates separately from other bill updates.
       requestBody:
         required: true
         content:
@@ -10834,6 +10841,9 @@ paths:
         - connector: freshbooks
           description: |
             The status field can be set to either "submitted", "partially_paid", "paid" or "draft". The due_date and invoice_date fields are required for the invoice to be created.
+        - connector: zoho-books
+          description: |
+            By default, the status of the invoice will be set to "draft".
       requestBody:
         required: true
         content:
@@ -11145,6 +11155,10 @@ paths:
         - connector: freshbooks
           description: |
             The status field can be set to either "submitted" or "draft". The other available statuses are set by the Freshbooks API and cannot be updated manually. The due_date and invoice_date fields are required for the due date to be updated.
+        - connector: zoho-books
+          description: |
+            The allowed values for the status field are "draft", "submitted", and "void" when using the update method.
+            Please ensure that status updates are sent separately from other invoice updates.
       requestBody:
         required: true
         content:
@@ -11669,6 +11683,10 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: zoho-books
+          description: |
+            For ledger accounts, please update the "active" status separately from other updates.
       requestBody:
         required: true
         content:
@@ -12079,6 +12097,9 @@ paths:
         - connector: quickbooks
           description: |
             The `taxable` field is applicable to US companies only and should be sent in the request body if your QuickBooks account is in the US region.
+        - connector: zoho-books
+          description: |
+            Please ensure that status updates are sent separately from other invoice item updates.
       requestBody:
         required: true
         content:
@@ -12325,6 +12346,9 @@ paths:
       x-apideck-gotchas:
         - connector: xero
           description: For adding invoice allocations, use the proxy API. [Know more](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#2-curl-requests-for-adding-and-removing-allocations-from-xero-credit-note)
+        - connector: zoho-books
+          description: |
+            By default, the status of the bill will be set to "authorised".
       requestBody:
         required: true
         content:
@@ -12609,6 +12633,10 @@ paths:
             - Any invoice allocation and payment must be deleted before updating the authorised Credit Note to status voided.
             - To delete payments, use the payment ID from the raw data and delete it using the Delete Payment endpoint.
             - For adding and removing invoice allocations, use the proxy API. [Know more](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#2-curl-requests-for-adding-and-removing-allocations-from-xero-credit-note)
+        - connector: zoho-books
+          description: |
+            Allowed values for the status are "draft", "authorised", and "voided" when using the update method.
+            Please send status updates separately from other updates for Credit Notes.
       requestBody:
         required: true
         content:
@@ -13200,6 +13228,10 @@ paths:
         - connector: freshbooks
           description: |
             The status field can be updated to either "active" or "archived".
+        - connector: zoho-books
+          description: |
+            The status field can be updated to either "active" or "inactive".
+            Please send status updates separately from other updates for the customer.
       requestBody:
         required: true
         content:
@@ -13727,6 +13759,10 @@ paths:
         - connector: freshbooks
           description: |
             The status field can be updated to either "active" or "archived".
+        - connector: zoho-books
+          description: |
+            The status field can be updated to either "active" or "inactive".
+            Please send status updates separately from other updates for the supplier.
       requestBody:
         required: true
         content:
@@ -15270,6 +15306,9 @@ paths:
         - connector: microsoft-dynamics-365-business-central
           description: |
             If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central.
+        - connector: zoho-books
+          description: |
+            By default, the status of the purchase order will be set to "draft".
       requestBody:
         required: true
         content:
@@ -15551,6 +15590,10 @@ paths:
           description: ''
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
+        - connector: zoho-books
+          description: |
+            Allowed values for the status are "draft", "open", "billed" and "deleted" when using the update method.
+            Please send status updates separately from other updates for the supplier.
       requestBody:
         required: true
         content:

@@ -1837,7 +1837,7 @@ components:
         - id
       properties:
         id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/WritableId'
         first_name:
           $ref: '#/components/schemas/FirstName'
         last_name:
@@ -4764,6 +4764,7 @@ paths:
 
             const params = {
               employee: {
+                id: '12345',
                 first_name: 'Elon',
                 last_name: 'Musk',
                 middle_name: 'D.',
@@ -5106,6 +5107,7 @@ paths:
             const params = {
               id: 'id_example',
               employee: {
+                id: '12345',
                 first_name: 'Elon',
                 last_name: 'Musk',
                 middle_name: 'D.',

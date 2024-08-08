@@ -9481,6 +9481,7 @@ components:
         parent_id: low
         name: critical
         status: critical
+        code: low
       additionalProperties: false
       properties:
         id:
@@ -9492,6 +9493,11 @@ components:
           description: The name of the tracking category.
           example: Department
           nullable: false
+        code:
+          type: string
+          description: The code of the tracking category.
+          example: '100'
+          nullable: true
         status:
           type: string
           title: Tracking Category status
@@ -17194,6 +17200,9 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: sage-intacct
+          description: The Parent ID field refers to the parent tracking category code.
       responses:
         '200':
           $ref: '#/components/responses/GetTrackingCategoriesResponse'
@@ -17241,6 +17250,9 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: sage-intacct
+          description: When creating a category with parent ID please use the tracking category code.
       requestBody:
         required: true
         content:
@@ -17279,6 +17291,7 @@ paths:
               trackingCategory: {
                 parent_id: '12345',
                 name: 'Department',
+                code: '100',
                 status: 'active',
                 row_version: '1-12345',
                 pass_through: [
@@ -17319,6 +17332,9 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: sage-intacct
+          description: The Parent ID field refers to the parent tracking category code.
       responses:
         '200':
           $ref: '#/components/responses/GetTrackingCategoryResponse'
@@ -17375,6 +17391,9 @@ paths:
               $ref: '#/components/schemas/TrackingCategory'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: sage-intacct
+          description: When updating the Parent ID field please use the tracking category code.
       responses:
         '200':
           $ref: '#/components/responses/UpdateTrackingCategoryResponse'
@@ -17408,6 +17427,7 @@ paths:
               trackingCategory: {
                 parent_id: '12345',
                 name: 'Department',
+                code: '100',
                 status: 'active',
                 row_version: '1-12345',
                 pass_through: [

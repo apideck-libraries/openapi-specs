@@ -9838,6 +9838,9 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+        - connector: quickbooks
+          description: |
+            In quickbooks, the tax rates resource does not support pagination.
       responses:
         '200':
           $ref: '#/components/responses/GetTaxRatesResponse'
@@ -9885,6 +9888,10 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: quickbooks
+          description: |
+            To create a tax rate, `effective_tax_rate`, `tax_payable_account_id`, `name` and a `component` is required. If `tax_payable_account_id` is unknown, make a proxy call to get list of TaxAgency. [TaxAgency doc](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/taxagency#query-a-taxagency)
       requestBody:
         required: true
         content:

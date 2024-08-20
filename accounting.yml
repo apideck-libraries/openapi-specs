@@ -14077,6 +14077,9 @@ paths:
         - connector: xero
           description: |
             Xero supports creating payments against multiple allocation types in a single request. However, the response will provide the ID of the first payment only. To access all payment IDs, inspect the raw data.
+        - connector: quickbooks
+          description: |
+            Payment allocations in QuickBooks are processed asynchronously. While the allocations are included in the request, they may not appear in the immediate response. The allocations will be applied and become visible in subsequent list or get calls.
       responses:
         '201':
           $ref: '#/components/responses/CreatePaymentResponse'

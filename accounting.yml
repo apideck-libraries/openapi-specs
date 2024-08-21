@@ -10857,6 +10857,8 @@ paths:
         - connector: zoho-books
           description: |
             By default, the status of the invoice will be set to "draft".
+        - connector: netsuite
+          description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
       requestBody:
         required: true
         content:
@@ -11172,6 +11174,8 @@ paths:
           description: |
             The allowed values for the status field are "draft", "submitted", and "void" when using the update method.
             Please ensure that status updates are sent separately from other invoice updates.
+        - connector: netsuite
+          description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
       requestBody:
         required: true
         content:
@@ -12362,6 +12366,8 @@ paths:
         - connector: zoho-books
           description: |
             By default, the status of the bill will be set to "authorised".
+        - connector: netsuite
+          description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
       requestBody:
         required: true
         content:
@@ -12650,6 +12656,8 @@ paths:
           description: |
             Allowed values for the status are "draft", "authorised", and "voided" when using the update method.
             Please send status updates separately from other updates for Credit Notes.
+        - connector: netsuite
+          description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
       requestBody:
         required: true
         content:
@@ -14714,6 +14722,8 @@ paths:
             Procountor only accepts the following values for the tax_code field: SALES, PURCHASE.
         - connector: xero
           description: When creating journal entries, the returned ID is collected from Xero with a maximum of 100 new journal items per day. If more than 100 journal entries are created in a single day, the id returned will be of the manual journal.
+        - connector: netsuite
+          description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
       requestBody:
         required: true
         content:
@@ -14988,6 +14998,8 @@ paths:
           description: |
             Procountor only accepts the following values for the tax_code field: SALES, PURCHASE.
             Procountor requires row_version to be set when updating a journal entry. The row_version should be equivalent to the current row_version of the resource
+        - connector: netsuite
+          description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
       requestBody:
         required: true
         content:

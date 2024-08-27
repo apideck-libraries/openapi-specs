@@ -89,6 +89,12 @@ components:
           title: Updated since (timestamp)
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
+        type:
+          type: string
+          title: Type
+          description: Type to filter on
+          format: string
+          example: Task
       additionalProperties: false
     ActivitiesSort:
       type: object
@@ -8446,7 +8452,7 @@ paths:
         - connector: hubspot
           description: Hubspot will only return activities from the last 30 days when using the `filter[updated_since]` parameter, with a maximum of 10.000 records. More info [here](https://legacydocs.hubspot.com/docs/methods/engagements/get-recent-engagements).
         - connector: salesforce
-          description: Salesforce imposes a maximum offset limit of 2000. Exceeding this offset will result in an error from Salesforce. For result sets larger than 2000 items, it is necessary to set the pagination limit to 200, as this will enforce the use of batchSize for pagination. Note that setting a limit lower than 200 will not reduce the batchSize due to Salesforce's minimum batch size policy of 200, as detailed in their documentation [here](https://developer.salesforce.com/docs/atlas.en-us.250.0.api_rest.meta/api_rest/headers_queryoptions.htm) and will have no effect.
+          description: 'Salesforce imposes a maximum offset limit of 2000. Exceeding this offset will result in an error from Salesforce. For result sets larger than 2000 items, it is necessary to set the pagination limit to 200, as this will enforce the use of batchSize for pagination. Note that setting a limit lower than 200 will not reduce the batchSize due to Salesforce''s minimum batch size policy of 200, as detailed in their documentation [here](https://developer.salesforce.com/docs/atlas.en-us.250.0.api_rest.meta/api_rest/headers_queryoptions.htm) and will have no effect. In Salesforce, to get list of tasks, calls or emails, please use filter "type": "task" to ensure proper handling.'
       responses:
         '200':
           $ref: '#/components/responses/GetActivitiesResponse'
@@ -8494,6 +8500,9 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: salesforce
+          description: 'In Salesforce, when creating tasks, calls, or emails, please specify "type": "task" with correct `event_sub_type` value in the request body to ensure proper handling.'
       requestBody:
         required: true
         content:
@@ -8705,6 +8714,9 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: salesforce
+          description: 'In Salesforce, when updating tasks, calls, or emails, please specify "type": "task" in the request body to ensure proper handling.'
       requestBody:
         required: true
         content:

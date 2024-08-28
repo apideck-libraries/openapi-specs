@@ -1097,6 +1097,7 @@ components:
         name: critical
         company_name: high
         owner_id: high
+        owner_name: low
         company_id: high
         contact_id: low
         lead_source: low
@@ -1148,6 +1149,11 @@ components:
           description: The owner of the lead.
           type: string
           example: '54321'
+          nullable: true
+        owner_name:
+          description: The name of the owner of the lead.
+          type: string
+          example: John Doe
           nullable: true
         company_id:
           description: The company the lead is associated with.
@@ -2186,6 +2192,7 @@ paths:
                 name: 'Elon Musk',
                 company_name: 'Spacex',
                 owner_id: '54321',
+                owner_name: 'John Doe',
                 company_id: '2',
                 lead_id: '2',
                 lead_source: 'Cold Call',
@@ -2395,6 +2402,7 @@ paths:
                 name: 'Elon Musk',
                 company_name: 'Spacex',
                 owner_id: '54321',
+                owner_name: 'John Doe',
                 company_id: '2',
                 lead_id: '2',
                 lead_source: 'Cold Call',

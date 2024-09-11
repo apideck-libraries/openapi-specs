@@ -1,3 +1,29 @@
+## v10.7.2 - (2024-09-03)
+
+### Accounting API
+
+- Added [Bill Payments](apis/accounting/reference#tag/Bill-Payments) schema.
+- Added [Bill Payments](apis/accounting/reference#tag/Bill-Payments) support for [Quickbooks](connectors/quickbooks) connector.
+
+## v10.7.1 - (2024-08-28)
+
+### CRM API
+
+- Added type filter in [Activities](apis/crm/reference#tag/Activities)
+- Added `owner_name` to [Leads](apis/crm/reference#tag/Leads) schema.
+
+### HRIS API
+
+- Added pass_through property to HRIS API.
+- Added `id` as optional field in [Employee](apis/hris/reference#tag/Employees) schema.
+
+### Accounting API
+
+- Added accounting_period in [Bill](apis/accounting/reference#tag/Bills) and [Journal Entry](apis/accounting/reference#tag/Journal-Entries) schema.
+- Added `line_number` to Invoice Line Items and Journal Entry Line Items.
+- Added supplier_id filter to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders).
+- Added code in [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) schema.
+
 ## v10.7.0 - (2024-07-16)
 
 ### Accounting API

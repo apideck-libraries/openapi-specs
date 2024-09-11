@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.7.0
+  version: 10.7.2
   title: Vault API
   description: |+
     Welcome to the Vault API 👋
@@ -43,17 +43,6 @@ info:
     - Give integration suggestions based on provided metadata (email or website) when creating the session (upcoming)
 
     To use Hosted Vault, you will need to first [**create a session**](https://developers.apideck.com/apis/vault/reference#operation/sessionsCreate). This can be achieved by making a POST request to the Vault API to create a valid session for a user, hereafter referred to as the consumer ID.
-
-    Example using curl:
-
-    ```
-    curl -X POST https://unify.apideck.com/vault/sessions
-        -H "Content-Type: application/json"
-        -H "Authorization: Bearer <your-api-key>"
-        -H "X-APIDECK-CONSUMER-ID: <consumer-id>"
-        -H "X-APIDECK-APP-ID: <application-id>"
-        -d '{"consumer_metadata": { "account_name" : "Sample", "user_name": "Sand Box", "email": "sand@box.com", "image": "https://unavatar.now.sh/jake" }, "theme": { "vault_name": "Intercom", "primary_color": "#286efa", "sidepanel_background_color": "#286efa","sidepanel_text_color": "#FFFFFF", "favicon": "https://res.cloudinary.com/apideck/icons/intercom" }}'
-    ```
 
     ### Vault API
 
@@ -2723,14 +2712,14 @@ components:
       in: header
       name: Authorization
       description: |
-        To use API you have to sign up and get your own API key. Unify API accounts have sandbox mode and live mode API keys. 
+        To use API you have to sign up and get your own API key. Unify API accounts have sandbox mode and live mode API keys.
         To change modes just use the appropriate key to get a live or test object. You can find your API keys on the unify settings of your Apideck app.
         Your Apideck application_id can also be found on the same page.
 
-        Authenticate your API requests by including your test or live secret API key in the request header. 
+        Authenticate your API requests by including your test or live secret API key in the request header.
 
-        - Bearer authorization header: `Authorization: Bearer <your-apideck-api-key>`
-        - Application id header: `x-apideck-app-id: <your-apideck-app-id>`
+        - Bearer authorization header: `Authorization: Bearer "YOUR_API_KEY_HERE"`
+        - Application id header: `x-apideck-app-id: "YOUR_APP_ID_HERE"`
 
         You should use the public keys on the SDKs and the secret keys to authenticate API requests.
 

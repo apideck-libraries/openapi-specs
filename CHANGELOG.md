@@ -1,3 +1,10 @@
+## v10.7.3 - (2024-09-17)
+
+### Accounting API
+
+- Added [Expenses](apis/accounting/reference#tag/Expenses) schema.
+- Added [Expenses](apis/accounting/reference#tag/Expenses) support for [Quickbooks](connectors/quickbooks) and [Xero](connectors/xero) connector.
+
 ## v10.7.2 - (2024-09-03)
 
 ### Accounting API

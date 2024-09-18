@@ -4006,6 +4006,7 @@ components:
         updated_at: medium
         created_at: medium
         policy_type: edge-case
+        day_part: edge-case
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -4089,6 +4090,11 @@ components:
           type: number
           description: The amount of time off requested.
           example: 3.5
+          nullable: true
+        day_part:
+          type: string
+          description: The day part of the time off request.
+          example: morning
           nullable: true
         notes:
           type: object
@@ -6500,6 +6506,7 @@ paths:
                 approval_date: '2022-03-21',
                 units: 'hours',
                 amount: 3.5,
+                day_part: 'morning',
                 notes: {
                   employee: 'Relaxing on the beach for a few hours.',
                   manager: 'Enjoy!'
@@ -6647,6 +6654,7 @@ paths:
                 approval_date: '2022-03-21',
                 units: 'hours',
                 amount: 3.5,
+                day_part: 'morning',
                 notes: {
                   employee: 'Relaxing on the beach for a few hours.',
                   manager: 'Enjoy!'

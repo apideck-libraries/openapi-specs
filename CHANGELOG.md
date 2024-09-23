@@ -1,3 +1,10 @@
+## v10.7.4 - (2024-09-23)
+
+### Accounting API
+
+- Added `number` filter to [Invoices](apis/accounting/reference#tag/Invoices)
+- Added `number` filter support for [Quickbooks](connectors/quickbooks), [Xero](connectors/xero), [MYOB](apis/accounting/myob), [Zoho-Books](apis/accounting/zoho-books) and [FreshBooks](apis/accounting/freshbooks) connectors.
+
 ## v10.7.3 - (2024-09-17)
 
 ### Accounting API

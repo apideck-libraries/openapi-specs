@@ -1,3 +1,9 @@
+## v10.7.5 - (2024-09-24)
+
+### Lead API
+
+- Removed min length for the field `name` on Unify Lead 
+
 ## v10.7.4 - (2024-09-23)
 
 ### Accounting API

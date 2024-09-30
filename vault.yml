@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.7.5
+  version: 10.7.6
   title: Vault API
   description: |+
     Welcome to the Vault API 👋
@@ -1320,6 +1320,12 @@ components:
           example: test_user_id
           readOnly: true
           nullable: true
+        example:
+          type: string
+          description: Target Field Mapping example value from downstream
+          example: Some value
+          readOnly: true
+          nullable: true
       additionalProperties: false
     DeleteConsumerResponse:
       type: object
@@ -1578,6 +1584,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomFieldFinder'
+    GetCustomMappingsResponse:
+      type: object
+      x-apideck-schema-id: GetCustomMappingsResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomMapping'
     GetCustomMappingResponse:
       type: object
       x-apideck-schema-id: GetCustomMappingResponse
@@ -2596,6 +2622,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/GetCustomFieldsResponse'
+      description: Custom mapping
+    GetCustomMappingsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetCustomMappingsResponse'
       description: Custom mapping
     GetCustomMappingResponse:
       content:
@@ -3926,6 +3958,62 @@ paths:
             } catch (error) {
               console.error(error)
             }
+  /vault/connections/{unified_api}/{service_id}/{resource}/custom-mappings:
+    get:
+      tags:
+        - Connections
+      summary: List connection custom mappings
+      description: This endpoint returns a list of custom mappings for a connection.
+      operationId: connectionCustomMappingsAll
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/resource'
+        - $ref: '#/components/parameters/resource_id'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCustomMappingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              unifiedApi: 'crm',
+              serviceId: 'pipedrive',
+              resource: 'leads'
+            }
+
+            try {
+              const { data } = await apideck.vault.connectionCustomMappingsAll(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
   /vault/authorize/{service_id}/{application_id}:
     get:
       tags:
@@ -4290,6 +4378,57 @@ paths:
 
             try {
               const { data } = await apideck.vault.customMappingsDelete(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /vault/custom-mappings/{unified_api}/{service_id}:
+    get:
+      tags:
+        - Custom Mappings
+      summary: List custom mappings
+      description: This endpoint returns a list of custom mappings.
+      operationId: customMappingsAll
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/unified_api'
+        - $ref: '#/components/parameters/service_id'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetCustomMappingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.vault.customMappingsAll({
+                unifiedApi: 'crm',
+                serviceId: 'pipedrive'
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

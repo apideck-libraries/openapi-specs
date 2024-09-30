@@ -1,3 +1,10 @@
+## v10.7.6 - (2024-09-26)
+
+### Vault API
+
+- Added `/vault/connections/:unified_api/:service_id/:resource/custom-mappings` endpoint to retrieve all custom mappings for a connection.
+- Added `/vault/custom-mappings/:unified_api/:service_id` endpoint to retrieve all custom mappings for a service.
+
 ## v10.7.5 - (2024-09-24)
 
 ### Lead API

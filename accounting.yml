@@ -999,9 +999,9 @@ components:
         - accounting.supplier.created
         - accounting.supplier.updated
         - accounting.supplier.deleted
-        - accounting.purchase-order.created
-        - accounting.purchase-order.updated
-        - accounting.purchase-order.deleted
+        - accounting.purchase_order.created
+        - accounting.purchase_order.updated
+        - accounting.purchase_order.deleted
         - accounting.expense.created
         - accounting.expense.updated
         - accounting.expense.deleted
@@ -19860,9 +19860,9 @@ x-webhooks:
       description: Event broadcast when a tax has been rate deleted.
   PurchaseOrderCreated:
     post:
-      summary: Purchase order Created
+      summary: Purchase Order Created
       operationId: purchaseOrderCreated
-      x-apideck-event-type: accounting.purchase-order.created
+      x-apideck-event-type: accounting.purchase_order.created
       parameters:
         - name: x-apideck-event-type
           in: header
@@ -19890,20 +19890,20 @@ x-webhooks:
                   $ref: '#/components/schemas/AccountingWebhookEvent'
             example:
               payload:
-                event_type: accounting.purchase-order.created
+                event_type: accounting.purchase_order.created
                 unified_api: accounting
                 service_id: xero
                 consumer_id: test_user_id
                 event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
                 entity_id: 123456ASDF
-                entity_url: https://unify.apideck.com/accounting/purchase-orders/123456ASDF
-                entity_type: purchase-order
+                entity_url: https://unify.apideck.com/accounting/purchase_orders/123456ASDF
+                entity_type: purchase_order
                 occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.
       security: []
-      description: Event broadcast when a purchase order has been created.
+      description: Event broadcast when a purchase has been order created.
   PurchaseOrderDeleted:
     post:
       summary: Purchase order Deleted

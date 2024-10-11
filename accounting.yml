@@ -15072,6 +15072,10 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: |
+            Xero doesn't support updating payments. To update a payment, you need to delete the existing payment and create a new one.
       requestBody:
         required: true
         content:

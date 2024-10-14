@@ -1383,6 +1383,7 @@ components:
         last_name: Musk
         email: elon@tesla.com
         company_id: '12345'
+        owner_id: '12345'
       properties:
         name:
           type: string
@@ -1407,6 +1408,10 @@ components:
         company_id:
           type: string
           description: Unique identifier for the associated company of the contact to filter on
+          example: '12345'
+        owner_id:
+          type: string
+          description: Unique identifier for the owner of the contact to filter on
           example: '12345'
       additionalProperties: false
     ContactsSort:
@@ -6034,6 +6039,8 @@ paths:
           description: Salesforce imposes a maximum offset limit of 2000. Exceeding this offset will result in an error from Salesforce. For result sets larger than 2000 items, it is necessary to set the pagination limit to 200, as this will enforce the use of batchSize for pagination. Note that setting a limit lower than 200 will not reduce the batchSize due to Salesforce's minimum batch size policy of 200, as detailed in their documentation [here](https://developer.salesforce.com/docs/atlas.en-us.250.0.api_rest.meta/api_rest/headers_queryoptions.htm) and will have no effect.
         - connector: zoho-crm
           description: When using the phone_number filter for contacts in Zoho CRM, the filter does not work with numbers containing dashes (e.g., 989-989-989) or their URL-encoded equivalents (e.g., 989%2D989%2D989). It only works with continuous digits (e.g., 9898989898).
+        - connector: microsoft-outlook
+          description: To get custom fields, make a get contact call with owner_id. If no owner_id is provided, the list call will return the contacts of the authenticated user.
       responses:
         '200':
           $ref: '#/components/responses/GetContactsResponse'
@@ -6250,8 +6257,12 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/contactsFilter'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: microsoft-outlook
+          description: If no owner_id is provided, the get call will return the contacts of the authenticated user only.
       responses:
         '200':
           $ref: '#/components/responses/GetContactResponse'
@@ -6469,6 +6480,9 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: microsoft-outlook
+          description: To delete another user's contact use proxy api.
       responses:
         '200':
           $ref: '#/components/responses/DeleteContactResponse'

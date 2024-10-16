@@ -9743,7 +9743,7 @@ components:
       title: Total Amount
       description: The total amount of the transaction
       type: number
-      example: 1000
+      example: 49.99
       nullable: true
     TransactionReference:
       title: Transaction Reference
@@ -10090,11 +10090,64 @@ components:
         status:
           $ref: '#/components/schemas/PaymentStatus'
         type:
-          $ref: '#/components/schemas/PaymentType'
+          type: string
+          title: Bill payment Type
+          description: Type of payment
+          x-apideck-enum-id: bill-payments.type
+          enum:
+            - accounts_payable_credit
+            - accounts_payable_overpayment
+            - accounts_payable_prepayment
+            - accounts_payable
+          example: accounts_payable
         allocations:
           type: array
           items:
-            $ref: '#/components/schemas/Allocation'
+            type: object
+            x-apideck-schema-id: Allocation
+            x-apideck-weights:
+              id: medium
+              type: medium
+              code: medium
+              amount: medium
+              allocation_id: medium
+            x-apideck-strict-any-of:
+              - required:
+                  - id
+              - required:
+                  - code
+            properties:
+              id:
+                $ref: '#/components/schemas/WritableId'
+              type:
+                type: string
+                title: Allocation type
+                description: Type of entity this payment should be attributed to.
+                example: bill
+                x-apideck-enum-id: bill-payments.allocations.type
+                enum:
+                  - bill
+                  - expense
+                  - credit_memo
+                  - over_payment
+                  - pre_payment
+                  - journal_entry
+                  - other
+              code:
+                type: string
+                example: N091
+                readOnly: true
+              amount:
+                type: number
+                title: Amount
+                description: Amount of payment that should be attributed to this allocation. If null, the total_amount will be used.
+                example: 49.99
+                nullable: true
+              allocation_id:
+                type: string
+                title: Allocation ID
+                description: Unique identifier of the allocation
+                example: '123456'
         note:
           $ref: '#/components/schemas/TransactionNote'
         number:
@@ -14906,7 +14959,7 @@ paths:
               payment: {
                 currency: 'USD',
                 currency_rate: 0.69,
-                total_amount: 1000,
+                total_amount: 49.99,
                 reference: '123456',
                 payment_method: 'cash',
                 payment_method_reference: '123456',
@@ -15115,7 +15168,7 @@ paths:
               payment: {
                 currency: 'USD',
                 currency_rate: 0.69,
-                total_amount: 1000,
+                total_amount: 49.99,
                 reference: '123456',
                 payment_method: 'cash',
                 payment_method_reference: '123456',
@@ -18425,7 +18478,7 @@ paths:
               billPayment: {
                 currency: 'USD',
                 currency_rate: 0.69,
-                total_amount: 1000,
+                total_amount: 49.99,
                 reference: '123456',
                 payment_method: 'cash',
                 payment_method_reference: '123456',
@@ -18469,11 +18522,11 @@ paths:
                 company_id: '12345',
                 reconciled: true,
                 status: 'authorised',
-                type: 'accounts_receivable',
+                type: 'accounts_payable',
                 allocations: [
                   {
-                    id: '123456',
-                    type: 'invoice',
+                    id: '12345',
+                    type: 'bill',
                     amount: 49.99,
                     allocation_id: '123456'
                   }
@@ -18627,7 +18680,7 @@ paths:
               billPayment: {
                 currency: 'USD',
                 currency_rate: 0.69,
-                total_amount: 1000,
+                total_amount: 49.99,
                 reference: '123456',
                 payment_method: 'cash',
                 payment_method_reference: '123456',
@@ -18671,11 +18724,11 @@ paths:
                 company_id: '12345',
                 reconciled: true,
                 status: 'authorised',
-                type: 'accounts_receivable',
+                type: 'accounts_payable',
                 allocations: [
                   {
-                    id: '123456',
-                    type: 'invoice',
+                    id: '12345',
+                    type: 'bill',
                     amount: 49.99,
                     allocation_id: '123456'
                   }

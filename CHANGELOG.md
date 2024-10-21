@@ -194,7 +194,7 @@
 - Added of the [Cezanne HR](connectors/cezannehr) connector as early-access
 - Improved mapping manager for employee for [AFAS](connectors/afas)
 
-- Added and improved of the mapping for departments for integrations: [AFAS](connectors/afas), [AlexisHR](connectors/alexishr), [BambooHR](connectors/bamboohr), [Breathe HR](connectors/breathehr]), [Deel](connectors/deel), [Loket](connectors/loket-nl), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) , [NMBRS](connectors/nmbrs), [Officient](connectors/officient-io),
+- Added and improved of the mapping for departments for integrations: [AFAS](connectors/afas), [AlexisHR](connectors/alexishr), [BambooHR](connectors/bamboohr), [Breathe HR](connectors/breathehr), [Deel](connectors/deel), [Loket](connectors/loket-nl), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) , [NMBRS](connectors/nmbrs), [Officient](connectors/officient-io),
 
 ### Issue tracking
 
@@ -276,8 +276,8 @@
 - Improved employee mapping & pagination for [UKG Pro](connectors/ukg-pro)
 - Deprecated API key authentication & "people" endpoint for [Hibob](connectors/hibob) in favor a new faster "people/search" endpoint and Service User authentication.
 - Improved employee mapping for [Hibob](connectors/hibob)
-- Extended the employee mapping for [Ceridian Dayforce](connectors/ceridian-dayforce])
-- Overall improvements of the coverage for employee properties for integrations: [Officient](connectors/officient-io), [Namely](connectors/namely), [Paychex](connectors/paychex), [PayFit](connectors/payfit), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Cegid talentsoft](connectors/cegid-talentsoft), [Employment Hero](connectors/employmenthero)
+- Extended the employee mapping for [Ceridian Dayforce](connectors/ceridian-dayforce)
+- Overall improvements of the coverage for employee properties for integrations: [Officient](connectors/officient-io), [Namely](connectors/namely), [Paychex](connectors/paychex), [PayFit](connectors/payfit), [Ceridian Dayforce](connectors/ceridian-dayforce), [Cegid talentsoft](connectors/cegid-talentsoft), [Employment Hero](connectors/employmenthero)
 - Employee model `leaving_reason` can be null
 
 ### Accounting API
@@ -311,7 +311,7 @@
 
 - Release of the [Charlie HR](connectors/charliehr) connector with support for the resources: Employee, Department, Time-off
 - The [Humaans](connectors/humaans)-io includes inactive employees by default.
-- Overall improvements of the coverage for employee properties for integrations: [Google Workspace](connectors/google-workspace), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) ,[SD Worx](connectors/sdworx), [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [Breathe HR](connectors/breathehr]), [Deel](connectors/deel), [Freshteam](connectors/freshteam), [Loket](connectors/loket-nl), [Paylocity](connectors/paylocity), [NMBRS](connectors/nmbrs), [Sage HR](connectors/sage-hr), [Zenefits](connectors/zenefits)
+- Overall improvements of the coverage for employee properties for integrations: [Google Workspace](connectors/google-workspace), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) ,[SD Worx](connectors/sdworx), [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [Breathe HR](connectors/breathehr), [Deel](connectors/deel), [Freshteam](connectors/freshteam), [Loket](connectors/loket-nl), [Paylocity](connectors/paylocity), [NMBRS](connectors/nmbrs), [Sage HR](connectors/sage-hr), [Zenefits](connectors/zenefits)
 
 ### Filestorage API
 
@@ -367,7 +367,7 @@
 - Added departments resource mapping for [Humaans](connectors/humaans-io)
 - Added departments resource mapping for [Google Workspace](connectors/google-workspace)
 
-- Mapped the ethnicity field for the connectors that support it: [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [BambooHR](connectors/bamboohr), [Breathe HR](connectors/breathehr]), [Cascade HR](connectors/cascade-hr]), [Ceridian Dayforce](connectors/ceridian-dayforce]), [Hibob](connectors/hibob), [Justworks](connectors/justworks), [Namely](connectors/namely), [Paychex](connectors/paychex), [Trinet](connectors/trinet), [UKG Pro](connectors/ukg-pro), [Workday](connectors/workday)
+- Mapped the ethnicity field for the connectors that support it: [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [BambooHR](connectors/bamboohr), [Breathe HR](connectors/breathehr), [Cascade HR](connectors/cascade-hr), [Ceridian Dayforce](connectors/ceridian-dayforce), [Hibob](connectors/hibob), [Justworks](connectors/justworks), [Namely](connectors/namely), [Paychex](connectors/paychex), [Trinet](connectors/trinet), [UKG Pro](connectors/ukg-pro), [Workday](connectors/workday)
 
 ### Accounting API
 
@@ -968,7 +968,7 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ## v8.52.1 - (2022-09-09)
 
-- Generalize example detail for Unprocessable Entity Error to prevent confusing when using the [Mock API](mock-api).
+- Generalize example detail for Unprocessable Entity Error to prevent confusing when using the Mock API (sunsetted).
 
 ## v8.52.0 - (2022-09-07)
 

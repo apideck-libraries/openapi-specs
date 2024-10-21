@@ -1429,14 +1429,13 @@ components:
               type: object
               title: Resources
               description: The resources that will be requested from downstream.
-              patternProperties:
-                ^.*$:
-                  type: object
-                  properties:
-                    events:
-                      type: array
-                      items:
-                        type: string
+              additionalProperties:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: string
   securitySchemes:
     apiKey:
       type: apiKey

@@ -2371,8 +2371,6 @@ components:
           example: '2022-04-21'
           nullable: true
         totals:
-          type: object
-          description: The overview of the payroll totals.
           $ref: '#/components/schemas/PayrollTotals'
         compensations:
           type: array
@@ -3419,7 +3417,7 @@ components:
         - monthly
         - pro-rata
         - other
-      example: year
+      example: monthly
       nullable: true
     PaymentRequiredResponse:
       type: object
@@ -3518,8 +3516,6 @@ components:
           example: '2022-04-21'
           nullable: true
         totals:
-          type: object
-          description: The overview of the payroll totals.
           $ref: '#/components/schemas/PayrollTotals'
         compensations:
           type: array
@@ -3530,6 +3526,7 @@ components:
           $ref: '#/components/schemas/CustomMappings'
     PayrollTotals:
       type: object
+      description: The overview of the payroll totals.
       x-apideck-schema-id: PayrollTotals
       properties:
         company_debit:
@@ -4154,7 +4151,7 @@ components:
         time_off_request_status:
           type: string
           description: Time off request status to filter on
-          example: ''
+          example: requested
           enum:
             - requested
             - approved

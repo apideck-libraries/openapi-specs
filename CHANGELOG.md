@@ -1,3 +1,9 @@
+## v10.7.7 - (2024-10-22)
+
+### Accounting API
+
+- Added new field `subsidiaries` to Ledger Accounts, including support for [Netsuite](connectors/netsuite) and [Sage Intacct](connectors/sage-intacct) connectors.
+
 ## v10.7.6 - (2024-09-26)
 
 ### Vault API

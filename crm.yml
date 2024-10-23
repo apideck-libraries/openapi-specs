@@ -6544,7 +6544,9 @@ paths:
         - connector: hubspot
           description: When using a filter or sorting for opportunities, Hubspot will only return a maximum of 10.000 opportunities and omit the company_id, primary_contact_id, company_id, contact_ids, lead_id and contact_id.
         - connector: salesforce
-          description: Salesforce imposes a maximum offset limit of 2000. Exceeding this offset will result in an error from Salesforce. For result sets larger than 2000 items, it is necessary to set the pagination limit to 200, as this will enforce the use of batchSize for pagination. Note that setting a limit lower than 200 will not reduce the batchSize due to Salesforce's minimum batch size policy of 200, as detailed in their documentation [here](https://developer.salesforce.com/docs/atlas.en-us.250.0.api_rest.meta/api_rest/headers_queryoptions.htm) and will have no effect.
+          description: Salesforce imposes a maximum offset limit of 2000. Exceeding this offset will result in an error from Salesforce. For result sets larger than 2000 items, it is necessary to set the pagination limit to 200, as this will enforce the use of batchSize for pagination. Note that setting a limit lower than 200 will not reduce the batchSize due to Salesforce's minimum batch size policy of 200, as detailed in their documentation [here](https://developer.salesforce.com/docs/atlas.en-us.250.0.api_rest/api_rest/headers_queryoptions.htm) and will have no effect.
+        - connector: pipedrive
+          description: Pipedrive supports filtering by either title or company_id, but not both simultaneously.
       responses:
         '200':
           $ref: '#/components/responses/GetOpportunitiesResponse'

@@ -253,7 +253,7 @@
 
 ### HRIS API
 
-- Overall improvements of the coverage for department properties for integrations: [Gusto](connectors/gusta), [Cascade HR](connectors/cascade-hr)
+- Overall improvements of the coverage for department properties for integrations: [Gusto](connectors/gusto), [Cascade HR](connectors/cascade-hr)
 
 ### CRM API
 

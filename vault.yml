@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.7.7
+  version: 10.8.0
   title: Vault API
   description: |+
     Welcome to the Vault API 👋
@@ -2532,6 +2532,38 @@ components:
           type: string
           description: The date and time the webhook subscription was created downstream
           example: '2020-10-01T12:00:00.000Z'
+    CreateCallbackStateData:
+      type: object
+      x-apideck-schema-id: CreateCallbackStateData
+      properties:
+        redirect_uri:
+          type: string
+          description: The redirect URI to be used after the connection is created.
+          example: https://example.com/callback
+    CreateCallbackStateResponse:
+      type: object
+      x-apideck-schema-id: CreateCallbackStateResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: object
+          properties:
+            state:
+              type: string
+              description: Callback state
+              example: 123e4567-e89b-12d3-a456-426614174000
+              readOnly: true
   responses:
     BadRequestResponse:
       content:
@@ -2735,6 +2767,12 @@ components:
           example: {}
           schema: {}
       description: Resource updated
+    CreateCallbackStateResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateCallbackStateResponse'
+      description: Callback state created
   securitySchemes:
     apiKey:
       type: apiKey
@@ -3627,6 +3665,70 @@ paths:
 
             try {
               const { data } = await apideck.vault.validateConnectionState(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /vault/connections/{unified_api}/{service_id}/callback-state:
+    post:
+      tags:
+        - Connections
+      summary: Create Callback State
+      operationId: createCallbackState
+      description: |
+        This endpoint creates a callback state that can be used to issue requests to the callback endpoint.
+      security:
+        - apiKey: []
+      parameters:
+        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unified_api'
+      requestBody:
+        description: Callback state data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCallbackStateData'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateCallbackStateResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              serviceId: 'pipedrive',
+              unifiedApi: 'crm',
+              createCallbackState: {
+                redirect_uri: 'https://example.com/callback'
+              }
+            }
+
+            try {
+              const { data } = await apideck.vault.createCallbackState(params)
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

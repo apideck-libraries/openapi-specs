@@ -1,3 +1,9 @@
+## v10.8.0 - (2024-10-30)
+
+### Vault API
+
+- Added `createCallbackState` endpoint to [Create Callback State](/apis/vault/reference#operation/createCallbackState) to create a short-lived state for callback requests.
+
 ## v10.7.7 - (2024-10-22)
 
 ### Accounting API

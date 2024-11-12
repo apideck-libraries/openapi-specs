@@ -2222,6 +2222,7 @@ components:
         payment_unit: medium
         hired_at: medium
         is_primary: medium
+        status: medium
         location: medium
       x-apideck-schema-id: EmployeeJob
       title: job
@@ -2277,6 +2278,17 @@ components:
           description: Indicates whether this the employee has a manager role.
           type: boolean
           example: true
+          nullable: true
+        status:
+          type: string
+          title: Status
+          enum:
+            - active
+            - inactive
+            - other
+          x-apideck-enum-id: jobs.status
+          description: Indicates the status of the job.
+          example: active
           nullable: true
         location:
           $ref: '#/components/schemas/Address'
@@ -4850,6 +4862,7 @@ paths:
                     hired_at: '2020-08-12',
                     is_primary: true,
                     is_manager: true,
+                    status: 'active',
                     location: {
                       id: '123',
                       type: 'primary',
@@ -5193,6 +5206,7 @@ paths:
                     hired_at: '2020-08-12',
                     is_primary: true,
                     is_manager: true,
+                    status: 'active',
                     location: {
                       id: '123',
                       type: 'primary',

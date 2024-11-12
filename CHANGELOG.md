@@ -1,3 +1,9 @@
+## v10.8.1 - (2024-11-12)
+
+### HRIS API
+
+- Added `status` field to jobs for [Employee](apis/hris/reference#tag/Employees) schema.
+
 ## v10.8.0 - (2024-10-30)
 
 ### Vault API
@@ -21,7 +27,7 @@
 
 ### Lead API
 
-- Removed min length for the field `name` on Unify Lead 
+- Removed min length for the field `name` on Unify Lead
 
 ### HRIS API
 

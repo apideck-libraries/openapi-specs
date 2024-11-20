@@ -1912,12 +1912,16 @@ components:
       schema:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
+      x-speakeasy-name-override: appId
+      x-speakeasy-globals-hidden: true
     serviceId:
       name: x-apideck-service-id
       in: header
       description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
       schema:
         type: string
+      example: salesforce
+      x-speakeasy-name-override: serviceId
     consumerId:
       name: x-apideck-consumer-id
       in: header
@@ -1925,6 +1929,9 @@ components:
       description: ID of the consumer which you want to get or push data from
       schema:
         type: string
+      example: test-consumer
+      x-speakeasy-name-override: customerId
+      x-speakeasy-globals-hidden: true
     raw:
       name: raw
       in: query

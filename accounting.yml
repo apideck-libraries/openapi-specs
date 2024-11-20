@@ -28,6 +28,8 @@ components:
       schema:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
+      x-speakeasy-name-override: appId
+      x-speakeasy-globals-hidden: true
     balanceSheetFilter:
       name: filter
       in: query
@@ -59,6 +61,9 @@ components:
       description: ID of the consumer which you want to get or push data from
       schema:
         type: string
+      example: test-consumer
+      x-speakeasy-name-override: customerId
+      x-speakeasy-globals-hidden: true
     cursor:
       name: cursor
       in: query
@@ -239,6 +244,8 @@ components:
       description: Provide the service id you want to call (e.g., pipedrive). Only needed when a consumer has activated multiple integrations for a Unified API.
       schema:
         type: string
+      example: salesforce
+      x-speakeasy-name-override: serviceId
     suppliersFilter:
       name: filter
       in: query
@@ -1591,6 +1598,7 @@ components:
     BalanceSheetAccounts:
       type: array
       x-apideck-schema-id: BalanceSheetAccounts
+      x-speakeasy-type-override: any
       title: Balance Sheet Accounts
       description: A list of balance sheet accounts
       nullable: true
@@ -8049,6 +8057,8 @@ components:
     ProfitAndLossRecords:
       type: array
       x-apideck-schema-id: ProfitAndLossRecords
+      title: ProfitAndLossRecords
+      x-speakeasy-type-override: any
       nullable: true
       items:
         anyOf:

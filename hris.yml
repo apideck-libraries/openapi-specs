@@ -4695,6 +4695,8 @@ paths:
           description: The employment_status supports filtering on 'active'.
         - connector: bamboohr
           description: The employment role field will return "other" for list calls when the employee is terminated. To fetch the correct employment role data, you need to call the employee detail endpoint.
+        - connector: rippling
+          description: Include pass_through[include_terminated] in the query params to include terminated employees in the response.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeesResponse'

@@ -207,11 +207,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Invalid Params
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: Missing property foobar
             - type: object
+              additionalProperties: true
               example:
                 missing:
                   - foobar: required
@@ -1462,11 +1464,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Unknown Widget
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: "Could not find widget with id: '123'"
             - type: object
+              additionalProperties: true
               example:
                 not_found:
                   entity: widget
@@ -1496,11 +1500,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Unmapped Attribute
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: Failed to retrieve Widget tokenUrl from 'components.securitySchemes.OAuth2.flows'
             - type: object
+              additionalProperties: true
           description: Contains parameter or domain specific information related to the error and why it occurred.
         ref:
           type: string
@@ -1574,6 +1580,7 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Request Limit Reached
+          x-speakeasy-error-message: true
         detail:
           type: string
           description: Contains parameter or domain specific information related to the error and why it occurred.
@@ -1712,6 +1719,7 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Connector Rate Limit Error
+          x-speakeasy-error-message: true
         detail:
           type: object
           properties:
@@ -1744,11 +1752,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Unauthorized Request
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: Missing authentication
             - type: object
+              additionalProperties: true
               example:
                 statusCode: 401
                 error: Unauthorized
@@ -1778,11 +1788,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Invalid Params
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: 'Missing Header: x-apideck-consumer-id'
             - type: object
+              additionalProperties: true
               example:
                 missing:
                   - x-apideck-consumer-id: required
@@ -1824,11 +1836,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Invalid State
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: Unprocessable request, please verify your request headers and body.
             - type: object
+              additionalProperties: true
               example:
                 error: Unprocessable
                 message: Unprocessable request, please verify your request headers and body.
@@ -1930,7 +1944,7 @@ components:
       schema:
         type: string
       example: test-consumer
-      x-speakeasy-name-override: customerId
+      x-speakeasy-name-override: consumerId
       x-speakeasy-globals-hidden: true
     raw:
       name: raw

@@ -62,7 +62,7 @@ components:
       schema:
         type: string
       example: test-consumer
-      x-speakeasy-name-override: customerId
+      x-speakeasy-name-override: consumerId
       x-speakeasy-globals-hidden: true
     cursor:
       name: cursor
@@ -1268,11 +1268,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Invalid Params
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: Missing property foobar
             - type: object
+              additionalProperties: true
               example:
                 missing:
                   - foobar: required
@@ -1632,17 +1634,34 @@ components:
       example:
         start_date: '2021-01-01'
         end_date: '2021-12-31'
+        period_count: 3
+        period_type: month
       properties:
         start_date:
           type: string
           title: Start date
-          description: Filter by start date. If start date is given, end date is required.
+          description: The start date of the period to include in the resource.
           example: '2021-01-01'
         end_date:
           type: string
           title: End date
-          description: Filter by end date. If end date is given, start date is required.
+          description: The end date of the period to include in the resource.
           example: '2021-12-31'
+        period_count:
+          type: integer
+          title: Period count
+          description: The number of periods to include in the resource.
+          example: 3
+        period_type:
+          x-apideck-enum-id: balance-sheet.period-type
+          type: string
+          title: Period type
+          description: 'The type of period to include in the resource: month, quarter, year.'
+          example: month
+          enum:
+            - month
+            - quarter
+            - year
       additionalProperties: false
     BankAccount:
       type: object
@@ -7500,11 +7519,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Unknown Widget
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: "Could not find widget with id: '123'"
             - type: object
+              additionalProperties: true
               example:
                 not_found:
                   entity: widget
@@ -7534,11 +7555,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Unmapped Attribute
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: Failed to retrieve Widget tokenUrl from 'components.securitySchemes.OAuth2.flows'
             - type: object
+              additionalProperties: true
           description: Contains parameter or domain specific information related to the error and why it occurred.
         ref:
           type: string
@@ -7740,6 +7763,7 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Request Limit Reached
+          x-speakeasy-error-message: true
         detail:
           type: string
           description: Contains parameter or domain specific information related to the error and why it occurred.
@@ -8861,6 +8885,7 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Connector Rate Limit Error
+          x-speakeasy-error-message: true
         detail:
           type: object
           properties:
@@ -8893,11 +8918,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Unauthorized Request
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: Missing authentication
             - type: object
+              additionalProperties: true
               example:
                 statusCode: 401
                 error: Unauthorized
@@ -8927,11 +8954,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Invalid Params
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: 'Missing Header: x-apideck-consumer-id'
             - type: object
+              additionalProperties: true
               example:
                 missing:
                   - x-apideck-consumer-id: required
@@ -8984,11 +9013,13 @@ components:
           type: string
           description: A human-readable message providing more details about the error.
           example: Invalid State
+          x-speakeasy-error-message: true
         detail:
           anyOf:
             - type: string
               example: Unprocessable request, please verify your request headers and body.
             - type: object
+              additionalProperties: true
               example:
                 error: Unprocessable
                 message: Unprocessable request, please verify your request headers and body.

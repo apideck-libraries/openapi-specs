@@ -126,6 +126,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/InvoiceItemsFilter'
+    invoiceItemFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/InvoiceItemFilter'
     invoicesFilter:
       name: filter
       in: query
@@ -6436,12 +6444,42 @@ components:
       x-apideck-schema-id: InvoiceItemsFilter
       example:
         name: Widgets Large
+        type: service
       properties:
         name:
           type: string
           title: Name
           description: Name of Invoice Items to search for
           example: Widgets Large
+        type:
+          type: string
+          title: Invoice item type
+          example: service
+          description: The type of invoice item, indicating whether it is an inventory item, a service, or another type.
+          x-apideck-enum-id: accounting.invoice_items_type
+          enum:
+            - inventory
+            - service
+            - other
+          nullable: true
+      additionalProperties: false
+    InvoiceItemFilter:
+      type: object
+      x-apideck-schema-id: InvoiceItemFilter
+      example:
+        type: service
+      properties:
+        type:
+          type: string
+          title: Invoice item type
+          example: service
+          description: The type of invoice item, indicating whether it is an inventory item, a service, or another type.
+          x-apideck-enum-id: accounting.invoice_item_type
+          enum:
+            - inventory
+            - service
+            - other
+          nullable: true
       additionalProperties: false
     InvoiceLineItem:
       type: object
@@ -12278,6 +12316,9 @@ paths:
             Please ensure that status updates are sent separately from other invoice updates.
         - connector: netsuite
           description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
+        - connector: sage-business-cloud-accounting
+          description: |
+            To fetch service items, you must include filter[type]=service in your request parameters
       requestBody:
         required: true
         content:
@@ -13170,6 +13211,11 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/invoiceItemFilter'
+      x-apideck-gotchas:
+        - connector: sage-business-cloud-accounting
+          description: |
+            To fetch service items, you must include filter[type]=service in your request parameters
       security:
         - apiKey: []
       responses:

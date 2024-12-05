@@ -1,3 +1,9 @@
+## v10.8.2 - (2024-12-05)
+
+### Accounting API
+
+- Added `payment_type` field to [Expenses](apis/accounting/reference#tag/Expenses) schema.
+
 ## v10.8.1 - (2024-11-12)
 
 ### HRIS API

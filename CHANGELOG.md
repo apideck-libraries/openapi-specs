@@ -1,3 +1,11 @@
+## v10.8.3 - (2024-12-05)
+
+### Accounting API
+
+- Added `subsidiaries` field to [Tax Rates](apis/accounting/reference#tag/Tax-Rates) schema.
+- Added `subsidiaries` field to [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) schema.
+- Added `subsidiary_id` field to [Suppliers](apis/accounting/reference#tag/Suppliers) schema.
+
 ## v10.8.2 - (2024-12-05)
 
 ### Accounting API

@@ -23,6 +23,7 @@ info:
     - Select and configure the integrations you want to make available to your users. Through the Unify dashboard, you can configure which connectors you want to support as integrations.
     - Retrieve the client_id and client_secret for the integration you want to activate (Only needed for OAuth integrations).
     - Register the redirect URI for the example app (https://unify.apideck.com/vault/callback) in the list of redirect URIs under your app's settings.
+
     ### Hosted Vault
 
     Hosted Vault (vault.apideck.com) is a no-code solution, so you don't need to build your own UI to handle the integration settings and authentication.
@@ -78,6 +79,10 @@ info:
     | x-apideck-app-id      | String  | Yes      | The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                               |
     | x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |
     | x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes.                                                                                                      |
+
+    ## Sandbox (upcoming)
+
+    The sandbox is pre-loaded with data similar to a real-life integrations setup. You can use the preconfigured OAauth configured connectors for testing purposes and can skip this step by using the Apideck sandbox credentials to get you started.
 
     ## Guides
 
@@ -2794,9 +2799,7 @@ components:
       in: header
       name: Authorization
       description: |
-        To use API you have to sign up and get your own API key. Unify API accounts have sandbox mode and live mode API keys.
-        To change modes just use the appropriate key to get a live or test object. You can find your API keys on the unify settings of your Apideck app.
-        Your Apideck application_id can also be found on the same page.
+        To access our API, you need to sign up and obtain your unique API key. Each Unify application is assigned a single API key. You can locate your API key in the Configuration Settings section of your Apideck application. Additionally, your application’s application_id is available on the same page.
 
         Authenticate your API requests by including your test or live secret API key in the request header.
 

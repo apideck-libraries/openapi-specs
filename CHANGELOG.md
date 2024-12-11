@@ -1,3 +1,10 @@
+## v10.9.0 - (2024-12-11)
+
+## Accounting API
+
+- Added [Aged Creditors](apis/accounting/reference#tag/Aged-Creditors) schema.
+- Added [Aged Debtors](apis/accounting/reference#tag/Aged-Debtors) schema.
+
 ## v10.8.3 - (2024-12-05)
 
 ### Accounting API

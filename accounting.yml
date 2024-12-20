@@ -4135,6 +4135,10 @@ components:
           $ref: '#/components/schemas/PaymentMethod'
         channel:
           $ref: '#/components/schemas/Channel'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
         custom_mappings:
           $ref: '#/components/schemas/CustomMappings'
         updated_by:
@@ -8898,6 +8902,10 @@ components:
                 type: string
                 title: Subsidiary ID
                 description: The ID of the subsidiary.
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
     TaxRatesFilter:
       type: object
       x-apideck-schema-id: TaxRatesFilter
@@ -11475,6 +11483,14 @@ paths:
                   {
                     id: 'string'
                   }
+                ],
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
+                  }
                 ]
               }
             }
@@ -11626,6 +11642,14 @@ paths:
                 subsidiaries: [
                   {
                     id: 'string'
+                  }
+                ],
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
                   }
                 ]
               }
@@ -14687,6 +14711,14 @@ paths:
                 status: 'active',
                 payment_method: 'cash',
                 channel: 'email',
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
+                  }
+                ],
                 row_version: '1-12345',
                 pass_through: [
                   {
@@ -14924,6 +14956,14 @@ paths:
                 status: 'active',
                 payment_method: 'cash',
                 channel: 'email',
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
+                  }
+                ],
                 row_version: '1-12345',
                 pass_through: [
                   {

@@ -10893,10 +10893,10 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
-    OutstandingBalance:
+    OutstandingBalanceByCustomer:
       type: object
       title: Outstanding Balance
-      x-apideck-schema-id: OutstandingBalance
+      x-apideck-schema-id: OutstandingBalanceByCustomer
       additionalProperties: false
       x-apideck-weights:
         customer_id: high
@@ -10905,13 +10905,37 @@ components:
       properties:
         customer_id:
           type: string
-          title: Customer or Supplier ID
-          description: Unique identifier for the customer or supplier.
+          title: Customer ID
+          description: Unique identifier for the customer.
           example: '123'
         customer_name:
           type: string
-          title: Customer or Supplier Name
-          description: Full name of the customer or supplier.
+          title: Customer Name
+          description: Full name of the customer.
+          example: Super Store
+        outstanding_balances_by_currency:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutstandingBalanceByCurrency'
+    OutstandingBalanceBySupplier:
+      type: object
+      title: Outstanding Balance
+      x-apideck-schema-id: OutstandingBalanceBySupplier
+      additionalProperties: false
+      x-apideck-weights:
+        supplier_id: high
+        supplier_name: high
+        outstanding_balances_by_currency: critical
+      properties:
+        supplier_id:
+          type: string
+          title: Supplier ID
+          description: Unique identifier for the supplier.
+          example: '123'
+        supplier_name:
+          type: string
+          title: Supplier Name
+          description: Full name of the supplier.
           example: Super Store
         outstanding_balances_by_currency:
           type: array
@@ -10928,6 +10952,10 @@ components:
       properties:
         currency:
           $ref: '#/components/schemas/Currency'
+        total_amount:
+          type: number
+          title: Total Amount
+          description: Total amount of the outstanding balance.
         balances_by_period:
           type: array
           items:
@@ -10938,21 +10966,23 @@ components:
       x-apideck-schema-id: BalanceByPeriod
       additionalProperties: false
       x-apideck-weights:
-        start_date: critical
+        start_date: high
         end_date: high
         total_amount: critical
         balances_by_transaction: high
       properties:
         start_date:
           type: string
+          nullable: true
           title: Start Date
-          description: Start date of the period.
+          description: The starting date of the period. If not provided, it represents the oldest period, where all transactions due before the specified `end_date` are included.
           format: date
           example: '2024-01-01'
         end_date:
           type: string
+          nullable: true
           title: End Date
-          description: End date of the period.
+          description: The ending date of the period. If not provided, it represents an open-ended period starting from the `start_date`, typically capturing future-dated transactions that are not yet aged.
           format: date
           example: '2024-01-30'
         total_amount:
@@ -11001,7 +11031,7 @@ components:
             - credit_note
             - bill
             - payment
-            - bill-payment
+            - bill_payment
           nullable: false
         due_date:
           type: string
@@ -11021,6 +11051,12 @@ components:
           title: Outstanding Balance
           description: Outstanding balance of the transaction.
           example: 800
+          nullable: false
+        transaction_number:
+          type: string
+          title: Transaction Number
+          description: Transaction number of the transaction.
+          example: INV-1001
           nullable: false
     AgedCreditors:
       type: object
@@ -11044,7 +11080,7 @@ components:
         outstanding_balances:
           type: array
           items:
-            $ref: '#/components/schemas/OutstandingBalance'
+            $ref: '#/components/schemas/OutstandingBalanceBySupplier'
     AgedDebtors:
       type: object
       x-apideck-schema-id: AgedDebtors
@@ -11067,7 +11103,7 @@ components:
         outstanding_balances:
           type: array
           items:
-            $ref: '#/components/schemas/OutstandingBalance'
+            $ref: '#/components/schemas/OutstandingBalanceByCustomer'
     PeriodLength:
       type: integer
       title: Period Length
@@ -11162,6 +11198,7 @@ components:
       type: object
       x-apideck-schema-id: AgedReportFilter
       example:
+        supplier_id: 123abc
         customer_id: 123abc
         report_as_of_date: '2024-01-01'
         period_count: 3
@@ -11171,6 +11208,11 @@ components:
           type: string
           title: Customer Id
           description: Filter by customer id
+          example: 123abc
+        supplier_id:
+          type: string
+          title: Supplier Id
+          description: Filter by supplier id
           example: 123abc
         report_as_of_date:
           type: string
@@ -20034,7 +20076,6 @@ paths:
       operationId: agedDebtorsOne
       summary: Get Aged Debtors
       description: Get Aged Debtors
-      x-apideck-upcoming: true
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'

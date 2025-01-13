@@ -1,3 +1,7 @@
+## v10.9.1 - (2025-01-13)
+
+- Added `custom_fields` to [Journal Entry](apis/accounting/reference#tag/Journal-Entries)
+
 ## v10.9.0 - (2024-12-11)
 
 ## Accounting API

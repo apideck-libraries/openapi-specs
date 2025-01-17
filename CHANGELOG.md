@@ -1,3 +1,7 @@
+## v10.10.0 - (2025-01-16)
+
+- Added `Users` resource to [Microsoft Dynamics CRM](connectors/microsoft-dynamics).
+
 ## v10.9.1 - (2025-01-13)
 
 - Added `custom_fields` to [Journal Entry](apis/accounting/reference#tag/Journal-Entries)

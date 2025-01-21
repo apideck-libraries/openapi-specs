@@ -189,7 +189,7 @@ components:
         type: string
       required: true
       description: ID of the record you are acting upon.
-    x-apideck-app-id:
+    applicationId:
       name: x-apideck-app-id
       in: header
       required: true
@@ -198,8 +198,7 @@ components:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
       x-speakeasy-name-override: appId
-      x-speakeasy-globals-hidden: true
-    x-apideck-consumer-id:
+    consumerId:
       name: x-apideck-consumer-id
       in: header
       required: true
@@ -208,7 +207,6 @@ components:
         type: string
       example: test-consumer
       x-speakeasy-name-override: consumerId
-      x-speakeasy-globals-hidden: true
     x-apideck-service-id:
       name: x-apideck-service-id
       in: header
@@ -2830,7 +2828,7 @@ paths:
       tags:
         - Consumers
       parameters:
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/applicationId'
       security:
         - apiKey: []
       requestBody:
@@ -2892,7 +2890,7 @@ paths:
       tags:
         - Consumers
       parameters:
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
       security:
@@ -2939,7 +2937,7 @@ paths:
       tags:
         - Consumers
       parameters:
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/consumer_id'
       security:
         - apiKey: []
@@ -2985,7 +2983,7 @@ paths:
       tags:
         - Consumers
       parameters:
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/consumer_id'
       security:
         - apiKey: []
@@ -3047,7 +3045,7 @@ paths:
       tags:
         - Consumers
       parameters:
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/consumer_id'
       security:
         - apiKey: []
@@ -3095,7 +3093,7 @@ paths:
       tags:
         - Consumers
       parameters:
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/consumer_id'
         - $ref: '#/components/parameters/start_datetime'
         - $ref: '#/components/parameters/end_datetime'
@@ -3151,8 +3149,8 @@ paths:
       tags:
         - Connections
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/api'
         - $ref: '#/components/parameters/configured'
       security:
@@ -3199,8 +3197,8 @@ paths:
       description: Get a connection
       operationId: connectionsOne
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/unified_api'
       security:
@@ -3251,8 +3249,8 @@ paths:
         - Connections
       x-sdk-exclude: true
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/unified_api'
       security:
@@ -3341,8 +3339,8 @@ paths:
       description: Update a connection
       operationId: connectionsUpdate
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/unified_api'
       security:
@@ -3431,8 +3429,8 @@ paths:
       description: Deletes a connection
       operationId: connectionsDelete
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/unified_api'
       security:
@@ -3483,8 +3481,8 @@ paths:
       tags:
         - Connections
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/unified_api'
       security:
@@ -3569,8 +3567,8 @@ paths:
       security:
         - apiKey: []
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/unified_api'
       requestBody:
@@ -3636,8 +3634,8 @@ paths:
       security:
         - apiKey: []
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/unified_api'
       requestBody:
@@ -3698,8 +3696,8 @@ paths:
       security:
         - apiKey: []
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/unified_api'
       requestBody:
@@ -3760,8 +3758,8 @@ paths:
         This endpoint returns custom settings and their defaults required by connection for a given resource.
       operationId: connectionSettingsAll
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/resource'
@@ -3814,8 +3812,8 @@ paths:
       description: Update default values for a connection's resource settings
       operationId: connectionSettingsUpdate
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/resource'
@@ -3910,8 +3908,8 @@ paths:
       x-internal: true
       operationId: connectionsSchema
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/resource'
@@ -3968,8 +3966,8 @@ paths:
       x-internal: true
       operationId: connectionsExample
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/resource'
@@ -4024,8 +4022,8 @@ paths:
         This endpoint returns an custom fields on a connection resource.
       operationId: customFieldsAll
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/resource'
@@ -4080,8 +4078,8 @@ paths:
       description: This endpoint returns a list of custom mappings for a connection.
       operationId: connectionCustomMappingsAll
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/resource'
@@ -4261,8 +4259,8 @@ paths:
       x-sdk-exclude: true
       x-internal: true
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/target_field_id'
@@ -4317,8 +4315,8 @@ paths:
       x-sdk-exclude: true
       x-internal: true
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/target_field_id'
@@ -4383,8 +4381,8 @@ paths:
       x-sdk-exclude: true
       x-internal: true
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/target_field_id'
@@ -4449,8 +4447,8 @@ paths:
       x-sdk-exclude: true
       x-internal: true
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
         - $ref: '#/components/parameters/target_field_id'
@@ -4504,8 +4502,8 @@ paths:
       description: This endpoint returns a list of custom mappings.
       operationId: customMappingsAll
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/unified_api'
         - $ref: '#/components/parameters/service_id'
       security:
@@ -4612,8 +4610,8 @@ paths:
       tags:
         - Sessions
       parameters:
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
-        - $ref: '#/components/parameters/x-apideck-app-id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
       security:
         - apiKey: []
       requestBody:
@@ -4714,8 +4712,8 @@ paths:
       tags:
         - Logs
       parameters:
-        - $ref: '#/components/parameters/x-apideck-app-id'
-        - $ref: '#/components/parameters/x-apideck-consumer-id'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/consumerId'
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'

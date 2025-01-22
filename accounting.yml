@@ -10190,7 +10190,9 @@ components:
       description: Status of payment
       x-apideck-enum-id: payments.status
       enum:
+        - draft
         - authorised
+        - rejected
         - paid
         - voided
         - deleted
@@ -19266,6 +19268,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
       responses:
         '200':
           $ref: '#/components/responses/GetBillPaymentsResponse'
@@ -19317,6 +19323,9 @@ paths:
         - connector: quickbooks
           description: |
             Payment method is required and must be `Check` or `CreditCard`.
+        - connector: netsuite
+          description: |
+            In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
       requestBody:
         required: true
         content:
@@ -19464,6 +19473,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
       responses:
         '200':
           $ref: '#/components/responses/GetBillPaymentResponse'

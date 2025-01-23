@@ -955,6 +955,11 @@ components:
               $ref: '#/components/schemas/LinkedConnectorResource'
             example_response:
               $ref: '#/components/schemas/ConnectorResourceExample'
+            workflow_examples:
+              description: If the resource has a workflow, this will contain the example response for each step
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/ConnectorResourceExample'
     GetConnectorResourceResponse:
       type: object
       x-apideck-schema-id: GetConnectorResourceResponse

@@ -1,3 +1,16 @@
+## v10.11.0 - (2025-01-25)
+
+### Ecommerce API
+
+- Added new webhook events for [Ecommerce](apis/ecommerce/reference#tag/Webhook-Events)
+- Added native webhook support for [Shopify](connectors/shopify) which api_managed (both delete and creation).
+
+## v10.10.1 - (2025-01-23)
+
+### Accounting API
+
+- Added `sort` parameter to [Invoice Items](apis/accounting/reference#tag/Invoice-Items)
+
 ## v10.10.0 - (2025-01-16)
 
 - Added `Users` resource to [Microsoft Dynamics CRM](connectors/microsoft-dynamics).

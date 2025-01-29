@@ -6058,7 +6058,7 @@ paths:
         - connector: zoho-crm
           description: When using the phone_number filter for contacts in Zoho CRM, the filter does not work with numbers containing dashes (e.g., 989-989-989) or their URL-encoded equivalents (e.g., 989%2D989%2D989). It only works with continuous digits (e.g., 9898989898).
         - connector: microsoft-outlook
-          description: To get custom fields, make a get contact call with owner_id. If no owner_id is provided, the list call will return the contacts of the authenticated user.
+          description: To get custom fields, make a get contact call with owner_id. If no owner_id is provided, the list call will return the contacts of the authenticated user. Microsoft Outlook allows multiple emails without a type. We will return the type of the first email as primary and the rest as other.
       responses:
         '200':
           $ref: '#/components/responses/GetContactsResponse'
@@ -6109,6 +6109,8 @@ paths:
       x-apideck-gotchas:
         - connector: hubspot
           description: When creating a contact, it is advised to always include an unique email address since Hubspot uses it to prevent duplicate contacts in HubSpot. More info on the [Hubspot developer docs](https://developers.hubspot.com/docs/api/crm/contacts).
+        - connector: microsoft-outlook
+          description: Microsoft Outlook allows multiple emails without a type. Please provide the first email as primary and the rest as other.
       requestBody:
         required: true
         content:
@@ -6280,7 +6282,7 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: microsoft-outlook
-          description: If no owner_id is provided, the get call will return the contacts of the authenticated user only.
+          description: If no owner_id is provided, the get call will return the contacts of the authenticated user only. Microsoft Outlook allows multiple emails without a type. We will return the type of the first email as primary and the rest as other.
       responses:
         '200':
           $ref: '#/components/responses/GetContactResponse'
@@ -6331,6 +6333,9 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: microsoft-outlook
+          description: Microsoft Outlook allows multiple emails without a type. Please provide the first email as primary and the rest as other.
       requestBody:
         required: true
         content:

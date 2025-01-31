@@ -1,4 +1,16 @@
+## v10.11.2 - (2025-01-30)
+
+### CRM API
+
+- Added gotchas for [Planhat connector](connectors/planhat)
+
 ## v10.11.1 - (2025-01-30)
+
+### HRIS API
+
+- Added `companies` coverage to [BambooHR](connectors/bamboohr)
+
+## v10.11.0 - (2025-01-25)
 
 ### Ecommerce API
 

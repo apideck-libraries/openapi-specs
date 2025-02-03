@@ -16448,6 +16448,9 @@ paths:
         - connector: mrisoftware
           description: |
             MRI Software does not provide a proper ID for journal line items. Instead, each journal line item is identified by a combination of GLREFERENCE, PERIOD, and ITEM. These fields are mapped to unify with the properties number, accounting_period, and line_number, respectively. Additionally, MRI Software requires a GLSOURCE field, which is not supported by Unify. Therefore, it will be sent statically as "GL" (General Ledger).
+        - connector: quickbooks
+          description: |
+            Quickbooks only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
       requestBody:
         required: true
         content:
@@ -16735,6 +16738,9 @@ paths:
             Procountor requires row_version to be set when updating a journal entry. The row_version should be equivalent to the current row_version of the resource
         - connector: netsuite
           description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
+        - connector: quickbooks
+          description: |
+            Quickbooks only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
       requestBody:
         required: true
         content:

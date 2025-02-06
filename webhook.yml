@@ -29,7 +29,7 @@ components:
         type: string
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
       x-speakeasy-name-override: appId
-    serviceId:
+    servicePathId:
       in: path
       name: serviceId
       schema:
@@ -1426,7 +1426,7 @@ paths:
       x-internal: true
       parameters:
         - $ref: '#/components/parameters/webhookToken'
-        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/servicePathId'
       security:
         - apiKey: []
       requestBody:
@@ -1491,7 +1491,7 @@ paths:
       x-internal: true
       parameters:
         - $ref: '#/components/parameters/webhookToken'
-        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/servicePathId'
         - $ref: '#/components/parameters/lookupId'
         - $ref: '#/components/parameters/downstreamEventType'
       security:
@@ -1558,7 +1558,7 @@ paths:
       x-internal: true
       parameters:
         - $ref: '#/components/parameters/lookupIdToken'
-        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/servicePathId'
         - $ref: '#/components/parameters/downstreamEventType'
       security:
         - apiKey: []
@@ -1618,7 +1618,7 @@ paths:
       x-internal: true
       parameters:
         - $ref: '#/components/parameters/lookupIdToken'
-        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/servicePathId'
         - $ref: '#/components/parameters/downstreamEventType'
       responses:
         '200':

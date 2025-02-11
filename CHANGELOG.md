@@ -1,3 +1,9 @@
+## v10.11.3 - (2025-02-11)
+
+### Ecommerce API
+
+- Added [Etsy](connectors/etsy) connector
+
 ## v10.11.2 - (2025-01-30)
 
 ### CRM API

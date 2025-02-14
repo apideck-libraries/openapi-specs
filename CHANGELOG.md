@@ -1,3 +1,9 @@
+## v10.11.4 - (2025-02-14)
+
+### Accounting API
+
+- Added credit-note webhooks support for [Quickbooks](connectors/quickbooks)
+
 ## v10.11.3 - (2025-02-11)
 
 ### Ecommerce API

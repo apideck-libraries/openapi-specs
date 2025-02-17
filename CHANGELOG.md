@@ -1,3 +1,9 @@
+## v10.11.5 - (2025-02-17)
+
+### File Storage API
+
+- Added `raw` parameter to [Files Search](apis/file-storage/reference#tag/Files)
+
 ## v10.11.4 - (2025-02-14)
 
 ### Accounting API

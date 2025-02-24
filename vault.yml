@@ -1162,6 +1162,8 @@ components:
               example: 40
             request_counts:
               $ref: '#/components/schemas/RequestCountAllocation'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CreateConnectionResponse:
       type: object
       x-apideck-schema-id: CreateConnectionResponse
@@ -1180,6 +1182,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Connection'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CreateConsumerResponse:
       type: object
       x-apideck-schema-id: GetConsumerResponse
@@ -1198,6 +1202,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Consumer'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CreateCustomMappingRequest:
       type: object
       x-apideck-schema-id: CreateCustomMappingRequest
@@ -1227,6 +1233,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/CustomMapping'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CreateSessionResponse:
       type: object
       x-apideck-schema-id: CreateSessionResponse
@@ -1259,6 +1267,8 @@ components:
               readOnly: true
               type: string
           additionalProperties: false
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CustomFieldFinder:
       type: object
       x-apideck-schema-id: CustomFieldFinder
@@ -1360,6 +1370,8 @@ components:
           properties:
             consumer_id:
               $ref: '#/components/schemas/ConsumerId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     FormField:
       type: object
       x-apideck-schema-id: FormField
@@ -1484,6 +1496,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Connection'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetConnectionsResponse:
       type: object
       x-apideck-schema-id: GetConnectionsResponse
@@ -1504,6 +1518,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Connection'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetConsumerResponse:
       type: object
       x-apideck-schema-id: GetConsumerResponse
@@ -1522,6 +1538,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Consumer'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetConsumersResponse:
       type: object
       x-apideck-schema-id: GetConsumersResponse
@@ -1577,6 +1595,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCustomFieldsResponse:
       type: object
       x-apideck-schema-id: GetCustomFieldsResponse
@@ -1597,6 +1617,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomFieldFinder'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCustomMappingsResponse:
       type: object
       x-apideck-schema-id: GetCustomMappingsResponse
@@ -1617,6 +1639,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomMapping'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCustomMappingResponse:
       type: object
       x-apideck-schema-id: GetCustomMappingResponse
@@ -1635,6 +1659,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/CustomMapping'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetLogsResponse:
       type: object
       x-apideck-schema-id: GetLogsResponse
@@ -1659,6 +1685,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetResourceExampleResponse:
       type: object
       x-apideck-schema-id: GetResourceExampleResponse
@@ -1677,6 +1705,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/ResourceExample'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetResourceSchemaResponse:
       type: object
       x-apideck-schema-id: GetResourceSchemaResponse
@@ -1695,6 +1725,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/ResourceSchema'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     IntegrationState:
       type: string
       x-apideck-schema-id: IntegrationState
@@ -2094,6 +2126,8 @@ components:
               readOnly: true
             state:
               $ref: '#/components/schemas/ConnectionState'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     RequestCountAllocation:
       type: object
       x-apideck-schema-id: RequestCountAllocation
@@ -2463,6 +2497,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Connection'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     UpdateConsumerRequest:
       type: object
       x-apideck-schema-id: UpdateConsumerRequest
@@ -2488,6 +2524,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Consumer'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     UpdateCustomMappingRequest:
       type: object
       x-apideck-schema-id: UpdateCustomMappingRequest
@@ -2517,6 +2555,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/CustomMapping'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     VaultEventType:
       type: string
       x-apideck-enum-id: vault.events
@@ -2594,6 +2634,15 @@ components:
               description: Callback state
               example: 123e4567-e89b-12d3-a456-426614174000
               readOnly: true
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    Raw:
+      title: raw
+      type: object
+      x-apideck-schema-id: Raw
+      description: Raw response from the integration when raw=true query param is provided
+      nullable: true
+      additionalProperties: true
   responses:
     BadRequestResponse:
       content:

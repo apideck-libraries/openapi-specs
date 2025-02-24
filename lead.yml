@@ -336,6 +336,8 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Currency:
       type: string
       title: Currency
@@ -983,6 +985,8 @@ components:
           example: delete
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Email:
       type: object
       x-apideck-schema-id: Email
@@ -1052,6 +1056,8 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Lead'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetLeadsResponse:
       type: object
       x-apideck-schema-id: GetLeadsResponse
@@ -1091,6 +1097,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Lead:
       type: object
       x-apideck-schema-id: Lead
@@ -1885,6 +1893,8 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Website:
       type: object
       x-apideck-schema-id: Website
@@ -1918,6 +1928,13 @@ components:
             - other
           example: primary
           nullable: true
+    Raw:
+      title: raw
+      type: object
+      x-apideck-schema-id: Raw
+      description: Raw response from the integration when raw=true query param is provided
+      nullable: true
+      additionalProperties: true
   parameters:
     applicationId:
       name: x-apideck-app-id

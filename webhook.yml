@@ -294,6 +294,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     DeleteWebhookResponse:
       type: object
       x-apideck-schema-id: DeleteWebhookResponse
@@ -312,6 +314,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     DeliveryUrl:
       type: string
       format: uri
@@ -389,6 +393,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetWebhookResponse:
       type: object
       x-apideck-schema-id: GetWebhookResponse
@@ -407,6 +413,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetWebhooksResponse:
       type: object
       x-apideck-schema-id: GetWebhooksResponse
@@ -431,6 +439,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Links:
       type: object
       x-apideck-schema-id: Links
@@ -609,6 +619,8 @@ components:
           type: string
           description: ISO Datetime webhook event was received
           example: '2021-10-01T08:26:28.039Z'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     ServiceId:
       type: string
       description: Service provider identifier
@@ -806,6 +818,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Webhook'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Webhook:
       type: object
       x-apideck-schema-id: Webhook
@@ -1132,6 +1146,13 @@ components:
         - ecommerce.customer.deleted
       example: crm.company.created
       type: string
+    Raw:
+      title: raw
+      type: object
+      x-apideck-schema-id: Raw
+      description: Raw response from the integration when raw=true query param is provided
+      nullable: true
+      additionalProperties: true
   securitySchemes:
     apiKey:
       type: apiKey

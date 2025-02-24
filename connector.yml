@@ -856,6 +856,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/ApiResourceCoverage'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -878,6 +880,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/ApiResource'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -900,6 +904,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Api'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -924,6 +930,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Api'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -960,6 +968,8 @@ components:
               type: object
               additionalProperties:
                 $ref: '#/components/schemas/ConnectorResourceExample'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetConnectorResourceResponse:
       type: object
       x-apideck-schema-id: GetConnectorResourceResponse
@@ -978,6 +988,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/ConnectorResource'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -1000,6 +1012,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/ConnectorResourceSchema'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetConnectorResponse:
       type: object
       x-apideck-schema-id: GetConnectorResponse
@@ -1018,6 +1032,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Connector'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -1042,6 +1058,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Connector'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -1452,6 +1470,13 @@ components:
                     type: array
                     items:
                       type: string
+    Raw:
+      title: raw
+      type: object
+      x-apideck-schema-id: Raw
+      description: Raw response from the integration when raw=true query param is provided
+      nullable: true
+      additionalProperties: true
   securitySchemes:
     apiKey:
       type: apiKey

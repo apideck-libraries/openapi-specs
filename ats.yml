@@ -972,6 +972,8 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CreateApplicationResponse:
       type: object
       required:
@@ -1004,6 +1006,8 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CreatedAt:
       type: string
       title: Created at (timestamp)
@@ -1052,6 +1056,8 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Currency:
       type: string
       title: Currency
@@ -1698,6 +1704,8 @@ components:
           example: delete
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     DeleteApplicationResponse:
       type: object
       required:
@@ -1730,6 +1738,8 @@ components:
           example: delete
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Deleted:
       type: boolean
       title: Deleted
@@ -1784,6 +1794,8 @@ components:
           example: delete
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Department:
       type: object
       x-apideck-schema-id: Department
@@ -1910,6 +1922,8 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Applicant'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetApplicantsResponse:
       type: object
       x-apideck-schema-id: GetApplicantsResponse
@@ -1945,6 +1959,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Applicant'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -1981,6 +1997,8 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Application'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetApplicationsResponse:
       type: object
       required:
@@ -2015,6 +2033,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Application'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -2052,6 +2072,8 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Job'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetJobsResponse:
       type: object
       x-apideck-schema-id: GetJobsResponse
@@ -2087,6 +2109,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Job'
+        _raw:
+          $ref: '#/components/schemas/Raw'
         meta:
           $ref: '#/components/schemas/Meta'
         links:
@@ -2924,6 +2948,8 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     UpdateApplicationResponse:
       type: object
       required:
@@ -2956,6 +2982,8 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     UpdatedAt:
       type: string
       title: Updated at (timestamp)
@@ -3004,12 +3032,21 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Url:
       type: string
       format: uri
       description: The url pointing to the job.
       pattern: ^(https?)://
       example: https://downstreamconnector.com/job?id=123
+    Raw:
+      title: raw
+      type: object
+      x-apideck-schema-id: Raw
+      description: Raw response from the integration when raw=true query param is provided
+      nullable: true
+      additionalProperties: true
   securitySchemes:
     apiKey:
       type: apiKey

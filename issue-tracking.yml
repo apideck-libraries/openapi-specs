@@ -708,6 +708,8 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CreateTicketResponse:
       type: object
       x-apideck-schema-id: CreateTicketResponse
@@ -741,6 +743,8 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CreatedAt:
       type: string
       title: Created at (timestamp)
@@ -1397,6 +1401,8 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     DeleteTicketResponse:
       type: object
       x-apideck-schema-id: DeleteTicketResponse
@@ -1430,6 +1436,8 @@ components:
           example: add
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Department:
       type: object
       x-apideck-schema-id: Department
@@ -1581,6 +1589,8 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Collection'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCollectionTagsResponse:
       type: object
       x-apideck-schema-id: GetTagsResponse
@@ -1620,6 +1630,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCollectionUserResponse:
       type: object
       x-apideck-schema-id: GetCollectionUserResponse
@@ -1653,6 +1665,8 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/CollectionUser'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCollectionUsersResponse:
       type: object
       x-apideck-schema-id: GetCollectionUsersResponse
@@ -1692,6 +1706,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCollectionsResponse:
       type: object
       x-apideck-schema-id: GetCollectionsResponse
@@ -1731,6 +1747,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCommentResponse:
       type: object
       x-apideck-schema-id: GetCommentResponse
@@ -1764,6 +1782,8 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/CollectionTicketComment'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCommentsResponse:
       type: object
       x-apideck-schema-id: GetCommentsResponse
@@ -1803,6 +1823,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetTicketResponse:
       type: object
       x-apideck-schema-id: GetTicketResponse
@@ -1836,6 +1858,8 @@ components:
           example: one
         data:
           $ref: '#/components/schemas/Ticket'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetTicketsResponse:
       type: object
       x-apideck-schema-id: GetTicketsResponse
@@ -1875,6 +1899,8 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Id:
       type: string
       title: ID
@@ -2622,6 +2648,8 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     UpdateTicketResponse:
       type: object
       x-apideck-schema-id: UpdateTicketResponse
@@ -2655,6 +2683,8 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     UpdatedAt:
       type: string
       title: Updated at (timestamp)
@@ -2703,6 +2733,13 @@ components:
             - other
           example: primary
           nullable: true
+    Raw:
+      title: raw
+      type: object
+      x-apideck-schema-id: Raw
+      description: Raw response from the integration when raw=true query param is provided
+      nullable: true
+      additionalProperties: true
   securitySchemes:
     apiKey:
       type: apiKey

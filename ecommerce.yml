@@ -3604,6 +3604,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: woocommerce
+          description: |
+            Woocommerce returns the customer_id as '0' when an order was completed without registration. In this scenario, the customer data on order reflects a 'Guest Checkout'.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrderResponse'

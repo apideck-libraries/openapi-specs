@@ -1,6 +1,13 @@
+## v10.12.1 - (2025-03-07)
+
+### Accounting API
+
+- Added `expenses` support for [Netsuite](connectors/netsuite)
+
 ## v10.12.0 - (2025-03-04)
 
 ### ATS API
+
 - Added Bullhorn [connectors/bullhorn-ats] connector for the ATS API
 
 ## v10.11.5 - (2025-02-17)

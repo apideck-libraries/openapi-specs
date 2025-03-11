@@ -1,3 +1,9 @@
+## v10.12.2 - (2025-03-11)
+
+### Accounting API
+
+- Addded `cost_of_goods_sold`, `other_income`, `other_expenses`, `uncategorized_categories` support to [Profit And Loss](apis/accounting/reference#tag/Profit-And-Loss)
+
 ## v10.12.1 - (2025-03-07)
 
 ### Accounting API

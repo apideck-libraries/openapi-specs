@@ -1824,6 +1824,7 @@ components:
         row_version: edge-case
         accounting_period: low
         custom_fields: medium
+        source_document_url: low
       x-apideck-strict-required:
         - id
         - bill_date
@@ -1957,6 +1958,12 @@ components:
           $ref: '#/components/schemas/BankAccount'
         discount_percentage:
           $ref: '#/components/schemas/DiscountPercentage'
+        source_document_url:
+          type: string
+          title: Source document URL
+          description: URL link to a source document - shown as 'Go to [appName]' in the downstream app. Currently only supported for Xero.
+          example: https://www.invoicesolution.com/bill/123456
+          nullable: true
         tracking_categories:
           $ref: '#/components/schemas/LinkedTrackingCategories'
         updated_by:
@@ -12456,6 +12463,7 @@ paths:
                   currency: 'USD'
                 },
                 discount_percentage: 5.5,
+                source_document_url: 'https://www.invoicesolution.com/bill/123456',
                 tracking_categories: [
                   {
                     id: '123456',
@@ -12724,6 +12732,7 @@ paths:
                   currency: 'USD'
                 },
                 discount_percentage: 5.5,
+                source_document_url: 'https://www.invoicesolution.com/bill/123456',
                 tracking_categories: [
                   {
                     id: '123456',

@@ -1,3 +1,9 @@
+## v10.12.3 - (2025-03-11)
+
+### Accounting API
+
+- Added new filter for `supplier_id` to [Customers](apis/accounting/reference#tag/Customers)
+
 ## v10.12.2 - (2025-03-11)
 
 ### Accounting API

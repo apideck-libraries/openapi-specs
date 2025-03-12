@@ -6507,6 +6507,9 @@ paths:
         - connector: payfit
           description: |
             In Payfit the start_date parameter is supported only and will provide data of that specific month only. This endpoint is only available for French companies.
+        - connector: people-hr
+          description: |
+            In PeopleHR, it is mandatory to provide the employee_id in the filter.
       responses:
         '200':
           $ref: '#/components/responses/GetTimeOffRequestsResponse'
@@ -6554,6 +6557,10 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: people-hr
+          description: |
+            In PeopleHR, day_part value should be AM or PM. It is mandatory to provide the employee_id in the request body.
       requestBody:
         required: true
         content:

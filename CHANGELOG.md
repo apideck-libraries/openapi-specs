@@ -261,7 +261,7 @@
 ### Accounting API
 
 - Added [Microsoft Dynamics Business Central](connectors/microsoft-dynamics-365-business-central) connector
-- Added filtering resources by update_since support for [Quickbooks](connectors/quickbook) connector
+- Added filtering resources by update_since support for [Quickbooks](connectors/quickbooks) connector
 - Added `company_id` field to [Bill](apis/accounting/reference#tag/Bills), [Credit Note](apis/accounting/reference#tag/Credit-Notes), [Customer](apis/accounting/reference#tag/Customers), [Invoice](apis/accounting/reference#tag/Invoices), [Journal Entry](apis/accounting/reference#tag/Journal-Entries), [Payment](apis/accounting/reference#tag/Payments), [Purchase Order](apis/accounting/reference#tag/Purchase-Orders), [Supplier](apis/accounting/reference#tag/Suppliers),
 
 ### Ecommerce API
@@ -279,7 +279,7 @@
 ### Accounting API
 
 - Added all, one, create, update and delete Departments and Locations endpoint
-- Release Departments and Locations endpoint for [Netsuite](connectors/sage-netsuite)
+- Release Departments and Locations endpoint for [Netsuite](connectors/netsuite)
 
 ## v10.2.2 - (2024-01-19)
 
@@ -308,7 +308,7 @@
 - Added of the [Cezanne HR](connectors/cezannehr) connector as early-access
 - Improved mapping manager for employee for [AFAS](connectors/afas)
 
-- Added and improved of the mapping for departments for integrations: [AFAS](connectors/afas), [AlexisHR](connectors/alexishr), [BambooHR](connectors/bamboohr), [Breathe HR](connectors/breathehr), [Deel](connectors/deel), [Loket](connectors/loket-nl), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) , [NMBRS](connectors/nmbrs), [Officient](connectors/officient-io),
+- Added and improved of the mapping for departments for integrations: [AFAS](connectors/afas), [AlexisHR](connectors/alexishr), [BambooHR](connectors/bamboohr), [Breathe HR](connectors/breathehr), [Deel](connectors/deel), [Loket](connectors/loket-nl), [Lucca HR](connectors/lucca-hr), Rippling, [NMBRS](connectors/nmbrs), [Officient](connectors/officient-io),
 
 ### Issue tracking
 
@@ -361,7 +361,7 @@
 
 ### HRIS API
 
-- Overall improvements of the coverage for department properties for integrations: [Gusto](connectors/gusto), [Cascade HR](connectors/cascade-hr)
+- Overall improvements of the coverage for department properties for integrations: Gusto, [Cascade HR](connectors/cascade-hr)
 
 ### CRM API
 
@@ -424,7 +424,7 @@
 ### HRIS API
 
 - Release of the [Charlie HR](connectors/charliehr) connector with support for the resources: Employee, Department, Time-off
-- The [Humaans](connectors/humaans)-io includes inactive employees by default.
+- The [Humaans](connectors/humaans-io) includes inactive employees by default.
 - Overall improvements of the coverage for employee properties for integrations: [Google Workspace](connectors/google-workspace), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) ,[SD Worx](connectors/sdworx), [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [Breathe HR](connectors/breathehr), [Deel](connectors/deel), [Freshteam](connectors/freshteam), [Loket](connectors/loket-nl), [Paylocity](connectors/paylocity), [NMBRS](connectors/nmbrs), [Sage HR](connectors/sage-hr), [Zenefits](connectors/zenefits)
 
 ### Filestorage API
@@ -514,8 +514,8 @@
 
 ### HRIS API
 
-- Release of the [Paycheck](connectors/paycheck) connector with support for the resources: Employee, Department, Company
-- Early-access release of the [Silae](connectors/silae-fr) connector with support for the Employee resource
+- Release of the [Paycheck](/apis/hris/paychex) connector with support for the resources: Employee, Department, Company
+- Early-access release of the Silae connector with support for the Employee resource
 - Early-access release of the [Cegid talentsoft](connectors/cegid-talentsoft) connector with support for the Employee resource
 - Early-access release of the [Justworks](connectors/justworks) connector with support for the Employee resource
 - Early-access release of the [Trinet](connectors/trinet) connector with support for the Employee resource

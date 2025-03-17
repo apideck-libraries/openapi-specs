@@ -1,3 +1,10 @@
+## v10.13.0 - (2025-03-17)
+
+### Accounting API
+
+- Added `time-off-requests` coverage to [People-hr](connectors/people-hr)
+- Added `time-off-requests` coverage to [Employment Hero](connectors/employmenthero)
+
 ## v10.12.3 - (2025-03-11)
 
 ### Accounting API

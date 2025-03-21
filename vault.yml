@@ -1457,10 +1457,16 @@ components:
           example:
             - label: General Channel
               value: general
+              option_type: simple
     FormFieldOption:
-      anyOf:
+      oneOf:
         - $ref: '#/components/schemas/SimpleFormFieldOption'
         - $ref: '#/components/schemas/FormFieldOptionGroup'
+      discriminator:
+        propertyName: option_type
+        mapping:
+          simple: '#/components/schemas/SimpleFormFieldOption'
+          group: '#/components/schemas/FormFieldOptionGroup'
     FormFieldOptionGroup:
       type: object
       x-apideck-schema-id: FormFieldOptionGroup
@@ -1475,6 +1481,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SimpleFormFieldOption'
+        option_type:
+          type: string
+          enum:
+            - group
+          x-apideck-enum-id: form_field.option_type
+      required:
+        - label
+        - option_type
+        - options
     GetConnectionResponse:
       type: object
       x-apideck-schema-id: GetConnectionResponse
@@ -2319,7 +2334,7 @@ components:
           type: string
           example: General Channel
         value:
-          anyOf:
+          oneOf:
             - type: string
               example: general
             - type: integer
@@ -2330,13 +2345,21 @@ components:
               example: true
             - type: array
               items:
-                anyOf:
+                oneOf:
                   - type: string
                   - type: integer
                   - type: number
               example:
                 - team
                 - general
+        option_type:
+          type: string
+          enum:
+            - simple
+          x-apideck-enum-id: form_field.option_type
+      required:
+        - label
+        - option_type
     UnauthorizedResponse:
       type: object
       x-apideck-schema-id: Unauthorized

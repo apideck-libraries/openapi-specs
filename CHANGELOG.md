@@ -1,3 +1,9 @@
+## v10.12.4 - (2025-03-20)
+
+### HRIS API
+
+- Added [Acerta](connectors/acerta) connector for the HRIS API
+
 ## v10.13.0 - (2025-03-17)
 
 ### Accounting API

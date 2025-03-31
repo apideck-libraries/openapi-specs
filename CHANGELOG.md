@@ -1,3 +1,10 @@
+## v10.14.0 - (2025-03-28)
+
+### CRM API
+
+- Added [Attio](connectors/attio) connector for the CRM API
+- Added [Webhooks](apis/crm/reference#tag/Webhooks) support for [Attio](connectors/attio) connector in the CRM API
+
 ## v10.12.4 - (2025-03-20)
 
 ### HRIS API

@@ -2085,17 +2085,9 @@ components:
           example: 19.99
           nullable: true
         location_id:
-          type: string
-          title: Location id
-          description: Location id
-          example: '1234'
-          nullable: true
+          $ref: '#/components/schemas/LocationId'
         department_id:
-          type: string
-          title: Department id
-          description: Department id
-          example: '1234'
-          nullable: true
+          $ref: '#/components/schemas/DepartmentId'
         item:
           $ref: '#/components/schemas/LinkedInvoiceItem'
         tax_rate:
@@ -6472,6 +6464,10 @@ components:
         active: medium
         tracking_category: low
         tracking_categories: low
+        department_id: low
+        location_id: low
+        subsidiary_id: low
+        tax_schedule_id: low
         row_version: edge-case
         updated_by: edge-case
         created_by: edge-case
@@ -6542,7 +6538,9 @@ components:
           x-apideck-enum-id: invoice-items.type
           enum:
             - inventory
+            - non_inventory
             - service
+            - description
             - other
           nullable: true
         sales_details:
@@ -6593,6 +6591,18 @@ components:
           $ref: '#/components/schemas/LinkedTrackingCategories'
         active:
           $ref: '#/components/schemas/Active'
+        department_id:
+          $ref: '#/components/schemas/DepartmentId'
+        location_id:
+          $ref: '#/components/schemas/LocationId'
+        subsidiary_id:
+          $ref: '#/components/schemas/SubsidiaryId'
+        tax_schedule_id:
+          type: string
+          title: Tax schedule ID
+          description: The ID of the tax schedule
+          example: '123456'
+          nullable: true
         custom_mappings:
           $ref: '#/components/schemas/CustomMappings'
         row_version:
@@ -6770,17 +6780,9 @@ components:
           example: 19.99
           nullable: true
         location_id:
-          type: string
-          title: Location id
-          description: Location id
-          example: '1234'
-          nullable: true
+          $ref: '#/components/schemas/LocationId'
         department_id:
-          type: string
-          title: Department id
-          description: Department id
-          example: '1234'
-          nullable: true
+          $ref: '#/components/schemas/DepartmentId'
         item:
           $ref: '#/components/schemas/LinkedInvoiceItem'
         tax_rate:
@@ -7064,9 +7066,9 @@ components:
         supplier:
           $ref: '#/components/schemas/LinkedSupplier'
         department_id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/DepartmentId'
         location_id:
-          $ref: '#/components/schemas/Id'
+          $ref: '#/components/schemas/LocationId'
         line_number:
           $ref: '#/components/schemas/LineNumber'
     Language:
@@ -11171,10 +11173,7 @@ components:
         company_id:
           $ref: '#/components/schemas/AccountingCompanyId'
         department_id:
-          type: string
-          title: Department ID
-          description: The ID of the department this expense is linked to.
-          example: '12345'
+          $ref: '#/components/schemas/DepartmentId'
         payment_type:
           type: string
           title: Payment type
@@ -11269,15 +11268,11 @@ components:
           description: The ID of the customer this expense item is linked to.
           example: '12345'
         department_id:
-          type: string
-          title: Department ID
-          description: The ID of the department this expense item is linked to.
-          example: '12345'
+          $ref: '#/components/schemas/DepartmentId'
         location_id:
-          type: string
-          title: Location ID
-          description: The ID of the location this expense item is linked to.
-          example: '12345'
+          $ref: '#/components/schemas/LocationId'
+        subsidiary_id:
+          $ref: '#/components/schemas/SubsidiaryId'
         tax_rate:
           $ref: '#/components/schemas/LinkedTaxRate'
         description:
@@ -11712,6 +11707,27 @@ components:
           $ref: '#/components/schemas/TotalAmount'
       example:
         total: 10000
+    DepartmentId:
+      type: string
+      title: Department ID
+      description: The ID of the department
+      example: '12345'
+      nullable: true
+      readOnly: false
+    LocationId:
+      type: string
+      title: Location ID
+      description: The ID of the location
+      example: '12345'
+      nullable: true
+      readOnly: false
+    SubsidiaryId:
+      type: string
+      title: Subsidiary ID
+      description: The ID of the subsidiary
+      example: '12345'
+      nullable: true
+      readOnly: false
   securitySchemes:
     apiKey:
       type: apiKey
@@ -12425,8 +12441,8 @@ paths:
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
                     discount_amount: 19.99,
-                    location_id: '1234',
-                    department_id: '1234',
+                    location_id: '12345',
+                    department_id: '12345',
                     item: {
                       id: '12344',
                       code: '120-C',
@@ -12694,8 +12710,8 @@ paths:
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
                     discount_amount: 19.99,
-                    location_id: '1234',
-                    department_id: '1234',
+                    location_id: '12345',
+                    department_id: '12345',
                     item: {
                       id: '12344',
                       code: '120-C',
@@ -13027,8 +13043,8 @@ paths:
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
                     discount_amount: 19.99,
-                    location_id: '1234',
-                    department_id: '1234',
+                    location_id: '12345',
+                    department_id: '12345',
                     item: {
                       id: '12344',
                       code: '120-C',
@@ -13349,8 +13365,8 @@ paths:
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
                     discount_amount: 19.99,
-                    location_id: '1234',
-                    department_id: '1234',
+                    location_id: '12345',
+                    department_id: '12345',
                     item: {
                       id: '12344',
                       code: '120-C',
@@ -14130,6 +14146,10 @@ paths:
                   }
                 ],
                 active: true,
+                department_id: '12345',
+                location_id: '12345',
+                subsidiary_id: '12345',
+                tax_schedule_id: '123456',
                 row_version: '1-12345',
                 pass_through: [
                   {
@@ -14324,6 +14344,10 @@ paths:
                   }
                 ],
                 active: true,
+                department_id: '12345',
+                location_id: '12345',
+                subsidiary_id: '12345',
+                tax_schedule_id: '123456',
                 row_version: '1-12345',
                 pass_through: [
                   {
@@ -14561,8 +14585,8 @@ paths:
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
                     discount_amount: 19.99,
-                    location_id: '1234',
-                    department_id: '1234',
+                    location_id: '12345',
+                    department_id: '12345',
                     item: {
                       id: '12344',
                       code: '120-C',
@@ -14855,8 +14879,8 @@ paths:
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
                     discount_amount: 19.99,
-                    location_id: '1234',
-                    department_id: '1234',
+                    location_id: '12345',
+                    department_id: '12345',
                     item: {
                       id: '12344',
                       code: '120-C',
@@ -16990,6 +17014,8 @@ paths:
                         row_version: '1-12345'
                       }
                     },
+                    department_id: '12345',
+                    location_id: '12345',
                     line_number: 1
                   },
                   {
@@ -17054,6 +17080,8 @@ paths:
                         row_version: '1-12345'
                       }
                     },
+                    department_id: '12345',
+                    location_id: '12345',
                     line_number: 1
                   }
                 ],
@@ -17281,6 +17309,8 @@ paths:
                         row_version: '1-12345'
                       }
                     },
+                    department_id: '12345',
+                    location_id: '12345',
                     line_number: 1
                   },
                   {
@@ -17345,6 +17375,8 @@ paths:
                         row_version: '1-12345'
                       }
                     },
+                    department_id: '12345',
+                    location_id: '12345',
                     line_number: 1
                   }
                 ],
@@ -17620,8 +17652,8 @@ paths:
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
                     discount_amount: 19.99,
-                    location_id: '1234',
-                    department_id: '1234',
+                    location_id: '12345',
+                    department_id: '12345',
                     item: {
                       id: '12344',
                       code: '120-C',
@@ -17906,8 +17938,8 @@ paths:
                     unit_of_measure: 'pc.',
                     discount_percentage: 0.01,
                     discount_amount: 19.99,
-                    location_id: '1234',
-                    department_id: '1234',
+                    location_id: '12345',
+                    department_id: '12345',
                     item: {
                       id: '12344',
                       code: '120-C',
@@ -20320,6 +20352,7 @@ paths:
                     customer_id: '12345',
                     department_id: '12345',
                     location_id: '12345',
+                    subsidiary_id: '12345',
                     tax_rate: {
                       id: '123456',
                       rate: 10
@@ -20494,6 +20527,7 @@ paths:
                     customer_id: '12345',
                     department_id: '12345',
                     location_id: '12345',
+                    subsidiary_id: '12345',
                     tax_rate: {
                       id: '123456',
                       rate: 10

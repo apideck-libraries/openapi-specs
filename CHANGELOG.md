@@ -1,3 +1,9 @@
+## v10.14.1 - (2025-04-02)
+
+### Accounting API
+
+- Added [myob-acumatica](connectors/myob-acumatica) connector for the Accounting API
+
 ## v10.14.0 - (2025-03-28)
 
 ### CRM API

@@ -2740,8 +2740,6 @@ components:
         company_name: medium
         emails: medium
         phone_numbers: medium
-      required:
-        - id
       x-apideck-strict-required:
         - emails
       x-apideck-strict-any-of:
@@ -2787,10 +2785,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PhoneNumber'
+          nullable: true
         emails:
           type: array
           items:
             $ref: '#/components/schemas/Email'
+          nullable: true
     LinkedEcommerceOrder:
       type: object
       x-apideck-schema-id: LinkedEcommerceOrder

@@ -319,12 +319,14 @@ components:
     attachmentMetadata:
       name: x-apideck-metadata
       in: header
-      description: Metadata to attach to the attachment file
+      description: Metadata to attach to the attachment file (JSON string)
       required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateAttachmentRequest'
+      schema:
+        type: string
+        format: json
+      examples:
+        basic:
+          value: '{"name":"document.pdf","description":"Invoice attachment"}'
     contentType:
       name: content-type
       in: header
@@ -19215,6 +19217,7 @@ paths:
       security:
         - apiKey: []
       requestBody:
+        required: true
         content:
           '*/*':
             schema:
@@ -20744,6 +20747,7 @@ paths:
             }
 x-webhooks:
   x-sdk-exclude: true
+  x-speakeasy-ignore: true
   CustomerCreated:
     post:
       summary: Customer Created

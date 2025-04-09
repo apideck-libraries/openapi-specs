@@ -4773,7 +4773,8 @@ paths:
         - connector: paylocity
           description: For virtual webhook events on Paylocity, we monitor the "List Employees" response, which has a very small set of fields in comparison of the "Get Employee" response.
         - connector: sage-hr
-          description: The minimum pagination `limit` is 50, since Sage HR does not support pagination with a lower limit. Pagination for Sage HR only support per 50 limits.
+          description: |
+            The minimum pagination `limit` is 50, since Sage HR does not support pagination with a lower limit. Pagination for Sage HR only support per 50 limits. Without the employment_status filter it will only return active employees. To fetch terminated employees, you need to include the employment_status filter with the value "terminated".
         - connector: sap-successfactors
           description: The custom fields are mapped only when they are in the personalInfoNav.
         - connector: hr-works

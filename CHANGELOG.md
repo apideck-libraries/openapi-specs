@@ -1,3 +1,9 @@
+## v10.15.2 - (2025-04-11)
+
+### Accounting API
+
+- Added `payment_allocations` field to [Accounting](api/accounting) connectors.
+
 ## v10.15.1 - (2025-04-11)
 
 ### CRM API

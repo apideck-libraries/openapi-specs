@@ -1,3 +1,9 @@
+## v10.15.0 - (2025-04-10)
+
+### Accounting API
+
+- Added virtual webhook support for [Netsuite](connectors/netsuite)
+
 ## v10.14.1 - (2025-04-02)
 
 ### Accounting API

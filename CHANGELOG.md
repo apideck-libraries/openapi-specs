@@ -1,3 +1,9 @@
+## v10.15.1 - (2025-04-11)
+
+### CRM API
+
+- Added [Odoo](connectors/odoo) connector for the CRM API
+
 ## v10.15.0 - (2025-04-10)
 
 ### Accounting API

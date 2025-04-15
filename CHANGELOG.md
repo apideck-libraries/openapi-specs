@@ -1,3 +1,9 @@
+## v10.16.0 - (2025-04-15)
+
+### Accounting API
+
+- Added [Workday](connectors/workday) connector for Accounting API
+
 ## v10.15.2 - (2025-04-11)
 
 ### Accounting API

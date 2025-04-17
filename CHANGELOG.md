@@ -1,3 +1,9 @@
+## v10.16.1 - (2025-04-17)
+
+### Webhooks
+
+- Outgoing webhooks now include a `x-apideck-signature` for you to verify the authenticity of the event. Read more about [this feature here](https://developers.apideck.com/guides/webhook-signature-verification).
+
 ## v10.16.0 - (2025-04-15)
 
 ### Accounting API

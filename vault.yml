@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.16.1
+  version: 10.16.2
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -4860,6 +4860,20 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
         - name: x-apideck-idempotency-key
           in: header
           required: true
@@ -4919,6 +4933,20 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
         - name: x-apideck-idempotency-key
           in: header
           required: true
@@ -4978,6 +5006,20 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
         - name: x-apideck-idempotency-key
           in: header
           required: true
@@ -5037,6 +5079,20 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
         - name: x-apideck-idempotency-key
           in: header
           required: true
@@ -5096,6 +5152,20 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
         - name: x-apideck-idempotency-key
           in: header
           required: true
@@ -5155,6 +5225,20 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
         - name: x-apideck-idempotency-key
           in: header
           required: true
@@ -5203,10 +5287,10 @@ x-webhooks:
       security: []
   TokenRefreshFailed:
     post:
-      summary: Connection Token Refresh Failed
-      description: Event broadcast when a connection token refresh has failed.
+      summary: Token Refresh Failed
+      description: Event broadcast when a token has been refresh failed.
       operationId: connectionTokenRefreshFailed
-      x-apideck-event-type: vault.connection.token_refresh.failed
+      x-apideck-event-type: vault.token_refresh.failed
       parameters:
         - name: x-apideck-event-type
           in: header
@@ -5214,6 +5298,20 @@ x-webhooks:
           description: The type of event that was triggered
           schema:
             $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
         - name: x-apideck-idempotency-key
           in: header
           required: true
@@ -5235,7 +5333,7 @@ x-webhooks:
             example:
               payload:
                 event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-                event_type: vault.connection.token_refresh.failed
+                event_type: vault.token_refresh.failed
                 service_id: apideck-vault
                 entity_id: 1111+test_user_id
                 entity_type: Connection

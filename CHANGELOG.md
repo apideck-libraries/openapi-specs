@@ -1,3 +1,9 @@
+## v10.16.2 - (2025-04-18)
+
+### Webhooks
+
+- Ensure all headers are properly defined in all events
+
 ## v10.16.1 - (2025-04-17)
 
 ### Webhooks

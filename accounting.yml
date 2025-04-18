@@ -19256,6 +19256,7 @@ paths:
       summary: Upload attachment
       description: Upload attachment
       x-sdk-exclude: true
+      x-speakeasy-test: false
       servers:
         - url: https://upload.apideck.com
       parameters:
@@ -21763,9 +21764,9 @@ x-webhooks:
       description: Event broadcast when a purchase has been order created.
   PurchaseOrderDeleted:
     post:
-      summary: Purchase Order Deleted
+      summary: Purchase order Deleted
       operationId: purchaseOrderDeleted
-      x-apideck-event-type: accounting.purchase_order.deleted
+      x-apideck-event-type: accounting.purchase-order.deleted
       parameters:
         - name: x-apideck-event-type
           in: header
@@ -21807,25 +21808,25 @@ x-webhooks:
                   $ref: '#/components/schemas/AccountingWebhookEvent'
             example:
               payload:
-                event_type: accounting.purchase_order.deleted
+                event_type: accounting.purchase-order.deleted
                 unified_api: accounting
                 service_id: xero
                 consumer_id: test_user_id
                 event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
                 entity_id: 123456ASDF
-                entity_url: https://unify.apideck.com/accounting/purchase_orders/123456ASDF
-                entity_type: purchase_order
+                entity_url: https://unify.apideck.com/accounting/purchase-orders/123456ASDF
+                entity_type: purchase-order
                 occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.
       security: []
-      description: Event broadcast when a purchase has been order deleted.
+      description: Event broadcast when a purchase order has been deleted.
   PurchaseOrderUpdated:
     post:
-      summary: Purchase Order Updated
+      summary: Purchase order Updated
       operationId: purchaseOrderUpdated
-      x-apideck-event-type: accounting.purchase_order.updated
+      x-apideck-event-type: accounting.purchase-order.updated
       parameters:
         - name: x-apideck-event-type
           in: header
@@ -21867,20 +21868,20 @@ x-webhooks:
                   $ref: '#/components/schemas/AccountingWebhookEvent'
             example:
               payload:
-                event_type: accounting.purchase_order.updated
+                event_type: accounting.purchase-order.updated
                 unified_api: accounting
                 service_id: xero
                 consumer_id: test_user_id
                 event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
                 entity_id: 123456ASDF
-                entity_url: https://unify.apideck.com/accounting/purchase_orders/123456ASDF
-                entity_type: purchase_order
+                entity_url: https://unify.apideck.com/accounting/purchase-orders/123456ASDF
+                entity_type: purchase-order
                 occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.
       security: []
-      description: Event broadcast when a purchase has been order updated.
+      description: Event broadcast when a purchase order has been updated.
   ExpenseUpdated:
     post:
       summary: Expense Updated

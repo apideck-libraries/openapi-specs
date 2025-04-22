@@ -1,3 +1,10 @@
+## v10.16.3 - (2025-04-22)
+
+### CRM API
+
+- Added `notes` coverage to [Odoo](connectors/odoo)
+- Added `activity_id` field to shared Opportunities schema
+
 ## v10.16.2 - (2025-04-18)
 
 ### Webhooks

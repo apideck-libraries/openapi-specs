@@ -1,3 +1,9 @@
+## v10.16.4 - (2025-04-23)
+
+### CRM API
+
+- Added `notes`, `opportunities` and `companies` coverage to [Freshsales](connectors/freshsales)
+
 ## v10.16.3 - (2025-04-22)
 
 ### CRM API

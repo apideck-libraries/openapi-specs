@@ -1,3 +1,11 @@
+## v10.16.5 - (2025-05-02)
+
+### ACCOUNTING API
+
+- Added `supplier_id` and `updated_since` filter to Purchase Orders in [Workday](connectors/workday)
+- Added `updated_since` filter to Suppliers in [Workday](connectors/workday)
+- Added `updated_since` filter to Bills in [Workday](connectors/workday)
+
 ## v10.16.4 - (2025-04-23)
 
 ### CRM API

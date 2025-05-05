@@ -216,6 +216,15 @@ info:
     ### Request IDs
 
     Each API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
+    ## Connection settings
+    You can use curly braces {} to interpolate values from your connection settings directly in the `x-apideck-downstream-url`. This is useful for APIs like Microsoft Dynamics that use tenant-specific base URLs.
+    Example:
+    If your connection includes a setting like:
+    ```json "organisation_url": "https://your-instance.crm.dynamics.com" ```
+    You can set your header as:
+    ```http x-apideck-downstream-url: {organisation_url}/api/data/v8.2/accounts?$select=name ```
+    Apideck will substitute `{organisation_url}` with the actual value from the connection.
+    Use the [Vault API](https://developers.apideck.com/apis/vault/reference#tag/Connections/operation/connectionsOne) to see which settings are available.
 
     ## Support
 

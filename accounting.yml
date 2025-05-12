@@ -980,6 +980,66 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAgedDebtorsResponse'
+    CreateBankFeedAccountResponse:
+      description: Bank Feed Accounts
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateBankFeedAccountResponse'
+    DeleteBankFeedAccountResponse:
+      description: Bank Feed Accounts
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteBankFeedAccountResponse'
+    GetBankFeedAccountResponse:
+      description: Bank Feed Accounts
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetBankFeedAccountResponse'
+    GetBankFeedAccountsResponse:
+      description: Bank Feed Accounts
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetBankFeedAccountsResponse'
+    UpdateBankFeedAccountResponse:
+      description: Bank Feed Accounts
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateBankFeedAccountResponse'
+    CreateBankFeedStatementResponse:
+      description: Bank Feed Statements
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateBankFeedStatementResponse'
+    DeleteBankFeedStatementResponse:
+      description: Bank Feed Statements
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteBankFeedStatementResponse'
+    GetBankFeedStatementResponse:
+      description: Bank Feed Statements
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetBankFeedStatementResponse'
+    GetBankFeedStatementsResponse:
+      description: Bank Feed Statements
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetBankFeedStatementsResponse'
+    UpdateBankFeedStatementResponse:
+      description: Bank Feed Statements
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateBankFeedStatementResponse'
   schemas:
     AccountCode:
       title: Account Code
@@ -11769,6 +11829,601 @@ components:
       example: '12345'
       nullable: true
       readOnly: false
+    CreditOrDebit:
+      type: string
+      title: Credit or Debit
+      description: Whether the amount is a credit or debit.
+      x-apideck-enum-id: accounting.credit_or_debit
+      enum:
+        - credit
+        - debit
+      example: debit
+    BankFeedAccount:
+      type: object
+      x-apideck-schema-id: BankFeedAccount
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        bank_account_type: high
+        source_account_id: high
+        target_account_id: high
+        target_account_name: high
+        target_account_number: high
+        currency: medium
+        feed_status: medium
+        country: medium
+        created_at: low
+        updated_at: low
+        updated_by: low
+        created_by: low
+      required:
+        - id
+      x-apideck-strict-required:
+        - bank_account_type
+        - source_account_id
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        bank_account_type:
+          type: string
+          title: Bank Account Type
+          description: Type of the bank account.
+          x-apideck-enum-id: bank_feed_accounts.account_type
+          enum:
+            - bank
+            - credit_card
+          example: bank
+        source_account_id:
+          type: string
+          title: Source Account ID
+          description: The source account's unique identifier.
+          example: src_456
+        target_account_id:
+          type: string
+          title: Target Account ID
+          description: The target account's unique identifier in the accounting connector.
+          example: tgt_789
+        target_account_name:
+          type: string
+          title: Target Account Name
+          description: Name associated with the target account.
+          example: Main Company Checking
+        target_account_number:
+          type: string
+          title: Target Account Number
+          description: Account number of the destination bank account.
+          example: NL91ABNA0417164300
+        currency:
+          $ref: '#/components/schemas/Currency'
+        feed_status:
+          type: string
+          title: Feed Status
+          description: Current status of the bank feed.
+          x-apideck-enum-id: bank_feeds.status
+          enum:
+            - pending
+            - rejected
+          example: pending
+        country:
+          type: string
+          example: US
+          title: Country Code
+          description: Country code according to ISO 3166-1 alpha-2.
+          minLength: 2
+          maxLength: 2
+          nullable: true
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+    BankFeedStatement:
+      type: object
+      x-apideck-schema-id: BankFeedStatement
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        bank_feed_account_id: critical
+        status: high
+        start_date: high
+        end_date: high
+        start_balance: medium
+        start_balance_credit_or_debit: medium
+        end_balance: medium
+        end_balance_credit_or_debit: medium
+        transactions: critical
+        created_at: low
+        updated_at: low
+        updated_by: low
+        created_by: low
+      required:
+        - id
+      x-apideck-strict-required:
+        - bank_feed_account_id
+        - status
+        - start_date
+        - end_date
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        bank_feed_account_id:
+          type: string
+          title: Bank Feed Account ID
+          description: The ID of the bank feed account this statement belongs to.
+          example: acc_456
+        status:
+          type: string
+          title: Statement Status
+          description: The current status of the bank feed statement.
+          x-apideck-enum-id: bank_feed_statements.status
+          enum:
+            - pending
+            - rejected
+            - success
+          example: pending
+        start_date:
+          type: string
+          title: Start Date
+          description: Start date of the bank feed statement.
+          format: date-time
+          example: '2021-05-01T12:00:00.000Z'
+        end_date:
+          type: string
+          format: date-time
+          title: End Date
+          description: End date of the bank feed statement.
+          example: '2025-01-31T12:00:00.000Z'
+        start_balance:
+          type: number
+          title: Start Balance
+          description: Balance amount at the start of the period.
+          example: 10500.25
+        start_balance_credit_or_debit:
+          $ref: '#/components/schemas/CreditOrDebit'
+        end_balance:
+          type: number
+          title: End Balance
+          description: Balance amount at the end of the period.
+          example: 9800.5
+        end_balance_credit_or_debit:
+          $ref: '#/components/schemas/CreditOrDebit'
+        transactions:
+          type: array
+          title: Bank Feed Statement Transactions
+          description: List of transactions in the bank feed statement.
+          items:
+            type: object
+            properties:
+              posted_date:
+                type: string
+                format: date-time
+                title: Posted Date
+                description: The date of the transaction - YYYY:MM::DDThh:mm:ss.sTZD
+                example: '2025-01-15T12:00:00.000Z'
+              description:
+                type: string
+                title: Description
+                description: A description of the transaction.
+                example: Payment received from ACME Corp
+              amount:
+                type: number
+                title: Transaction Amount
+                description: The amount of the transaction.
+                example: 250
+              credit_or_debit:
+                $ref: '#/components/schemas/CreditOrDebit'
+              source_transaction_id:
+                type: string
+                title: Source Transaction ID
+                description: The ID of the source transaction.
+                example: txn_987
+              counterparty:
+                type: string
+                title: Counterparty
+                description: The counterparty of the transaction.
+                example: ACME Corp
+              reference:
+                type: string
+                title: Reference
+                description: The reference of the transaction.
+                example: INV-2025-01
+              transaction_type:
+                type: string
+                title: Transaction Type
+                description: Type of transaction.
+                x-apideck-enum-id: bank_feed_statements.transaction_type
+                enum:
+                  - credit
+                  - debit
+                  - deposit
+                  - transfer
+                  - payment
+                  - other
+                example: payment
+            required:
+              - posted_date
+              - amount
+              - credit_or_debit
+              - source_transaction_id
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+    CreateBankFeedAccountResponse:
+      type: object
+      x-apideck-schema-id: CreateBankFeedAccountResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: xero
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bills
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    DeleteBankFeedAccountResponse:
+      type: object
+      x-apideck-schema-id: DeleteBankFeedAccountResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bank-feed-accounts
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetBankFeedAccountResponse:
+      type: object
+      x-apideck-schema-id: GetBankFeedAccountResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bank-feed-accounts
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/BankFeedAccount'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetBankFeedAccountsResponse:
+      type: object
+      x-apideck-schema-id: GetBankFeedAccountsResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bank-feed-accounts
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankFeedAccount'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    UpdateBankFeedAccountResponse:
+      type: object
+      x-apideck-schema-id: UpdateBankFeedAccountResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bank-feed-accounts
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    CreateBankFeedStatementResponse:
+      type: object
+      x-apideck-schema-id: CreateBankFeedStatementResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: xero
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bills
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    DeleteBankFeedStatementResponse:
+      type: object
+      x-apideck-schema-id: DeleteBankFeedStatementResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bank-feed-statements
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetBankFeedStatementResponse:
+      type: object
+      x-apideck-schema-id: GetBankFeedStatementResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bank-feed-statements
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/BankFeedStatement'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetBankFeedStatementsResponse:
+      type: object
+      x-apideck-schema-id: GetBankFeedStatementsResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bank-feed-statements
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankFeedStatement'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    UpdateBankFeedStatementResponse:
+      type: object
+      x-apideck-schema-id: UpdateBankFeedStatementResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bank-feed-statements
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -11907,6 +12562,16 @@ tags:
     x-apideck-resource-id: aged-debtors
     x-apideck-model:
       $ref: '#/components/schemas/AgedDebtors'
+  - name: Bank Feed Accounts
+    description: ''
+    x-apideck-resource-id: bank-feed-accounts
+    x-apideck-model:
+      $ref: '#/components/schemas/BankFeedAccount'
+  - name: Bank Feed Statements
+    description: ''
+    x-apideck-resource-id: bank-feed-statements
+    x-apideck-model:
+      $ref: '#/components/schemas/BankFeedStatement'
 paths:
   /accounting/tax-rates:
     get:
@@ -20798,6 +21463,637 @@ paths:
 
             try {
               const { data } = await apideck.accounting.agedDebtorsOne({})
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /accounting/bank-feed-accounts:
+    get:
+      tags:
+        - Bank Feed Accounts
+      operationId: bankFeedAccountsAll
+      summary: List Bank Feed Accounts
+      description: List Bank Feed Accounts
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      x-apideck-gotchas: null
+      responses:
+        '200':
+          $ref: '#/components/responses/GetBankFeedAccountsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.accounting.bankFeedAccountsAll({})
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    post:
+      tags:
+        - Bank Feed Accounts
+      operationId: bankFeedAccountsAdd
+      summary: Create Bank Feed Account
+      description: Create Bank Feed Account
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas: null
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankFeedAccount'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateBankFeedAccountResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              bankFeedAccount: {
+                bank_account_type: 'bank',
+                source_account_id: 'src_456',
+                target_account_id: 'tgt_789',
+                target_account_name: 'Main Company Checking',
+                target_account_number: 'NL91ABNA0417164300',
+                currency: 'USD',
+                feed_status: 'pending',
+                country: 'US',
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
+                  }
+                ]
+              }
+            }
+
+            try {
+              const { data } = await apideck.accounting.bankFeedAccountsAdd(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /accounting/bank-feed-accounts/{id}:
+    get:
+      tags:
+        - Bank Feed Accounts
+      operationId: bankFeedAccountsOne
+      summary: Get Bank Feed Account
+      description: Get Bank Feed Account
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      x-apideck-gotchas: null
+      responses:
+        '200':
+          $ref: '#/components/responses/GetBankFeedAccountResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.accounting.bankFeedAccountsOne({
+                id: 'id_example'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    patch:
+      tags:
+        - Bank Feed Accounts
+      operationId: bankFeedAccountsUpdate
+      summary: Update Bank Feed Account
+      description: Update Bank Feed Account
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas: null
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankFeedAccount'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateBankFeedAccountResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              id: 'id_example',
+              bankFeedAccount: {
+                bank_account_type: 'bank',
+                source_account_id: 'src_456',
+                target_account_id: 'tgt_789',
+                target_account_name: 'Main Company Checking',
+                target_account_number: 'NL91ABNA0417164300',
+                currency: 'USD',
+                feed_status: 'pending',
+                country: 'US',
+                custom_fields: [
+                  {
+                    id: '2389328923893298',
+                    name: 'employee_level',
+                    description: 'Employee Level',
+                    value: 'Uses Salesforce and Marketo'
+                  }
+                ]
+              }
+            }
+
+            try {
+              const { data } = await apideck.accounting.bankFeedAccountsUpdate(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    delete:
+      tags:
+        - Bank Feed Accounts
+      operationId: bankFeedAccountsDelete
+      summary: Delete Bank Feed Account
+      description: Delete Bank Feed Account
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas: null
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteBankFeedAccountResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.accounting.bankFeedAccountsDelete({
+                id: 'id_example'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /accounting/bank-feed-statements:
+    get:
+      tags:
+        - Bank Feed Statements
+      operationId: bankFeedStatementsAll
+      summary: List Bank Feed Statements
+      description: List Bank Feed Statements
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      x-apideck-gotchas: null
+      responses:
+        '200':
+          $ref: '#/components/responses/GetBankFeedStatementsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.accounting.bankFeedStatementsAll({})
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    post:
+      tags:
+        - Bank Feed Statements
+      operationId: bankFeedStatementsAdd
+      summary: Create Bank Feed Statement
+      description: Create Bank Feed Statement
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: |
+            In Xero, if a transaction ID has been previously used, the API will reject the entire bank feed statement.
+            However, if the statement includes multiple transactions and at least one transaction ID is unique, 
+            the API will return a success response but will not process the transactions with duplicate IDs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankFeedStatement'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateBankFeedStatementResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              bankFeedStatement: {
+                bank_feed_account_id: 'acc_456',
+                status: 'pending',
+                start_date: '2021-05-01T12:00:00.000Z',
+                end_date: '2025-01-31T12:00:00.000Z',
+                start_balance: 10500.25,
+                start_balance_credit_or_debit: 'debit',
+                end_balance: 9800.5,
+                end_balance_credit_or_debit: 'debit',
+                transactions: [
+                  {
+                    posted_date: '2025-01-15T12:00:00.000Z',
+                    description: 'Payment received from ACME Corp',
+                    amount: 250,
+                    credit_or_debit: 'debit',
+                    source_transaction_id: 'txn_987',
+                    counterparty: 'ACME Corp',
+                    reference: 'INV-2025-01',
+                    transaction_type: 'payment'
+                  }
+                ]
+              }
+            }
+
+            try {
+              const { data } = await apideck.accounting.bankFeedStatementsAdd(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+  /accounting/bank-feed-statements/{id}:
+    get:
+      tags:
+        - Bank Feed Statements
+      operationId: bankFeedStatementsOne
+      summary: Get Bank Feed Statement
+      description: Get Bank Feed Statement
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      x-apideck-gotchas: null
+      responses:
+        '200':
+          $ref: '#/components/responses/GetBankFeedStatementResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.accounting.bankFeedStatementsOne({
+                id: 'id_example'
+              })
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    patch:
+      tags:
+        - Bank Feed Statements
+      operationId: bankFeedStatementsUpdate
+      summary: Update Bank Feed Statement
+      description: Update Bank Feed Statement
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas: null
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankFeedStatement'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateBankFeedStatementResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            const params = {
+              id: 'id_example',
+              bankFeedStatement: {
+                bank_feed_account_id: 'acc_456',
+                status: 'pending',
+                start_date: '2021-05-01T12:00:00.000Z',
+                end_date: '2025-01-31T12:00:00.000Z',
+                start_balance: 10500.25,
+                start_balance_credit_or_debit: 'debit',
+                end_balance: 9800.5,
+                end_balance_credit_or_debit: 'debit',
+                transactions: [
+                  {
+                    posted_date: '2025-01-15T12:00:00.000Z',
+                    description: 'Payment received from ACME Corp',
+                    amount: 250,
+                    credit_or_debit: 'debit',
+                    source_transaction_id: 'txn_987',
+                    counterparty: 'ACME Corp',
+                    reference: 'INV-2025-01',
+                    transaction_type: 'payment'
+                  }
+                ]
+              }
+            }
+
+            try {
+              const { data } = await apideck.accounting.bankFeedStatementsUpdate(params)
+              console.log('API called successfully', data)
+            } catch (error) {
+              console.error(error)
+            }
+    delete:
+      tags:
+        - Bank Feed Statements
+      operationId: bankFeedStatementsDelete
+      summary: Delete Bank Feed Statement
+      description: Delete Bank Feed Statement
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas: null
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteBankFeedStatementResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: |
+            import { Apideck } from '@apideck/node'
+
+            const apideck = new Apideck({
+              apiKey: 'REPLACE_WITH_API_KEY',
+              appId: 'REPLACE_WITH_APP_ID',
+              consumerId: 'REPLACE_WITH_CONSUMER_ID'
+            })
+
+            try {
+              const { data } = await apideck.accounting.bankFeedStatementsDelete({
+                id: 'id_example'
+              })
               console.log('API called successfully', data)
             } catch (error) {
               console.error(error)

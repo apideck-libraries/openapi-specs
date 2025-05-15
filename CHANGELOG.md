@@ -1,3 +1,9 @@
+## v10.16.6 - (2025-05-15)
+
+### ACCOUNTING API
+
+- Added `subsidiary_id` to Purchase Orders in [Netsuite](connectors/netsuite)
+
 ## v10.16.5 - (2025-05-02)
 
 ### ACCOUNTING API

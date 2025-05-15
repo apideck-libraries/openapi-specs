@@ -1,3 +1,11 @@
+## v10.16.7 - (2025-05-15)
+
+### ACCOUNTING API
+
+- Added `invoice_id` propertie to shared Payments Filters schema
+- Added `payment_allocations` to [Freshbooks](connectors/freshbooks)
+- Added `payment_allocations` to [Zoho Books](connectors/zoho-books)
+
 ## v10.16.6 - (2025-05-15)
 
 ### ACCOUNTING API

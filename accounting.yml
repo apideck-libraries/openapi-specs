@@ -11237,14 +11237,17 @@ components:
         total_amount: medium
         currency_rate: edge-case
         company_id: edge-case
-        updated_at: medium
-        created_at: medium
         department_id: medium
+        payment_type: medium
         tax_rate: medium
         custom_fields: medium
         custom_mappings: low
-        row_version: low
         pass_through: low
+        updated_at: medium
+        created_at: medium
+        updated_by: low
+        created_by: low
+        row_version: low
       required:
         - account_id
         - transaction_date
@@ -11340,6 +11343,10 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         row_version:
           $ref: '#/components/schemas/RowVersion'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
         pass_through:
           $ref: '#/components/schemas/PassThroughBody'
     ExpenseLineItem:
@@ -11357,6 +11364,7 @@ components:
         department_id: edge-case
         location_id: edge-case
         billable: edge-case
+        line_number: edge-case
       required:
         - total_amount
       x-apideck-strict-required:
@@ -11401,6 +11409,8 @@ components:
           title: Billable
           description: Boolean that indicates if the line item is billable or not.
           example: true
+        line_number:
+          $ref: '#/components/schemas/LineNumber'
     UpdateExpenseResponse:
       type: object
       required:
@@ -21043,6 +21053,8 @@ paths:
       x-apideck-gotchas:
         - connector: xero
           description: When creating an expense for Xero, ensure the `account_id` corresponds to a 'bank' or 'credit_card' account type. Using other account types may result in errors or unexpected behavior.
+        - connector: sage-intacct
+          description: When creating an expense for Sage Intacct, the account_id must refer to a credit card account, not a ledger account. You can find the correct credit card account ID in Sage Intacct under the Credit Cards section.
       requestBody:
         required: true
         content:
@@ -21115,7 +21127,8 @@ paths:
                     },
                     description: 'Travel US.',
                     total_amount: 275,
-                    billable: true
+                    billable: true,
+                    line_number: 1
                   }
                 ],
                 custom_fields: [
@@ -21290,7 +21303,8 @@ paths:
                     },
                     description: 'Travel US.',
                     total_amount: 275,
-                    billable: true
+                    billable: true,
+                    line_number: 1
                   }
                 ],
                 custom_fields: [
@@ -21330,6 +21344,9 @@ paths:
       operationId: expensesDelete
       summary: Delete Expense
       description: Delete Expense
+      x-apideck-gotchas:
+        - connector: sage-intacct
+          description: The delete operation for credit card transactions in Sage Intacct is not a true deletion. Instead, it performs a reversal using the reverse_cctransaction function.
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'

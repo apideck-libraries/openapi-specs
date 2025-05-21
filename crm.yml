@@ -1330,6 +1330,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomField'
+          nullable: true
         tags:
           $ref: '#/components/schemas/Tags'
         first_call_at:
@@ -3511,6 +3512,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomField'
+          nullable: true
         tags:
           $ref: '#/components/schemas/Tags'
         custom_mappings:
@@ -4412,6 +4414,7 @@ components:
       description: When custom mappings are configured on the resource, the result is included here.
       nullable: true
       readOnly: true
+      additionalProperties: true
     TooManyRequestsResponse:
       type: object
       x-apideck-schema-id: TooManyRequests

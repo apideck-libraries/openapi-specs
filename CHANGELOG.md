@@ -1,3 +1,9 @@
+## v10.16.9 - (2025-05-26)
+
+### Accounting API
+
+- Added write support for Invoices and Purchase orders for [Workday](connectors/workday)
+
 ## v10.16.8 - (2025-05-23)
 
 ### ECOMMERCE API

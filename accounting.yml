@@ -13677,6 +13677,9 @@ paths:
         - connector: netsuite
           description: |
             Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used. While creating an invoice, revenue start date and revenue end date should be passed in the custom fields object inside the line items.
+        - connector: workday
+          description: |
+            It is required to provide tracking_categories.id in the line items, which corresponds to the worktag/cost_center_id in Workday. It is required to provide the item.id in the line items.
       requestBody:
         required: true
         content:
@@ -14005,6 +14008,9 @@ paths:
         - connector: sage-business-cloud-accounting
           description: |
             To fetch service items, you must include filter[type]=service in your request parameters
+        - connector: workday
+          description: |
+            It is required to provide tracking_categories.id in the line items, which corresponds to the worktag/cost_center_id in Workday. It is required to provide the item.id in the line items. Workday only supports `sales_item` and `service` types for line items and this is required.
       requestBody:
         required: true
         content:
@@ -18298,6 +18304,9 @@ paths:
         - connector: zoho-books
           description: |
             By default, the status of the purchase order will be set to "draft".
+        - connector: workday
+          description: |
+            Required fields for line items: tracking_categories.id (maps to Workday worktag/cost_center_id), item.id, and type (must be either `sales_item` or `service`).
       requestBody:
         required: true
         content:
@@ -18592,6 +18601,9 @@ paths:
           description: |
             Allowed values for the status are "draft", "open", "billed" and "deleted" when using the update method.
             Please send status updates separately from other updates for the supplier.
+        - connector: workday
+          description: |
+            Required fields for line items: tracking_categories.id (maps to Workday worktag/cost_center_id), item.id, and type (must be either `sales_item` or `service`).
       requestBody:
         required: true
         content:

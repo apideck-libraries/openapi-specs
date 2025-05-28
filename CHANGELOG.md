@@ -1,3 +1,6 @@
+## v10.17.0 - (2025-05-26)
+- Added a new connector bol.com with orders API to [bol.com](connectors/bol-com)
+
 ## v10.16.9 - (2025-05-26)
 
 ### Accounting API

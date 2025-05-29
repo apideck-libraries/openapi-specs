@@ -1,4 +1,13 @@
+## v10.17.1 - (2025-05-27)
+
+### CRM API
+
+- Added [Custom Object Schemas](apis/crm/reference#tag/CustomObjectSchemas) schema.
+- Added [Custom Objects](apis/crm/reference#tag/CustomObjects) schema.
+- Added `custom-object-schemas` and `custom-objects` coverage to [Salesforce](connectors/salesforce)
+
 ## v10.17.0 - (2025-05-26)
+
 - Added a new connector bol.com with orders API to [bol.com](connectors/bol-com)
 
 ## v10.16.9 - (2025-05-26)

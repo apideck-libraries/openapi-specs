@@ -1,3 +1,10 @@
+## v10.17.2 - (2025-05-29)
+
+### Accounting API
+
+- Added `status` field to [Journal Entry](apis/accounting/reference#tag/Journal-Entries)
+- Added support to update Journal Entry in [Xero](connectors/xero)
+
 ## v10.17.1 - (2025-05-27)
 
 ### CRM API

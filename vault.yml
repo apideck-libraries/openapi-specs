@@ -203,6 +203,15 @@ components:
         type: string
       example: test-consumer
       x-speakeasy-name-override: consumerId
+    optionalConsumerId:
+      name: x-apideck-consumer-id
+      in: header
+      required: false
+      description: ID of the consumer which you want to get or push data from
+      schema:
+        type: string
+      example: test-consumer
+      x-speakeasy-name-override: consumerId
     x-apideck-service-id:
       name: x-apideck-service-id
       in: header
@@ -3230,7 +3239,7 @@ paths:
       tags:
         - Connections
       parameters:
-        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/optionalConsumerId'
         - $ref: '#/components/parameters/applicationId'
         - $ref: '#/components/parameters/api'
         - $ref: '#/components/parameters/configured'

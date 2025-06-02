@@ -7014,6 +7014,7 @@ components:
             - voided
             - rejected
             - deleted
+            - other
           nullable: true
         memo:
           type: string
@@ -17673,6 +17674,9 @@ paths:
         - connector: quickbooks
           description: |
             Quickbooks only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
+        - connector: sage-intacct
+          description: |
+            Sage Intacct only supports `draft` and `posted` status fields when updating a journal entry.
       requestBody:
         required: true
         content:
@@ -17971,6 +17975,9 @@ paths:
         - connector: xero
           description: |
             Xero only supports `draft` and `posted` for the status field
+        - connector: sage-intacct
+          description: |
+            Sage Intacct only supports `draft` and `posted` status fields when updating a journal entry.
       requestBody:
         required: true
         content:

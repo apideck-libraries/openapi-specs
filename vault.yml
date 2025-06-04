@@ -2943,35 +2943,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            const params = {
-              consumer: {
-                consumer_id: 'test_consumer_id',
-                metadata: {
-                  account_name: 'SpaceX',
-                  user_name: 'Elon Musk',
-                  email: 'elon@musk.com',
-                  image: 'https://www.spacex.com/static/images/share.jpg'
-                }
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.consumersAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     get:
       summary: Get all consumers
       operationId: consumersAll
@@ -3001,23 +2973,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            try {
-              const { data } = await apideck.vault.consumersAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/consumers/{consumer_id}:
     get:
       summary: Get consumer
@@ -3047,25 +3003,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            try {
-              const { data } = await apideck.vault.consumersOne({
-                consumerId: 'test_user_id'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       summary: Update consumer
       operationId: consumersUpdate
@@ -3099,35 +3037,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            const params = {
-              consumerId: 'test_user_id',
-              consumer: {
-                metadata: {
-                  account_name: 'SpaceX',
-                  user_name: 'Elon Musk',
-                  email: 'elon@musk.com',
-                  image: 'https://www.spacex.com/static/images/share.jpg'
-                }
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.consumersUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       summary: Delete consumer
       operationId: consumersDelete
@@ -3155,25 +3065,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            try {
-              const { data } = await apideck.vault.consumersDelete({
-                consumerId: 'test_user_id'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/consumers/{consumer_id}/stats:
     get:
       summary: Consumer request counts
@@ -3205,29 +3097,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            const params = {
-              consumerId: 'test_user_id',
-              startDatetime: '2021-05-01T12:00:00.000Z',
-              endDatetime: '2021-05-30T12:00:00.000Z'
-            }
-
-            try {
-              const { data } = await apideck.vault.consumerRequestCountsAll(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections:
     get:
       summary: Get all connections
@@ -3261,24 +3131,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.vault.connectionsAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}:
     get:
       tags:
@@ -3309,27 +3162,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.vault.connectionsOne({
-                serviceId: 'pipedrive',
-                unifiedApi: 'crm'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       summary: Create connection
       operationId: connectionsAdd
@@ -3369,60 +3202,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              serviceId: 'pipedrive',
-              unifiedApi: 'crm',
-              connection: {
-                enabled: true,
-                settings: {
-                  instance_url: 'https://eu28.salesforce.com',
-                  api_key: '12345xxxxxx'
-                },
-                metadata: {
-                  account: {
-                    name: 'My Company',
-                    id: 'c01458a5-7276-41ce-bc19-639906b0450a'
-                  },
-                  plan: 'enterprise'
-                },
-                configuration: [
-                  {
-                    resource: 'leads',
-                    defaults: [
-                      {
-                        id: 'ProductInterest',
-                        options: [Array],
-                        value: 'GC5000 series'
-                      }
-                    ]
-                  }
-                ],
-                custom_mappings: [
-                  {
-                    value: '$.root.training.first_aid'
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionsAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Connections
@@ -3459,60 +3239,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              serviceId: 'pipedrive',
-              unifiedApi: 'crm',
-              connection: {
-                enabled: true,
-                settings: {
-                  instance_url: 'https://eu28.salesforce.com',
-                  api_key: '12345xxxxxx'
-                },
-                metadata: {
-                  account: {
-                    name: 'My Company',
-                    id: 'c01458a5-7276-41ce-bc19-639906b0450a'
-                  },
-                  plan: 'enterprise'
-                },
-                configuration: [
-                  {
-                    resource: 'leads',
-                    defaults: [
-                      {
-                        id: 'ProductInterest',
-                        options: [Array],
-                        value: 'GC5000 series'
-                      }
-                    ]
-                  }
-                ],
-                custom_mappings: [
-                  {
-                    value: '$.root.training.first_aid'
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionsUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Connections
@@ -3542,27 +3269,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.vault.connectionsDelete({
-                serviceId: 'pipedrive',
-                unifiedApi: 'crm'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}/import:
     post:
       summary: Import connection
@@ -3601,47 +3308,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              serviceId: 'pipedrive',
-              unifiedApi: 'crm',
-              connection: {
-                credentials: {
-                  access_token:
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
-                  refresh_token:
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.cThIIoDvwdueQB468K5xDc5633seEFoqwxjF_xSJyQQ'
-                },
-                settings: {
-                  instance_url: 'https://eu28.salesforce.com'
-                },
-                metadata: {
-                  account: {
-                    name: 'My Company',
-                    id: 'c01458a5-7276-41ce-bc19-639906b0450a'
-                  },
-                  plan: 'enterprise'
-                }
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionsImport(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}/token:
     post:
       tags:
@@ -3685,30 +3352,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              serviceId: 'pipedrive',
-              unifiedApi: 'crm',
-              connectionsToken: {}
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionsToken(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}/validate:
     post:
       tags:
@@ -3752,30 +3396,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              serviceId: 'pipedrive',
-              unifiedApi: 'crm',
-              validateConnectionState: {}
-            }
-
-            try {
-              const { data } = await apideck.vault.validateConnectionState(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}/callback-state:
     post:
       tags:
@@ -3814,32 +3435,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              serviceId: 'pipedrive',
-              unifiedApi: 'crm',
-              createCallbackState: {
-                redirect_uri: 'https://example.com/callback'
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.createCallbackState(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}/{resource}/config:
     get:
       tags:
@@ -3872,30 +3468,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              unifiedApi: 'crm',
-              serviceId: 'pipedrive',
-              resource: 'leads'
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionSettingsAll(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Connections
@@ -3933,61 +3506,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              serviceId: 'pipedrive',
-              unifiedApi: 'crm',
-              resource: 'leads',
-              connection: {
-                enabled: true,
-                settings: {
-                  instance_url: 'https://eu28.salesforce.com',
-                  api_key: '12345xxxxxx'
-                },
-                metadata: {
-                  account: {
-                    name: 'My Company',
-                    id: 'c01458a5-7276-41ce-bc19-639906b0450a'
-                  },
-                  plan: 'enterprise'
-                },
-                configuration: [
-                  {
-                    resource: 'leads',
-                    defaults: [
-                      {
-                        id: 'ProductInterest',
-                        options: [Array],
-                        value: 'GC5000 series'
-                      }
-                    ]
-                  }
-                ],
-                custom_mappings: [
-                  {
-                    value: '$.root.training.first_aid'
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionSettingsUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}/{resource}/schema:
     get:
       tags:
@@ -4023,30 +3542,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              unifiedApi: 'crm',
-              serviceId: 'pipedrive',
-              resource: 'leads'
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionsSchema(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}/{resource}/example:
     get:
       tags:
@@ -4082,30 +3578,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              unifiedApi: 'crm',
-              serviceId: 'pipedrive',
-              resource: 'leads'
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionsExample(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}/{resource}/custom-fields:
     get:
       tags:
@@ -4139,30 +3612,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              unifiedApi: 'crm',
-              serviceId: 'pipedrive',
-              resource: 'leads'
-            }
-
-            try {
-              const { data } = await apideck.vault.customFieldsAll(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/connections/{unified_api}/{service_id}/{resource}/custom-mappings:
     get:
       tags:
@@ -4195,30 +3645,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              unifiedApi: 'crm',
-              serviceId: 'pipedrive',
-              resource: 'leads'
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionCustomMappingsAll(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/authorize/{service_id}/{application_id}:
     get:
       tags:
@@ -4258,30 +3685,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY'
-            })
-
-            const params = {
-              serviceId: 'pipedrive',
-              applicationId: 'dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX',
-              state:
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk',
-              redirectUri: 'http://example.com/integrations'
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionsAuthorize(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/revoke/{service_id}/{application_id}:
     get:
       tags:
@@ -4320,30 +3724,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY'
-            })
-
-            const params = {
-              serviceId: 'pipedrive',
-              applicationId: 'dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX',
-              state:
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk',
-              redirectUri: 'http://example.com/integrations'
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionsRevoke(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/custom-mappings/{unified_api}/{service_id}/{target_field_id}:
     get:
       tags:
@@ -4378,30 +3759,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              unifiedApi: 'crm',
-              serviceId: 'pipedrive',
-              targetFieldId: 'hris+employees+first_aid_training'
-            }
-
-            try {
-              const { data } = await apideck.vault.customMappingsOne(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       tags:
         - Custom Mappings
@@ -4442,33 +3800,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              unifiedApi: 'crm',
-              serviceId: 'pipedrive',
-              targetFieldId: 'hris+employees+first_aid_training',
-              customMapping: {
-                value: '$.root.training.first_aid'
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.customMappingsAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Custom Mappings
@@ -4509,33 +3841,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              unifiedApi: 'crm',
-              serviceId: 'pipedrive',
-              targetFieldId: 'hris+employees+first_aid_training',
-              customMapping: {
-                value: '$.root.training.first_aid'
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.customMappingsUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Custom Mappings
@@ -4569,30 +3875,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              unifiedApi: 'crm',
-              serviceId: 'pipedrive',
-              targetFieldId: 'hris+employees+first_aid_training'
-            }
-
-            try {
-              const { data } = await apideck.vault.customMappingsDelete(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/custom-mappings/{unified_api}/{service_id}:
     get:
       tags:
@@ -4623,27 +3906,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.vault.customMappingsAll({
-                unifiedApi: 'crm',
-                serviceId: 'pipedrive'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/callback:
     get:
       tags:
@@ -4676,28 +3939,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY'
-            })
-
-            const params = {
-              state:
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk',
-              code: 'g0ZGZmNjVmOWI'
-            }
-
-            try {
-              const { data } = await apideck.vault.connectionsCallback(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/sessions:
     post:
       summary: Create Session
@@ -4737,72 +3979,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              session: {
-                consumer_metadata: {
-                  account_name: 'SpaceX',
-                  user_name: 'Elon Musk',
-                  email: 'elon@musk.com',
-                  image: 'https://www.spacex.com/static/images/share.jpg'
-                },
-                redirect_uri: 'https://mysaas.com/dashboard',
-                settings: {
-                  unified_apis: ['crm'],
-                  hide_resource_settings: false,
-                  sandbox_mode: false,
-                  isolation_mode: false,
-                  session_length: '30m',
-                  show_logs: true,
-                  show_suggestions: false,
-                  show_sidebar: true,
-                  auto_redirect: false,
-                  hide_guides: false,
-                  allow_actions: ['delete']
-                },
-                theme: {
-                  favicon: 'https://res.cloudinary.com/apideck/icons/intercom',
-                  logo: 'https://res.cloudinary.com/apideck/icons/intercom',
-                  primary_color: '#286efa',
-                  sidepanel_background_color: '#286efa',
-                  sidepanel_text_color: '#FFFFFF',
-                  vault_name: 'Intercom',
-                  privacy_url: 'https://compliance.apideck.com/privacy-policy',
-                  terms_url: 'https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e'
-                },
-                custom_consumer_settings: {
-                  feature_flag_1: true,
-                  tax_rates: [
-                    {
-                      id: '6',
-                      label: '6%'
-                    },
-                    {
-                      id: '21',
-                      label: '21%'
-                    }
-                  ]
-                }
-              }
-            }
-
-            try {
-              const { data } = await apideck.vault.sessionsCreate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /vault/logs:
     get:
       summary: Get all consumer request logs
@@ -4835,24 +4012,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.vault.logsAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true

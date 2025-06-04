@@ -1259,23 +1259,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            try {
-              const { data } = await apideck.webhook.webhooksAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       tags:
         - Webhooks
@@ -1308,33 +1292,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            const params = {
-              webhook: {
-                description: 'A description',
-                unified_api: 'crm',
-                status: 'enabled',
-                delivery_url: 'https://example.com/my/webhook/endpoint',
-                events: ['vault.connection.created', 'vault.connection.updated']
-              }
-            }
-
-            try {
-              const { data } = await apideck.webhook.webhooksAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /webhook/webhooks/{id}:
     get:
       tags:
@@ -1363,25 +1321,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            try {
-              const { data } = await apideck.webhook.webhooksOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Webhooks
@@ -1415,33 +1355,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              webhook: {
-                description: 'A description',
-                status: 'enabled',
-                delivery_url: 'https://example.com/my/webhook/endpoint',
-                events: ['vault.connection.created', 'vault.connection.updated']
-              }
-            }
-
-            try {
-              const { data } = await apideck.webhook.webhooksUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Webhooks
@@ -1469,25 +1383,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            try {
-              const { data } = await apideck.webhook.webhooksDelete({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /webhook/webhooks/{id}/execute/{serviceId}:
     post:
       tags:
@@ -1532,28 +1428,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY'
-            })
-
-            const params = {
-              id: 'id_example',
-              serviceId: 'factorialhr',
-              webhooksExecute: {}
-            }
-
-            try {
-              const { data } = await apideck.webhook.webhooksExecute(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /webhook/webhooks/{id}/x/{serviceId}:
     post:
       tags:
@@ -1600,28 +1475,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY'
-            })
-
-            const params = {
-              id: 'id_example',
-              serviceId: 'factorialhr',
-              webhooksShortExecute: {}
-            }
-
-            try {
-              const { data } = await apideck.webhook.webhooksShortExecute(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /webhook/w/{id}/{serviceId}:
     post:
       tags:
@@ -1662,28 +1516,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY'
-            })
-
-            const params = {
-              id: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk2MDAwYzIzLWI1NmItNGRlOC1iZmEzLTMxNTAzMTE3YzBmNyJ9.rAXnsmZ4O7eF0aDwdflkxAJQwMUfWs5989WfmspNZ6Q',
-              serviceId: 'factorialhr',
-              webhooksResolve: {}
-            }
-
-            try {
-              const { data } = await apideck.webhook.webhooksResolve(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     get:
       tags:
         - Webhooks
@@ -1713,27 +1546,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY'
-            })
-
-            const params = {
-              id: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk2MDAwYzIzLWI1NmItNGRlOC1iZmEzLTMxNTAzMTE3YzBmNyJ9.rAXnsmZ4O7eF0aDwdflkxAJQwMUfWs5989WfmspNZ6Q',
-              serviceId: 'factorialhr'
-            }
-
-            try {
-              const { data } = await apideck.webhook.webhookVerify(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /webhook/logs:
     get:
       tags:
@@ -1764,20 +1577,4 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID'
-            })
-
-            try {
-              const { data } = await apideck.webhook.eventLogsAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []

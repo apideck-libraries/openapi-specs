@@ -2825,24 +2825,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.issueTracking.collectionsAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /issue-tracking/collections/{collection_id}:
     get:
       tags:
@@ -2875,26 +2858,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.issueTracking.collectionsOne({
-                collectionId: 'collection_id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /issue-tracking/collections/{collection_id}/tickets:
     get:
       tags:
@@ -2932,26 +2896,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketsAll({
-                collectionId: 'collection_id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       tags:
         - Tickets
@@ -2988,60 +2933,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              collectionId: 'collection_id_example',
-              collectionTicket: {
-                parent_id: '12345',
-                type: 'Technical',
-                subject: 'Technical Support Request',
-                description: 'I am facing issues with my internet connection',
-                status: 'open',
-                priority: 'high',
-                assignees: [
-                  {
-                    id: '12345'
-                  }
-                ],
-                due_date: '2020-09-30T07:43:32.000Z',
-                tags: [
-                  {
-                    id: '12345'
-                  }
-                ],
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketsAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /issue-tracking/collections/{collection_id}/tickets/{ticket_id}:
     get:
       tags:
@@ -3075,29 +2967,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              ticketId: 'ticket_id_example',
-              collectionId: 'collection_id_example'
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketsOne(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Tickets
@@ -3135,61 +3005,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              ticketId: 'ticket_id_example',
-              collectionId: 'collection_id_example',
-              collectionTicket: {
-                parent_id: '12345',
-                type: 'Technical',
-                subject: 'Technical Support Request',
-                description: 'I am facing issues with my internet connection',
-                status: 'open',
-                priority: 'high',
-                assignees: [
-                  {
-                    id: '12345'
-                  }
-                ],
-                due_date: '2020-09-30T07:43:32.000Z',
-                tags: [
-                  {
-                    id: '12345'
-                  }
-                ],
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketsUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Tickets
@@ -3221,29 +3037,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              ticketId: 'ticket_id_example',
-              collectionId: 'collection_id_example'
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketsDelete(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /issue-tracking/collections/{collection_id}/tickets/{ticket_id}/comments:
     get:
       tags:
@@ -3281,29 +3075,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              collectionId: 'collection_id_example',
-              ticketId: 'ticket_id_example'
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketCommentsAll(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       tags:
         - Comments
@@ -3341,45 +3113,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              collectionId: 'collection_id_example',
-              ticketId: 'ticket_id_example',
-              collectionTicketComment: {
-                body: 'What internet provider do you use?',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketCommentsAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /issue-tracking/collections/{collection_id}/tickets/{ticket_id}/comments/{id}:
     get:
       tags:
@@ -3416,30 +3150,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              collectionId: 'collection_id_example',
-              ticketId: 'ticket_id_example'
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketCommentsOne(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Comments
@@ -3478,46 +3189,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              collectionId: 'collection_id_example',
-              ticketId: 'ticket_id_example',
-              collectionTicketComment: {
-                body: 'What internet provider do you use?',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketCommentsUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Comments
@@ -3550,30 +3222,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              collectionId: 'collection_id_example',
-              ticketId: 'ticket_id_example'
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTicketCommentsDelete(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /issue-tracking/collections/{collection_id}/users:
     get:
       tags:
@@ -3609,26 +3258,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.issueTracking.collectionUsersAll({
-                collectionId: 'collection_id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /issue-tracking/collections/{collection_id}/users/{id}:
     get:
       tags:
@@ -3662,29 +3292,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              collectionId: 'collection_id_example',
-              id: 'id_example'
-            }
-
-            try {
-              const { data } = await apideck.issueTracking.collectionUsersOne(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /issue-tracking/collections/{collection_id}/tags:
     get:
       tags:
@@ -3720,26 +3328,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.issueTracking.collectionTagsAll({
-                collectionId: 'collection_id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true

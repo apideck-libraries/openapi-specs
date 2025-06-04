@@ -2162,24 +2162,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: lead
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.lead.leadsAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       tags:
         - Leads
@@ -2215,127 +2198,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: lead
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              lead: {
-                name: 'Elon Musk',
-                company_name: 'Spacex',
-                owner_id: '54321',
-                owner_name: 'John Doe',
-                company_id: '2',
-                lead_id: '2',
-                lead_source: 'Cold Call',
-                first_name: 'Elon',
-                last_name: 'Musk',
-                description: 'A thinker',
-                prefix: 'Sir',
-                title: 'CEO',
-                language: 'EN',
-                status: 'New',
-                monetary_amount: 75000,
-                currency: 'USD',
-                fax: '+12129876543',
-                websites: [
-                  {
-                    id: '12345',
-                    url: 'http://example.com',
-                    type: 'primary'
-                  }
-                ],
-                addresses: [
-                  {
-                    id: '123',
-                    type: 'primary',
-                    string: '25 Spring Street, Blackburn, VIC 3130',
-                    name: 'HQ US',
-                    line1: 'Main street',
-                    line2: 'apt #',
-                    line3: 'Suite #',
-                    line4: 'delivery instructions',
-                    street_number: '25',
-                    city: 'San Francisco',
-                    state: 'CA',
-                    postal_code: '94104',
-                    country: 'US',
-                    latitude: '40.759211',
-                    longitude: '-73.984638',
-                    county: 'Santa Clara',
-                    contact_name: 'Elon Musk',
-                    salutation: 'Mr',
-                    phone_number: '111-111-1111',
-                    fax: '122-111-1111',
-                    email: 'elon@musk.com',
-                    website: 'https://elonmusk.com',
-                    notes: 'Address notes or delivery instructions.',
-                    row_version: '1-12345'
-                  }
-                ],
-                social_links: [
-                  {
-                    id: '12345',
-                    url: 'https://www.twitter.com/apideck',
-                    type: 'twitter'
-                  }
-                ],
-                phone_numbers: [
-                  {
-                    id: '12345',
-                    country_code: '1',
-                    area_code: '323',
-                    number: '111-111-1111',
-                    extension: '105',
-                    type: 'primary'
-                  }
-                ],
-                emails: [
-                  {
-                    id: '123',
-                    email: 'elon@musk.com',
-                    type: 'primary'
-                  }
-                ],
-                custom_fields: [
-                  {
-                    id: '2389328923893298',
-                    name: 'employee_level',
-                    description: 'Employee Level',
-                    value: 'Uses Salesforce and Marketo'
-                  }
-                ],
-                tags: ['New'],
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.lead.leadsAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /lead/leads/{id}:
     get:
       tags:
@@ -2368,26 +2231,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: lead
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.lead.leadsOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Leads
@@ -2424,128 +2268,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: lead
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              lead: {
-                name: 'Elon Musk',
-                company_name: 'Spacex',
-                owner_id: '54321',
-                owner_name: 'John Doe',
-                company_id: '2',
-                lead_id: '2',
-                lead_source: 'Cold Call',
-                first_name: 'Elon',
-                last_name: 'Musk',
-                description: 'A thinker',
-                prefix: 'Sir',
-                title: 'CEO',
-                language: 'EN',
-                status: 'New',
-                monetary_amount: 75000,
-                currency: 'USD',
-                fax: '+12129876543',
-                websites: [
-                  {
-                    id: '12345',
-                    url: 'http://example.com',
-                    type: 'primary'
-                  }
-                ],
-                addresses: [
-                  {
-                    id: '123',
-                    type: 'primary',
-                    string: '25 Spring Street, Blackburn, VIC 3130',
-                    name: 'HQ US',
-                    line1: 'Main street',
-                    line2: 'apt #',
-                    line3: 'Suite #',
-                    line4: 'delivery instructions',
-                    street_number: '25',
-                    city: 'San Francisco',
-                    state: 'CA',
-                    postal_code: '94104',
-                    country: 'US',
-                    latitude: '40.759211',
-                    longitude: '-73.984638',
-                    county: 'Santa Clara',
-                    contact_name: 'Elon Musk',
-                    salutation: 'Mr',
-                    phone_number: '111-111-1111',
-                    fax: '122-111-1111',
-                    email: 'elon@musk.com',
-                    website: 'https://elonmusk.com',
-                    notes: 'Address notes or delivery instructions.',
-                    row_version: '1-12345'
-                  }
-                ],
-                social_links: [
-                  {
-                    id: '12345',
-                    url: 'https://www.twitter.com/apideck',
-                    type: 'twitter'
-                  }
-                ],
-                phone_numbers: [
-                  {
-                    id: '12345',
-                    country_code: '1',
-                    area_code: '323',
-                    number: '111-111-1111',
-                    extension: '105',
-                    type: 'primary'
-                  }
-                ],
-                emails: [
-                  {
-                    id: '123',
-                    email: 'elon@musk.com',
-                    type: 'primary'
-                  }
-                ],
-                custom_fields: [
-                  {
-                    id: '2389328923893298',
-                    name: 'employee_level',
-                    description: 'Employee Level',
-                    value: 'Uses Salesforce and Marketo'
-                  }
-                ],
-                tags: ['New'],
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.lead.leadsUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Leads
@@ -2576,26 +2299,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: lead
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.lead.leadsDelete({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true

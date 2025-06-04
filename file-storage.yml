@@ -2684,24 +2684,7 @@ paths:
         - connector: google-drive
           description: Google drive does not provide `previous` cursor information, so the cursors for the previous pages will be empty.
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.filesAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       tags:
         - Files
@@ -2747,27 +2730,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID',
-              metadata: 'REPLACE_WITH_METADATA'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.filesUpload({
-                filesUpload: 'string'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/files/search:
     post:
       tags:
@@ -2812,28 +2775,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.filesSearch({
-                filesSearch: {
-                  query: 'logo jpg'
-                }
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/files/{id}:
     get:
       tags:
@@ -2866,26 +2808,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.filesOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Files
@@ -2922,46 +2845,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              file: {
-                name: 'New Name.pdf',
-                description: 'Renamed PDF Document',
-                parent_folder_id: '1234',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.filesUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Files
@@ -2992,26 +2876,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.filesDelete({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/files/{id}/download:
     get:
       tags:
@@ -3043,26 +2908,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.filesDownload({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/files/{id}/export:
     get:
       tags:
@@ -3095,27 +2941,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.filesExport({
-                id: 'id_example',
-                format: 'pdf'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/folders:
     post:
       tags:
@@ -3156,46 +2982,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              folder: {
-                name: 'Documents',
-                description: 'My Personal Documents',
-                parent_folder_id: '1234',
-                drive_id: '1234',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.foldersAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/folders/{id}:
     get:
       tags:
@@ -3231,26 +3018,7 @@ paths:
         - connector: dropbox
           description: Dropbox does not support getting metadata for the `root` folder.
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.foldersOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Folders
@@ -3287,46 +3055,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              folder: {
-                name: 'Documents',
-                description: 'My Personal Documents',
-                parent_folder_id: '1234',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.foldersUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Folders
@@ -3357,26 +3086,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.foldersDelete({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/folders/{id}/copy:
     post:
       tags:
@@ -3415,45 +3125,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              folder: {
-                name: 'Documents',
-                parent_folder_id: '1234',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.foldersCopy(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/shared-links:
     get:
       tags:
@@ -3488,24 +3160,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.sharedLinksAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       tags:
         - Shared Links
@@ -3541,46 +3196,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              sharedLink: {
-                download_url: 'https://www.box.com/shared/static/rh935iit6ewrmw0unyul.jpeg',
-                target_id: 'string',
-                scope: 'company',
-                password: 'string',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.sharedLinksAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/shared-links/{id}:
     get:
       tags:
@@ -3613,26 +3229,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.sharedLinksOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Shared Links
@@ -3669,47 +3266,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              sharedLink: {
-                download_url: 'https://www.box.com/shared/static/rh935iit6ewrmw0unyul.jpeg',
-                target_id: 'string',
-                scope: 'company',
-                password: 'string',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.sharedLinksUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Shared Links
@@ -3740,26 +3297,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.sharedLinksDelete({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/upload-sessions:
     post:
       tags:
@@ -3798,46 +3336,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              uploadSession: {
-                name: 'Documents',
-                parent_folder_id: '1234',
-                drive_id: '1234',
-                size: 1810673,
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.uploadSessionsAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/upload-sessions/{id}:
     get:
       tags:
@@ -3872,26 +3371,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.uploadSessionsOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     put:
       tags:
         - Upload Sessions
@@ -3939,31 +3419,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID',
-              digest: 'REPLACE_WITH_DIGEST'
-            })
-
-            const params = {
-              id: 'id_example',
-              partNumber: 0,
-              body: '<binary string>'
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.uploadSessionsUpload(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Upload Sessions
@@ -3994,26 +3450,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.uploadSessionsDelete({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/upload-sessions/{id}/finish:
     post:
       tags:
@@ -4058,28 +3495,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID',
-              digest: 'REPLACE_WITH_DIGEST'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.uploadSessionsFinish({
-                id: 'id_example',
-                uploadSessionsFinish: {}
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/drives:
     get:
       tags:
@@ -4117,24 +3533,7 @@ paths:
         - connector: google-drive
           description: Google drive does not provide `previous` cursor information, so the cursors for the previous pages will be empty.
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.drivesAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       tags:
         - Drives
@@ -4170,44 +3569,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              drive: {
-                name: 'Project Resources',
-                description: 'A description',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.drivesAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/drives/{id}:
     get:
       tags:
@@ -4240,26 +3602,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.drivesOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Drives
@@ -4296,45 +3639,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              drive: {
-                name: 'Project Resources',
-                description: 'A description',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.drivesUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Drives
@@ -4365,26 +3670,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.drivesDelete({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/drive-groups:
     get:
       tags:
@@ -4420,24 +3706,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.driveGroupsAll({})
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     post:
       tags:
         - Drive Groups
@@ -4473,45 +3742,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              driveGroup: {
-                name: 'accounting',
-                display_name: 'accounting',
-                description: 'A description',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.driveGroupsAdd(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
   /file-storage/drive-groups/{id}:
     get:
       tags:
@@ -4544,26 +3775,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.driveGroupsOne({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     patch:
       tags:
         - Drive Groups
@@ -4600,46 +3812,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            const params = {
-              id: 'id_example',
-              driveGroup: {
-                name: 'accounting',
-                display_name: 'accounting',
-                description: 'A description',
-                pass_through: [
-                  {
-                    service_id: 'string',
-                    operation_id: 'string',
-                    extend_object: {},
-                    extend_paths: [
-                      {
-                        path: '$.nested.property',
-                        value: [Object]
-                      }
-                    ]
-                  }
-                ]
-              }
-            }
-
-            try {
-              const { data } = await apideck.fileStorage.driveGroupsUpdate(params)
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
     delete:
       tags:
         - Drive Groups
@@ -4670,26 +3843,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source: |
-            import { Apideck } from '@apideck/node'
-
-            const apideck = new Apideck({
-              apiKey: 'REPLACE_WITH_API_KEY',
-              appId: 'REPLACE_WITH_APP_ID',
-              consumerId: 'REPLACE_WITH_CONSUMER_ID'
-            })
-
-            try {
-              const { data } = await apideck.fileStorage.driveGroupsDelete({
-                id: 'id_example'
-              })
-              console.log('API called successfully', data)
-            } catch (error) {
-              console.error(error)
-            }
+      x-codeSamples: []
 x-webhooks:
   FileCreated:
     post:

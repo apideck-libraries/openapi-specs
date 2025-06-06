@@ -13421,6 +13421,10 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: quickbooks
+          description: |
+            This connector does not support deleting ledger accounts. Instead, it will update the ledger account to inactive.
       responses:
         '200':
           $ref: '#/components/responses/DeleteLedgerAccountResponse'

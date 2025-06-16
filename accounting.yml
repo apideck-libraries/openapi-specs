@@ -1939,11 +1939,7 @@ components:
           example: '90000117'
           nullable: true
         reference:
-          type: string
-          title: Bill reference
-          description: Optional bill reference.
-          example: '123456'
-          nullable: true
+          $ref: '#/components/schemas/Reference'
         line_items:
           type: array
           items:
@@ -6367,11 +6363,7 @@ components:
           example: '90000117'
           nullable: true
         reference:
-          type: string
-          title: Invoice reference
-          description: Optional invoice reference.
-          example: '123456'
-          nullable: true
+          $ref: '#/components/schemas/Reference'
         status:
           type: string
           title: Status
@@ -11253,6 +11245,7 @@ components:
         department_id: medium
         payment_type: medium
         tax_rate: medium
+        reference: medium
         custom_fields: medium
         custom_mappings: low
         pass_through: low
@@ -11344,6 +11337,8 @@ components:
           description: Expense line items linked to this expense.
           items:
             $ref: '#/components/schemas/ExpenseLineItem'
+        reference:
+          $ref: '#/components/schemas/Reference'
         custom_fields:
           type: array
           items:
@@ -12453,6 +12448,12 @@ components:
           $ref: '#/components/schemas/UnifiedId'
         _raw:
           $ref: '#/components/schemas/Raw'
+    Reference:
+      type: string
+      title: Reference
+      description: Optional reference identifier for the transaction.
+      example: INV-2024-001
+      nullable: true
   securitySchemes:
     apiKey:
       type: apiKey

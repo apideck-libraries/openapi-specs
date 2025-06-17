@@ -1,3 +1,10 @@
+## v10.18.0 - (2025-06-17)
+
+### Accounting API
+
+- Added [Categories](apis/accounting/reference#tag/Categories) resource
+- Added `categories` coverage to [Workday](connectors/workday)
+
 ## v10.17.2 - (2025-05-29)
 
 ### Accounting API

@@ -14806,7 +14806,10 @@ paths:
         - connector: xero
           description: |
             When creating journal entries, the returned ID is collected from Xero with a maximum of 100 new journal items per day. If more than 100 journal entries are created in a single day, the id returned will be of the manual journal.
-            Xero only supports `draft` and `posted` for the status field
+
+            Xero only supports `draft` and `posted` for the status field.
+
+            When creating or updating journal entries, Xero requires the ledger account to be specified by its code, not by ID. Therefore, the `ledger_account.code` field must be used in journal lines instead of `ledger_account.id`.
         - connector: netsuite
           description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
         - connector: mrisoftware
@@ -14901,6 +14904,8 @@ paths:
         - connector: xero
           description: |
             Xero only supports `draft` and `posted` for the status field
+
+            When creating or updating journal entries, Xero requires the ledger account to be specified by its code, not by ID. Therefore, the `ledger_account.code` field must be used in journal lines instead of `ledger_account.id`.
         - connector: sage-intacct
           description: |
             Sage Intacct only supports `draft` and `posted` status fields when updating a journal entry.

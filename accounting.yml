@@ -7480,12 +7480,30 @@ components:
       x-apideck-schema-id: LedgerAccountsFilter
       example:
         updated_since: '2020-09-30T07:43:32.000Z'
+        classification: asset
       properties:
         updated_since:
           type: string
           title: Updated since (timestamp)
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
+        classification:
+          type: string
+          title: Classification
+          description: Filter by account classification.
+          x-apideck-enum-id: ledger-accounts.classification
+          enum:
+            - asset
+            - equity
+            - expense
+            - liability
+            - revenue
+            - income
+            - other_income
+            - other_expense
+            - costs_of_sales
+            - other
+          example: asset
       additionalProperties: false
     LedgerAccountsSort:
       type: object

@@ -1,3 +1,9 @@
+## v10.18.1 - (2025-06-27)
+
+### Accounting API
+
+- Added `country` field to bank_account and `terms` field to [Suppliers](apis/accounting/reference#tag/Suppliers) schema
+
 ## v10.18.0 - (2025-06-17)
 
 ### Accounting API

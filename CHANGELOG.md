@@ -1,3 +1,9 @@
+## v10.18.2 - (2025-07-09)
+
+### Accounting API
+
+- Added `type` field and filter to [Categories](apis/accounting/reference#tag/Categories)
+
 ## v10.18.1 - (2025-06-27)
 
 ### Accounting API

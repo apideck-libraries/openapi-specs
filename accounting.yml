@@ -1747,6 +1747,7 @@ components:
         end_date: '2021-12-31'
         period_count: 3
         period_type: month
+        location_id: '123'
       properties:
         start_date:
           type: string
@@ -1774,6 +1775,11 @@ components:
             - month
             - quarter
             - year
+        location_id:
+          type: string
+          title: Location ID
+          description: The ID of the location to include in the resource.
+          example: '123'
       additionalProperties: false
     BankAccount:
       type: object
@@ -8598,6 +8604,7 @@ components:
         customer_id: 123abc
         start_date: '2021-01-01'
         end_date: '2021-12-31'
+        location_id: '123'
       properties:
         customer_id:
           type: string
@@ -8614,6 +8621,11 @@ components:
           title: End date
           description: Filter by end date. If end date is given, start date is required.
           example: '2021-12-31'
+        location_id:
+          type: string
+          title: Location ID
+          description: Filter by location id
+          example: '123'
       additionalProperties: false
     ProfitAndLossRecord:
       type: object

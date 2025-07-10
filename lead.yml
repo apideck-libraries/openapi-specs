@@ -949,12 +949,24 @@ components:
               example:
                 foo: bar
               nullable: true
+              additionalProperties: true
             - type: array
               items:
-                type: string
-            - type: array
-              items:
-                type: object
+                anyOf:
+                  - type: string
+                    example: Uses Salesforce and Marketo
+                    nullable: true
+                  - type: number
+                    example: 10
+                    nullable: true
+                  - type: boolean
+                    example: true
+                    nullable: true
+                  - type: object
+                    example:
+                      foo: bar
+                    nullable: true
+                    additionalProperties: true
     CustomMappings:
       type: object
       x-apideck-schema-id: CustomMappings

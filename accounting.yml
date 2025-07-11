@@ -11338,6 +11338,7 @@ components:
         tax_rate: medium
         reference: medium
         custom_fields: medium
+        source_document_url: low
         custom_mappings: low
         pass_through: low
         updated_at: medium
@@ -11430,6 +11431,12 @@ components:
             $ref: '#/components/schemas/ExpenseLineItem'
         reference:
           $ref: '#/components/schemas/Reference'
+        source_document_url:
+          type: string
+          title: Source document URL
+          description: URL link to a source document - shown as 'Go to [appName]' in the downstream app. Currently only supported for Xero.
+          example: https://www.invoicesolution.com/expense/123456
+          nullable: true
         custom_fields:
           type: array
           items:

@@ -1,3 +1,7 @@
+## v10.18.3 - (2025-07-18)
+
+- Added `rebilling` field to [Bills](apis/accounting/reference#tag/Bills) and [Expenses](apis/accounting/reference#tag/Expenses)
+
 ## v10.18.2 - (2025-07-09)
 
 ### Accounting API

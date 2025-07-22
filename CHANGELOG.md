@@ -1,3 +1,11 @@
+## v10.18.4 - (2025-07-22)
+
+### Accounting API
+
+- Added `notes` and `amortization_type` support to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders)
+- Added `subsidiary_id` and `prepaid` support to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders) line items
+- Added `subsidiary_id` and `purchase_order` support to [Bills](apis/accounting/reference#tag/Bills) line items
+
 ## v10.18.3 - (2025-07-18)
 
 - Added `rebilling` field to [Bills](apis/accounting/reference#tag/Bills) and [Expenses](apis/accounting/reference#tag/Expenses)

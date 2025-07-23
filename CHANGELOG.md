@@ -1,3 +1,19 @@
+## v10.19.0 - (2025-07-23)
+
+### Accounting API
+
+- Added [Quotes](apis/accounting/reference#tag/Quotes).
+
+### Accounting API
+
+- Added `supplier_id` filter to [Payment Events](apis/accounting/reference#tag/Payment-Events)
+
+## v10.18.5 - (2025-07-23)
+
+### Accounting API
+
+- Added `supplier_id` filter to [Payment Events](apis/accounting/reference#tag/Payment-Events)
+
 ## v10.18.4 - (2025-07-22)
 
 ### Accounting API

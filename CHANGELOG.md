@@ -1,3 +1,10 @@
+## v10.19.1 - (2025-07-24)
+
+### Accounting API
+
+- Added `billing_address`, `terms`, `tax_method`, `issued_method`, and `issued_email` support to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders)
+- Added `shipping_id`, `memo`, `tax_applicable_on`, `tax_recoverability`, `tax_method`, `budget` and `project_id` support to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders) line items
+
 ## v10.19.0 - (2025-07-23)
 
 ### Accounting API

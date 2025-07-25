@@ -1,3 +1,9 @@
+## v10.20.0 - (2025-07-24)
+
+### Accounting API
+
+- Added [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) support to [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central)
+
 ## v10.19.1 - (2025-07-24)
 
 ### Accounting API

@@ -1,3 +1,9 @@
+## v10.20.1 - (2025-07-25)
+
+### Ecommerce API
+
+- Added `name`, `created_since`, `updated_since` filters to [Products](apis/ecommerce/reference#tag/Products)
+
 ## v10.20.0 - (2025-07-24)
 
 ### Accounting API

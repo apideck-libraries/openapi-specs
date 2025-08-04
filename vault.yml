@@ -539,7 +539,7 @@ components:
           additionalProperties: true
           properties: {}
           nullable: true
-          example:
+          example: &ref_0
             instance_url: https://eu28.salesforce.com
             api_key: 12345xxxxxx
         metadata:
@@ -548,7 +548,7 @@ components:
           additionalProperties: true
           properties: {}
           nullable: true
-          example:
+          example: &ref_1
             account:
               name: My Company
               id: c01458a5-7276-41ce-bc19-639906b0450a
@@ -750,7 +750,7 @@ components:
               description: The number of seconds until the token expires. If omitted the token will be queued for refresh.
               nullable: true
               example: 3600
-          example:
+          example: &ref_2
             access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
             refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.cThIIoDvwdueQB468K5xDc5633seEFoqwxjF_xSJyQQ
         settings:
@@ -759,7 +759,7 @@ components:
           nullable: true
           additionalProperties: true
           properties: {}
-          example:
+          example: &ref_3
             instance_url: https://eu28.salesforce.com
         metadata:
           type: object
@@ -767,7 +767,7 @@ components:
           additionalProperties: true
           properties: {}
           nullable: true
-          example:
+          example: &ref_4
             account:
               name: My Company
               id: c01458a5-7276-41ce-bc19-639906b0450a
@@ -1196,6 +1196,17 @@ components:
           $ref: '#/components/schemas/Connection'
         _raw:
           $ref: '#/components/schemas/Raw'
+    CreateConsumerRequest:
+      type: object
+      x-apideck-schema-id: CreateConsumerRequest
+      additionalProperties: false
+      required:
+        - consumer_id
+      properties:
+        consumer_id:
+          $ref: '#/components/schemas/ConsumerId'
+        metadata:
+          $ref: '#/components/schemas/ConsumerMetadata'
     CreateConsumerResponse:
       type: object
       x-apideck-schema-id: GetConsumerResponse
@@ -2332,7 +2343,7 @@ components:
         custom_consumer_settings:
           additionalProperties: true
           description: Custom consumer settings that are passed as part of the session.
-          example:
+          example: &ref_5
             feature_flag_1: true
             tax_rates:
               - id: '6'
@@ -2932,7 +2943,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Consumer'
+              $ref: '#/components/schemas/CreateConsumerRequest'
       responses:
         '200':
           $ref: '#/components/responses/CreateConsumerResponse'
@@ -2949,7 +2960,17 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            consumer:
+              consumer_id: test_consumer_id
+              metadata:
+                account_name: SpaceX
+                user_name: Elon Musk
+                email: elon@musk.com
+                image: https://www.spacex.com/static/images/share.jpg
     get:
       summary: Get all consumers
       operationId: consumersAll
@@ -2979,7 +3000,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /vault/consumers/{consumer_id}:
     get:
       summary: Get consumer
@@ -3009,7 +3033,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            consumerId: test_user_id
     patch:
       summary: Update consumer
       operationId: consumersUpdate
@@ -3043,7 +3071,17 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            consumerId: test_user_id
+            consumer:
+              metadata:
+                account_name: SpaceX
+                user_name: Elon Musk
+                email: elon@musk.com
+                image: https://www.spacex.com/static/images/share.jpg
     delete:
       summary: Delete consumer
       operationId: consumersDelete
@@ -3071,7 +3109,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            consumerId: test_user_id
   /vault/consumers/{consumer_id}/stats:
     get:
       summary: Consumer request counts
@@ -3103,7 +3145,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            consumerId: test_user_id
+            startDatetime: '2021-05-01T12:00:00.000Z'
+            endDatetime: '2021-05-30T12:00:00.000Z'
   /vault/connections:
     get:
       summary: Get all connections
@@ -3137,7 +3185,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /vault/connections/{unified_api}/{service_id}:
     get:
       tags:
@@ -3168,7 +3219,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
     post:
       summary: Create connection
       operationId: connectionsAdd
@@ -3208,7 +3264,27 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            connection:
+              enabled: true
+              settings: *ref_0
+              metadata: *ref_1
+              configuration:
+                - resource: leads
+                  defaults:
+                    - id: ProductInterest
+                      options:
+                        - label: General Channel
+                          value: general
+                          option_type: simple
+                      value: GC5000 series
+              custom_mappings:
+                - value: $.root.training.first_aid
     patch:
       tags:
         - Connections
@@ -3245,7 +3321,27 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            connection:
+              enabled: true
+              settings: *ref_0
+              metadata: *ref_1
+              configuration:
+                - resource: leads
+                  defaults:
+                    - id: ProductInterest
+                      options:
+                        - label: General Channel
+                          value: general
+                          option_type: simple
+                      value: GC5000 series
+              custom_mappings:
+                - value: $.root.training.first_aid
     delete:
       tags:
         - Connections
@@ -3275,7 +3371,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
   /vault/connections/{unified_api}/{service_id}/import:
     post:
       summary: Import connection
@@ -3314,7 +3415,16 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            connection:
+              credentials: *ref_2
+              settings: *ref_3
+              metadata: *ref_4
   /vault/connections/{unified_api}/{service_id}/token:
     post:
       tags:
@@ -3358,7 +3468,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            connectionsToken: {}
   /vault/connections/{unified_api}/{service_id}/validate:
     post:
       tags:
@@ -3402,7 +3518,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            validateConnectionState: {}
   /vault/connections/{unified_api}/{service_id}/callback-state:
     post:
       tags:
@@ -3441,7 +3563,14 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            createCallbackState:
+              redirect_uri: https://example.com/callback
   /vault/connections/{unified_api}/{service_id}/{resource}/config:
     get:
       tags:
@@ -3474,7 +3603,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
+            resource: leads
     patch:
       tags:
         - Connections
@@ -3512,7 +3647,28 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            resource: leads
+            connection:
+              enabled: true
+              settings: *ref_0
+              metadata: *ref_1
+              configuration:
+                - resource: leads
+                  defaults:
+                    - id: ProductInterest
+                      options:
+                        - label: General Channel
+                          value: general
+                          option_type: simple
+                      value: GC5000 series
+              custom_mappings:
+                - value: $.root.training.first_aid
   /vault/connections/{unified_api}/{service_id}/{resource}/schema:
     get:
       tags:
@@ -3548,7 +3704,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
+            resource: leads
   /vault/connections/{unified_api}/{service_id}/{resource}/example:
     get:
       tags:
@@ -3584,7 +3746,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
+            resource: leads
   /vault/connections/{unified_api}/{service_id}/{resource}/custom-fields:
     get:
       tags:
@@ -3618,7 +3786,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
+            resource: leads
   /vault/connections/{unified_api}/{service_id}/{resource}/custom-mappings:
     get:
       tags:
@@ -3651,7 +3825,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
+            resource: leads
   /vault/authorize/{service_id}/{application_id}:
     get:
       tags:
@@ -3691,7 +3871,14 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            applicationId: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
+            state: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk
+            redirectUri: http://example.com/integrations
   /vault/revoke/{service_id}/{application_id}:
     get:
       tags:
@@ -3730,7 +3917,14 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            applicationId: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
+            state: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk
+            redirectUri: http://example.com/integrations
   /vault/custom-mappings/{unified_api}/{service_id}/{target_field_id}:
     get:
       tags:
@@ -3765,7 +3959,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
+            targetFieldId: hris+employees+first_aid_training
     post:
       tags:
         - Custom Mappings
@@ -3806,7 +4006,15 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
+            targetFieldId: hris+employees+first_aid_training
+            customMapping:
+              value: $.root.training.first_aid
     patch:
       tags:
         - Custom Mappings
@@ -3847,7 +4055,15 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
+            targetFieldId: hris+employees+first_aid_training
+            customMapping:
+              value: $.root.training.first_aid
     delete:
       tags:
         - Custom Mappings
@@ -3881,7 +4097,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
+            targetFieldId: hris+employees+first_aid_training
   /vault/custom-mappings/{unified_api}/{service_id}:
     get:
       tags:
@@ -3912,7 +4134,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            unifiedApi: crm
+            serviceId: pipedrive
   /vault/callback:
     get:
       tags:
@@ -3925,9 +4152,26 @@ paths:
         This endpoint gets called after the triggering the authorize flow.
 
         Callback links need a state and code parameter to verify the validity of the request.
+
+        When an error occurs during the OAuth flow, providers will optionally include error parameters
+        in the callback request instead of the code parameter.
       parameters:
         - $ref: '#/components/parameters/state'
         - $ref: '#/components/parameters/code'
+        - name: error
+          in: query
+          description: Error code returned by the OAuth provider when authorization fails
+          required: false
+          schema:
+            type: string
+            example: access_denied
+        - name: error_description
+          in: query
+          description: Human-readable description of the error from the OAuth provider
+          required: false
+          schema:
+            type: string
+            example: The user denied access to your application
       security: []
       responses:
         '301':
@@ -3945,7 +4189,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            state: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk
+            code: g0ZGZmNjVmOWI
   /vault/sessions:
     post:
       summary: Create Session
@@ -3985,7 +4234,41 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            session:
+              consumer_metadata:
+                account_name: SpaceX
+                user_name: Elon Musk
+                email: elon@musk.com
+                image: https://www.spacex.com/static/images/share.jpg
+              redirect_uri: https://mysaas.com/dashboard
+              settings:
+                unified_apis:
+                  - crm
+                hide_resource_settings: false
+                sandbox_mode: false
+                isolation_mode: false
+                session_length: 30m
+                show_logs: true
+                show_suggestions: false
+                show_sidebar: true
+                auto_redirect: false
+                hide_guides: false
+                allow_actions:
+                  - delete
+              theme:
+                favicon: https://res.cloudinary.com/apideck/icons/intercom
+                logo: https://res.cloudinary.com/apideck/icons/intercom
+                primary_color: '#286efa'
+                sidepanel_background_color: '#286efa'
+                sidepanel_text_color: '#FFFFFF'
+                vault_name: Intercom
+                privacy_url: https://compliance.apideck.com/privacy-policy
+                terms_url: https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e
+              custom_consumer_settings: *ref_5
   /vault/logs:
     get:
       summary: Get all consumer request logs
@@ -4018,7 +4301,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: vault
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true

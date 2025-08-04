@@ -4691,7 +4691,7 @@ components:
                   example: $.nested.property
                 value:
                   description: The value to set at the specified path, can be any type.
-                  example:
+                  example: &ref_1
                     TaxClassificationRef:
                       value: EUC-99990201-V1-00020000
               required:
@@ -4950,7 +4950,7 @@ components:
       x-apideck-schema-id: Tags
       items:
         type: string
-      example:
+      example: &ref_0
         - New
       nullable: true
     CustomMappings:
@@ -6331,7 +6331,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Companies
@@ -6370,7 +6373,106 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            company:
+              name: SpaceX
+              owner_id: '12345'
+              image: https://www.spacex.com/static/images/share.jpg
+              description: Space Exploration Technologies Corp. is an American aerospace manufacturer, space transportation services and communications company headquartered in Hawthorne, California.
+              vat_number: BE0689615164
+              currency: USD
+              status: Open
+              fax: '+12129876543'
+              annual_revenue: +$35m
+              number_of_employees: 500-1000
+              industry: Apparel
+              ownership: Public
+              sales_tax_number: 12456EN
+              payee_number: 78932EN
+              abn_or_tfn: 46 115 614 695
+              abn_branch: '123'
+              acn: XXX XXX XXX
+              first_name: Elon
+              last_name: Musk
+              bank_accounts:
+                - bank_name: Monzo
+                  account_number: '123465'
+                  account_name: SPACEX LLC
+                  account_type: credit_card
+                  iban: CH2989144532982975332
+                  bic: AUDSCHGGXXX
+                  routing_number: '012345678'
+                  bsb_number: 062-001
+                  branch_identifier: '001'
+                  bank_code: BNH
+                  currency: USD
+                  country: US
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              social_links:
+                - id: '12345'
+                  url: https://www.twitter.com/apideck
+                  type: twitter
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              row_type:
+                id: '12345'
+                name: Customer Account
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              tags: *ref_0
+              read_only: false
+              salutation: Mr
+              birthday: '2000-08-12'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/companies/{id}:
     get:
       tags:
@@ -6403,7 +6505,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Companies
@@ -6443,7 +6549,107 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            company:
+              name: SpaceX
+              owner_id: '12345'
+              image: https://www.spacex.com/static/images/share.jpg
+              description: Space Exploration Technologies Corp. is an American aerospace manufacturer, space transportation services and communications company headquartered in Hawthorne, California.
+              vat_number: BE0689615164
+              currency: USD
+              status: Open
+              fax: '+12129876543'
+              annual_revenue: +$35m
+              number_of_employees: 500-1000
+              industry: Apparel
+              ownership: Public
+              sales_tax_number: 12456EN
+              payee_number: 78932EN
+              abn_or_tfn: 46 115 614 695
+              abn_branch: '123'
+              acn: XXX XXX XXX
+              first_name: Elon
+              last_name: Musk
+              bank_accounts:
+                - bank_name: Monzo
+                  account_number: '123465'
+                  account_name: SPACEX LLC
+                  account_type: credit_card
+                  iban: CH2989144532982975332
+                  bic: AUDSCHGGXXX
+                  routing_number: '012345678'
+                  bsb_number: 062-001
+                  branch_identifier: '001'
+                  bank_code: BNH
+                  currency: USD
+                  country: US
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              social_links:
+                - id: '12345'
+                  url: https://www.twitter.com/apideck
+                  type: twitter
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              row_type:
+                id: '12345'
+                name: Customer Account
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              tags: *ref_0
+              read_only: false
+              salutation: Mr
+              birthday: '2000-08-12'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Companies
@@ -6474,7 +6680,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /crm/contacts:
     get:
       tags:
@@ -6520,7 +6730,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Contacts
@@ -6561,7 +6774,95 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            contact:
+              name: Elon Musk
+              owner_id: '54321'
+              type: personal
+              company_id: '23456'
+              company_name: '23456'
+              lead_id: '34567'
+              first_name: Elon
+              middle_name: D.
+              last_name: Musk
+              prefix: Mr.
+              suffix: PhD
+              title: CEO
+              department: Engineering
+              language: EN
+              gender: female
+              birthday: '2000-08-12'
+              image: https://unavatar.io/elon-musk
+              photo_url: https://unavatar.io/elon-musk
+              lead_source: Cold Call
+              fax: '+12129876543'
+              description: Internal champion
+              current_balance: 10.5
+              status: open
+              active: true
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              social_links:
+                - id: '12345'
+                  url: https://www.twitter.com/apideck
+                  type: twitter
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              email_domain: gmail.com
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              tags: *ref_0
+              opportunity_ids:
+                - '12345'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/contacts/{id}:
     get:
       tags:
@@ -6598,7 +6899,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Contacts
@@ -6638,7 +6943,96 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            contact:
+              name: Elon Musk
+              owner_id: '54321'
+              type: personal
+              company_id: '23456'
+              company_name: '23456'
+              lead_id: '34567'
+              first_name: Elon
+              middle_name: D.
+              last_name: Musk
+              prefix: Mr.
+              suffix: PhD
+              title: CEO
+              department: Engineering
+              language: EN
+              gender: female
+              birthday: '2000-08-12'
+              image: https://unavatar.io/elon-musk
+              photo_url: https://unavatar.io/elon-musk
+              lead_source: Cold Call
+              fax: '+12129876543'
+              description: Internal champion
+              current_balance: 10.5
+              status: open
+              active: true
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              social_links:
+                - id: '12345'
+                  url: https://www.twitter.com/apideck
+                  type: twitter
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              email_domain: gmail.com
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              tags: *ref_0
+              opportunity_ids:
+                - '12345'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Contacts
@@ -6672,7 +7066,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /crm/opportunities:
     get:
       tags:
@@ -6716,7 +7114,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Opportunities
@@ -6769,7 +7170,51 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            opportunity:
+              title: New Rocket
+              primary_contact_id: '12345'
+              description: Opportunities are created for People and Companies that are interested in buying your products or services. Create Opportunities for People and Companies to move them through one of your Pipelines.
+              type: Existing Customer - Upgrade
+              monetary_amount: 75000
+              currency: USD
+              win_probability: 40
+              close_date: '2020-10-30'
+              loss_reason_id: '12345'
+              loss_reason: No budget
+              won_reason_id: '12345'
+              won_reason: Best pitch
+              pipeline_id: '12345'
+              pipeline_stage_id: '12345'
+              source_id: '12345'
+              lead_id: '12345'
+              lead_source: Website
+              contact_id: '12345'
+              contact_ids:
+                - '12345'
+              company_id: '12345'
+              company_name: Copper
+              owner_id: '12345'
+              priority: None
+              status: Open
+              status_id: '12345'
+              tags: *ref_0
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              stage_last_changed_at: '2020-09-30T07:43:32.000Z'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/opportunities/{id}:
     get:
       tags:
@@ -6802,7 +7247,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Opportunities
@@ -6842,7 +7291,52 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            opportunity:
+              title: New Rocket
+              primary_contact_id: '12345'
+              description: Opportunities are created for People and Companies that are interested in buying your products or services. Create Opportunities for People and Companies to move them through one of your Pipelines.
+              type: Existing Customer - Upgrade
+              monetary_amount: 75000
+              currency: USD
+              win_probability: 40
+              close_date: '2020-10-30'
+              loss_reason_id: '12345'
+              loss_reason: No budget
+              won_reason_id: '12345'
+              won_reason: Best pitch
+              pipeline_id: '12345'
+              pipeline_stage_id: '12345'
+              source_id: '12345'
+              lead_id: '12345'
+              lead_source: Website
+              contact_id: '12345'
+              contact_ids:
+                - '12345'
+              company_id: '12345'
+              company_name: Copper
+              owner_id: '12345'
+              priority: None
+              status: Open
+              status_id: '12345'
+              tags: *ref_0
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              stage_last_changed_at: '2020-09-30T07:43:32.000Z'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Opportunities
@@ -6873,7 +7367,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /crm/leads:
     get:
       tags:
@@ -6917,7 +7415,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Leads
@@ -6960,7 +7461,85 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            lead:
+              name: Elon Musk
+              company_name: Spacex
+              owner_id: '54321'
+              owner_name: John Doe
+              company_id: '2'
+              lead_id: '2'
+              lead_source: Cold Call
+              first_name: Elon
+              last_name: Musk
+              description: A thinker
+              prefix: Sir
+              title: CEO
+              language: EN
+              status: New
+              monetary_amount: 75000
+              currency: USD
+              fax: '+12129876543'
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              social_links:
+                - id: '12345'
+                  url: https://www.twitter.com/apideck
+                  type: twitter
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              tags: *ref_0
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/leads/{id}:
     get:
       tags:
@@ -6993,7 +7572,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Leads
@@ -7030,7 +7613,86 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            lead:
+              name: Elon Musk
+              company_name: Spacex
+              owner_id: '54321'
+              owner_name: John Doe
+              company_id: '2'
+              lead_id: '2'
+              lead_source: Cold Call
+              first_name: Elon
+              last_name: Musk
+              description: A thinker
+              prefix: Sir
+              title: CEO
+              language: EN
+              status: New
+              monetary_amount: 75000
+              currency: USD
+              fax: '+12129876543'
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              social_links:
+                - id: '12345'
+                  url: https://www.twitter.com/apideck
+                  type: twitter
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              tags: *ref_0
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Leads
@@ -7061,7 +7723,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /crm/pipelines:
     get:
       tags:
@@ -7096,7 +7762,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Pipelines
@@ -7133,7 +7802,30 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            pipeline:
+              id: default
+              name: Sales Pipeline
+              currency: USD
+              archived: false
+              active: false
+              display_order: 1
+              win_probability_enabled: true
+              stages:
+                - name: Contract Sent
+                  value: CONTRACT_SENT
+                  win_probability: 50
+                  display_order: 1
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/pipelines/{id}:
     get:
       tags:
@@ -7167,7 +7859,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Pipelines
@@ -7205,7 +7901,31 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            pipeline:
+              id: default
+              name: Sales Pipeline
+              currency: USD
+              archived: false
+              active: false
+              display_order: 1
+              win_probability_enabled: true
+              stages:
+                - name: Contract Sent
+                  value: CONTRACT_SENT
+                  win_probability: 50
+                  display_order: 1
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Pipelines
@@ -7237,7 +7957,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /crm/notes:
     get:
       tags:
@@ -7275,7 +7999,10 @@ paths:
         - connector: salesforce
           description: Salesforce imposes a maximum offset limit of 2000. Exceeding this offset will result in an error from Salesforce. For result sets larger than 2000 items, it is necessary to set the pagination limit to 200, as this will enforce the use of batchSize for pagination. Note that setting a limit lower than 200 will not reduce the batchSize due to Salesforce's minimum batch size policy of 200, as detailed in their documentation [here](https://developer.salesforce.com/docs/atlas.en-us.250.0.api_rest.meta/api_rest/headers_queryoptions.htm) and will have no effect.
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Notes
@@ -7316,7 +8043,27 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            note:
+              title: Meeting Notes
+              content: Office hours are 9AM-6PM
+              owner_id: '12345'
+              contact_id: '12345'
+              company_id: '12345'
+              opportunity_id: '12345'
+              activity_id: '12345'
+              lead_id: '12345'
+              active: true
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/notes/{id}:
     get:
       tags:
@@ -7349,7 +8096,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Notes
@@ -7389,7 +8140,28 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            note:
+              title: Meeting Notes
+              content: Office hours are 9AM-6PM
+              owner_id: '12345'
+              contact_id: '12345'
+              company_id: '12345'
+              opportunity_id: '12345'
+              activity_id: '12345'
+              lead_id: '12345'
+              active: true
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Notes
@@ -7420,7 +8192,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /crm/users:
     get:
       tags:
@@ -7460,7 +8236,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Users
@@ -7499,7 +8278,68 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            user:
+              parent_id: '54321'
+              username: masterofcoin
+              first_name: Elon
+              last_name: Musk
+              title: CEO
+              division: Europe
+              department: R&D
+              company_name: SpaceX
+              employee_number: 123456-AB
+              description: A description
+              image: https://logo.clearbit.com/spacex.com?s=128
+              language: EN
+              status: active
+              password: supersecretpassword
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/users/{id}:
     get:
       tags:
@@ -7532,7 +8372,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Users
@@ -7572,7 +8416,69 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            user:
+              parent_id: '54321'
+              username: masterofcoin
+              first_name: Elon
+              last_name: Musk
+              title: CEO
+              division: Europe
+              department: R&D
+              company_name: SpaceX
+              employee_number: 123456-AB
+              description: A description
+              image: https://logo.clearbit.com/spacex.com?s=128
+              language: EN
+              status: active
+              password: supersecretpassword
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Users
@@ -7603,7 +8509,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /crm/activities:
     get:
       tags:
@@ -7645,7 +8555,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Activities
@@ -7686,7 +8599,98 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            activity:
+              activity_datetime: '2021-05-01T12:00:00.000Z'
+              duration_seconds: 1800
+              user_id: '12345'
+              account_id: '12345'
+              contact_id: '12345'
+              company_id: '12345'
+              opportunity_id: '12345'
+              lead_id: '12345'
+              owner_id: '12345'
+              campaign_id: '12345'
+              case_id: '12345'
+              asset_id: '12345'
+              contract_id: '12345'
+              product_id: '12345'
+              solution_id: '12345'
+              custom_object_id: '12345'
+              type: meeting
+              title: Meeting
+              description: More info about the meeting
+              note: An internal note about the meeting
+              location: Space
+              location_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              all_day_event: false
+              private: true
+              group_event: true
+              event_sub_type: debrief
+              group_event_type: Proposed
+              child: false
+              archived: false
+              deleted: false
+              show_as: busy
+              done: false
+              start_datetime: '2021-05-01T12:00:00.000Z'
+              end_datetime: '2021-05-01T12:30:00.000Z'
+              activity_date: '2021-05-01'
+              end_date: '2021-05-01'
+              recurrent: false
+              reminder_datetime: '2021-05-01T17:00:00.000Z'
+              reminder_set: false
+              video_conference_url: https://us02web.zoom.us/j/88120759396
+              video_conference_id: zoom:88120759396
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              attendees:
+                - name: Elon Musk
+                  first_name: Elon
+                  middle_name: D.
+                  last_name: Musk
+                  prefix: Mr.
+                  suffix: PhD
+                  email_address: elon@musk.com
+                  is_organizer: true
+                  status: accepted
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/activities/{id}:
     get:
       tags:
@@ -7719,7 +8723,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Activities
@@ -7763,7 +8771,99 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            activity:
+              activity_datetime: '2021-05-01T12:00:00.000Z'
+              duration_seconds: 1800
+              user_id: '12345'
+              account_id: '12345'
+              contact_id: '12345'
+              company_id: '12345'
+              opportunity_id: '12345'
+              lead_id: '12345'
+              owner_id: '12345'
+              campaign_id: '12345'
+              case_id: '12345'
+              asset_id: '12345'
+              contract_id: '12345'
+              product_id: '12345'
+              solution_id: '12345'
+              custom_object_id: '12345'
+              type: meeting
+              title: Meeting
+              description: More info about the meeting
+              note: An internal note about the meeting
+              location: Space
+              location_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              all_day_event: false
+              private: true
+              group_event: true
+              event_sub_type: debrief
+              group_event_type: Proposed
+              child: false
+              archived: false
+              deleted: false
+              show_as: busy
+              done: false
+              start_datetime: '2021-05-01T12:00:00.000Z'
+              end_datetime: '2021-05-01T12:30:00.000Z'
+              activity_date: '2021-05-01'
+              end_date: '2021-05-01'
+              recurrent: false
+              reminder_datetime: '2021-05-01T17:00:00.000Z'
+              reminder_set: false
+              video_conference_url: https://us02web.zoom.us/j/88120759396
+              video_conference_id: zoom:88120759396
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              attendees:
+                - name: Elon Musk
+                  first_name: Elon
+                  middle_name: D.
+                  last_name: Musk
+                  prefix: Mr.
+                  suffix: PhD
+                  email_address: elon@musk.com
+                  is_organizer: true
+                  status: accepted
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Activities
@@ -7797,7 +8897,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /crm/custom-object-schemas:
     get:
       tags:
@@ -7831,7 +8935,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Custom Object Schemas
@@ -7867,7 +8974,32 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            customObjectSchema:
+              name: project
+              description: This schema defines a project custom object
+              fields:
+                - id: field_123
+                  name: project_name
+                  description: Name of the project
+                  type: string
+                  required: true
+                  options:
+                    - value: option1
+                      label: Option 1
+                  default_value: New Project
+              visible: true
+              active: true
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/custom-object-schemas/{id}:
     get:
       tags:
@@ -7899,7 +9031,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Custom Object Schemas
@@ -7936,7 +9072,33 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            customObjectSchema:
+              name: project
+              description: This schema defines a project custom object
+              fields:
+                - id: field_123
+                  name: project_name
+                  description: Name of the project
+                  type: string
+                  required: true
+                  options:
+                    - value: option1
+                      label: Option 1
+                  default_value: New Project
+              visible: true
+              active: true
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Custom Object Schemas
@@ -7967,7 +9129,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /crm/custom-objects/{object_id}:
     get:
       tags:
@@ -8003,7 +9169,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            objectId: object_id_example
     post:
       tags:
         - Custom Objects
@@ -8040,7 +9210,23 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            objectId: object_id_example
+            customObject:
+              name: project
+              fields:
+                - name: name
+                  value: string
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /crm/custom-objects/{object_id}/{id}:
     get:
       tags:
@@ -8073,7 +9259,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            objectId: object_id_example
     patch:
       tags:
         - Custom Objects
@@ -8111,7 +9302,24 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            objectId: object_id_example
+            customObject:
+              name: project
+              fields:
+                - name: name
+                  value: string
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Custom Objects
@@ -8143,7 +9351,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: crm
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            objectId: object_id_example
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true

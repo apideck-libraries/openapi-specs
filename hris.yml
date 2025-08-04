@@ -2045,7 +2045,7 @@ components:
           description: Direct reports is an array of ids that reflect the individuals in an organizational hierarchy who are directly supervised by this specific employee.
           items:
             type: string
-          example:
+          example: &ref_0
             - a0d636c6-43b3-4bde-8c70-85b707d992f4
             - a98lfd96-43b3-4bde-8c70-85b707d992e6
           nullable: true
@@ -2153,7 +2153,7 @@ components:
           description: Indicate the employee's food allergies.
           items:
             type: string
-          example:
+          example: &ref_2
             - No allergies
           nullable: true
         probation_period:
@@ -2250,7 +2250,7 @@ components:
           example: '2020-08-12'
         payment_frequency:
           $ref: '#/components/schemas/PaymentFrequency'
-      example:
+      example: &ref_1
         id: '3404301363494309004'
         job_id: '3490439050957906679'
         rate: 50
@@ -3490,7 +3490,7 @@ components:
                   example: $.nested.property
                 value:
                   description: The value to set at the specified path, can be any type.
-                  example:
+                  example: &ref_4
                     TaxClassificationRef:
                       value: EUC-99990201-V1-00020000
               required:
@@ -4043,7 +4043,7 @@ components:
       x-apideck-schema-id: Tags
       items:
         type: string
-      example:
+      example: &ref_3
         - New
       nullable: true
     Tax:
@@ -4821,7 +4821,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Employees
@@ -4869,7 +4872,188 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            employee:
+              id: '12345'
+              first_name: Elon
+              last_name: Musk
+              middle_name: D.
+              display_name: Technoking
+              preferred_name: Elon Musk
+              initials: EM
+              salutation: Mr
+              title: CEO
+              marital_status: married
+              partner:
+                first_name: Elon
+                last_name: Musk
+                middle_name: D.
+                gender: male
+                initials: EM
+                birthday: '2000-08-12'
+                deceased_on: '2000-08-12'
+              division: Europe
+              division_id: '12345'
+              department: R&D
+              department_id: '12345'
+              department_name: '12345'
+              team:
+                id: '1234'
+                name: Full Stack Engineers
+              company_id: '23456'
+              company_name: SpaceX
+              employment_start_date: '2021-10-26'
+              employment_end_date: '2028-10-26'
+              leaving_reason: resigned
+              employee_number: 123456-AB
+              employment_status: active
+              employment_role:
+                type: contractor
+                sub_type: full_time
+              ethnicity: African American
+              manager:
+                id: '12345'
+                name: Elon Musk
+                first_name: Elon
+                last_name: Musk
+                email: elon@musk.com
+                employment_status: active
+              direct_reports: *ref_0
+              social_security_number: '123456789'
+              birthday: '2000-08-12'
+              deceased_on: '2000-08-12'
+              country_of_birth: US
+              description: A description
+              gender: male
+              pronouns: she,her
+              preferred_language: EN
+              languages:
+                - EN
+              nationalities:
+                - US
+              photo_url: https://unavatar.io/elon-musk
+              timezone: Europe/London
+              source: lever
+              source_id: '12345'
+              record_url: https://app.intercom.io/contacts/12345
+              jobs:
+                - title: CEO
+                  role: Sales
+                  start_date: '2020-08-12'
+                  end_date: '2020-08-12'
+                  compensation_rate: 72000
+                  currency: USD
+                  payment_unit: year
+                  hired_at: '2020-08-12'
+                  is_primary: true
+                  is_manager: true
+                  status: active
+                  location:
+                    id: '123'
+                    type: primary
+                    string: 25 Spring Street, Blackburn, VIC 3130
+                    name: HQ US
+                    line1: Main street
+                    line2: 'apt #'
+                    line3: 'Suite #'
+                    line4: delivery instructions
+                    street_number: '25'
+                    city: San Francisco
+                    state: CA
+                    postal_code: '94104'
+                    country: US
+                    latitude: '40.759211'
+                    longitude: '-73.984638'
+                    county: Santa Clara
+                    contact_name: Elon Musk
+                    salutation: Mr
+                    phone_number: 111-111-1111
+                    fax: 122-111-1111
+                    email: elon@musk.com
+                    website: https://elonmusk.com
+                    notes: Address notes or delivery instructions.
+                    row_version: 1-12345
+              compensations:
+                - *ref_1
+              works_remote: true
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              social_links:
+                - id: '12345'
+                  url: https://www.twitter.com/apideck
+                  type: twitter
+              bank_accounts:
+                - bank_name: Monzo
+                  account_number: '123465'
+                  account_name: SPACEX LLC
+                  account_type: credit_card
+                  iban: CH2989144532982975332
+                  bic: AUDSCHGGXXX
+                  routing_number: '012345678'
+                  bsb_number: 062-001
+                  branch_identifier: '001'
+                  bank_code: BNH
+                  currency: USD
+                  country: US
+              tax_code: '1111'
+              tax_id: 234-32-0000
+              dietary_preference: Veggie
+              food_allergies: *ref_2
+              probation_period:
+                start_date: '2021-10-01'
+                end_date: '2021-11-28'
+              tags: *ref_3
+              row_version: 1-12345
+              deleted: true
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_4
   /hris/employees/{id}:
     get:
       tags:
@@ -4913,7 +5097,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Employees
@@ -4953,7 +5141,189 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            employee:
+              id: '12345'
+              first_name: Elon
+              last_name: Musk
+              middle_name: D.
+              display_name: Technoking
+              preferred_name: Elon Musk
+              initials: EM
+              salutation: Mr
+              title: CEO
+              marital_status: married
+              partner:
+                first_name: Elon
+                last_name: Musk
+                middle_name: D.
+                gender: male
+                initials: EM
+                birthday: '2000-08-12'
+                deceased_on: '2000-08-12'
+              division: Europe
+              division_id: '12345'
+              department: R&D
+              department_id: '12345'
+              department_name: '12345'
+              team:
+                id: '1234'
+                name: Full Stack Engineers
+              company_id: '23456'
+              company_name: SpaceX
+              employment_start_date: '2021-10-26'
+              employment_end_date: '2028-10-26'
+              leaving_reason: resigned
+              employee_number: 123456-AB
+              employment_status: active
+              employment_role:
+                type: contractor
+                sub_type: full_time
+              ethnicity: African American
+              manager:
+                id: '12345'
+                name: Elon Musk
+                first_name: Elon
+                last_name: Musk
+                email: elon@musk.com
+                employment_status: active
+              direct_reports: *ref_0
+              social_security_number: '123456789'
+              birthday: '2000-08-12'
+              deceased_on: '2000-08-12'
+              country_of_birth: US
+              description: A description
+              gender: male
+              pronouns: she,her
+              preferred_language: EN
+              languages:
+                - EN
+              nationalities:
+                - US
+              photo_url: https://unavatar.io/elon-musk
+              timezone: Europe/London
+              source: lever
+              source_id: '12345'
+              record_url: https://app.intercom.io/contacts/12345
+              jobs:
+                - title: CEO
+                  role: Sales
+                  start_date: '2020-08-12'
+                  end_date: '2020-08-12'
+                  compensation_rate: 72000
+                  currency: USD
+                  payment_unit: year
+                  hired_at: '2020-08-12'
+                  is_primary: true
+                  is_manager: true
+                  status: active
+                  location:
+                    id: '123'
+                    type: primary
+                    string: 25 Spring Street, Blackburn, VIC 3130
+                    name: HQ US
+                    line1: Main street
+                    line2: 'apt #'
+                    line3: 'Suite #'
+                    line4: delivery instructions
+                    street_number: '25'
+                    city: San Francisco
+                    state: CA
+                    postal_code: '94104'
+                    country: US
+                    latitude: '40.759211'
+                    longitude: '-73.984638'
+                    county: Santa Clara
+                    contact_name: Elon Musk
+                    salutation: Mr
+                    phone_number: 111-111-1111
+                    fax: 122-111-1111
+                    email: elon@musk.com
+                    website: https://elonmusk.com
+                    notes: Address notes or delivery instructions.
+                    row_version: 1-12345
+              compensations:
+                - *ref_1
+              works_remote: true
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              social_links:
+                - id: '12345'
+                  url: https://www.twitter.com/apideck
+                  type: twitter
+              bank_accounts:
+                - bank_name: Monzo
+                  account_number: '123465'
+                  account_name: SPACEX LLC
+                  account_type: credit_card
+                  iban: CH2989144532982975332
+                  bic: AUDSCHGGXXX
+                  routing_number: '012345678'
+                  bsb_number: 062-001
+                  branch_identifier: '001'
+                  bank_code: BNH
+                  currency: USD
+                  country: US
+              tax_code: '1111'
+              tax_id: 234-32-0000
+              dietary_preference: Veggie
+              food_allergies: *ref_2
+              probation_period:
+                start_date: '2021-10-01'
+                end_date: '2021-11-28'
+              tags: *ref_3
+              row_version: 1-12345
+              deleted: true
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_4
     delete:
       tags:
         - Employees
@@ -4984,7 +5354,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /hris/companies:
     get:
       tags:
@@ -5022,7 +5396,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Companies
@@ -5058,7 +5435,65 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            company:
+              legal_name: SpaceX
+              display_name: SpaceX
+              subdomain: company
+              status: active
+              company_number: 123456-AB
+              currency: USD
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              debtor_id: '12345'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_4
   /hris/companies/{id}:
     get:
       tags:
@@ -5091,7 +5526,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Companies
@@ -5128,7 +5567,66 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            company:
+              legal_name: SpaceX
+              display_name: SpaceX
+              subdomain: company
+              status: active
+              company_number: 123456-AB
+              currency: USD
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              debtor_id: '12345'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_4
     delete:
       tags:
         - Companies
@@ -5159,7 +5657,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /hris/departments:
     get:
       tags:
@@ -5197,7 +5699,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Departments
@@ -5233,7 +5738,21 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            department:
+              name: R&D
+              code: '2'
+              description: R&D
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_4
   /hris/departments/{id}:
     get:
       tags:
@@ -5266,7 +5785,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Departments
@@ -5303,7 +5826,22 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            department:
+              name: R&D
+              code: '2'
+              description: R&D
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_4
     delete:
       tags:
         - Departments
@@ -5334,7 +5872,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /hris/payrolls:
     get:
       tags:
@@ -5368,7 +5910,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /hris/payrolls/{payroll_id}:
     get:
       tags:
@@ -5401,7 +5946,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            payrollId: payroll_id_example
   /hris/payrolls/employees/{employee_id}:
     get:
       tags:
@@ -5436,7 +5985,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            employeeId: employee_id_example
   /hris/payrolls/employees/{employee_id}/payrolls/{payroll_id}:
     get:
       tags:
@@ -5470,7 +6023,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            payrollId: payroll_id_example
+            employeeId: employee_id_example
   /hris/schedules/employees/{employee_id}:
     get:
       tags:
@@ -5504,7 +6062,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            employeeId: employee_id_example
   /hris/time-off-requests:
     get:
       tags:
@@ -5554,7 +6116,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Time Off Requests
@@ -5594,7 +6159,34 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            timeOffRequest:
+              employee_id: '12345'
+              policy_id: '12345'
+              status: approved
+              description: Enjoying some sun.
+              start_date: '2022-04-01'
+              end_date: '2022-04-01'
+              request_date: '2022-03-21'
+              request_type: vacation
+              approval_date: '2022-03-21'
+              units: hours
+              amount: 3.5
+              day_part: morning
+              notes:
+                employee: Relaxing on the beach for a few hours.
+                manager: Enjoy!
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_4
+              policy_type: sick
   /hris/time-off-requests/employees/{employee_id}/time-off-requests/{id}:
     get:
       tags:
@@ -5628,7 +6220,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            employeeId: employee_id_example
     patch:
       tags:
         - Time Off Requests
@@ -5666,7 +6263,36 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            employeeId: employee_id_example
+            timeOffRequest:
+              employee_id: '12345'
+              policy_id: '12345'
+              status: approved
+              description: Enjoying some sun.
+              start_date: '2022-04-01'
+              end_date: '2022-04-01'
+              request_date: '2022-03-21'
+              request_type: vacation
+              approval_date: '2022-03-21'
+              units: hours
+              amount: 3.5
+              day_part: morning
+              notes:
+                employee: Relaxing on the beach for a few hours.
+                manager: Enjoy!
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_4
+              policy_type: sick
     delete:
       tags:
         - Time Off Requests
@@ -5698,7 +6324,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: hris
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            employeeId: employee_id_example
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true

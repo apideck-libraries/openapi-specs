@@ -1102,7 +1102,7 @@ components:
     FilesSearch:
       type: object
       x-apideck-schema-id: FilesSearch
-      example:
+      example: &ref_0
         query: logo jpg
       properties:
         query:
@@ -1900,7 +1900,7 @@ components:
                   example: $.nested.property
                 value:
                   description: The value to set at the specified path, can be any type.
-                  example:
+                  example: &ref_1
                     TaxClassificationRef:
                       value: EUC-99990201-V1-00020000
               required:
@@ -2684,7 +2684,10 @@ paths:
         - connector: google-drive
           description: Google drive does not provide `previous` cursor information, so the cursors for the previous pages will be empty.
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Files
@@ -2730,7 +2733,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            filesUpload: string
   /file-storage/files/search:
     post:
       tags:
@@ -2775,7 +2782,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            filesSearch: *ref_0
   /file-storage/files/{id}:
     get:
       tags:
@@ -2808,7 +2819,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Files
@@ -2845,7 +2860,22 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            file:
+              name: New Name.pdf
+              description: Renamed PDF Document
+              parent_folder_id: '1234'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Files
@@ -2876,7 +2906,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /file-storage/files/{id}/download:
     get:
       tags:
@@ -2908,7 +2942,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /file-storage/files/{id}/export:
     get:
       tags:
@@ -2941,7 +2979,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            format: pdf
   /file-storage/folders:
     post:
       tags:
@@ -2982,7 +3025,22 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            folder:
+              name: Documents
+              description: My Personal Documents
+              parent_folder_id: '1234'
+              drive_id: '1234'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /file-storage/folders/{id}:
     get:
       tags:
@@ -3018,7 +3076,11 @@ paths:
         - connector: dropbox
           description: Dropbox does not support getting metadata for the `root` folder.
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Folders
@@ -3055,7 +3117,22 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            folder:
+              name: Documents
+              description: My Personal Documents
+              parent_folder_id: '1234'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Folders
@@ -3086,7 +3163,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /file-storage/folders/{id}/copy:
     post:
       tags:
@@ -3125,7 +3206,21 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            folder:
+              name: Documents
+              parent_folder_id: '1234'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /file-storage/shared-links:
     get:
       tags:
@@ -3160,7 +3255,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Shared Links
@@ -3196,7 +3294,22 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            sharedLink:
+              download_url: https://www.box.com/shared/static/rh935iit6ewrmw0unyul.jpeg
+              target_id: string
+              scope: company
+              password: string
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /file-storage/shared-links/{id}:
     get:
       tags:
@@ -3229,7 +3342,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Shared Links
@@ -3266,7 +3383,23 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            sharedLink:
+              download_url: https://www.box.com/shared/static/rh935iit6ewrmw0unyul.jpeg
+              target_id: string
+              scope: company
+              password: string
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Shared Links
@@ -3297,7 +3430,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /file-storage/upload-sessions:
     post:
       tags:
@@ -3336,7 +3473,22 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            uploadSession:
+              name: Documents
+              parent_folder_id: '1234'
+              drive_id: '1234'
+              size: 1810673
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /file-storage/upload-sessions/{id}:
     get:
       tags:
@@ -3371,7 +3523,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     put:
       tags:
         - Upload Sessions
@@ -3419,7 +3575,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            partNumber: 0
+            body: <binary string>
     delete:
       tags:
         - Upload Sessions
@@ -3450,7 +3612,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /file-storage/upload-sessions/{id}/finish:
     post:
       tags:
@@ -3495,7 +3661,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            uploadSessionsFinish: {}
   /file-storage/drives:
     get:
       tags:
@@ -3533,7 +3704,10 @@ paths:
         - connector: google-drive
           description: Google drive does not provide `previous` cursor information, so the cursors for the previous pages will be empty.
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Drives
@@ -3569,7 +3743,20 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            drive:
+              name: Project Resources
+              description: A description
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /file-storage/drives/{id}:
     get:
       tags:
@@ -3602,7 +3789,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Drives
@@ -3639,7 +3830,21 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            drive:
+              name: Project Resources
+              description: A description
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Drives
@@ -3670,7 +3875,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /file-storage/drive-groups:
     get:
       tags:
@@ -3706,7 +3915,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Drive Groups
@@ -3742,7 +3954,21 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            driveGroup:
+              name: accounting
+              display_name: accounting
+              description: A description
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
   /file-storage/drive-groups/{id}:
     get:
       tags:
@@ -3775,7 +4001,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Drive Groups
@@ -3812,7 +4042,22 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            driveGroup:
+              name: accounting
+              display_name: accounting
+              description: A description
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_1
     delete:
       tags:
         - Drive Groups
@@ -3843,7 +4088,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: fileStorage
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
 x-webhooks:
   FileCreated:
     post:

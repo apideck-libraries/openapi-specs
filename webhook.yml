@@ -320,7 +320,7 @@ components:
           type: array
           title: Subscribed events
           description: The list of subscribed events for this webhook. [`*`] indicates that all events are enabled.
-          example:
+          example: &ref_0
             - vault.connection.created
             - vault.connection.updated
           items:
@@ -844,7 +844,7 @@ components:
           type: array
           title: Subscribed events
           description: The list of subscribed events for this webhook. [`*`] indicates that all events are enabled.
-          example:
+          example: &ref_1
             - vault.connection.created
             - vault.connection.updated
           items:
@@ -1262,7 +1262,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Webhooks
@@ -1295,7 +1298,16 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            webhook:
+              description: A description
+              unified_api: crm
+              status: enabled
+              delivery_url: https://example.com/my/webhook/endpoint
+              events: *ref_0
   /webhook/webhooks/{id}:
     get:
       tags:
@@ -1324,7 +1336,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Webhooks
@@ -1358,7 +1374,16 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            webhook:
+              description: A description
+              status: enabled
+              delivery_url: https://example.com/my/webhook/endpoint
+              events: *ref_1
     delete:
       tags:
         - Webhooks
@@ -1386,7 +1411,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /webhook/webhooks/{id}/execute/{serviceId}:
     post:
       tags:
@@ -1431,7 +1460,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            serviceId: factorialhr
+            webhooksExecute: {}
   /webhook/webhooks/{id}/x/{serviceId}:
     post:
       tags:
@@ -1478,7 +1513,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            serviceId: factorialhr
+            webhooksShortExecute: {}
   /webhook/w/{id}/{serviceId}:
     post:
       tags:
@@ -1519,7 +1560,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk2MDAwYzIzLWI1NmItNGRlOC1iZmEzLTMxNTAzMTE3YzBmNyJ9.rAXnsmZ4O7eF0aDwdflkxAJQwMUfWs5989WfmspNZ6Q
+            serviceId: factorialhr
+            webhooksResolve: {}
     get:
       tags:
         - Webhooks
@@ -1549,7 +1596,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk2MDAwYzIzLWI1NmItNGRlOC1iZmEzLTMxNTAzMTE3YzBmNyJ9.rAXnsmZ4O7eF0aDwdflkxAJQwMUfWs5989WfmspNZ6Q
+            serviceId: factorialhr
   /webhook/logs:
     get:
       tags:
@@ -1580,4 +1632,7 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: webhook
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}

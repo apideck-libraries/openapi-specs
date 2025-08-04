@@ -1358,7 +1358,7 @@ components:
                   example: $.nested.property
                 value:
                   description: The value to set at the specified path, can be any type.
-                  example:
+                  example: &ref_0
                     TaxClassificationRef:
                       value: EUC-99990201-V1-00020000
               required:
@@ -1672,7 +1672,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: sms
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Messages
@@ -1708,7 +1711,27 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: sms
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            message:
+              from: '+15017122661'
+              to: '+15017122662'
+              subject: Picture
+              body: Hi! How are you doing?
+              type: sms
+              scheduled_at: '2020-09-30T07:43:32.000Z'
+              webhook_url: https://unify.apideck.com/webhook/webhooks/eyz329dkffdl4949/x/sms
+              reference: CUST001
+              messaging_service_id: '123456'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /sms/messages/{id}:
     get:
       tags:
@@ -1741,7 +1764,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: sms
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Messages
@@ -1778,7 +1805,28 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: sms
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            message:
+              from: '+15017122661'
+              to: '+15017122662'
+              subject: Picture
+              body: Hi! How are you doing?
+              type: sms
+              scheduled_at: '2020-09-30T07:43:32.000Z'
+              webhook_url: https://unify.apideck.com/webhook/webhooks/eyz329dkffdl4949/x/sms
+              reference: CUST001
+              messaging_service_id: '123456'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Messages
@@ -1809,4 +1857,8 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: sms
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example

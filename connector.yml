@@ -478,7 +478,6 @@ components:
           example: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
         logo_url:
           type: string
-          format: uri
           description: Link to the full logo for the connector.
           example: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
         website_url:
@@ -835,6 +834,7 @@ components:
       enum:
         - live
         - beta
+        - early-access
         - development
         - considering
       description: Status of the connector. Connectors with status live or beta are callable.
@@ -1551,7 +1551,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /connector/connectors/{id}:
     get:
       tags:
@@ -1576,7 +1579,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /connector/connectors/{id}/docs/{doc_id}:
     get:
       tags:
@@ -1602,7 +1609,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            docId: application_owner+oauth_credentials
   /connector/connectors/{id}/resources/{resource_id}:
     get:
       tags:
@@ -1630,7 +1642,12 @@ paths:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-speakeasy-test: false
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            resourceId: resource_id_example
   /connector/connectors/{id}/resources/{resource_id}/unified_api/{api_id}/schema:
     get:
       tags:
@@ -1660,7 +1677,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            resourceId: resource_id_example
+            apiId: api_id_example
   /connector/connectors/{id}/resources/{resource_id}/unified_api/{api_id}/example:
     get:
       tags:
@@ -1690,7 +1713,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            resourceId: resource_id_example
+            apiId: api_id_example
   /connector/apis:
     get:
       tags:
@@ -1717,7 +1746,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /connector/apis/{id}:
     get:
       tags:
@@ -1742,7 +1774,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /connector/apis/{id}/resources/{resource_id}:
     get:
       tags:
@@ -1768,7 +1804,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            resourceId: resource_id_example
   /connector/apis/{id}/resources/{resource_id}/coverage:
     get:
       tags:
@@ -1795,4 +1836,9 @@ paths:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-speakeasy-test: false
       x-apideck-api: connector
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            resourceId: resource_id_example

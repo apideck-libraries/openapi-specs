@@ -8114,7 +8114,7 @@ components:
                   example: $.nested.property
                 value:
                   description: The value to set at the specified path, can be any type.
-                  example:
+                  example: &ref_0
                     TaxClassificationRef:
                       value: EUC-99990201-V1-00020000
               required:
@@ -13661,7 +13661,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Tax Rates
@@ -13701,7 +13704,43 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            taxRate:
+              id: '1234'
+              name: GST on Purchases
+              code: ABN
+              description: Reduced rate GST Purchases
+              effective_tax_rate: 10
+              total_tax_rate: 10
+              tax_payable_account_id: '123456'
+              tax_remitted_account_id: '123456'
+              components:
+                - id: '10'
+                  name: GST
+                  rate: 10
+                  compound: true
+              type: NONE
+              report_tax_type: NONE
+              original_tax_rate_id: '12345'
+              status: active
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+              subsidiaries:
+                - id: string
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
   /accounting/tax-rates/{id}:
     get:
       tags:
@@ -13735,7 +13774,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Tax Rates
@@ -13772,7 +13815,44 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            taxRate:
+              id: '1234'
+              name: GST on Purchases
+              code: ABN
+              description: Reduced rate GST Purchases
+              effective_tax_rate: 10
+              total_tax_rate: 10
+              tax_payable_account_id: '123456'
+              tax_remitted_account_id: '123456'
+              components:
+                - id: '10'
+                  name: GST
+                  rate: 10
+                  compound: true
+              type: NONE
+              report_tax_type: NONE
+              original_tax_rate_id: '12345'
+              status: active
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+              subsidiaries:
+                - id: string
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
     delete:
       tags:
         - Tax Rates
@@ -13803,7 +13883,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/bills:
     get:
       tags:
@@ -13857,7 +13941,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Bills
@@ -13912,7 +13999,148 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            bill:
+              bill_number: '10001'
+              supplier:
+                id: '12345'
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              company_id: '12345'
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              bill_date: '2020-09-30'
+              due_date: '2020-10-30'
+              paid_date: '2020-10-30'
+              po_number: '90000117'
+              reference: INV-2024-001
+              line_items:
+                - row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: expense_account
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  category_id: '12345'
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  purchase_order:
+                    id: '123456'
+                    line_id: '123456'
+                    line_number: '1'
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
+                  rebilling:
+                    rebillable: true
+                    rebill_status: billed
+                    linked_transaction_id: txn_abc123
+                    linked_transaction_line_id: line_xyz789
+                  row_version: 1-12345
+              terms: Net 30 days
+              balance: 27500
+              deposit: 0
+              sub_total: 27500
+              total_tax: 2500
+              total: 27500
+              tax_code: '1234'
+              notes: Some notes about this bill.
+              status: draft
+              ledger_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              payment_method: cash
+              channel: email
+              language: EN
+              accounting_by_row: false
+              bank_account:
+                bank_name: Monzo
+                account_number: '123465'
+                account_name: SPACEX LLC
+                account_type: credit_card
+                iban: CH2989144532982975332
+                bic: AUDSCHGGXXX
+                routing_number: '012345678'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
+              discount_percentage: 5.5
+              source_document_url: https://www.invoicesolution.com/bill/123456
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              row_version: 1-12345
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+              accounting_period: 01-24
   /accounting/bills/{id}:
     get:
       tags:
@@ -13948,7 +14176,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Bills
@@ -13997,7 +14229,149 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            bill:
+              bill_number: '10001'
+              supplier:
+                id: '12345'
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              company_id: '12345'
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              bill_date: '2020-09-30'
+              due_date: '2020-10-30'
+              paid_date: '2020-10-30'
+              po_number: '90000117'
+              reference: INV-2024-001
+              line_items:
+                - row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: expense_account
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  category_id: '12345'
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  purchase_order:
+                    id: '123456'
+                    line_id: '123456'
+                    line_number: '1'
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
+                  rebilling:
+                    rebillable: true
+                    rebill_status: billed
+                    linked_transaction_id: txn_abc123
+                    linked_transaction_line_id: line_xyz789
+                  row_version: 1-12345
+              terms: Net 30 days
+              balance: 27500
+              deposit: 0
+              sub_total: 27500
+              total_tax: 2500
+              total: 27500
+              tax_code: '1234'
+              notes: Some notes about this bill.
+              status: draft
+              ledger_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              payment_method: cash
+              channel: email
+              language: EN
+              accounting_by_row: false
+              bank_account:
+                bank_name: Monzo
+                account_number: '123465'
+                account_name: SPACEX LLC
+                account_type: credit_card
+                iban: CH2989144532982975332
+                bic: AUDSCHGGXXX
+                routing_number: '012345678'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
+              discount_percentage: 5.5
+              source_document_url: https://www.invoicesolution.com/bill/123456
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              row_version: 1-12345
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+              accounting_period: 01-24
     delete:
       tags:
         - Bills
@@ -14032,7 +14406,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/invoices:
     get:
       tags:
@@ -14075,7 +14453,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Invoices
@@ -14134,7 +14515,184 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            invoice:
+              type: service
+              number: OIT00546
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              company_id: '12345'
+              invoice_date: '2020-09-30'
+              due_date: '2020-09-30'
+              terms: Net 30 days
+              po_number: '90000117'
+              reference: INV-2024-001
+              status: draft
+              invoice_sent: true
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_tax: 2500
+              tax_code: '1234'
+              discount_percentage: 5.5
+              discount_amount: 25
+              total: 27500
+              balance: 27500
+              deposit: 0
+              customer_memo: Thank you for your business and have a great day!
+              tracking_category:
+                id: '123456'
+                name: New York
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  budget: in_budget
+                  project_id: '12345'
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              template_id: '123456'
+              source_document_url: https://www.invoicesolution.com/invoice/123456
+              payment_allocations:
+                - id: '123456'
+                  allocated_amount: 1000
+                  date: '2020-09-30T07:43:32.000Z'
+              payment_method: cash
+              channel: email
+              language: EN
+              accounting_by_row: false
+              bank_account:
+                bank_name: Monzo
+                account_number: '123465'
+                account_name: SPACEX LLC
+                account_type: credit_card
+                iban: CH2989144532982975332
+                bic: AUDSCHGGXXX
+                routing_number: '012345678'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
+              ledger_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/invoices/{id}:
     get:
       tags:
@@ -14167,7 +14725,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Invoices
@@ -14232,7 +14794,185 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            invoice:
+              type: service
+              number: OIT00546
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              company_id: '12345'
+              invoice_date: '2020-09-30'
+              due_date: '2020-09-30'
+              terms: Net 30 days
+              po_number: '90000117'
+              reference: INV-2024-001
+              status: draft
+              invoice_sent: true
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_tax: 2500
+              tax_code: '1234'
+              discount_percentage: 5.5
+              discount_amount: 25
+              total: 27500
+              balance: 27500
+              deposit: 0
+              customer_memo: Thank you for your business and have a great day!
+              tracking_category:
+                id: '123456'
+                name: New York
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  budget: in_budget
+                  project_id: '12345'
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              template_id: '123456'
+              source_document_url: https://www.invoicesolution.com/invoice/123456
+              payment_allocations:
+                - id: '123456'
+                  allocated_amount: 1000
+                  date: '2020-09-30T07:43:32.000Z'
+              payment_method: cash
+              channel: email
+              language: EN
+              accounting_by_row: false
+              bank_account:
+                bank_name: Monzo
+                account_number: '123465'
+                account_name: SPACEX LLC
+                account_type: credit_card
+                iban: CH2989144532982975332
+                bic: AUDSCHGGXXX
+                routing_number: '012345678'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
+              ledger_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Invoices
@@ -14267,7 +15007,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/ledger-accounts:
     get:
       tags:
@@ -14310,7 +15054,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Ledger Accounts
@@ -14346,7 +15093,65 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            ledgerAccount:
+              display_id: 1-12345
+              nominal_code: N091
+              code: '453'
+              classification: asset
+              type: bank
+              sub_type: CHECKING_ACCOUNT
+              name: Bank account
+              fully_qualified_name: Asset.Bank.Checking_Account
+              description: Main checking account
+              opening_balance: 75000
+              current_balance: 20000
+              currency: USD
+              tax_type: NONE
+              tax_rate:
+                id: '123456'
+                rate: 10
+              level: 1
+              active: true
+              status: active
+              header: true
+              bank_account:
+                bank_name: Monzo
+                account_number: '123465'
+                account_name: SPACEX LLC
+                account_type: credit_card
+                iban: CH2989144532982975332
+                bic: AUDSCHGGXXX
+                routing_number: '012345678'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
+              parent_account:
+                id: '12345'
+                name: Bank Accounts
+                display_id: 1-1100
+              sub_account: false
+              last_reconciliation_date: '2020-09-30'
+              subsidiaries:
+                - id: string
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/ledger-accounts/{id}:
     get:
       tags:
@@ -14379,7 +15184,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Ledger Accounts
@@ -14420,7 +15229,66 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            ledgerAccount:
+              display_id: 1-12345
+              nominal_code: N091
+              code: '453'
+              classification: asset
+              type: bank
+              sub_type: CHECKING_ACCOUNT
+              name: Bank account
+              fully_qualified_name: Asset.Bank.Checking_Account
+              description: Main checking account
+              opening_balance: 75000
+              current_balance: 20000
+              currency: USD
+              tax_type: NONE
+              tax_rate:
+                id: '123456'
+                rate: 10
+              level: 1
+              active: true
+              status: active
+              header: true
+              bank_account:
+                bank_name: Monzo
+                account_number: '123465'
+                account_name: SPACEX LLC
+                account_type: credit_card
+                iban: CH2989144532982975332
+                bic: AUDSCHGGXXX
+                routing_number: '012345678'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
+              parent_account:
+                id: '12345'
+                name: Bank Accounts
+                display_id: 1-1100
+              sub_account: false
+              last_reconciliation_date: '2020-09-30'
+              subsidiaries:
+                - id: string
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Ledger Accounts
@@ -14455,7 +15323,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/invoice-items:
     get:
       tags:
@@ -14496,7 +15368,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Invoice Items
@@ -14536,7 +15411,69 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            invoiceItem:
+              name: Model Y
+              description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+              code: 120-C
+              sold: true
+              purchased: true
+              tracked: true
+              taxable: true
+              inventory_date: '2020-10-30'
+              type: inventory
+              sales_details:
+                unit_price: 27500.5
+                unit_of_measure: pc.
+                tax_inclusive: true
+                tax_rate:
+                  id: '123456'
+                  rate: 10
+              purchase_details:
+                unit_price: 27500.5
+                unit_of_measure: pc.
+                tax_inclusive: true
+                tax_rate:
+                  id: '123456'
+                  rate: 10
+              quantity: 1
+              unit_price: 27500.5
+              asset_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              income_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              expense_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              tracking_category:
+                id: '123456'
+                name: New York
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              active: true
+              department_id: '12345'
+              location_id: '12345'
+              subsidiary_id: '12345'
+              tax_schedule_id: '123456'
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/invoice-items/{id}:
     get:
       tags:
@@ -14574,7 +15511,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Invoice Items
@@ -14618,7 +15559,70 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            invoiceItem:
+              name: Model Y
+              description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+              code: 120-C
+              sold: true
+              purchased: true
+              tracked: true
+              taxable: true
+              inventory_date: '2020-10-30'
+              type: inventory
+              sales_details:
+                unit_price: 27500.5
+                unit_of_measure: pc.
+                tax_inclusive: true
+                tax_rate:
+                  id: '123456'
+                  rate: 10
+              purchase_details:
+                unit_price: 27500.5
+                unit_of_measure: pc.
+                tax_inclusive: true
+                tax_rate:
+                  id: '123456'
+                  rate: 10
+              quantity: 1
+              unit_price: 27500.5
+              asset_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              income_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              expense_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              tracking_category:
+                id: '123456'
+                name: New York
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              active: true
+              department_id: '12345'
+              location_id: '12345'
+              subsidiary_id: '12345'
+              tax_schedule_id: '123456'
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Invoice Items
@@ -14653,7 +15657,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/credit-notes:
     get:
       tags:
@@ -14696,7 +15704,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Credit Notes
@@ -14740,7 +15751,159 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            creditNote:
+              number: OIT00546
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              company_id: '12345'
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_amount: 49.99
+              total_tax: 2500
+              tax_code: '1234'
+              balance: 27500
+              remaining_credit: 27500
+              status: authorised
+              reference: '123456'
+              date_issued: '2021-05-01T12:00:00.000Z'
+              date_paid: '2021-05-01T12:00:00.000Z'
+              type: accounts_receivable_credit
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  budget: in_budget
+                  project_id: '12345'
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              allocations:
+                - id: '123456'
+                  type: invoice
+                  amount: 49.99
+                  allocation_id: '123456'
+              note: Some notes about this credit note
+              terms: Some terms about this credit note
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/credit-notes/{id}:
     get:
       tags:
@@ -14773,7 +15936,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Credit Notes
@@ -14826,7 +15993,160 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            creditNote:
+              number: OIT00546
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              company_id: '12345'
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_amount: 49.99
+              total_tax: 2500
+              tax_code: '1234'
+              balance: 27500
+              remaining_credit: 27500
+              status: authorised
+              reference: '123456'
+              date_issued: '2021-05-01T12:00:00.000Z'
+              date_paid: '2021-05-01T12:00:00.000Z'
+              type: accounts_receivable_credit
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  budget: in_budget
+                  project_id: '12345'
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              allocations:
+                - id: '123456'
+                  type: invoice
+                  amount: 49.99
+                  allocation_id: '123456'
+              note: Some notes about this credit note
+              terms: Some terms about this credit note
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Credit Notes
@@ -14868,7 +16188,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/customers:
     get:
       tags:
@@ -14914,7 +16238,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Customers
@@ -14960,7 +16287,104 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            customer:
+              display_id: EMP00101
+              display_name: Windsurf Shop
+              company_name: SpaceX
+              company_id: '12345'
+              title: CEO
+              first_name: Elon
+              middle_name: D.
+              last_name: Musk
+              suffix: Jr.
+              individual: true
+              project: false
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              bank_accounts:
+                - bank_name: Monzo
+                  account_number: '123465'
+                  account_name: SPACEX LLC
+                  account_type: credit_card
+                  iban: CH2989144532982975332
+                  bic: AUDSCHGGXXX
+                  routing_number: '012345678'
+                  bsb_number: 062-001
+                  branch_identifier: '001'
+                  bank_code: BNH
+                  currency: USD
+                  country: US
+              notes: Some notes about this customer
+              tax_rate:
+                id: '123456'
+                rate: 10
+              tax_number: US123945459
+              currency: USD
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              parent:
+                id: '12345'
+                name: Windsurf Shop
+              status: active
+              payment_method: cash
+              channel: email
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/customers/{id}:
     get:
       tags:
@@ -14993,7 +16417,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Customers
@@ -15044,7 +16472,105 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            customer:
+              display_id: EMP00101
+              display_name: Windsurf Shop
+              company_name: SpaceX
+              company_id: '12345'
+              title: CEO
+              first_name: Elon
+              middle_name: D.
+              last_name: Musk
+              suffix: Jr.
+              individual: true
+              project: false
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              bank_accounts:
+                - bank_name: Monzo
+                  account_number: '123465'
+                  account_name: SPACEX LLC
+                  account_type: credit_card
+                  iban: CH2989144532982975332
+                  bic: AUDSCHGGXXX
+                  routing_number: '012345678'
+                  bsb_number: 062-001
+                  branch_identifier: '001'
+                  bank_code: BNH
+                  currency: USD
+                  country: US
+              notes: Some notes about this customer
+              tax_rate:
+                id: '123456'
+                rate: 10
+              tax_number: US123945459
+              currency: USD
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              parent:
+                id: '12345'
+                name: Windsurf Shop
+              status: active
+              payment_method: cash
+              channel: email
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Customers
@@ -15079,7 +16605,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/suppliers:
     get:
       tags:
@@ -15129,7 +16659,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Suppliers
@@ -15177,7 +16710,103 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            supplier:
+              display_id: EMP00101
+              display_name: Windsurf Shop
+              company_name: SpaceX
+              company_id: '12345'
+              supplier_category: Insurance
+              title: CEO
+              first_name: Elon
+              middle_name: D.
+              last_name: Musk
+              suffix: Jr.
+              individual: true
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              bank_accounts:
+                - bank_name: Monzo
+                  account_number: '123465'
+                  account_name: SPACEX LLC
+                  account_type: credit_card
+                  iban: CH2989144532982975332
+                  bic: AUDSCHGGXXX
+                  routing_number: '012345678'
+                  bsb_number: 062-001
+                  branch_identifier: '001'
+                  bank_code: BNH
+                  currency: USD
+                  country: US
+              notes: Some notes about this supplier
+              tax_rate:
+                id: '123456'
+                rate: 10
+              tax_number: US123945459
+              currency: USD
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              status: active
+              payment_method: cash
+              terms: Net 30 days
+              channel: email
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+              subsidiary_id: '12345'
   /accounting/suppliers/{id}:
     get:
       tags:
@@ -15210,7 +16839,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Suppliers
@@ -15261,7 +16894,104 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            supplier:
+              display_id: EMP00101
+              display_name: Windsurf Shop
+              company_name: SpaceX
+              company_id: '12345'
+              supplier_category: Insurance
+              title: CEO
+              first_name: Elon
+              middle_name: D.
+              last_name: Musk
+              suffix: Jr.
+              individual: true
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              websites:
+                - id: '12345'
+                  url: http://example.com
+                  type: primary
+              bank_accounts:
+                - bank_name: Monzo
+                  account_number: '123465'
+                  account_name: SPACEX LLC
+                  account_type: credit_card
+                  iban: CH2989144532982975332
+                  bic: AUDSCHGGXXX
+                  routing_number: '012345678'
+                  bsb_number: 062-001
+                  branch_identifier: '001'
+                  bank_code: BNH
+                  currency: USD
+                  country: US
+              notes: Some notes about this supplier
+              tax_rate:
+                id: '123456'
+                rate: 10
+              tax_number: US123945459
+              currency: USD
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              status: active
+              payment_method: cash
+              terms: Net 30 days
+              channel: email
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+              subsidiary_id: '12345'
     delete:
       tags:
         - Suppliers
@@ -15296,7 +17026,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/payments:
     get:
       tags:
@@ -15348,7 +17082,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Payments
@@ -15394,7 +17131,87 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            payment:
+              currency: USD
+              currency_rate: 0.69
+              total_amount: 49.99
+              reference: '123456'
+              payment_method: cash
+              payment_method_reference: '123456'
+              payment_method_id: '12345'
+              accounts_receivable_account_type: Account
+              accounts_receivable_account_id: '123456'
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              supplier:
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              company_id: '12345'
+              reconciled: true
+              status: authorised
+              type: accounts_receivable
+              allocations:
+                - id: '123456'
+                  type: invoice
+                  amount: 49.99
+                  allocation_id: '123456'
+              note: Some notes about this transaction
+              number: '123456'
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              display_id: '123456'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/payments/{id}:
     get:
       tags:
@@ -15427,7 +17244,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Payments
@@ -15468,7 +17289,88 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            payment:
+              currency: USD
+              currency_rate: 0.69
+              total_amount: 49.99
+              reference: '123456'
+              payment_method: cash
+              payment_method_reference: '123456'
+              payment_method_id: '12345'
+              accounts_receivable_account_type: Account
+              accounts_receivable_account_id: '123456'
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              supplier:
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              company_id: '12345'
+              reconciled: true
+              status: authorised
+              type: accounts_receivable
+              allocations:
+                - id: '123456'
+                  type: invoice
+                  amount: 49.99
+                  allocation_id: '123456'
+              note: Some notes about this transaction
+              number: '123456'
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              display_id: '123456'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Payments
@@ -15503,7 +17405,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/company-info:
     get:
       tags:
@@ -15535,7 +17441,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /accounting/balance-sheet:
     get:
       tags:
@@ -15571,7 +17480,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /accounting/profit-and-loss:
     get:
       tags:
@@ -15609,7 +17521,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /accounting/journal-entries:
     get:
       tags:
@@ -15661,7 +17576,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Journal Entries
@@ -15719,7 +17637,154 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            journalEntry:
+              title: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry'
+              currency_rate: 0.69
+              currency: USD
+              company_id: '12345'
+              line_items:
+                - description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  tax_amount: 27500
+                  sub_total: 27500
+                  total_amount: 27500
+                  type: debit
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_category:
+                    id: '123456'
+                    name: New York
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
+                  supplier:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    address:
+                      id: '123'
+                      type: primary
+                      string: 25 Spring Street, Blackburn, VIC 3130
+                      name: HQ US
+                      line1: Main street
+                      line2: 'apt #'
+                      line3: 'Suite #'
+                      line4: delivery instructions
+                      street_number: '25'
+                      city: San Francisco
+                      state: CA
+                      postal_code: '94104'
+                      country: US
+                      latitude: '40.759211'
+                      longitude: '-73.984638'
+                      county: Santa Clara
+                      contact_name: Elon Musk
+                      salutation: Mr
+                      phone_number: 111-111-1111
+                      fax: 122-111-1111
+                      email: elon@musk.com
+                      website: https://elonmusk.com
+                      notes: Address notes or delivery instructions.
+                      row_version: 1-12345
+                  department_id: '12345'
+                  location_id: '12345'
+                  line_number: 1
+                - description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  tax_amount: 27500
+                  sub_total: 27500
+                  total_amount: 27500
+                  type: debit
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_category:
+                    id: '123456'
+                    name: New York
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
+                  supplier:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    address:
+                      id: '123'
+                      type: primary
+                      string: 25 Spring Street, Blackburn, VIC 3130
+                      name: HQ US
+                      line1: Main street
+                      line2: 'apt #'
+                      line3: 'Suite #'
+                      line4: delivery instructions
+                      street_number: '25'
+                      city: San Francisco
+                      state: CA
+                      postal_code: '94104'
+                      country: US
+                      latitude: '40.759211'
+                      longitude: '-73.984638'
+                      county: Santa Clara
+                      contact_name: Elon Musk
+                      salutation: Mr
+                      phone_number: 111-111-1111
+                      fax: 122-111-1111
+                      email: elon@musk.com
+                      website: https://elonmusk.com
+                      notes: Address notes or delivery instructions.
+                      row_version: 1-12345
+                  department_id: '12345'
+                  location_id: '12345'
+                  line_number: 1
+              status: draft
+              memo: Thank you for your business and have a great day!
+              posted_at: '2020-09-30T07:43:32.000Z'
+              journal_symbol: IND
+              tax_type: sales
+              tax_code: '1234'
+              number: OIT00546
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              accounting_period: 01-24
+              row_version: 1-12345
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/journal-entries/{id}:
     get:
       tags:
@@ -15752,7 +17817,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Journal Entries
@@ -15807,7 +17876,155 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            journalEntry:
+              title: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry'
+              currency_rate: 0.69
+              currency: USD
+              company_id: '12345'
+              line_items:
+                - description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  tax_amount: 27500
+                  sub_total: 27500
+                  total_amount: 27500
+                  type: debit
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_category:
+                    id: '123456'
+                    name: New York
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
+                  supplier:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    address:
+                      id: '123'
+                      type: primary
+                      string: 25 Spring Street, Blackburn, VIC 3130
+                      name: HQ US
+                      line1: Main street
+                      line2: 'apt #'
+                      line3: 'Suite #'
+                      line4: delivery instructions
+                      street_number: '25'
+                      city: San Francisco
+                      state: CA
+                      postal_code: '94104'
+                      country: US
+                      latitude: '40.759211'
+                      longitude: '-73.984638'
+                      county: Santa Clara
+                      contact_name: Elon Musk
+                      salutation: Mr
+                      phone_number: 111-111-1111
+                      fax: 122-111-1111
+                      email: elon@musk.com
+                      website: https://elonmusk.com
+                      notes: Address notes or delivery instructions.
+                      row_version: 1-12345
+                  department_id: '12345'
+                  location_id: '12345'
+                  line_number: 1
+                - description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  tax_amount: 27500
+                  sub_total: 27500
+                  total_amount: 27500
+                  type: debit
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_category:
+                    id: '123456'
+                    name: New York
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
+                  supplier:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    address:
+                      id: '123'
+                      type: primary
+                      string: 25 Spring Street, Blackburn, VIC 3130
+                      name: HQ US
+                      line1: Main street
+                      line2: 'apt #'
+                      line3: 'Suite #'
+                      line4: delivery instructions
+                      street_number: '25'
+                      city: San Francisco
+                      state: CA
+                      postal_code: '94104'
+                      country: US
+                      latitude: '40.759211'
+                      longitude: '-73.984638'
+                      county: Santa Clara
+                      contact_name: Elon Musk
+                      salutation: Mr
+                      phone_number: 111-111-1111
+                      fax: 122-111-1111
+                      email: elon@musk.com
+                      website: https://elonmusk.com
+                      notes: Address notes or delivery instructions.
+                      row_version: 1-12345
+                  department_id: '12345'
+                  location_id: '12345'
+                  line_number: 1
+              status: draft
+              memo: Thank you for your business and have a great day!
+              posted_at: '2020-09-30T07:43:32.000Z'
+              journal_symbol: IND
+              tax_type: sales
+              tax_code: '1234'
+              number: OIT00546
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              accounting_period: 01-24
+              row_version: 1-12345
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Journal Entries
@@ -15838,7 +18055,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/purchase-orders:
     get:
       tags:
@@ -15881,7 +18102,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Purchase Orders
@@ -15934,7 +18158,200 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            purchaseOrder:
+              po_number: '90000117'
+              reference: '123456'
+              supplier:
+                id: '12345'
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              subsidiary_id: '12345'
+              company_id: '12345'
+              status: open
+              issued_date: '2020-09-30'
+              delivery_date: '2020-09-30'
+              expected_arrival_date: '2020-09-30'
+              currency: USD
+              currency_rate: 0.69
+              sub_total: 27500
+              total_tax: 2500
+              total: 27500
+              tax_inclusive: true
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  budget: in_budget
+                  project_id: '12345'
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              ledger_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              template_id: '123456'
+              discount_percentage: 5.5
+              bank_account:
+                bank_name: Monzo
+                account_number: '123465'
+                account_name: SPACEX LLC
+                account_type: credit_card
+                iban: CH2989144532982975332
+                bic: AUDSCHGGXXX
+                routing_number: '012345678'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
+              accounting_by_row: false
+              due_date: '2020-10-30'
+              payment_method: cash
+              terms: Net 30 days
+              amortization_type: manual
+              tax_code: '1234'
+              tax_method: Due to supplier
+              issued_method: Email
+              issued_email: john.doe@example.com
+              channel: email
+              memo: Thank you for the partnership and have a great day!
+              notes: This is a test purchase order
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/purchase-orders/{id}:
     get:
       tags:
@@ -15966,7 +18383,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Purchase Orders
@@ -16018,7 +18439,201 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            purchaseOrder:
+              po_number: '90000117'
+              reference: '123456'
+              supplier:
+                id: '12345'
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              subsidiary_id: '12345'
+              company_id: '12345'
+              status: open
+              issued_date: '2020-09-30'
+              delivery_date: '2020-09-30'
+              expected_arrival_date: '2020-09-30'
+              currency: USD
+              currency_rate: 0.69
+              sub_total: 27500
+              total_tax: 2500
+              total: 27500
+              tax_inclusive: true
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  budget: in_budget
+                  project_id: '12345'
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              ledger_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              template_id: '123456'
+              discount_percentage: 5.5
+              bank_account:
+                bank_name: Monzo
+                account_number: '123465'
+                account_name: SPACEX LLC
+                account_type: credit_card
+                iban: CH2989144532982975332
+                bic: AUDSCHGGXXX
+                routing_number: '012345678'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
+              accounting_by_row: false
+              due_date: '2020-10-30'
+              payment_method: cash
+              terms: Net 30 days
+              amortization_type: manual
+              tax_code: '1234'
+              tax_method: Due to supplier
+              issued_method: Email
+              issued_email: john.doe@example.com
+              channel: email
+              memo: Thank you for the partnership and have a great day!
+              notes: This is a test purchase order
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Purchase Orders
@@ -16049,7 +18664,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/subsidiaries:
     get:
       tags:
@@ -16087,7 +18706,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Subsidiaries
@@ -16124,7 +18746,22 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            subsidiary:
+              parent_id: '12345'
+              name: SpaceX
+              status: active
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/subsidiaries/{id}:
     get:
       tags:
@@ -16157,7 +18794,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Subsidiaries
@@ -16195,7 +18836,23 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            subsidiary:
+              parent_id: '12345'
+              name: SpaceX
+              status: active
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Subsidiaries
@@ -16226,7 +18883,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/locations:
     get:
       tags:
@@ -16265,7 +18926,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Locations
@@ -16302,7 +18966,50 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            location:
+              parent_id: '12345'
+              company_name: SpaceX
+              display_name: 11 UT - South Jordan
+              status: active
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              subsidiaries:
+                - name: SpaceX
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/locations/{id}:
     get:
       tags:
@@ -16335,7 +19042,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Locations
@@ -16373,7 +19084,51 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            location:
+              parent_id: '12345'
+              company_name: SpaceX
+              display_name: 11 UT - South Jordan
+              status: active
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              subsidiaries:
+                - name: SpaceX
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Locations
@@ -16404,7 +19159,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/departments:
     get:
       tags:
@@ -16446,7 +19205,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Departments
@@ -16483,7 +19245,25 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            department:
+              parent_id: '12345'
+              name: Sales
+              status: active
+              subsidiaries:
+                - name: SpaceX
+              code: '123'
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/departments/{id}:
     get:
       tags:
@@ -16516,7 +19296,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Departments
@@ -16554,7 +19338,26 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            department:
+              parent_id: '12345'
+              name: Sales
+              status: active
+              subsidiaries:
+                - name: SpaceX
+              code: '123'
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Departments
@@ -16585,7 +19388,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/attachments/{reference_type}/{reference_id}:
     get:
       tags:
@@ -16621,7 +19428,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            referenceType: invoice
+            referenceId: '123456'
     post:
       tags:
         - Attachments
@@ -16671,7 +19483,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            referenceType: invoice
+            referenceId: '123456'
+            attachmentsUpload: string
   /accounting/attachments/{reference_type}/{reference_id}/{id}:
     get:
       tags:
@@ -16706,7 +19524,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            referenceType: invoice
+            referenceId: '123456'
+            id: id_example
     delete:
       tags:
         - Attachments
@@ -16739,7 +19563,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            referenceType: invoice
+            referenceId: '123456'
+            id: id_example
   /accounting/attachments/{reference_type}/{reference_id}/{id}/download:
     get:
       tags:
@@ -16773,7 +19603,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            referenceType: invoice
+            referenceId: '123456'
+            id: id_example
   /accounting/tracking-categories:
     get:
       tags:
@@ -16813,7 +19649,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Tracking Categories
@@ -16852,7 +19691,25 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            trackingCategory:
+              parent_id: '12345'
+              name: Department
+              code: '100'
+              status: active
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+              subsidiaries:
+                - id: string
   /accounting/tracking-categories/{id}:
     get:
       tags:
@@ -16888,7 +19745,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Tracking Categories
@@ -16928,7 +19789,26 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            trackingCategory:
+              parent_id: '12345'
+              name: Department
+              code: '100'
+              status: active
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+              subsidiaries:
+                - id: string
     delete:
       tags:
         - Tracking Categories
@@ -16959,7 +19839,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/bill-payments:
     get:
       tags:
@@ -17000,7 +19884,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Bill Payments
@@ -17043,7 +19930,81 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            billPayment:
+              currency: USD
+              currency_rate: 0.69
+              total_amount: 49.99
+              reference: '123456'
+              payment_method: cash
+              payment_method_reference: '123456'
+              payment_method_id: '12345'
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              supplier:
+                id: '12345'
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              company_id: '12345'
+              reconciled: true
+              status: authorised
+              type: accounts_payable
+              allocations:
+                - id: '12345'
+                  type: bill
+                  amount: 49.99
+                  allocation_id: '123456'
+              note: Some notes about this transaction
+              number: '123456'
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              display_id: '123456'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/bill-payments/{id}:
     get:
       tags:
@@ -17080,7 +20041,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Bill Payments
@@ -17121,7 +20086,82 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            billPayment:
+              currency: USD
+              currency_rate: 0.69
+              total_amount: 49.99
+              reference: '123456'
+              payment_method: cash
+              payment_method_reference: '123456'
+              payment_method_id: '12345'
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              supplier:
+                id: '12345'
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              company_id: '12345'
+              reconciled: true
+              status: authorised
+              type: accounts_payable
+              allocations:
+                - id: '12345'
+                  type: bill
+                  amount: 49.99
+                  allocation_id: '123456'
+              note: Some notes about this transaction
+              number: '123456'
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              display_id: '123456'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Bill Payments
@@ -17156,7 +20196,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/expenses:
     get:
       tags:
@@ -17192,7 +20236,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Expenses
@@ -17233,7 +20280,65 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            expense:
+              number: OIT00546
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              account_id: '123456'
+              customer_id: '12345'
+              supplier_id: '12345'
+              company_id: '12345'
+              department_id: '12345'
+              payment_type: cash
+              currency: USD
+              currency_rate: 0.69
+              type: expense
+              memo: For travel expenses incurred on 2024-05-15
+              tax_rate:
+                id: '123456'
+                rate: 10
+              total_amount: 275
+              line_items:
+                - tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  account_id: '123456'
+                  customer_id: '12345'
+                  department_id: '12345'
+                  location_id: '12345'
+                  subsidiary_id: '12345'
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  description: Travel US.
+                  total_amount: 275
+                  billable: true
+                  line_number: 1
+                  rebilling:
+                    rebillable: true
+                    rebill_status: billed
+                    linked_transaction_id: txn_abc123
+                    linked_transaction_line_id: line_xyz789
+              reference: INV-2024-001
+              source_document_url: https://www.invoicesolution.com/expense/123456
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/expenses/{id}:
     get:
       tags:
@@ -17268,7 +20373,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Expenses
@@ -17305,7 +20414,66 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            expense:
+              number: OIT00546
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              account_id: '123456'
+              customer_id: '12345'
+              supplier_id: '12345'
+              company_id: '12345'
+              department_id: '12345'
+              payment_type: cash
+              currency: USD
+              currency_rate: 0.69
+              type: expense
+              memo: For travel expenses incurred on 2024-05-15
+              tax_rate:
+                id: '123456'
+                rate: 10
+              total_amount: 275
+              line_items:
+                - tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  account_id: '123456'
+                  customer_id: '12345'
+                  department_id: '12345'
+                  location_id: '12345'
+                  subsidiary_id: '12345'
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  description: Travel US.
+                  total_amount: 275
+                  billable: true
+                  line_number: 1
+                  rebilling:
+                    rebillable: true
+                    rebill_status: billed
+                    linked_transaction_id: txn_abc123
+                    linked_transaction_line_id: line_xyz789
+              reference: INV-2024-001
+              source_document_url: https://www.invoicesolution.com/expense/123456
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Expenses
@@ -17339,7 +20507,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/aged-creditors:
     get:
       tags:
@@ -17374,7 +20546,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /accounting/aged-debtors:
     get:
       tags:
@@ -17408,7 +20583,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /accounting/bank-feed-accounts:
     get:
       tags:
@@ -17444,7 +20622,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Bank Feed Accounts
@@ -17481,7 +20662,24 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            bankFeedAccount:
+              bank_account_type: bank
+              source_account_id: src_456
+              target_account_id: tgt_789
+              target_account_name: Main Company Checking
+              target_account_number: NL91ABNA0417164300
+              currency: USD
+              feed_status: pending
+              country: US
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
   /accounting/bank-feed-accounts/{id}:
     get:
       tags:
@@ -17515,7 +20713,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Bank Feed Accounts
@@ -17553,7 +20755,25 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            bankFeedAccount:
+              bank_account_type: bank
+              source_account_id: src_456
+              target_account_id: tgt_789
+              target_account_name: Main Company Checking
+              target_account_number: NL91ABNA0417164300
+              currency: USD
+              feed_status: pending
+              country: US
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
     delete:
       tags:
         - Bank Feed Accounts
@@ -17585,7 +20805,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/bank-feed-statements:
     get:
       tags:
@@ -17621,7 +20845,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Bank Feed Statements
@@ -17663,7 +20890,28 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            bankFeedStatement:
+              bank_feed_account_id: acc_456
+              status: pending
+              start_date: '2021-05-01T12:00:00.000Z'
+              end_date: '2025-01-31T12:00:00.000Z'
+              start_balance: 10500.25
+              start_balance_credit_or_debit: debit
+              end_balance: 9800.5
+              end_balance_credit_or_debit: debit
+              transactions:
+                - posted_date: '2025-01-15T12:00:00.000Z'
+                  description: Payment received from ACME Corp
+                  amount: 250
+                  credit_or_debit: debit
+                  source_transaction_id: txn_987
+                  counterparty: ACME Corp
+                  reference: INV-2025-01
+                  transaction_type: payment
   /accounting/bank-feed-statements/{id}:
     get:
       tags:
@@ -17697,7 +20945,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Bank Feed Statements
@@ -17735,7 +20987,29 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            bankFeedStatement:
+              bank_feed_account_id: acc_456
+              status: pending
+              start_date: '2021-05-01T12:00:00.000Z'
+              end_date: '2025-01-31T12:00:00.000Z'
+              start_balance: 10500.25
+              start_balance_credit_or_debit: debit
+              end_balance: 9800.5
+              end_balance_credit_or_debit: debit
+              transactions:
+                - posted_date: '2025-01-15T12:00:00.000Z'
+                  description: Payment received from ACME Corp
+                  amount: 250
+                  credit_or_debit: debit
+                  source_transaction_id: txn_987
+                  counterparty: ACME Corp
+                  reference: INV-2025-01
+                  transaction_type: payment
     delete:
       tags:
         - Bank Feed Statements
@@ -17767,7 +21041,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/categories:
     get:
       tags:
@@ -17805,7 +21083,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /accounting/categories/{id}:
     get:
       tags:
@@ -17842,7 +21123,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
   /accounting/quotes:
     get:
       tags:
@@ -17875,7 +21160,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
     post:
       tags:
         - Quotes
@@ -17911,7 +21199,144 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            quote:
+              number: QT00546
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              sales_order_id: '123456'
+              company_id: '12345'
+              project_id: '12345'
+              quote_date: '2020-09-30'
+              expiry_date: '2020-10-30'
+              terms: Valid for 30 days
+              reference: INV-2024-001
+              status: draft
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_tax: 2500
+              tax_code: '1234'
+              discount_percentage: 5.5
+              discount_amount: 25
+              total: 27500
+              customer_memo: Thank you for considering our services!
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              template_id: '123456'
+              source_document_url: https://www.quotesolution.com/quote/123456
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /accounting/quotes/{id}:
     get:
       tags:
@@ -17943,7 +21368,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
     patch:
       tags:
         - Quotes
@@ -17980,7 +21409,145 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            quote:
+              number: QT00546
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              sales_order_id: '123456'
+              company_id: '12345'
+              project_id: '12345'
+              quote_date: '2020-09-30'
+              expiry_date: '2020-10-30'
+              terms: Valid for 30 days
+              reference: INV-2024-001
+              status: draft
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_tax: 2500
+              tax_code: '1234'
+              discount_percentage: 5.5
+              discount_amount: 25
+              total: 27500
+              customer_memo: Thank you for considering our services!
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_rate:
+                    id: '123456'
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              template_id: '123456'
+              source_document_url: https://www.quotesolution.com/quote/123456
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Quotes
@@ -18011,7 +21578,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: accounting
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true

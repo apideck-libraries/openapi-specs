@@ -2198,7 +2198,7 @@ components:
                   example: $.nested.property
                 value:
                   description: The value to set at the specified path, can be any type.
-                  example:
+                  example: &ref_0
                     TaxClassificationRef:
                       value: EUC-99990201-V1-00020000
               required:
@@ -2837,7 +2837,10 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /issue-tracking/collections/{collection_id}:
     get:
       tags:
@@ -2870,7 +2873,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            collectionId: collection_id_example
   /issue-tracking/collections/{collection_id}/tickets:
     get:
       tags:
@@ -2908,7 +2915,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            collectionId: collection_id_example
     post:
       tags:
         - Tickets
@@ -2945,7 +2956,30 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            collectionId: collection_id_example
+            collectionTicket:
+              parent_id: '12345'
+              type: Technical
+              subject: Technical Support Request
+              description: I am facing issues with my internet connection
+              status: open
+              priority: high
+              assignees:
+                - id: '12345'
+              due_date: '2020-09-30T07:43:32.000Z'
+              tags:
+                - id: '12345'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /issue-tracking/collections/{collection_id}/tickets/{ticket_id}:
     get:
       tags:
@@ -2979,7 +3013,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            ticketId: ticket_id_example
+            collectionId: collection_id_example
     patch:
       tags:
         - Tickets
@@ -3017,7 +3056,31 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            ticketId: ticket_id_example
+            collectionId: collection_id_example
+            collectionTicket:
+              parent_id: '12345'
+              type: Technical
+              subject: Technical Support Request
+              description: I am facing issues with my internet connection
+              status: open
+              priority: high
+              assignees:
+                - id: '12345'
+              due_date: '2020-09-30T07:43:32.000Z'
+              tags:
+                - id: '12345'
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Tickets
@@ -3049,7 +3112,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            ticketId: ticket_id_example
+            collectionId: collection_id_example
   /issue-tracking/collections/{collection_id}/tickets/{ticket_id}/comments:
     get:
       tags:
@@ -3087,7 +3155,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            collectionId: collection_id_example
+            ticketId: ticket_id_example
     post:
       tags:
         - Comments
@@ -3125,7 +3198,21 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            collectionId: collection_id_example
+            ticketId: ticket_id_example
+            collectionTicketComment:
+              body: What internet provider do you use?
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
   /issue-tracking/collections/{collection_id}/tickets/{ticket_id}/comments/{id}:
     get:
       tags:
@@ -3162,7 +3249,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            collectionId: collection_id_example
+            ticketId: ticket_id_example
     patch:
       tags:
         - Comments
@@ -3201,7 +3294,22 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            collectionId: collection_id_example
+            ticketId: ticket_id_example
+            collectionTicketComment:
+              body: What internet provider do you use?
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
     delete:
       tags:
         - Comments
@@ -3234,7 +3342,13 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            collectionId: collection_id_example
+            ticketId: ticket_id_example
   /issue-tracking/collections/{collection_id}/users:
     get:
       tags:
@@ -3270,7 +3384,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            collectionId: collection_id_example
   /issue-tracking/collections/{collection_id}/users/{id}:
     get:
       tags:
@@ -3304,7 +3422,12 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            collectionId: collection_id_example
+            id: id_example
   /issue-tracking/collections/{collection_id}/tags:
     get:
       tags:
@@ -3340,7 +3463,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-api: issueTracking
-      x-codeSamples: []
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            collectionId: collection_id_example
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true

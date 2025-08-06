@@ -155,6 +155,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/WebhookEventLogsFilter'
+    validationToken:
+      name: validationToken
+      in: query
+      description: Validation token for webhook verification
+      required: false
+      schema:
+        type: string
+      example: abc123
   responses:
     BadRequestResponse:
       content:
@@ -221,6 +229,10 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ResolveWebhookResponse'
+        text/plain:
+          schema:
+            type: string
+            description: Plain text response for webhook validation (e.g., validation token)
       description: Resolve Webhook
     UnauthorizedResponse:
       content:
@@ -1534,16 +1546,21 @@ paths:
         - $ref: '#/components/parameters/lookupIdToken'
         - $ref: '#/components/parameters/servicePathId'
         - $ref: '#/components/parameters/downstreamEventType'
+        - $ref: '#/components/parameters/validationToken'
       security:
         - apiKey: []
       requestBody:
-        required: true
+        required: false
         content:
           application/json:
             schema:
               oneOf:
                 - $ref: '#/components/schemas/ResolveWebhookEventRequest'
                 - $ref: '#/components/schemas/ResolveWebhookEventsRequest'
+          text/plain:
+            schema:
+              type: string
+              description: Plain text body for webhook validation requests
       responses:
         '200':
           $ref: '#/components/responses/ResolveWebhookResponse'

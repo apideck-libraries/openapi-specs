@@ -3,6 +3,7 @@
 ### Accounting API
 
 - Fixed `account` field in `Payments` in [Sage Business Cloud](connectors/sage-business-cloud-accounting)
+- Added native webhook events for [Sharepoint](connectors/sharepoint)
 
 ## v10.20.1 - (2025-07-25)
 

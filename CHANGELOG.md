@@ -1,3 +1,9 @@
+## v10.20.2 - (2025-08-01)
+
+### Accounting API
+
+- Fixed `account` field in `Payments` in [Sage Business Cloud](connectors/sage-business-cloud-accounting)
+
 ## v10.20.1 - (2025-07-25)
 
 ### Ecommerce API

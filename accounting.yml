@@ -1864,6 +1864,7 @@ components:
       x-apideck-weights:
         id: critical
         downstream_id: low
+        display_id: low
         bill_number: high
         supplier: high
         company_id: middle
@@ -1913,6 +1914,8 @@ components:
           $ref: '#/components/schemas/Id'
         downstream_id:
           $ref: '#/components/schemas/DownstreamId'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
         bill_number:
           type: string
           title: Bill number
@@ -6314,6 +6317,7 @@ components:
       x-apideck-weights:
         id: critical
         downstream_id: low
+        display_id: low
         type: high
         number: high
         customer: high
@@ -6361,6 +6365,8 @@ components:
           $ref: '#/components/schemas/Id'
         downstream_id:
           $ref: '#/components/schemas/DownstreamId'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
         type:
           type: string
           title: Invoice type
@@ -14005,6 +14011,7 @@ paths:
           label: Node
           source:
             bill:
+              display_id: '123456'
               bill_number: '10001'
               supplier:
                 id: '12345'
@@ -14236,6 +14243,7 @@ paths:
           source:
             id: id_example
             bill:
+              display_id: '123456'
               bill_number: '10001'
               supplier:
                 id: '12345'
@@ -14521,6 +14529,7 @@ paths:
           label: Node
           source:
             invoice:
+              display_id: '123456'
               type: service
               number: OIT00546
               customer:
@@ -14801,6 +14810,7 @@ paths:
           source:
             id: id_example
             invoice:
+              display_id: '123456'
               type: service
               number: OIT00546
               customer:

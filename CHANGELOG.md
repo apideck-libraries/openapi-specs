@@ -1,3 +1,10 @@
+## v10.20.4 - (2025-08-11)
+
+### HRIS API
+
+- Fixed mapping for phone number in [AFAS](connectors/afas)
+- Fixed enum mapping for leaving reasons in [Humaans-io](connectors/humaans-io)
+
 ## v10.20.3 - (2025-08-11)
 
 ### Accounting API

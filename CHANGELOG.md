@@ -1,3 +1,11 @@
+## v10.20.3 - (2025-08-11)
+
+### Accounting API
+
+- Added `approved_by`, `amortization_type`, `tax_method`, `template_id` and `attachments` support to [Bills](apis/accounting/reference#tag/Bills)
+- Added `retention_amount`, `payment_amount`, `shipping_id`, `memo`, `prepaid`, `tax_applicable_on`, `tax_recoverability`, `tax_method` and `worktags` support to [Bills](apis/accounting/reference#tag/Bills) line items
+- Added `worktags` and removed `budget` and `project_id` support in [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders) line items
+
 ## v10.20.2 - (2025-08-01)
 
 ### Accounting API

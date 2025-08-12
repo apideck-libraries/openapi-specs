@@ -1,3 +1,9 @@
+## v10.20.6 - (2025-08-12)
+
+### ATS API
+
+- Added `salutation`, `social_security_number`, `gender`, `type` fields to [Applicants](apis/ats/reference#tag/Applicants) schema
+
 ## v10.20.4 - (2025-08-11)
 
 ### HRIS API

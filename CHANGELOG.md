@@ -1,4 +1,11 @@
-## v10.20.6 - (2025-08-12)
+## v10.20.6 - (2025-08-13)
+
+### Accounting API
+
+- Added `department_id` support to [Bills](apis/accounting/reference#tag/Bills), [Invoices](apis/accounting/reference#tag/Invoices), [Purchase Orders](apis/accounting/reference#tag/PurchaseOrders), and [Credit Notes](apis/accounting/reference#tag/CreditNotes)
+- Added Locations and Departments support for [QuickBooks](connectors/quickbooks)
+
+## v10.20.5 - (2025-08-12)
 
 ### ATS API
 

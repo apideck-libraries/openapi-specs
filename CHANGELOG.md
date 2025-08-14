@@ -26,11 +26,23 @@
 - Added `retention_amount`, `payment_amount`, `shipping_id`, `memo`, `prepaid`, `tax_applicable_on`, `tax_recoverability`, `tax_method` and `worktags` support to [Bills](apis/accounting/reference#tag/Bills) line items
 - Added `worktags` and removed `budget` and `project_id` support in [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders) line items
 
+### File Storage API
+
+- Added native webhook events for [OneDrive](connectors/onedrive)
+
+### Webhook API
+
+- New webhook event `file-storage.drive.updated` is now available to subscribe to.
+
+
 ## v10.20.2 - (2025-08-01)
 
 ### Accounting API
 
 - Fixed `account` field in `Payments` in [Sage Business Cloud](connectors/sage-business-cloud-accounting)
+
+### File Storage API
+
 - Added native webhook events for [Sharepoint](connectors/sharepoint)
 
 ## v10.20.1 - (2025-07-25)

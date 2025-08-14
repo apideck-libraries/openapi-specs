@@ -1144,6 +1144,7 @@ components:
         - file-storage.file.created
         - file-storage.file.updated
         - file-storage.file.deleted
+        - file-storage.drive.updated
       example: file-storage.file.created
     FileStorageWebhookEvent:
       allOf:
@@ -4269,6 +4270,66 @@ x-webhooks:
                 entity_id: 123456ASDF
                 entity_url: https://unify.apideck.com/file-storage/files/123456ASDF
                 entity_type: file
+                occurred_at: '2020-01-01T00:00:00.000Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
+  DriveUpdated:
+    post:
+      summary: Drive Updated
+      description: Event broadcast when a drive has been updated.
+      operationId: driveUpdated
+      x-apideck-event-type: file-storage.drive.updated
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/FileStorageEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payload:
+                  $ref: '#/components/schemas/FileStorageWebhookEvent'
+            example:
+              payload:
+                event_type: file-storage.drive.updated
+                unified_api: file-storage
+                service_id: dropbox
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/file-storage/drives/123456ASDF
+                entity_type: drive
                 occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':

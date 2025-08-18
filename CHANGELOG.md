@@ -1,3 +1,10 @@
+## v10.20.7 - (2025-08-16)
+
+### Accounting API
+
+- Added [Dualentry](connectors/dualentry) connector
+- Added `currencies` field to [Subsidiaries](apis/accounting/reference#tag/Subsidiaries) schema
+
 ## v10.20.6 - (2025-08-13)
 
 ### Accounting API

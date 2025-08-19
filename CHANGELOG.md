@@ -1,3 +1,9 @@
+## v10.20.8 - (2025-08-19)
+
+### Accounting API
+
+- PhoneNumber unify enum type extended to include `billing`
+  
 ## v10.20.7 - (2025-08-16)
 
 ### Accounting API
@@ -26,6 +32,10 @@
 - Fixed enum mapping for leaving reasons in [Humaans-io](connectors/humaans-io)
 
 ## v10.20.3 - (2025-08-11)
+
+### Ats API
+
+- Added Job status enum mapping for [bullhorn-ats](connectors/bullhorn-ats)
 
 ### Accounting API
 

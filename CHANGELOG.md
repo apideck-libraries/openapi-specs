@@ -1,3 +1,10 @@
+## v10.20.9 - (2025-08-20)
+
+### ATS API
+
+- Added `accepting_candidates`, `open`, `closed`, `archived` to `job.status` enum.
+
+
 ## v10.20.8 - (2025-08-19)
 
 ### Accounting API

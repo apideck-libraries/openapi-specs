@@ -1,16 +1,21 @@
+## v10.20.10 - (2025-08-21)
+
+### Accounting API
+
+- Added `tax_details`, `tax_status_details`, `issued_method`, `issued_email` and `integration_system_id` fields to [Suppliers](apis/accounting/reference#tag/Suppliers) schema
+
 ## v10.20.9 - (2025-08-20)
 
 ### ATS API
 
 - Added `accepting_candidates`, `open`, `closed`, `archived` to `job.status` enum.
 
-
 ## v10.20.8 - (2025-08-19)
 
 ### Accounting API
 
 - PhoneNumber unify enum type extended to include `billing`
-  
+
 ## v10.20.7 - (2025-08-16)
 
 ### Accounting API
@@ -57,7 +62,6 @@
 ### Webhook API
 
 - New webhook event `file-storage.drive.updated` is now available to subscribe to.
-
 
 ## v10.20.2 - (2025-08-01)
 

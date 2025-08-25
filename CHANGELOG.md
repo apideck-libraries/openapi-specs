@@ -1,3 +1,9 @@
+## v10.20.11 - (2025-08-25)
+
+### HRIS API
+
+- Improved `start_date` and `end_date` filter descriptions for [Time Off Requests](apis/hris/reference#tag/Time-Off-Requests) to clarify date range functionality
+
 ## v10.20.10 - (2025-08-21)
 
 ### ATS API
@@ -7,7 +13,6 @@
 ### Accounting API
 
 - Added `tax_details`, `tax_status_details`, `issued_method`, `issued_email` and `integration_system_id` fields to [Suppliers](apis/accounting/reference#tag/Suppliers) schema
-
 
 ## v10.20.9 - (2025-08-20)
 

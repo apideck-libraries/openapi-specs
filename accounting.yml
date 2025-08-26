@@ -10889,6 +10889,7 @@ components:
       x-apideck-weights:
         id: medium
         parent_id: low
+        parent_name: low
         name: critical
         status: critical
         code: low
@@ -10899,6 +10900,11 @@ components:
           $ref: '#/components/schemas/Id'
         parent_id:
           $ref: '#/components/schemas/WritableId'
+        parent_name:
+          type: string
+          description: The name of the parent tracking category.
+          example: Area
+          nullable: true
         name:
           type: string
           description: The name of the tracking category.
@@ -20057,6 +20063,7 @@ paths:
           source:
             trackingCategory:
               parent_id: '12345'
+              parent_name: Area
               name: Department
               code: '100'
               status: active
@@ -20156,6 +20163,7 @@ paths:
             id: id_example
             trackingCategory:
               parent_id: '12345'
+              parent_name: Area
               name: Department
               code: '100'
               status: active

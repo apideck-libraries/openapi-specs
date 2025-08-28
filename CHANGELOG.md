@@ -1,3 +1,11 @@
+## v10.20.12 - (2025-08-25)
+
+### Accounting API
+
+- Added `status` field to [Expenses](apis/accounting/reference#tag/Expenses) schema
+- Added `updated_since` and `status` filters to [Expenses](apis/accounting/reference#tag/Expenses)
+- Added `status` filter to [Journal Entries](apis/accounting/reference#tag/Journal-Entries)
+
 ## v10.20.11 - (2025-08-25)
 
 ### HRIS API

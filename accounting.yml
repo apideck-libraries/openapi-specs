@@ -15738,6 +15738,15 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+        - connector: freeagent
+          description: |
+            We use **price list items** from FreeAgent to support invoice items. 
+            To access stock items, please use the [Proxy API](https://developers.apideck.com/apis/proxy/reference).
+
+            **Related resources:**
+            - [Price List Items](https://dev.freeagent.com/docs/price_list_items)
+            - [Stock Items](https://dev.freeagent.com/docs/stock_items) 
+            - [Stock Items via Proxy API](https://developers.apideck.com/apis/proxy/reference)
       responses:
         '200':
           $ref: '#/components/responses/GetInvoiceItemsResponse'
@@ -15775,6 +15784,15 @@ paths:
         - connector: quickbooks
           description: |
             The `taxable` field is applicable to US companies only and should be sent in the request body if your QuickBooks account is in the US region.
+        - connector: freeagent
+          description: |
+            We use **price list items** from FreeAgent to support invoice items. 
+            To access stock items, please use the [Proxy API](https://developers.apideck.com/apis/proxy/reference).
+
+            **Related resources:**
+            - [Price List Items](https://dev.freeagent.com/docs/price_list_items)
+            - [Stock Items](https://dev.freeagent.com/docs/stock_items) 
+            - [Stock Items via Proxy API](https://developers.apideck.com/apis/proxy/reference)
       requestBody:
         required: true
         content:
@@ -15880,6 +15898,15 @@ paths:
         - connector: sage-business-cloud-accounting
           description: |
             To fetch service items, you must include filter[type]=service in your request parameters
+        - connector: freeagent
+          description: |
+            We use **price list items** from FreeAgent to support invoice items. 
+            To access stock items, please use the [Proxy API](https://developers.apideck.com/apis/proxy/reference).
+
+            **Related resources:**
+            - [Price List Items](https://dev.freeagent.com/docs/price_list_items)
+            - [Stock Items](https://dev.freeagent.com/docs/stock_items) 
+            - [Stock Items via Proxy API](https://developers.apideck.com/apis/proxy/reference)
       security:
         - apiKey: []
       responses:

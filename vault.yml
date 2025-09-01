@@ -410,6 +410,44 @@ components:
       type: string
       description: ID of your Apideck Application
       example: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
+    ConsentState:
+      type: string
+      x-apideck-schema-id: ConsentState
+      description: The current consent state of the connection
+      enum:
+        - implicit
+        - pending
+        - granted
+        - denied
+        - revoked
+        - requires_reconsent
+      x-apideck-enum-id: connections.consent_state
+      example: granted
+    ConsentRecord:
+      type: object
+      x-apideck-schema-id: ConsentRecord
+      required:
+        - id
+        - created_at
+        - granted
+        - resources
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this consent record
+          example: con_1234567890
+          readOnly: true
+        created_at:
+          type: string
+          description: ISO timestamp when consent was recorded
+          example: '2025-04-15T14:30:00Z'
+          readOnly: true
+        granted:
+          type: boolean
+          description: Whether consent was granted (true) or denied/revoked (false)
+          example: true
+        resources:
+          $ref: '#/components/schemas/DataScopesResources'
     AuthType:
       type: string
       x-apideck-enum-id: auth_types
@@ -685,6 +723,18 @@ components:
           description: List of custom mappings configured for this connection
           items:
             $ref: '#/components/schemas/CustomMapping'
+        consent_state:
+          $ref: '#/components/schemas/ConsentState'
+        consents:
+          type: array
+          description: Immutable array of consent records for compliance and audit purposes
+          items:
+            $ref: '#/components/schemas/ConsentRecord'
+          readOnly: true
+        latest_consent:
+          $ref: '#/components/schemas/ConsentRecord'
+        application_data_scopes:
+          $ref: '#/components/schemas/DataScopes'
         updated_at:
           type: number
           example: 1616662325753
@@ -750,7 +800,7 @@ components:
               description: The number of seconds until the token expires. If omitted the token will be queued for refresh.
               nullable: true
               example: 3600
-          example: &ref_2
+          example: &ref_3
             access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
             refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.cThIIoDvwdueQB468K5xDc5633seEFoqwxjF_xSJyQQ
         settings:
@@ -759,7 +809,7 @@ components:
           nullable: true
           additionalProperties: true
           properties: {}
-          example: &ref_3
+          example: &ref_4
             instance_url: https://eu28.salesforce.com
         metadata:
           type: object
@@ -767,7 +817,7 @@ components:
           additionalProperties: true
           properties: {}
           nullable: true
-          example: &ref_4
+          example: &ref_5
             account:
               name: My Company
               id: c01458a5-7276-41ce-bc19-639906b0450a
@@ -1177,6 +1227,40 @@ components:
               $ref: '#/components/schemas/RequestCountAllocation'
         _raw:
           $ref: '#/components/schemas/Raw'
+    CreateCallbackState:
+      type: object
+      x-apideck-schema-id: CreateCallbackState
+      properties:
+        redirect_uri:
+          type: string
+          description: The redirect URI to be used after the connection is created.
+          example: https://example.com/callback
+    CreateCallbackStateResponse:
+      type: object
+      x-apideck-schema-id: CreateCallbackStateResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: object
+          properties:
+            state:
+              type: string
+              description: Callback state
+              example: 123e4567-e89b-12d3-a456-426614174000
+              readOnly: true
+        _raw:
+          $ref: '#/components/schemas/Raw'
     CreateConnectionResponse:
       type: object
       x-apideck-schema-id: CreateConnectionResponse
@@ -1374,6 +1458,119 @@ components:
           readOnly: true
           nullable: true
       additionalProperties: false
+    DataScopesResources:
+      x-apideck-schema-id: DataScopesResources
+      description: Data scopes resource configuration that can be either detailed field permissions or a wildcard
+      oneOf:
+        - type: object
+          x-apideck-schema-id: DataScopesFields
+          description: Map of resources to field-level permissions
+          additionalProperties:
+            type: object
+            description: Field paths with read/write permissions
+            additionalProperties:
+              type: object
+              properties:
+                read:
+                  type: boolean
+                  description: Whether the field can be read
+                  example: true
+                write:
+                  type: boolean
+                  description: Whether the field can be written to
+                  example: true
+          example:
+            hris.employees:
+              id:
+                read: true
+                write: false
+              first_name:
+                read: true
+                write: true
+              last_name:
+                read: true
+                write: true
+              email:
+                read: true
+                write: true
+              addresses[].street:
+                read: true
+                write: false
+              addresses[].city:
+                read: true
+                write: false
+              employment.job_title:
+                read: true
+                write: true
+              custom_fields[].employee_number:
+                read: true
+                write: false
+            hris.departments:
+              id:
+                read: true
+                write: false
+              name:
+                read: true
+                write: true
+              code:
+                read: true
+                write: false
+        - type: string
+          enum:
+            - '*'
+          description: Wildcard indicating all resources and fields when Data Scopes is selected
+          example: '*'
+      example: &ref_2
+        hris.employees:
+          id:
+            read: true
+            write: false
+          first_name:
+            read: true
+            write: true
+          last_name:
+            read: true
+            write: true
+          email:
+            read: true
+            write: true
+          addresses[].street:
+            read: true
+            write: false
+          addresses[].city:
+            read: true
+            write: false
+          employment.job_title:
+            read: true
+            write: true
+          custom_fields[].employee_number:
+            read: true
+            write: false
+        hris.departments:
+          id:
+            read: true
+            write: false
+          name:
+            read: true
+            write: true
+          code:
+            read: true
+            write: false
+    DataScopes:
+      type: object
+      x-apideck-schema-id: DataScopes
+      properties:
+        enabled:
+          type: boolean
+          description: Whether Data Scopes is enabled for this application
+          example: true
+        updated_at:
+          type: string
+          description: ISO timestamp of when the Data Scopes configuration was last modified
+          example: '2025-04-15T14:30:00Z'
+          readOnly: true
+        resources:
+          $ref: '#/components/schemas/DataScopesResources'
     DeleteConsumerResponse:
       type: object
       x-apideck-schema-id: GetConsumerResponse
@@ -1559,6 +1756,29 @@ components:
             $ref: '#/components/schemas/Connection'
         _raw:
           $ref: '#/components/schemas/Raw'
+    GetConsentRecordsResponse:
+      type: object
+      x-apideck-schema-id: GetConsentRecordsResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsentRecord'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+      additionalProperties: false
     GetConsumerResponse:
       type: object
       x-apideck-schema-id: GetConsumerResponse
@@ -2344,7 +2564,7 @@ components:
         custom_consumer_settings:
           additionalProperties: true
           description: Custom consumer settings that are passed as part of the session.
-          example: &ref_5
+          example: &ref_6
             feature_flag_1: true
             tax_rates:
               - id: '6'
@@ -2546,6 +2766,61 @@ components:
           $ref: '#/components/schemas/Connection'
         _raw:
           $ref: '#/components/schemas/Raw'
+    UpdateConsentRequest:
+      type: object
+      x-apideck-schema-id: UpdateConsentRequest
+      additionalProperties: false
+      required:
+        - granted
+        - resources
+      properties:
+        resources:
+          oneOf:
+            - type: object
+              description: Map of resources to field-level permissions that are being consented to
+              additionalProperties:
+                type: object
+                description: Field paths with read/write permissions
+                additionalProperties:
+                  type: object
+                  properties:
+                    read:
+                      type: boolean
+                      description: Whether the field can be read
+                      example: true
+                    write:
+                      type: boolean
+                      description: Whether the field can be written to
+                      example: true
+            - type: string
+              enum:
+                - '*'
+              description: Wildcard indicating all resources and fields when Data Scopes is disabled
+              example: '*'
+        granted:
+          type: boolean
+          description: Whether consent is being granted (true) or denied/revoked (false)
+          example: true
+    UpdateConsentResponse:
+      type: object
+      x-apideck-schema-id: UpdateConsentResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          $ref: '#/components/schemas/ConsentRecord'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     UpdateConsumerRequest:
       type: object
       x-apideck-schema-id: UpdateConsumerRequest
@@ -2649,40 +2924,6 @@ components:
           type: string
           description: The date and time the webhook subscription was created downstream
           example: '2020-10-01T12:00:00.000Z'
-    CreateCallbackState:
-      type: object
-      x-apideck-schema-id: CreateCallbackState
-      properties:
-        redirect_uri:
-          type: string
-          description: The redirect URI to be used after the connection is created.
-          example: https://example.com/callback
-    CreateCallbackStateResponse:
-      type: object
-      x-apideck-schema-id: CreateCallbackStateResponse
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          type: object
-          properties:
-            state:
-              type: string
-              description: Callback state
-              example: 123e4567-e89b-12d3-a456-426614174000
-              readOnly: true
-        _raw:
-          $ref: '#/components/schemas/Raw'
     Raw:
       title: raw
       type: object
@@ -2745,6 +2986,12 @@ components:
           example: {}
           schema: {}
       description: Resource successfully deleted
+    GetConsentRecordsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetConsentRecordsResponse'
+      description: Consent records
     GetConnectionResponse:
       content:
         application/json:
@@ -2899,6 +3146,12 @@ components:
           schema:
             $ref: '#/components/schemas/CreateCallbackStateResponse'
       description: Callback state created
+    UpdateConsentResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateConsentResponse'
+      description: Consent updated
   securitySchemes:
     apiKey:
       type: apiKey
@@ -3286,6 +3539,13 @@ paths:
                       value: GC5000 series
               custom_mappings:
                 - value: $.root.training.first_aid
+              consent_state: granted
+              latest_consent:
+                granted: true
+                resources: *ref_2
+              application_data_scopes:
+                enabled: true
+                resources: *ref_2
     patch:
       tags:
         - Connections
@@ -3343,6 +3603,13 @@ paths:
                       value: GC5000 series
               custom_mappings:
                 - value: $.root.training.first_aid
+              consent_state: granted
+              latest_consent:
+                granted: true
+                resources: *ref_2
+              application_data_scopes:
+                enabled: true
+                resources: *ref_2
     delete:
       tags:
         - Connections
@@ -3423,9 +3690,9 @@ paths:
             serviceId: pipedrive
             unifiedApi: crm
             connection:
-              credentials: *ref_2
-              settings: *ref_3
-              metadata: *ref_4
+              credentials: *ref_3
+              settings: *ref_4
+              metadata: *ref_5
   /vault/connections/{unified_api}/{service_id}/token:
     post:
       tags:
@@ -3526,6 +3793,101 @@ paths:
             serviceId: pipedrive
             unifiedApi: crm
             validateConnectionState: {}
+  /vault/connections/{unified_api}/{service_id}/consent:
+    get:
+      tags:
+        - Connections
+      summary: Get consent records
+      description: Get all consent records for a connection
+      operationId: connectionConsentsAll
+      parameters:
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unified_api'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetConsentRecordsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+    patch:
+      tags:
+        - Connections
+      summary: Update consent state
+      description: Update the consent state of a connection
+      operationId: connectionConsentUpdate
+      parameters:
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unified_api'
+      security:
+        - apiKey: []
+      requestBody:
+        description: New consent state
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateConsentRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateConsentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            connectionConsent:
+              resources:
+                property1:
+                  property1:
+                    read: true
+                    write: true
+                  property2:
+                    read: true
+                    write: true
+                property2:
+                  property1:
+                    read: true
+                    write: true
+                  property2:
+                    read: true
+                    write: true
+              granted: true
   /vault/connections/{unified_api}/{service_id}/callback-state:
     post:
       tags:
@@ -3670,6 +4032,13 @@ paths:
                       value: GC5000 series
               custom_mappings:
                 - value: $.root.training.first_aid
+              consent_state: granted
+              latest_consent:
+                granted: true
+                resources: *ref_2
+              application_data_scopes:
+                enabled: true
+                resources: *ref_2
   /vault/connections/{unified_api}/{service_id}/{resource}/schema:
     get:
       tags:
@@ -4269,7 +4638,7 @@ paths:
                 vault_name: Intercom
                 privacy_url: https://compliance.apideck.com/privacy-policy
                 terms_url: https://www.termsfeed.com/terms-conditions/957c85c1b089ae9e3219c83eff65377e
-              custom_consumer_settings: *ref_5
+              custom_consumer_settings: *ref_6
   /vault/logs:
     get:
       summary: Get all consumer request logs

@@ -1,3 +1,9 @@
+## v10.20.13 - (2025-09-01)
+
+### CRM API
+
+- Added [Blackbaud](connectors/blackbaud) connector
+
 ## v10.20.12 - (2025-08-25)
 
 ### Accounting API

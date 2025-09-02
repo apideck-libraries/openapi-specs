@@ -1,3 +1,9 @@
+## v10.20.14 - (2025-09-02)
+
+### Accounting API
+
+- Added SuiteTax support to [NetSuite](connectors/netsuite) with tax jurisdiction breakdown and fallback to Legacy Tax fields
+
 ## v10.20.13 - (2025-09-01)
 
 ### CRM API

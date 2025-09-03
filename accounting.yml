@@ -2641,6 +2641,7 @@ components:
         sales_tax_enabled: edge-case
         automated_sales_tax: edge-case
         tracking_categories_enabled: edge-case
+        tracking_categories_mode: edge-case
         row_version: edge-case
         updated_by: edge-case
         created_by: edge-case
@@ -2730,6 +2731,17 @@ components:
           type: boolean
           title: Tracking categories enabled
           description: Whether tracking categories are enabled for the company on transactions
+        tracking_categories_mode:
+          type: string
+          title: Tracking categories mode
+          description: The mode of tracking categories for the company on transactions
+          x-apideck-enum-id: company-info.tracking_categories_mode
+          enum:
+            - transaction
+            - line
+            - both
+            - disabled
+          example: disabled
         row_version:
           $ref: '#/components/schemas/RowVersion'
         updated_by:

@@ -1,3 +1,9 @@
+## v10.20.15 - (2025-09-15)
+
+### Accounting API
+
+- Added [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) resource.
+
 ## v10.20.14 - (2025-09-02)
 
 ### Accounting API

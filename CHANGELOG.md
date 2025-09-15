@@ -1,3 +1,9 @@
+## v10.20.16 - (2025-09-15)
+
+### Vault API
+
+- Added `status_codes` filter to [Logs](apis/vault/reference#tag/Logs)
+
 ## v10.20.15 - (2025-09-15)
 
 ### Accounting API
@@ -9,6 +15,7 @@
 ### Accounting API
 
 - Added SuiteTax support to [NetSuite](connectors/netsuite) with tax jurisdiction breakdown and fallback to Legacy Tax fields
+- Added [Sage Intacct REST](connectors/sage-intacct-rest) as an auth-only connector
 
 ## v10.20.13 - (2025-09-01)
 

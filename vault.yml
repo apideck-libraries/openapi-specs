@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.20.15
+  version: 10.20.16
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -2199,6 +2199,20 @@ components:
           type: number
           example: 201
           nullable: true
+          description: Filter by a single HTTP status code. For backward compatibility - use status_codes for multiple values.
+        status_codes:
+          type: array
+          items:
+            type: number
+            minimum: 100
+            maximum: 599
+          example:
+            - 200
+            - 201
+            - 204
+          nullable: true
+          description: Filter by multiple HTTP status codes. Values must be between 100-599. Maximum 50 status codes allowed.
+          maxItems: 50
         exclude_unified_apis:
           type: string
           nullable: true

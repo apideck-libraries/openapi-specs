@@ -1,3 +1,17 @@
+## v10.21.0 - (2025-09-25)
+
+### Accounting API
+
+- Added `line5` support to [Invoices](apis/accounting/reference#tag/Invoices), [Customers](apis/accounting/reference#tag/Customers), [Suppliers](apis/accounting/reference#tag/Suppliers), [Bills](apis/accounting/reference#tag/Bills), and [Credit Notes](apis/accounting/reference#tag/CreditNotes) address fields
+
+### HRIS API
+
+- Added `line5` support to [Employees](apis/hris/reference#tag/Employees) address fields  
+
+### CRM API
+
+- Added `line5` support to [Contacts](apis/crm/reference#tag/Contacts), [Companies](apis/crm/reference#tag/Companies), and [Leads](apis/crm/reference#tag/Leads) address fields
+
 ## v10.20.17 - (2025-09-24)
 
 ### Accounting API

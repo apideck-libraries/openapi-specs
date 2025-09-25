@@ -1,3 +1,9 @@
+## v10.20.17 - (2025-09-24)
+
+### Accounting API
+
+- Added [Quotes](apis/accounting/reference#tag/Quotes) support for [NetSuite](connectors/netsuite) connector.
+
 ## v10.20.16 - (2025-09-15)
 
 ### Vault API

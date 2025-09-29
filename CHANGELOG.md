@@ -1,3 +1,9 @@
+## v10.21.1 - (2025-09-28)
+
+### Accounting API
+
+- Added [Projects](apis/accounting/reference#tag/Projects) and support for the [NetSuite](connectors/netsuite) connector.
+
 ## v10.21.0 - (2025-09-25)
 
 ### Accounting API

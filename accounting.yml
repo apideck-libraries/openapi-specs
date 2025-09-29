@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.21.0
+  version: 10.21.1
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes.                                                                                                      |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer API KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer sk_live_***'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Prices and Currencies\n\nAll prices returned by the API are represented as integer amounts in a currency’s smallest unit. For example, $5 USD would be returned as 500 (i.e, 500 cents).\n\nFor zero-decimal currencies, amounts will still be provided as an integer but without the need to divide by 100. For example, an amount of ¥5 (JPY) would be returned as 5.\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -255,6 +255,22 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/PurchaseOrdersFilter'
+    projectsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ProjectsFilter'
+    projectsSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ProjectsSort'
     purchaseOrdersSort:
       name: sort
       in: query
@@ -1146,6 +1162,36 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateQuoteResponse'
+    CreateProjectResponse:
+      description: Projects
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateProjectResponse'
+    DeleteProjectResponse:
+      description: Projects
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteProjectResponse'
+    GetProjectResponse:
+      description: Projects
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetProjectResponse'
+    GetProjectsResponse:
+      description: Projects
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetProjectsResponse'
+    UpdateProjectResponse:
+      description: Projects
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateProjectResponse'
   schemas:
     AccountCode:
       title: Account Code
@@ -1398,6 +1444,9 @@ components:
         - accounting.quote.created
         - accounting.quote.updated
         - accounting.quote.deleted
+        - accounting.project.created
+        - accounting.project.updated
+        - accounting.project.deleted
     AccountingWebhookEvent:
       x-sdk-exclude: true
       allOf:
@@ -14240,6 +14289,566 @@ components:
             - other
           x-apideck-enum-id: expenses.status
       additionalProperties: false
+    CreateProjectResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Projects
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteProjectResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Projects
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    GetProjectResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Projects
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Project'
+    GetProjectsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Projects
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    Project:
+      type: object
+      x-apideck-schema-id: Project
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        downstream_id: edge-case
+        name: critical
+        display_id: medium
+        reference_id: medium
+        description: medium
+        status: high
+        project_type: medium
+        priority: medium
+        completion_percentage: medium
+        completion_date: medium
+        start_date: medium
+        end_date: medium
+        customer: high
+        department: medium
+        company_id: medium
+        owner_id: medium
+        parent_project: low
+        currency: medium
+        budget_amount: medium
+        approved_amount: medium
+        actual_amount: low
+        budget_hours: medium
+        actual_hours: low
+        hourly_rate: medium
+        billing_method: medium
+        is_billable: medium
+        phase: medium
+        tax_rate: medium
+        tracking_categories: medium
+        custom_fields: medium
+        tags: low
+        notes: low
+        contract_number: medium
+        profit_margin: medium
+        schedule_status: medium
+        addresses: medium
+        team_size: low
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
+        row_version: edge-case
+      required:
+        - name
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
+        name:
+          type: string
+          title: Project name
+          description: Name of the project
+          example: Website Redesign Project
+          minLength: 1
+        display_id:
+          type: string
+          title: Display ID
+          description: User-friendly project identifier
+          example: PROJ-001
+          nullable: true
+        reference_id:
+          type: string
+          title: Reference ID
+          description: External reference identifier for the project
+          example: WD-REF-2024-001
+          nullable: true
+        description:
+          type: string
+          title: Description
+          description: Detailed description of the project
+          example: Complete redesign of the company website including new branding and improved user experience
+          nullable: true
+        status:
+          type: string
+          title: Project Status
+          description: Current status of the project
+          example: active
+          enum:
+            - active
+            - completed
+            - on_hold
+            - cancelled
+            - draft
+            - other
+          x-apideck-enum-id: project.status
+          nullable: true
+        project_type:
+          type: string
+          title: Project Type
+          description: Type or category of the project
+          example: client_project
+          enum:
+            - client_project
+            - internal_project
+            - maintenance
+            - research_development
+            - training
+            - other
+          x-apideck-enum-id: project.project_type
+          nullable: true
+        priority:
+          type: string
+          title: Priority
+          description: Priority level of the project
+          example: high
+          enum:
+            - low
+            - medium
+            - high
+            - critical
+          x-apideck-enum-id: project.priority
+          nullable: true
+        completion_percentage:
+          type: number
+          minimum: 0
+          maximum: 100
+          title: Completion Percentage
+          description: Percentage of project completion (0-100)
+          example: 75.5
+          nullable: true
+        start_date:
+          type: string
+          format: date
+          title: Start Date
+          description: Start date of the project
+          example: '2024-01-15'
+          nullable: true
+        end_date:
+          type: string
+          format: date
+          title: End Date
+          description: Expected or actual end date of the project
+          example: '2024-06-30'
+          nullable: true
+        customer:
+          $ref: '#/components/schemas/LinkedCustomer'
+        department:
+          type: object
+          title: Department
+          description: Department or organizational unit associated with the project
+          nullable: true
+          properties:
+            id:
+              type: string
+              title: Department ID
+              description: Unique identifier for the department
+              example: DEPT-001
+            name:
+              type: string
+              title: Department Name
+              description: Name of the department
+              example: Marketing
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
+        owner_id:
+          type: string
+          title: Owner ID
+          description: ID of the user who owns/manages this project
+          example: '12345'
+          nullable: true
+        parent_project:
+          type: object
+          title: Parent Project
+          description: Parent project if this is a subproject
+          nullable: true
+          properties:
+            id:
+              type: string
+              title: Parent Project ID
+              description: Unique identifier for the parent project
+              example: PROJ-PARENT-001
+            name:
+              type: string
+              title: Parent Project Name
+              description: Name of the parent project
+              example: Company Website Overhaul
+        currency:
+          $ref: '#/components/schemas/Currency'
+        budget_amount:
+          type: number
+          multipleOf: 0.01
+          title: Budget Amount
+          description: Total budgeted amount for the project
+          example: 50000
+          nullable: true
+        approved_amount:
+          type: number
+          multipleOf: 0.01
+          title: Approved Amount
+          description: Approved budget amount for the project
+          example: 48000
+          nullable: true
+        actual_amount:
+          type: number
+          multipleOf: 0.01
+          title: Actual Amount
+          description: Total actual amount spent on the project
+          example: 45250.75
+          nullable: true
+          readOnly: true
+        budget_hours:
+          type: number
+          title: Budget Hours
+          description: Total budgeted hours for the project
+          example: 400
+          nullable: true
+        actual_hours:
+          type: number
+          title: Actual Hours
+          description: Total actual hours worked on the project
+          example: 385.5
+          nullable: true
+          readOnly: true
+        hourly_rate:
+          type: number
+          multipleOf: 0.01
+          title: Hourly Rate
+          description: Default hourly rate for project work
+          example: 125
+          nullable: true
+        billing_method:
+          type: string
+          title: Billing Method
+          description: Method used for billing this project
+          example: time_and_materials
+          enum:
+            - fixed_price
+            - time_and_materials
+            - milestone_based
+            - retainer
+            - non_billable
+          x-apideck-enum-id: project.billing_method
+          nullable: true
+        is_billable:
+          type: boolean
+          title: Is Billable
+          description: Indicates if the project is billable to the customer
+          example: true
+          default: true
+          nullable: true
+        phase:
+          type: string
+          title: Project Phase
+          description: Current phase of the project lifecycle
+          example: execution
+          enum:
+            - initiation
+            - planning
+            - execution
+            - monitoring
+            - closure
+            - other
+          x-apideck-enum-id: project.phase
+          nullable: true
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        tags:
+          type: array
+          items:
+            type: string
+          title: Tags
+          description: Tags associated with the project
+          example: &ref_1
+            - website
+            - redesign
+            - urgent
+        notes:
+          type: string
+          title: Notes
+          description: Additional notes about the project
+          example: Client has requested modern design with mobile-first approach
+          nullable: true
+        contract_number:
+          type: string
+          title: Contract Number
+          description: Contract or agreement number associated with the project
+          example: CNT-2024-001
+          nullable: true
+        profit_margin:
+          type: number
+          title: Profit Margin
+          description: Expected profit margin percentage for the project
+          example: 15.5
+          minimum: 0
+          maximum: 100
+          nullable: true
+        schedule_status:
+          type: string
+          title: Schedule Status
+          description: Current status of project schedule compared to plan
+          example: on_schedule
+          enum:
+            - ahead_of_schedule
+            - on_schedule
+            - behind_schedule
+            - critical_delay
+          x-apideck-enum-id: project.schedule_status
+          nullable: true
+        addresses:
+          type: array
+          title: Addresses
+          description: An array of addresses associated with the project (billing, job site, etc.)
+          items:
+            $ref: '#/components/schemas/Address'
+        team_size:
+          type: integer
+          title: Team Size
+          description: Number of team members assigned to the project
+          example: 8
+          minimum: 0
+          nullable: true
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+    ProjectsFilter:
+      type: object
+      x-apideck-schema-id: ProjectsFilter
+      example:
+        name: Website Redesign
+        status: active
+        customer_id: '12345'
+        is_billable: true
+        is_active: true
+        updated_since: '2020-09-30T07:43:32.000Z'
+      properties:
+        name:
+          type: string
+          title: Project Name
+          description: Name of project to search for
+          example: Website Redesign
+        status:
+          type: string
+          title: Project Status
+          description: Status of projects to filter by
+          example: active
+          x-apideck-enum-id: projects.status
+          enum:
+            - active
+            - completed
+            - on_hold
+            - cancelled
+            - draft
+        customer_id:
+          type: string
+          title: Customer ID
+          description: Filter projects by customer ID
+          example: '12345'
+        updated_since:
+          type: string
+          format: date-time
+          title: Updated Since
+          description: Return projects modified after this date
+          example: '2020-09-30T07:43:32.000Z'
+    ProjectsSort:
+      type: object
+      x-apideck-schema-id: ProjectsSort
+      properties:
+        by:
+          type: string
+          title: Sort by
+          description: The field to sort by
+          x-apideck-enum-id: projects.sort_by
+          enum:
+            - name
+            - status
+            - start_date
+            - end_date
+            - budget_amount
+            - actual_amount
+            - created_at
+            - updated_at
+          example: name
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+    UpdateProjectResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Projects
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -14403,6 +15012,11 @@ tags:
     x-apideck-resource-id: quotes
     x-apideck-model:
       $ref: '#/components/schemas/Quote'
+  - name: Projects
+    description: ''
+    x-apideck-resource-id: projects
+    x-apideck-model:
+      $ref: '#/components/schemas/Project'
 paths:
   /accounting/tax-rates:
     get:
@@ -22790,6 +23404,353 @@ paths:
           label: Node
           source:
             id: id_example
+  /accounting/projects:
+    get:
+      tags:
+        - Projects
+      operationId: projectsAll
+      summary: List projects
+      description: List projects
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/projectsFilter'
+        - $ref: '#/components/parameters/projectsSort'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProjectsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Projects
+      operationId: projectsAdd
+      summary: Create project
+      description: Create project
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateProjectResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            project:
+              name: Website Redesign Project
+              display_id: PROJ-001
+              reference_id: WD-REF-2024-001
+              description: Complete redesign of the company website including new branding and improved user experience
+              status: active
+              project_type: client_project
+              priority: high
+              completion_percentage: 75.5
+              start_date: '2024-01-15'
+              end_date: '2024-06-30'
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              department:
+                id: DEPT-001
+                name: Marketing
+              company_id: '12345'
+              owner_id: '12345'
+              parent_project:
+                id: PROJ-PARENT-001
+                name: Company Website Overhaul
+              currency: USD
+              budget_amount: 50000
+              approved_amount: 48000
+              budget_hours: 400
+              hourly_rate: 125
+              billing_method: time_and_materials
+              is_billable: true
+              phase: execution
+              tax_rate:
+                id: '123456'
+                rate: 10
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              tags: *ref_1
+              notes: Client has requested modern design with mobile-first approach
+              contract_number: CNT-2024-001
+              profit_margin: 15.5
+              schedule_status: on_schedule
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  line5: 'Attention: Finance Dept'
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              team_size: 8
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+  /accounting/projects/{id}:
+    get:
+      tags:
+        - Projects
+      operationId: projectsOne
+      summary: Get project
+      description: Get project
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetProjectResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+    patch:
+      tags:
+        - Projects
+      operationId: projectsUpdate
+      summary: Update project
+      description: Update project
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateProjectResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            project:
+              name: Website Redesign Project
+              display_id: PROJ-001
+              reference_id: WD-REF-2024-001
+              description: Complete redesign of the company website including new branding and improved user experience
+              status: active
+              project_type: client_project
+              priority: high
+              completion_percentage: 75.5
+              start_date: '2024-01-15'
+              end_date: '2024-06-30'
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              department:
+                id: DEPT-001
+                name: Marketing
+              company_id: '12345'
+              owner_id: '12345'
+              parent_project:
+                id: PROJ-PARENT-001
+                name: Company Website Overhaul
+              currency: USD
+              budget_amount: 50000
+              approved_amount: 48000
+              budget_hours: 400
+              hourly_rate: 125
+              billing_method: time_and_materials
+              is_billable: true
+              phase: execution
+              tax_rate:
+                id: '123456'
+                rate: 10
+              tracking_categories:
+                - id: '123456'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              tags: *ref_1
+              notes: Client has requested modern design with mobile-first approach
+              contract_number: CNT-2024-001
+              profit_margin: 15.5
+              schedule_status: on_schedule
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  line5: 'Attention: Finance Dept'
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              team_size: 8
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+    delete:
+      tags:
+        - Projects
+      operationId: projectsDelete
+      summary: Delete project
+      description: Delete project
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteProjectResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true
@@ -24144,6 +25105,117 @@ x-webhooks:
                 entity_id: 123456ASDF
                 entity_url: https://unify.apideck.com/accounting/quotes/123456ASDF
                 entity_type: quote
+                occurred_at: '2020-01-01T00:00:00.000Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
+  ProjectUpdated:
+    post:
+      summary: Project Updated
+      description: Event broadcast when a project has been updated.
+      operationId: projectUpdated
+      x-apideck-event-type: accounting.project.updated
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountingWebhookEvent'
+            example:
+              payload:
+                event_type: accounting.project.updated
+                unified_api: accounting
+                service_id: xero
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/accounting/projects/123456ASDF
+                entity_type: project
+                occurred_at: '2020-01-01T00:00:00.000Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
+  ProjectCreated:
+    post:
+      summary: Project Created
+      description: Event broadcast when a project has been created.
+      operationId: projectCreated
+      x-apideck-event-type: accounting.project.created
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountingWebhookEvent'
+            example:
+              payload:
+                event_type: accounting.project.created
+                unified_api: accounting
+                service_id: xero
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/accounting/projects/123456ASDF
+                entity_type: project
+                occurred_at: '2020-01-01T00:00:00.000Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully
+      parameters:
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
+          schema:
+            type: string
+            format: uuid
+            example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      security: []
+  ProjectDeleted:
+    post:
+      summary: Project Deleted
+      description: Event broadcast when a project has been deleted.
+      operationId: projectDeleted
+      x-apideck-event-type: accounting.project.deleted
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountingWebhookEvent'
+            example:
+              payload:
+                event_type: accounting.project.deleted
+                unified_api: accounting
+                service_id: xero
+                consumer_id: test_user_id
+                event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
+                entity_id: 123456ASDF
+                entity_url: https://unify.apideck.com/accounting/projects/123456ASDF
+                entity_type: project
                 occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':

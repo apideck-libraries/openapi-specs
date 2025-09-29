@@ -4611,6 +4611,7 @@ components:
         display_name: edge-case
         company_name: high
         company_id: medium
+        customer_category: edge-case
         title: high
         first_name: high
         middle_name: low
@@ -4629,6 +4630,7 @@ components:
         account: medium
         status: high
         payment_method: edge-case
+        terms: edge-case
         channel: edge-case
         updated_by: edge-case
         created_by: edge-case
@@ -4671,6 +4673,12 @@ components:
           $ref: '#/components/schemas/CompanyName'
         company_id:
           $ref: '#/components/schemas/AccountingCompanyId'
+        customer_category:
+          type: string
+          title: Customer Category
+          description: The category/type of the customer
+          example: Insurance
+          nullable: true
         title:
           $ref: '#/components/schemas/Title'
         first_name:
@@ -4744,6 +4752,12 @@ components:
             - unknown
         payment_method:
           $ref: '#/components/schemas/PaymentMethod'
+        terms:
+          type: string
+          title: Terms
+          description: Terms of payment.
+          example: Net 30 days
+          nullable: true
         channel:
           $ref: '#/components/schemas/Channel'
         custom_fields:
@@ -7340,6 +7354,7 @@ components:
       example:
         name: Widgets Large
         type: service
+        transaction_type: sale
       properties:
         name:
           type: string
@@ -7357,12 +7372,23 @@ components:
             - service
             - other
           nullable: true
+        transaction_type:
+          type: string
+          title: Transaction type
+          example: sale
+          description: The kind of transaction, indicating whether it is a sales transaction or a purchase transaction.
+          x-apideck-enum-id: accounting.transaction_type
+          enum:
+            - sale
+            - purchase
+          nullable: true
       additionalProperties: false
     InvoiceItemFilter:
       type: object
       x-apideck-schema-id: InvoiceItemFilter
       example:
         type: service
+        transaction_type: purchase
       properties:
         type:
           type: string
@@ -7374,6 +7400,16 @@ components:
             - inventory
             - service
             - other
+          nullable: true
+        transaction_type:
+          type: string
+          title: Transaction type
+          example: purchase
+          description: The kind of transaction, indicating whether it is a sales transaction or a purchase transaction.
+          x-apideck-enum-id: accounting.transaction_type
+          enum:
+            - sale
+            - purchase
           nullable: true
       additionalProperties: false
     InvoiceItemsSort:
@@ -13577,6 +13613,7 @@ components:
             - supplier
             - expense
             - revenue
+            - customer
           nullable: false
         status:
           type: string
@@ -13617,6 +13654,7 @@ components:
             - supplier
             - expense
             - revenue
+            - customer
           nullable: false
       additionalProperties: false
     GetCategoryResponse:
@@ -17801,6 +17839,7 @@ paths:
               display_name: Windsurf Shop
               company_name: SpaceX
               company_id: '12345'
+              customer_category: Insurance
               title: CEO
               first_name: Elon
               middle_name: D.
@@ -17877,6 +17916,7 @@ paths:
                 name: Windsurf Shop
               status: active
               payment_method: cash
+              terms: Net 30 days
               channel: email
               custom_fields:
                 - id: '2389328923893298'
@@ -17988,6 +18028,7 @@ paths:
               display_name: Windsurf Shop
               company_name: SpaceX
               company_id: '12345'
+              customer_category: Insurance
               title: CEO
               first_name: Elon
               middle_name: D.
@@ -18064,6 +18105,7 @@ paths:
                 name: Windsurf Shop
               status: active
               payment_method: cash
+              terms: Net 30 days
               channel: email
               custom_fields:
                 - id: '2389328923893298'

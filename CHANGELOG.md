@@ -1,3 +1,11 @@
+## v10.21.2 - (2025-09-29)
+
+### Accounting API
+
+- Added [Ledger Accounts](apis/accounting/reference#tag/Ledger-Accounts), [Customers](apis/accounting/reference#tag/Customers), [Subsidiaries](apis/accounting/reference#tag/Subsidiaries), [Payments](apis/accounting/reference#tag/Payments), [Journal Entries](apis/accounting/reference#tag/Journal-Entries), [Invoice Items](apis/accounting/reference#tag/Invoice-Items), and [Tax Rates](apis/accounting/reference#tag/Tax-Rates) read support for [Workday](connectors/workday)
+- Added `terms` and `customer_category` fields to [Customers](apis/accounting/reference#tag/Customers)
+- Added `transaction_type` filter to [Invoice Items](apis/accounting/reference#tag/Invoice-Items)
+
 ## v10.21.1 - (2025-09-28)
 
 ### Accounting API
@@ -12,7 +20,7 @@
 
 ### HRIS API
 
-- Added `line5` support to [Employees](apis/hris/reference#tag/Employees) address fields  
+- Added `line5` support to [Employees](apis/hris/reference#tag/Employees) address fields
 
 ### CRM API
 

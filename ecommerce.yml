@@ -3721,6 +3721,8 @@ paths:
           description: 'PrestaShop primarily uses an `id` field to identify product associations (Ie: categories, variants etc). To maintain performance on the list endpoint, fewer properties are returned than other connectors.'
         - connector: bigcommerce
           description: In the pagination, the limit value should be in additions of 10. E.g. 10, 20, 30, etc.
+        - connector: wix
+          description: Wix V3 catalog assigns unique SKUs and weights to each product variant. The product-level `sku` and `weight` fields represent only the first variant for backward compatibility. To access complete variant data across all product variations, reference the individual `variants[].sku` and `variants[].weight` fields which contain the accurate data for each variant.
       responses:
         '200':
           $ref: '#/components/responses/GetProductsResponse'
@@ -3760,6 +3762,8 @@ paths:
       x-apideck-gotchas:
         - connector: prestashop
           description: Product images for PrestaShop are limited to the default image set on the product.
+        - connector: wix
+          description: Wix V3 catalog assigns unique SKUs and weights to each product variant. The product-level `sku` and `weight` fields represent only the first variant for backward compatibility. To access complete variant data across all product variations, reference the individual `variants[].sku` and `variants[].weight` fields which contain the accurate data for each variant.
       responses:
         '200':
           $ref: '#/components/responses/GetProductResponse'

@@ -17759,7 +17759,7 @@ paths:
           description: Clearbooks does not support setting the pagination size.
         - connector: xero
           description: |
-            In Xero, contacts are not specifically identified as customers or suppliers until an associated financial document is linked to them. This means that within the customer data response, you will find contacts in two categories: those who have been linked to an invoice and thus are recognized as customers, and those who have no invoices or bills associated, remaining uncategorized. For example, a contact is only considered a Customer if there is an invoice connected to them. Similarly, a contact is recognized as a Supplier only when a bill has been associated with their account.
+            In Xero, contacts are not strictly separated into customers or suppliers until linked to a transaction. Apideck's approach is to return customers as `IsCustomer=true||IsSupplier=false` and suppliers as `IsSupplier=true||IsCustomer=false`. If you need other cases, use pass-through, e.g. `?pass_through[where]=IsCustomer=false AND IsSupplier=false` for uncategorized contacts. See the [Pass-through guide](https://developers.apideck.com/guides/pass-through) for more details.
         - connector: freeagent
           description: |
             In FreeAgent, newly created customers will not appear in customer list responses until an invoice has been assigned to them. This is because FreeAgent only classifies contacts as customers once they have associated invoices. See [Set up a contact as a customer or a supplier](https://support.freeagent.com/hc/en-gb/articles/115001217850-Set-up-a-contact-as-a-customer-or-a-supplier) for more details.
@@ -18192,7 +18192,7 @@ paths:
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: xero
           description: |
-            In Xero, contacts are not specifically identified as customers or suppliers until an associated financial document is linked to them. This means that within the customer data response, you will find contacts in two categories: those who have been linked to an invoice and thus are recognized as customers, and those who have no invoices or bills associated, remaining uncategorized. For example, a contact is only considered a Customer if there is an invoice connected to them. Similarly, a contact is recognized as a Supplier only when a bill has been associated with their account.
+            In Xero, contacts are not strictly separated into customers or suppliers until linked to a transaction. Apideck's approach is to return suppliers as `IsSupplier=true||IsCustomer=false` and customers as `IsCustomer=true||IsSupplier=false`. If you need other cases, use pass-through, e.g. `?pass_through[where]=IsCustomer=false AND IsSupplier=false` for uncategorized contacts. See the [Pass-through guide](https://developers.apideck.com/guides/pass-through) for more details.
       responses:
         '200':
           $ref: '#/components/responses/GetSuppliersResponse'

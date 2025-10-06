@@ -8026,25 +8026,25 @@ components:
           description: The type of account.
           x-apideck-enum-id: ledger-accounts.type
           enum:
+            - accounts_payable
             - accounts_receivable
-            - revenue
-            - sales
-            - other_income
-            - bank
-            - current_asset
-            - fixed_asset
-            - non_current_asset
-            - other_asset
             - balancesheet
+            - bank
+            - costs_of_sales
+            - credit_card
+            - current_asset
+            - current_liability
             - equity
             - expense
-            - other_expense
-            - costs_of_sales
-            - accounts_payable
-            - credit_card
-            - current_liability
+            - fixed_asset
+            - non_current_asset
             - non_current_liability
+            - other_asset
+            - other_expense
+            - other_income
             - other_liability
+            - revenue
+            - sales
             - other
           example: bank
         sub_type:
@@ -16565,6 +16565,10 @@ paths:
       operationId: ledgerAccountsAdd
       summary: Create Ledger Account
       description: Create Ledger Account
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            The `currency` field is supported only when Multi-Currency is enabled in NetSuite. It applies mainly to Bank and Credit Card accounts and becomes read-only after creation.
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'

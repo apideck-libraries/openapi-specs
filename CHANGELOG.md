@@ -1,3 +1,10 @@
+## v10.21.3 - (2025-10-07)
+
+### Accounting API
+
+- Added [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) and [Projects](apis/accounting/reference#tag/Projects) resource to [Workday](connectors/workday) accounting
+- Added `active` field to [Projects](apis/accounting/reference#tag/Projects) resource
+
 ## v10.21.2 - (2025-09-29)
 
 ### Accounting API

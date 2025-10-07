@@ -1256,7 +1256,6 @@ components:
         - id
       x-apideck-strict-required:
         - name
-        - account_type
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -14474,6 +14473,7 @@ components:
         reference_id: medium
         description: medium
         status: high
+        active: high
         project_type: medium
         priority: medium
         completion_percentage: medium
@@ -14552,8 +14552,16 @@ components:
             - on_hold
             - cancelled
             - draft
+            - in_progress
+            - approved
             - other
           x-apideck-enum-id: project.status
+          nullable: true
+        active:
+          type: boolean
+          title: Active
+          description: Indicates whether the project is currently active or inactive
+          example: true
           nullable: true
         project_type:
           type: string
@@ -23536,6 +23544,7 @@ paths:
               reference_id: WD-REF-2024-001
               description: Complete redesign of the company website including new branding and improved user experience
               status: active
+              active: true
               project_type: client_project
               priority: high
               completion_percentage: 75.5
@@ -23691,6 +23700,7 @@ paths:
               reference_id: WD-REF-2024-001
               description: Complete redesign of the company website including new branding and improved user experience
               status: active
+              active: true
               project_type: client_project
               priority: high
               completion_percentage: 75.5

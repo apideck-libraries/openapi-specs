@@ -1,3 +1,9 @@
+## v10.21.4 - (2025-10-08)
+
+### Accounting API
+
+- Added `service_date` support to [Invoices](apis/accounting/reference#tag/Invoices) and [Quotes](apis/accounting/reference#tag/Quotes) and [Credit Notes](apis/accounting/reference#tag/CreditNotes) line items
+
 ## v10.21.3 - (2025-10-07)
 
 ### Accounting API

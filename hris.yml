@@ -4854,6 +4854,12 @@ paths:
         - connector: nmbrs
           description: |
             When creating an employee, the `employment_role.type` values accepted for NMbrs are `employee`, `contractor` and `freelance`.
+
+            **Important**: Nmbrs requires nationality data (`nationalities` field) for employees with type "payroll". When nationality is not provided:
+            - Employees with `employment_role.type: "employee"` are automatically created as "external" type instead of "payroll" to avoid validation errors
+            - This may affect payroll processing, benefits eligibility, and reporting in Nmbrs
+            - To create employees as "payroll" type, ensure the `nationalities` field contains at least one ISO country code
+            - Contractors and freelancers are always created as "external" type regardless of nationality
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'

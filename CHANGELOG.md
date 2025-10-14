@@ -1,3 +1,10 @@
+## v10.21.5 - (2025-10-14)
+
+### Accounting API
+
+- Added write support for [Journal Entries](apis/accounting/reference#tag/Journal-Entries) in [Workday](connectors/workday)
+- Added `worktags` and `ledger_account.parent_id` fields in [Journal Entries](apis/accounting/reference#tag/Journal-Entries) line items
+
 ## v10.21.4 - (2025-10-08)
 
 ### Accounting API

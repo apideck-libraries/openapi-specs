@@ -1,3 +1,9 @@
+## v10.21.6 - (2025-10-17)
+
+### Accounting API
+
+- Added write support for [Ledger Accounts](apis/accounting/reference#tag/Ledger-Accounts) in [Workday](connectors/workday)
+
 ## v10.21.5 - (2025-10-14)
 
 ### Accounting API

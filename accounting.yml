@@ -1266,16 +1266,9 @@ components:
           example: BA-001
           nullable: true
         name:
-          type: string
-          title: Bank Account Name
-          description: The name of the bank account as it appears in the accounting system
-          example: Main Operating Account
+          $ref: '#/components/schemas/BankAccountName'
         account_number:
-          type: string
-          title: Account Number
-          description: The bank account number
-          example: '1234567890'
-          nullable: true
+          $ref: '#/components/schemas/BankAccountNumber'
         account_type:
           type: string
           title: Account Type
@@ -1290,11 +1283,7 @@ components:
             - other
           example: checking
         bank_name:
-          type: string
-          title: Bank Name
-          description: The name of the bank or financial institution
-          example: Chase Bank
-          nullable: true
+          $ref: '#/components/schemas/BankName'
         currency:
           $ref: '#/components/schemas/Currency'
         balance:
@@ -1316,41 +1305,17 @@ components:
           example: 5000
           nullable: true
         routing_number:
-          type: string
-          title: Routing Number
-          description: Bank routing number (US)
-          example: '021000021'
-          nullable: true
+          $ref: '#/components/schemas/RoutingNumber'
         iban:
-          type: string
-          title: IBAN
-          description: International Bank Account Number
-          example: GB33BUKB20201555555555
-          nullable: true
+          $ref: '#/components/schemas/IBAN'
         bic:
-          type: string
-          title: BIC/SWIFT Code
-          description: Bank Identifier Code / SWIFT Code
-          example: CHASUS33
-          nullable: true
+          $ref: '#/components/schemas/BIC'
         bsb_number:
-          type: string
-          title: BSB Number
-          description: Bank State Branch number (Australia/New Zealand)
-          example: 062-001
-          nullable: true
+          $ref: '#/components/schemas/BSBNumber'
         branch_identifier:
-          type: string
-          title: Branch Identifier
-          description: Bank branch identifier
-          example: '001'
-          nullable: true
+          $ref: '#/components/schemas/BranchIdentifier'
         bank_code:
-          type: string
-          title: Bank Code
-          description: Bank code assigned by central bank
-          example: BNH
-          nullable: true
+          $ref: '#/components/schemas/BankCode'
         country:
           $ref: '#/components/schemas/Country'
         status:
@@ -2063,23 +2028,11 @@ components:
         country: low
       properties:
         bank_name:
-          type: string
-          title: Bank Name
-          description: The name of the bank
-          example: Monzo
-          nullable: true
+          $ref: '#/components/schemas/BankName'
         account_number:
-          type: string
-          title: Bank Account Number
-          description: A bank account number is a number that is tied to your bank account. If you have several bank accounts, such as personal, joint, business (and so on), each account will have a different account number.
-          example: '123465'
-          nullable: true
+          $ref: '#/components/schemas/BankAccountNumber'
         account_name:
-          type: string
-          title: Bank Account Name
-          description: The name which you used in opening your bank account.
-          example: SPACEX LLC
-          nullable: true
+          $ref: '#/components/schemas/BankAccountName'
         account_type:
           type: string
           title: Account Type
@@ -2092,43 +2045,75 @@ components:
           example: credit_card
           nullable: true
         iban:
-          description: The International Bank Account Number (IBAN).
-          type: string
-          example: CH2989144532982975332
-          nullable: true
+          $ref: '#/components/schemas/IBAN'
         bic:
-          description: The Bank Identifier Code (BIC).
-          type: string
-          example: AUDSCHGGXXX
-          nullable: true
+          $ref: '#/components/schemas/BIC'
         routing_number:
-          type: string
-          title: Routing number
-          description: A routing number is a nine-digit code used to identify a financial institution in the United States.
-          example: '012345678'
-          nullable: true
+          $ref: '#/components/schemas/RoutingNumber'
         bsb_number:
-          type: string
-          title: BSB Number
-          description: A BSB is a 6 digit numeric code used for identifying the branch of an Australian or New Zealand bank or financial institution.
-          example: 062-001
-          nullable: true
+          $ref: '#/components/schemas/BSBNumber'
         branch_identifier:
-          type: string
-          title: Branch Identifier
-          description: A branch identifier is a unique identifier for a branch of a bank or financial institution.
-          example: '001'
-          nullable: true
+          $ref: '#/components/schemas/BranchIdentifier'
         bank_code:
-          type: string
-          title: Bank Code
-          description: A bank code is a code assigned by a central bank, a bank supervisory body or a Bankers Association in a country to all its licensed member banks or financial institutions.
-          example: BNH
-          nullable: true
+          $ref: '#/components/schemas/BankCode'
         currency:
           $ref: '#/components/schemas/Currency'
         country:
           $ref: '#/components/schemas/Country'
+    BankAccountName:
+      type: string
+      title: Account Name
+      description: The name of the bank account
+      example: Main Operating Account
+      nullable: true
+    BankAccountNumber:
+      type: string
+      title: Account Number
+      description: The bank account number
+      example: '123465'
+      nullable: true
+    BankName:
+      type: string
+      title: Bank Name
+      description: The name of the bank or financial institution
+      example: Chase Bank
+      nullable: true
+    BIC:
+      type: string
+      title: BIC/SWIFT Code
+      description: Bank Identifier Code / SWIFT Code
+      example: CHASUS33
+      nullable: true
+    IBAN:
+      type: string
+      title: IBAN
+      description: International Bank Account Number
+      example: GB33BUKB20201555555555
+      nullable: true
+    RoutingNumber:
+      type: string
+      title: Routing Number
+      description: Bank routing number (US)
+      example: '021000021'
+      nullable: true
+    BSBNumber:
+      type: string
+      title: BSB Number
+      description: Bank State Branch number (Australia/New Zealand)
+      example: 062-001
+      nullable: true
+    BranchIdentifier:
+      type: string
+      title: Branch Identifier
+      description: Bank branch identifier
+      example: '001'
+      nullable: true
+    BankCode:
+      type: string
+      title: Bank Code
+      description: Bank code assigned by central bank
+      example: BNH
+      nullable: true
     BankAccountsFilter:
       type: object
       x-apideck-schema-id: BankAccountsFilter
@@ -8325,6 +8310,28 @@ components:
           description: The notes of the file.
           example: A sample image
           nullable: true
+    LinkedBankAccount:
+      type: object
+      x-apideck-schema-id: LinkedBankAccount
+      additionalProperties: false
+      nullable: true
+      x-apideck-weights:
+        id: medium
+        name: medium
+        account_number: medium
+        bank_name: low
+      properties:
+        id:
+          title: Bank Account ID
+          description: The unique identifier for the bank account.
+          type: string
+          example: ba_123456
+        name:
+          $ref: '#/components/schemas/BankAccountName'
+        account_number:
+          $ref: '#/components/schemas/BankAccountNumber'
+        bank_name:
+          $ref: '#/components/schemas/BankName'
     LinkedCustomer:
       type: object
       x-apideck-schema-id: LinkedCustomer
@@ -8403,12 +8410,14 @@ components:
     LinkedLedgerAccount:
       type: object
       x-apideck-schema-id: LinkedLedgerAccount
+      additionalProperties: false
       x-apideck-weights:
         id: medium
         nominal_code: medium
         code: medium
         name: medium
         parent_id: low
+        display_id: low
       nullable: true
       properties:
         id:
@@ -8439,6 +8448,12 @@ components:
           type: string
           title: Parent ID
           description: The parent ID of the account.
+          example: '123456'
+          nullable: true
+        display_id:
+          type: string
+          title: Display ID
+          description: The display ID of the account.
           example: '123456'
           nullable: true
     LinkedPurchaseOrder:
@@ -12332,6 +12347,7 @@ components:
         id: critical
         transaction_date: critical
         account_id: critical
+        account: critical
         supplier_id: high
         line_items: high
         currency: high
@@ -12351,19 +12367,25 @@ components:
         custom_mappings: low
         pass_through: low
         status: medium
+        bank_account: medium
         updated_at: medium
         created_at: medium
         updated_by: low
         created_by: low
         row_version: low
       required:
-        - account_id
         - transaction_date
         - line_items
       x-apideck-strict-required:
-        - account_id
         - transaction_date
         - line_items
+      anyOf:
+        - required:
+            - account_id
+        - required:
+            - account
+        - required:
+            - bank_account
       properties:
         id:
           $ref: '#/components/schemas/Id'
@@ -12377,9 +12399,14 @@ components:
           $ref: '#/components/schemas/TransactionDate'
         account_id:
           title: Account ID
-          description: 'The unique identifier for the ledger account that this expense should be credited to. '
+          description: The unique identifier for the ledger account that this expense should be credited to. Deprecated, use account instead.
           type: string
           example: '123456'
+          deprecated: true
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        bank_account:
+          $ref: '#/components/schemas/LinkedBankAccount'
         customer_id:
           type: string
           title: Customer ID
@@ -12486,6 +12513,7 @@ components:
         tax_rate: medium
         tracking_categories: low
         account_id: critical
+        account: critical
         customer_id: medium
         department_id: edge-case
         location_id: edge-case
@@ -12503,9 +12531,12 @@ components:
           $ref: '#/components/schemas/LinkedTrackingCategories'
         account_id:
           title: Account ID
-          description: The unique identifier for the ledger account.
+          description: The unique identifier for the ledger account. Deprecated, use account instead.
           type: string
           example: '123456'
+          deprecated: true
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
         customer_id:
           type: string
           title: Customer ID
@@ -15559,6 +15590,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   purchase_order:
                     id: '123456'
                     line_id: '123456'
@@ -15596,18 +15628,19 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               payment_method: cash
               channel: email
               language: EN
               accounting_by_row: false
               bank_account:
-                bank_name: Monzo
+                bank_name: Chase Bank
                 account_number: '123465'
-                account_name: SPACEX LLC
+                account_name: Main Operating Account
                 account_type: credit_card
-                iban: CH2989144532982975332
-                bic: AUDSCHGGXXX
-                routing_number: '012345678'
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
                 bsb_number: 062-001
                 branch_identifier: '001'
                 bank_code: BNH
@@ -15818,6 +15851,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   purchase_order:
                     id: '123456'
                     line_id: '123456'
@@ -15855,18 +15889,19 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               payment_method: cash
               channel: email
               language: EN
               accounting_by_row: false
               bank_account:
-                bank_name: Monzo
+                bank_name: Chase Bank
                 account_number: '123465'
-                account_name: SPACEX LLC
+                account_name: Main Operating Account
                 account_type: credit_card
-                iban: CH2989144532982975332
-                bic: AUDSCHGGXXX
-                routing_number: '012345678'
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
                 bsb_number: 062-001
                 branch_identifier: '001'
                 bank_code: BNH
@@ -16135,6 +16170,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   custom_fields:
                     - id: '2389328923893298'
                       name: employee_level
@@ -16204,13 +16240,13 @@ paths:
               language: EN
               accounting_by_row: false
               bank_account:
-                bank_name: Monzo
+                bank_name: Chase Bank
                 account_number: '123465'
-                account_name: SPACEX LLC
+                account_name: Main Operating Account
                 account_type: credit_card
-                iban: CH2989144532982975332
-                bic: AUDSCHGGXXX
-                routing_number: '012345678'
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
                 bsb_number: 062-001
                 branch_identifier: '001'
                 bank_code: BNH
@@ -16221,6 +16257,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               custom_fields:
                 - id: '2389328923893298'
                   name: employee_level
@@ -16423,6 +16460,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   custom_fields:
                     - id: '2389328923893298'
                       name: employee_level
@@ -16492,13 +16530,13 @@ paths:
               language: EN
               accounting_by_row: false
               bank_account:
-                bank_name: Monzo
+                bank_name: Chase Bank
                 account_number: '123465'
-                account_name: SPACEX LLC
+                account_name: Main Operating Account
                 account_type: credit_card
-                iban: CH2989144532982975332
-                bic: AUDSCHGGXXX
-                routing_number: '012345678'
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
                 bsb_number: 062-001
                 branch_identifier: '001'
                 bank_code: BNH
@@ -16509,6 +16547,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               custom_fields:
                 - id: '2389328923893298'
                   name: employee_level
@@ -16672,13 +16711,13 @@ paths:
               status: active
               header: true
               bank_account:
-                bank_name: Monzo
+                bank_name: Chase Bank
                 account_number: '123465'
-                account_name: SPACEX LLC
+                account_name: Main Operating Account
                 account_type: credit_card
-                iban: CH2989144532982975332
-                bic: AUDSCHGGXXX
-                routing_number: '012345678'
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
                 bsb_number: 062-001
                 branch_identifier: '001'
                 bank_code: BNH
@@ -16809,13 +16848,13 @@ paths:
               status: active
               header: true
               bank_account:
-                bank_name: Monzo
+                bank_name: Chase Bank
                 account_number: '123465'
-                account_name: SPACEX LLC
+                account_name: Main Operating Account
                 account_type: credit_card
-                iban: CH2989144532982975332
-                bic: AUDSCHGGXXX
-                routing_number: '012345678'
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
                 bsb_number: 062-001
                 branch_identifier: '001'
                 bank_code: BNH
@@ -17018,16 +17057,19 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               income_account:
                 id: '123456'
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               expense_account:
                 id: '123456'
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               tracking_category:
                 id: '123456'
                 name: New York
@@ -17180,16 +17222,19 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               income_account:
                 id: '123456'
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               expense_account:
                 id: '123456'
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               tracking_category:
                 id: '123456'
                 name: New York
@@ -17371,6 +17416,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               line_items:
                 - id: '12345'
                   row_id: '12345'
@@ -17416,6 +17462,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   custom_fields:
                     - id: '2389328923893298'
                       name: employee_level
@@ -17621,6 +17668,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               line_items:
                 - id: '12345'
                   row_id: '12345'
@@ -17666,6 +17714,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   custom_fields:
                     - id: '2389328923893298'
                       name: employee_level
@@ -17954,13 +18003,13 @@ paths:
                   url: http://example.com
                   type: primary
               bank_accounts:
-                - bank_name: Monzo
+                - bank_name: Chase Bank
                   account_number: '123465'
-                  account_name: SPACEX LLC
+                  account_name: Main Operating Account
                   account_type: credit_card
-                  iban: CH2989144532982975332
-                  bic: AUDSCHGGXXX
-                  routing_number: '012345678'
+                  iban: GB33BUKB20201555555555
+                  bic: CHASUS33
+                  routing_number: '021000021'
                   bsb_number: 062-001
                   branch_identifier: '001'
                   bank_code: BNH
@@ -17977,6 +18026,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               parent:
                 id: '12345'
                 name: Windsurf Shop
@@ -18144,13 +18194,13 @@ paths:
                   url: http://example.com
                   type: primary
               bank_accounts:
-                - bank_name: Monzo
+                - bank_name: Chase Bank
                   account_number: '123465'
-                  account_name: SPACEX LLC
+                  account_name: Main Operating Account
                   account_type: credit_card
-                  iban: CH2989144532982975332
-                  bic: AUDSCHGGXXX
-                  routing_number: '012345678'
+                  iban: GB33BUKB20201555555555
+                  bic: CHASUS33
+                  routing_number: '021000021'
                   bsb_number: 062-001
                   branch_identifier: '001'
                   bank_code: BNH
@@ -18167,6 +18217,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               parent:
                 id: '12345'
                 name: Windsurf Shop
@@ -18384,13 +18435,13 @@ paths:
                   url: http://example.com
                   type: primary
               bank_accounts:
-                - bank_name: Monzo
+                - bank_name: Chase Bank
                   account_number: '123465'
-                  account_name: SPACEX LLC
+                  account_name: Main Operating Account
                   account_type: credit_card
-                  iban: CH2989144532982975332
-                  bic: AUDSCHGGXXX
-                  routing_number: '012345678'
+                  iban: GB33BUKB20201555555555
+                  bic: CHASUS33
+                  routing_number: '021000021'
                   bsb_number: 062-001
                   branch_identifier: '001'
                   bank_code: BNH
@@ -18407,6 +18458,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               status: active
               payment_method: cash
               terms: Net 30 days
@@ -18582,13 +18634,13 @@ paths:
                   url: http://example.com
                   type: primary
               bank_accounts:
-                - bank_name: Monzo
+                - bank_name: Chase Bank
                   account_number: '123465'
-                  account_name: SPACEX LLC
+                  account_name: Main Operating Account
                   account_type: credit_card
-                  iban: CH2989144532982975332
-                  bic: AUDSCHGGXXX
-                  routing_number: '012345678'
+                  iban: GB33BUKB20201555555555
+                  bic: CHASUS33
+                  routing_number: '021000021'
                   bsb_number: 062-001
                   branch_identifier: '001'
                   bank_code: BNH
@@ -18605,6 +18657,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               status: active
               payment_method: cash
               terms: Net 30 days
@@ -18792,6 +18845,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               transaction_date: '2021-05-01T12:00:00.000Z'
               customer:
                 id: '12345'
@@ -18953,6 +19007,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               transaction_date: '2021-05-01T12:00:00.000Z'
               customer:
                 id: '12345'
@@ -19325,6 +19380,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   customer:
                     id: '12345'
                     display_name: Windsurf Shop
@@ -19386,6 +19442,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   customer:
                     id: '12345'
                     display_name: Windsurf Shop
@@ -19585,6 +19642,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   customer:
                     id: '12345'
                     display_name: Windsurf Shop
@@ -19646,6 +19704,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   customer:
                     id: '12345'
                     display_name: Windsurf Shop
@@ -19942,6 +20001,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   custom_fields:
                     - id: '2389328923893298'
                       name: employee_level
@@ -20005,16 +20065,17 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               template_id: '123456'
               discount_percentage: 5.5
               bank_account:
-                bank_name: Monzo
+                bank_name: Chase Bank
                 account_number: '123465'
-                account_name: SPACEX LLC
+                account_name: Main Operating Account
                 account_type: credit_card
-                iban: CH2989144532982975332
-                bic: AUDSCHGGXXX
-                routing_number: '012345678'
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
                 bsb_number: 062-001
                 branch_identifier: '001'
                 bank_code: BNH
@@ -20232,6 +20293,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   custom_fields:
                     - id: '2389328923893298'
                       name: employee_level
@@ -20295,16 +20357,17 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               template_id: '123456'
               discount_percentage: 5.5
               bank_account:
-                bank_name: Monzo
+                bank_name: Chase Bank
                 account_number: '123465'
-                account_name: SPACEX LLC
+                account_name: Main Operating Account
                 account_type: credit_card
-                iban: CH2989144532982975332
-                bic: AUDSCHGGXXX
-                routing_number: '012345678'
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
                 bsb_number: 062-001
                 branch_identifier: '001'
                 bank_code: BNH
@@ -21404,7 +21467,7 @@ paths:
             bankAccount:
               display_id: BA-001
               name: Main Operating Account
-              account_number: '1234567890'
+              account_number: '123465'
               account_type: checking
               bank_name: Chase Bank
               currency: USD
@@ -21506,7 +21569,7 @@ paths:
             bankAccount:
               display_id: BA-001
               name: Main Operating Account
-              account_number: '1234567890'
+              account_number: '123465'
               account_type: checking
               bank_name: Chase Bank
               currency: USD
@@ -21901,6 +21964,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               transaction_date: '2021-05-01T12:00:00.000Z'
               supplier:
                 id: '12345'
@@ -22060,6 +22124,7 @@ paths:
                 nominal_code: N091
                 code: '453'
                 parent_id: '123456'
+                display_id: '123456'
               transaction_date: '2021-05-01T12:00:00.000Z'
               supplier:
                 id: '12345'
@@ -22247,6 +22312,17 @@ paths:
               number: OIT00546
               transaction_date: '2021-05-01T12:00:00.000Z'
               account_id: '123456'
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              bank_account:
+                id: ba_123456
+                name: Main Operating Account
+                account_number: '123465'
+                bank_name: Chase Bank
               customer_id: '12345'
               supplier_id: '12345'
               company_id: '12345'
@@ -22267,6 +22343,12 @@ paths:
                       parent_id: '123456'
                       parent_name: New York
                   account_id: '123456'
+                  account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
                   customer_id: '12345'
                   department_id: '12345'
                   location_id: '12345'
@@ -22383,6 +22465,17 @@ paths:
               number: OIT00546
               transaction_date: '2021-05-01T12:00:00.000Z'
               account_id: '123456'
+              account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              bank_account:
+                id: ba_123456
+                name: Main Operating Account
+                account_number: '123465'
+                bank_name: Chase Bank
               customer_id: '12345'
               supplier_id: '12345'
               company_id: '12345'
@@ -22403,6 +22496,12 @@ paths:
                       parent_id: '123456'
                       parent_name: New York
                   account_id: '123456'
+                  account:
+                    id: '123456'
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
                   customer_id: '12345'
                   department_id: '12345'
                   location_id: '12345'
@@ -23225,6 +23324,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   custom_fields:
                     - id: '2389328923893298'
                       name: employee_level
@@ -23441,6 +23541,7 @@ paths:
                     nominal_code: N091
                     code: '453'
                     parent_id: '123456'
+                    display_id: '123456'
                   custom_fields:
                     - id: '2389328923893298'
                       name: employee_level
@@ -24868,9 +24969,9 @@ x-webhooks:
       description: Event broadcast when a purchase has been order created.
   PurchaseOrderDeleted:
     post:
-      summary: Purchase order Deleted
+      summary: Purchase Order Deleted
       operationId: purchaseOrderDeleted
-      x-apideck-event-type: accounting.purchase-order.deleted
+      x-apideck-event-type: accounting.purchase_order.deleted
       parameters:
         - name: x-apideck-event-type
           in: header
@@ -24912,25 +25013,25 @@ x-webhooks:
                   $ref: '#/components/schemas/AccountingWebhookEvent'
             example:
               payload:
-                event_type: accounting.purchase-order.deleted
+                event_type: accounting.purchase_order.deleted
                 unified_api: accounting
                 service_id: xero
                 consumer_id: test_user_id
                 event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
                 entity_id: 123456ASDF
-                entity_url: https://unify.apideck.com/accounting/purchase-orders/123456ASDF
-                entity_type: purchase-order
+                entity_url: https://unify.apideck.com/accounting/purchase_orders/123456ASDF
+                entity_type: purchase_order
                 occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.
       security: []
-      description: Event broadcast when a purchase order has been deleted.
+      description: Event broadcast when a purchase has been order deleted.
   PurchaseOrderUpdated:
     post:
-      summary: Purchase order Updated
+      summary: Purchase Order Updated
       operationId: purchaseOrderUpdated
-      x-apideck-event-type: accounting.purchase-order.updated
+      x-apideck-event-type: accounting.purchase_order.updated
       parameters:
         - name: x-apideck-event-type
           in: header
@@ -24972,20 +25073,20 @@ x-webhooks:
                   $ref: '#/components/schemas/AccountingWebhookEvent'
             example:
               payload:
-                event_type: accounting.purchase-order.updated
+                event_type: accounting.purchase_order.updated
                 unified_api: accounting
                 service_id: xero
                 consumer_id: test_user_id
                 event_id: d290f1ee-6c54-4b01-90e6-d701748f0851
                 entity_id: 123456ASDF
-                entity_url: https://unify.apideck.com/accounting/purchase-orders/123456ASDF
-                entity_type: purchase-order
+                entity_url: https://unify.apideck.com/accounting/purchase_orders/123456ASDF
+                entity_type: purchase_order
                 occurred_at: '2020-01-01T00:00:00.000Z'
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully.
       security: []
-      description: Event broadcast when a purchase order has been updated.
+      description: Event broadcast when a purchase has been order updated.
   ExpenseUpdated:
     post:
       summary: Expense Updated

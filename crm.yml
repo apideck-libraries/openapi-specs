@@ -775,20 +775,20 @@ components:
         bank_name:
           type: string
           title: Bank Name
-          description: The name of the bank
-          example: Monzo
+          description: The name of the bank or financial institution
+          example: Chase Bank
           nullable: true
         account_number:
           type: string
-          title: Bank Account Number
-          description: A bank account number is a number that is tied to your bank account. If you have several bank accounts, such as personal, joint, business (and so on), each account will have a different account number.
+          title: Account Number
+          description: The bank account number
           example: '123465'
           nullable: true
         account_name:
           type: string
-          title: Bank Account Name
-          description: The name which you used in opening your bank account.
-          example: SPACEX LLC
+          title: Account Name
+          description: The name of the bank account
+          example: Main Operating Account
           nullable: true
         account_type:
           type: string
@@ -802,37 +802,39 @@ components:
           example: credit_card
           nullable: true
         iban:
-          description: The International Bank Account Number (IBAN).
           type: string
-          example: CH2989144532982975332
+          title: IBAN
+          description: International Bank Account Number
+          example: GB33BUKB20201555555555
           nullable: true
         bic:
-          description: The Bank Identifier Code (BIC).
           type: string
-          example: AUDSCHGGXXX
+          title: BIC/SWIFT Code
+          description: Bank Identifier Code / SWIFT Code
+          example: CHASUS33
           nullable: true
         routing_number:
           type: string
-          title: Routing number
-          description: A routing number is a nine-digit code used to identify a financial institution in the United States.
-          example: '012345678'
+          title: Routing Number
+          description: Bank routing number (US)
+          example: '021000021'
           nullable: true
         bsb_number:
           type: string
           title: BSB Number
-          description: A BSB is a 6 digit numeric code used for identifying the branch of an Australian or New Zealand bank or financial institution.
+          description: Bank State Branch number (Australia/New Zealand)
           example: 062-001
           nullable: true
         branch_identifier:
           type: string
           title: Branch Identifier
-          description: A branch identifier is a unique identifier for a branch of a bank or financial institution.
+          description: Bank branch identifier
           example: '001'
           nullable: true
         bank_code:
           type: string
           title: Bank Code
-          description: A bank code is a code assigned by a central bank, a bank supervisory body or a Bankers Association in a country to all its licensed member banks or financial institutions.
+          description: Bank code assigned by central bank
           example: BNH
           nullable: true
         currency:
@@ -6411,13 +6413,13 @@ paths:
               first_name: Elon
               last_name: Musk
               bank_accounts:
-                - bank_name: Monzo
+                - bank_name: Chase Bank
                   account_number: '123465'
-                  account_name: SPACEX LLC
+                  account_name: Main Operating Account
                   account_type: credit_card
-                  iban: CH2989144532982975332
-                  bic: AUDSCHGGXXX
-                  routing_number: '012345678'
+                  iban: GB33BUKB20201555555555
+                  bic: CHASUS33
+                  routing_number: '021000021'
                   bsb_number: 062-001
                   branch_identifier: '001'
                   bank_code: BNH
@@ -6589,13 +6591,13 @@ paths:
               first_name: Elon
               last_name: Musk
               bank_accounts:
-                - bank_name: Monzo
+                - bank_name: Chase Bank
                   account_number: '123465'
-                  account_name: SPACEX LLC
+                  account_name: Main Operating Account
                   account_type: credit_card
-                  iban: CH2989144532982975332
-                  bic: AUDSCHGGXXX
-                  routing_number: '012345678'
+                  iban: GB33BUKB20201555555555
+                  bic: CHASUS33
+                  routing_number: '021000021'
                   bsb_number: 062-001
                   branch_identifier: '001'
                   bank_code: BNH

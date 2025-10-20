@@ -857,11 +857,12 @@ components:
         disabled_reason:
           type: string
           x-apideck-enum-id: webhook.disabled_reasons
-          description: Indicates if the webhook has has been disabled as it reached its retry limit or if account is over the usage allocated by it's plan.
+          description: 'Indicates why the webhook has been disabled. `retry_limit`: webhook reached its retry limit. `usage_limit`: account is over its usage limit. `delivery_url_validation_failed`: delivery URL failed validation during webhook creation or update.'
           enum:
             - none
             - retry_limit
             - usage_limit
+            - delivery_url_validation_failed
           example: retry_limit
         delivery_url:
           $ref: '#/components/schemas/DeliveryUrl'
@@ -1239,7 +1240,12 @@ paths:
         - Webhooks
       operationId: webhooksAdd
       summary: Create webhook subscription
-      description: Create a webhook subscription to receive events
+      description: |
+        Create a webhook subscription to receive events.
+
+        **Delivery URL Validation**: The provided `delivery_url` will be validated synchronously by sending an HTTP POST request with an HMAC signature. If validation fails (network error, timeout, non-2xx response), the webhook will still be created but with `status: "disabled"` and `disabled_reason: "delivery_url_validation_failed"`.
+
+        **Important**: Always check the `status` and `disabled_reason` fields in the response to ensure the webhook is active.
       parameters:
         - $ref: '#/components/parameters/applicationId'
       security:
@@ -1314,7 +1320,12 @@ paths:
         - Webhooks
       operationId: webhooksUpdate
       summary: Update webhook subscription
-      description: Update a webhook subscription
+      description: |
+        Update a webhook subscription.
+
+        **Delivery URL Validation**: When updating the `delivery_url`, it will be validated synchronously by sending an HTTP POST request with an HMAC signature. If validation fails (network error, timeout, non-2xx response), the webhook will still be updated but with `status: "disabled"` and `disabled_reason: "delivery_url_validation_failed"`. Validation only occurs when the URL is changed.
+
+        **Important**: Always check the `status` and `disabled_reason` fields in the response to ensure the webhook is active.
       parameters:
         - $ref: '#/components/parameters/webhookToken'
         - $ref: '#/components/parameters/applicationId'

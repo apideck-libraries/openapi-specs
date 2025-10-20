@@ -878,11 +878,12 @@ components:
         disabled_reason:
           type: string
           x-apideck-enum-id: webhook.disabled_reasons
-          description: Indicates if the webhook has has been disabled as it reached its retry limit or if account is over the usage allocated by it's plan.
+          description: 'Indicates why the webhook has been disabled. `retry_limit`: webhook reached its retry limit. `usage_limit`: account is over its usage limit. `delivery_url_validation_failed`: delivery URL failed validation during webhook creation or update.'
           enum:
             - none
             - retry_limit
             - usage_limit
+            - delivery_url_validation_failed
           example: retry_limit
         delivery_url:
           type: string
@@ -4724,14 +4725,6 @@ x-webhooks:
           schema:
             type: string
           example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
-        - name: x-apideck-idempotency-key
-          in: header
-          required: true
-          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
-          schema:
-            type: string
-            format: uuid
-            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -4797,14 +4790,6 @@ x-webhooks:
           schema:
             type: string
           example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
-        - name: x-apideck-idempotency-key
-          in: header
-          required: true
-          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
-          schema:
-            type: string
-            format: uuid
-            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -4870,14 +4855,6 @@ x-webhooks:
           schema:
             type: string
           example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
-        - name: x-apideck-idempotency-key
-          in: header
-          required: true
-          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
-          schema:
-            type: string
-            format: uuid
-            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -4943,14 +4920,6 @@ x-webhooks:
           schema:
             type: string
           example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
-        - name: x-apideck-idempotency-key
-          in: header
-          required: true
-          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
-          schema:
-            type: string
-            format: uuid
-            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -5016,14 +4985,6 @@ x-webhooks:
           schema:
             type: string
           example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
-        - name: x-apideck-idempotency-key
-          in: header
-          required: true
-          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
-          schema:
-            type: string
-            format: uuid
-            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -5089,14 +5050,6 @@ x-webhooks:
           schema:
             type: string
           example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
-        - name: x-apideck-idempotency-key
-          in: header
-          required: true
-          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
-          schema:
-            type: string
-            format: uuid
-            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:
@@ -5162,14 +5115,6 @@ x-webhooks:
           schema:
             type: string
           example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
-        - name: x-apideck-idempotency-key
-          in: header
-          required: true
-          description: An idempotency key is a unique value generated to recognize subsequent retries/duplicates of the same request.
-          schema:
-            type: string
-            format: uuid
-            example: d290f1ee-6c54-4b01-90e6-d701748f0851
       tags:
         - Webhook Events
       requestBody:

@@ -1234,6 +1234,7 @@ components:
         name: high
         account_number: critical
         account_type: high
+        ledger_account: low
         bank_name: medium
         currency: high
         balance: high
@@ -1281,7 +1282,10 @@ components:
             - money_market
             - line_of_credit
             - other
+            - cash
           example: checking
+        ledger_account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
         bank_name:
           $ref: '#/components/schemas/BankName'
         currency:
@@ -12430,6 +12434,7 @@ components:
             - cash
             - check
             - credit_card
+            - other
           example: cash
           nullable: true
         currency:
@@ -14369,6 +14374,7 @@ components:
       example:
         updated_since: '2020-09-30T07:43:32.000Z'
         status: draft
+        type: expense
       properties:
         updated_since:
           type: string
@@ -14387,6 +14393,12 @@ components:
             - deleted
             - other
           x-apideck-enum-id: expenses.status
+        type:
+          type: string
+          enum:
+            - expense
+            - refund
+          x-apideck-enum-id: expenses.type
       additionalProperties: false
     CreateProjectResponse:
       type: object
@@ -21469,6 +21481,12 @@ paths:
               name: Main Operating Account
               account_number: '123465'
               account_type: checking
+              ledger_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
               bank_name: Chase Bank
               currency: USD
               balance: 25000
@@ -21571,6 +21589,12 @@ paths:
               name: Main Operating Account
               account_number: '123465'
               account_type: checking
+              ledger_account:
+                id: '123456'
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
               bank_name: Chase Bank
               currency: USD
               balance: 25000

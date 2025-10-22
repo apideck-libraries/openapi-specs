@@ -78,21 +78,59 @@ info:
 
     Custom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.
 
-    | Name                  | Type    | Required | Description                                                                                                                                                    |
-    | --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | x-apideck-app-id      | String  | Yes      | The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                               |
-    | x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |
-    | x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes.                                                                                                      |
+    | Name                  | Type    | Required | Description                                                                                                                                                    | | --------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------  | x-apideck-app-id      | String  | Yes      | The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                               | | x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. | | x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes.                                                                                                      |
+
+    ## Webhook Events
+
+    Vault provides real-time webhook events to notify you of connection state changes:
+
+    - **vault.connection.created** - Triggered when a new connection is created in Vault - **vault.connection.updated** - Triggered whenever any connection data changes (credentials, settings, metadata) - **vault.connection.callable** - Triggered when a connection transitions to callable state (ready for API calls) - **vault.connection.disabled** - Triggered when the enabled property changes from true to false - **vault.connection.deleted** - Triggered when a connection is permanently removed from the system - **vault.connection.revoked** - Triggered when OAuth access is successfully revoked at the service provider level - **vault.connection.token_refresh.failed** - Triggered when automatic token refresh fails for an OAuth connection
+
+    ### Event Sequences
+
+    **Initial OAuth Flow:** 1. `vault.connection.created` (if new connection) 2. `vault.connection.updated` (when OAuth credentials are saved) 3. `vault.connection.callable` (when connection becomes ready for API calls)
+
+    **Re-authorization:** 1. `vault.connection.updated` (when new credentials are saved) 2. `vault.connection.callable` (if connection becomes callable again)
+
+    **Connection Management:** - **Disabled**: `vault.connection.disabled` (connection paused but preserved) - **Deleted**: `vault.connection.deleted` (permanent removal) - **Revoked**: `vault.connection.revoked` (OAuth access revoked at service provider)
 
     ## Guides
 
     - [How to integrate Vault JS](https://developers.apideck.com/guides/vault)
     - [How to build an integrations UI with Vault](https://github.com/apideck-samples/vault?tab=readme-ov-file#integration-settings)
 
+    ## How to integrate Apideck Vault
+
+    Vault provides **three auth strategies** to use API tokens from your customers:
+
+    - [Vault JS](https://developers.apideck.com/guides/vault) (recommended)
+    - Vault API
+    - Hosted Vault (advanced)
+
+    ### What auth types does Vault support?
+
+    We currently support three authentication flows for your customers to activate an integration:
+
+    #### API keys
+
+    For services supporting the API key strategy, Hosted Vault provides an in-app form where users can configure their API keys provided by the integration service.
+
+    #### OAuth 2.0
+
+    Vault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own.
+
+    Certain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate. This is handled by the `/authorize` endpoint.
+
+    #### Basic auth
+
+    Basic authentication is a simple authentication scheme built into the HTTP protocol. The required fields to complete basic auth are handled by Hosted Vault or by updating the connection through the Vault API.
+
+    You can learn more about [API Auth methods](https://www.apideck.com/blog/api-auth-authentication-methods-and-examples) in our guide.
 
     ## FAQ
 
     **What purpose does Vault serve? Can I just handle the authentication and access token myself?**
+
     You can store everything yourself, but that defeats the purpose of using Apideck Unify. Handling tokens for multiple providers can quickly become very complex.
 
     ### Is my data secure?
@@ -105,40 +143,21 @@ info:
 
     ### Can I use Vault in combination with existing integrations?
 
-    Yes, you can. The flexibility of Unify allows you to quickly the use cases you need while keeping a gradual migration path based on your timeline and requirements. 
+    Yes, you can. The flexibility of Unify allows you to quickly use the cases you need while keeping a gradual migration path based on your timeline and requirements.
 
-    ### How to integrate Apideck Vault
+    ### Webhook Event Differences
 
-    This section covers everything you need to know to authenticate your customers through Vault.
-    Vault provides **three auth strategies** to use API tokens from your customers:
+    **What's the difference between disabled, deleted, and revoked?**
 
-    - [Vault JS](https://developers.apideck.com/guides/vault) (recommended)
-    - Vault API
-    - Hosted Vault (advanced)
+    - **Disabled**: Connection is paused but preserved (enabled=false). Can be re-enabled. - **Deleted**: Connection is permanently removed from the system. Cannot be recovered. - **Revoked**: OAuth access is revoked at the service provider level. Connection record remains but requires re-authorization.
 
-    ### What auth types does Vault support?
+    **When do I get multiple events during OAuth?**
 
-    What auth strategies does Vault handle? We currently support three flows so your customers can activate an integration.
+    During re-authorization, you typically receive: 1. `vault.connection.updated` (when new credentials are saved) 2. `vault.connection.callable` (if connection becomes callable again)
 
-    #### API keys
+    **What's the difference between updated and callable events?**
 
-    For Services supporting the API key strategy, you can use Hosted Vault will need to provide an in-app form where users can configure their API keys provided by the integration service.
-
-    #### OAuth 2.0
-
-    ##### Authorization Code Grant Type Flow
-
-    Vault handles the complete Authorization Code Grant Type Flow for you. This flow only supports browser-based (passive) authentication because most identity providers don't allow entering a username and password to be entered into applications that they don't own.
-
-    Certain connectors require an OAuth redirect authentication flow, where the end-user is redirected to the provider's website or mobile app to authenticate.
-
-    This is being handled by the `/authorize` endpoint.
-
-    #### Basic auth
-
-    Basic authentication is a simple authentication scheme built into the HTTP protocol. The required fields to complete basic auth are handled by Hosted Vault or by updating the connection through the Vault API below.
-
-    You can learn more about [API Auth methods](https://www.apideck.com/blog/api-auth-authentication-methods-and-examples) in our guide.
+    - `updated` fires on any change to connection data - `callable` only fires when the connection state changes TO callable - Think of `callable` as a significant milestone, while `updated` is any change
   contact:
     email: hello@apideck.com
     url: https://developers.apideck.com
@@ -5090,10 +5109,10 @@ x-webhooks:
       security: []
   TokenRefreshFailed:
     post:
-      summary: Token Refresh Failed
-      description: Event broadcast when a token has been refresh failed.
+      summary: Connection Token Refresh Failed
+      description: Event broadcast when a connection token refresh has failed.
       operationId: connectionTokenRefreshFailed
-      x-apideck-event-type: vault.token_refresh.failed
+      x-apideck-event-type: vault.connection.token_refresh.failed
       parameters:
         - name: x-apideck-event-type
           in: header
@@ -5128,7 +5147,7 @@ x-webhooks:
             example:
               payload:
                 event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
-                event_type: vault.token_refresh.failed
+                event_type: vault.connection.token_refresh.failed
                 service_id: apideck-vault
                 entity_id: 1111+test_user_id
                 entity_type: Connection

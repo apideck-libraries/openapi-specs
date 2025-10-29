@@ -1,3 +1,9 @@
+## v10.21.8 - (2025-10-29)
+
+### Accounting API
+
+- New webhook event `accounting.bill_payment.created`, `accounting.bill_payment.updated`, and `accounting.bill_payment.deleted` is now available to subscribe to.
+
 ## v10.21.7 - (2025-10-29)
 
 ### Accounting API

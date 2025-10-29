@@ -1,3 +1,9 @@
+## v10.21.7 - (2025-10-29)
+
+### Accounting API
+
+- Added `posted` status support to [Bills](apis/accounting/reference#tag/Bills) and [Invoices](apis/accounting/reference#tag/Invoices)
+
 ## v10.21.6 - (2025-10-17)
 
 ### Accounting API

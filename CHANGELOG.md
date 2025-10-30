@@ -1,3 +1,9 @@
+## v10.21.9 - (2025-10-30)
+
+### Ecommerce API
+
+- Added `partially_refunded` to `ecommerce.order.payment_status` enum.
+
 ## v10.21.8 - (2025-10-29)
 
 ### Accounting API

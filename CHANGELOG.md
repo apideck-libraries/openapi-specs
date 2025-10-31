@@ -1,3 +1,10 @@
+## v10.21.10 - (2025-10-31)
+
+### Accounting API
+
+- Added `status` filter to [Bills](apis/accounting/reference#tag/Bills) schema.
+- Added `status` filter to [Workday](connectors/workday)
+
 ## v10.21.9 - (2025-10-30)
 
 ### Ecommerce API

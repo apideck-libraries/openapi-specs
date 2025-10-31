@@ -7163,6 +7163,7 @@ components:
         id: critical
         name: critical
         description: medium
+        display_id: low
         code: high
         sold: edge-case
         purchased: edge-case
@@ -7209,6 +7210,12 @@ components:
           title: Description
           description: A short description of the item
           example: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+          nullable: true
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID of the item
+          example: '12345'
           nullable: true
         code:
           type: string
@@ -7676,6 +7683,7 @@ components:
         id: critical
         downstream_id: low
         source_id: low
+        display_id: low
         title: medium
         currency_rate: low
         currency: medium
@@ -7705,6 +7713,12 @@ components:
           $ref: '#/components/schemas/Id'
         downstream_id:
           $ref: '#/components/schemas/DownstreamId'
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID of the journal entry
+          example: '12345'
+          nullable: true
         title:
           type: string
           title: Journal entry title
@@ -9645,6 +9659,7 @@ components:
       x-apideck-weights:
         id: critical
         downstream_id: low
+        display_id: low
         po_number: low
         reference: low
         supplier: high
@@ -9692,6 +9707,12 @@ components:
           $ref: '#/components/schemas/Id'
         downstream_id:
           $ref: '#/components/schemas/DownstreamId'
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID of the purchase order
+          example: '12345'
+          nullable: true
         po_number:
           type: string
           title: Purchase Order number
@@ -9960,6 +9981,7 @@ components:
         id: medium
         name: critical
         status: critical
+        display_id: low
       additionalProperties: false
       properties:
         id:
@@ -9968,6 +9990,12 @@ components:
           $ref: '#/components/schemas/WritableId'
         name:
           $ref: '#/components/schemas/CompanyName'
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID of the subsidiary
+          example: '12345'
+          nullable: true
         status:
           type: string
           title: Subsidiary status
@@ -10318,6 +10346,7 @@ components:
       x-apideck-schema-id: TaxRate
       x-apideck-weights:
         id: critical
+        display_id: low
         name: high
         code: edge-case
         description: low
@@ -10351,6 +10380,12 @@ components:
           type: string
           description: ID assigned to identify this tax rate.
           example: '1234'
+          nullable: true
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID of the tax rate
+          example: '12345'
           nullable: true
         name:
           type: string
@@ -13655,6 +13690,7 @@ components:
       x-apideck-schema-id: Category
       x-apideck-weights:
         id: medium
+        display_id: low
         name: critical
         status: critical
         type: critical
@@ -13667,6 +13703,12 @@ components:
           description: The name of the category.
           example: Insurance
           nullable: false
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID of the category
+          example: '12345'
+          nullable: true
         type:
           type: string
           description: The type of the category.
@@ -15235,6 +15277,7 @@ paths:
           source:
             taxRate:
               id: '1234'
+              display_id: '12345'
               name: GST on Purchases
               code: ABN
               description: Reduced rate GST Purchases
@@ -15347,6 +15390,7 @@ paths:
             id: id_example
             taxRate:
               id: '1234'
+              display_id: '12345'
               name: GST on Purchases
               code: ABN
               description: Reduced rate GST Purchases
@@ -17045,6 +17089,7 @@ paths:
             invoiceItem:
               name: Model Y
               description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+              display_id: '12345'
               code: 120-C
               sold: true
               purchased: true
@@ -17210,6 +17255,7 @@ paths:
             invoiceItem:
               name: Model Y
               description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+              display_id: '12345'
               code: 120-C
               sold: true
               purchased: true
@@ -19371,6 +19417,7 @@ paths:
           label: Node
           source:
             journalEntry:
+              display_id: '12345'
               title: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry'
               currency_rate: 0.69
               currency: USD
@@ -19633,6 +19680,7 @@ paths:
           source:
             id: id_example
             journalEntry:
+              display_id: '12345'
               title: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry'
               currency_rate: 0.69
               currency: USD
@@ -19929,6 +19977,7 @@ paths:
           label: Node
           source:
             purchaseOrder:
+              display_id: '12345'
               po_number: '90000117'
               reference: '123456'
               supplier:
@@ -20221,6 +20270,7 @@ paths:
           source:
             id: id_example
             purchaseOrder:
+              display_id: '12345'
               po_number: '90000117'
               reference: '123456'
               supplier:
@@ -20539,6 +20589,7 @@ paths:
             subsidiary:
               parent_id: '12345'
               name: SpaceX
+              display_id: '12345'
               status: active
               currencies:
                 - USD
@@ -20632,6 +20683,7 @@ paths:
             subsidiary:
               parent_id: '12345'
               name: SpaceX
+              display_id: '12345'
               status: active
               currencies:
                 - USD

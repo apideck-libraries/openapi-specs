@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.21.10
+  version: 10.21.11
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -28,7 +28,7 @@ info:
 
     [Vault JS](https://developers.apideck.com/guides/vault) is a vanilla JavaScript library to embed Apideck Vault in any web application.
 
-    [Follow this guide](https://developers.apideck.com/guides/vault) to get started 
+    [Follow this guide](https://developers.apideck.com/guides/vault) to get started
 
     ### Hosted Vault
 
@@ -78,7 +78,7 @@ info:
 
     Custom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.
 
-    | Name                  | Type    | Required | Description                                                                                                                                                    | | --------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------  | x-apideck-app-id      | String  | Yes      | The id of your Unify application. Available at https://app.apideck.com/api-keys.                                                                               | | x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. | | x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes.                                                                                                      |
+    | Name                  | Type    | Required | Description | | --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | x-apideck-app-id      | String  | Yes      | The id of your Unify application. Available at https://app.apideck.com/api-keys. | | x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. | | x-apideck-raw         | Boolean | No       | Include raw response. Mostly used for debugging purposes. |
 
     ## Webhook Events
 
@@ -734,10 +734,6 @@ components:
           readOnly: true
           description: Whether the connector has a guide available in the developer docs or not (https://docs.apideck.com/connectors/{service_id}/docs/consumer+connection).
           example: true
-        created_at:
-          type: number
-          readOnly: true
-          example: 1615563533390
         custom_mappings:
           type: array
           description: List of custom mappings configured for this connection
@@ -755,6 +751,31 @@ components:
           $ref: '#/components/schemas/ConsentRecord'
         application_data_scopes:
           $ref: '#/components/schemas/DataScopes'
+        health:
+          type: string
+          description: Operational health status of the connection
+          x-apideck-enum-id: connections.health
+          enum:
+            - missing_settings
+            - needs_auth
+            - pending_refresh
+            - ok
+          readOnly: true
+          example: ok
+        credentials_expire_at:
+          type: number
+          description: Unix timestamp in milliseconds when credentials will be deleted if token refresh continues to fail. A value of 0 indicates no active retention window (connection is healthy or not using OAuth token refresh).
+          example: 1730172800000
+          readOnly: true
+        last_refresh_failed_at:
+          type: number
+          description: Unix timestamp in milliseconds of the last failed token refresh attempt. A value of 0 indicates no recent failures. This field is used internally to enforce cooldown periods between retry attempts.
+          example: 1730000000000
+          readOnly: true
+        created_at:
+          type: number
+          readOnly: true
+          example: 1615563533390
         updated_at:
           type: number
           example: 1616662325753
@@ -2676,10 +2697,54 @@ components:
               example: Missing authentication
             - type: object
               x-speakeasy-detail: true
+              properties:
+                type:
+                  type: string
+                  description: Error type identifier
+                  example: refresh_token_connector_error
+                message:
+                  type: string
+                  description: Detailed error message
+                  example: Token refresh failed
+                debug:
+                  type: object
+                  description: Debug information including request/response details and OAuth timing metadata
+                  properties:
+                    request:
+                      type: object
+                      description: HTTP request details
+                    response:
+                      type: object
+                      description: HTTP response details
+                    message:
+                      type: string
+                      description: Error message from downstream provider or network layer
+                    code:
+                      type: string
+                      description: Error code (e.g., ETIMEDOUT, ECONNREFUSED)
+                    credentials_expire_at_ms:
+                      type: number
+                      description: Unix timestamp (milliseconds) when credentials will be deleted if not refreshed. Only present for non-recoverable errors (401, 400). Credentials are preserved indefinitely for recoverable/network errors.
+                      example: 1620172800000
+                    retry_after_ms:
+                      type: number
+                      description: Unix timestamp (milliseconds) when token refresh retry is allowed after cooldown period expires.
+                      example: 1620000030000
+                    cooldown_remaining_ms:
+                      type: number
+                      description: Milliseconds remaining in cooldown period before retry is allowed.
+                      example: 30000
               example:
-                statusCode: 401
-                error: Unauthorized
-                message: Missing authentication
+                type: refresh_token_connector_error
+                message: Token refresh failed with 401 error
+                debug:
+                  response:
+                    statusCode: 401
+                    data:
+                      error: invalid_grant
+                  credentials_expire_at_ms: 1620172800000
+                  retry_after_ms: 1620000030000
+                  cooldown_remaining_ms: 30000
           description: Contains parameter or domain specific information related to the error and why it occurred.
         ref:
           type: string

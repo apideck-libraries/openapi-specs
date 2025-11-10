@@ -1,3 +1,11 @@
+## v10.21.13 - (2025-11-10)
+
+### Accounting API
+
+- Added `address` field to [Subsidiaries](apis/accounting/reference#tag/Subsidiaries) schema to support main subsidiary address with full address structure (line1-3, city, state, postal_code, country)
+- Improved [NetSuite](connectors/netsuite) subsidiaries mapping to include `status`, `display_id`, and `currencies` fields
+- Enhanced [NetSuite](connectors/netsuite) subsidiaries write operations (create/update) to support address and status fields
+
 ## v10.21.12 - (2025-11-09)
 
 ### Accounting API

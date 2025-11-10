@@ -1,3 +1,10 @@
+## v10.21.12 - (2025-11-09)
+
+### Accounting API
+
+- Added `bank_account`, `account`, `supplier`, `sub_total`, `total_tax`, and `tax_inclusive` fields to [Expenses](apis/accounting/reference#tag/Expenses)
+- Added `type`, `tax_amount`, `quantity`, `unit_price`, and `item` fields to [Expenses](apis/accounting/reference#tag/Expenses) line items
+
 ## v10.21.11 - (2025-11-03)
 
 ### Vault API

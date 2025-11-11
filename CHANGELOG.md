@@ -1,3 +1,10 @@
+## v10.21.14 - (2025-11-11)
+
+### Accounting API
+
+- Added `taxable` boolean field to [Customers](apis/accounting/reference#tag/Customers) and [Suppliers](apis/accounting/reference#tag/Suppliers) schemas to indicate whether the entity is subject to taxation
+- Implemented `taxable` field mapping for [QuickBooks](connectors/quickbooks), [NetSuite](connectors/netsuite), [Sage Intacct](connectors/sage-intacct), and [Zoho Books](connectors/zoho-books) connectors
+
 ## v10.21.13 - (2025-11-10)
 
 ### Accounting API

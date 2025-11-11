@@ -1,3 +1,9 @@
+## v10.21.15 - (2025-11-11)
+
+### Accounting API
+
+- Added write support for [Customers](apis/accounting/reference#tag/Customers) in [Workday](connectors/workday)
+
 ## v10.21.14 - (2025-11-11)
 
 ### Accounting API
@@ -26,7 +32,6 @@
 
 - [Get Connection](/apis/vault/reference#tag/Connections/operation/connectionsOne) now returns a persisted `health` property to better indicated connection health.
 - OAuth tokens are now resilient to provider downtime and apply a 48 retention period before removing credentials when we fail to refresh tokens.
-
 
 ## v10.21.10 - (2025-10-31)
 

@@ -19421,6 +19421,9 @@ paths:
         - connector: sage-intacct
           description: |
             Sage Intacct's Profit and Loss report is structured around account groups.  To retrieve accurate data, all income statement accounts must be mapped to one  of the following categories: Revenue, Cost of Revenue, Operating Expense, or Other Expenses.  Any income statement accounts that are not mapped to one of these categories  will appear under the `uncategorized_accounts` property.
+        - connector: freeagent
+          description: |
+            FreeAgent's Profit and Loss API has a date range limitation. The specified period must be **12 months or less, or contained within a single accounting year**.  Periods that exceed 12 months and span multiple accounting years will return an error.
       responses:
         '200':
           $ref: '#/components/responses/GetProfitAndLossResponse'

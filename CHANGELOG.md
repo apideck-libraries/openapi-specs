@@ -1,3 +1,9 @@
+## v10.21.16 - (2025-11-24)
+
+### Accounting API
+
+- Added write support for [Projects](apis/accounting/reference#tag/Projects) in [Workday](connectors/workday)
+
 ## v10.21.15 - (2025-11-11)
 
 ### Accounting API

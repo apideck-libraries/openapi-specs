@@ -1,3 +1,9 @@
+## v10.21.17 - (2025-11-25)
+
+### Accounting API
+
+- Added write support for [Payments](apis/accounting/reference#tag/Payments) in [Workday](connectors/workday)
+
 ## v10.21.16 - (2025-11-24)
 
 ### Accounting API

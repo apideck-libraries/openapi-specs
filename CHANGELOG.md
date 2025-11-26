@@ -1,3 +1,9 @@
+## v10.21.18 - (2025-11-26)
+
+### Accounting API
+
+- Added write support for [Tax Rates](apis/accounting/reference#tag/Tax-Rates) in [Workday](connectors/workday)
+
 ## v10.21.17 - (2025-11-25)
 
 ### Accounting API

@@ -1,3 +1,12 @@
+## v10.21.19 - (2025-11-26)
+
+## v10.21.19 - (2025-11-26)
+
+### Accounting API
+
+- Added `accounting_method` filter to [Profit and Loss](apis/accounting/reference#tag/Profit-and-Loss) and [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) reports to specify cash or accrual basis
+- Implemented `accounting_method` filter for [QuickBooks](connectors/quickbooks) and [Xero](connectors/xero) connectors
+
 ## v10.21.18 - (2025-11-26)
 
 ### Accounting API

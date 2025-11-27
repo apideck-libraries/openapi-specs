@@ -1,3 +1,9 @@
+## v10.22.0 - (2025-11-27)
+
+### Ecommerce API
+
+- Added new connector for [eBay](connectors/ebay)
+
 ## v10.21.19 - (2025-11-26)
 
 ### Accounting API

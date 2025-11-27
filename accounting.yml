@@ -1230,6 +1230,7 @@ components:
       additionalProperties: false
       x-apideck-weights:
         id: critical
+        downstream_id: edge-case
         display_id: edge-case
         name: high
         account_number: critical
@@ -1260,6 +1261,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/Id'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
         display_id:
           type: string
           title: Display ID
@@ -2141,6 +2144,20 @@ components:
           title: Name
           description: Filter by bank account name
           example: Main Operating
+        account_type:
+          type: string
+          title: Account Type
+          description: Filter by account type
+          x-apideck-enum-id: bank_accounts.account_type
+          enum:
+            - checking
+            - savings
+            - credit_card
+            - money_market
+            - line_of_credit
+            - other
+            - cash
+          example: checking
         status:
           type: string
           title: Status
@@ -3860,6 +3877,7 @@ components:
           enum:
             - draft
             - authorised
+            - partially_paid
             - paid
             - voided
             - deleted
@@ -21724,6 +21742,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: sage-intacct
+          description: |
+            Pagination is not supported when listing all bank accounts without an account_type filter.
       responses:
         '200':
           $ref: '#/components/responses/GetBankAccountsResponse'

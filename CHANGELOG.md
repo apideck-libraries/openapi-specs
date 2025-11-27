@@ -1,7 +1,5 @@
 ## v10.21.19 - (2025-11-26)
 
-## v10.21.19 - (2025-11-26)
-
 ### Accounting API
 
 - Added `accounting_method` filter to [Profit and Loss](apis/accounting/reference#tag/Profit-and-Loss) and [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) reports to specify cash or accrual basis
@@ -12,6 +10,9 @@
 ### Accounting API
 
 - Added write support for [Tax Rates](apis/accounting/reference#tag/Tax-Rates) in [Workday](connectors/workday)
+- Added full CRUD support for [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) in [Sage Intacct](connectors/sage-intacct) - unifies checking accounts, savings accounts, and credit cards into a single resource
+- Added `partially_paid` status to [Credit Notes](apis/accounting/reference#tag/Credit-Notes) schema
+- Added `downstream_id` field to [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) schema
 
 ## v10.21.17 - (2025-11-25)
 

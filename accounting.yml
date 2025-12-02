@@ -15690,6 +15690,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: xero
+          description: |
+            When providing both supplier.id and supplier.display_name (or supplier.name), Xero will update the contact's name if the ContactID exists. If the ContactID doesn't exist, Xero will automatically create a new contact using the provided name. This allows for automatic contact creation but may update existing contact names if the display_name differs from the stored name.
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
@@ -16268,6 +16271,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: xero
+          description: |
+            When providing both customer.id and customer.display_name (or customer.name), Xero will update the contact's name if the ContactID exists. If the ContactID doesn't exist, Xero will automatically create a new contact using the provided name. This allows for automatic contact creation but may update existing contact names if the display_name differs from the stored name.
         - connector: quickbooks
           description: Quickbooks offers limited (regional) support for applying discount on a Line Item. Including discount_percentage or discount_amount applies to entire invoice. The default type for a Line Item is a sales item if no type has been provided.
         - connector: procountor-fi

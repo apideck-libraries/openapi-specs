@@ -1,3 +1,9 @@
+## v10.22.1 - (2025-12-02)
+
+### Accounting API
+
+- Added write support for [Invoice Items](apis/accounting/reference#tag/Invoice-Items) in [Workday](connectors/workday)
+
 ## v10.22.0 - (2025-11-27)
 
 ### Ecommerce API

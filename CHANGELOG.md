@@ -1,3 +1,11 @@
+## v10.22.2 - (2025-12-03)
+
+### Accounting API
+
+- Added [Invoice Items](apis/accounting/reference#tag/Invoice-Items) in [Acumatica](connectors/acumatica)
+- Added [Invoice Items](apis/accounting/reference#tag/Invoice-Items) in [MYOB Acumatica](connectors/myob-acumatica)
+- When filling `line_items`, you can either link an existing item by providing the item `code` or create a new item by filling in the item details. Using both options at the same time is not supported.
+
 ## v10.22.1 - (2025-12-02)
 
 ### Accounting API

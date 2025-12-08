@@ -1,3 +1,14 @@
+## v10.22.3 - (2025-12-08)
+
+### CRM API
+
+- Added `lead_id` and `contact_id` fields to [Leads](apis/crm/reference#tag/Leads) schema
+- Added `archived`, `created_at`, `updated_at` fields to [Pipelines](apis/crm/reference#tag/Pipelines) stage items
+
+### Ecommerce API
+
+- Updated [Orders](apis/ecommerce/reference#tag/Orders) line item schema to support flexible identification - line items can now be identified by (`id` OR `product_id`) AND (`name` OR `sku`)
+
 ## v10.22.2 - (2025-12-03)
 
 ### Accounting API

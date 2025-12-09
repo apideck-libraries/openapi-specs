@@ -1,3 +1,10 @@
+## v10.22.4 - (2025-12-09)
+
+### Accounting API
+
+- Added `type` filter to [Payments](apis/accounting/reference#tag/Payments) schema.
+- Implemented `type` filter for [Sage Business Cloud](connectors/sage-business-cloud-accounting)
+
 ## v10.22.3 - (2025-12-08)
 
 ### CRM API

@@ -1,3 +1,9 @@
+## v10.23.0 - (2025-12-10)
+
+### File Storage API
+
+- Added `created_at` support to [Files](apis/file-storage/reference#tag/Files) sorting.
+
 ## v10.22.4 - (2025-12-09)
 
 ### Accounting API

@@ -1240,8 +1240,10 @@ components:
       x-apideck-schema-id: Folder
       x-apideck-weights:
         id: critical
+        downstream_id: edge-case
         name: critical
         size: low
+        downloadable: low
         parent_folders: high
         parent_folders_complete: critical
         updated_at: critical
@@ -1253,6 +1255,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/Id'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
         name:
           type: string
           description: The name of the folder
@@ -1273,6 +1277,10 @@ components:
           description: The size of the folder in bytes
           example: 1810673
           readOnly: true
+          nullable: true
+        downloadable:
+          type: boolean
+          description: Whether the current user can download the contents of this folder
           nullable: true
         owner:
           $ref: '#/components/schemas/Owner'

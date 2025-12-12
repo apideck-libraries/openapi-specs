@@ -1,3 +1,9 @@
+## v10.23.1 - (2025-12-12)
+
+### Accounting API
+
+- Added support to [Expenses](apis/accounting/reference#tag/Expenses) in [Workday](connectors/workday)
+
 ## v10.23.0 - (2025-12-10)
 
 ### File Storage API

@@ -17,7 +17,7 @@ info:
 
     | Name                               | Type   | Required | Description |
     | ---------------------------------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-    | Authorization                      | String | Yes      | Bearer API KEY |
+    | Authorization                      | String | Yes      | Bearer <token> KEY |
     | x-apideck-app-id                   | String | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys. |
     | x-apideck-consumer-id              | String | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app.                       |
     | x-apideck-downstream-url           | String | Yes      | Downstream URL to forward the request too |
@@ -35,7 +35,7 @@ info:
 
     Authenticate your API requests by including your test or live secret API key in the request header.
 
-    - Bearer authorization header: Authorization: Bearer "YOUR_API_KEY_HERE"
+    - Bearer <token> header: Authorization: Bearer "YOUR_API_KEY_HERE"
     - Application id header: x-apideck-app-id: "YOUR_APP_ID_HERE"
       You should use the public keys on the SDKs and the secret keys to authenticate API requests.
 
@@ -131,7 +131,7 @@ info:
 
     #### UnauthorizedError
 
-    We were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer sk_live_***'`
+    We were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`
 
     #### ConnectorCredentialsError
 
@@ -317,7 +317,7 @@ components:
       name: x-apideck-downstream-authorization
       in: header
       description: Downstream authorization header. This will skip the Vault token injection.
-      example: Bearer XXXXXXXXXXXXXXXXX
+      example: Bearer <token>
       required: false
       schema:
         type: string

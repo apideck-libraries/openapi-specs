@@ -299,7 +299,7 @@ components:
       name: x-apideck-downstream-authorization
       in: header
       description: Downstream authorization header. This will skip the Vault token injection.
-      example: Bearer XXXXXXXXXXXXXXXXX
+      example: Bearer <token>
       required: false
       schema:
         type: string
@@ -372,7 +372,7 @@ components:
       required: true
       schema:
         type: string
-      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk
+      example: <jwt_token>
     code:
       name: code
       in: query
@@ -844,8 +844,8 @@ components:
               nullable: true
               example: 3600
           example: &ref_3
-            access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-            refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.cThIIoDvwdueQB468K5xDc5633seEFoqwxjF_xSJyQQ
+            access_token: <access_token>
+            refresh_token: <refresh_token>
         settings:
           type: object
           description: Connection settings. Values will persist to `form_fields` with corresponding id
@@ -1417,11 +1417,11 @@ components:
             - session_token
           properties:
             session_uri:
-              example: http://vault.apideck.com/session/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj
+              example: https://vault.apideck.com/session/<session_token>
               readOnly: true
               type: string
             session_token:
-              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsImFwcGxpY2F0aW9uX2lkIj
+              example: <session_token>
               readOnly: true
               type: string
           additionalProperties: false
@@ -4356,7 +4356,7 @@ paths:
           source:
             serviceId: pipedrive
             applicationId: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
-            state: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk
+            state: <jwt_token>
             redirectUri: http://example.com/integrations
   /vault/revoke/{service_id}/{application_id}:
     get:
@@ -4402,7 +4402,7 @@ paths:
           source:
             serviceId: pipedrive
             applicationId: dSBdXd2H6Mqwfg0atXHXYcysLJE9qyn1VwBtXHX
-            state: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk
+            state: <jwt_token>
             redirectUri: http://example.com/integrations
   /vault/custom-mappings/{unified_api}/{service_id}/{target_field_id}:
     get:
@@ -4672,7 +4672,7 @@ paths:
         - lang: TypeScript
           label: Node
           source:
-            state: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb25zdW1lcl9pZCI6InRlc3RfdXNlcl9pZCIsInVuaWZpZWRfYXBpIjoiZGVmYXVsdCIsInNlcnZpY2VfaWQiOiJ0ZWFtbGVhZGVyIiwiYXBwbGljYXRpb25faWQiOiIxMTExIiwiaWF0IjoxNjIyMTI2Nzg3fQ.97_pn1UAXc7mctXBdr15czUNO1jjdQ9sJUOIE_Myzbk
+            state: <jwt_token>
             code: g0ZGZmNjVmOWI
   /vault/sessions:
     post:

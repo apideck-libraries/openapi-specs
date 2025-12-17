@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.23.1
+  version: 10.23.2
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -3905,6 +3905,7 @@ components:
           enum:
             - draft
             - authorised
+            - posted
             - partially_paid
             - paid
             - voided
@@ -5331,13 +5332,17 @@ components:
         name: critical
         status: critical
         subsidiaries: low
+        display_id: medium
         code: low
+        downstream_id: low
       additionalProperties: false
       properties:
         id:
           $ref: '#/components/schemas/Id'
         parent_id:
           $ref: '#/components/schemas/WritableId'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
         name:
           type: string
           title: Department name
@@ -5362,6 +5367,8 @@ components:
           title: Department code
           description: The code of the department.
           example: '123'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
         custom_mappings:
           $ref: '#/components/schemas/CustomMappings'
         row_version:
@@ -8543,6 +8550,46 @@ components:
           description: The display ID of the account.
           example: '123456'
           nullable: true
+    LinkedFinancialAccount:
+      type: object
+      x-apideck-schema-id: LinkedFinancialAccount
+      additionalProperties: false
+      nullable: true
+      description: A flexible account reference that can represent either a ledger account (GL account) or a bank account, depending on the connector's requirements.
+      x-apideck-weights:
+        id: critical
+        type: high
+        code: medium
+        account_number: medium
+        name: medium
+        display_id: low
+        downstream_id: low
+      properties:
+        id:
+          type: string
+          title: Account ID
+          description: The unique identifier for the account. This can be a ledger account ID or bank account ID depending on the `type` field.
+          example: '123456'
+        type:
+          type: string
+          title: Account Type
+          description: The type of account being referenced. Use `ledger_account` for GL accounts from the chart of accounts, or `bank_account` for bank account entities. When not specified, the connector will use its default behavior.
+          x-apideck-enum-id: linked-financial-account.type
+          enum:
+            - ledger_account
+            - bank_account
+          example: ledger_account
+          nullable: true
+        code:
+          $ref: '#/components/schemas/AccountCode'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
+        account_number:
+          $ref: '#/components/schemas/BankAccountNumber'
+        name:
+          $ref: '#/components/schemas/AccountName'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
     LinkedPurchaseOrder:
       type: object
       x-apideck-schema-id: LinkedPurchaseOrder
@@ -8670,6 +8717,7 @@ components:
       x-apideck-schema-id: LinkedTrackingCategory
       x-apideck-weights:
         id: critical
+        code: medium
       nullable: true
       properties:
         id:
@@ -8677,6 +8725,12 @@ components:
           description: The unique identifier for the tracking category.
           type: string
           example: '123456'
+        code:
+          type: string
+          title: Tracking Category Code
+          description: The code of the tracking category.
+          example: '100'
+          nullable: true
         name:
           type: string
           title: Tracking Category Name
@@ -8694,6 +8748,64 @@ components:
           description: The name of the parent tracking category.
           example: New York
           nullable: true
+    LinkedLocation:
+      type: object
+      x-apideck-schema-id: LinkedLocation
+      x-apideck-weights:
+        id: critical
+        display_id: medium
+        name: medium
+        downstream_id: low
+      nullable: true
+      properties:
+        id:
+          title: Location ID
+          description: The unique identifier for the location.
+          type: string
+          example: '123456'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
+        name:
+          type: string
+          title: Location Name
+          description: The name of the location.
+          example: New York Office
+          nullable: true
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
+    LinkedDepartment:
+      type: object
+      x-apideck-schema-id: LinkedDepartment
+      x-apideck-weights:
+        id: critical
+        display_id: medium
+        name: medium
+        downstream_id: low
+      nullable: true
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
+        name:
+          $ref: '#/components/schemas/Name'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
+    LinkedSubsidiary:
+      type: object
+      x-apideck-schema-id: LinkedSubsidiary
+      x-apideck-weights:
+        id: critical
+        display_id: medium
+        name: medium
+      nullable: true
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
+        name:
+          $ref: '#/components/schemas/Name'
     LinkedWorktag:
       type: object
       x-apideck-schema-id: LinkedWorktag
@@ -8809,6 +8921,8 @@ components:
         parent_id: low
         company_name: medium
         display_name: critical
+        display_id: medium
+        downstream_id: low
         status: critical
         addresses: low
         subsidiaries: low
@@ -8818,6 +8932,10 @@ components:
           $ref: '#/components/schemas/Id'
         parent_id:
           $ref: '#/components/schemas/WritableId'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
         company_name:
           $ref: '#/components/schemas/CompanyName'
         display_name:
@@ -8890,6 +9008,12 @@ components:
       title: Middle name
       description: Middle name of the person.
       example: D.
+      nullable: true
+    Name:
+      type: string
+      title: Name
+      description: The name of the resource.
+      example: Acme Inc.
       nullable: true
     NotFoundResponse:
       type: object
@@ -10069,6 +10193,7 @@ components:
         name: critical
         status: critical
         display_id: low
+        downstream_id: low
         address: medium
         parent_id: medium
         currencies: medium
@@ -10086,6 +10211,8 @@ components:
           description: Display ID of the subsidiary
           example: '12345'
           nullable: true
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
         status:
           type: string
           title: Subsidiary status
@@ -12570,6 +12697,7 @@ components:
       additionalProperties: false
       x-apideck-weights:
         id: critical
+        display_id: high
         transaction_date: critical
         account_id: critical
         account: critical
@@ -12580,7 +12708,6 @@ components:
         type: high
         number: medium
         memo: medium
-        customer_id: medium
         total_amount: medium
         sub_total: high
         total_tax: high
@@ -12588,6 +12715,7 @@ components:
         currency_rate: edge-case
         company_id: edge-case
         department_id: medium
+        department: medium
         payment_type: medium
         tax_rate: medium
         reference: medium
@@ -12618,6 +12746,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/Id'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
         number:
           type: string
           title: Number
@@ -12633,14 +12763,9 @@ components:
           example: '123456'
           deprecated: true
         account:
-          $ref: '#/components/schemas/LinkedLedgerAccount'
+          $ref: '#/components/schemas/LinkedFinancialAccount'
         bank_account:
           $ref: '#/components/schemas/LinkedBankAccount'
-        customer_id:
-          type: string
-          title: Customer ID
-          description: The ID of the customer this entity is linked to. Used for expenses that should be marked as billable to customers.
-          example: '12345'
         supplier_id:
           type: string
           title: Supplier ID
@@ -12653,6 +12778,8 @@ components:
           $ref: '#/components/schemas/AccountingCompanyId'
         department_id:
           $ref: '#/components/schemas/DepartmentId'
+        department:
+          $ref: '#/components/schemas/LinkedDepartment'
         payment_type:
           type: string
           title: Payment type
@@ -12759,9 +12886,11 @@ components:
         account_id: critical
         account: critical
         customer_id: medium
+        customer: medium
         department_id: edge-case
+        department: edge-case
         location_id: edge-case
-        billable: edge-case
+        location: edge-case
         line_number: edge-case
         rebilling: medium
       required:
@@ -12784,14 +12913,19 @@ components:
         customer_id:
           type: string
           title: Customer ID
-          description: The ID of the customer this expense item is linked to.
+          description: The ID of the customer this expense item is linked to. Deprecated in favor of `customer`.
           example: '12345'
+          deprecated: true
+        customer:
+          $ref: '#/components/schemas/LinkedCustomer'
         department_id:
           $ref: '#/components/schemas/DepartmentId'
+        department:
+          $ref: '#/components/schemas/LinkedDepartment'
         location_id:
           $ref: '#/components/schemas/LocationId'
-        subsidiary_id:
-          $ref: '#/components/schemas/SubsidiaryId'
+        location:
+          $ref: '#/components/schemas/LinkedLocation'
         tax_rate:
           $ref: '#/components/schemas/LinkedTaxRate'
         description:
@@ -12816,12 +12950,6 @@ components:
           $ref: '#/components/schemas/UnitPrice'
         item:
           $ref: '#/components/schemas/LinkedInvoiceItem'
-        billable:
-          type: boolean
-          title: Billable
-          description: Boolean that indicates if the line item is billable or not.
-          example: true
-          deprecated: true
         line_number:
           $ref: '#/components/schemas/LineNumber'
         rebilling:
@@ -15875,6 +16003,7 @@ paths:
                     line_number: '1'
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -15934,6 +16063,7 @@ paths:
               source_document_url: https://www.invoicesolution.com/bill/123456
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -16139,6 +16269,7 @@ paths:
                     line_number: '1'
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -16198,6 +16329,7 @@ paths:
               source_document_url: https://www.invoicesolution.com/bill/123456
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -16413,6 +16545,7 @@ paths:
                 name: New York
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -16454,6 +16587,7 @@ paths:
                     rate: 10
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -16706,6 +16840,7 @@ paths:
                 name: New York
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -16747,6 +16882,7 @@ paths:
                     rate: 10
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -17398,6 +17534,7 @@ paths:
                 name: New York
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -17576,6 +17713,7 @@ paths:
                 name: New York
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -17793,6 +17931,7 @@ paths:
                     rate: 10
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -17870,6 +18009,7 @@ paths:
                 row_version: 1-12345
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -18048,6 +18188,7 @@ paths:
                     rate: 10
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -18125,6 +18266,7 @@ paths:
                 row_version: 1-12345
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -19252,6 +19394,7 @@ paths:
               number: '123456'
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -19415,6 +19558,7 @@ paths:
               number: '123456'
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -19737,6 +19881,7 @@ paths:
                     name: New York
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -19801,6 +19946,7 @@ paths:
                     name: New York
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -19860,6 +20006,7 @@ paths:
               number: OIT00546
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -20004,6 +20151,7 @@ paths:
                     name: New York
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -20068,6 +20216,7 @@ paths:
                     name: New York
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -20127,6 +20276,7 @@ paths:
               number: OIT00546
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -20368,6 +20518,7 @@ paths:
                     rate: 10
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -20472,6 +20623,7 @@ paths:
               notes: This is a test purchase order
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -20664,6 +20816,7 @@ paths:
                     rate: 10
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -20768,6 +20921,7 @@ paths:
               notes: This is a test purchase order
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -21180,6 +21334,7 @@ paths:
           source:
             location:
               parent_id: '12345'
+              display_id: '123456'
               company_name: SpaceX
               display_name: 11 UT - South Jordan
               status: active
@@ -21300,6 +21455,7 @@ paths:
             id: id_example
             location:
               parent_id: '12345'
+              display_id: '123456'
               company_name: SpaceX
               display_name: 11 UT - South Jordan
               status: active
@@ -21461,6 +21617,7 @@ paths:
           source:
             department:
               parent_id: '12345'
+              display_id: '123456'
               name: Sales
               status: active
               subsidiaries:
@@ -21555,6 +21712,7 @@ paths:
             id: id_example
             department:
               parent_id: '12345'
+              display_id: '123456'
               name: Sales
               status: active
               subsidiaries:
@@ -22466,6 +22624,7 @@ paths:
               number: '123456'
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -22627,6 +22786,7 @@ paths:
               number: '123456'
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -22768,22 +22928,20 @@ paths:
           label: Node
           source:
             expense:
+              display_id: '123456'
               number: OIT00546
               transaction_date: '2021-05-01T12:00:00.000Z'
               account_id: '123456'
               account:
                 id: '123456'
-                name: Bank account
-                nominal_code: N091
-                code: '453'
-                parent_id: '123456'
+                type: ledger_account
                 display_id: '123456'
+                account_number: '123465'
               bank_account:
                 id: ba_123456
                 name: Main Operating Account
                 account_number: '123465'
                 bank_name: Chase Bank
-              customer_id: '12345'
               supplier_id: '12345'
               supplier:
                 id: '12345'
@@ -22816,6 +22974,9 @@ paths:
                   row_version: 1-12345
               company_id: '12345'
               department_id: '12345'
+              department:
+                display_id: '123456'
+                name: Acme Inc.
               payment_type: cash
               currency: USD
               currency_rate: 0.69
@@ -22832,6 +22993,7 @@ paths:
               line_items:
                 - tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -22844,9 +23006,20 @@ paths:
                     parent_id: '123456'
                     display_id: '123456'
                   customer_id: '12345'
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
                   department_id: '12345'
+                  department:
+                    display_id: '123456'
+                    name: Acme Inc.
                   location_id: '12345'
-                  subsidiary_id: '12345'
+                  location:
+                    id: '123456'
+                    display_id: '123456'
+                    name: New York Office
                   tax_rate:
                     id: '123456'
                     code: N-T
@@ -22861,7 +23034,6 @@ paths:
                     id: '12344'
                     code: 120-C
                     name: Model Y
-                  billable: true
                   line_number: 1
                   rebilling:
                     rebillable: true
@@ -22965,22 +23137,20 @@ paths:
           source:
             id: id_example
             expense:
+              display_id: '123456'
               number: OIT00546
               transaction_date: '2021-05-01T12:00:00.000Z'
               account_id: '123456'
               account:
                 id: '123456'
-                name: Bank account
-                nominal_code: N091
-                code: '453'
-                parent_id: '123456'
+                type: ledger_account
                 display_id: '123456'
+                account_number: '123465'
               bank_account:
                 id: ba_123456
                 name: Main Operating Account
                 account_number: '123465'
                 bank_name: Chase Bank
-              customer_id: '12345'
               supplier_id: '12345'
               supplier:
                 id: '12345'
@@ -23013,6 +23183,9 @@ paths:
                   row_version: 1-12345
               company_id: '12345'
               department_id: '12345'
+              department:
+                display_id: '123456'
+                name: Acme Inc.
               payment_type: cash
               currency: USD
               currency_rate: 0.69
@@ -23029,6 +23202,7 @@ paths:
               line_items:
                 - tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -23041,9 +23215,20 @@ paths:
                     parent_id: '123456'
                     display_id: '123456'
                   customer_id: '12345'
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
                   department_id: '12345'
+                  department:
+                    display_id: '123456'
+                    name: Acme Inc.
                   location_id: '12345'
-                  subsidiary_id: '12345'
+                  location:
+                    id: '123456'
+                    display_id: '123456'
+                    name: New York Office
                   tax_rate:
                     id: '123456'
                     code: N-T
@@ -23058,7 +23243,6 @@ paths:
                     id: '12344'
                     code: 120-C
                     name: Model Y
-                  billable: true
                   line_number: 1
                   rebilling:
                     rebillable: true
@@ -23864,6 +24048,7 @@ paths:
                     rate: 10
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -23934,6 +24119,7 @@ paths:
                 row_version: 1-12345
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -24083,6 +24269,7 @@ paths:
                     rate: 10
                   tracking_categories:
                     - id: '123456'
+                      code: '100'
                       name: New York
                       parent_id: '123456'
                       parent_name: New York
@@ -24153,6 +24340,7 @@ paths:
                 row_version: 1-12345
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -24324,6 +24512,7 @@ paths:
                 rate: 10
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York
@@ -24481,6 +24670,7 @@ paths:
                 rate: 10
               tracking_categories:
                 - id: '123456'
+                  code: '100'
                   name: New York
                   parent_id: '123456'
                   parent_name: New York

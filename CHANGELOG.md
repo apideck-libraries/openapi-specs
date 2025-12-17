@@ -1,3 +1,15 @@
+## v10.23.2 - (2025-12-17)
+
+### Accounting API
+
+- Added support for [Expenses](apis/accounting/reference#tag/Expenses) in [Sage Intacct](connectors/sage-intacct) with full CRUD operations
+- Added `downstream_id` field to [Departments](apis/accounting/reference#tag/Departments), [Locations](apis/accounting/reference#tag/Locations), and [Subsidiaries](apis/accounting/reference#tag/Subsidiaries) schemas to support connectors with dual ID systems
+- Added LinkedDepartment, LinkedSubsidiary, LinkedLocation, and LinkedFinancialAccount schemas for better reference handling in transactions
+- Added `posted` and `partially_paid` status support to [Bills](apis/accounting/reference#tag/Bills), [Invoices](apis/accounting/reference#tag/Invoices), and [Credit Notes](apis/accounting/reference#tag/Credit-Notes) in [Sage Intacct](connectors/sage-intacct)
+- Removed deprecated `billable` field from [Expenses](apis/accounting/reference#tag/Expenses) line items (use `rebilling.rebillable` instead)
+- Removed `customer` and `customer_id` from [Expenses](apis/accounting/reference#tag/Expenses) header level (available in line items only)
+- Fixed 404 error handling for read one operations in [Sage Intacct](connectors/sage-intacct)
+
 ## v10.23.1 - (2025-12-12)
 
 ### Accounting API

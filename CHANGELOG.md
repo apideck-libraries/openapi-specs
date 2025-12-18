@@ -1,3 +1,7 @@
+## v10.23.3 - (2025-12-18)
+
+- Added new connector for [Access Financials](connectors/access-financials)
+
 ## v10.23.2 - (2025-12-17)
 
 ### Accounting API

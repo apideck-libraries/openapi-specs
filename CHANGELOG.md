@@ -1,3 +1,10 @@
+## v10.23.4 - (2025-12-30)
+
+### Accounting API
+
+- Added support for `customer_id` filter to [Payments](apis/accounting/reference#tag/Payments) schema.
+- Implemented `customer_id` filter for [Sage Business Cloud](connectors/sage-business-cloud-accounting), [Sage Intacct](connectors/sage-intacct), [QuickBooks](connectors/quickbooks), [NetSuite](connectors/netsuite) and [Xero](connectors/xero)
+
 ## v10.23.3 - (2025-12-18)
 
 - Added new connector for [Access Financials](connectors/access-financials)

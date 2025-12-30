@@ -4854,7 +4854,11 @@ paths:
         - connector: freshteam
           description: The minimum pagination `limit` is 50, since Freshteam does not support pagination with a lower limit. Pagination for Freshteam only support per 50 limits.
         - connector: hibob
-          description: Hibob allows you to define employee fields that aren't included by default on the 'List Employees' response. By using the fields parameter, you can specifically request these properties to be part of your response. Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses. Important to know is that Hibob has permission controls for users to determine which data will be available on their API. This can lead to the `birthday` not being available.
+          description: |
+            HiBob allows you to define employee fields that aren't included by default on the 'List Employees' response. By using the fields parameter, you can specifically request these properties to be part of your response.
+            Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
+            Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
+            For getting custom field values, please use the 'Get Employee' (employeesOne) call instead of 'List Employees'.
         - connector: paylocity
           description: For virtual webhook events on Paylocity, we monitor the "List Employees" response, which has a very small set of fields in comparison of the "Get Employee" response.
         - connector: sage-hr
@@ -5147,7 +5151,10 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: hibob
-          description: Hibob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response. Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses. Important to know is that Hibob has permission controls for users to determine which data will be available on their API. This can lead to the `birthday` not being available.
+          description: |
+            HiBob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response.
+            Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
+            Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
         - connector: sap-successfactors
           description: The custom fields are mapped only when they are in the personalInfoNav.
         - connector: charliehr

@@ -1,3 +1,11 @@
+## v10.23.5 - (2025-12-31)
+
+### Accounting API
+
+- Added `location_id` field to [Bills](apis/accounting/reference#tag/Bills), [Credit Notes](apis/accounting/reference#tag/Credit-Notes), [Invoices](apis/accounting/reference#tag/Invoices), and [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders) schemas
+- Added `location` object to [Expenses](apis/accounting/reference#tag/Expenses) schema for consistent location tracking across accounting resources
+- Implemented `location_id` mapping for [QuickBooks](connectors/quickbooks) Bills, Credit Notes, Invoices, Purchase Orders, and Expenses - both locations and departments now map to QuickBooks DepartmentRef
+
 ## v10.23.4 - (2025-12-30)
 
 ### Accounting API

@@ -3695,6 +3695,11 @@ paths:
           description: In the pagination, the limit value should be in additions of 10. E.g. 10, 20, 30, etc.
         - connector: tiktok
           description: To retrieve customer details, if they are hidden in the order response, use `seller shipping` instead of the default `TikTok shipping` in Tiktok. Please refer to our [integration guide](https://developers.apideck.com/connectors/tiktok/docs/application_owner+oauth_credentials) for more details.
+        - connector: amazon-seller-central
+          description: |
+            **Filter parameters:** Either the `created_since` parameter or the `updated_since` parameter is required. Both cannot be empty. `updated_since` cannot be set when `created_since` is set.
+
+            **Order history limits:** For the JP, AU, and SG marketplaces, the Orders API supports orders from 2016 onward. For all other marketplaces, the Orders API supports orders for the last two years (orders older than this don't show up in the response).
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrdersResponse'

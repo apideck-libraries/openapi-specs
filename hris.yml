@@ -4874,6 +4874,8 @@ paths:
           description: Include pass_through[include_terminated] in the query params to include terminated employees in the response.
         - connector: workday
           description: To avoid request timeouts when fetching all employees, it's recommended to use a limit of 20. Workday can return large amounts of data per employee, and requests exceeding 30 seconds will timeout with an "Endpoint request timed out" error.
+        - connector: fourth
+          description: The `leaving_reason` field in Fourth is a string and not an enum. We will return `"other"` if there is a leaving reason. You can use `custom_mappings` to get the actual value.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeesResponse'
@@ -5161,6 +5163,8 @@ paths:
           description: The jobs array compensation data includes only the data related to the first compensation. For more comprehensive compensation data, please refer to the compensations array.
         - connector: sympa
           description: The employment end data and jobs array are only available on the 'Get Employee' response.
+        - connector: fourth
+          description: The `leaving_reason` field in Fourth is a string and not an enum. We will return `"other"` if there is a leaving reason. You can use `custom_mappings` to get the actual value.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeeResponse'

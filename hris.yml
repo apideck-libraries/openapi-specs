@@ -4875,7 +4875,9 @@ paths:
         - connector: workday
           description: To avoid request timeouts when fetching all employees, it's recommended to use a limit of 20. Workday can return large amounts of data per employee, and requests exceeding 30 seconds will timeout with an "Endpoint request timed out" error.
         - connector: fourth
-          description: The `leaving_reason` field in Fourth is a string and not an enum. We will return `"other"` if there is a leaving reason. You can use `custom_mappings` to get the actual value.
+          description: |
+            The `leaving_reason` field in Fourth is a string and not an enum. We will return `"other"` if there is a leaving reason. You can use `custom_mappings` to get the actual value.
+            The `manager.id` field may be empty even when `manager.name` is present. This occurs when the manager is a former employee who is not included in the active employees list. In such cases, the manager's EmployeeID cannot be resolved from the PayrollNumber lookup.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeesResponse'
@@ -5164,7 +5166,9 @@ paths:
         - connector: sympa
           description: The employment end data and jobs array are only available on the 'Get Employee' response.
         - connector: fourth
-          description: The `leaving_reason` field in Fourth is a string and not an enum. We will return `"other"` if there is a leaving reason. You can use `custom_mappings` to get the actual value.
+          description: |
+            The `leaving_reason` field in Fourth is a string and not an enum. We will return `"other"` if there is a leaving reason. You can use `custom_mappings` to get the actual value.
+            The `manager.id` field may be empty even when `manager.name` is present. This occurs when the manager is a former employee who is not included in the active employees list. In such cases, the manager's EmployeeID cannot be resolved from the PayrollNumber lookup.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeeResponse'

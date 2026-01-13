@@ -17831,6 +17831,10 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+        - connector: sage-business-cloud-accounting
+          description: |
+            The `allocations` field is never returned in SBCA responses (LIST, GET, or POST).
+            To retrieve allocation details, use the proxy API to call /contact_allocations with the contact_id.
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNotesResponse'
@@ -17872,6 +17876,11 @@ paths:
             By default, the status of the bill will be set to "authorised".
         - connector: netsuite
           description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
+        - connector: sage-business-cloud-accounting
+          description: |
+            The `allocations` field is never returned in SBCA responses. Allocations are created via `invoice_id` at creation time.
+            To retrieve allocation details, use the proxy API to call /contact_allocations with the contact_id.
+            For Sage Start plans, only single invoice allocation is supported (multiple allocations require higher plans).
       requestBody:
         required: true
         content:
@@ -18078,6 +18087,11 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: sage-business-cloud-accounting
+          description: |
+            The `allocations` field is never returned in SBCA responses (LIST, GET, or POST).
+            To retrieve allocation details, use the proxy API to call /contact_allocations with the contact_id.
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNoteResponse'
@@ -18131,6 +18145,10 @@ paths:
             Please send status updates separately from other updates for Credit Notes.
         - connector: netsuite
           description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
+        - connector: sage-business-cloud-accounting
+          description: |
+            Allocations cannot be modified after credit note creation. The allocation is set via `invoice_id` at creation time.
+            The `allocations` field is never returned in SBCA responses - use the proxy API to call /contact_allocations.
       requestBody:
         required: true
         content:

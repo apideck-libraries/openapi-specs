@@ -1208,7 +1208,6 @@ components:
       description: The account code of the account
       type: string
       example: '1100'
-      readOnly: true
     AccountId:
       title: Account Id
       description: The unique identifier for the account.
@@ -17833,8 +17832,7 @@ paths:
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: sage-business-cloud-accounting
           description: |
-            The `allocations` field is never returned in SBCA responses (LIST, GET, or POST).
-            To retrieve allocation details, use the proxy API to call /contact_allocations with the contact_id.
+            The `allocations` field is not returned in responses. To retrieve allocation details, use the proxy API to call `/contact_allocations?contact_id={customer_id}`.
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNotesResponse'
@@ -17878,9 +17876,8 @@ paths:
           description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
         - connector: sage-business-cloud-accounting
           description: |
-            The `allocations` field is never returned in SBCA responses. Allocations are created via `invoice_id` at creation time.
-            To retrieve allocation details, use the proxy API to call /contact_allocations with the contact_id.
-            For Sage Start plans, only single invoice allocation is supported (multiple allocations require higher plans).
+            Pass allocations in the `allocations` array. The first allocation is supported on all plans; additional allocations (2+) require higher than "Start" plan.
+            The `allocations` field is not returned in responses. To retrieve allocation details, use the proxy API to call `/contact_allocations?contact_id={customer_id}`.
       requestBody:
         required: true
         content:
@@ -18090,8 +18087,7 @@ paths:
       x-apideck-gotchas:
         - connector: sage-business-cloud-accounting
           description: |
-            The `allocations` field is never returned in SBCA responses (LIST, GET, or POST).
-            To retrieve allocation details, use the proxy API to call /contact_allocations with the contact_id.
+            The `allocations` field is not returned in responses. To retrieve allocation details, use the proxy API to call `/contact_allocations?contact_id={customer_id}`.
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNoteResponse'
@@ -18147,8 +18143,7 @@ paths:
           description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
         - connector: sage-business-cloud-accounting
           description: |
-            Allocations cannot be modified after credit note creation. The allocation is set via `invoice_id` at creation time.
-            The `allocations` field is never returned in SBCA responses - use the proxy API to call /contact_allocations.
+            Allocations cannot be modified after credit note creation.
       requestBody:
         required: true
         content:
@@ -22996,6 +22991,7 @@ paths:
               account:
                 id: '123456'
                 type: ledger_account
+                code: '1100'
                 display_id: '123456'
                 account_number: '123465'
               bank_account:
@@ -23209,6 +23205,7 @@ paths:
               account:
                 id: '123456'
                 type: ledger_account
+                code: '1100'
                 display_id: '123456'
                 account_number: '123465'
               bank_account:

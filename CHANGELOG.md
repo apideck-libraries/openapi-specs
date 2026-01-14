@@ -1,3 +1,10 @@
+## v10.23.6 - (2026-01-14)
+
+### Accounting API
+
+- Migrated [Expenses](apis/accounting/reference#tag/Expenses) from `bank_account` to `account` (LinkedFinancialAccount) for [Sage Business Cloud](connectors/sage-business-cloud-accounting) and [Workday](connectors/workday)
+- Removed deprecated `bank_account` field from [Expenses](apis/accounting/reference#tag/Expenses) schema - use `account` with `type: bank_account` or `type: ledger_account` instead
+
 ## v10.23.5 - (2025-12-31)
 
 ### Accounting API

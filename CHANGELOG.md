@@ -1,3 +1,9 @@
+## v10.23.7 - (2026-01-16)
+
+### Proxy API
+
+- Added `x-apideck-unified-api` header to Proxy endpoints for specifying which unified API connection to use with multi-API connectors (e.g., Workday)
+
 ## v10.23.6 - (2026-01-14)
 
 ### Accounting API

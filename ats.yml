@@ -162,18 +162,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UnprocessableResponse'
-    Offer:
-      description: Offers
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Offer'
-    AtsActivity:
-      description: Activities
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/AtsActivity'
     CreateJobResponse:
       description: Jobs
       content:
@@ -831,29 +819,6 @@ components:
       type: boolean
       example: false
       nullable: true
-    AtsActivity:
-      type: object
-      x-apideck-schema-id: AtsActivity
-      additionalProperties: false
-      x-apideck-weights:
-        id: high
-        updated_by: edge-case
-        created_by: edge-case
-        updated_at: medium
-        created_at: medium
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        custom_mappings:
-          $ref: '#/components/schemas/CustomMappings'
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
     AtsEventType:
       enum:
         - '*'
@@ -2630,33 +2595,6 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#mappingerror
-    Offer:
-      type: object
-      x-apideck-schema-id: Offer
-      additionalProperties: false
-      x-apideck-weights:
-        id: high
-        updated_by: edge-case
-        created_by: edge-case
-        updated_at: medium
-        created_at: medium
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        application_id:
-          title: Application ID
-          type: string
-          example: abc123
-        custom_mappings:
-          $ref: '#/components/schemas/CustomMappings'
-        updated_by:
-          $ref: '#/components/schemas/UpdatedBy'
-        created_by:
-          $ref: '#/components/schemas/CreatedBy'
-        updated_at:
-          $ref: '#/components/schemas/UpdatedAt'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
     OwnerId:
       title: Owner ID
       type: string
@@ -3184,30 +3122,18 @@ components:
 security:
   - apiKey: []
 tags:
-  - name: Offers
-    description: ''
-    x-apideck-upcoming: true
-    x-apideck-resource-id: offers
-    x-apideck-model:
-      $ref: '#/components/schemas/Offer'
-  - name: Activities
-    description: ''
-    x-apideck-upcoming: true
-    x-apideck-resource-id: activities
-    x-apideck-model:
-      $ref: '#/components/schemas/AtsActivity'
   - name: Jobs
-    description: ''
+    description: A Job represents an open position, including title, description, requirements, department, location, employment type, and status.
     x-apideck-resource-id: jobs
     x-apideck-model:
       $ref: '#/components/schemas/Job'
   - name: Applicants
-    description: ''
+    description: An Applicant represents a candidate, including name, contact information, resume URL, social profiles, tags, and source tracking.
     x-apideck-resource-id: applicants
     x-apideck-model:
       $ref: '#/components/schemas/Applicant'
   - name: Applications
-    description: ''
+    description: An Application links an applicant to a job, including current stage, status, rejection reason, and hiring decision data.
     x-apideck-resource-id: applications
     x-apideck-model:
       $ref: '#/components/schemas/Application'

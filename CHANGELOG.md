@@ -1,3 +1,13 @@
+## v10.23.8 - (2026-01-19)
+
+### Accounting API
+
+- Added new [Intuit Enterprise Suite](connectors/intuit-enterprise-suite) connector
+
+### Proxy API
+
+- Added [Gmail](connectors/gmail) as an auth-only connector
+
 ## v10.23.7 - (2026-01-16)
 
 ### Proxy API

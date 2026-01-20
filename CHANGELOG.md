@@ -1,3 +1,9 @@
+## v10.23.10 - (2026-01-20)
+
+### Accounting API
+
+- Added `tracking_categories` field to [Expenses](apis/accounting/reference#tag/Expenses) schema
+
 ## v10.23.9 - (2026-01-20)
 
 ### HRIS API

@@ -1,3 +1,9 @@
+## v10.23.9 - (2026-01-20)
+
+### HRIS API
+
+- Added new [Liantis](connectors/liantis) connector
+
 ## v10.23.8 - (2026-01-19)
 
 ### Accounting API

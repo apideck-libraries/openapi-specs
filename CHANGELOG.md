@@ -1,3 +1,8 @@
+## v10.23.11 - (2026-01-22)
+
+- Added support for `customer_ids` filter to [Customers](apis/ecommerce/reference#tag/Customers) schema.
+- Implemented `customer_ids` filter for [BigCommerce](connectors/bigcommerce), [Magento](connectors/magento), [Shopify](connectors/shopify), [Shopware](connectors/shopware), [Wix](connectors/wix) and [WooCommerce](connectors/woocommerce)
+
 ## v10.23.10 - (2026-01-20)
 
 ### Accounting API

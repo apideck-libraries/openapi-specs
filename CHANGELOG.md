@@ -1,3 +1,5 @@
+## v10.23.6 - (2026-01-27)
+
 ## v10.23.11 - (2026-01-22)
 
 - Added support for `customer_ids` filter to [Customers](apis/ecommerce/reference#tag/Customers) schema.

@@ -1,3 +1,9 @@
+## v10.23.13 - (2026-02-03)
+
+### Accounting API
+
+- Added support for [Projects](apis/accounting/reference#tag/Projects) in [Quickbooks](connectors/quickbooks)
+
 ## v10.23.12 - (2026-01-28)
 
 - Added support for `customer_ids` filter to [Customers](apis/ecommerce/reference#tag/Customers) schema.

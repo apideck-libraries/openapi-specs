@@ -250,6 +250,25 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#requestvalidationerror
+        downstream_errors:
+          type: array
+          description: Contains downstream errors returned from the connector. Only present when type_name is ConnectorExecutionError.
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message from the downstream provider
+              detail:
+                type: string
+                description: Additional error details
+              code:
+                type: string
+                description: Error code from the downstream provider
+          example:
+            - message: Account code '100' has been archived or deleted
+              detail: Each line item must reference a valid account
+              code: VALIDATION_ERROR
     ConsumerId:
       type: string
       example: test_consumer_id

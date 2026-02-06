@@ -19875,7 +19875,7 @@ paths:
             Xero has two separate resources: journals (journal entries generated from any type of originating transaction such as invoices, payments, or manual journals) and manual journals (user-created entries).
             When a journal entry is created as draft, it is stored as a manual journal and does not yet become a journal. Once it is posted, or if it is created as posted from the beginning, it becomes a journal. In this case, when a draft manual journal is changed to posted, the id will change.
             Xero only supports `draft` and `posted` for the status field.
-            When creating or updating journal entries, Xero requires the ledger account to be specified by its code, not by ID. Therefore, the `ledger_account.code` field must be used in journal lines instead of `ledger_account.id`.
+            For ledger accounts in journal lines, you can use either `ledger_account.id` (UUID) or `ledger_account.code`. If only the ID is provided, the code will be resolved automatically.
             Journal entries in xero can be tax inclusive, tax exclusive or no tax. The `tax_inclusive` field should be set to true, false or null if the journal entry is tax inclusive, tax exclusive or no tax.
         - connector: netsuite
           description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
@@ -20154,7 +20154,7 @@ paths:
             Xero has two resources: journals (entries from transactions like invoices, payments, or manual journals) and manual journals (user-created entries).
             Draft entries are manual journals. When posted, they become journals and the ID changes. Updating a posted entry creates a reverse journal and a new one, so the ID also changes.
             Xero only supports `draft` and `posted` for the status field.
-            Ledger accounts must be specified by `code`, not by ID, so use `ledger_account.code` in journal lines.
+            For ledger accounts in journal lines, you can use either `ledger_account.id` (UUID) or `ledger_account.code`. If only the ID is provided, the code will be resolved automatically.
         - connector: sage-intacct
           description: |
             Sage Intacct only supports `draft` and `posted` status fields when updating a journal entry.

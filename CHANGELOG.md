@@ -1,3 +1,13 @@
+## v10.23.14 - (2026-02-06)
+
+### CRM API
+
+- Added new [Folk](connectors/folk) connector
+
+### Accounting API
+
+- Added new [Campfire](connectors/campfire) connector with support for Invoices, Bills, Credit Notes, Journal Entries, Ledger Accounts, Customers, Suppliers, Payments, Bank Feed Accounts, Bank Feed Statements, Company Info, Invoice Items, Departments, and Tracking Categories
+
 ## v10.23.13 - (2026-02-03)
 
 ### Accounting API

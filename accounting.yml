@@ -15599,10 +15599,16 @@ paths:
       x-apideck-gotchas:
         - connector: netsuite
           description: |
-            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation. NetSuite supports compound taxes through the `components` array, allowing multi-tier tax structures (e.g., state + county taxes).
         - connector: quickbooks
           description: |
-            In quickbooks, the tax rates resource does not support pagination.
+            In quickbooks, the tax rates resource does not support pagination. QuickBooks returns tax codes rather than complete tax rate data. The `effective_tax_rate` may not be populated; use `code` to reference the tax in invoice line items.
+        - connector: xero
+          description: |
+            Xero tax rates include `effective_tax_rate` for the combined percentage. Tax types are categorized as INPUT (purchases), OUTPUT (sales), or NONE. Use the appropriate tax type when applying rates to invoices vs bills.
+        - connector: sage-intacct
+          description: |
+            Sage Intacct supports multi-component taxes through the `components` array. Each component can have its own rate and tax authority. Use compound taxes for jurisdictions with multiple tax layers (e.g., GST + PST in Canada).
       responses:
         '200':
           $ref: '#/components/responses/GetTaxRatesResponse'
@@ -16467,6 +16473,12 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+        - connector: xero
+          description: |
+            Invoices in Xero can be tax inclusive, tax exclusive, or no tax. The `tax_inclusive` field is set to `true` (tax inclusive), `false` (tax exclusive), or `null` (no tax). Line items include `tax_rate` references that link to the tax-rates resource.
+        - connector: quickbooks
+          description: |
+            QuickBooks uses tax codes rather than tax rates. The `tax_rate` on line items references a tax code, which may not include the actual percentage value. To get the actual rate, retrieve the full tax rate details via the tax-rates endpoint.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoicesResponse'
@@ -16813,7 +16825,11 @@ paths:
         - connector: xero
           description: For updating invoices, there are some limitations. Check out [here](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#1-limitations-and-rules-for-updating-xero-invoices)
         - connector: xero
-          description: Invoices in xero can be tax inclusive, tax exclusive or no tax. The tax_inclusive field should be set to true, false or null if the invoice is tax inclusive, tax exclusive or no tax.
+          description: |
+            Invoices in Xero can be tax inclusive, tax exclusive, or no tax. Set `tax_inclusive` to `true` (amounts include tax), `false` (amounts exclude tax), or `null` (no tax applied). When updating, changing `tax_inclusive` recalculates all line item amounts.
+        - connector: quickbooks
+          description: |
+            When setting tax rates on line items, QuickBooks requires valid tax codes. The `tax_rate.id` must reference an existing tax code from the tax-rates endpoint. QuickBooks automatically calculates tax amounts based on the tax code's rate.
         - connector: freshbooks
           description: |
             The status field can be set to either "submitted" or "draft". The other available statuses are set by the Freshbooks API and cannot be updated manually. The due_date and invoice_date fields are required for the due date to be updated.
@@ -19683,6 +19699,12 @@ paths:
       operationId: companyInfoOne
       summary: Get company info
       description: Get company info
+      x-apideck-gotchas:
+        - connector: campfire
+          description: |
+            Campfire does not have a dedicated company info endpoint. This operation returns the first
+            entity (subsidiary) from the entities list. For multi-entity accounts, use the subsidiaries
+            endpoint to get all entities.
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'

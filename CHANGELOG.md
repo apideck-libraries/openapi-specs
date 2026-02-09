@@ -1,3 +1,9 @@
+## v10.23.16 - (2026-02-09)
+
+### Ecommerce API
+
+- Added `updated_since` and `created_since` filter support for [Customers](apis/ecommerce/reference#tag/Customers) across Wix, Shopify, BigCommerce, Magento, and Shopware connectors
+
 ## v10.23.15 - (2026-02-09)
 
 ### Accounting API

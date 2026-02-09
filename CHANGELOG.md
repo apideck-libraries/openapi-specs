@@ -1,3 +1,9 @@
+## v10.23.15 - (2026-02-09)
+
+### Accounting API
+
+- Added new [Digits](connectors/digits) connector with support for Ledger Accounts, Journal Entries, Customers, Suppliers, Tracking Categories, Balance Sheet, and Profit and Loss reports
+
 ## v10.23.14 - (2026-02-06)
 
 ### CRM API

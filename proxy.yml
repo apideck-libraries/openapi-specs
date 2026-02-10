@@ -297,6 +297,7 @@ components:
       example: close
       schema:
         type: string
+      x-speakeasy-name-override: serviceId
     x-apideck-unified-api:
       name: x-apideck-unified-api
       in: header
@@ -305,6 +306,7 @@ components:
       example: hris
       schema:
         type: string
+      x-speakeasy-name-override: unifiedApi
     x-apideck-downstream-url:
       name: x-apideck-downstream-url
       in: header
@@ -313,6 +315,7 @@ components:
       required: true
       schema:
         type: string
+      x-speakeasy-name-override: downstreamUrl
     x-apideck-downstream-method:
       name: x-apideck-downstream-method
       in: header
@@ -329,6 +332,7 @@ components:
       required: false
       schema:
         type: string
+      x-speakeasy-name-override: downstreamAuthorization
     raw:
       name: raw
       in: query
@@ -430,13 +434,52 @@ components:
             description: Indicates if the error returned in the body is from the downstream
       content:
         application/json:
-          schema: {}
+          schema:
+            x-speakeasy-name-override: errorJson
+            type: object
+            additionalProperties: true
+        application/xml:
+          schema:
+            x-speakeasy-name-override: errorXml
+            type: string
+        text/plain:
+          schema:
+            x-speakeasy-name-override: errorText
+            type: string
+        text/html:
+          schema:
+            x-speakeasy-name-override: errorHtml
+            type: string
     Ok:
       description: Ok
       content:
         application/json:
-          schema: {}
-          example: {}
+          schema:
+            x-speakeasy-name-override: responseJson
+            type: object
+            additionalProperties: true
+        application/xml:
+          schema:
+            x-speakeasy-name-override: responseXml
+            type: string
+        text/plain:
+          schema:
+            x-speakeasy-name-override: responseText
+            type: string
+        text/csv:
+          schema:
+            x-speakeasy-name-override: responseCsv
+            type: string
+        application/pdf:
+          schema:
+            x-speakeasy-name-override: responsePdf
+            type: string
+            format: binary
+        application/octet-stream:
+          schema:
+            x-speakeasy-name-override: responseBinary
+            type: string
+            format: binary
   securitySchemes:
     apiKey:
       type: apiKey
@@ -470,8 +513,7 @@ paths:
     get:
       summary: GET
       operationId: getProxy
-      x-sdk-exclude: true
-      x-speakeasy-ignore: true
+      x-apideck-api: proxy
       description: |
         Proxies a downstream GET request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
@@ -496,8 +538,7 @@ paths:
     options:
       summary: OPTIONS
       operationId: optionsProxy
-      x-sdk-exclude: true
-      x-speakeasy-ignore: true
+      x-apideck-api: proxy
       description: |
         Proxies a downstream OPTION request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
@@ -522,8 +563,7 @@ paths:
     post:
       summary: POST
       operationId: postProxy
-      x-sdk-exclude: true
-      x-speakeasy-ignore: true
+      x-apideck-api: proxy
       description: |
         Proxies a downstream POST request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
@@ -585,8 +625,7 @@ paths:
     put:
       summary: PUT
       operationId: putProxy
-      x-sdk-exclude: true
-      x-speakeasy-ignore: true
+      x-apideck-api: proxy
       description: |
         Proxies a downstream PUT request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
@@ -648,8 +687,7 @@ paths:
     patch:
       summary: PATCH
       operationId: patchProxy
-      x-sdk-exclude: true
-      x-speakeasy-ignore: true
+      x-apideck-api: proxy
       description: |
         Proxies a downstream PATCH request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.
@@ -711,8 +749,7 @@ paths:
     delete:
       summary: DELETE
       operationId: deleteProxy
-      x-sdk-exclude: true
-      x-speakeasy-ignore: true
+      x-apideck-api: proxy
       description: |
         Proxies a downstream DELETE request to a service and injects the necessary credentials into a request stored in Vault. This allows you to have an additional security layer and logging without needing to rely on Unify for normalization.
         **Note**: Vault will proxy all data to the downstream URL and method/verb in the headers.

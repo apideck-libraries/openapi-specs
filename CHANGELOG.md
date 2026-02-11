@@ -1,3 +1,9 @@
+## v10.23.17 - (2026-02-11)
+
+### HRIS API
+
+- Added `retired` to `hris.employee.leaving_reason` enum.
+
 ## v10.23.16 - (2026-02-09)
 
 ### Ecommerce API

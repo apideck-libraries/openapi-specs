@@ -1,3 +1,10 @@
+## v10.23.18 - (2026-02-12)
+
+### Accounting API
+
+- Added `updated_since` filter to [InvoiceItems](apis/accounting/reference#tag/InvoiceItems) schema.
+- Implemented `updated_since` filter for [Netsuite](connectors/Netsuite)
+
 ## v10.23.17 - (2026-02-11)
 
 ### HRIS API

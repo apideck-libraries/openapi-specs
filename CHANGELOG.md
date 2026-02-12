@@ -1,3 +1,9 @@
+## v10.23.19 - (2026-02-12)
+
+### CRM API
+
+- Added `updated_since` and `created_since` filters to [Companies](apis/crm/reference#tag/Companies) and [Contacts](apis/crm/reference#tag/Contacts) for [HubSpot](connectors/hubspot)
+
 ## v10.23.18 - (2026-02-12)
 
 ### Accounting API

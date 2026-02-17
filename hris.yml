@@ -5187,6 +5187,10 @@ paths:
           description: |
             The `leaving_reason` field in Fourth is a string and not an enum. We will return `"other"` if there is a leaving reason. You can use `custom_mappings` to get the actual value.
             The `manager.id` field may be empty even when `manager.name` is present. This occurs when the manager is a former employee who is not included in the active employees list. In such cases, the manager's EmployeeID cannot be resolved from the PayrollNumber lookup.
+        - connector: liantis
+          description: |
+            Liantis does not provide name fields such as `first_name`, `last_name`, or `display_name` on the Get Employee response.
+            Additionally, the fields returned by the Get Employee endpoint differ from those returned by List Employees, as they use different upstream API endpoints with different data structures.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeeResponse'

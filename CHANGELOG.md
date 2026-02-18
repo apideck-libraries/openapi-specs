@@ -1,3 +1,10 @@
+## v10.23.20 - (2026-02-18)
+
+### Accounting API
+
+- Added new [DualEntry](connectors/dualentry) connector with support for Invoices, Bills, Credit Notes, Journal Entries, Ledger Accounts, Customers, Suppliers, Payments, Bill Payments, Purchase Orders, Invoice Items, Subsidiaries, Company Info, Departments, Locations, Tracking Categories, and Attachments
+
+
 ## v10.23.19 - (2026-02-12)
 
 ### CRM API

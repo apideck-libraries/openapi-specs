@@ -402,6 +402,30 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ExpensesFilter'
+    accountingEmployeesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/AccountingEmployeesFilter'
+    expenseCategoriesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ExpenseCategoriesFilter'
+    expenseReportsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ExpenseReportsFilter'
   responses:
     BadRequestResponse:
       content:
@@ -1202,6 +1226,96 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateProjectResponse'
+    CreateAccountingEmployeeResponse:
+      description: Employees
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateAccountingEmployeeResponse'
+    DeleteAccountingEmployeeResponse:
+      description: Employees
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteAccountingEmployeeResponse'
+    GetAccountingEmployeeResponse:
+      description: Employees
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetAccountingEmployeeResponse'
+    GetAccountingEmployeesResponse:
+      description: Employees
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetAccountingEmployeesResponse'
+    UpdateAccountingEmployeeResponse:
+      description: Employees
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateAccountingEmployeeResponse'
+    CreateExpenseCategoryResponse:
+      description: Expense Categories
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateExpenseCategoryResponse'
+    DeleteExpenseCategoryResponse:
+      description: Expense Categories
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteExpenseCategoryResponse'
+    GetExpenseCategoryResponse:
+      description: Expense Categories
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetExpenseCategoryResponse'
+    GetExpenseCategoriesResponse:
+      description: Expense Categories
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetExpenseCategoriesResponse'
+    UpdateExpenseCategoryResponse:
+      description: Expense Categories
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateExpenseCategoryResponse'
+    CreateExpenseReportResponse:
+      description: Expense Reports
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateExpenseReportResponse'
+    DeleteExpenseReportResponse:
+      description: Expense Reports
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteExpenseReportResponse'
+    GetExpenseReportResponse:
+      description: Expense Reports
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetExpenseReportResponse'
+    GetExpenseReportsResponse:
+      description: Expense Reports
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetExpenseReportsResponse'
+    UpdateExpenseReportResponse:
+      description: Expense Reports
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateExpenseReportResponse'
   schemas:
     AccountCode:
       title: Account Code
@@ -1366,6 +1480,392 @@ components:
           $ref: '#/components/schemas/UpdatedBy'
     AccountingCustomer:
       $ref: '#/components/schemas/Customer'
+    AccountingEmployee:
+      type: object
+      x-apideck-schema-id: AccountingEmployee
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        downstream_id: low
+        display_id: high
+        first_name: critical
+        last_name: critical
+        display_name: critical
+        emails: high
+        employee_number: high
+        job_title: medium
+        status: critical
+        is_contractor: medium
+        department: medium
+        location: medium
+        manager: medium
+        hire_date: medium
+        termination_date: medium
+        gender: low
+        birth_date: low
+        subsidiary: medium
+        tracking_categories: low
+        currency: edge-case
+        notes: low
+        addresses: low
+        phone_numbers: low
+        custom_fields: medium
+        custom_mappings: low
+        row_version: low
+        updated_at: medium
+        created_at: medium
+        pass_through: low
+      x-apideck-strict-required:
+        - id
+        - first_name
+        - last_name
+        - status
+      x-apideck-strict-any-of:
+        - required:
+            - first_name
+        - required:
+            - last_name
+        - required:
+            - display_name
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
+        first_name:
+          type: string
+          title: First Name
+          description: The first name of the employee.
+          example: John
+          nullable: true
+        last_name:
+          type: string
+          title: Last Name
+          description: The last name of the employee.
+          example: Doe
+          nullable: true
+        display_name:
+          type: string
+          title: Display Name
+          description: The display name of the employee.
+          example: John Doe
+          nullable: true
+        emails:
+          type: array
+          title: Email Addresses
+          description: Email addresses of the employee.
+          items:
+            $ref: '#/components/schemas/Email'
+        employee_number:
+          type: string
+          title: Employee Number
+          description: The employee number or identifier.
+          example: EMP-001
+          nullable: true
+        job_title:
+          type: string
+          title: Job Title
+          description: The job title of the employee.
+          example: Senior Accountant
+          nullable: true
+        status:
+          type: string
+          title: Employee Status
+          description: The status of the employee.
+          x-apideck-enum-id: accounting_employees.status
+          enum:
+            - active
+            - inactive
+            - terminated
+          example: active
+          nullable: true
+        is_contractor:
+          type: boolean
+          title: Is Contractor
+          description: Whether the employee is a contractor.
+          example: false
+          nullable: true
+        department:
+          $ref: '#/components/schemas/LinkedDepartment'
+        location:
+          $ref: '#/components/schemas/LinkedLocation'
+        manager:
+          type: object
+          title: Manager
+          description: The manager of the employee.
+          properties:
+            id:
+              type: string
+              title: Manager ID
+              description: A unique identifier for the manager.
+              example: '12345'
+            name:
+              type: string
+              title: Manager Name
+              description: The name of the manager.
+              example: Jane Smith
+              nullable: true
+        hire_date:
+          type: string
+          title: Hire Date
+          description: The date the employee was hired.
+          format: date
+          example: '2020-01-15'
+          nullable: true
+        termination_date:
+          type: string
+          title: Termination Date
+          description: The date the employee was terminated.
+          format: date
+          example: '2025-12-31'
+          nullable: true
+        gender:
+          $ref: '#/components/schemas/Gender'
+        birth_date:
+          type: string
+          title: Birth Date
+          description: The date of birth of the employee.
+          format: date
+          example: '1990-05-20'
+          nullable: true
+        subsidiary:
+          $ref: '#/components/schemas/LinkedSubsidiary'
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        notes:
+          type: string
+          title: Notes
+          description: Notes about the employee.
+          example: Some notes about this employee
+          nullable: true
+        addresses:
+          type: array
+          title: Addresses
+          description: Addresses of the employee.
+          items:
+            $ref: '#/components/schemas/Address'
+        phone_numbers:
+          type: array
+          title: Phone Numbers
+          description: Phone numbers of the employee.
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+    AccountingEmployeesFilter:
+      type: object
+      x-apideck-schema-id: AccountingEmployeesFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+        status: active
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - terminated
+          x-apideck-enum-id: accounting_employees.status
+      additionalProperties: false
+    GetAccountingEmployeeResponse:
+      type: object
+      x-apideck-schema-id: GetAccountingEmployeeResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/AccountingEmployee'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetAccountingEmployeesResponse:
+      type: object
+      x-apideck-schema-id: GetAccountingEmployeesResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountingEmployee'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    CreateAccountingEmployeeResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    UpdateAccountingEmployeeResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    DeleteAccountingEmployeeResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: Employees
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     AccountingInvoiceId:
       title: Invoice Id
       description: The unique identifier for the invoice.
@@ -5491,6 +5991,19 @@ components:
       title: First name
       description: The first name of the person.
       example: Elon
+      nullable: true
+    Gender:
+      type: string
+      x-apideck-enum-id: genders
+      title: Gender
+      description: The gender represents the gender identity of a person.
+      enum:
+        - male
+        - female
+        - unisex
+        - other
+        - not_specified
+      example: male
       nullable: true
     GetBalanceSheetResponse:
       type: object
@@ -13003,6 +13516,814 @@ components:
           $ref: '#/components/schemas/LineNumber'
         rebilling:
           $ref: '#/components/schemas/Rebilling'
+    ExpenseCategory:
+      type: object
+      x-apideck-schema-id: ExpenseCategory
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        display_id: medium
+        name: critical
+        code: medium
+        description: high
+        status: critical
+        account: critical
+        offset_account: edge-case
+        tax_rate: medium
+        rate_required: low
+        default_rate: low
+        custom_mappings: low
+        row_version: low
+        updated_at: medium
+        created_at: medium
+        pass_through: low
+      required:
+        - name
+      x-apideck-strict-required:
+        - id
+        - name
+        - status
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
+        name:
+          type: string
+          title: Name
+          description: The name of the expense category.
+          example: Travel
+        code:
+          type: string
+          title: Code
+          description: The code or external identifier of the expense category.
+          example: TRAVEL-001
+          nullable: true
+        description:
+          type: string
+          title: Description
+          description: The description of the expense category.
+          example: Travel-related expenses including flights, hotels, and ground transportation.
+          nullable: true
+        status:
+          type: string
+          title: Status
+          description: The status of the expense category.
+          x-apideck-enum-id: expense_categories.status
+          enum:
+            - active
+            - inactive
+          example: active
+          nullable: true
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        offset_account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        rate_required:
+          type: boolean
+          title: Rate Required
+          description: Whether the expense category requires rate/quantity entry (e.g. mileage at $/mile).
+          example: false
+          nullable: true
+        default_rate:
+          type: number
+          title: Default Rate
+          description: Default rate when rate_required is true (e.g. 0.67 for mileage).
+          example: 0.67
+          nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+    ExpenseCategoriesFilter:
+      type: object
+      x-apideck-schema-id: ExpenseCategoriesFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+        status: active
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          x-apideck-enum-id: expense_categories.status
+      additionalProperties: false
+    GetExpenseCategoryResponse:
+      type: object
+      x-apideck-schema-id: GetExpenseCategoryResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseCategories
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/ExpenseCategory'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetExpenseCategoriesResponse:
+      type: object
+      x-apideck-schema-id: GetExpenseCategoriesResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseCategories
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseCategory'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    CreateExpenseCategoryResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseCategories
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    UpdateExpenseCategoryResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseCategories
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    DeleteExpenseCategoryResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseCategories
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    ExpenseReport:
+      type: object
+      x-apideck-schema-id: ExpenseReport
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        display_id: high
+        number: medium
+        title: high
+        employee: critical
+        status: critical
+        transaction_date: critical
+        posting_date: low
+        due_date: medium
+        currency: high
+        currency_rate: edge-case
+        sub_total: high
+        total_tax: high
+        total_amount: critical
+        reimbursable_amount: medium
+        memo: medium
+        department: medium
+        location: medium
+        account: medium
+        accounting_period: low
+        line_items: critical
+        subsidiary: medium
+        tracking_categories: medium
+        tax_inclusive: edge-case
+        approved_by: low
+        custom_fields: medium
+        custom_mappings: low
+        row_version: low
+        updated_at: medium
+        created_at: medium
+        pass_through: low
+      required:
+        - employee
+        - transaction_date
+        - line_items
+      x-apideck-strict-required:
+        - id
+        - employee
+        - transaction_date
+        - line_items
+        - status
+        - total_amount
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        display_id:
+          $ref: '#/components/schemas/DisplayId'
+        number:
+          type: string
+          title: Number
+          description: The expense report number.
+          example: ER-001
+          nullable: true
+        title:
+          type: string
+          title: Title
+          description: Title or purpose of the expense report.
+          example: Q1 Business Travel
+          nullable: true
+        employee:
+          type: object
+          title: Employee
+          description: The employee who submitted the expense report.
+          properties:
+            id:
+              type: string
+              title: Employee ID
+              description: A unique identifier for the employee.
+              example: '12345'
+            display_name:
+              type: string
+              title: Employee Display Name
+              description: The display name of the employee.
+              example: John Doe
+              nullable: true
+        status:
+          type: string
+          title: Status
+          description: The status of the expense report.
+          x-apideck-enum-id: expense_reports.status
+          enum:
+            - draft
+            - submitted
+            - approved
+            - reimbursed
+            - rejected
+            - reversed
+            - voided
+          example: submitted
+          nullable: true
+        transaction_date:
+          $ref: '#/components/schemas/TransactionDate'
+        posting_date:
+          type: string
+          title: Posting Date
+          description: The date the expense report was posted to the general ledger.
+          format: date
+          example: '2024-06-01'
+          nullable: true
+        due_date:
+          type: string
+          title: Due Date
+          description: Date when reimbursement is due.
+          format: date
+          example: '2024-06-15'
+          nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
+        currency_rate:
+          $ref: '#/components/schemas/CurrencyRate'
+        sub_total:
+          $ref: '#/components/schemas/SubTotal'
+        total_tax:
+          $ref: '#/components/schemas/TotalTax'
+        total_amount:
+          type: number
+          title: Total Amount
+          description: Total amount of all expense lines including tax.
+          example: 1250.75
+          nullable: true
+        reimbursable_amount:
+          type: number
+          title: Reimbursable Amount
+          description: Total reimbursable amount (may differ from total if some expenses are non-reimbursable).
+          example: 1100
+          nullable: true
+        memo:
+          type: string
+          title: Memo
+          description: The memo of the expense report.
+          example: Business travel expenses for Q1 client meetings
+          nullable: true
+        department:
+          $ref: '#/components/schemas/LinkedDepartment'
+        location:
+          $ref: '#/components/schemas/LinkedLocation'
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        accounting_period:
+          type: object
+          title: Accounting Period
+          description: The accounting period the expense report is posted to.
+          nullable: true
+          properties:
+            id:
+              type: string
+              title: Accounting Period ID
+              description: A unique identifier for the accounting period.
+              example: '12345'
+            name:
+              type: string
+              title: Accounting Period Name
+              description: The name of the accounting period.
+              example: Q1 2024
+              nullable: true
+        line_items:
+          type: array
+          minItems: 1
+          description: Expense line items linked to this expense report.
+          items:
+            $ref: '#/components/schemas/ExpenseReportLineItem'
+        subsidiary:
+          $ref: '#/components/schemas/LinkedSubsidiary'
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        tax_inclusive:
+          $ref: '#/components/schemas/TaxInclusive'
+        approved_by:
+          type: object
+          title: Approved By
+          description: The person who approved the expense report.
+          nullable: true
+          properties:
+            id:
+              type: string
+              title: Approver ID
+              description: A unique identifier for the approver.
+              example: '12345'
+            display_name:
+              type: string
+              title: Approver Display Name
+              description: The display name of the approver.
+              example: Jane Smith
+              nullable: true
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+    ExpenseReportLineItem:
+      type: object
+      x-apideck-schema-id: ExpenseReportLineItem
+      additionalProperties: false
+      x-apideck-weights:
+        id: high
+        expense_category: critical
+        account: critical
+        description: medium
+        quantity: medium
+        unit_price: medium
+        amount: critical
+        tax_rate: medium
+        tax_amount: high
+        total_amount: high
+        transaction_date: high
+        billable: medium
+        reimbursable: medium
+        customer: medium
+        department: medium
+        location: medium
+        tracking_categories: low
+        receipt_url: low
+        currency: edge-case
+      required:
+        - amount
+      x-apideck-strict-required:
+        - amount
+      x-apideck-strict-any-of:
+        - required:
+            - expense_category
+        - required:
+            - account
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        expense_category:
+          type: object
+          title: Expense Category
+          description: The expense category for this line item.
+          properties:
+            id:
+              type: string
+              title: Expense Category ID
+              description: A unique identifier for the expense category.
+              example: '12345'
+            name:
+              type: string
+              title: Expense Category Name
+              description: The name of the expense category.
+              example: Travel
+              nullable: true
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        description:
+          type: string
+          title: Description
+          description: The description of the expense line item.
+          example: Flight to New York
+          nullable: true
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        unit_price:
+          $ref: '#/components/schemas/UnitPrice'
+        amount:
+          type: number
+          title: Amount
+          description: The amount of the expense line item.
+          example: 275
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        tax_amount:
+          $ref: '#/components/schemas/TaxAmount'
+        total_amount:
+          type: number
+          title: Total Amount
+          description: The total amount of the expense line item including tax.
+          example: 302.5
+          nullable: true
+        transaction_date:
+          type: string
+          title: Transaction Date
+          description: The date of the individual expense.
+          format: date
+          example: '2024-05-15'
+          nullable: true
+        billable:
+          type: boolean
+          title: Billable
+          description: Whether the expense is billable to a customer.
+          example: true
+          nullable: true
+        reimbursable:
+          type: boolean
+          title: Reimbursable
+          description: Whether the expense is reimbursable to the employee.
+          example: true
+          nullable: true
+        customer:
+          $ref: '#/components/schemas/LinkedCustomer'
+        department:
+          $ref: '#/components/schemas/LinkedDepartment'
+        location:
+          $ref: '#/components/schemas/LinkedLocation'
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        receipt_url:
+          type: string
+          title: Receipt URL
+          description: URL to the receipt or attachment for this expense line.
+          example: https://example.com/receipts/123.pdf
+          nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
+    ExpenseReportsFilter:
+      type: object
+      x-apideck-schema-id: ExpenseReportsFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+        status: submitted
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        status:
+          type: string
+          enum:
+            - draft
+            - submitted
+            - approved
+            - reimbursed
+            - rejected
+            - reversed
+            - voided
+          x-apideck-enum-id: expense_reports.status
+        employee_id:
+          type: string
+          title: Employee ID
+          description: Filter by employee ID
+          example: '12345'
+      additionalProperties: false
+    GetExpenseReportResponse:
+      type: object
+      x-apideck-schema-id: GetExpenseReportResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseReports
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/ExpenseReport'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetExpenseReportsResponse:
+      type: object
+      x-apideck-schema-id: GetExpenseReportsResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseReports
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExpenseReport'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    CreateExpenseReportResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseReports
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    UpdateExpenseReportResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseReports
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    DeleteExpenseReportResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ExpenseReports
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     UpdateExpenseResponse:
       type: object
       required:
@@ -15581,6 +16902,21 @@ tags:
     x-apideck-resource-id: projects
     x-apideck-model:
       $ref: '#/components/schemas/Project'
+  - name: Employees
+    description: An Employee represents an individual within the organization for accounting purposes, including name, department, hire date, and employment status.
+    x-apideck-resource-id: employees
+    x-apideck-model:
+      $ref: '#/components/schemas/AccountingEmployee'
+  - name: Expense Categories
+    description: An Expense Category classifies types of expenses within the organization, such as travel, meals, or office supplies. Used to categorize expense report line items.
+    x-apideck-resource-id: expense-categories
+    x-apideck-model:
+      $ref: '#/components/schemas/ExpenseCategory'
+  - name: Expense Reports
+    description: An Expense Report is a collection of expense line items submitted by an employee for reimbursement, including amounts, categories, and approval status.
+    x-apideck-resource-id: expense-reports
+    x-apideck-model:
+      $ref: '#/components/schemas/ExpenseReport'
 paths:
   /accounting/tax-rates:
     get:
@@ -24860,6 +26196,1022 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DeleteProjectResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/employees:
+    get:
+      tags:
+        - Employees
+      operationId: employeesAll
+      summary: List Employees
+      description: List Employees
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/accountingEmployeesFilter'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetAccountingEmployeesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Employees
+      operationId: employeesAdd
+      summary: Create Employee
+      description: Create Employee
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountingEmployee'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateAccountingEmployeeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            employee:
+              display_id: '123456'
+              first_name: John
+              last_name: Doe
+              display_name: John Doe
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              employee_number: EMP-001
+              job_title: Senior Accountant
+              status: active
+              is_contractor: false
+              department:
+                display_id: '123456'
+                name: Acme Inc.
+              location:
+                id: '123456'
+                display_id: '123456'
+                name: New York Office
+              manager:
+                id: '12345'
+                name: Jane Smith
+              hire_date: '2020-01-15'
+              termination_date: '2025-12-31'
+              gender: male
+              birth_date: '1990-05-20'
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              currency: USD
+              notes: Some notes about this employee
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  line5: 'Attention: Finance Dept'
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+  /accounting/employees/{id}:
+    get:
+      tags:
+        - Employees
+      operationId: employeesOne
+      summary: Get Employee
+      description: Get Employee
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetAccountingEmployeeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+    patch:
+      tags:
+        - Employees
+      operationId: employeesUpdate
+      summary: Update Employee
+      description: Update Employee
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountingEmployee'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateAccountingEmployeeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            employee:
+              display_id: '123456'
+              first_name: John
+              last_name: Doe
+              display_name: John Doe
+              emails:
+                - id: '123'
+                  email: elon@musk.com
+                  type: primary
+              employee_number: EMP-001
+              job_title: Senior Accountant
+              status: active
+              is_contractor: false
+              department:
+                display_id: '123456'
+                name: Acme Inc.
+              location:
+                id: '123456'
+                display_id: '123456'
+                name: New York Office
+              manager:
+                id: '12345'
+                name: Jane Smith
+              hire_date: '2020-01-15'
+              termination_date: '2025-12-31'
+              gender: male
+              birth_date: '1990-05-20'
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              currency: USD
+              notes: Some notes about this employee
+              addresses:
+                - id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  line5: 'Attention: Finance Dept'
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              phone_numbers:
+                - id: '12345'
+                  country_code: '1'
+                  area_code: '323'
+                  number: 111-111-1111
+                  extension: '105'
+                  type: primary
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+    delete:
+      tags:
+        - Employees
+      operationId: employeesDelete
+      summary: Delete Employee
+      description: Delete Employee
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteAccountingEmployeeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/expense-categories:
+    get:
+      tags:
+        - Expense Categories
+      operationId: expenseCategoriesAll
+      summary: List Expense Categories
+      description: List Expense Categories
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/expenseCategoriesFilter'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetExpenseCategoriesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Expense Categories
+      operationId: expenseCategoriesAdd
+      summary: Create Expense Category
+      description: Create Expense Category
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseCategory'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateExpenseCategoryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            expenseCategory:
+              display_id: '123456'
+              name: Travel
+              code: TRAVEL-001
+              description: Travel-related expenses including flights, hotels, and ground transportation.
+              status: active
+              account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              offset_account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              tax_rate:
+                id: '123456'
+                code: N-T
+                rate: 10
+              rate_required: false
+              default_rate: 0.67
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+  /accounting/expense-categories/{id}:
+    get:
+      tags:
+        - Expense Categories
+      operationId: expenseCategoriesOne
+      summary: Get Expense Category
+      description: Get Expense Category
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetExpenseCategoryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+    patch:
+      tags:
+        - Expense Categories
+      operationId: expenseCategoriesUpdate
+      summary: Update Expense Category
+      description: Update Expense Category
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseCategory'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateExpenseCategoryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            expenseCategory:
+              display_id: '123456'
+              name: Travel
+              code: TRAVEL-001
+              description: Travel-related expenses including flights, hotels, and ground transportation.
+              status: active
+              account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              offset_account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              tax_rate:
+                id: '123456'
+                code: N-T
+                rate: 10
+              rate_required: false
+              default_rate: 0.67
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+    delete:
+      tags:
+        - Expense Categories
+      operationId: expenseCategoriesDelete
+      summary: Delete Expense Category
+      description: Delete Expense Category
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteExpenseCategoryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/expense-reports:
+    get:
+      tags:
+        - Expense Reports
+      operationId: expenseReportsAll
+      summary: List Expense Reports
+      description: List Expense Reports
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/expenseReportsFilter'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetExpenseReportsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Expense Reports
+      operationId: expenseReportsAdd
+      summary: Create Expense Report
+      description: Create Expense Report
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseReport'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateExpenseReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            expenseReport:
+              display_id: '123456'
+              number: ER-001
+              title: Q1 Business Travel
+              employee:
+                id: '12345'
+                display_name: John Doe
+              status: submitted
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              posting_date: '2024-06-01'
+              due_date: '2024-06-15'
+              currency: USD
+              currency_rate: 0.69
+              sub_total: 250
+              total_tax: 25
+              total_amount: 1250.75
+              reimbursable_amount: 1100
+              memo: Business travel expenses for Q1 client meetings
+              department:
+                display_id: '123456'
+                name: Acme Inc.
+              location:
+                id: '123456'
+                display_id: '123456'
+                name: New York Office
+              account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              accounting_period:
+                id: '12345'
+                name: Q1 2024
+              line_items:
+                - expense_category:
+                    id: '12345'
+                    name: Travel
+                  account:
+                    id: '123456'
+                    name: Bank account
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
+                  description: Flight to New York
+                  quantity: 1
+                  unit_price: 27500.5
+                  amount: 275
+                  tax_rate:
+                    id: '123456'
+                    code: N-T
+                    rate: 10
+                  tax_amount: 27.5
+                  total_amount: 302.5
+                  transaction_date: '2024-05-15'
+                  billable: true
+                  reimbursable: true
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
+                  department:
+                    display_id: '123456'
+                    name: Acme Inc.
+                  location:
+                    id: '123456'
+                    display_id: '123456'
+                    name: New York Office
+                  tracking_categories:
+                    - id: '123456'
+                      code: '100'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  receipt_url: https://example.com/receipts/123.pdf
+                  currency: USD
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              tax_inclusive: true
+              approved_by:
+                id: '12345'
+                display_name: Jane Smith
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+  /accounting/expense-reports/{id}:
+    get:
+      tags:
+        - Expense Reports
+      operationId: expenseReportsOne
+      summary: Get Expense Report
+      description: Get Expense Report
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetExpenseReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+    patch:
+      tags:
+        - Expense Reports
+      operationId: expenseReportsUpdate
+      summary: Update Expense Report
+      description: Update Expense Report
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseReport'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateExpenseReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            expenseReport:
+              display_id: '123456'
+              number: ER-001
+              title: Q1 Business Travel
+              employee:
+                id: '12345'
+                display_name: John Doe
+              status: submitted
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              posting_date: '2024-06-01'
+              due_date: '2024-06-15'
+              currency: USD
+              currency_rate: 0.69
+              sub_total: 250
+              total_tax: 25
+              total_amount: 1250.75
+              reimbursable_amount: 1100
+              memo: Business travel expenses for Q1 client meetings
+              department:
+                display_id: '123456'
+                name: Acme Inc.
+              location:
+                id: '123456'
+                display_id: '123456'
+                name: New York Office
+              account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              accounting_period:
+                id: '12345'
+                name: Q1 2024
+              line_items:
+                - expense_category:
+                    id: '12345'
+                    name: Travel
+                  account:
+                    id: '123456'
+                    name: Bank account
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
+                  description: Flight to New York
+                  quantity: 1
+                  unit_price: 27500.5
+                  amount: 275
+                  tax_rate:
+                    id: '123456'
+                    code: N-T
+                    rate: 10
+                  tax_amount: 27.5
+                  total_amount: 302.5
+                  transaction_date: '2024-05-15'
+                  billable: true
+                  reimbursable: true
+                  customer:
+                    id: '12345'
+                    display_name: Windsurf Shop
+                    name: Windsurf Shop
+                    email: boring@boring.com
+                  department:
+                    display_id: '123456'
+                    name: Acme Inc.
+                  location:
+                    id: '123456'
+                    display_id: '123456'
+                    name: New York Office
+                  tracking_categories:
+                    - id: '123456'
+                      code: '100'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  receipt_url: https://example.com/receipts/123.pdf
+                  currency: USD
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              tax_inclusive: true
+              approved_by:
+                id: '12345'
+                display_name: Jane Smith
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+    delete:
+      tags:
+        - Expense Reports
+      operationId: expenseReportsDelete
+      summary: Delete Expense Report
+      description: Delete Expense Report
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteExpenseReportResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':

@@ -1,3 +1,13 @@
+## v10.23.21 - (2026-02-20)
+
+### Accounting API
+
+- Added new [Employees](apis/accounting/reference#tag/Employees) resource with support for list, get, create, and update operations
+- Added new [Expense Categories](apis/accounting/reference#tag/ExpenseCategories) resource with support for list and get operations
+- Added new [Expense Reports](apis/accounting/reference#tag/ExpenseReports) resource with support for list and get operations
+- Implemented Employees, Expense Categories, and Expense Reports for [NetSuite](connectors/netsuite)
+- Implemented Employees with full CRUD operations for [Sage Intacct](connectors/sage-intacct)
+
 ## v10.23.20 - (2026-02-18)
 
 ### Accounting API

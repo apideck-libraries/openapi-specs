@@ -8,12 +8,16 @@
 - Implemented Employees, Expense Categories, and Expense Reports for [NetSuite](connectors/netsuite)
 - Implemented Employees with full CRUD operations for [Sage Intacct](connectors/sage-intacct)
 
+### Issue Tracking API
+
+- Added new [Linear Multiworkspace](connectors/linear-multiworkspace) connector with support for [Collections](apis/issue-tracking/reference#tag/Collections) and [Collection Tickets](apis/issue-tracking/reference#tag/CollectionTickets), including webhook support
+- Added [Collections](apis/issue-tracking/reference#tag/Collections) and [Collection Tickets](apis/issue-tracking/reference#tag/CollectionTickets) support to [Linear](connectors/linear), including webhook support
+
 ## v10.23.20 - (2026-02-18)
 
 ### Accounting API
 
 - Added new [DualEntry](connectors/dualentry) connector with support for Invoices, Bills, Credit Notes, Journal Entries, Ledger Accounts, Customers, Suppliers, Payments, Bill Payments, Purchase Orders, Invoice Items, Subsidiaries, Company Info, Departments, Locations, Tracking Categories, and Attachments
-
 
 ## v10.23.19 - (2026-02-12)
 

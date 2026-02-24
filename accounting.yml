@@ -3038,11 +3038,7 @@ components:
           example: 120-C
           nullable: true
         line_number:
-          type: integer
-          title: Line number
-          description: Line number in the invoice
-          example: 1
-          nullable: true
+          $ref: '#/components/schemas/LineNumber'
         description:
           type: string
           title: Description
@@ -9028,6 +9024,40 @@ components:
           title: Email
           description: The email address of the customer.
           example: boring@boring.com
+    LinkedExpenseCategory:
+      type: object
+      x-apideck-schema-id: LinkedExpenseCategory
+      title: LinkedExpenseCategory
+      description: The expense category this entity is linked to.
+      x-apideck-weights:
+        id: medium
+        downstream_id: edge-case
+        display_id: medium
+        name: medium
+      properties:
+        id:
+          type: string
+          title: Expense Category ID
+          description: The ID of the expense category.
+          example: '12345'
+        downstream_id:
+          type: string
+          title: Downstream ID
+          description: The third-party API ID of the expense category.
+          example: '12345'
+          nullable: true
+        display_id:
+          type: string
+          title: Display ID
+          description: The display ID of the expense category.
+          example: Airfare
+          nullable: true
+        name:
+          type: string
+          title: Name
+          description: The name of the expense category.
+          example: Airfare
+          nullable: true
     LinkedInvoiceItem:
       type: object
       x-apideck-schema-id: LinkedInvoiceItem
@@ -13533,7 +13563,10 @@ components:
         rate_required: low
         default_rate: low
         custom_mappings: low
+        downstream_id: low
         row_version: low
+        updated_by: edge-case
+        created_by: edge-case
         updated_at: medium
         created_at: medium
         pass_through: low
@@ -13595,8 +13628,14 @@ components:
           nullable: true
         custom_mappings:
           $ref: '#/components/schemas/CustomMappings'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
         row_version:
           $ref: '#/components/schemas/RowVersion'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
@@ -13833,6 +13872,8 @@ components:
         custom_fields: medium
         custom_mappings: low
         row_version: low
+        updated_by: edge-case
+        created_by: edge-case
         updated_at: medium
         created_at: medium
         pass_through: low
@@ -13997,6 +14038,10 @@ components:
           $ref: '#/components/schemas/CustomMappings'
         row_version:
           $ref: '#/components/schemas/RowVersion'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
         updated_at:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
@@ -14009,6 +14054,7 @@ components:
       additionalProperties: false
       x-apideck-weights:
         id: high
+        line_number: medium
         expense_category: critical
         account: critical
         description: medium
@@ -14027,6 +14073,10 @@ components:
         tracking_categories: low
         receipt_url: low
         currency: edge-case
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: edge-case
+        created_at: edge-case
       required:
         - amount
       x-apideck-strict-required:
@@ -14039,22 +14089,10 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/Id'
+        line_number:
+          $ref: '#/components/schemas/LineNumber'
         expense_category:
-          type: object
-          title: Expense Category
-          description: The expense category for this line item.
-          properties:
-            id:
-              type: string
-              title: Expense Category ID
-              description: A unique identifier for the expense category.
-              example: '12345'
-            name:
-              type: string
-              title: Expense Category Name
-              description: The name of the expense category.
-              example: Travel
-              nullable: true
+          $ref: '#/components/schemas/LinkedExpenseCategory'
         account:
           $ref: '#/components/schemas/LinkedLedgerAccount'
         description:
@@ -14117,6 +14155,14 @@ components:
           nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
     ExpenseReportsFilter:
       type: object
       x-apideck-schema-id: ExpenseReportsFilter
@@ -26943,9 +26989,12 @@ paths:
                 id: '12345'
                 name: Q1 2024
               line_items:
-                - expense_category:
+                - line_number: 1
+                  expense_category:
                     id: '12345'
-                    name: Travel
+                    downstream_id: '12345'
+                    display_id: Airfare
+                    name: Airfare
                   account:
                     id: '123456'
                     name: Bank account
@@ -27126,9 +27175,12 @@ paths:
                 id: '12345'
                 name: Q1 2024
               line_items:
-                - expense_category:
+                - line_number: 1
+                  expense_category:
                     id: '12345'
-                    name: Travel
+                    downstream_id: '12345'
+                    display_id: Airfare
+                    name: Airfare
                   account:
                     id: '123456'
                     name: Bank account

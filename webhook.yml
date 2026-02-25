@@ -1489,6 +1489,11 @@ paths:
               oneOf:
                 - $ref: '#/components/schemas/ExecuteWebhookEventRequest'
                 - $ref: '#/components/schemas/ExecuteWebhookEventsRequest'
+          application/cloudevents-batch+json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ExecuteWebhookEventRequest'
+                - $ref: '#/components/schemas/ExecuteWebhookEventsRequest'
       responses:
         '200':
           $ref: '#/components/responses/ExecuteWebhookResponse'
@@ -1542,6 +1547,11 @@ paths:
               oneOf:
                 - $ref: '#/components/schemas/ExecuteWebhookEventRequest'
                 - $ref: '#/components/schemas/ExecuteWebhookEventsRequest'
+          application/cloudevents-batch+json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ExecuteWebhookEventRequest'
+                - $ref: '#/components/schemas/ExecuteWebhookEventsRequest'
       responses:
         '200':
           $ref: '#/components/responses/ExecuteWebhookResponse'
@@ -1586,6 +1596,11 @@ paths:
         required: false
         content:
           application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ResolveWebhookEventRequest'
+                - $ref: '#/components/schemas/ResolveWebhookEventsRequest'
+          application/cloudevents-batch+json:
             schema:
               oneOf:
                 - $ref: '#/components/schemas/ResolveWebhookEventRequest'

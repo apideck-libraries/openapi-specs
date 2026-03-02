@@ -1,3 +1,28 @@
+## v10.24.0 - (2026-02-27)
+
+### Accounting API
+
+- Added new [Companies](apis/accounting/reference#tag/Companies) resource with support for listing accessible companies within a connection — available for multi-company connectors
+- Added `x-apideck-company-id` header parameter to all Accounting API endpoints, allowing consumers to override the default company at request time for multi-company connectors
+- Implemented [Companies](apis/accounting/reference#tag/Companies) for [Xero](connectors/xero), [Sage Business Cloud](connectors/sage-business-cloud-accounting), [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central), [Sage Intacct](connectors/sage-intacct), [Exact Online](connectors/exact-online), [Workday](connectors/workday), and [DualEntry](connectors/dualentry)
+
+### Vault API
+
+- Connection `metadata.company_id` is now automatically synced when a company setting is updated or set via OAuth authorization for multi-company connectors — providing a standardized, connector-agnostic way to identify the active company
+
+## v10.23.22 - (2026-02-27)
+
+### Accounting API
+
+- Added `terms_id` support to [Invoices](apis/accounting/reference#tag/Invoices), [Bills](apis/accounting/reference#tag/Bills), [Purchase Orders](apis/accounting/reference#tag/PurchaseOrders), [Credit Notes](apis/accounting/reference#tag/CreditNotes), [Customers](apis/accounting/reference#tag/Customers), [Quotes](apis/accounting/reference#tag/Quotes), and [Suppliers](apis/accounting/reference#tag/Suppliers)
+
+## v10.23.22 - (2026-02-26)
+
+### Accounting API
+
+- Aligned [Expenses](apis/accounting/reference#tag/Expenses) `status` enum to `draft`, `posted`, `voided` — removed unsupported values (`pending_approval`, `approved`, `rejected`, `deleted`, `other`).
+- Updated Expenses filter `status` to match the model enum
+
 ## v10.23.21 - (2026-02-20)
 
 ### Accounting API

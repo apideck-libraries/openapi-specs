@@ -18046,6 +18046,9 @@ paths:
         - connector: acumatica
           description: |
             When filling line items, you can either link an existing item by providing the item code or create a new item by filling in the item details. Using both options at the same time is not supported.
+        - connector: access-financials
+          description: |
+            Access Financials creates invoices as live/posted transactions immediately. Live transactions cannot be updated, so to correct an invoice you must create a credit note and issue a new invoice.
       requestBody:
         required: true
         content:
@@ -18349,9 +18352,6 @@ paths:
         - connector: workday
           description: |
             It is required to provide tracking_categories.id in the line items, which corresponds to the worktag/cost_center_id in Workday. It is required to provide the item.id in the line items. Workday only supports `sales_item` and `service` types for line items and this is required.
-        - connector: access-financials
-          description: |
-            Access Financials does not support updating invoices. The API creates invoices as live/posted transactions immediately, and live transactions cannot be modified. To correct an invoice, create a credit note and issue a new invoice.
       requestBody:
         required: true
         content:
@@ -19430,6 +19430,9 @@ paths:
           description: |
             Pass allocations in the `allocations` array. The first allocation is supported on all plans; additional allocations (2+) require higher than "Start" plan.
             The `allocations` field is not returned in responses. To retrieve allocation details, use the proxy API to call `/contact_allocations?contact_id={customer_id}`.
+        - connector: access-financials
+          description: |
+            Access Financials creates credit notes as live/posted transactions immediately. Live transactions cannot be updated, so to correct a credit note you must delete it and create a new one.
       requestBody:
         required: true
         content:
@@ -19678,9 +19681,6 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
-        - connector: access-financials
-          description: |
-            Update is not supported. Live/posted transactions cannot be modified in Access Financials.
         - connector: netsuite
           description: |
             - Netsuite doesn't support voiding credit notes via API. Options: 1) Remove allocations and delete, or 2) Create a reversing invoice for the same amount.
@@ -20925,6 +20925,9 @@ paths:
         - connector: quickbooks
           description: |
             Payment allocations in QuickBooks are processed asynchronously. While the allocations are included in the request, they may not appear in the immediate response. The allocations will be applied and become visible in subsequent list or get calls.
+        - connector: access-financials
+          description: |
+            Access Financials creates payments as live/posted transactions immediately. Live transactions cannot be updated, so to correct a payment you must delete it and create a new one.
       responses:
         '201':
           $ref: '#/components/responses/CreatePaymentResponse'
@@ -21084,9 +21087,6 @@ paths:
         - connector: xero
           description: |
             Xero doesn't support updating payments. To update a payment, you need to delete the existing payment and create a new one.
-        - connector: access-financials
-          description: |
-            Access Financials does not support updating payments. The API creates payments as live/posted transactions immediately, and live transactions cannot be modified. To correct a payment, delete it and create a new one.
       requestBody:
         required: true
         content:

@@ -1,3 +1,9 @@
+## v10.24.1 - (2026-03-09)
+
+### ATS API
+
+- Added new [JobAdder](connectors/jobadder) connector with support for [Applicants](apis/ats/reference#tag/Applicants) and [Jobs](apis/ats/reference#tag/Jobs) resources
+
 ## v10.24.0 - (2026-02-27)
 
 ### Accounting API

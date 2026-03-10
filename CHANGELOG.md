@@ -1,4 +1,9 @@
-## v10.24.1 - (2026-03-09)
+## v10.24.1 - (2026-03-10)
+
+### Accounting API
+
+- Added new [Refunds](apis/accounting/reference#tag/Refunds) resource with full CRUD support (list, get, create, update, delete)
+- Implemented [Refunds](apis/accounting/reference#tag/Refunds) for [QuickBooks](connectors/quickbooks)
 
 ### ATS API
 

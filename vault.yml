@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.24.1
+  version: 10.24.2
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -425,6 +425,14 @@ components:
       schema:
         type: string
       example: '1234'
+    consumers_filter:
+      name: filter
+      in: query
+      description: Filter results
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ConsumersFilter'
   schemas:
     ApplicationId:
       type: string
@@ -1257,6 +1265,20 @@ components:
           type: string
           title: Image
           description: The avatar of the user in the sidebar. Must be a valid URL
+    ConsumersFilter:
+      type: object
+      x-apideck-schema-id: ConsumersFilter
+      properties:
+        consumer_id:
+          type: string
+          example: test-consumer
+          nullable: true
+          description: Filter by consumer ID using a prefix match (beginsWith).
+        search:
+          type: string
+          example: john
+          nullable: true
+          description: Search across consumer ID, email, account name, and user name using a substring match (contains). Matches any field (OR logic).
     ConsumerRequestCountsInDateRangeResponse:
       type: object
       x-apideck-schema-id: ConsumerRequestCountsInDateRangeResponse
@@ -3363,6 +3385,7 @@ paths:
         - Consumers
       parameters:
         - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/consumers_filter'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
       security:

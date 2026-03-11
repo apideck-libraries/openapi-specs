@@ -1,3 +1,10 @@
+## v10.24.3 - (2026-03-11)
+
+### ATS API
+
+- Added [Applications](apis/ats/reference#tag/Applications) resource support for [JobAdder](connectors/jobadder) with list and get operations
+- Added create and update operations for [Jobs](apis/ats/reference#tag/Jobs) in [JobAdder](connectors/jobadder)
+
 ## v10.24.1 - (2026-03-10)
 
 ### Accounting API

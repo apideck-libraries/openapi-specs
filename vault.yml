@@ -2538,45 +2538,6 @@ components:
         - upcoming
         - considering
       description: Status of the resource. Resources with status live or beta are callable.
-    SecureAuthorizeConnectionRequest:
-      type: object
-      x-apideck-schema-id: SecureAuthorizeConnectionRequest
-      required:
-        - nonce
-        - redirect_uri
-      properties:
-        nonce:
-          type: string
-          minLength: 1
-          description: A client-generated nonce for CSRF protection in the OAuth flow.
-          example: abc123
-        redirect_uri:
-          type: string
-          minLength: 1
-          description: The redirect URI to be used after the connection is authorized.
-          example: https://example.com/callback
-    SecureAuthorizeConnectionResponse:
-      type: object
-      x-apideck-schema-id: SecureAuthorizeConnectionResponse
-      required:
-        - status_code
-        - status
-        - data
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          type: object
-          properties:
-            authorize_url:
-              type: string
-              example: https://provider.com/authorize?state=...
     ServiceId:
       type: string
       description: Service provider identifier
@@ -3121,36 +3082,6 @@ components:
       description: Raw response from the integration when raw=true query param is provided
       nullable: true
       additionalProperties: true
-    ConfirmConnection:
-      type: object
-      x-apideck-schema-id: ConfirmConnection
-      required:
-        - confirm_token
-      properties:
-        confirm_token:
-          type: string
-          description: The confirm token received from the OAuth callback redirect.
-          example: 550e8400-e29b-41d4-a716-446655440000
-    ConfirmConnectionResponse:
-      type: object
-      x-apideck-schema-id: ConfirmConnectionResponse
-      properties:
-        status_code:
-          type: integer
-          description: HTTP Response Status Code
-          example: 200
-        status:
-          type: string
-          description: HTTP Response Status
-          example: OK
-        data:
-          type: object
-          x-apideck-schema-id: ConfirmConnectionResponseData
-          required:
-            - confirmed
-          properties:
-            confirmed:
-              type: boolean
   responses:
     BadRequestResponse:
       content:
@@ -3164,12 +3095,6 @@ components:
           schema:
             $ref: '#/components/schemas/ConsumerRequestCountsInDateRangeResponse'
       description: Consumers Request Counts within Date Range
-    ConfirmConnectionResponse:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ConfirmConnectionResponse'
-      description: Connection confirmed
     CreateConnectionResponse:
       content:
         application/json:
@@ -3318,12 +3243,6 @@ components:
           schema:
             description: Indicates if the error returned in the body is from the downstream
             type: boolean
-    SecureAuthorizeConnectionResponse:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/SecureAuthorizeConnectionResponse'
-      description: Authorize URL
     ValidateConnectionStateResponse:
       content:
         application/json:
@@ -4121,103 +4040,6 @@ paths:
                     read: true
                     write: true
               granted: true
-  /vault/connections/{unified_api}/{service_id}/authorize:
-    post:
-      tags:
-        - Connections
-      summary: Secure Authorize Connection
-      operationId: connectionsSecureAuthorize
-      description: |
-        Initiates a secure OAuth authorization flow with CSRF protection via a client-generated nonce.
-      x-sdk-exclude: true
-      x-speakeasy-ignore: true
-      security:
-        - apiKey: []
-      parameters:
-        - $ref: '#/components/parameters/consumerId'
-        - $ref: '#/components/parameters/applicationId'
-        - $ref: '#/components/parameters/service_id'
-        - $ref: '#/components/parameters/unified_api'
-      requestBody:
-        description: Secure authorize request data
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SecureAuthorizeConnectionRequest'
-      responses:
-        '200':
-          $ref: '#/components/responses/SecureAuthorizeConnectionResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '402':
-          $ref: '#/components/responses/PaymentRequiredResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '422':
-          $ref: '#/components/responses/UnprocessableResponse'
-        default:
-          $ref: '#/components/responses/UnexpectedErrorResponse'
-      x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source:
-            serviceId: pipedrive
-            unifiedApi: crm
-            connectionsSecureAuthorize:
-              nonce: abc123
-              redirect_uri: https://example.com/callback
-  /vault/connections/{unified_api}/{service_id}/confirm:
-    post:
-      tags:
-        - Connections
-      summary: Confirm Connection
-      operationId: connectionsConfirm
-      description: |
-        Confirms an OAuth connection after the callback by verifying the confirm token.
-      x-sdk-exclude: true
-      x-speakeasy-ignore: true
-      security:
-        - apiKey: []
-      parameters:
-        - $ref: '#/components/parameters/consumerId'
-        - $ref: '#/components/parameters/applicationId'
-        - $ref: '#/components/parameters/service_id'
-        - $ref: '#/components/parameters/unified_api'
-      requestBody:
-        description: Confirm connection request data
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ConfirmConnection'
-      responses:
-        '200':
-          $ref: '#/components/responses/ConfirmConnectionResponse'
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedResponse'
-        '402':
-          $ref: '#/components/responses/PaymentRequiredResponse'
-        '404':
-          $ref: '#/components/responses/NotFoundResponse'
-        '422':
-          $ref: '#/components/responses/UnprocessableResponse'
-        default:
-          $ref: '#/components/responses/UnexpectedErrorResponse'
-      x-apideck-api: vault
-      x-codeSamples:
-        - lang: TypeScript
-          label: Node
-          source:
-            serviceId: pipedrive
-            unifiedApi: crm
-            connectionsConfirm:
-              confirm_token: 550e8400-e29b-41d4-a716-446655440000
   /vault/connections/{unified_api}/{service_id}/callback-state:
     post:
       tags:

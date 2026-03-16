@@ -1,3 +1,9 @@
+## v10.24.4 - (2026-03-16)
+
+### Accounting API
+
+- Added new [Bank Feed Statements](apis/accounting/reference#tag/Bank-Feed-Statements) resource for [Sage Intacct](connectors/sage-intacct) with list, get, create, and delete operations
+
 ## v10.24.3 - (2026-03-11)
 
 ### ATS API

@@ -1569,6 +1569,7 @@ components:
         notes: low
         addresses: low
         phone_numbers: low
+        bank_account: medium
         custom_fields: medium
         custom_mappings: low
         row_version: low
@@ -1714,6 +1715,8 @@ components:
           description: Phone numbers of the employee.
           items:
             $ref: '#/components/schemas/PhoneNumber'
+        bank_account:
+          $ref: '#/components/schemas/BankAccount'
         custom_fields:
           type: array
           items:
@@ -8678,6 +8681,7 @@ components:
           title: Type
           description: Debit entries are considered positive, and credit entries are considered negative.
           example: debit
+          nullable: true
         tax_rate:
           $ref: '#/components/schemas/LinkedTaxRate'
         tracking_category:
@@ -27683,6 +27687,19 @@ paths:
                   number: 111-111-1111
                   extension: '105'
                   type: primary
+              bank_account:
+                bank_name: Chase Bank
+                account_number: '123465'
+                account_name: Main Operating Account
+                account_type: credit_card
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
               custom_fields:
                 - id: '2389328923893298'
                   name: employee_level
@@ -27845,6 +27862,19 @@ paths:
                   number: 111-111-1111
                   extension: '105'
                   type: primary
+              bank_account:
+                bank_name: Chase Bank
+                account_number: '123465'
+                account_name: Main Operating Account
+                account_type: credit_card
+                iban: GB33BUKB20201555555555
+                bic: CHASUS33
+                routing_number: '021000021'
+                bsb_number: 062-001
+                branch_identifier: '001'
+                bank_code: BNH
+                currency: USD
+                country: US
               custom_fields:
                 - id: '2389328923893298'
                   name: employee_level

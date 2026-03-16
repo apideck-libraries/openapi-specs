@@ -3821,6 +3821,9 @@ paths:
           description: In the pagination, the limit value should be in additions of 10. E.g. 10, 20, 30, etc.
         - connector: wix
           description: Wix V3 catalog assigns unique SKUs and weights to each product variant. The product-level `sku` and `weight` fields represent only the first variant for backward compatibility. To access complete variant data across all product variations, reference the individual `variants[].sku` and `variants[].weight` fields which contain the accurate data for each variant.
+        - connector: walmart
+          description: |
+            The cursor for Walmart expires if it has not been used within 2 minutes of the last request.
       responses:
         '200':
           $ref: '#/components/responses/GetProductsResponse'

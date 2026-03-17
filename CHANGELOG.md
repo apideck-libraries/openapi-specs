@@ -1,3 +1,9 @@
+## v10.24.5 - (2026-03-17)
+
+### Issue Tracking API
+
+- Added [Jira Teams](connectors/jira-teams) proxy connector with Basic Auth support
+
 ## v10.24.4 - (2026-03-16)
 
 ### Accounting API

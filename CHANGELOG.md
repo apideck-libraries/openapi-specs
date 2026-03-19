@@ -1,3 +1,12 @@
+## v10.24.6 - (2026-03-18)
+
+### Accounting API
+
+- Added `employee` field to [Journal Entry](apis/accounting/reference#tag/Journal-Entries) line items for referencing employee accounts alongside customer and supplier
+- Added `employee` type to `LinkedFinancialAccount` for [Expenses](apis/accounting/reference#tag/Expenses) payment accounts
+- Added `LinkedEmployee` schema for employee references on accounting entities
+- Implemented employee account type support for [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central) on journal entries and expenses
+
 ## v10.24.5 - (2026-03-17)
 
 ### Issue Tracking API

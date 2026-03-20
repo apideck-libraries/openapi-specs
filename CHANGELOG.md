@@ -1,3 +1,11 @@
+## v10.24.7 - (2026-03-20)
+
+### Accounting API
+
+- Added `tax_type` field to [Journal Entry](apis/accounting/reference#tag/Journal-Entries) line items, allowing individual lines to specify their own tax applicability (`sales` or `purchase`) independently of each other
+- The root-level `tax_type` on Journal Entries is now deprecated — it remains functional as a fallback for lines that do not set their own `tax_type`
+- Implemented per-line `tax_type` mapping for [QuickBooks](connectors/quickbooks) journal entries on create, update, and read operations
+
 ## v10.24.6 - (2026-03-18)
 
 ### Accounting API

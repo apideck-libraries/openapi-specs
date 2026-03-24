@@ -22554,6 +22554,7 @@ paths:
             Quickbooks only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
             Line-level tax fields (tax_rate, tax_amount, tax_type) on journal entries are only supported for non-US QuickBooks companies (UK, CA, AU, etc.). US-based QuickBooks companies silently discard all tax fields — the request succeeds but no tax data is persisted.
             For US companies that need to reflect tax in journal entries, add a separate line item posting the tax amount to a tax liability ledger account (e.g., "Sales Tax Payable"). This keeps the journal entry balanced in the general ledger, but will not populate QuickBooks Sales Tax reports — for that, use invoices or sales receipts instead.
+            When line_items[].tax_type is not set, QuickBooks requires knowing whether the tax applies to a sales or purchase transaction. Unify infers this from line_items[].type: credit lines are treated as sales (TaxApplicableOn: Sales) and debit lines as purchases (TaxApplicableOn: Purchase). This covers the common case of sales summary journal entries. For atypical entries (e.g. a credit to an AP account, or a debit for a sales return), set tax_type explicitly on each line to override the default.
         - connector: sage-intacct
           description: |
             Sage Intacct only supports `draft` and `posted` status fields when updating a journal entry.
@@ -22833,6 +22834,7 @@ paths:
         - connector: quickbooks
           description: |
             Quickbooks only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
+            When line_items[].tax_type is not set, QuickBooks requires knowing whether the tax applies to a sales or purchase transaction. Unify infers this from line_items[].type: credit lines are treated as sales (TaxApplicableOn: Sales) and debit lines as purchases (TaxApplicableOn: Purchase). This covers the common case of sales summary journal entries. For atypical entries (e.g. a credit to an AP account, or a debit for a sales return), set tax_type explicitly on each line to override the default.
         - connector: xero
           description: |
             Xero has two resources: journals (entries from transactions like invoices, payments, or manual journals) and manual journals (user-created entries).

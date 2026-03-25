@@ -1,3 +1,10 @@
+## v10.24.8 - (2026-03-24)
+
+### Accounting API
+
+- Added [Profit & Loss](apis/accounting/reference#tag/Profit-and-Loss) and [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) financial report support for [NetSuite](connectors/netsuite), using the SOAP `getPostingTransactionSummary` API which requires only "Financial Statements" permission
+- NetSuite financial reports include automatic account enrichment — a secondary ledger accounts lookup provides accurate account names and type-based categorization
+
 ## v10.24.7 - (2026-03-20)
 
 ### Accounting API

@@ -1,3 +1,14 @@
+## v10.24.9 - (2026-03-26)
+
+## v10.24.9 - (2026-03-26)
+
+### Accounting API
+
+- Added [Payments](apis/accounting/reference#tag/Payments) and [Bill Payments](apis/accounting/reference#tag/Bill-Payments) create support for [Exact Online](connectors/exact-online), [Exact Online NL](connectors/exact-online-nl), and [Exact Online UK](connectors/exact-online-uk) via BankEntries API
+- Added customer payment fallback via XML GLTransactions API when Exact Online's REST BankEntries endpoint rejects non-supplier accounts, with optional invoice reconciliation via MatchSets
+- Added [Bills](apis/accounting/reference#tag/Bills) create, update, and delete support for [Exact Online NL](connectors/exact-online-nl) via PurchaseInvoices API
+- Added configurable Bank Journal and Purchase Journal settings for Exact Online connectors in Vault UI with dynamic dropdown selection
+
 ## v10.24.8 - (2026-03-24)
 
 ### Accounting API

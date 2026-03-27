@@ -842,6 +842,20 @@ components:
           type: string
           description: ISO Datetime for when the original event occurred
           example: '2021-10-01T03:14:55.419Z'
+    ConnectionHealth:
+      type: string
+      x-apideck-schema-id: ConnectionHealth
+      description: The operational health status of the connection
+      x-apideck-enum-id: connections.health
+      enum:
+        - ok
+        - pending_refresh
+        - needs_auth
+        - needs_consent
+        - revoked
+        - missing_settings
+      example: ok
+      readOnly: true
     ConnectionImportData:
       type: object
       x-apideck-schema-id: ConnectionImportData
@@ -1006,6 +1020,8 @@ components:
               - vault.connection.callable
               - vault.connection.revoked
               - vault.connection.token_refresh.failed
+              - vault.connection.token_refresh.pending
+              - vault.connection.token_refresh.recovered
               - ats.job.created
               - ats.job.updated
               - ats.job.deleted
@@ -1236,6 +1252,16 @@ components:
           nullable: true
         state:
           $ref: '#/components/schemas/ConnectionState'
+        health:
+          $ref: '#/components/schemas/ConnectionHealth'
+        credentials_expire_at:
+          type: string
+          description: ISO 8601 timestamp indicating when credentials will be cleared if token refresh continues to fail. Only present when connection health is pending_refresh and a retention window is active.
+          nullable: true
+        last_refresh_failed_at:
+          type: string
+          description: ISO 8601 timestamp of the most recent token refresh failure. Only present when connection has experienced refresh failures.
+          nullable: true
     ConsumerId:
       type: string
       example: test_consumer_id
@@ -3042,6 +3068,8 @@ components:
         - vault.connection.callable
         - vault.connection.revoked
         - vault.connection.token_refresh.failed
+        - vault.connection.token_refresh.pending
+        - vault.connection.token_refresh.recovered
       example: vault.connection.created
     WebhookSubscription:
       type: object
@@ -5261,6 +5289,136 @@ x-webhooks:
               payload:
                 event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
                 event_type: vault.connection.token_refresh.failed
+                service_id: apideck-vault
+                entity_id: 1111+test_user_id
+                entity_type: Connection
+                entity:
+                  id: 1111+test_user_id
+                  consumer_id: test_user_id
+                  unified_api: crm
+                  service_id: salesforce
+                  name: Salesforce
+                  icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+                  logo: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
+                  website: https://www.salesforce.com
+                  tag_line: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
+                  auth_type: oauth2
+                  enabled: true
+                  created_at: '2020-09-19T12:18:37.071Z'
+                  updated_at: '2020-09-19T12:18:37.071Z'
+                  state: added
+                execution_attempt: 2
+                occurred_at: '2021-10-01T03:14:55.419Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
+  TokenRefreshPending:
+    post:
+      summary: Connection Token Refresh Pending
+      description: Event broadcast when a connection has been token refresh pending.
+      operationId: connectionTokenRefreshPending
+      x-apideck-event-type: vault.connection.token_refresh.pending
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payload:
+                  $ref: '#/components/schemas/ConnectionEvent'
+            example:
+              payload:
+                event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+                event_type: vault.connection.token_refresh.pending
+                service_id: apideck-vault
+                entity_id: 1111+test_user_id
+                entity_type: Connection
+                entity:
+                  id: 1111+test_user_id
+                  consumer_id: test_user_id
+                  unified_api: crm
+                  service_id: salesforce
+                  name: Salesforce
+                  icon: https://res.cloudinary.com/apideck/image/upload/v1529456047/catalog/salesforce/icon128x128.png
+                  logo: https://c1.sfdcstatic.com/content/dam/web/en_us/www/images/home/logo-salesforce-m.svg
+                  website: https://www.salesforce.com
+                  tag_line: CRM software solutions and enterprise cloud computing from Salesforce, the leader in customer relationship management (CRM) and PaaS. Free 30 day trial.
+                  auth_type: oauth2
+                  enabled: true
+                  created_at: '2020-09-19T12:18:37.071Z'
+                  updated_at: '2020-09-19T12:18:37.071Z'
+                  state: added
+                execution_attempt: 2
+                occurred_at: '2021-10-01T03:14:55.419Z'
+      responses:
+        '200':
+          description: Return a 200 status to indicate that the data was received successfully.
+      security: []
+  TokenRefreshRecovered:
+    post:
+      summary: Connection Token Refresh Recovered
+      description: Event broadcast when a connection has been token refresh recovered.
+      operationId: connectionTokenRefreshRecovered
+      x-apideck-event-type: vault.connection.token_refresh.recovered
+      parameters:
+        - name: x-apideck-event-type
+          in: header
+          required: true
+          description: The type of event that was triggered
+          schema:
+            $ref: '#/components/schemas/VaultEventType'
+        - name: x-apideck-signature
+          in: header
+          required: true
+          description: HMAC SHA-256 signature of the request body, used to verify the webhook came from Apideck
+          schema:
+            type: string
+          example: 2c3b38f1a9b3349afe38829713dcd9722f47dec3ce8906ad93ce803a33f2a8a3
+        - name: x-apideck-idempotency-key
+          in: header
+          required: true
+          description: A unique identifier for the webhook event, can be used to prevent duplicate processing
+          schema:
+            type: string
+          example: e91dea5d-8ff6-4099-8b33-d3162fb4a042
+      tags:
+        - Webhook Events
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payload:
+                  $ref: '#/components/schemas/ConnectionEvent'
+            example:
+              payload:
+                event_id: 9755c355-56c3-4a2f-a2da-86ff4411fccb
+                event_type: vault.connection.token_refresh.recovered
                 service_id: apideck-vault
                 entity_id: 1111+test_user_id
                 entity_type: Connection

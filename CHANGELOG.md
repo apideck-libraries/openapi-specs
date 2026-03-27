@@ -1,3 +1,9 @@
+## v10.24.10 - (2026-03-27)
+
+### Vault API
+
+- Added `vault.token-refresh.pending` and `vault.token-refresh.recovered` webhook events for token refresh lifecycle monitoring — connections now emit `pending` when a refresh fails but credentials are still within the retention window, and `recovered` when a subsequent refresh succeeds
+- Added `health`, `credentials_expire_at`, and `last_refresh_failed_at` fields to the webhook event entity for token refresh lifecycle events, providing actionable context for automated remediation
 ## v10.24.9 - (2026-03-26)
 
 ## v10.24.9 - (2026-03-26)

@@ -4870,7 +4870,8 @@ paths:
         - connector: nmbrs
           description: We keep track of the "List Employees" response for NMBRS virtual webhooks events, which contains fewer fields compared to the "Get Employee" response.
         - connector: ceridian-dayforce
-          description: For virtual webhook events on Ceridian Dayforce, we monitor the "List Employees" response, which has a very small set of fields in comparison to the "Get Employee" response. This is the reason why we only support `hris.employee.created` events for this connector.
+          description: |
+            The Ceridian Dayforce "List Employees" endpoint only returns employee IDs by default. To get full employee details, use the "Get Employee" endpoint. For virtual webhook events on Ceridian Dayforce, we monitor the "List Employees" response, which has a very small set of fields in comparison to the "Get Employee" response. This is the reason why we only support `hris.employee.created` events for this connector.
         - connector: hibob
           description: |
             HiBob allows you to define employee fields that aren't included by default on the 'List Employees' response. By using the fields parameter, you can specifically request these properties to be part of your response.

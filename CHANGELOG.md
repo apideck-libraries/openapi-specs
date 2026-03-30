@@ -1,26 +1,27 @@
+## v10.24.11 - (2026-03-28)
+
+### HRIS API
+
+- Added Remote.com connector with read and write support for employees, companies, departments, time-off requests, and payrolls
+
 ## v10.24.10 - (2026-03-27)
 
 ### Vault API
 
-- Added `vault.token-refresh.pending` and `vault.token-refresh.recovered` webhook events for token refresh lifecycle monitoring — connections now emit `pending` when a refresh fails but credentials are still within the retention window, and `recovered` when a subsequent refresh succeeds
-- Added `health`, `credentials_expire_at`, and `last_refresh_failed_at` fields to the webhook event entity for token refresh lifecycle events, providing actionable context for automated remediation
-## v10.24.9 - (2026-03-26)
+- Added `token-refresh.pending` and `token-refresh.recovered` webhook events for monitoring connection token refresh lifecycle
 
 ## v10.24.9 - (2026-03-26)
 
 ### Accounting API
 
-- Added [Payments](apis/accounting/reference#tag/Payments) and [Bill Payments](apis/accounting/reference#tag/Bill-Payments) create support for [Exact Online](connectors/exact-online), [Exact Online NL](connectors/exact-online-nl), and [Exact Online UK](connectors/exact-online-uk) via BankEntries API
-- Added customer payment fallback via XML GLTransactions API when Exact Online's REST BankEntries endpoint rejects non-supplier accounts, with optional invoice reconciliation via MatchSets
-- Added [Bills](apis/accounting/reference#tag/Bills) create, update, and delete support for [Exact Online NL](connectors/exact-online-nl) via PurchaseInvoices API
-- Added configurable Bank Journal and Purchase Journal settings for Exact Online connectors in Vault UI with dynamic dropdown selection
+- Added [Payments](apis/accounting/reference#tag/Payments) and [Bill Payments](apis/accounting/reference#tag/Bill-Payments) create support for [Exact Online](connectors/exact-online), [Exact Online NL](connectors/exact-online-nl), and [Exact Online UK](connectors/exact-online-uk)
+- Added [Bills](apis/accounting/reference#tag/Bills) create, update, and delete support for [Exact Online NL](connectors/exact-online-nl)
 
 ## v10.24.8 - (2026-03-24)
 
 ### Accounting API
 
-- Added [Profit & Loss](apis/accounting/reference#tag/Profit-and-Loss) and [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) financial report support for [NetSuite](connectors/netsuite), using the SOAP `getPostingTransactionSummary` API which requires only "Financial Statements" permission
-- NetSuite financial reports include automatic account enrichment — a secondary ledger accounts lookup provides accurate account names and type-based categorization
+- Added [Profit & Loss](apis/accounting/reference#tag/Profit-and-Loss) and [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) financial report support for [NetSuite](connectors/netsuite)
 
 ## v10.24.7 - (2026-03-20)
 

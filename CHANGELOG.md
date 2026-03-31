@@ -1,3 +1,9 @@
+## v10.24.12 - (2026-03-31)
+
+### Accounting API
+
+- Added Rillet connector with read and write support for customers, suppliers, invoices, bills, credit notes, journal entries, invoice items, payments, bill payments, expenses, bank accounts, bank feed statements, ledger accounts, tax rates, subsidiaries, balance sheet, profit and loss, and company info
+
 ## v10.24.11 - (2026-03-28)
 
 ### HRIS API

@@ -1,3 +1,9 @@
+## v10.24.13 - (2026-04-03)
+
+### Accounting API
+
+- Added new [Stripe](connectors/stripe) connector with support for [Customers](apis/accounting/reference#tag/Customers), [Invoices](apis/accounting/reference#tag/Invoices), [Invoice Items](apis/accounting/reference#tag/Invoice-Items), [Credit Notes](apis/accounting/reference#tag/Credit-Notes), [Refunds](apis/accounting/reference#tag/Refunds), [Tax Rates](apis/accounting/reference#tag/Tax-Rates), [Payments](apis/accounting/reference#tag/Payments), [Expenses](apis/accounting/reference#tag/Expenses), [Company Info](apis/accounting/reference#tag/Company-Info), and [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) resources
+
 ## v10.24.12 - (2026-03-31)
 
 ### Accounting API

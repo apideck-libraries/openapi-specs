@@ -1,3 +1,9 @@
+## v10.24.14 - (2026-04-04)
+
+### Accounting API
+
+- Added [Odoo](connectors/odoo) accounting support with [Customers](apis/accounting/reference#tag/Customers), [Suppliers](apis/accounting/reference#tag/Suppliers), [Invoices](apis/accounting/reference#tag/Invoices), [Bills](apis/accounting/reference#tag/Bills), [Credit Notes](apis/accounting/reference#tag/Credit-Notes), [Payments](apis/accounting/reference#tag/Payments), [Bill Payments](apis/accounting/reference#tag/Bill-Payments), [Tax Rates](apis/accounting/reference#tag/Tax-Rates), [Ledger Accounts](apis/accounting/reference#tag/Ledger-Accounts), [Journal Entries](apis/accounting/reference#tag/Journal-Entries), [Invoice Items](apis/accounting/reference#tag/Invoice-Items), [Company Info](apis/accounting/reference#tag/Company-Info), [Expenses](apis/accounting/reference#tag/Expenses), [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts), [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories), [Bank Feed Statements](apis/accounting/reference#tag/Bank-Feed-Statements), and [Bank Feed Accounts](apis/accounting/reference#tag/Bank-Feed-Accounts) resources
+
 ## v10.24.13 - (2026-04-03)
 
 ### Accounting API

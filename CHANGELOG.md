@@ -1,3 +1,9 @@
+## v10.24.15 - (2026-04-06)
+
+### Accounting API
+
+- Added [Bill Payments](apis/accounting/reference/bill-payments) support for [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central) with read and write operations
+
 ## v10.24.14 - (2026-04-04)
 
 ### Accounting API

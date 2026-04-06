@@ -2,13 +2,13 @@
 
 ### Accounting API
 
-- Added [Odoo](connectors/odoo) accounting support with [Customers](apis/accounting/reference#tag/Customers), [Suppliers](apis/accounting/reference#tag/Suppliers), [Invoices](apis/accounting/reference#tag/Invoices), [Bills](apis/accounting/reference#tag/Bills), [Credit Notes](apis/accounting/reference#tag/Credit-Notes), [Payments](apis/accounting/reference#tag/Payments), [Bill Payments](apis/accounting/reference#tag/Bill-Payments), [Tax Rates](apis/accounting/reference#tag/Tax-Rates), [Ledger Accounts](apis/accounting/reference#tag/Ledger-Accounts), [Journal Entries](apis/accounting/reference#tag/Journal-Entries), [Invoice Items](apis/accounting/reference#tag/Invoice-Items), [Company Info](apis/accounting/reference#tag/Company-Info), [Expenses](apis/accounting/reference#tag/Expenses), [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts), [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories), [Bank Feed Statements](apis/accounting/reference#tag/Bank-Feed-Statements), and [Bank Feed Accounts](apis/accounting/reference#tag/Bank-Feed-Accounts) resources
+- Added [Odoo](connectors/odoo) accounting support with [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Payments](apis/accounting/reference/payments), [Bill Payments](apis/accounting/reference/bill-payments), [Tax Rates](apis/accounting/reference/tax-rates), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Journal Entries](apis/accounting/reference/journal-entries), [Invoice Items](apis/accounting/reference/invoice-items), [Company Info](apis/accounting/reference/company-info), [Expenses](apis/accounting/reference/expenses), [Bank Accounts](apis/accounting/reference/bank-accounts), [Tracking Categories](apis/accounting/reference/tracking-categories), [Bank Feed Statements](apis/accounting/reference/bank-feed-statements), and [Bank Feed Accounts](apis/accounting/reference/bank-feed-accounts) resources
 
 ## v10.24.13 - (2026-04-03)
 
 ### Accounting API
 
-- Added new [Stripe](connectors/stripe) connector with support for [Customers](apis/accounting/reference#tag/Customers), [Invoices](apis/accounting/reference#tag/Invoices), [Invoice Items](apis/accounting/reference#tag/Invoice-Items), [Credit Notes](apis/accounting/reference#tag/Credit-Notes), [Refunds](apis/accounting/reference#tag/Refunds), [Tax Rates](apis/accounting/reference#tag/Tax-Rates), [Payments](apis/accounting/reference#tag/Payments), [Expenses](apis/accounting/reference#tag/Expenses), [Company Info](apis/accounting/reference#tag/Company-Info), and [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) resources
+- Added new [Stripe](connectors/stripe) connector with support for [Customers](apis/accounting/reference/customers), [Invoices](apis/accounting/reference/invoices), [Invoice Items](apis/accounting/reference/invoice-items), [Credit Notes](apis/accounting/reference/credit-notes), [Refunds](apis/accounting/reference/refunds), [Tax Rates](apis/accounting/reference/tax-rates), [Payments](apis/accounting/reference/payments), [Expenses](apis/accounting/reference/expenses), [Company Info](apis/accounting/reference/company-info), and [Bank Accounts](apis/accounting/reference/bank-accounts) resources
 
 ## v10.24.12 - (2026-03-31)
 
@@ -32,20 +32,20 @@
 
 ### Accounting API
 
-- Added [Payments](apis/accounting/reference#tag/Payments) and [Bill Payments](apis/accounting/reference#tag/Bill-Payments) create support for [Exact Online](connectors/exact-online), [Exact Online NL](connectors/exact-online-nl), and [Exact Online UK](connectors/exact-online-uk)
-- Added [Bills](apis/accounting/reference#tag/Bills) create, update, and delete support for [Exact Online NL](connectors/exact-online-nl)
+- Added [Payments](apis/accounting/reference/payments) and [Bill Payments](apis/accounting/reference/bill-payments) create support for [Exact Online](connectors/exact-online), [Exact Online NL](connectors/exact-online-nl), and [Exact Online UK](connectors/exact-online-uk)
+- Added [Bills](apis/accounting/reference/bills) create, update, and delete support for [Exact Online NL](connectors/exact-online-nl)
 
 ## v10.24.8 - (2026-03-24)
 
 ### Accounting API
 
-- Added [Profit & Loss](apis/accounting/reference#tag/Profit-and-Loss) and [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) financial report support for [NetSuite](connectors/netsuite)
+- Added [Profit & Loss](apis/accounting/reference/profit-and-loss) and [Balance Sheet](apis/accounting/reference/balance-sheet) financial report support for [NetSuite](connectors/netsuite)
 
 ## v10.24.7 - (2026-03-20)
 
 ### Accounting API
 
-- Added `tax_type` field to [Journal Entry](apis/accounting/reference#tag/Journal-Entries) line items, allowing individual lines to specify their own tax applicability (`sales` or `purchase`) independently of each other
+- Added `tax_type` field to [Journal Entry](apis/accounting/reference/journal-entries) line items, allowing individual lines to specify their own tax applicability (`sales` or `purchase`) independently of each other
 - The root-level `tax_type` on Journal Entries is now deprecated — it remains functional as a fallback for lines that do not set their own `tax_type`
 - Implemented per-line `tax_type` mapping for [QuickBooks](connectors/quickbooks) journal entries on create, update, and read operations
 
@@ -53,8 +53,8 @@
 
 ### Accounting API
 
-- Added `employee` field to [Journal Entry](apis/accounting/reference#tag/Journal-Entries) line items for referencing employee accounts alongside customer and supplier
-- Added `employee` type to `LinkedFinancialAccount` for [Expenses](apis/accounting/reference#tag/Expenses) payment accounts
+- Added `employee` field to [Journal Entry](apis/accounting/reference/journal-entries) line items for referencing employee accounts alongside customer and supplier
+- Added `employee` type to `LinkedFinancialAccount` for [Expenses](apis/accounting/reference/expenses) payment accounts
 - Added `LinkedEmployee` schema for employee references on accounting entities
 - Implemented employee account type support for [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central) on journal entries and expenses
 
@@ -68,33 +68,33 @@
 
 ### Accounting API
 
-- Added new [Bank Feed Statements](apis/accounting/reference#tag/Bank-Feed-Statements) resource for [Sage Intacct](connectors/sage-intacct) with list, get, create, and delete operations
+- Added new [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) resource for [Sage Intacct](connectors/sage-intacct) with list, get, create, and delete operations
 
 ## v10.24.3 - (2026-03-11)
 
 ### ATS API
 
-- Added [Applications](apis/ats/reference#tag/Applications) resource support for [JobAdder](connectors/jobadder) with list and get operations
-- Added create and update operations for [Jobs](apis/ats/reference#tag/Jobs) in [JobAdder](connectors/jobadder)
+- Added [Applications](apis/ats/reference/applications) resource support for [JobAdder](connectors/jobadder) with list and get operations
+- Added create and update operations for [Jobs](apis/ats/reference/jobs) in [JobAdder](connectors/jobadder)
 
 ## v10.24.1 - (2026-03-10)
 
 ### Accounting API
 
-- Added new [Refunds](apis/accounting/reference#tag/Refunds) resource with full CRUD support (list, get, create, update, delete)
-- Implemented [Refunds](apis/accounting/reference#tag/Refunds) for [QuickBooks](connectors/quickbooks)
+- Added new [Refunds](apis/accounting/reference/refunds) resource with full CRUD support (list, get, create, update, delete)
+- Implemented [Refunds](apis/accounting/reference/refunds) for [QuickBooks](connectors/quickbooks)
 
 ### ATS API
 
-- Added new [JobAdder](connectors/jobadder) connector with support for [Applicants](apis/ats/reference#tag/Applicants) and [Jobs](apis/ats/reference#tag/Jobs) resources
+- Added new [JobAdder](connectors/jobadder) connector with support for [Applicants](apis/ats/reference/applicants) and [Jobs](apis/ats/reference/jobs) resources
 
 ## v10.24.0 - (2026-02-27)
 
 ### Accounting API
 
-- Added new [Companies](apis/accounting/reference#tag/Companies) resource with support for listing accessible companies within a connection — available for multi-company connectors
+- Added new [Companies](apis/accounting/reference/companies) resource with support for listing accessible companies within a connection — available for multi-company connectors
 - Added `x-apideck-company-id` header parameter to all Accounting API endpoints, allowing consumers to override the default company at request time for multi-company connectors
-- Implemented [Companies](apis/accounting/reference#tag/Companies) for [Xero](connectors/xero), [Sage Business Cloud](connectors/sage-business-cloud-accounting), [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central), [Sage Intacct](connectors/sage-intacct), [Exact Online](connectors/exact-online), [Workday](connectors/workday), and [DualEntry](connectors/dualentry)
+- Implemented [Companies](apis/accounting/reference/companies) for [Xero](connectors/xero), [Sage Business Cloud](connectors/sage-business-cloud-accounting), [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central), [Sage Intacct](connectors/sage-intacct), [Exact Online](connectors/exact-online), [Workday](connectors/workday), and [DualEntry](connectors/dualentry)
 
 ### Vault API
 
@@ -104,29 +104,29 @@
 
 ### Accounting API
 
-- Added `terms_id` support to [Invoices](apis/accounting/reference#tag/Invoices), [Bills](apis/accounting/reference#tag/Bills), [Purchase Orders](apis/accounting/reference#tag/PurchaseOrders), [Credit Notes](apis/accounting/reference#tag/CreditNotes), [Customers](apis/accounting/reference#tag/Customers), [Quotes](apis/accounting/reference#tag/Quotes), and [Suppliers](apis/accounting/reference#tag/Suppliers)
+- Added `terms_id` support to [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Purchase Orders](apis/accounting/reference/purchase-orders), [Credit Notes](apis/accounting/reference/credit-notes), [Customers](apis/accounting/reference/customers), [Quotes](apis/accounting/reference/quotes), and [Suppliers](apis/accounting/reference/suppliers)
 
 ## v10.23.22 - (2026-02-26)
 
 ### Accounting API
 
-- Aligned [Expenses](apis/accounting/reference#tag/Expenses) `status` enum to `draft`, `posted`, `voided` — removed unsupported values (`pending_approval`, `approved`, `rejected`, `deleted`, `other`).
+- Aligned [Expenses](apis/accounting/reference/expenses) `status` enum to `draft`, `posted`, `voided` — removed unsupported values (`pending_approval`, `approved`, `rejected`, `deleted`, `other`).
 - Updated Expenses filter `status` to match the model enum
 
 ## v10.23.21 - (2026-02-20)
 
 ### Accounting API
 
-- Added new [Employees](apis/accounting/reference#tag/Employees) resource with support for list, get, create, and update operations
-- Added new [Expense Categories](apis/accounting/reference#tag/ExpenseCategories) resource with support for list and get operations
-- Added new [Expense Reports](apis/accounting/reference#tag/ExpenseReports) resource with support for list and get operations
+- Added new [Employees](apis/accounting/reference/employees) resource with support for list, get, create, and update operations
+- Added new [Expense Categories](apis/accounting/reference/expense-categories) resource with support for list and get operations
+- Added new [Expense Reports](apis/accounting/reference/expense-reports) resource with support for list and get operations
 - Implemented Employees, Expense Categories, and Expense Reports for [NetSuite](connectors/netsuite)
 - Implemented Employees with full CRUD operations for [Sage Intacct](connectors/sage-intacct)
 
 ### Issue Tracking API
 
-- Added new [Linear Multiworkspace](connectors/linear-multiworkspace) connector with support for [Collections](apis/issue-tracking/reference#tag/Collections) and [Collection Tickets](apis/issue-tracking/reference#tag/CollectionTickets), including webhook support
-- Added [Collections](apis/issue-tracking/reference#tag/Collections) and [Collection Tickets](apis/issue-tracking/reference#tag/CollectionTickets) support to [Linear](connectors/linear), including webhook support
+- Added new [Linear Multiworkspace](connectors/linear-multiworkspace) connector with support for [Collections](apis/issue-tracking/reference/collections) and [Collection Tickets](apis/issue-tracking/reference/collection-tickets), including webhook support
+- Added [Collections](apis/issue-tracking/reference/collections) and [Collection Tickets](apis/issue-tracking/reference/collection-tickets) support to [Linear](connectors/linear), including webhook support
 
 ## v10.23.20 - (2026-02-18)
 
@@ -138,13 +138,13 @@
 
 ### CRM API
 
-- Added `updated_since` and `created_since` filters to [Companies](apis/crm/reference#tag/Companies) and [Contacts](apis/crm/reference#tag/Contacts) for [HubSpot](connectors/hubspot)
+- Added `updated_since` and `created_since` filters to [Companies](apis/crm/reference/companies) and [Contacts](apis/crm/reference/contacts) for [HubSpot](connectors/hubspot)
 
 ## v10.23.18 - (2026-02-12)
 
 ### Accounting API
 
-- Added `updated_since` filter to [InvoiceItems](apis/accounting/reference#tag/InvoiceItems) schema.
+- Added `updated_since` filter to [InvoiceItems](apis/accounting/reference/invoice-items) schema.
 - Implemented `updated_since` filter for [Netsuite](connectors/Netsuite)
 
 ## v10.23.17 - (2026-02-11)
@@ -157,7 +157,7 @@
 
 ### Ecommerce API
 
-- Added `updated_since` and `created_since` filter support for [Customers](apis/ecommerce/reference#tag/Customers) across Wix, Shopify, BigCommerce, Magento, and Shopware connectors
+- Added `updated_since` and `created_since` filter support for [Customers](apis/ecommerce/reference/customers) across Wix, Shopify, BigCommerce, Magento, and Shopware connectors
 
 ## v10.23.15 - (2026-02-09)
 
@@ -179,18 +179,18 @@
 
 ### Accounting API
 
-- Added support for [Projects](apis/accounting/reference#tag/Projects) in [Quickbooks](connectors/quickbooks)
+- Added support for [Projects](apis/accounting/reference/projects) in [Quickbooks](connectors/quickbooks)
 
 ## v10.23.12 - (2026-01-28)
 
-- Added support for `customer_ids` filter to [Customers](apis/ecommerce/reference#tag/Customers) schema.
+- Added support for `customer_ids` filter to [Customers](apis/ecommerce/reference/customers) schema.
 - Implemented `customer_ids` filter for [BigCommerce](connectors/bigcommerce), [Magento](connectors/magento), [Shopify](connectors/shopify), [Shopware](connectors/shopware), [Wix](connectors/wix) and [WooCommerce](connectors/woocommerce)
 
 ## v10.23.10 - (2026-01-20)
 
 ### Accounting API
 
-- Added `tracking_categories` field to [Expenses](apis/accounting/reference#tag/Expenses) schema
+- Added `tracking_categories` field to [Expenses](apis/accounting/reference/expenses) schema
 
 ## v10.23.9 - (2026-01-20)
 
@@ -218,22 +218,22 @@
 
 ### Accounting API
 
-- Migrated [Expenses](apis/accounting/reference#tag/Expenses) from `bank_account` to `account` (LinkedFinancialAccount) for [Sage Business Cloud](connectors/sage-business-cloud-accounting) and [Workday](connectors/workday)
-- Removed deprecated `bank_account` field from [Expenses](apis/accounting/reference#tag/Expenses) schema - use `account` with `type: bank_account` or `type: ledger_account` instead
+- Migrated [Expenses](apis/accounting/reference/expenses) from `bank_account` to `account` (LinkedFinancialAccount) for [Sage Business Cloud](connectors/sage-business-cloud-accounting) and [Workday](connectors/workday)
+- Removed deprecated `bank_account` field from [Expenses](apis/accounting/reference/expenses) schema - use `account` with `type: bank_account` or `type: ledger_account` instead
 
 ## v10.23.5 - (2025-12-31)
 
 ### Accounting API
 
-- Added `location_id` field to [Bills](apis/accounting/reference#tag/Bills), [Credit Notes](apis/accounting/reference#tag/Credit-Notes), [Invoices](apis/accounting/reference#tag/Invoices), and [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders) schemas
-- Added `location` object to [Expenses](apis/accounting/reference#tag/Expenses) schema for consistent location tracking across accounting resources
+- Added `location_id` field to [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Invoices](apis/accounting/reference/invoices), and [Purchase Orders](apis/accounting/reference/purchase-orders) schemas
+- Added `location` object to [Expenses](apis/accounting/reference/expenses) schema for consistent location tracking across accounting resources
 - Implemented `location_id` mapping for [QuickBooks](connectors/quickbooks) Bills, Credit Notes, Invoices, Purchase Orders, and Expenses - both locations and departments now map to QuickBooks DepartmentRef
 
 ## v10.23.4 - (2025-12-30)
 
 ### Accounting API
 
-- Added support for `customer_id` filter to [Payments](apis/accounting/reference#tag/Payments) schema.
+- Added support for `customer_id` filter to [Payments](apis/accounting/reference/payments) schema.
 - Implemented `customer_id` filter for [Sage Business Cloud](connectors/sage-business-cloud-accounting), [Sage Intacct](connectors/sage-intacct), [QuickBooks](connectors/quickbooks), [NetSuite](connectors/netsuite) and [Xero](connectors/xero)
 
 ## v10.23.3 - (2025-12-18)
@@ -244,57 +244,57 @@
 
 ### Accounting API
 
-- Added support for [Expenses](apis/accounting/reference#tag/Expenses) in [Sage Intacct](connectors/sage-intacct) with full CRUD operations
-- Added `downstream_id` field to [Departments](apis/accounting/reference#tag/Departments), [Locations](apis/accounting/reference#tag/Locations), and [Subsidiaries](apis/accounting/reference#tag/Subsidiaries) schemas to support connectors with dual ID systems
+- Added support for [Expenses](apis/accounting/reference/expenses) in [Sage Intacct](connectors/sage-intacct) with full CRUD operations
+- Added `downstream_id` field to [Departments](apis/accounting/reference/departments), [Locations](apis/accounting/reference/locations), and [Subsidiaries](apis/accounting/reference/subsidiaries) schemas to support connectors with dual ID systems
 - Added LinkedDepartment, LinkedSubsidiary, LinkedLocation, and LinkedFinancialAccount schemas for better reference handling in transactions
-- Added `posted` and `partially_paid` status support to [Bills](apis/accounting/reference#tag/Bills), [Invoices](apis/accounting/reference#tag/Invoices), and [Credit Notes](apis/accounting/reference#tag/Credit-Notes) in [Sage Intacct](connectors/sage-intacct)
-- Removed deprecated `billable` field from [Expenses](apis/accounting/reference#tag/Expenses) line items (use `rebilling.rebillable` instead)
-- Removed `customer` and `customer_id` from [Expenses](apis/accounting/reference#tag/Expenses) header level (available in line items only)
+- Added `posted` and `partially_paid` status support to [Bills](apis/accounting/reference/bills), [Invoices](apis/accounting/reference/invoices), and [Credit Notes](apis/accounting/reference/credit-notes) in [Sage Intacct](connectors/sage-intacct)
+- Removed deprecated `billable` field from [Expenses](apis/accounting/reference/expenses) line items (use `rebilling.rebillable` instead)
+- Removed `customer` and `customer_id` from [Expenses](apis/accounting/reference/expenses) header level (available in line items only)
 - Fixed 404 error handling for read one operations in [Sage Intacct](connectors/sage-intacct)
 
 ## v10.23.1 - (2025-12-12)
 
 ### Accounting API
 
-- Added support to [Expenses](apis/accounting/reference#tag/Expenses) in [Workday](connectors/workday)
+- Added support to [Expenses](apis/accounting/reference/expenses) in [Workday](connectors/workday)
 
 ## v10.23.0 - (2025-12-10)
 
 ### File Storage API
 
-- Added `created_at` support to [Files](apis/file-storage/reference#tag/Files) sorting.
+- Added `created_at` support to [Files](apis/file-storage/reference/files) sorting.
 
 ## v10.22.4 - (2025-12-09)
 
 ### Accounting API
 
-- Added `type` filter to [Payments](apis/accounting/reference#tag/Payments) schema.
+- Added `type` filter to [Payments](apis/accounting/reference/payments) schema.
 - Implemented `type` filter for [Sage Business Cloud](connectors/sage-business-cloud-accounting)
 
 ## v10.22.3 - (2025-12-08)
 
 ### CRM API
 
-- Added `lead_id` and `contact_id` fields to [Leads](apis/crm/reference#tag/Leads) schema
-- Added `archived`, `created_at`, `updated_at` fields to [Pipelines](apis/crm/reference#tag/Pipelines) stage items
+- Added `lead_id` and `contact_id` fields to [Leads](apis/crm/reference/leads) schema
+- Added `archived`, `created_at`, `updated_at` fields to [Pipelines](apis/crm/reference/pipelines) stage items
 
 ### Ecommerce API
 
-- Updated [Orders](apis/ecommerce/reference#tag/Orders) line item schema to support flexible identification - line items can now be identified by (`id` OR `product_id`) AND (`name` OR `sku`)
+- Updated [Orders](apis/ecommerce/reference/orders) line item schema to support flexible identification - line items can now be identified by (`id` OR `product_id`) AND (`name` OR `sku`)
 
 ## v10.22.2 - (2025-12-03)
 
 ### Accounting API
 
-- Added [Invoice Items](apis/accounting/reference#tag/Invoice-Items) in [Acumatica](connectors/acumatica)
-- Added [Invoice Items](apis/accounting/reference#tag/Invoice-Items) in [MYOB Acumatica](connectors/myob-acumatica)
+- Added [Invoice Items](apis/accounting/reference/invoice-items) in [Acumatica](connectors/acumatica)
+- Added [Invoice Items](apis/accounting/reference/invoice-items) in [MYOB Acumatica](connectors/myob-acumatica)
 - When filling `line_items`, you can either link an existing item by providing the item `code` or create a new item by filling in the item details. Using both options at the same time is not supported.
 
 ## v10.22.1 - (2025-12-02)
 
 ### Accounting API
 
-- Added write support for [Invoice Items](apis/accounting/reference#tag/Invoice-Items) in [Workday](connectors/workday)
+- Added write support for [Invoice Items](apis/accounting/reference/invoice-items) in [Workday](connectors/workday)
 
 ## v10.22.0 - (2025-11-27)
 
@@ -306,48 +306,48 @@
 
 ### Accounting API
 
-- Added `accounting_method` filter to [Profit and Loss](apis/accounting/reference#tag/Profit-and-Loss) and [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) reports to specify cash or accrual basis
+- Added `accounting_method` filter to [Profit and Loss](apis/accounting/reference/profit-and-loss) and [Balance Sheet](apis/accounting/reference/balance-sheet) reports to specify cash or accrual basis
 - Implemented `accounting_method` filter for [QuickBooks](connectors/quickbooks) and [Xero](connectors/xero) connectors
 
 ## v10.21.18 - (2025-11-26)
 
 ### Accounting API
 
-- Added write support for [Tax Rates](apis/accounting/reference#tag/Tax-Rates) in [Workday](connectors/workday)
-- Added full CRUD support for [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) in [Sage Intacct](connectors/sage-intacct) - unifies checking accounts, savings accounts, and credit cards into a single resource
-- Added `partially_paid` status to [Credit Notes](apis/accounting/reference#tag/Credit-Notes) schema
-- Added `downstream_id` field to [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) schema
+- Added write support for [Tax Rates](apis/accounting/reference/tax-rates) in [Workday](connectors/workday)
+- Added full CRUD support for [Bank Accounts](apis/accounting/reference/bank-accounts) in [Sage Intacct](connectors/sage-intacct) - unifies checking accounts, savings accounts, and credit cards into a single resource
+- Added `partially_paid` status to [Credit Notes](apis/accounting/reference/credit-notes) schema
+- Added `downstream_id` field to [Bank Accounts](apis/accounting/reference/bank-accounts) schema
 
 ## v10.21.17 - (2025-11-25)
 
 ### Accounting API
 
-- Added write support for [Payments](apis/accounting/reference#tag/Payments) in [Workday](connectors/workday)
+- Added write support for [Payments](apis/accounting/reference/payments) in [Workday](connectors/workday)
 
 ## v10.21.16 - (2025-11-24)
 
 ### Accounting API
 
-- Added write support for [Projects](apis/accounting/reference#tag/Projects) in [Workday](connectors/workday)
+- Added write support for [Projects](apis/accounting/reference/projects) in [Workday](connectors/workday)
 
 ## v10.21.15 - (2025-11-11)
 
 ### Accounting API
 
-- Added write support for [Customers](apis/accounting/reference#tag/Customers) in [Workday](connectors/workday)
+- Added write support for [Customers](apis/accounting/reference/customers) in [Workday](connectors/workday)
 
 ## v10.21.14 - (2025-11-11)
 
 ### Accounting API
 
-- Added `taxable` boolean field to [Customers](apis/accounting/reference#tag/Customers) and [Suppliers](apis/accounting/reference#tag/Suppliers) schemas to indicate whether the entity is subject to taxation
+- Added `taxable` boolean field to [Customers](apis/accounting/reference/customers) and [Suppliers](apis/accounting/reference/suppliers) schemas to indicate whether the entity is subject to taxation
 - Implemented `taxable` field mapping for [QuickBooks](connectors/quickbooks), [NetSuite](connectors/netsuite), [Sage Intacct](connectors/sage-intacct), and [Zoho Books](connectors/zoho-books) connectors
 
 ## v10.21.13 - (2025-11-10)
 
 ### Accounting API
 
-- Added `address` field to [Subsidiaries](apis/accounting/reference#tag/Subsidiaries) schema to support main subsidiary address with full address structure (line1-3, city, state, postal_code, country)
+- Added `address` field to [Subsidiaries](apis/accounting/reference/subsidiaries) schema to support main subsidiary address with full address structure (line1-3, city, state, postal_code, country)
 - Improved [NetSuite](connectors/netsuite) subsidiaries mapping to include `status`, `display_id`, and `currencies` fields
 - Enhanced [NetSuite](connectors/netsuite) subsidiaries write operations (create/update) to support address and status fields
 
@@ -355,21 +355,21 @@
 
 ### Accounting API
 
-- Added `bank_account`, `account`, `supplier`, `sub_total`, `total_tax`, and `tax_inclusive` fields to [Expenses](apis/accounting/reference#tag/Expenses)
-- Added `type`, `tax_amount`, `quantity`, `unit_price`, and `item` fields to [Expenses](apis/accounting/reference#tag/Expenses) line items
+- Added `bank_account`, `account`, `supplier`, `sub_total`, `total_tax`, and `tax_inclusive` fields to [Expenses](apis/accounting/reference/expenses)
+- Added `type`, `tax_amount`, `quantity`, `unit_price`, and `item` fields to [Expenses](apis/accounting/reference/expenses) line items
 
 ## v10.21.11 - (2025-11-03)
 
 ### Vault API
 
-- [Get Connection](/apis/vault/reference#tag/Connections/operation/connectionsOne) now returns a persisted `health` property to better indicated connection health.
+- [Get Connection](/apis/vault/reference/connections) now returns a persisted `health` property to better indicated connection health.
 - OAuth tokens are now resilient to provider downtime and apply a 48 retention period before removing credentials when we fail to refresh tokens.
 
 ## v10.21.10 - (2025-10-31)
 
 ### Accounting API
 
-- Added `status` filter to [Bills](apis/accounting/reference#tag/Bills) schema.
+- Added `status` filter to [Bills](apis/accounting/reference/bills) schema.
 - Added `status` filter to [Workday](connectors/workday)
 
 ## v10.21.9 - (2025-10-30)
@@ -388,79 +388,79 @@
 
 ### Accounting API
 
-- Added `posted` status support to [Bills](apis/accounting/reference#tag/Bills) and [Invoices](apis/accounting/reference#tag/Invoices)
+- Added `posted` status support to [Bills](apis/accounting/reference/bills) and [Invoices](apis/accounting/reference/invoices)
 
 ## v10.21.6 - (2025-10-17)
 
 ### Accounting API
 
-- Added write support for [Ledger Accounts](apis/accounting/reference#tag/Ledger-Accounts) in [Workday](connectors/workday)
+- Added write support for [Ledger Accounts](apis/accounting/reference/ledger-accounts) in [Workday](connectors/workday)
 
 ## v10.21.5 - (2025-10-14)
 
 ### Accounting API
 
-- Added write support for [Journal Entries](apis/accounting/reference#tag/Journal-Entries) in [Workday](connectors/workday)
-- Added `worktags` and `ledger_account.parent_id` fields in [Journal Entries](apis/accounting/reference#tag/Journal-Entries) line items
+- Added write support for [Journal Entries](apis/accounting/reference/journal-entries) in [Workday](connectors/workday)
+- Added `worktags` and `ledger_account.parent_id` fields in [Journal Entries](apis/accounting/reference/journal-entries) line items
 
 ## v10.21.4 - (2025-10-08)
 
 ### Accounting API
 
-- Added `service_date` support to [Invoices](apis/accounting/reference#tag/Invoices) and [Quotes](apis/accounting/reference#tag/Quotes) and [Credit Notes](apis/accounting/reference#tag/CreditNotes) line items
+- Added `service_date` support to [Invoices](apis/accounting/reference/invoices) and [Quotes](apis/accounting/reference/quotes) and [Credit Notes](apis/accounting/reference/credit-notes) line items
 
 ## v10.21.3 - (2025-10-07)
 
 ### Accounting API
 
-- Added [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) and [Projects](apis/accounting/reference#tag/Projects) resource to [Workday](connectors/workday) accounting
-- Added `active` field to [Projects](apis/accounting/reference#tag/Projects) resource
+- Added [Bank Accounts](apis/accounting/reference/bank-accounts) and [Projects](apis/accounting/reference/projects) resource to [Workday](connectors/workday) accounting
+- Added `active` field to [Projects](apis/accounting/reference/projects) resource
 
 ## v10.21.2 - (2025-09-29)
 
 ### Accounting API
 
-- Added [Ledger Accounts](apis/accounting/reference#tag/Ledger-Accounts), [Customers](apis/accounting/reference#tag/Customers), [Subsidiaries](apis/accounting/reference#tag/Subsidiaries), [Payments](apis/accounting/reference#tag/Payments), [Journal Entries](apis/accounting/reference#tag/Journal-Entries), [Invoice Items](apis/accounting/reference#tag/Invoice-Items), and [Tax Rates](apis/accounting/reference#tag/Tax-Rates) read support for [Workday](connectors/workday)
-- Added `terms` and `customer_category` fields to [Customers](apis/accounting/reference#tag/Customers)
-- Added `transaction_type` filter to [Invoice Items](apis/accounting/reference#tag/Invoice-Items)
+- Added [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Customers](apis/accounting/reference/customers), [Subsidiaries](apis/accounting/reference/subsidiaries), [Payments](apis/accounting/reference/payments), [Journal Entries](apis/accounting/reference/journal-entries), [Invoice Items](apis/accounting/reference/invoice-items), and [Tax Rates](apis/accounting/reference/tax-rates) read support for [Workday](connectors/workday)
+- Added `terms` and `customer_category` fields to [Customers](apis/accounting/reference/customers)
+- Added `transaction_type` filter to [Invoice Items](apis/accounting/reference/invoice-items)
 
 ## v10.21.1 - (2025-09-28)
 
 ### Accounting API
 
-- Added [Projects](apis/accounting/reference#tag/Projects) and support for the [NetSuite](connectors/netsuite) connector.
+- Added [Projects](apis/accounting/reference/projects) and support for the [NetSuite](connectors/netsuite) connector.
 
 ## v10.21.0 - (2025-09-25)
 
 ### Accounting API
 
-- Added `line5` support to [Invoices](apis/accounting/reference#tag/Invoices), [Customers](apis/accounting/reference#tag/Customers), [Suppliers](apis/accounting/reference#tag/Suppliers), [Bills](apis/accounting/reference#tag/Bills), and [Credit Notes](apis/accounting/reference#tag/CreditNotes) address fields
+- Added `line5` support to [Invoices](apis/accounting/reference/invoices), [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Bills](apis/accounting/reference/bills), and [Credit Notes](apis/accounting/reference/credit-notes) address fields
 
 ### HRIS API
 
-- Added `line5` support to [Employees](apis/hris/reference#tag/Employees) address fields
+- Added `line5` support to [Employees](apis/hris/reference/employees) address fields
 
 ### CRM API
 
-- Added `line5` support to [Contacts](apis/crm/reference#tag/Contacts), [Companies](apis/crm/reference#tag/Companies), and [Leads](apis/crm/reference#tag/Leads) address fields
+- Added `line5` support to [Contacts](apis/crm/reference/contacts), [Companies](apis/crm/reference/companies), and [Leads](apis/crm/reference/leads) address fields
 
 ## v10.20.17 - (2025-09-24)
 
 ### Accounting API
 
-- Added [Quotes](apis/accounting/reference#tag/Quotes) support for [NetSuite](connectors/netsuite) connector.
+- Added [Quotes](apis/accounting/reference/quotes) support for [NetSuite](connectors/netsuite) connector.
 
 ## v10.20.16 - (2025-09-15)
 
 ### Vault API
 
-- Added `status_codes` filter to [Logs](apis/vault/reference#tag/Logs)
+- Added `status_codes` filter to [Logs](apis/vault/reference/logs)
 
 ## v10.20.15 - (2025-09-15)
 
 ### Accounting API
 
-- Added [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts) resource.
+- Added [Bank Accounts](apis/accounting/reference/bank-accounts) resource.
 
 ## v10.20.14 - (2025-09-02)
 
@@ -479,15 +479,15 @@
 
 ### Accounting API
 
-- Added `status` field to [Expenses](apis/accounting/reference#tag/Expenses) schema
-- Added `updated_since` and `status` filters to [Expenses](apis/accounting/reference#tag/Expenses)
-- Added `status` filter to [Journal Entries](apis/accounting/reference#tag/Journal-Entries)
+- Added `status` field to [Expenses](apis/accounting/reference/expenses) schema
+- Added `updated_since` and `status` filters to [Expenses](apis/accounting/reference/expenses)
+- Added `status` filter to [Journal Entries](apis/accounting/reference/journal-entries)
 
 ## v10.20.11 - (2025-08-25)
 
 ### HRIS API
 
-- Improved `start_date` and `end_date` filter descriptions for [Time Off Requests](apis/hris/reference#tag/Time-Off-Requests) to clarify date range functionality
+- Improved `start_date` and `end_date` filter descriptions for [Time Off Requests](apis/hris/reference/time-off-requests) to clarify date range functionality
 
 ## v10.20.10 - (2025-08-21)
 
@@ -497,7 +497,7 @@
 
 ### Accounting API
 
-- Added `tax_details`, `tax_status_details`, `issued_method`, `issued_email` and `integration_system_id` fields to [Suppliers](apis/accounting/reference#tag/Suppliers) schema
+- Added `tax_details`, `tax_status_details`, `issued_method`, `issued_email` and `integration_system_id` fields to [Suppliers](apis/accounting/reference/suppliers) schema
 
 ## v10.20.9 - (2025-08-20)
 
@@ -516,20 +516,20 @@
 ### Accounting API
 
 - Added [Dualentry](connectors/dualentry) connector
-- Added `currencies` field to [Subsidiaries](apis/accounting/reference#tag/Subsidiaries) schema
+- Added `currencies` field to [Subsidiaries](apis/accounting/reference/subsidiaries) schema
 
 ## v10.20.6 - (2025-08-13)
 
 ### Accounting API
 
-- Added `department_id` support to [Bills](apis/accounting/reference#tag/Bills), [Invoices](apis/accounting/reference#tag/Invoices), [Purchase Orders](apis/accounting/reference#tag/PurchaseOrders), and [Credit Notes](apis/accounting/reference#tag/CreditNotes)
+- Added `department_id` support to [Bills](apis/accounting/reference/bills), [Invoices](apis/accounting/reference/invoices), [Purchase Orders](apis/accounting/reference/purchase-orders), and [Credit Notes](apis/accounting/reference/credit-notes)
 - Added Locations and Departments support for [QuickBooks](connectors/quickbooks)
 
 ## v10.20.5 - (2025-08-12)
 
 ### ATS API
 
-- Added `salutation`, `social_security_number`, `gender`, `type` fields to [Applicants](apis/ats/reference#tag/Applicants) schema
+- Added `salutation`, `social_security_number`, `gender`, `type` fields to [Applicants](apis/ats/reference/applicants) schema
 
 ## v10.20.4 - (2025-08-11)
 
@@ -546,9 +546,9 @@
 
 ### Accounting API
 
-- Added `approved_by`, `amortization_type`, `tax_method`, `template_id` and `attachments` support to [Bills](apis/accounting/reference#tag/Bills)
-- Added `retention_amount`, `payment_amount`, `shipping_id`, `memo`, `prepaid`, `tax_applicable_on`, `tax_recoverability`, `tax_method` and `worktags` support to [Bills](apis/accounting/reference#tag/Bills) line items
-- Added `worktags` and removed `budget` and `project_id` support in [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders) line items
+- Added `approved_by`, `amortization_type`, `tax_method`, `template_id` and `attachments` support to [Bills](apis/accounting/reference/bills)
+- Added `retention_amount`, `payment_amount`, `shipping_id`, `memo`, `prepaid`, `tax_applicable_on`, `tax_recoverability`, `tax_method` and `worktags` support to [Bills](apis/accounting/reference/bills) line items
+- Added `worktags` and removed `budget` and `project_id` support in [Purchase Orders](apis/accounting/reference/purchase-orders) line items
 
 ### File Storage API
 
@@ -572,81 +572,81 @@
 
 ### Ecommerce API
 
-- Added `name`, `created_since`, `updated_since` filters to [Products](apis/ecommerce/reference#tag/Products)
+- Added `name`, `created_since`, `updated_since` filters to [Products](apis/ecommerce/reference/products)
 
 ## v10.20.0 - (2025-07-24)
 
 ### Accounting API
 
-- Added [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) support to [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central)
+- Added [Tracking Categories](apis/accounting/reference/tracking-categories) support to [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central)
 
 ## v10.19.1 - (2025-07-24)
 
 ### Accounting API
 
-- Added `billing_address`, `terms`, `tax_method`, `issued_method`, and `issued_email` support to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders)
-- Added `shipping_id`, `memo`, `tax_applicable_on`, `tax_recoverability`, `tax_method`, `budget` and `project_id` support to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders) line items
+- Added `billing_address`, `terms`, `tax_method`, `issued_method`, and `issued_email` support to [Purchase Orders](apis/accounting/reference/purchase-orders)
+- Added `shipping_id`, `memo`, `tax_applicable_on`, `tax_recoverability`, `tax_method`, `budget` and `project_id` support to [Purchase Orders](apis/accounting/reference/purchase-orders) line items
 
 ## v10.19.0 - (2025-07-23)
 
 ### Accounting API
 
-- Added [Quotes](apis/accounting/reference#tag/Quotes).
+- Added [Quotes](apis/accounting/reference/quotes).
 
 ### Accounting API
 
-- Added `supplier_id` filter to [Payment Events](apis/accounting/reference#tag/Payment-Events)
+- Added `supplier_id` filter to [Payment Events](apis/accounting/reference/payment-events)
 
 ## v10.18.5 - (2025-07-23)
 
 ### Accounting API
 
-- Added `supplier_id` filter to [Payment Events](apis/accounting/reference#tag/Payment-Events)
+- Added `supplier_id` filter to [Payment Events](apis/accounting/reference/payment-events)
 
 ## v10.18.4 - (2025-07-22)
 
 ### Accounting API
 
-- Added `notes` and `amortization_type` support to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders)
-- Added `subsidiary_id` and `prepaid` support to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders) line items
-- Added `subsidiary_id` and `purchase_order` support to [Bills](apis/accounting/reference#tag/Bills) line items
+- Added `notes` and `amortization_type` support to [Purchase Orders](apis/accounting/reference/purchase-orders)
+- Added `subsidiary_id` and `prepaid` support to [Purchase Orders](apis/accounting/reference/purchase-orders) line items
+- Added `subsidiary_id` and `purchase_order` support to [Bills](apis/accounting/reference/bills) line items
 
 ## v10.18.3 - (2025-07-18)
 
-- Added `rebilling` field to [Bills](apis/accounting/reference#tag/Bills) and [Expenses](apis/accounting/reference#tag/Expenses)
+- Added `rebilling` field to [Bills](apis/accounting/reference/bills) and [Expenses](apis/accounting/reference/expenses)
 
 ## v10.18.2 - (2025-07-09)
 
 ### Accounting API
 
-- Added `type` field and filter to [Categories](apis/accounting/reference#tag/Categories)
+- Added `type` field and filter to [Categories](apis/accounting/reference/categories)
 
 ## v10.18.1 - (2025-06-27)
 
 ### Accounting API
 
-- Added `country` field to bank_account and `terms` field to [Suppliers](apis/accounting/reference#tag/Suppliers) schema
+- Added `country` field to bank_account and `terms` field to [Suppliers](apis/accounting/reference/suppliers) schema
 
 ## v10.18.0 - (2025-06-17)
 
 ### Accounting API
 
-- Added [Categories](apis/accounting/reference#tag/Categories) resource
+- Added [Categories](apis/accounting/reference/categories) resource
 - Added `categories` coverage to [Workday](connectors/workday)
 
 ## v10.17.2 - (2025-05-29)
 
 ### Accounting API
 
-- Added `status` field to [Journal Entry](apis/accounting/reference#tag/Journal-Entries)
+- Added `status` field to [Journal Entry](apis/accounting/reference/journal-entries)
 - Added support to update Journal Entry in [Xero](connectors/xero)
 
 ## v10.17.1 - (2025-05-27)
 
 ### CRM API
 
-- Added [Custom Object Schemas](apis/crm/reference#tag/CustomObjectSchemas) schema.
-- Added [Custom Objects](apis/crm/reference#tag/CustomObjects) schema.
+- Added [Custom Object Schemas](apis/crm/reference/custom-object-schemas) schema.
+- Added [Custom Objects](apis/crm/reference/custom-objects) schema.
 - Added `custom-object-schemas` and `custom-objects` coverage to [Salesforce](connectors/salesforce)
 
 ## v10.17.0 - (2025-05-26)
@@ -663,7 +663,7 @@
 
 ### ECOMMERCE API
 
-- Added `refunds` to [Ecommerce Orders](apis/ecommerce/reference#tag/EcommerceOrders)
+- Added `refunds` to [Ecommerce Orders](apis/ecommerce/reference/ecommerce-orders)
 
 ## v10.16.7 - (2025-05-15)
 
@@ -747,7 +747,7 @@
 ### CRM API
 
 - Added [Attio](connectors/attio) connector for the CRM API
-- Added [Webhooks](apis/crm/reference#tag/Webhooks) support for [Attio](connectors/attio) connector in the CRM API
+- Added [Webhooks](apis/crm/reference/webhooks) support for [Attio](connectors/attio) connector in the CRM API
 
 ## v10.12.4 - (2025-03-20)
 
@@ -766,13 +766,13 @@
 
 ### Accounting API
 
-- Added new filter for `supplier_id` to [Customers](apis/accounting/reference#tag/Customers)
+- Added new filter for `supplier_id` to [Customers](apis/accounting/reference/customers)
 
 ## v10.12.2 - (2025-03-11)
 
 ### Accounting API
 
-- Addded `cost_of_goods_sold`, `other_income`, `other_expenses`, `uncategorized_categories` support to [Profit And Loss](apis/accounting/reference#tag/Profit-And-Loss)
+- Addded `cost_of_goods_sold`, `other_income`, `other_expenses`, `uncategorized_categories` support to [Profit And Loss](apis/accounting/reference/profit-and-loss)
 
 ## v10.12.1 - (2025-03-07)
 
@@ -790,7 +790,7 @@
 
 ### File Storage API
 
-- Added `raw` parameter to [Files Search](apis/file-storage/reference#tag/Files)
+- Added `raw` parameter to [Files Search](apis/file-storage/reference/files)
 
 ## v10.11.4 - (2025-02-14)
 
@@ -820,14 +820,14 @@
 
 ### Ecommerce API
 
-- Added new webhook events for [Ecommerce](apis/ecommerce/reference#tag/Webhook-Events)
+- Added new webhook events for [Ecommerce](apis/ecommerce/reference/webhook-events)
 - Added native webhook support for [Shopify](connectors/shopify) which api_managed (both delete and creation).
 
 ## v10.10.1 - (2025-01-23)
 
 ### Accounting API
 
-- Added `sort` parameter to [Invoice Items](apis/accounting/reference#tag/Invoice-Items)
+- Added `sort` parameter to [Invoice Items](apis/accounting/reference/invoice-items)
 
 ## v10.10.0 - (2025-01-16)
 
@@ -835,34 +835,34 @@
 
 ## v10.9.1 - (2025-01-13)
 
-- Added `custom_fields` to [Journal Entry](apis/accounting/reference#tag/Journal-Entries)
+- Added `custom_fields` to [Journal Entry](apis/accounting/reference/journal-entries)
 
 ## v10.9.0 - (2024-12-11)
 
 ## Accounting API
 
-- Added [Aged Creditors](apis/accounting/reference#tag/Aged-Creditors) schema.
-- Added [Aged Debtors](apis/accounting/reference#tag/Aged-Debtors) schema.
+- Added [Aged Creditors](apis/accounting/reference/aged-creditors) schema.
+- Added [Aged Debtors](apis/accounting/reference/aged-debtors) schema.
 
 ## v10.8.3 - (2024-12-05)
 
 ### Accounting API
 
-- Added `subsidiaries` field to [Tax Rates](apis/accounting/reference#tag/Tax-Rates) schema.
-- Added `subsidiaries` field to [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) schema.
-- Added `subsidiary_id` field to [Suppliers](apis/accounting/reference#tag/Suppliers) schema.
+- Added `subsidiaries` field to [Tax Rates](apis/accounting/reference/tax-rates) schema.
+- Added `subsidiaries` field to [Tracking Categories](apis/accounting/reference/tracking-categories) schema.
+- Added `subsidiary_id` field to [Suppliers](apis/accounting/reference/suppliers) schema.
 
 ## v10.8.2 - (2024-12-05)
 
 ### Accounting API
 
-- Added `payment_type` field to [Expenses](apis/accounting/reference#tag/Expenses) schema.
+- Added `payment_type` field to [Expenses](apis/accounting/reference/expenses) schema.
 
 ## v10.8.1 - (2024-11-12)
 
 ### HRIS API
 
-- Added `status` field to jobs for [Employee](apis/hris/reference#tag/Employees) schema.
+- Added `status` field to jobs for [Employee](apis/hris/reference/employees) schema.
 
 ## v10.8.0 - (2024-10-30)
 
@@ -897,48 +897,48 @@
 
 ### Accounting API
 
-- Added `number` filter to [Invoices](apis/accounting/reference#tag/Invoices)
+- Added `number` filter to [Invoices](apis/accounting/reference/invoices)
 - Added `number` filter support for [Quickbooks](connectors/quickbooks), [Xero](connectors/xero), [MYOB](apis/accounting/myob), [Zoho-Books](apis/accounting/zoho-books) and [FreshBooks](apis/accounting/freshbooks) connectors.
 
 ## v10.7.3 - (2024-09-17)
 
 ### Accounting API
 
-- Added [Expenses](apis/accounting/reference#tag/Expenses) schema.
-- Added [Expenses](apis/accounting/reference#tag/Expenses) support for [Quickbooks](connectors/quickbooks) and [Xero](connectors/xero) connector.
+- Added [Expenses](apis/accounting/reference/expenses) schema.
+- Added [Expenses](apis/accounting/reference/expenses) support for [Quickbooks](connectors/quickbooks) and [Xero](connectors/xero) connector.
 
 ## v10.7.2 - (2024-09-03)
 
 ### Accounting API
 
-- Added [Bill Payments](apis/accounting/reference#tag/Bill-Payments) schema.
-- Added [Bill Payments](apis/accounting/reference#tag/Bill-Payments) support for [Quickbooks](connectors/quickbooks) connector.
+- Added [Bill Payments](apis/accounting/reference/bill-payments) schema.
+- Added [Bill Payments](apis/accounting/reference/bill-payments) support for [Quickbooks](connectors/quickbooks) connector.
 
 ## v10.7.1 - (2024-08-28)
 
 ### CRM API
 
-- Added type filter in [Activities](apis/crm/reference#tag/Activities)
-- Added `owner_name` to [Leads](apis/crm/reference#tag/Leads) schema.
+- Added type filter in [Activities](apis/crm/reference/activities)
+- Added `owner_name` to [Leads](apis/crm/reference/leads) schema.
 
 ### HRIS API
 
 - Added pass_through property to HRIS API.
-- Added `id` as optional field in [Employee](apis/hris/reference#tag/Employees) schema.
+- Added `id` as optional field in [Employee](apis/hris/reference/employees) schema.
 
 ### Accounting API
 
-- Added accounting_period in [Bill](apis/accounting/reference#tag/Bills) and [Journal Entry](apis/accounting/reference#tag/Journal-Entries) schema.
+- Added accounting_period in [Bill](apis/accounting/reference/bills) and [Journal Entry](apis/accounting/reference/journal-entries) schema.
 - Added `line_number` to Invoice Line Items and Journal Entry Line Items.
-- Added supplier_id filter to [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders).
-- Added code in [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) schema.
+- Added supplier_id filter to [Purchase Orders](apis/accounting/reference/purchase-orders).
+- Added code in [Tracking Categories](apis/accounting/reference/tracking-categories) schema.
 
 ## v10.7.0 - (2024-07-16)
 
 ### Accounting API
 
-- Added [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) schema.
-- Added [Tracking Categories](apis/accounting/reference#tag/Tracking-Categories) support for [Quickbooks](connectors/quickbook) connector.
+- Added [Tracking Categories](apis/accounting/reference/tracking-categories) schema.
+- Added [Tracking Categories](apis/accounting/reference/tracking-categories) support for [Quickbooks](connectors/quickbook) connector.
 
 ## v10.6.3 - (2024-07-11)
 
@@ -950,13 +950,13 @@
 
 ### Accounting API
 
-- Updated [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) schema.
+- Updated [Balance Sheet](apis/accounting/reference/balance-sheet) schema.
 
 ## v10.6.1 - (2024-06-24)
 
 ### Accounting API
 
-- Updated [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet) schema.
+- Updated [Balance Sheet](apis/accounting/reference/balance-sheet) schema.
 
 ## v10.6.0 - (2024-06-19)
 
@@ -974,17 +974,17 @@
 
 ### Ecommerce API
 
-- Added `updated_since` and `created_since` filter support for [Orders](apis/ecommerce/reference#tag/EcommerceOrders).
+- Added `updated_since` and `created_since` filter support for [Orders](apis/ecommerce/reference/ecommerce-orders).
 
 ### Accounting API
 
-- Added `created_since` filter support for [Invoices](apis/accounting/reference#tag/Invoices).
+- Added `created_since` filter support for [Invoices](apis/accounting/reference/invoices).
 
 ## v10.4.1 - (2024-05-06)
 
 ### Accounting API
 
-- Added `opportunity_ids` field to [Contacts](apis/accounting/reference#tag/Contacts)
+- Added `opportunity_ids` field to [Contacts](apis/accounting/reference/contacts)
 - Updated Balance Sheet schema.
 
 ## v10.4.0 - (2024-03-26)
@@ -1026,7 +1026,7 @@
 
 - Added [Microsoft Dynamics Business Central](connectors/microsoft-dynamics-365-business-central) connector
 - Added filtering resources by update_since support for [Quickbooks](connectors/quickbooks) connector
-- Added `company_id` field to [Bill](apis/accounting/reference#tag/Bills), [Credit Note](apis/accounting/reference#tag/Credit-Notes), [Customer](apis/accounting/reference#tag/Customers), [Invoice](apis/accounting/reference#tag/Invoices), [Journal Entry](apis/accounting/reference#tag/Journal-Entries), [Payment](apis/accounting/reference#tag/Payments), [Purchase Order](apis/accounting/reference#tag/Purchase-Orders), [Supplier](apis/accounting/reference#tag/Suppliers),
+- Added `company_id` field to [Bill](apis/accounting/reference/bills), [Credit Note](apis/accounting/reference/credit-notes), [Customer](apis/accounting/reference/customers), [Invoice](apis/accounting/reference/invoices), [Journal Entry](apis/accounting/reference/journal-entries), [Payment](apis/accounting/reference/payments), [Purchase Order](apis/accounting/reference/purchase-orders), [Supplier](apis/accounting/reference/suppliers),
 
 ### Ecommerce API
 
@@ -1147,7 +1147,7 @@
 
 ### Ecommerce API
 
-- Added `customer_id` filter to E-Commerce: [Orders](apis/ecommerce/reference#tag/Orders)
+- Added `customer_id` filter to E-Commerce: [Orders](apis/ecommerce/reference/orders)
 
 ### HRIS API
 
@@ -1206,7 +1206,7 @@
 
 ### Accounting API
 
-- Extended [Journal Entries](https://developers.apideck.com/apis/accounting/reference#tag/Journal-Entries) with customer.
+- Extended [Journal Entries](https://developers.apideck.com/apis/accounting/reference/journal-entries) with customer.
 
 ### HRIS API
 
@@ -1230,7 +1230,7 @@
 
 ### HRIS API
 
-- Added a new property `ethnicity` to the [Employee](apis/hris/reference#tag/Employees) resource
+- Added a new property `ethnicity` to the [Employee](apis/hris/reference/employees) resource
 
 - Added jobs fields mappings for [SD Worx](connectors/sdworx)
 - Added support for custom fields for [Sage HR](connectors/sage-hr)
@@ -1310,7 +1310,7 @@
 
 ### ATS API
 
-- Added the job description field to the [Job](apis/ats/reference#tag/Jobs) resource for [Greenhouse](connectors/greenhouse)
+- Added the job description field to the [Job](apis/ats/reference/jobs) resource for [Greenhouse](connectors/greenhouse)
 
 ### Accounting API
 
@@ -1353,11 +1353,11 @@
 
 ## v9.7.6 - (2023-07-10)
 
-- Add `bank_accounts` support to the [Employee](apis/hris/reference#tag/Employees) resource.
+- Add `bank_accounts` support to the [Employee](apis/hris/reference/employees) resource.
 
 ## v9.7.5 - (2023-07-05)
 
-- Add the `payment_frequency` field on the [Employee](apis/hris/reference#tag/Employees) compensations resource.
+- Add the `payment_frequency` field on the [Employee](apis/hris/reference/employees) compensations resource.
 
 ## v9.7.4 - (2023-06-06)
 
@@ -1385,7 +1385,7 @@
 
 ### Resources
 
-- [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders)
+- [Purchase Orders](apis/accounting/reference/purchase-orders)
 
 ### Connectors
 
@@ -1412,7 +1412,7 @@
 
 ### HRIS API
 
-- Add the `probation_period` field on the [Employee](apis/hris/reference#tag/Employees) resource.
+- Add the `probation_period` field on the [Employee](apis/hris/reference/employees) resource.
 
 ## v9.5.0 - (2023-05-15)
 
@@ -1441,14 +1441,14 @@
 
 ### Vault API
 
-- Added new `invalid` state and new `validation_support` field on [Connections](apis/vault/reference#tag/Connections) to support connection validation.
-- Added `prefix` and `suffix` to `form_fields` on [Connections](apis/vault/reference#tag/Connections)
+- Added new `invalid` state and new `validation_support` field on [Connections](apis/vault/reference/connections) to support connection validation.
+- Added `prefix` and `suffix` to `form_fields` on [Connections](apis/vault/reference/connections)
 
 ## v9.2.0 - (2023-04-17)
 
 ### HRIS API
 
-- Deprecate the `department` field in favor of the dedicated `department_id` and `department_name` field on the [Employee](apis/hris/reference#tag/Employees) resource.
+- Deprecate the `department` field in favor of the dedicated `department_id` and `department_name` field on the [Employee](apis/hris/reference/employees) resource.
 
 ## v9.1.5 - (2023-04-17)
 
@@ -1464,8 +1464,8 @@
 
 ### Accounting API
 
-- added optional `payment_method_id` to [Payments](apis/accounting/reference#tag/Payments) resource.
-- added `taxable` to [InvoiceItems](apis/accounting/reference#tag/InvoiceItems) resource.
+- added optional `payment_method_id` to [Payments](apis/accounting/reference/payments) resource.
+- added `taxable` to [InvoiceItems](apis/accounting/reference/invoice-items) resource.
 
 ## v9.1.3 - (2023-04-13)
 
@@ -1476,14 +1476,14 @@
 ### Accounting API
 
 - pass_through parameter is now available on all list endpoints.
-- added `terms` to [Credit Notes](apis/accounting/reference#tag/Credit-Notes) resource.
-- added `rate` to [Tax Rates](apis/accounting/reference#tag/Tax-Rates) resource.
+- added `terms` to [Credit Notes](apis/accounting/reference/credit-notes) resource.
+- added `rate` to [Tax Rates](apis/accounting/reference/tax-rates) resource.
 
 ## v9.1.1 - (2023-03-13)
 
 ### Accounting API
 
-- Added `discount_amount` to [Invoices](apis/accounting/reference#tag/Invoices) resource and it's Line Items.
+- Added `discount_amount` to [Invoices](apis/accounting/reference/invoices) resource and it's Line Items.
 
 ## v9.1.0 - (2023-02-28)
 
@@ -1504,14 +1504,14 @@ Added the [Issue Tracking API](apis/issue-tracking/reference).
 
 ### Resources
 
-- [Tickets](apis/issue-tracking/reference#tag/Tickets)
-- [Collections](apis/issue-tracking/reference#tag/Collections)
-- [Users](apis/issue-tracking/reference#tag/Users)
-- [Comments](apis/issue-tracking/reference#tag/Comments)
+- [Tickets](apis/issue-tracking/reference/tickets)
+- [Collections](apis/issue-tracking/reference/collections)
+- [Users](apis/issue-tracking/reference/users)
+- [Comments](apis/issue-tracking/reference/comments)
 
 ### Webhooks
 
-- [Webhook Events](apis/issue-tracking/reference#tag/Webhook-Events)
+- [Webhook Events](apis/issue-tracking/reference/webhook-events)
 
 ### Connectors
 
@@ -1529,7 +1529,7 @@ Added the [Issue Tracking API](apis/issue-tracking/reference).
 
 ### Ecommerce API
 
-- [Product](apis/ecommerce/reference#tag/Product) `inventory` property is now a string instead of number.
+- [Product](apis/ecommerce/reference/product) `inventory` property is now a string instead of number.
 
 ### Connectors
 
@@ -1537,7 +1537,7 @@ Added the [Issue Tracking API](apis/issue-tracking/reference).
 
 ## v8.91.0 - (2023-02-15)
 
-- Added `parent` and `project` fields to the [Customer](apis/accounting/reference#tag/Customer) schema on Accounting.
+- Added `parent` and `project` fields to the [Customer](apis/accounting/reference/customer) schema on Accounting.
 
 ## v8.90.0 - (2023-02-15)
 
@@ -1547,10 +1547,10 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### Resources
 
-- [Orders](apis/ecommerce/reference#tag/Orders)
-- [Customers](apis/ecommerce/reference#tag/Customers)
-- [Products](apis/ecommerce/reference#tag/Products)
-- [Store](apis/ecommerce/reference#tag/Stores)
+- [Orders](apis/ecommerce/reference/orders)
+- [Customers](apis/ecommerce/reference/customers)
+- [Products](apis/ecommerce/reference/products)
+- [Store](apis/ecommerce/reference/stores)
 
 ### Connectors
 
@@ -1567,19 +1567,19 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### Accounting API
 
-- Added the [Journal Entries](apis/accounting/reference#tag/JournalEntries) resource.
+- Added the [Journal Entries](apis/accounting/reference/journal-entries) resource.
 
 ## v8.88.0 - (2023-02-07)
 
 ### CRM API
 
-- Added the [Users](apis/crm/reference#tag/Users) resource to [HubSpot](connectors/hubspot).
+- Added the [Users](apis/crm/reference/users) resource to [HubSpot](connectors/hubspot).
 
 ## v8.87.0 - (2023-01-24)
 
 ### CRM API
 
-- Added `filter[updated_since]` to [Activities](apis/crm/reference#tag/Activities)
+- Added `filter[updated_since]` to [Activities](apis/crm/reference/activities)
 
 ## v8.86.0 - (2023-01-11)
 
@@ -1593,23 +1593,23 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### Webhooks API
 
-- Added `disabled_reason` to [Webhook](apis/webhooks/reference#tag/Webhooks) to reflect when a webhook has been automatically disabled.
+- Added `disabled_reason` to [Webhook](apis/webhooks/reference/webhooks) to reflect when a webhook has been automatically disabled.
 
 ## v8.85.0 - (2022-11-15)
 
 ### Connector API
 
-- Added `free_trial_available`, `signup_url` and `webhook_support` to [Connector](apis/connector/reference#tag/Connectors)
+- Added `free_trial_available`, `signup_url` and `webhook_support` to [Connector](apis/connector/reference/connectors)
 
 ### CRM API
 
-- Added `company_id` filter to [Opportunities](apis/crm/reference#tag/Opportunities)
+- Added `company_id` filter to [Opportunities](apis/crm/reference/opportunities)
 
 ## v8.84.0 - (2022-11-12)
 
 ### ATS API
 
-- Added [Jobs](apis/ats/reference#tag/Jobs) and [Applicants](apis/ats/reference#tag/Applicants) resource to [SAP SuccessFactors](connectors/sap-successfactors).
+- Added [Jobs](apis/ats/reference/jobs) and [Applicants](apis/ats/reference/applicants) resource to [SAP SuccessFactors](connectors/sap-successfactors).
 - Added `created_by` and `updated_by` fields to the Applicant schema.
 
 ## v8.83.0 - (2022-11-10)
@@ -1624,12 +1624,12 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### HRIS API
 
-- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [ADP Workforce Now](connectors/adp-workforce-now).
-- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [BambooHR](connectors/bamboohr).
-- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [Personio](connectors/personio).
-- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [Sage Hr](connectors/sage-hr).
-- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [SAP SuccessFactors](connectors/sap-successfactors).
-- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource to [Workday](connectors/workday).
+- Added [Time Off Requests](apis/hris/reference/time-off-requests) resource to [ADP Workforce Now](connectors/adp-workforce-now).
+- Added [Time Off Requests](apis/hris/reference/time-off-requests) resource to [BambooHR](connectors/bamboohr).
+- Added [Time Off Requests](apis/hris/reference/time-off-requests) resource to [Personio](connectors/personio).
+- Added [Time Off Requests](apis/hris/reference/time-off-requests) resource to [Sage Hr](connectors/sage-hr).
+- Added [Time Off Requests](apis/hris/reference/time-off-requests) resource to [SAP SuccessFactors](connectors/sap-successfactors).
+- Added [Time Off Requests](apis/hris/reference/time-off-requests) resource to [Workday](connectors/workday).
 
 ### ATS API
 
@@ -1653,7 +1653,7 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### Connector API
 
-- Added `custom_scopes` to [Connector](apis/connector/reference#tag/Connectors)
+- Added `custom_scopes` to [Connector](apis/connector/reference/connectors)
 
 ## v8.78.0 - (2022-11-07)
 
@@ -1671,7 +1671,7 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### Vault API
 
-- Added subscriptions prop to [Connections](apis/vault/reference#tag/Connections)
+- Added subscriptions prop to [Connections](apis/vault/reference/connections)
 
 ## v8.75.0 - (2022-10-28)
 
@@ -1688,8 +1688,8 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### Connector API
 
-- Added `downstream_unsupported_operations` to [ConnectorResource](apis/connector/reference#tag/ConnectorResource)
-- # Added `unified_apis[].downstream_unsupported_resources` to [Connector](apis/connector/reference#tag/Connectors)
+- Added `downstream_unsupported_operations` to [ConnectorResource](apis/connector/reference/connector-resource)
+- # Added `unified_apis[].downstream_unsupported_resources` to [Connector](apis/connector/reference/connectors)
 
 ## v8.73.0 - (2022-10-27)
 
@@ -1714,20 +1714,20 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### Connector API
 
-- Added `unified_apis[].name` and `unified_apis[].supported_resources` to [Connector](apis/connector/reference#tag/Connectors)
-- Added `?unified_api` parameter to [ConnectorResource](apis/connector/reference#tag/Connector-Resources)
+- Added `unified_apis[].name` and `unified_apis[].supported_resources` to [Connector](apis/connector/reference/connectors)
+- Added `?unified_api` parameter to [ConnectorResource](apis/connector/reference/connector-resources)
 
 ## v8.70.2 - (2022-10-14)
 
 ### Vault API
 
-- Add `show_sidebar` to settings on [create session](apis/vault/reference#tag/Sessions).
+- Add `show_sidebar` to settings on [create session](apis/vault/reference/sessions).
 
 ## v8.70.1 - (2022-10-13)
 
 ### Accounting API
 
-- Added `discount_percentage` to root of [Invoice](apis/accounting/reference#tag/Invoices) object. Quickbooks has limited support for LineItem discounts, so this is a workaround to support discounts on invoices.
+- Added `discount_percentage` to root of [Invoice](apis/accounting/reference/invoices) object. Quickbooks has limited support for LineItem discounts, so this is a workaround to support discounts on invoices.
 
 ## v8.70.0 - (2022-10-11)
 
@@ -1800,7 +1800,7 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### HRIS API
 
-- Added [Time Off Requests](apis/hris/reference#tag/TimeOffRequests) resource.
+- Added [Time Off Requests](apis/hris/reference/time-off-requests) resource.
 
 ## v8.59.0 - (2022-09-22)
 
@@ -1812,7 +1812,7 @@ Added the [Ecommerce API](apis/ecommerce/reference).
 
 ### Connector API
 
-- Added `blind_mapping` to [Connector](apis/connector/reference#tag/Connectors)
+- Added `blind_mapping` to [Connector](apis/connector/reference/connectors)
 
 ## v8.57.0 - (2022-09-13)
 
@@ -1868,7 +1868,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 - The schema description for a `bank_account` on the `Payments` object has been defined as `PosBankAccount` to avoid confusion with the `BankAccount` object in other APIs.
 - This change is backwards compatible, but we recommend updating your integrations to use the new name if you are using typed definitions.
-- **Note:** the properties on the `PosBankAccount` object have not changed. [PosPayments](apis/pos/reference#tag/Payments)
+- **Note:** the properties on the `PosBankAccount` object have not changed. [PosPayments](apis/pos/reference/payments)
 
 ## v8.48.0 - (2022-09-05)
 
@@ -1878,7 +1878,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 - Added [ADP Workforce Now](connectors/adp-workforce-now) connector
 - extended gender enum to include `not-specified`
-- Added `tls_support` to [Connector](apis/connector/reference#tag/Connectors)
+- Added `tls_support` to [Connector](apis/connector/reference/connectors)
 
 ## v8.46.0 - (2022-09-02)
 
@@ -1908,19 +1908,19 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Added sorting support to [Invoices](apis/accounting/reference#tag/Invoices). To sort results, use the `sort[by]` and `sort[direction]` query parameters. First available `sort[by]` value is `updated_at`. Supported for [Xero](connectors/xero) and [Quickbooks](connectors/quickbooks).
+- Added sorting support to [Invoices](apis/accounting/reference/invoices). To sort results, use the `sort[by]` and `sort[direction]` query parameters. First available `sort[by]` value is `updated_at`. Supported for [Xero](connectors/xero) and [Quickbooks](connectors/quickbooks).
 
 ## v8.41.1 - (2022-08-24)
 
 ### Accounting API
 
-- Make `invoice_date` and `due_date` nullable on [Invoices](apis/accounting/reference#tag/Invoices)
+- Make `invoice_date` and `due_date` nullable on [Invoices](apis/accounting/reference/invoices)
 
 ## v8.41.0 - (2022-08-17)
 
 ### Accounting API
 
-- Added [Credit Note](apis/accounting/reference#tag/Credit-Notes) support.
+- Added [Credit Note](apis/accounting/reference/credit-notes) support.
 - Added Credit Notes support for [Xero](connectors/xero).
 - Added Credit Notes readOnly support for [Quickbooks](connectors/quickbooks).
 
@@ -1928,7 +1928,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Added `filter[start_date]`, `filter[end_date]` to [Customers](apis/accounting/reference#tag/Balance-Sheet)
+- Added `filter[start_date]`, `filter[end_date]` to [Customers](apis/accounting/reference/balance-sheet)
 
 ## v8.40.0 - (2022-08-15)
 
@@ -1938,47 +1938,47 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Added [Bills](apis/accounting/reference#tag/Bills)
+- Added [Bills](apis/accounting/reference/bills)
 
 ## v8.39.0 - (2022-08-09)
 
 ### Connector API
 
-- Added `supported_list_fields` to [ConnectorResource](apis/connector/reference#tag/ConnectorResource)
+- Added `supported_list_fields` to [ConnectorResource](apis/connector/reference/connector-resource)
 
 ## v8.38.0 - (2022-08-03)
 
-- Added [Drives](apis/file-storage/reference#tag/Drives) resource on the File Storage API.
-- Added [Drive Groups](apis/file-storage/reference#tag/DriveGroups) resource on the File Storage API.
+- Added [Drives](apis/file-storage/reference/drives) resource on the File Storage API.
+- Added [Drive Groups](apis/file-storage/reference/drive-groups) resource on the File Storage API.
 
 ## v8.37.1 - (2022-07-25)
 
-- Mapped `price_amount` property on variations to [Items](apis/pos/reference#tag/Items) on the POS API for the [Square](connectors/square) connector.
+- Mapped `price_amount` property on variations to [Items](apis/pos/reference/items) on the POS API for the [Square](connectors/square) connector.
 
 ## v8.37.0 - (2022-07-20)
 
-- Added `modifier_groups` property to [Items](apis/pos/reference#tag/Items) on the POS API.
+- Added `modifier_groups` property to [Items](apis/pos/reference/items) on the POS API.
 
 ## v8.36.0 - (2022-07-20)
 
-- Added `status` property to [Company info](apis/accounting/reference#tag/Company-Info) on the Accounting API and for the [MYOB](connectors/myob) connector.
+- Added `status` property to [Company info](apis/accounting/reference/company-info) on the Accounting API and for the [MYOB](connectors/myob) connector.
 
 ## v8.35.1 - (2022-07-20)
 
-- Added docs for [QuickBooks](connectors/quickbooks) as supported connector for [Profit And Loss](apis/accounting/reference#tag/Profit-and-Loss) resource on the Accounting API.
+- Added docs for [QuickBooks](connectors/quickbooks) as supported connector for [Profit And Loss](apis/accounting/reference/profit-and-loss) resource on the Accounting API.
 
 ## v8.35.0 - (2022-07-20)
 
-- Added [Profit And Loss](apis/accounting/reference#tag/Profit-and-Loss) resource on the Accounting API.
+- Added [Profit And Loss](apis/accounting/reference/profit-and-loss) resource on the Accounting API.
 
 ## v8.34.0 - (2022-07-06)
 
-- Added [Jobs](apis/hris/reference#tag/Employees) on the HRIS API
+- Added [Jobs](apis/hris/reference/employees) on the HRIS API
 
 ## v8.33.0 - (2022-07-02)
 
-- Added `deceased_on` and `partner` to [Employee](apis/hris/reference#tag/Employees) on the HRIS API.
-- Added new resource [EmployeeSchedules](https://developers.apideck.com/apis/hris/reference#tag/Employee-Schedules) on the HRIS API.
+- Added `deceased_on` and `partner` to [Employee](apis/hris/reference/employees) on the HRIS API.
+- Added new resource [EmployeeSchedules](https://developers.apideck.com/apis/hris/reference/employee-schedules) on the HRIS API.
 
 ## v8.32.6 - (2022-06-24)
 
@@ -1990,24 +1990,24 @@ Beta users should note the following breaking changes that may affect existing i
 
 ## v8.32.4 - (2022-06-16)
 
-- Added `filter[first_name]` and `filter[display_name`] to to [Customers](apis/accounting/reference#tag/Customer)
-- Added `automated_sales_tax` to [CompanyInfo](apis/accounting/reference#tag/CompanyInfo)
+- Added `filter[first_name]` and `filter[display_name`] to to [Customers](apis/accounting/reference/customer)
+- Added `automated_sales_tax` to [CompanyInfo](apis/accounting/reference/company-info)
 
 ## v8.32.3 - (2022-06-15)
 
-- Added `country`, `sales_tax_enabled` and `default_sales_tax` to [CompanyInfo](apis/accounting/reference#tag/CompanyInfo)
+- Added `country`, `sales_tax_enabled` and `default_sales_tax` to [CompanyInfo](apis/accounting/reference/company-info)
 
 ## v8.32.2 - (2022-06-15)
 
 ### Accounting API
 
-- Added `filter[company_name]`, `filter[last_name]`, `filter[email]` to [Customers](apis/accounting/reference#tag/Customer)
+- Added `filter[company_name]`, `filter[last_name]`, `filter[email]` to [Customers](apis/accounting/reference/customer)
 
 ## v8.32.1 - (2022-06-08)
 
 ### [ATS API](apis/ats/reference)
 
-- Extended `department` properties on [Jobs](apis/ats/reference#tag/Job)
+- Extended `department` properties on [Jobs](apis/ats/reference/job)
 
 ## v8.32.0 - (2022-06-03)
 
@@ -2019,11 +2019,11 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Added filter[name] to [InvoiceItems](apis/accounting/reference#tag/InvoiceItem)
+- Added filter[name] to [InvoiceItems](apis/accounting/reference/invoice-item)
 
 ## v8.31.2 - (2022-06-01)
 
-- Added `row_type` [Companies](apis/crm/reference#tag/Company)
+- Added `row_type` [Companies](apis/crm/reference/company)
 
 ## v8.31.1 - (2022-05-31)
 
@@ -2035,19 +2035,19 @@ Beta users should note the following breaking changes that may affect existing i
 
 Beta users should note the following breaking changes that may affect existing integrations implementing the `Accounting` API:
 
-- [LedgerAccount](apis/accounting/reference#tag/LedgerAccount) `nominal_code` has been deprecated in favour of `code`.
+- [LedgerAccount](apis/accounting/reference/ledger-account) `nominal_code` has been deprecated in favour of `code`.
 
 ## v8.31.0 - (2022-05-26)
 
 ### CRM API
 
-- Added `pipelines` [Pipelines](apis/crm/reference#tag/Pipelines) for [Salesforce](connectors/salesforce)
+- Added `pipelines` [Pipelines](apis/crm/reference/pipelines) for [Salesforce](connectors/salesforce)
 
 ## v8.30.1 - (2022-05-24)
 
 ### Accounting API
 
-- Added `bank_accounts` [Suppliers](apis/accounting/reference#tag/Supplier)
+- Added `bank_accounts` [Suppliers](apis/accounting/reference/supplier)
 
 ## v8.30.0 - (2022-05-23)
 
@@ -2059,37 +2059,37 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Added [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet)
+- Added [Balance Sheet](apis/accounting/reference/balance-sheet)
 
 ## v8.29.4 - (2022-05-16)
 
-- Made `is_primary` optional for [Employee](apis/hris/reference#tag/Employees) jobs of HRIS API.
+- Made `is_primary` optional for [Employee](apis/hris/reference/employees) jobs of HRIS API.
 
 ## v8.29.3 - (2022-05-10)
 
-- Extended [Bills](apis/accounting/reference#tag/Bills) with `paid_date`, `deposit`, `sub_total`, and `total_tax`. If these properties are available in downstream connector response, they will be mapped returned.
+- Extended [Bills](apis/accounting/reference/bills) with `paid_date`, `deposit`, `sub_total`, and `total_tax`. If these properties are available in downstream connector response, they will be mapped returned.
 
 ## v8.29.2 - (2022-05-10)
 
-- Added optional `inventory_date` to [InvoiceItem](apis/accounting/reference#tag/InvoiceItems)
+- Added optional `inventory_date` to [InvoiceItem](apis/accounting/reference/invoice-items)
 
 ## v8.29.1 - (2022-05-06)
 
 ### Accounting API
 
-- Added [Bills](apis/accounting/reference#tag/Bills)
+- Added [Bills](apis/accounting/reference/bills)
 
 ## v8.29.0 - (2022-05-05)
 
 ### Accounting API
 
-- Added [Suppliers](apis/accounting/reference#tag/Suppliers)
+- Added [Suppliers](apis/accounting/reference/suppliers)
 
 ## v8.28.2 - (2022-05-05)
 
 ### Accounting API
 
-- Added optional `tax_code` to [Invoice](apis/accounting/reference#tag/Invoices)
+- Added optional `tax_code` to [Invoice](apis/accounting/reference/invoices)
 
 ## v8.28.1 - (2022-05-03)
 
@@ -2107,13 +2107,13 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### HRIS API
 
-- Added [Webhook Support](/apis/hris/reference#tag/Webhook-Events)
+- Added [Webhook Support](/apis/hris/reference/webhook-events)
 
 ## v8.27.1 - (2022-04-27)
 
 ### Vault API
 
-- Added docs for `authorize_url` and `revoke_url` to [Connections](apis/vault/reference#tag/Connections)
+- Added docs for `authorize_url` and `revoke_url` to [Connections](apis/vault/reference/connections)
 
 ## v8.27.0 - (2022-04-27)
 
@@ -2129,7 +2129,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### HRIS API
 
-- Added [Payrolls](apis/hris/reference#tag/Payrolls) and [EmployeePayrolls](apis/hris/reference#tag/EmployeePayrolls)to HRIS
+- Added [Payrolls](apis/hris/reference/payrolls) and [EmployeePayrolls](apis/hris/reference/employee-payrolls)to HRIS
 
 ## v8.25.0 - (2022-04-22)
 
@@ -2141,15 +2141,15 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Updated [TaxRates](apis/accounting/reference#tag/TaxRates) components.id to be `string`
+- Updated [TaxRates](apis/accounting/reference/tax-rates) components.id to be `string`
 
 ## v8.24.0 - (2022-04-20)
 
-- Add [Company info](apis/accounting/reference#tag/Company-Info) to [QuickBooks](connectors/quickbooks) connector
+- Add [Company info](apis/accounting/reference/company-info) to [QuickBooks](connectors/quickbooks) connector
 
 ## v8.23.0 - (2022-04-19)
 
-- Added [`Tenders`](apis/pos/reference#tag/Tenders) to [Clover](connectors/clover) connector
+- Added [`Tenders`](apis/pos/reference/tenders) to [Clover](connectors/clover) connector
 
 ## v8.22.0 - (2022-04-17)
 
@@ -2163,7 +2163,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ## Connector API
 
-- Added `oauth_scopes` to [Connector](apis/connector/reference#tag/Connectors)
+- Added `oauth_scopes` to [Connector](apis/connector/reference/connectors)
 
 ## v8.19.3 - (2022-04-11)
 
@@ -2190,21 +2190,21 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Connector API
 
-- Added `docs` to [Connector](apis/connector/reference#tag/Connectors)
+- Added `docs` to [Connector](apis/connector/reference/connectors)
 - Added endpoint to get the content of a Connector Doc
-- Added `events`, to [API](apis/connector/reference#tag/APIs)
+- Added `events`, to [API](apis/connector/reference/apis)
 
 ## v8.17.0 - (2022-03-24)
 
 ### Connector API
 
-- Added `oauth_grant_type`, `oauth_credentials_source` and `has_sandbox_credentials` to [Connector](apis/connector/reference#tag/Connectors)
+- Added `oauth_grant_type`, `oauth_credentials_source` and `has_sandbox_credentials` to [Connector](apis/connector/reference/connectors)
 
 ## v8.16.0 - (2022-03-24)
 
 ### HRIS API
 
-- Added [Departments](apis/hris/reference#tag/Departments) to HRIS
+- Added [Departments](apis/hris/reference/departments) to HRIS
 - Fixed Nmbrs birthday date format on Employees
 
 ## v8.15.0 - (2022-03-23)
@@ -2217,17 +2217,17 @@ Beta users should note the following breaking changes that may affect existing i
 ### Accounting API
 
 - Added [Sage Intacct](connectors/sage-intacct) connector
-- [LedgerAccounts](apis/accounting/reference#tag/LedgerAccounts)
+- [LedgerAccounts](apis/accounting/reference/ledger-accounts)
   - `LedgerAccount.type` enum extended to include `balancesheet`
   - Added `categories` property
-- [AccountingCustomer](apis/accounting/reference#tag/AccountingCustomer)
+- [AccountingCustomer](apis/accounting/reference/accounting-customer)
   - `AccountingCustomer.status` enum extended to include `inactive`
-- [Payment](apis/accounting/reference#tag/Payment)
+- [Payment](apis/accounting/reference/payment)
   - `Payment` extended with optional `payment_method` string
 
 ### Vault API
 
-- Extended [Connections](apis/vault/reference#tag/Connection) `auth_type` enum to include `custom`.
+- Extended [Connections](apis/vault/reference/connection) `auth_type` enum to include `custom`.
 
 ## v8.13.0 - (2022-03-09)
 
@@ -2237,13 +2237,13 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Added `taxRatesFilter` filter to [TaxRates](apis/accounting/reference#tag/TaxRates)
+- Added `taxRatesFilter` filter to [TaxRates](apis/accounting/reference/tax-rates)
 
 ## v8.12.0 - (2022-02-16)
 
 ### Vault API
 
-- Added `oauth_grant_type` property to [Connections](apis/vault/reference#tag/Connection).
+- Added `oauth_grant_type` property to [Connections](apis/vault/reference/connection).
 - Added [Token](apis/vault/reference#operation/connectionsToken) endpoint to support the `client_credentials` OAuth flow.
 
 ### HRIS API
@@ -2254,7 +2254,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- optional `report_tax_type` property added to [TaxRates](apis/accounting/reference#tag/TaxRates)
+- optional `report_tax_type` property added to [TaxRates](apis/accounting/reference/tax-rates)
 
 ## v8.11.0 - (2022-01-15)
 
@@ -2266,33 +2266,33 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### HRIS API
 
-- Moved compensations out of jobs array on [Employees](apis/hris/reference#tag/Employee)
+- Moved compensations out of jobs array on [Employees](apis/hris/reference/employee)
 
 ## v8.10.1 - (2021-12-14)
 
 ### Accounting API
 
 - Shared Schema `Address` extended with optional `line3` and `line4` properties
-- [LedgerAccounts](apis/accounting/reference#tag/LedgerAccounts)
+- [LedgerAccounts](apis/accounting/reference/ledger-accounts)
 
   - `LedgerAccount.type` enum extended to include `other_income`
 
-- [AccountingCustomer](apis/accounting/reference#tag/AccountingCustomer)
+- [AccountingCustomer](apis/accounting/reference/accounting-customer)
 
   - `AccountingCustomer` extended with `websites`, `title`, `display_name`, `middle_name`, `last_name`, and `suffix` properties
 
-- [Invoice](apis/accounting/reference#tag/Invoice)
+- [Invoice](apis/accounting/reference/invoice)
 
   - `Invoice` extended with optional `terms` string
 
-- [Payment](apis/accounting/reference#tag/Payment)
+- [Payment](apis/accounting/reference/payment)
   - `Payment` extended with optional `note` string
 
 ## v8.10.0 - (2021-12-05)
 
 ### File Storage API
 
-- Added [Upload Sessions](apis/file-storage/reference#tag/UploadSessions) resource.
+- Added [Upload Sessions](apis/file-storage/reference/upload-sessions) resource.
 - Added File Upload to the [Google Drive](connectors/google-drive) connector.
 
 ### HRIS API
@@ -2309,7 +2309,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- [Payments](apis/accounting/reference#tag/Payments)
+- [Payments](apis/accounting/reference/payments)
   - `Payment.reconciled` added to reflect reconciliation state
   - `Payment.status` enum added to reflect payment state [`authorised`, `paid`, `voided`, `deleted`]
   - `Payment.type` enum added
@@ -2330,13 +2330,13 @@ Beta users should note the following breaking changes that may affect existing i
 
 Beta users should note the following breaking changes that may affect existing integrations implementing the `Accounting` API:
 
-- [Payments](apis/accounting/reference#tag/Payments) `accounts_receivable_account_type` and `accounts_receivable_account_id` have been deprecated in favour of a single `account` object.
+- [Payments](apis/accounting/reference/payments) `accounts_receivable_account_type` and `accounts_receivable_account_id` have been deprecated in favour of a single `account` object.
 
 ## v8.8.0 - (2021-11-18)
 
 ### File Storage API
 
-- Added [Shared Links](apis/file-storage/reference#tag/SharedLinks) resource.
+- Added [Shared Links](apis/file-storage/reference/shared-links) resource.
 
 ## v8.7.1 - (2021-11-16)
 
@@ -2344,12 +2344,12 @@ Beta users should note the following breaking changes that may affect existing i
 
 - added `BankAccount.account_type` and `BankAccount.currency`. Account type is an enum [`bank_account`, `credit_card`, `other`]
 
-- [LedgerAccounts](apis/accounting/reference#tag/LedgerAccounts)
+- [LedgerAccounts](apis/accounting/reference/ledger-accounts)
 
   - `LedgerAccount.type` enum extended to include `fixed_asset` and `revenue`
   - `LedgerAccount.status` added to reflect downstream provider who allow different states (soft delete) [`active`, `inactive`, `archived`]
 
-- [InvoiceItems](apis/accounting/reference#tag/InvoiceItems)
+- [InvoiceItems](apis/accounting/reference/invoice-items)
   - `InvoiceItem.purchase_details` added to reflect purchase cost detail on an item
   - `InvoiceItem.tracked` added to indicate whether or not the item is tracked via inventory
   - `InvoiceItem.asset_account` added to reflect the asset account that this item should be related to.
@@ -2369,13 +2369,13 @@ Beta users should note the following breaking changes that may affect existing i
 
 Beta users should note the following breaking changes that may affect existing integrations implementing the `Accounting` API:
 
-- Type of [TaxRates](apis/accounting/reference#tag/TaxRates) `tax_type` has been deprecated to facilitate migrating from an enum to string using new `TaxRate.type`. Values sent via `TaxRate.type` should be aligned with any downstream connector requirements.
+- Type of [TaxRates](apis/accounting/reference/tax-rates) `tax_type` has been deprecated to facilitate migrating from an enum to string using new `TaxRate.type`. Values sent via `TaxRate.type` should be aligned with any downstream connector requirements.
 
 ## v8.5.0 - (2021-11-09)
 
 ### File Storage API
 
-- Added [Folders](apis/file-storage/reference#tag/Folders) resource.
+- Added [Folders](apis/file-storage/reference/folders) resource.
 
 ## v8.4.1 - (2021-11-08)
 
@@ -2391,7 +2391,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Extend [InvoiceItems](apis/accounting/reference#tag/InvoiceItems) to include `income_account` and `expense_account`.
+- Extend [InvoiceItems](apis/accounting/reference/invoice-items) to include `income_account` and `expense_account`.
 
 ## v8.3.1 - (2021-11-02)
 
@@ -2403,8 +2403,8 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Accounting API
 
-- Added [Payments](apis/accounting/reference#tag/Payments)
-- Added `downstream_id` to [Invoices](apis/accounting/reference#tag/Invoices) allowing for single endpoint fanning out to multiple downstream endpoints for Invoices.
+- Added [Payments](apis/accounting/reference/payments)
+- Added `downstream_id` to [Invoices](apis/accounting/reference/invoices) allowing for single endpoint fanning out to multiple downstream endpoints for Invoices.
 
 ## v8.2.0 - (2021-11-01)
 
@@ -2426,7 +2426,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### CRM API
 
-- Added [users](apis/crm/reference#tag/Users) support for the [Salesforce connector](connectors/salesforce).
+- Added [users](apis/crm/reference/users) support for the [Salesforce connector](connectors/salesforce).
 
 ## v7.1.0 - (2021-10-22)
 
@@ -2502,19 +2502,19 @@ Beta users should note the following breaking changes that may affect existing i
 
 ## v5.7.0 - (2021-09-06)
 
-- Add [Company info](apis/accounting/reference#tag/Company-Info) resource. Replace Contact and Company resource by [Customer](apis/accounting/reference#tag/Customers) resource.
+- Add [Company info](apis/accounting/reference/company-info) resource. Replace Contact and Company resource by [Customer](apis/accounting/reference/customers) resource.
 
 ## v5.6.0 - (2021-09-06)
 
 ### Accounting API
 
-- Add [Customers](apis/accounting/reference#tag/Customers) resource.
+- Add [Customers](apis/accounting/reference/customers) resource.
 
 ## v5.5.1 - (2021-08-29)
 
 ### Accounting API
 
-- Rename `general_ledger_account` to `ledger_account` read-only on [Invoices](apis/accounting/reference#tag/Invoices).
+- Rename `general_ledger_account` to `ledger_account` read-only on [Invoices](apis/accounting/reference/invoices).
 
 ## v5.4.1 - (2021-08-27)
 
@@ -2527,19 +2527,19 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### CRM API
 
-- Make `duration_minutes` read-only on [Activities](apis/crm/reference#tag/Activities).
+- Make `duration_minutes` read-only on [Activities](apis/crm/reference/activities).
 
 ## v5.3.0 - (2021-08-19)
 
 ### Vault API
 
-- Add `custom_consumer_settings` to [create session](apis/vault/reference#tag/Sessions). Allow wildcard objects to be passed through the `metadata` field on a connection.
+- Add `custom_consumer_settings` to [create session](apis/vault/reference/sessions). Allow wildcard objects to be passed through the `metadata` field on a connection.
 
 ## v5.2.0 - (2021-08-15)
 
 ### CRM API
 
-- Add `contact_id`, `company_id`, `opportunity_id`, `lead_id`, and `active` to [Notes](apis/crm/reference#tag/Notes).
+- Add `contact_id`, `company_id`, `opportunity_id`, `lead_id`, and `active` to [Notes](apis/crm/reference/notes).
 
 ## v5.1.0 - (2021-08-13)
 
@@ -2701,7 +2701,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### Vault/Proxy API
 
-- Deprecated [/vault/proxy](apis/vault/reference#tag/Proxy) and moved to the [Proxy API](apis/proxy)
+- Deprecated [/vault/proxy](apis/vault/reference/proxy) and moved to the [Proxy API](apis/proxy)
 
 ## v1.10.0 - (2021-05-28)
 
@@ -2719,13 +2719,13 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### CRM API
 
-- Added [Activities](apis/crm/reference#tag/Activities) resource
+- Added [Activities](apis/crm/reference/activities) resource
 
 ## v1.7.0 - (2021-05-21)
 
 ### CRM API
 
-- Added [Users](apis/crm/reference#tag/Users) resource
+- Added [Users](apis/crm/reference/users) resource
 
 ## v1.6.0 - (2021-05-20)
 

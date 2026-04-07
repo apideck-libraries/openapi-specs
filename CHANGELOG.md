@@ -1,3 +1,9 @@
+## v10.24.16 - (2026-04-07)
+
+### Accounting API
+
+- Added `status` filter to [Tax Rates](apis/accounting/reference#tag/Tax-Rates) with [QuickBooks](connectors/quickbooks) support
+
 ## v10.24.15 - (2026-04-06)
 
 ### Accounting API

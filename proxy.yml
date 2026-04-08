@@ -24,6 +24,7 @@ info:
     | x-apideck-downstream-authorization | String | No       | Downstream authorization header. This will skip the Vault token injection. |
     | x-apideck-downstream-method        | String | No       | Downstream method. If not provided the upstream method will be inherited, depending on the verb/method of the request this will contain the request body you want to POST/PATCH/PUT. |
     | x-apideck-service-id               | String | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.                                   |
+    | x-apideck-timeout                  | Integer | No      | Override the default downstream request timeout in milliseconds. Default is 28000 (28 seconds).                                                                    |
 
     ## Authorization
 
@@ -72,7 +73,7 @@ info:
 
     ### Timeout
 
-    The request timeout is set at 30 seconds.
+    The default downstream request timeout is 28 seconds. You can override this per request by passing the `x-apideck-timeout` header with a value in milliseconds.
 
     ### Response Size
 
@@ -333,6 +334,16 @@ components:
       schema:
         type: string
       x-speakeasy-name-override: downstreamAuthorization
+    x-apideck-timeout:
+      name: x-apideck-timeout
+      in: header
+      description: Override the default downstream request timeout in milliseconds. The default is 28000 (28 seconds).
+      example: 30000
+      required: false
+      schema:
+        type: integer
+        default: 28000
+      x-speakeasy-name-override: timeout
     raw:
       name: raw
       in: query
@@ -526,6 +537,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-unified-api'
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
+        - $ref: '#/components/parameters/x-apideck-timeout'
       security:
         - apiKey: []
       responses:
@@ -551,6 +563,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-unified-api'
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
+        - $ref: '#/components/parameters/x-apideck-timeout'
       security:
         - apiKey: []
       responses:
@@ -576,6 +589,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-unified-api'
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
+        - $ref: '#/components/parameters/x-apideck-timeout'
       security:
         - apiKey: []
       requestBody:
@@ -638,6 +652,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-unified-api'
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
+        - $ref: '#/components/parameters/x-apideck-timeout'
       security:
         - apiKey: []
       requestBody:
@@ -700,6 +715,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-unified-api'
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
+        - $ref: '#/components/parameters/x-apideck-timeout'
       security:
         - apiKey: []
       requestBody:
@@ -762,6 +778,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-unified-api'
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
+        - $ref: '#/components/parameters/x-apideck-timeout'
       security:
         - apiKey: []
       responses:

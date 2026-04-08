@@ -1,3 +1,14 @@
+## v10.24.18 - (2026-04-08)
+
+## v10.24.17 - (2026-04-08)
+
+## v10.24.18 - (2026-04-08)
+
+### Accounting API
+
+- Added new [Moneybird](connectors/moneybird) connector with support for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Expenses](apis/accounting/reference/expenses), [Payments](apis/accounting/reference/payments), [Bill Payments](apis/accounting/reference/bill-payments), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Journal Entries](apis/accounting/reference/journal-entries), [Tax Rates](apis/accounting/reference/tax-rates), [Invoice Items](apis/accounting/reference/invoice-items), [Tracking Categories](apis/accounting/reference/tracking-categories), [Bank Accounts](apis/accounting/reference/bank-accounts), and [Company Info](apis/accounting/reference/company-info) resources
+- Added einvoicing_id field to [Customers](apis/accounting/reference/customers) and [Suppliers](apis/accounting/reference/suppliers) for e-invoicing/Peppol support
+
 ## v10.24.16 - (2026-04-07)
 
 ### Accounting API

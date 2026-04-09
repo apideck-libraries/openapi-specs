@@ -1,3 +1,15 @@
+## v10.24.21 - (2026-04-09)
+
+### Accounting API
+
+- Added [Bill Payments](apis/accounting/reference/bill-payments) support for [Workday](connectors/workday) with read operations
+
+## v10.24.20 - (2026-04-09)
+
+### Accounting API
+
+- Added new [Wave](connectors/wave) connector with support for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Invoice Items](apis/accounting/reference/invoice-items), [Tax Rates](apis/accounting/reference/tax-rates), [Company Info](apis/accounting/reference/company-info), [Bank Accounts](apis/accounting/reference/bank-accounts), [Balance Sheet](apis/accounting/reference/balance-sheet), [Profit and Loss](apis/accounting/reference/profit-and-loss), and [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) resources
+
 ## v10.24.19 - (2026-04-09)
 
 ### Accounting API
@@ -21,7 +33,7 @@
 
 ### Accounting API
 
-- Added [Bill Payments](apis/accounting/reference/bill-payments) support for [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central) with read and write operations
+- Added [Bill Payments](apis/accounting/reference#tag/Bill-Payments) support for [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central)
 
 ## v10.24.14 - (2026-04-04)
 

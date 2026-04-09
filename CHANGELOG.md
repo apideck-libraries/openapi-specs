@@ -1,6 +1,8 @@
-## v10.24.18 - (2026-04-08)
+## v10.24.19 - (2026-04-09)
 
-## v10.24.17 - (2026-04-08)
+### Accounting API
+
+- Added support for [Projects](apis/accounting/reference/projects) in [Sage Intacct](connectors/sage-intacct)
 
 ## v10.24.18 - (2026-04-08)
 

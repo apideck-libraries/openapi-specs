@@ -1,3 +1,9 @@
+## v10.24.22 - (2026-04-10)
+
+### Accounting API
+
+- Added new [Pennylane](connectors/pennylane) connector with support for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Journal Entries](apis/accounting/reference/journal-entries), [Invoice Items](apis/accounting/reference/invoice-items), [Tracking Categories](apis/accounting/reference/tracking-categories), [Bank Accounts](apis/accounting/reference/bank-accounts), [Company Info](apis/accounting/reference/company-info), [Purchase Orders](apis/accounting/reference/purchase-orders), and [Quotes](apis/accounting/reference/quotes) resources
+
 ## v10.24.21 - (2026-04-09)
 
 ### Accounting API

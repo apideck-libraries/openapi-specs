@@ -1,3 +1,9 @@
+## v10.24.23 - (2026-04-15)
+
+### Ecommerce API
+
+- Added new [Shopify (Public App)](connectors/shopify-public-app) connector with OAuth2 authorization code flow for multi-tenant merchant connections, supporting [Orders](apis/ecommerce/reference/orders), [Products](apis/ecommerce/reference/products), [Customers](apis/ecommerce/reference/customers), and [Stores](apis/ecommerce/reference/stores) resources
+
 ## v10.24.22 - (2026-04-10)
 
 ### Accounting API

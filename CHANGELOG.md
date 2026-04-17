@@ -63,13 +63,13 @@
 
 ### Accounting API
 
-- Added Rillet connector with read and write support for customers, suppliers, invoices, bills, credit notes, journal entries, invoice items, payments, bill payments, expenses, bank accounts, bank feed statements, ledger accounts, tax rates, subsidiaries, balance sheet, profit and loss, and company info
+- Added new [Rillet](connectors/rillet) connector with read and write support for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Journal Entries](apis/accounting/reference/journal-entries), [Invoice Items](apis/accounting/reference/invoice-items), [Payments](apis/accounting/reference/payments), [Bill Payments](apis/accounting/reference/bill-payments), [Expenses](apis/accounting/reference/expenses), [Bank Accounts](apis/accounting/reference/bank-accounts), [Bank Feed Statements](apis/accounting/reference/bank-feed-statements), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Tax Rates](apis/accounting/reference/tax-rates), [Subsidiaries](apis/accounting/reference/subsidiaries), [Balance Sheet](apis/accounting/reference/balance-sheet), [Profit and Loss](apis/accounting/reference/profit-and-loss), and [Company Info](apis/accounting/reference/company-info)
 
 ## v10.24.11 - (2026-03-28)
 
 ### HRIS API
 
-- Added Remote.com connector with read and write support for employees, companies, departments, time-off requests, and payrolls
+- Added new [Remote](connectors/remote) connector with read and write support for [Employees](apis/hris/reference/employees), [Companies](apis/hris/reference/companies), [Departments](apis/hris/reference/departments), [Time Off Requests](apis/hris/reference/time-off-requests), and [Payrolls](apis/hris/reference/payrolls)
 
 ## v10.24.10 - (2026-03-27)
 

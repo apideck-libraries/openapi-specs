@@ -1,3 +1,9 @@
+## v10.24.24 - (2026-04-16)
+
+### Accounting API
+
+- Added new [Yuki](connectors/yuki) connector with support for [Customers](apis/accounting/reference#tag/Customers), [Suppliers](apis/accounting/reference#tag/Suppliers), [Invoices](apis/accounting/reference#tag/Invoices), [Bills](apis/accounting/reference#tag/Bills), [Ledger Accounts](apis/accounting/reference#tag/LedgerAccounts), [Journal Entries](apis/accounting/reference#tag/JournalEntries), [Tracking Categories](apis/accounting/reference#tag/TrackingCategories), [Tax Rates](apis/accounting/reference#tag/TaxRates), [Company Info](apis/accounting/reference#tag/CompanyInfo), [Aged Debtors](apis/accounting/reference#tag/AgedDebtors), [Aged Creditors](apis/accounting/reference#tag/AgedCreditors), and [Attachments](apis/accounting/reference#tag/Attachments) resources
+
 ## v10.24.23 - (2026-04-15)
 
 ### Ecommerce API

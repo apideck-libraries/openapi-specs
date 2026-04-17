@@ -2870,6 +2870,7 @@ components:
         document_received: low
         attachments: edge-case
         source_document_url: low
+        payment_allocations: high
       x-apideck-strict-required:
         - id
         - bill_date
@@ -3041,6 +3042,8 @@ components:
           description: URL link to a source document - shown as 'Go to [appName]' in the downstream app. Currently only supported for Xero.
           example: https://www.invoicesolution.com/bill/123456
           nullable: true
+        payment_allocations:
+          $ref: '#/components/schemas/LinkedPaymentAllocations'
         tracking_categories:
           $ref: '#/components/schemas/LinkedTrackingCategories'
         updated_by:
@@ -10056,6 +10059,7 @@ components:
       example:
         updated_since: '2020-09-30T07:43:32.000Z'
         invoice_id: '123'
+        bill_id: '123'
         supplier_id: '123'
         customer_id: 123abc
         type: accounts_receivable
@@ -10068,6 +10072,10 @@ components:
         invoice_id:
           type: string
           title: Invoice ID
+          example: '123'
+        bill_id:
+          type: string
+          title: Bill ID
           example: '123'
         supplier_id:
           type: string
@@ -13275,6 +13283,39 @@ components:
       nullable: true
       items:
         $ref: '#/components/schemas/LinkedTrackingCategory'
+    LinkedPaymentAllocations:
+      type: array
+      x-apideck-schema-id: LinkedPaymentAllocations
+      title: Linked payment allocations
+      description: A list of linked payment allocations.
+      nullable: true
+      items:
+        type: object
+        x-apideck-weights:
+          id: critical
+          allocated_amount: high
+          date: high
+        nullable: true
+        properties:
+          id:
+            type: string
+            example: '123456'
+            title: ID
+            description: ID of the payment
+            nullable: false
+          allocated_amount:
+            type: number
+            example: 1000
+            title: Amount
+            description: Amount of the payment allocated to the bill
+            nullable: true
+          date:
+            type: string
+            format: date-time
+            title: Date
+            description: Date of the payment
+            example: '2020-09-30T07:43:32.000Z'
+            nullable: true
     LineNumber:
       title: Line number
       type: integer
@@ -18129,6 +18170,10 @@ paths:
               tax_method: Due to supplier
               document_received: true
               source_document_url: https://www.invoicesolution.com/bill/123456
+              payment_allocations:
+                - id: '123456'
+                  allocated_amount: 1000
+                  date: '2020-09-30T07:43:32.000Z'
               tracking_categories:
                 - id: '123456'
                   code: '100'
@@ -18400,6 +18445,10 @@ paths:
               tax_method: Due to supplier
               document_received: true
               source_document_url: https://www.invoicesolution.com/bill/123456
+              payment_allocations:
+                - id: '123456'
+                  allocated_amount: 1000
+                  date: '2020-09-30T07:43:32.000Z'
               tracking_categories:
                 - id: '123456'
                   code: '100'

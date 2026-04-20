@@ -4855,6 +4855,109 @@ paths:
         - lang: TypeScript
           label: Node
           source: {}
+  /vault/oauth/disconnect/{jwt}/{service_id}:
+    get:
+      tags:
+        - Connections
+      summary: Provider disconnect callback
+      operationId: vaultOAuthDisconnect
+      x-sdk-exclude: true
+      x-speakeasy-ignore: true
+      x-internal: true
+      description: |
+        Endpoint that receives browser redirect notifications from downstream providers
+        when a user disconnects their OAuth integration. The JWT in the path encodes
+        the application identity. The service_id identifies the connector.
+      parameters:
+        - name: jwt
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: service_id
+          in: path
+          required: true
+          schema:
+            type: string
+      security: []
+      responses:
+        '200':
+          description: Static HTML disconnected page
+          content:
+            text/html:
+              schema:
+                type: string
+        '302':
+          description: Redirect to the application's configured post-disconnect URL
+          headers:
+            Location:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Connections
+      summary: Provider disconnect server callback
+      operationId: vaultOAuthDisconnectCallback
+      x-sdk-exclude: true
+      x-speakeasy-ignore: true
+      x-internal: true
+      description: |
+        Endpoint that receives server-to-server POST callbacks from downstream providers
+        when a user disconnects their OAuth integration. The JWT in the path encodes
+        the application identity. The service_id identifies the connector. The request
+        body contains the provider-specific identifier.
+      parameters:
+        - name: jwt
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: service_id
+          in: path
+          required: true
+          schema:
+            type: string
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '200':
+          description: Disconnect acknowledged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            vaultOAuthDisconnectCallback: {}
 x-webhooks:
   x-sdk-exclude: true
   x-speakeasy-ignore: true

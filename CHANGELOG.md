@@ -1,3 +1,9 @@
+## v10.24.25 - (2026-04-17)
+
+### Accounting API
+
+- Added new [DATEV Unternehmen Online](connectors/datev-unternehmen-online) connector with support for [Company Info](apis/accounting/reference#tag/Company-Info), [Ledger Accounts](apis/accounting/reference#tag/Ledger-Accounts), [Journal Entries](apis/accounting/reference#tag/Journal-Entries), [Balance Sheet](apis/accounting/reference#tag/Balance-Sheet), [Tax Rates](apis/accounting/reference#tag/Tax-Rates), [Customers](apis/accounting/reference#tag/Customers), [Suppliers](apis/accounting/reference#tag/Suppliers), and [Attachments](apis/accounting/reference#tag/Attachments) resources
+
 ## v10.24.24 - (2026-04-16)
 
 ### Accounting API

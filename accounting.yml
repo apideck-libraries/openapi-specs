@@ -10063,6 +10063,7 @@ components:
         supplier_id: '123'
         customer_id: 123abc
         type: accounts_receivable
+        status: authorised
       properties:
         updated_since:
           type: string
@@ -10099,6 +10100,19 @@ components:
             - accounts_receivable_prepayment
             - accounts_payable_prepayment
           example: accounts_receivable
+        status:
+          type: string
+          title: Payment status
+          description: Filter by payment status
+          x-apideck-enum-id: payments.status
+          enum:
+            - draft
+            - authorised
+            - rejected
+            - paid
+            - voided
+            - deleted
+          example: authorised
       additionalProperties: false
     PaymentsSort:
       type: object

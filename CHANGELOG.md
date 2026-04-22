@@ -1,3 +1,9 @@
+## v10.24.26 - (2026-04-22)
+
+### Accounting API
+
+- Added [Holded](connectors/holded) Accounting API support with coverage for [Invoices](apis/accounting/reference#tag/Invoices), [Bills](apis/accounting/reference#tag/Bills), [Credit Notes](apis/accounting/reference#tag/Credit-Notes), [Purchase Orders](apis/accounting/reference#tag/Purchase-Orders), [Quotes](apis/accounting/reference#tag/Quotes), [Customers](apis/accounting/reference#tag/Customers), [Suppliers](apis/accounting/reference#tag/Suppliers), [Payments](apis/accounting/reference#tag/Payments), [Bill Payments](apis/accounting/reference#tag/Bill-Payments), [Tax Rates](apis/accounting/reference#tag/Tax-Rates), [Bank Accounts](apis/accounting/reference#tag/Bank-Accounts), [Ledger Accounts](apis/accounting/reference#tag/Ledger-Accounts), [Journal Entries](apis/accounting/reference#tag/Journal-Entries), [Locations](apis/accounting/reference#tag/Locations), and [Attachments](apis/accounting/reference#tag/Attachments) resources
+
 ## v10.24.25 - (2026-04-17)
 
 ### Accounting API

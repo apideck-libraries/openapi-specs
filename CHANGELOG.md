@@ -1,3 +1,9 @@
+## v10.24.28 - (2026-04-23)
+
+### Accounting API
+
+- Added [NetSuite](connectors/netsuite) Accounting API support for [Bank Feed Accounts](apis/accounting/reference#tag/Bank-Feed-Accounts) and [Bank Feed Statements](apis/accounting/reference#tag/Bank-Feed-Statements) resources via a RESTlet bundle
+
 ## v10.24.27 - (2026-04-23)
 
 ### Accounting API

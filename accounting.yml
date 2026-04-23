@@ -3259,7 +3259,13 @@ components:
       example:
         updated_since: '2020-09-30T07:43:32.000Z'
         status: paid
+        id_since: '1'
       properties:
+        id_since:
+          type: string
+          title: Since ID
+          description: Return records with a row ID greater than or equal to the given value
+          example: '1'
         updated_since:
           type: string
           title: Updated since (timestamp)
@@ -3290,6 +3296,7 @@ components:
           enum:
             - updated_at
             - created_at
+            - id
           example: updated_at
         direction:
           $ref: '#/components/schemas/SortDirection'
@@ -4604,7 +4611,13 @@ components:
       x-apideck-schema-id: CreditNotesFilter
       example:
         updated_since: '2020-09-30T07:43:32.000Z'
+        id_since: '1'
       properties:
+        id_since:
+          type: string
+          title: Since ID
+          description: Return records with a row ID greater than or equal to the given value
+          example: '1'
         updated_since:
           type: string
           title: Updated since (timestamp)
@@ -4625,6 +4638,7 @@ components:
           enum:
             - created_at
             - updated_at
+            - id
           example: updated_at
         direction:
           $ref: '#/components/schemas/SortDirection'
@@ -8388,7 +8402,13 @@ components:
         created_since: '2020-09-30T07:43:32.000Z'
         number: OIT00546
         supplier_id: '123'
+        id_since: '1'
       properties:
+        id_since:
+          type: string
+          title: Since ID
+          description: Return records with a row ID greater than or equal to the given value
+          example: '1'
         updated_since:
           type: string
           title: Updated since (timestamp)
@@ -8424,6 +8444,7 @@ components:
           enum:
             - created_at
             - updated_at
+            - id
           example: updated_at
         direction:
           $ref: '#/components/schemas/SortDirection'
@@ -18557,6 +18578,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            When using filters or sort parameters (which trigger the SuiteQL path), `quantity` and `unit_price` on line items may reflect base-unit values (e.g., days) rather than selling-unit values (e.g., years) for items with Units of Measure (UOM) enabled. `total_amount` is always accurate regardless. Use the GET one endpoint for selling-unit quantities.
         - connector: xero
           description: |
             Invoices in Xero can be tax inclusive, tax exclusive, or no tax. The `tax_inclusive` field is set to `true` (tax inclusive), `false` (tax exclusive), or `null` (no tax). Line items include `tax_rate` references that link to the tax-rates resource.

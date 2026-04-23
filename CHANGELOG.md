@@ -1,3 +1,9 @@
+## v10.24.27 - (2026-04-23)
+
+### Accounting API
+
+- Added [Expenses](apis/accounting/reference/expenses) and [Projects](apis/accounting/reference/projects) support for [Zoho Books](connectors/zoho-books)
+
 ## v10.24.26 - (2026-04-22)
 
 ### Accounting API

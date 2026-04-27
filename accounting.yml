@@ -25180,6 +25180,11 @@ paths:
           description: The Parent ID field refers to the parent tracking category code.
         - connector: xero
           description: Returns tracking category options only. IDs and names are concatenated as "CategoryName - OptionName". The provided ID can be used to link to the correct tracking category to invoices, bills, etc.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            The `limit` parameter is ignored. All tracking categories (parent dimensions and their Standard
+            dimension values) are always returned in a single response. Non-Standard dimension value types
+            (Begin-Total, End-Total, Heading, Total) are excluded as they cannot be assigned to transactions.
       responses:
         '200':
           $ref: '#/components/responses/GetTrackingCategoriesResponse'

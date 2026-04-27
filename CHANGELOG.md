@@ -1,3 +1,9 @@
+## v10.24.30 - (2026-04-27)
+
+### Accounting API
+
+- Added `accounting_method` field to [Company Info](apis/accounting/reference/company-info) with support for [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite) connectors
+
 ## v10.24.29 - (2026-04-23)
 
 ### Accounting API

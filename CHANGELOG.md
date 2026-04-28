@@ -236,7 +236,7 @@
 ### Accounting API
 
 - Added `updated_since` filter to [InvoiceItems](apis/accounting/reference/invoice-items) schema.
-- Implemented `updated_since` filter for [Netsuite](connectors/Netsuite)
+- Implemented `updated_since` filter for [Netsuite](connectors/netsuite)
 
 ## v10.23.17 - (2026-02-11)
 
@@ -813,7 +813,7 @@
 
 ### Accounting API
 
-- Added `payment_allocations` field to [Accounting](api/accounting) connectors.
+- Added `payment_allocations` field to [Accounting](apis/accounting) connectors.
 
 ## v10.15.1 - (2025-04-11)
 
@@ -1029,7 +1029,7 @@
 ### Accounting API
 
 - Added [Tracking Categories](apis/accounting/reference/tracking-categories) schema.
-- Added [Tracking Categories](apis/accounting/reference/tracking-categories) support for [Quickbooks](connectors/quickbook) connector.
+- Added [Tracking Categories](apis/accounting/reference/tracking-categories) support for [Quickbooks](connectors/quickbooks) connector.
 
 ## v10.6.3 - (2024-07-11)
 
@@ -1141,7 +1141,7 @@
 ### Accounting API
 
 - Added create, update and delete Subsidiaries endpoint
-- Release Subsidiaries endpoint for [Netsuite](connectors/sage-netsuite)
+- Release Subsidiaries endpoint for [Netsuite](connectors/netsuite)
 
 ## v10.2.1 - (2024-01-18)
 
@@ -1280,7 +1280,7 @@
 
 - Release of the [Charlie HR](connectors/charliehr) connector with support for the resources: Employee, Department, Time-off
 - The [Humaans](connectors/humaans-io) includes inactive employees by default.
-- Overall improvements of the coverage for employee properties for integrations: [Google Workspace](connectors/google-workspace), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) ,[SD Worx](connectors/sdworx), [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [Breathe HR](connectors/breathehr), [Deel](connectors/deel), [Freshteam](connectors/freshteam), [Loket](connectors/loket-nl), [Paylocity](connectors/paylocity), [NMBRS](connectors/nmbrs), [Sage HR](connectors/sage-hr), [Zenefits](connectors/zenefits)
+- Overall improvements of the coverage for employee properties for integrations: [Google Workspace](connectors/google-workspace), [Lucca HR](connectors/lucca-hr), [Rippling](connectors/rippling) ,[SD Worx](connectors/sdworx), [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [Breathe HR](connectors/breathehr), [Deel](connectors/deel), Freshteam, [Loket](connectors/loket-nl), [Paylocity](connectors/paylocity), [NMBRS](connectors/nmbrs), [Sage HR](connectors/sage-hr), Zenefits
 
 ### Filestorage API
 
@@ -1495,7 +1495,7 @@
 - Updated [Greenhouse](connectors/greenhouse) connector
 - Updated [Workday](connectors/workday) connector
 - Updated [SAP-Successfactors](connectors/sap-successfactors) connector
-- Updated [Freshteam](connectors/freshteam) connector
+- Updated Freshteam connector
 - Updated [Sage HR](connectors/sage-hr) connector
 - Updated [Recruitee](connectors/recruitee) connector
 
@@ -1975,13 +1975,13 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### HRIS API
 
-- Added [Zenefits](connectors/zenefits) connector
+- Added Zenefits connector
 
 ## v8.45.0 - (2022-09-02)
 
 ### HRIS API
 
-- Added [Factorial](connectors/factorial) connector.
+- Added [Factorial](connectors/factorialhr) connector.
 
 ## v8.44.0 - (2022-09-01)
 
@@ -1993,7 +1993,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### HRIS API
 
-- Added [Freshteam](connectors/freshteam) connector
+- Added Freshteam connector
 
 ## v8.42.0 - (2022-08-24)
 
@@ -2044,7 +2044,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ## v8.37.1 - (2022-07-25)
 
-- Mapped `price_amount` property on variations to [Items](apis/pos/reference/items) on the POS API for the [Square](connectors/square) connector.
+- Mapped `price_amount` property on variations to [Items](apis/pos/reference/items) on the POS API for the Square connector.
 
 ## v8.37.0 - (2022-07-20)
 
@@ -2077,7 +2077,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ## v8.32.5 - (2022-06-21)
 
-- Updated Orders and Payments for the [Clover](connectors/clover) connector
+- Updated Orders and Payments for the Clover connector
 
 ## v8.32.4 - (2022-06-16)
 
@@ -2144,7 +2144,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### [ATS API](apis/ats/reference)
 
-- Added [Freshteam](connectors/freshteam) and [Recruitee](connectors/recruitee)
+- Added Freshteam and [Recruitee](connectors/recruitee)
 
 ## v8.29.5 - (2022-05-19)
 
@@ -2186,7 +2186,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### POS API
 
-- Added [Square](connectors/square) Locations
+- Added Square Locations
 
 ## v8.28.0 - (2022-05-03)
 
@@ -2240,15 +2240,15 @@ Beta users should note the following breaking changes that may affect existing i
 
 ## v8.23.0 - (2022-04-19)
 
-- Added [`Tenders`](apis/pos/reference/tenders) to [Clover](connectors/clover) connector
+- Added [`Tenders`](apis/pos/reference/tenders) to Clover connector
 
 ## v8.22.0 - (2022-04-17)
 
-- Added `Order Types` and `Modifier Groups` to [Clover](connectors/clover) connector
+- Added `Order Types` and `Modifier Groups` to Clover connector
 
 ## v8.21.0 - (2022-04-14)
 
-- Added `Orders` to [Clover](connectors/clover) connector
+- Added `Orders` to Clover connector
 
 ## v8.20.0 - (2022-04-12)
 
@@ -2301,7 +2301,7 @@ Beta users should note the following breaking changes that may affect existing i
 ## v8.15.0 - (2022-03-23)
 
 - Added [Greenhouse](connectors/greenhouse) connector to ATS
-- Added Merchant ID to [Clover](connectors/clover) connector
+- Added Merchant ID to Clover connector
 
 ## v8.14.0 - (2022-03-18)
 
@@ -2322,7 +2322,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ## v8.13.0 - (2022-03-09)
 
-- Added `Items` and `Orders` POS mapping to [Square](connectors/square`)
+- Added `Items` and `Orders` POS mapping to Square
 
 ## v8.12.1 - (2022-02-18)
 
@@ -2351,7 +2351,7 @@ Beta users should note the following breaking changes that may affect existing i
 
 ### POS API
 
-- Added [Square](connectors/square) connector.
+- Added Square connector.
 
 ## v8.10.2 - (2022-01-12)
 

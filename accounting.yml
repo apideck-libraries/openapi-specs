@@ -22516,6 +22516,9 @@ paths:
         - connector: netsuite
           description: |
             NetSuite date filtering resolves `filter[end_date]` to accounting period IDs via SuiteQL, then filters the SOAP request by periods up to that date. This requires the SuiteAnalytics Workbook permission for period resolution. If unavailable, returns all-time data as fallback. For Balance Sheet, only `filter[end_date]` is meaningful (point-in-time snapshot).
+        - connector: rillet
+          description: |
+            Rillet's `/reports/balance-sheet` endpoint returns a point-in-time snapshot keyed by a single `as_of_date` parameter (required). The unified `filter[end_date]` is mapped to `as_of_date`, so pass it to retrieve the balance sheet as of that date. `filter[start_date]` is not applicable and is ignored — a balance sheet has no start date.
         - connector: datev-unternehmen-online
           description: |
             The balance sheet report's `end_date` is derived from the `fiscal_year_start` connection setting (start + 12 months - 1 day). Configure this setting to match your actual fiscal year start date (e.g. 2023-07-01 for a July–June fiscal year). If not set, defaults to December 31 of the current year. Date filtering via `filter[end_date]` is not supported.

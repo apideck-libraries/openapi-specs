@@ -17981,6 +17981,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: afas
+          description: |
+            AFAS Profit has no first-party purchase-invoice GetConnector on most tenants. The default `purchase_invoices_connector` setting (`Profit_Creditor_Invoices`) is the open-items / aged-creditors report — it only returns purchase invoices that are still unpaid. Posted-and-cleared invoices will not appear.
+
+            To list all bills (paid + open), the customer must deploy a tenant-specific GetConnector (e.g. one over `FbInkfct`) and set its name on the connection via `purchase_invoices_connector`.
+
+            The `limit` parameter may return fewer bills than specified. AFAS returns flat purchase-invoice line rows which are grouped by `OrderNumber` into complete bills. `limit=N` caps the raw row count, not the grouped bill count, so a single `limit=10` request can return 3 bills (rows span 3 invoices) or 10 (every row is a different invoice).
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: freshbooks
@@ -18595,6 +18602,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: afas
+          description: |
+            AFAS Profit derives sales invoices from `Profit_SalesorderLines` (sales-orders feed). The `limit` parameter may return fewer invoices than specified — AFAS returns flat sales-order line rows which are grouped by `OrderNumber` into complete invoices. `limit=N` caps the raw row count, not the grouped invoice count.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: netsuite
@@ -20003,6 +20013,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: afas
+          description: |
+            AFAS Profit derives credit notes from `Profit_SalesorderLines` by filtering rows with a negative `AmtTotal` or a credit-style `Ordersoort` (e.g. `CR`). Tenants that store credit notes in a separate journal (and not as negative sales-order lines) will return an empty list — set the `credit_notes_connector` setting to a tenant-specific GetConnector to override.
+
+            The `limit` parameter may return fewer credit notes than specified. AFAS returns flat sales-order line rows which are grouped by `OrderNumber` into complete credit notes. `limit=N` caps the raw row count, not the grouped credit-note count.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: netsuite
@@ -26917,6 +26932,12 @@ paths:
         - $ref: '#/components/parameters/limit'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: afas
+          description: |
+            AFAS Profit's default sales-quotes GetConnector (`Profit_Quotation`) only exists on tenants that have the sales-quotes module deployed. On tenants without it, the list returns empty. Override `quotes_connector` on the connection to point at a tenant-specific quotes GetConnector if available.
+
+            The `limit` parameter may return fewer quotes than specified. AFAS returns flat quote line rows which are grouped by `OrderNumber` into complete quotes. `limit=N` caps the raw row count, not the grouped quote count.
       responses:
         '200':
           $ref: '#/components/responses/GetQuotesResponse'

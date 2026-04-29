@@ -786,6 +786,7 @@ components:
             - revoked
             - missing_settings
             - needs_consent
+            - pending_confirmation
             - needs_auth
             - pending_refresh
             - ok
@@ -851,6 +852,7 @@ components:
         - ok
         - pending_refresh
         - needs_auth
+        - pending_confirmation
         - needs_consent
         - revoked
         - missing_settings
@@ -1344,6 +1346,40 @@ components:
               $ref: '#/components/schemas/RequestCountAllocation'
         _raw:
           $ref: '#/components/schemas/Raw'
+    ConfirmConnection:
+      type: object
+      x-apideck-schema-id: ConfirmConnection
+      required:
+        - confirm_token
+      properties:
+        confirm_token:
+          type: string
+          description: The confirm token received from the OAuth callback redirect.
+          example: 550e8400-e29b-41d4-a716-446655440000
+    ConfirmConnectionResponse:
+      type: object
+      x-apideck-schema-id: ConfirmConnectionResponse
+      required:
+        - status_code
+        - status
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        data:
+          type: object
+          x-apideck-schema-id: ConfirmConnectionResponseData
+          required:
+            - confirmed
+          properties:
+            confirmed:
+              type: boolean
     CreateCallbackState:
       type: object
       x-apideck-schema-id: CreateCallbackState
@@ -3123,6 +3159,12 @@ components:
           schema:
             $ref: '#/components/schemas/ConsumerRequestCountsInDateRangeResponse'
       description: Consumers Request Counts within Date Range
+    ConfirmConnectionResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConfirmConnectionResponse'
+      description: Connection confirmed
     CreateConnectionResponse:
       content:
         application/json:
@@ -4068,6 +4110,54 @@ paths:
                     read: true
                     write: true
               granted: true
+  /vault/connections/{unified_api}/{service_id}/confirm:
+    post:
+      tags:
+        - Connections
+      summary: Confirm Connection
+      operationId: connectionsConfirm
+      description: |
+        Confirms an OAuth connection after the callback by verifying the confirm token.
+      x-sdk-exclude: true
+      x-speakeasy-ignore: true
+      security:
+        - apiKey: []
+      parameters:
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unified_api'
+      requestBody:
+        description: Confirm connection request data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmConnection'
+      responses:
+        '200':
+          $ref: '#/components/responses/ConfirmConnectionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            connectionsConfirm:
+              confirm_token: 550e8400-e29b-41d4-a716-446655440000
   /vault/connections/{unified_api}/{service_id}/callback-state:
     post:
       tags:

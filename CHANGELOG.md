@@ -1,3 +1,15 @@
+## v10.24.32 - (2026-05-05)
+
+### Accounting API
+
+- Added new [Wafeq](connectors/wafeq) connector with support for [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Payments](apis/accounting/reference/payments), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Journal Entries](apis/accounting/reference/journal-entries), [Tax Rates](apis/accounting/reference/tax-rates), [Invoice Items](apis/accounting/reference/invoice-items), [Departments](apis/accounting/reference/departments), and [Attachments](apis/accounting/reference/attachments) resources
+
+## v10.24.31 - (2026-05-04)
+
+### Accounting API
+
+- Added new [Fortnox](connectors/fortnox) connector with support for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Payments](apis/accounting/reference/payments), [Bill Payments](apis/accounting/reference/bill-payments), [Journal Entries](apis/accounting/reference/journal-entries), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Tax Rates](apis/accounting/reference/tax-rates), [Invoice Items](apis/accounting/reference/invoice-items), [Bank Accounts](apis/accounting/reference/bank-accounts), [Tracking Categories](apis/accounting/reference/tracking-categories), [Company Info](apis/accounting/reference/company-info), [Purchase Orders](apis/accounting/reference/purchase-orders), and [Attachments](apis/accounting/reference/attachments) resources
+
 ## v10.24.30 - (2026-04-27)
 
 ### Accounting API

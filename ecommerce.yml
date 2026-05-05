@@ -3734,6 +3734,9 @@ paths:
             **Filter parameters:** Either the `created_since` parameter or the `updated_since` parameter is required. Both cannot be empty. `updated_since` cannot be set when `created_since` is set.
 
             **Order history limits:** For the JP, AU, and SG marketplaces, the Orders API supports orders from 2016 onward. For all other marketplaces, the Orders API supports orders for the last two years (orders older than this don't show up in the response).
+        - connector: walmart
+          description: |
+            When the `created_since` filter is not provided, Walmart only returns orders from the last 7 days. To retrieve older orders, supply `filter[created_since]` with the desired start date (e.g. `?filter[created_since]=2024-01-01T00:00:00Z`).
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrdersResponse'

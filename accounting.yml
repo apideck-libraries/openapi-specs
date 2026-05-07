@@ -22723,6 +22723,20 @@ paths:
         - connector: microsoft-dynamics-365-business-central
           description: |
             Employee account type: journal entry lines can reference employees via the `employee` field (use `display_id` for the employee number, or `id` with a GUID which will be resolved automatically). Note: reading back the journal entry will NOT return the employee reference — employee lines are invisible in BC's API for draft entries, and resolve to a GL payable account when posted. Send `ledger_account: {}` alongside the `employee` field to satisfy schema validation.
+        - connector: acumatica
+          description: |
+            Acumatica requires a separate Release action to transition a journal entry from Balanced to Posted.
+            When `status: "posted"` is sent, Unify automatically calls the ReleaseJournalTransaction action after creating or updating the entry.
+            Only `status: "posted"` is supported for state transitions. Other values (`draft`, `voided`, etc.) are not supported — the entry will be created or updated but will remain in Balanced state.
+            Once a journal entry is Posted, it cannot be edited. Any attempt to update a Posted entry will be rejected by Acumatica with an error.
+            If the release step fails after a successful create or update, the entry will exist in Acumatica in Balanced state and the API will return an error. The entry is not rolled back.
+        - connector: myob-acumatica
+          description: |
+            MYOB Advanced (Acumatica) requires a separate Release action to transition a journal entry from Balanced to Posted.
+            When `status: "posted"` is sent, Unify automatically calls the ReleaseJournalTransaction action after creating or updating the entry.
+            Only `status: "posted"` is supported for state transitions. Other values (`draft`, `voided`, etc.) are not supported — the entry will be created or updated but will remain in Balanced state.
+            Once a journal entry is Posted, it cannot be edited. Any attempt to update a Posted entry will be rejected by Acumatica with an error.
+            If the release step fails after a successful create or update, the entry will exist in MYOB Advanced in Balanced state and the API will return an error. The entry is not rolled back.
       requestBody:
         required: true
         content:
@@ -23005,6 +23019,20 @@ paths:
           description: |
             Status should be set to "draft" or "posted". Default status is "draft".
             Only Journal Entries with `draft` status can be updated.
+        - connector: acumatica
+          description: |
+            Acumatica requires a separate Release action to transition a journal entry from Balanced to Posted.
+            When `status: "posted"` is sent, Unify automatically calls the ReleaseJournalTransaction action after updating the entry.
+            Only `status: "posted"` is supported for state transitions. Other values (`draft`, `voided`, etc.) are not supported — the entry will be updated but will remain in Balanced state.
+            Once a journal entry is Posted, it cannot be edited. Any attempt to update a Posted entry will be rejected by Acumatica with an error.
+            If the release step fails after a successful update, the entry will exist in Acumatica in Balanced state and the API will return an error. The update is not rolled back.
+        - connector: myob-acumatica
+          description: |
+            MYOB Advanced (Acumatica) requires a separate Release action to transition a journal entry from Balanced to Posted.
+            When `status: "posted"` is sent, Unify automatically calls the ReleaseJournalTransaction action after updating the entry.
+            Only `status: "posted"` is supported for state transitions. Other values (`draft`, `voided`, etc.) are not supported — the entry will be updated but will remain in Balanced state.
+            Once a journal entry is Posted, it cannot be edited. Any attempt to update a Posted entry will be rejected by Acumatica with an error.
+            If the release step fails after a successful update, the entry will exist in MYOB Advanced in Balanced state and the API will return an error. The update is not rolled back.
       requestBody:
         required: true
         content:

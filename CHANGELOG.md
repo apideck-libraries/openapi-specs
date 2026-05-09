@@ -1,3 +1,9 @@
+## v10.24.33 - (2026-05-09)
+
+### Accounting API
+
+- Added new [Visma eAccounting](connectors/visma-eaccounting) connector with support for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Payments](apis/accounting/reference/payments), [Bill Payments](apis/accounting/reference/bill-payments), [Journal Entries](apis/accounting/reference/journal-entries), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Tax Rates](apis/accounting/reference/tax-rates), [Invoice Items](apis/accounting/reference/invoice-items), [Bank Accounts](apis/accounting/reference/bank-accounts), [Tracking Categories](apis/accounting/reference/tracking-categories), [Company Info](apis/accounting/reference/company-info), and [Attachments](apis/accounting/reference/attachments) resources
+
 ## v10.24.32 - (2026-05-05)
 
 ### Accounting API

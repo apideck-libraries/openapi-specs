@@ -18006,6 +18006,13 @@ paths:
             `status` is derived from Spiris's `Status` field combined with `RemainingAmount`, not from `Status` alone.
 
             Per-payment records (payment date, amount, bank account) are scoped under `/supplierinvoices/{id}/payments` in the Spiris API and are not surfaced on the unified Bill. Bill payments can be created via `POST /bill-payments` but not listed or retrieved individually through the unified API.
+        - connector: quickbooks
+          description: |
+            On bill line items, QuickBooks returns `ClassRef.name` as the `FullyQualifiedName`
+            (e.g. `"Fruit:Apple"`) rather than the leaf class name. Apideck normalises this by
+            extracting the last `:` segment, so `tracking_categories[].name` returns `"Apple"` and
+            `parent_name` returns `"Fruit"`. Expense line items are unaffected — QuickBooks returns
+            only the short name there.
         - connector: visma-eaccounting
           description: |
             Visma eAccounting does not expose per-payment detail on the bill response. To check whether a bill is paid, use the `balance` and `total` fields:
@@ -18297,6 +18304,13 @@ paths:
       x-apideck-gotchas:
         - connector: freshbooks
           description: The Freshbooks Bills api is currently in beta.
+        - connector: quickbooks
+          description: |
+            On bill line items, QuickBooks returns `ClassRef.name` as the `FullyQualifiedName`
+            (e.g. `"Fruit:Apple"`) rather than the leaf class name. Apideck normalises this by
+            extracting the last `:` segment, so `tracking_categories[].name` returns `"Apple"` and
+            `parent_name` returns `"Fruit"`. Expense line items are unaffected — QuickBooks returns
+            only the short name there.
       responses:
         '200':
           $ref: '#/components/responses/GetBillResponse'

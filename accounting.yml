@@ -21607,6 +21607,13 @@ paths:
         - connector: xero
           description: |
             Xero supports creating payments against multiple allocation types in a single request. However, the response will provide the ID of the first payment only. To access all payment IDs, inspect the raw data.
+
+            Xero rejects payments where the organisation base currency, the invoice currency, and the bank
+            account currency are all different (a "3-currency transaction"):
+
+            `"The invoice, payment and organisation base currencies are all different. Xero cannot currently handle a 3-currency transaction."`
+
+            Pay from a bank account in either the base or the invoice currency (two currencies) to avoid the error.
         - connector: quickbooks
           description: |
             Payment allocations in QuickBooks are processed asynchronously. While the allocations are included in the request, they may not appear in the immediate response. The allocations will be applied and become visible in subsequent list or get calls.
@@ -25591,6 +25598,14 @@ paths:
         - connector: netsuite
           description: |
             In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
+        - connector: xero
+          description: |
+            Xero rejects bill payments where the organisation base currency, the bill currency, and the
+            bank account currency are all different (a "3-currency transaction"):
+
+            `"The invoice, payment and organisation base currencies are all different. Xero cannot currently handle a 3-currency transaction."`
+
+            Pay from a bank account in either the base or the bill currency (two currencies) to avoid the error.
       requestBody:
         required: true
         content:

@@ -18085,6 +18085,10 @@ paths:
         - connector: netsuite
           description: |
             For creating or updating a bill in Netsuite, its required to provide the line type.
+
+            `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
+
+            When `line_items[].customer` is set without an explicit `line_items[].rebilling.rebillable`, NetSuite defaults `rebillable` to `true`. Pass `rebilling: { rebillable: false }` explicitly if you want a customer-linked line that is not rebillable.
         - connector: microsoft-dynamics-365-business-central
           description: |
             If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
@@ -18372,6 +18376,11 @@ paths:
             Please send status updates separately from other bill updates.
         - connector: xero
           description: Bills in xero can be tax inclusive, tax exclusive or no tax. The tax_inclusive field should be set to true, false or null if the bill is tax inclusive, tax exclusive or no tax.
+        - connector: netsuite
+          description: |
+            `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
+
+            `line_items[].rebilling.rebillable` cannot be changed after the bill is created — NetSuite rejects updates to `isbillable` on VendorBill. The field is silently dropped from update requests; create a new bill if you need to change the flag. Additionally, any PATCH that updates a line with `customer` set will cause NetSuite to reset `rebilling.rebillable` to its default (`true`) because the SOAP update omits the field and NetSuite re-applies the default for billable lines.
       requestBody:
         required: true
         content:
@@ -25977,6 +25986,11 @@ paths:
             Employee account type: set `account.type` to `"employee"` and `account.id` to the employee number (or GUID, which will be resolved automatically). Note: reading back the expense will NOT return the employee reference — employee payment lines are invisible in BC's API for draft entries, and resolve to a GL payable account when posted.
         - connector: zoho-books
           description: Zoho Books supports only one customer and one rebilling (`rebillable`) flag per expense at the header level. Only provide these in the first line_item — they will be mapped to the header-level fields and applied to all lines. If differentiated treatment is required, create separate expenses.
+        - connector: netsuite
+          description: |
+            `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
+
+            When `line_items[].customer` is set without an explicit `line_items[].rebilling.rebillable`, NetSuite defaults `rebillable` to `true`. Pass `rebilling: { rebillable: false }` explicitly if you want a customer-linked line that is not rebillable.
       requestBody:
         required: true
         content:
@@ -26199,6 +26213,8 @@ paths:
           description: DualEntry requires `company_id`, `supplier` (vendor_id), `account` (account_number), and `currency` (currency_iso_4217_code) when updating a direct expense, even though these fields are optional in the unified schema.
         - connector: zoho-books
           description: Zoho Books supports only one customer and one rebilling (`rebillable`) flag per expense at the header level. Only provide these in the first line_item — they will be mapped to the header-level fields and applied to all lines. If differentiated treatment is required, create separate expenses.
+        - connector: netsuite
+          description: '`line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.'
       requestBody:
         required: true
         content:

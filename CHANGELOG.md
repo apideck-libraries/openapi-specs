@@ -1,3 +1,9 @@
+## v10.24.34 - (2026-05-20)
+
+### Accounting API
+
+- Added new [QuickBooks Desktop](connectors/quickbooks-desktop) connector with read-only support for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Payments](apis/accounting/reference/payments), [Journal Entries](apis/accounting/reference/journal-entries), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Tax Rates](apis/accounting/reference/tax-rates), [Invoice Items](apis/accounting/reference/invoice-items), and [Purchase Orders](apis/accounting/reference/purchase-orders) resources
+
 ## v10.24.33 - (2026-05-09)
 
 ### Accounting API

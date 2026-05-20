@@ -5192,6 +5192,13 @@ paths:
           description: |
             Liantis does not provide name fields such as `first_name`, `last_name`, or `display_name` on the Get Employee response.
             Additionally, the fields returned by the Get Employee endpoint differ from those returned by List Employees, as they use different upstream API endpoints with different data structures.
+        - connector: workday
+          description: |
+            Job Level (e.g., Junior, Intermediate, Senior, Principal) is exposed as a custom field `Job_Level_ID` on the Get Employee response only — not on List Employees. It is sourced from a separate `Get_Job_Profiles` SOAP call against Workday's Staffing service and merged into the response.
+
+            Job Level is omitted when the worker's job profile does not define `Job_Level_Reference` in Workday (configured per profile), or when the connection's Integration System User does not have access to the Staffing web service. Other custom fields and the rest of the response are unaffected in either case.
+
+            This enrichment is intentionally not performed on List Employees to avoid an extra SOAP call per worker.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeeResponse'

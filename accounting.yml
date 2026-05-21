@@ -18673,6 +18673,14 @@ paths:
         - connector: quickbooks
           description: |
             QuickBooks uses tax codes rather than tax rates. The `tax_rate` on line items references a tax code, which may not include the actual percentage value. To get the actual rate, retrieve the full tax rate details via the tax-rates endpoint.
+        - connector: freshbooks
+          description: |
+            FreshBooks supports up to two taxes per line item (`taxName1`/`taxAmount1` and `taxName2`/`taxAmount2`).
+            The unified API supports one `tax_rate` per line item, so Apideck maps the tax with the largest rate as
+            `tax_rate` (name, rate, code) and sets `tax_amount` to the combined total of both taxes applied to the line.
+
+            If you need both individual tax values, use the `raw` query parameter (`?raw=true`) to access the original
+            FreshBooks response, where both `taxName1`/`taxAmount1` and `taxName2`/`taxAmount2` are available on each line item.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoicesResponse'
@@ -18976,6 +18984,15 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: freshbooks
+          description: |
+            FreshBooks supports up to two taxes per line item (`taxName1`/`taxAmount1` and `taxName2`/`taxAmount2`).
+            The unified API supports one `tax_rate` per line item, so Apideck maps the tax with the largest rate as
+            `tax_rate` (name, rate, code) and sets `tax_amount` to the combined total of both taxes applied to the line.
+
+            If you need both individual tax values, use the `raw` query parameter (`?raw=true`) to access the original
+            FreshBooks response, where both `taxName1`/`taxAmount1` and `taxName2`/`taxAmount2` are available on each line item.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoiceResponse'

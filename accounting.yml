@@ -21824,6 +21824,12 @@ paths:
         - connector: xero
           description: |
             Xero doesn't support updating payments. To update a payment, you need to delete the existing payment and create a new one.
+        - connector: quickbooks
+          description: |
+            To clear the payment method on an existing payment, send `payment_method_id: null` explicitly
+            in the PATCH body. Omitting the field preserves the existing payment method (sparse update
+            semantics). Sending `null` triggers `PaymentMethodRef: { value: null }` in the QuickBooks
+            sparse POST, which removes the payment method reference from the payment.
       requestBody:
         required: true
         content:

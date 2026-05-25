@@ -4885,7 +4885,28 @@ paths:
           description: |
             The minimum pagination `limit` is 50, since Sage HR does not support pagination with a lower limit. Pagination for Sage HR only support per 50 limits. Without the employment_status filter it will only return active employees. To fetch terminated employees, you need to include the employment_status filter with the value "terminated".
         - connector: sap-successfactors
-          description: The custom fields are mapped only when they are in the personalInfoNav.
+          description: |
+            The custom fields are mapped only when they are in the personalInfoNav.
+
+            Address fields `line1`–`line5` are passed through verbatim from SAP's positional
+            fields `address1`–`address5` with no per-country recomposition. SAP SuccessFactors
+            interprets these positions differently per country, and the meaning of each position
+            also varies per tenant — two SAP customers in the same country can configure
+            `address1`–`addressN` semantics differently via Manage Business Configuration.
+            Belgium and the Netherlands are confirmed examples of per-tenant variation.
+            The country code is exposed in `addresses[].country` as ISO-2 (e.g. `"BE"`, `"NL"`) —
+            consumers must use it together with knowledge of the specific tenant's configuration
+            to interpret the semantic meaning of each line.
+
+            Fields `address6` through `address20` are not surfaced in the unified response — the
+            JSON mapping declares `line1`–`line5` only. Consumers that need higher-numbered
+            positional fields must use `pass_through`.
+
+            The `street_number` field is not populated for SAP SuccessFactors employees.
+
+            This limitation is by SAP design: their OData v2 API exposes a single merged
+            `PerAddressDEFLT` entity for all countries and does not surface per-country
+            field semantics. See SAP KBA 2902948.
         - connector: hr-works
           description: The employment_status supports filtering on 'active'.
         - connector: bamboohr
@@ -5180,7 +5201,28 @@ paths:
             Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
             Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
         - connector: sap-successfactors
-          description: The custom fields are mapped only when they are in the personalInfoNav.
+          description: |
+            The custom fields are mapped only when they are in the personalInfoNav.
+
+            Address fields `line1`–`line5` are passed through verbatim from SAP's positional
+            fields `address1`–`address5` with no per-country recomposition. SAP SuccessFactors
+            interprets these positions differently per country, and the meaning of each position
+            also varies per tenant — two SAP customers in the same country can configure
+            `address1`–`addressN` semantics differently via Manage Business Configuration.
+            Belgium and the Netherlands are confirmed examples of per-tenant variation.
+            The country code is exposed in `addresses[].country` as ISO-2 (e.g. `"BE"`, `"NL"`) —
+            consumers must use it together with knowledge of the specific tenant's configuration
+            to interpret the semantic meaning of each line.
+
+            Fields `address6` through `address20` are not surfaced in the unified response — the
+            JSON mapping declares `line1`–`line5` only. Consumers that need higher-numbered
+            positional fields must use `pass_through`.
+
+            The `street_number` field is not populated for SAP SuccessFactors employees.
+
+            This limitation is by SAP design: their OData v2 API exposes a single merged
+            `PerAddressDEFLT` entity for all countries and does not surface per-country
+            field semantics. See SAP KBA 2902948.
         - connector: charliehr
           description: The jobs array compensation data includes only the data related to the first compensation. For more comprehensive compensation data, please refer to the compensations array.
         - connector: sympa

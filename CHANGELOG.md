@@ -1,3 +1,9 @@
+## v10.24.35 - (2026-05-26)
+
+### Accounting API
+
+- Added new [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) connector with read-only support for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Payments](apis/accounting/reference/payments), [Bill Payments](apis/accounting/reference/bill-payments), [Journal Entries](apis/accounting/reference/journal-entries), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Invoice Items](apis/accounting/reference/invoice-items), [Purchase Orders](apis/accounting/reference/purchase-orders), [Subsidiaries](apis/accounting/reference/subsidiaries), and [Departments](apis/accounting/reference/departments) resources
+
 ## v10.24.34 - (2026-05-20)
 
 ### Accounting API

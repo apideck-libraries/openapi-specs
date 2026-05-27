@@ -1,3 +1,9 @@
+## v10.24.36 - (2026-05-26)
+
+### HRIS API
+
+- Documented per-tenant, per-country address-field behavior for [SAP SuccessFactors](connectors/sap-successfactors): `line1`–`line5` now pass through verbatim from SAP's positional `address1`–`address5`, `street_number` is not populated, and consumers must compose addresses client-side using `addresses[].country` (Ref #10567)
+
 ## v10.24.35 - (2026-05-26)
 
 ### Accounting API

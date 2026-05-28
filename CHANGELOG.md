@@ -1,3 +1,14 @@
+## v10.24.37 - (2026-05-28)
+
+### Accounting API
+
+- Added optional `subsidiary` field ([LinkedSubsidiary](apis/accounting/reference/subsidiaries)) to [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Journal Entries](apis/accounting/reference/journal-entries), [Payments](apis/accounting/reference/payments), and [Bill Payments](apis/accounting/reference/bill-payments) so transaction reads carry legal-entity attribution (`id`, `display_id`, `name`) alongside the existing `company_id` scalar. Populated on [Sage Intacct](connectors/sage-intacct) from `MEGAENTITY*` (Ref #11001)
+- Fixed [Sage Intacct](connectors/sage-intacct) [Subsidiaries](apis/accounting/reference/subsidiaries) to return only legal entities (Intacct `LOCATIONENTITY`) instead of all locations, matching the behavior of the [Companies](apis/accounting/reference/companies) endpoint (Ref #11049)
+- Fixed [Sage Intacct](connectors/sage-intacct) error responses to surface Intacct's native error code and message via `downstream_errors[]` (previously returned `null` with a raw XML dump). Closed-period and validation errors now expose `code: "BL01001973"` with the actionable description text (Ref #11001)
+- Fixed [Sage Intacct](connectors/sage-intacct) [Credit Notes](apis/accounting/reference/credit-notes) to actually create credit memos. Previous behavior sent the unified positive `total_amount` as-is to `create_aradjustment`, which Intacct interpreted as a debit memo. The connector now negates the line amount on write and normalizes back to positive on read so the consumer's view is unchanged (Ref #11001)
+- Fixed [Sage Intacct](connectors/sage-intacct) [Credit Note](apis/accounting/reference/credit-notes) updates by dropping `basecurr`/`currency` from the update payload — Intacct rejects currency on `update_aradjustment` (currency is create-only)
+- Added new gotchas for [Sage Intacct](connectors/sage-intacct) on [Credit Notes](apis/accounting/reference/credit-notes) (allocation gap + proxy escape hatch), [Journal Entries](apis/accounting/reference/journal-entries) (headers-only list + tracking-category matching), and [Locations](apis/accounting/reference/locations) (returns all LOCATION records vs entity-only)
+
 ## v10.24.36 - (2026-05-26)
 
 ### HRIS API

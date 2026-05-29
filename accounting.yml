@@ -20720,7 +20720,11 @@ paths:
       x-apideck-gotchas:
         - connector: netsuite
           description: |
-            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            The minimum page size accepted for Netsuite is 5. The cursor for Netsuite expires if it has not been used within 15 minutes after its creation.
+
+            The `taxable` field is read directly from the NetSuite `customer.taxable` boolean in both Legacy Tax and SuiteTax accounts. Under SuiteTax, `customer.taxable` continues to be readable but does not reflect per-jurisdiction tax exemptions — the meaningful per-nexus tax state lives in NetSuite's `customerTaxRegistration` records, which the unified API does not currently surface as first-class fields. Consumers needing per-nexus tax registration data should gate their logic on `connection.suitetax_enabled` and query `customerTaxRegistration` via pass-through SuiteQL, e.g. `?pass_through[q]=SELECT entity, nexus, taxRegistrationNumber FROM customerTaxRegistration WHERE entity = {customer_id}`.
+
+            When `filter`, `sort`, or `pass_through` parameters are applied to `GET /accounting/customers`, `addresses[]` returns only the default billing and default shipping addresses, each with `type` and `string` (a multi-line formatted address). Structured fields like `line1`, `city`, `state`, `postal_code`, and `country`, and any additional custom-labeled addresses, are returned only on unfiltered list calls and on `GET /accounting/customers/{id}`.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: xero

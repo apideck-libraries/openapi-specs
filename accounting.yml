@@ -17751,6 +17751,11 @@ paths:
         - connector: sage-intacct
           description: |
             Sage Intacct supports multi-component taxes through the `components` array. Each component can have its own rate and tax authority. Use compound taxes for jurisdictions with multiple tax layers (e.g., GST + PST in Canada).
+        - connector: dualentry
+          description: |
+            DualEntry returns the Product Tax Code catalog (e.g. `TAXABLE - System`, `NON_TAXABLE - System`, plus Avalara codes) from `/public/v2/product-tax-codes`. These are categorical tax codes, not rate-based — `effective_tax_rate` and `total_tax_rate` are always `0`. Use the returned `id` and `code` to reference the tax on invoice-items (`sales_details.tax_rate.id`).
+
+            Read-only catalog: `add`, `update`, `delete` are not exposed in this release. Global system-managed codes are list-only and return 403 on `GET /tax-rates/{id}`; org-scoped codes (when present) support get-by-id.
       responses:
         '200':
           $ref: '#/components/responses/GetTaxRatesResponse'

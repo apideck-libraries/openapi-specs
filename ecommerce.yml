@@ -3726,8 +3726,6 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
-        - connector: bigcommerce
-          description: In the pagination, the limit value should be in additions of 10. E.g. 10, 20, 30, etc.
         - connector: tiktok
           description: To retrieve customer details, if they are hidden in the order response, use `seller shipping` instead of the default `TikTok shipping` in Tiktok. Please refer to our [integration guide](https://developers.apideck.com/connectors/tiktok/docs/application_owner+oauth_credentials) for more details.
         - connector: amazon-seller-central
@@ -3821,8 +3819,6 @@ paths:
       x-apideck-gotchas:
         - connector: prestashop
           description: 'PrestaShop primarily uses an `id` field to identify product associations (Ie: categories, variants etc). To maintain performance on the list endpoint, fewer properties are returned than other connectors.'
-        - connector: bigcommerce
-          description: In the pagination, the limit value should be in additions of 10. E.g. 10, 20, 30, etc.
         - connector: wix
           description: Wix V3 catalog assigns unique SKUs and weights to each product variant. The product-level `sku` and `weight` fields represent only the first variant for backward compatibility. To access complete variant data across all product variations, reference the individual `variants[].sku` and `variants[].weight` fields which contain the accurate data for each variant.
         - connector: walmart
@@ -3912,8 +3908,6 @@ paths:
       x-apideck-gotchas:
         - connector: woocommerce
           description: Woocommerce will only return customers that have placed an order and created and account.
-        - connector: bigcommerce
-          description: In the pagination, the limit value should be in additions of 10. E.g. 10, 20, 30, etc.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceCustomersResponse'

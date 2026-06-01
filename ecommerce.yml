@@ -3736,6 +3736,12 @@ paths:
         - connector: walmart
           description: |
             When the `created_since` filter is not provided, Walmart only returns orders from the last 7 days. To retrieve older orders, supply `filter[created_since]` with the desired start date (e.g. `?filter[created_since]=2024-01-01T00:00:00Z`).
+        - connector: shopify
+          description: |
+            The `line_items[].discounts[]` array reflects each line item's allocated share from every
+            discount application on the order, including order-wide discounts. Shopify's
+            `discountAllocations` field does not distinguish between product-specific and order-wide
+            discount sources — all allocations for a given line item are returned together.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrdersResponse'
@@ -3776,6 +3782,12 @@ paths:
         - connector: woocommerce
           description: |
             Woocommerce returns the customer_id as '0' when an order was completed without registration. In this scenario, the customer data on order reflects a 'Guest Checkout'.
+        - connector: shopify
+          description: |
+            The `line_items[].discounts[]` array reflects each line item's allocated share from every
+            discount application on the order, including order-wide discounts. Shopify's
+            `discountAllocations` field does not distinguish between product-specific and order-wide
+            discount sources — all allocations for a given line item are returned together.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrderResponse'

@@ -18072,6 +18072,9 @@ paths:
             `status` is derived from Visma eAccounting's `Status` field combined with `RemainingAmount`, not from `Status` alone.
 
             Per-payment records (payment date, amount, bank account) are scoped under `/supplierinvoices/{id}/payments` in the Visma eAccounting API and are not surfaced on the unified Bill. Bill payments can be created via `POST /bill-payments` but not listed or retrieved individually through the unified API.
+        - connector: alegra
+          description: |
+            Each bill line is costed against either a catalog item (`line_items[].type: expense_item`, which sets `line.item`) or an expense ledger account (`expense_account`, which sets `line.ledger_account`); a single bill may mix both. See the Alegra usage guide for details.
       responses:
         '200':
           $ref: '#/components/responses/GetBillsResponse'
@@ -18713,6 +18716,9 @@ paths:
 
             If you need both individual tax values, use the `raw` query parameter (`?raw=true`) to access the original
             FreshBooks response, where both `taxName1`/`taxAmount1` and `taxName2`/`taxAmount2` are available on each line item.
+        - connector: alegra
+          description: |
+            Invoices are created **unstamped** (as a draft), so no CFDI folio is consumed. To stamp (timbrar), send `pass_through` with `stamp.generateStamp: true` plus the SAT fields (`paymentType`, `cfdiUse`, `regimeClient`); each line's Alegra item must have a SAT `productKey`. Update and delete work only while the invoice is a draft — a stamped invoice is immutable (void it in Alegra). The CFDI itself (UUID, seals) is not mapped to unified fields; read it via `?raw=true` or the Proxy (#11099). See the Alegra usage guide for the full stamping flow.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoicesResponse'
@@ -19384,6 +19390,9 @@ paths:
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
+        - connector: alegra
+          description: |
+            Only **postable** accounts (`header: false`) can be used on transactions; posting against a `header: true` grouping node is rejected. Two codes are exposed — `code` (the company's own account code) and `nominal_code` (the SAT *código agrupador*); the SAT code is shared across related accounts, not unique per account. Creating an account requires a `parent_account.id`, and accounts cannot be deleted (Alegra has no delete-account endpoint).
       responses:
         '200':
           $ref: '#/components/responses/GetLedgerAccountsResponse'
@@ -19727,6 +19736,9 @@ paths:
         - connector: workday
           description: |
             It is required to provide `transaction_type` filter in the request parameters. If `transaction_type` is `purchase`, purchase-items will be returned. If `transaction_type` is `sale`, sales-items will be returned.
+        - connector: alegra
+          description: |
+            The Mexican SAT product key (`productKey`) has no unified field — set it on create via `pass_through` and read it back via the Proxy. On create/update only `name`, `description`, `code`, `unit_price` and `type` are written; inventory levels, accounts and taxes are managed in Alegra.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoiceItemsResponse'
@@ -20137,6 +20149,9 @@ paths:
         - connector: sage-business-cloud-accounting
           description: |
             The `allocations` field is not returned in responses. To retrieve allocation details, use the proxy API to call `/contact_allocations?contact_id={customer_id}`.
+        - connector: alegra
+          description: |
+            `allocations` is not populated — Alegra exposes only the aggregate applied amount, not which invoices a credit note offset. A stamped credit note is immutable; update and delete work only while it is unstamped (open).
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNotesResponse'
@@ -21647,6 +21662,9 @@ paths:
         - connector: sage-business-cloud-accounting
           description: |
             Payments are retrieved using the `transaction_type_id` parameter which defaults to `CUSTOMER_RECEIPT`. Use the `type` filter to retrieve other payment transaction types.
+        - connector: alegra
+          description: |
+            A payment must be applied to at least one invoice — Alegra rejects an unapplied payment.
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentsResponse'
@@ -22810,6 +22828,9 @@ paths:
             query does not include line items. The `line_items` array is therefore omitted from each
             entry in this list. To read line-level detail (accounts, amounts, departments, locations,
             tracking categories), fetch each entry individually with the Get Journal Entry endpoint.
+        - connector: alegra
+          description: |
+            Alegra does not assign a journal entry `number` (always empty), and journal entries have no created/updated timestamps — so they cannot be sorted by date.
       responses:
         '200':
           $ref: '#/components/responses/GetJournalEntriesResponse'
@@ -23469,6 +23490,9 @@ paths:
         - connector: workday
           description: |
             When using the `supplier_id` filter, the `updated_since` filter should also be included.
+        - connector: alegra
+          description: |
+            `delivery_date` is required on create. Each line is costed against either a catalog item (`line_items[].type: expense_item`, which sets `line.item`) or an expense ledger account (`expense_account`, which sets `line.ledger_account`); a PO may mix both. See the Alegra usage guide for details.
       responses:
         '200':
           $ref: '#/components/responses/GetPurchaseOrdersResponse'
@@ -25153,6 +25177,9 @@ paths:
         - connector: sage-intacct
           description: |
             Pagination is not supported when listing all bank accounts without an account_type filter.
+        - connector: alegra
+          description: |
+            Alegra exposes no IBAN, BIC/SWIFT, routing number, currency or balance, so those fields are empty. On create, Alegra requires an opening balance — the connector sets it from the unified `balance` (or 0) at today's date.
       responses:
         '200':
           $ref: '#/components/responses/GetBankAccountsResponse'
@@ -25681,6 +25708,9 @@ paths:
         - connector: sage-business-cloud-accounting
           description: |
             Bill payments are filtered using the `transaction_type_id` parameter, which defaults to `VENDOR_PAYMENT`. Use the `type` filter to retrieve other payment transaction types.
+        - connector: alegra
+          description: |
+            A bill payment must be applied to at least one bill — Alegra rejects an unapplied payment.
       responses:
         '200':
           $ref: '#/components/responses/GetBillPaymentsResponse'
@@ -27192,6 +27222,9 @@ paths:
             AFAS Profit's default sales-quotes GetConnector (`Profit_Quotation`) only exists on tenants that have the sales-quotes module deployed. On tenants without it, the list returns empty. Override `quotes_connector` on the connection to point at a tenant-specific quotes GetConnector if available.
 
             The `limit` parameter may return fewer quotes than specified. AFAS returns flat quote line rows which are grouped by `OrderNumber` into complete quotes. `limit=N` caps the raw row count, not the grouped quote count.
+        - connector: alegra
+          description: |
+            Each line's Alegra item must have a SAT `productKey` or creation fails (code 1035, "La clave del producto es requerida"). The customer address is returned as a single preformatted string in `billing_address.line1`, not the structured object invoices return.
       responses:
         '200':
           $ref: '#/components/responses/GetQuotesResponse'

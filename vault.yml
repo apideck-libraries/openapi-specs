@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.24.37
+  version: 10.24.38
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -2349,6 +2349,49 @@ components:
           type: string
           example: crm+salesforce
           nullable: true
+          description: 'Filter by connector ID. Known limitation: this field is not currently applied at the log query resolver — connector filtering is performed via the service identifier internally (see GH-10099).'
+        path:
+          type: string
+          example: /crm/contacts
+          nullable: true
+          description: Filter by request path. Match behavior is controlled by path_match_mode (defaults to CONTAINS).
+        path_match_mode:
+          type: string
+          x-apideck-enum-id: logs.path_match_mode
+          enum:
+            - CONTAINS
+            - STARTS_WITH
+            - ENDS_WITH
+            - EXACT
+          default: CONTAINS
+          nullable: true
+          description: How the path filter is matched. CONTAINS matches the path anywhere; STARTS_WITH / ENDS_WITH anchor the match; EXACT requires the whole path to match. Only applied when path is set.
+        http_method:
+          type: string
+          example: GET
+          nullable: true
+          description: Filter by a single HTTP method.
+        http_methods:
+          type: array
+          items:
+            type: string
+          example:
+            - GET
+            - POST
+          nullable: true
+          description: Filter by multiple HTTP methods.
+        start_date:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00.000Z'
+          nullable: true
+          description: Filter logs at or after this ISO 8601 date-time (inclusive).
+        end_date:
+          type: string
+          format: date-time
+          example: '2024-01-31T23:59:59.999Z'
+          nullable: true
+          description: Filter logs at or before this ISO 8601 date-time (inclusive). Must be on or after start_date.
         status_code:
           type: number
           example: 201

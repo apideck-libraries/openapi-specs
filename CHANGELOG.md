@@ -1,3 +1,9 @@
+## v10.24.38 - (2026-06-02)
+
+### Vault API
+
+- Added filters to [Logs](apis/vault/reference/logs): filter by `path` (with `path_match_mode` of `CONTAINS` (default), `STARTS_WITH`, `ENDS_WITH`, or `EXACT`), by `http_method` / `http_methods`, and by a `start_date` / `end_date` time range. For example, `filter[path]=/crm/contacts&filter[path_match_mode]=ENDS_WITH` returns only the list endpoint and excludes per-record detail paths (Ref #10099)
+
 ## v10.24.37 - (2026-05-28)
 
 ### Accounting API

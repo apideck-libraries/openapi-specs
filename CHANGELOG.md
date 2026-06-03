@@ -1,3 +1,9 @@
+## v10.24.39 - (2026-06-03)
+
+### HRIS API
+
+- Added new [HiBob (OAuth)](connectors/hibob-oauth) connector with support for [Employees](apis/hris/reference/employees) (read, create, update), [Departments](apis/hris/reference/departments), and [Time Off Requests](apis/hris/reference/time-off-requests) (read, create, delete). Uses OAuth authentication and virtual webhooks for `hris.employee.created`, `hris.employee.updated`, and `hris.employee.terminated` events
+
 ## v10.24.38 - (2026-06-02)
 
 ### Vault API

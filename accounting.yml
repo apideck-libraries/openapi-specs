@@ -17756,6 +17756,8 @@ paths:
             DualEntry returns the Product Tax Code catalog (e.g. `TAXABLE - System`, `NON_TAXABLE - System`, plus Avalara codes) from `/public/v2/product-tax-codes`. These are categorical tax codes, not rate-based — `effective_tax_rate` and `total_tax_rate` are always `0`. Use the returned `id` and `code` to reference the tax on invoice-items (`sales_details.tax_rate.id`).
 
             Read-only catalog: `add`, `update`, `delete` are not exposed in this release. Global system-managed codes are list-only and return 403 on `GET /tax-rates/{id}`; org-scoped codes (when present) support get-by-id.
+
+            The product tax code catalog is tenant-wide and cannot be scoped by company. The `x-apideck-company-id` header is accepted but has no effect on the returned catalog.
       responses:
         '200':
           $ref: '#/components/responses/GetTaxRatesResponse'
@@ -18075,6 +18077,11 @@ paths:
         - connector: alegra
           description: |
             Each bill line is costed against either a catalog item (`line_items[].type: expense_item`, which sets `line.item`) or an expense ledger account (`expense_account`, which sets `line.ledger_account`); a single bill may mix both. See the Alegra usage guide for details.
+        - connector: dualentry
+          description: |
+            DualEntry scopes bills by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetBillsResponse'
@@ -18719,6 +18726,11 @@ paths:
         - connector: alegra
           description: |
             Invoices are created **unstamped** (as a draft), so no CFDI folio is consumed. To stamp (timbrar), send `pass_through` with `stamp.generateStamp: true` plus the SAT fields (`paymentType`, `cfdiUse`, `regimeClient`); each line's Alegra item must have a SAT `productKey`. Update and delete work only while the invoice is a draft — a stamped invoice is immutable (void it in Alegra). The CFDI itself (UUID, seals) is not mapped to unified fields; read it via `?raw=true` or the Proxy (#11099). See the Alegra usage guide for the full stamping flow.
+        - connector: dualentry
+          description: |
+            DualEntry scopes invoices by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoicesResponse'
@@ -19393,6 +19405,11 @@ paths:
         - connector: alegra
           description: |
             Only **postable** accounts (`header: false`) can be used on transactions; posting against a `header: true` grouping node is rejected. Two codes are exposed — `code` (the company's own account code) and `nominal_code` (the SAT *código agrupador*); the SAT code is shared across related accounts, not unique per account. Creating an account requires a `parent_account.id`, and accounts cannot be deleted (Alegra has no delete-account endpoint).
+        - connector: dualentry
+          description: |
+            Ledger accounts (the chart of accounts) are tenant-wide in DualEntry and cannot be scoped by company.
+            The `x-apideck-company-id` header is accepted but has no effect — all accounts across the tenant are
+            returned regardless of the company ID.
       responses:
         '200':
           $ref: '#/components/responses/GetLedgerAccountsResponse'
@@ -19739,6 +19756,11 @@ paths:
         - connector: alegra
           description: |
             The Mexican SAT product key (`productKey`) has no unified field — set it on create via `pass_through` and read it back via the Proxy. On create/update only `name`, `description`, `code`, `unit_price` and `type` are written; inventory levels, accounts and taxes are managed in Alegra.
+        - connector: dualentry
+          description: |
+            Invoice items (the product catalog) are tenant-wide in DualEntry and cannot be scoped by company.
+            The `x-apideck-company-id` header is accepted but has no effect — all items across the tenant are
+            returned regardless of the company ID.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoiceItemsResponse'
@@ -20152,6 +20174,11 @@ paths:
         - connector: alegra
           description: |
             `allocations` is not populated — Alegra exposes only the aggregate applied amount, not which invoices a credit note offset. A stamped credit note is immutable; update and delete work only while it is unstamped (open).
+        - connector: dualentry
+          description: |
+            DualEntry scopes credit notes by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNotesResponse'
@@ -20756,6 +20783,11 @@ paths:
         - connector: wafeq
           description: |
             Wafeq does not separate customers and suppliers as distinct API resources — both share `/v1/contacts/`. The unified `customers` resource sends `relationship[]=customer` to filter, and `suppliers` sends `relationship[]=supplier`. However, Wafeq's `relationship` field is internal and is NOT settable via the API on contact create/update — it is populated by Wafeq based on UI classification or transaction history. Newly-created contacts and contacts with no transactions will appear in BOTH the customers and suppliers lists until Wafeq tags them. To enforce strict customer/supplier separation, manage contact classification in the Wafeq UI.
+        - connector: dualentry
+          description: |
+            DualEntry scopes customers by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetCustomersResponse'
@@ -21204,6 +21236,11 @@ paths:
         - connector: xero
           description: |
             In Xero, contacts are not strictly separated into customers or suppliers until linked to a transaction. Apideck's approach is to return suppliers as `IsSupplier=true||IsCustomer=false` and customers as `IsCustomer=true||IsSupplier=false`. If you need other cases, use pass-through, e.g. `?pass_through[where]=IsCustomer=false AND IsSupplier=false` for uncategorized contacts. See the [Pass-through guide](https://developers.apideck.com/guides/pass-through) for more details.
+        - connector: dualentry
+          description: |
+            DualEntry scopes suppliers by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetSuppliersResponse'
@@ -21665,6 +21702,11 @@ paths:
         - connector: alegra
           description: |
             A payment must be applied to at least one invoice — Alegra rejects an unapplied payment.
+        - connector: dualentry
+          description: |
+            DualEntry scopes payments by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentsResponse'
@@ -22831,6 +22873,11 @@ paths:
         - connector: alegra
           description: |
             Alegra does not assign a journal entry `number` (always empty), and journal entries have no created/updated timestamps — so they cannot be sorted by date.
+        - connector: dualentry
+          description: |
+            DualEntry scopes journal entries by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetJournalEntriesResponse'
@@ -23493,6 +23540,11 @@ paths:
         - connector: alegra
           description: |
             `delivery_date` is required on create. Each line is costed against either a catalog item (`line_items[].type: expense_item`, which sets `line.item`) or an expense ledger account (`expense_account`, which sets `line.ledger_account`); a PO may mix both. See the Alegra usage guide for details.
+        - connector: dualentry
+          description: |
+            DualEntry scopes purchase orders by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetPurchaseOrdersResponse'
@@ -25711,6 +25763,11 @@ paths:
         - connector: alegra
           description: |
             A bill payment must be applied to at least one bill — Alegra rejects an unapplied payment.
+        - connector: dualentry
+          description: |
+            DualEntry scopes bill payments by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetBillPaymentsResponse'
@@ -26091,6 +26148,11 @@ paths:
       x-apideck-gotchas:
         - connector: xero
           description: In Xero, both suppliers (also used for employees) and customers are identified using the same contact ID, which maps to both `supplier_id` and `customer_id`. To accurately determine the contact type, use the suppliers and customers endpoints.
+        - connector: dualentry
+          description: |
+            DualEntry scopes expenses by company. Pass the `x-apideck-company-id` header (or set a Default
+            Company on the connection) to return only records belonging to that company within the tenant.
+            Without it, records across all companies in the tenant are returned.
       responses:
         '200':
           $ref: '#/components/responses/GetExpensesResponse'

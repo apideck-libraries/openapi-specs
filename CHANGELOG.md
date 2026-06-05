@@ -1,3 +1,10 @@
+## v10.24.40 - (2026-06-05)
+
+### CRM API
+
+- Added filters to [Notes](apis/crm/reference/notes): filter by `title`, `owner_id`, `updated_since`, and `created_since`. Supported on [Zoho CRM](connectors/zoho-crm)
+- Added filters to [Users](apis/crm/reference/users): filter by `email` and `name`. Supported on [Zoho CRM](connectors/zoho-crm)
+
 ## v10.24.39 - (2026-06-03)
 
 ### HRIS API

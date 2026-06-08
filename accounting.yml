@@ -192,6 +192,22 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/InvoicesSort'
+    generalLedgerTransactionsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/GeneralLedgerTransactionsFilter'
+    generalLedgerTransactionsSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/GeneralLedgerTransactionsSort'
     journalEntriesFilter:
       name: filter
       in: query
@@ -649,6 +665,18 @@ components:
           schema:
             $ref: '#/components/schemas/GetCustomersResponse'
       description: Customers
+    GetGeneralLedgerTransactionResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetGeneralLedgerTransactionResponse'
+      description: GeneralLedgerTransaction
+    GetGeneralLedgerTransactionsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetGeneralLedgerTransactionsResponse'
+      description: GeneralLedgerTransactions
     GetInvoiceItemResponse:
       content:
         application/json:
@@ -6545,6 +6573,80 @@ components:
           $ref: '#/components/schemas/Links'
         _raw:
           $ref: '#/components/schemas/Raw'
+    GetGeneralLedgerTransactionResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: xero
+        resource:
+          type: string
+          description: Unified API resource name
+          example: general-ledger-transactions
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/GeneralLedgerTransaction'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetGeneralLedgerTransactionsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: xero
+        resource:
+          type: string
+          description: Unified API resource name
+          example: general-ledger-transactions
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneralLedgerTransaction'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetInvoiceItemResponse:
       type: object
       x-apideck-schema-id: GetInvoiceItemResponse
@@ -8487,6 +8589,218 @@ components:
         direction:
           $ref: '#/components/schemas/SortDirection'
       additionalProperties: false
+    GeneralLedgerTransaction:
+      type: object
+      x-apideck-schema-id: GeneralLedgerTransaction
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        source_type: critical
+        source_id: high
+        posted_at: critical
+        reference: medium
+        number: medium
+        currency: medium
+        currency_rate: low
+        memo: low
+        line_items: critical
+        custom_fields: edge-case
+        updated_at: medium
+        created_at: medium
+        updated_by: edge-case
+        created_by: edge-case
+      required:
+        - source_type
+        - line_items
+      x-apideck-strict-required:
+        - source_type
+        - posted_at
+        - line_items
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        source_type:
+          type: string
+          title: Source Type
+          description: The originating transaction type that produced this posting in the general ledger. Discriminates whether the entry came from an invoice, a bill, a payment, a manual journal, etc. This is the key field that distinguishes general-ledger-transactions from journal-entries (which only covers manually-captured entries). May be `null` when the upstream connector did not return an origin discriminator (e.g. Xero's single-record endpoint strips `SourceType` for every record; certain historical records also omit it). To recover a populated value, query the list endpoint.
+          x-apideck-enum-id: general_ledger_transactions.source_type
+          enum:
+            - other
+            - invoice
+            - bill
+            - credit_note
+            - payment
+            - refund
+            - expense
+            - journal_entry
+            - payroll
+          nullable: true
+          example: invoice
+        source_id:
+          type: string
+          title: Source ID
+          description: Identifier of the originating document in the vendor system. For example, when source_type is 'invoice', this is the id of the invoice that produced this posting. Use this id together with source_type to fetch the source document via its dedicated unified resource.
+          example: '12345'
+          nullable: true
+        posted_at:
+          type: string
+          title: Posted at (timestamp)
+          description: The date on which the transaction was posted to the general ledger. This is the accounting date — it is what determines the period the transaction belongs to and can be earlier than the creation date for backdated postings.
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        reference:
+          $ref: '#/components/schemas/Reference'
+        number:
+          type: string
+          title: Transaction number
+          description: Sequential number auto-assigned by the vendor system to the transaction (e.g. Xero JournalNumber). Unique per company.
+          example: JNL-001
+          nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
+        currency_rate:
+          $ref: '#/components/schemas/CurrencyRate'
+        memo:
+          type: string
+          title: Memo
+          description: Free-text description at the header level. Typically populated when the transaction originates from a manual journal — for system-generated postings (invoice, payment, etc.) the source document carries the descriptive text.
+          example: Year-end adjustment for inventory revaluation
+          nullable: true
+        line_items:
+          type: array
+          minItems: 2
+          description: Lines of the transaction. Each line affects one ledger account with either a debit or a credit. The signed sum of net_amount across all lines must equal zero (double-entry invariant).
+          items:
+            $ref: '#/components/schemas/GeneralLedgerTransactionLineItem'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+    GeneralLedgerTransactionLineItem:
+      type: object
+      x-apideck-schema-id: GeneralLedgerTransactionLineItem
+      additionalProperties: false
+      x-apideck-weights:
+        id: high
+        description: medium
+        tax_amount: medium
+        net_amount: critical
+        type: critical
+        tax_rate: medium
+        tracking_categories: low
+        ledger_account: critical
+        line_number: low
+      required:
+        - ledger_account
+        - type
+      x-apideck-strict-required:
+        - ledger_account
+        - type
+        - net_amount
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        description:
+          type: string
+          title: Description
+          description: Free-text description of the line.
+          example: Sales revenue from Q3 batch
+          nullable: true
+        net_amount:
+          type: number
+          title: Net amount
+          description: The amount posted to the ledger account, tax-exclusive. Debit entries are positive, credit entries are negative. In general-ledger views the tax component lives in its own dedicated line against a tax payable/receivable account, so net_amount is the canonical figure for reporting.
+          example: 27500
+          nullable: true
+        type:
+          type: string
+          enum:
+            - debit
+            - credit
+          x-apideck-enum-id: GeneralLedgerTransactionLineItemType
+          title: Type
+          description: Side of the entry. Redundant with the sign of net_amount but exposed as an explicit flag for filtering convenience.
+          example: debit
+          nullable: true
+        tax_amount:
+          type: number
+          title: Tax amount
+          description: Tax embedded in the line. In GL views this is typically 0 or null because tax has its own dedicated line against a tax payable/receivable account. Exposed for completeness and for tax-inclusive setups.
+          example: 0
+          nullable: true
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        ledger_account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        line_number:
+          $ref: '#/components/schemas/LineNumber'
+    GeneralLedgerTransactionsFilter:
+      type: object
+      x-apideck-schema-id: GeneralLedgerTransactionsFilter
+      example:
+        source_type: invoice
+        updated_since: '2024-09-30T07:43:32.000Z'
+      properties:
+        source_type:
+          type: string
+          title: Source type
+          description: Filter by the originating transaction type.
+          x-apideck-enum-id: general_ledger_transactions.source_type
+          enum:
+            - other
+            - invoice
+            - bill
+            - credit_note
+            - payment
+            - refund
+            - expense
+            - journal_entry
+            - payroll
+        source_id:
+          type: string
+          title: Source ID
+          description: Return only transactions originated from the given source document id.
+          example: '12345'
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          description: Return transactions updated on or after this timestamp.
+          example: '2024-09-30T07:43:32.000Z'
+      additionalProperties: false
+    GeneralLedgerTransactionsSort:
+      type: object
+      x-apideck-schema-id: GeneralLedgerTransactionsSort
+      example:
+        by: posted_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: general_ledger_transactions.sort_by
+          description: The field on which to sort the General Ledger Transactions.
+          enum:
+            - posted_at
+            - updated_at
+            - created_at
+          example: posted_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
     JournalEntry:
       type: object
       additionalProperties: false
@@ -8659,6 +8973,14 @@ components:
             - deleted
             - other
           x-apideck-enum-id: journal_entries.status
+        scope:
+          type: string
+          title: Scope
+          description: Connector-specific scope hint that controls which downstream source backs the read. On Xero, `manual` reads from `ManualJournals` (free in every tier), while `system` reads from `Journals` (the full general ledger view including manual journal postings, paid post 2026-03-02). Omitting the filter is equivalent to `system` and preserves the legacy default. Only honored on connectors where the distinction is exposed; ignored elsewhere.
+          enum:
+            - manual
+            - system
+          x-apideck-enum-id: journal_entries.scope
       additionalProperties: false
     JournalEntriesSort:
       type: object
@@ -17621,6 +17943,11 @@ tags:
     x-apideck-resource-id: journal-entries
     x-apideck-model:
       $ref: '#/components/schemas/JournalEntry'
+  - name: General Ledger Transactions
+    description: 'A General Ledger Transaction is a posted entry in the general ledger, regardless of its origin — invoice posting, bill posting, payment, manual journal, payroll, etc. The source_type field discriminates the origin. Read-only by design: clients write through the originating resource (invoices, bills, payments, journal-entries).'
+    x-apideck-resource-id: general-ledger-transactions
+    x-apideck-model:
+      $ref: '#/components/schemas/GeneralLedgerTransaction'
   - name: Purchase Orders
     description: A Purchase Order represents a request to buy goods or services from a supplier, including line items, amounts, delivery date, and status.
     x-apideck-resource-id: purchase-orders
@@ -22844,9 +23171,12 @@ paths:
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: xero
           description: |
-            Xero has two resources: journals (entries from transactions like invoices, payments, or manual journals) and manual journals (user-created entries).
-            Unify lists journal entries (xero journals) by default. To view draft journal entries (xero manual journals), use the filter `filter[status]=draft`.
-            The exposed id depends on the journal entry status. For draft entries, the id corresponds to a manual journal. For posted entries, the id corresponds to a Journal.
+            Xero has two resources: `Journals` (postings from any source — invoices, bills, payments, manual journals, etc.) and `ManualJournals` (manual entries only). The default behaviour of `journal-entries` reads from `Journals`. From 2026-03-02 Xero moves the `Journals` endpoint to its Advanced tier; for the full general ledger view use `accounting/general-ledger-transactions` instead.
+
+            Use `?filter[scope]=manual` to read exclusively from `ManualJournals` (free in every Xero tier, target behaviour after the upcoming default flip). Use `?filter[scope]=system` or omit the filter to keep the legacy default. The `?filter[status]=draft` shortcut continues to read drafts from `ManualJournals`.
+
+            The exposed id today depends on the journal entry status: for drafts it is the `ManualJournalID`; once posted, it is the Xero `JournalID` (different from the draft id). To track the underlying manual journal across the lifecycle, use the new `manual_journal_id` field returned in write responses (and use the pattern `manual_journal_id ?? id` for stable storage). On a draft → posted transition the `id` changes but the `manual_journal_id` remains stable.
+
             Xero returns 100 items per call, so the `limit` parameter is ignored.
         - connector: exact-online
           description: |
@@ -22918,10 +23248,14 @@ paths:
             Procountor only accepts the following values for the tax_code field: SALES, PURCHASE.
         - connector: xero
           description: |
-            Xero has two separate resources: journals (journal entries generated from any type of originating transaction such as invoices, payments, or manual journals) and manual journals (user-created entries).
-            When a journal entry is created as draft, it is stored as a manual journal and does not yet become a journal. Once it is posted, or if it is created as posted from the beginning, it becomes a journal. In this case, when a draft manual journal is changed to posted, the id will change.
-            Xero only supports `draft` and `posted` for the status field.
-            For ledger accounts in journal lines, you can use either `ledger_account.id` (UUID) or `ledger_account.code`. If only the ID is provided, the code will be resolved automatically.
+            Writes go to Xero `ManualJournals` (free in every Xero tier).
+
+            When the resulting status is `draft`, the response `id` is the `ManualJournalID`. When the status is `posted` (either created posted directly, or transitioned from draft), the response `id` is the Xero `JournalID` for backwards compatibility — note that this is **not** the same value as the underlying `ManualJournalID`.
+
+            The response also returns `manual_journal_id` — the underlying `ManualJournalID`, which is stable across the entire lifecycle (draft → posted → voided). When persisting an id from this response, use the pattern `manual_journal_id ?? id` so your stored reference does not change on a draft → posted transition.
+
+            Xero only supports `draft` and `posted` for the status field. For ledger accounts in journal lines, you can use either `ledger_account.id` (UUID) or `ledger_account.code`; if only the ID is provided, the code will be resolved automatically.
+
             Journal entries in xero can be tax inclusive, tax exclusive or no tax. The `tax_inclusive` field should be set to true, false or null if the journal entry is tax inclusive, tax exclusive or no tax.
         - connector: netsuite
           description: Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
@@ -23492,6 +23826,103 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DeleteJournalEntryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/general-ledger-transactions:
+    get:
+      tags:
+        - General Ledger Transactions
+      operationId: generalLedgerTransactionsAll
+      summary: List General Ledger Transactions
+      description: List General Ledger Transactions
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/generalLedgerTransactionsFilter'
+        - $ref: '#/components/parameters/generalLedgerTransactionsSort'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: |
+            Backed by Xero's `Journals` API, which moves to the Advanced app tier on 2026-03-02. Each posting (invoice, bill, payment, payroll, manual journal, etc.) appears here with its origin discriminated by `source_type` and `source_id`.
+
+            Filtering by `source_type=journal_entry` returns no results because Xero's underlying `where=SourceType=="MANJOURNAL"` filter does not match any rows on the `Journals` endpoint, even when manual-journal postings clearly exist in the unfiltered list response. To list manual-journal postings, use `accounting/journal-entries?filter[scope]=manual` or `accounting/journal-entries` directly after the manual-only redefinition.
+
+            `currency` and `currency_rate` are returned as `null`. Xero's `Journals` endpoint does not expose currency information; fetch the originating document via `source_type` + `source_id` to retrieve currency.
+
+            The `Reference` field on Xero `Journals` is mapped to `reference`. For manual-journal postings, this is the `Narration` of the originating manual journal.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGeneralLedgerTransactionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+  /accounting/general-ledger-transactions/{id}:
+    get:
+      tags:
+        - General Ledger Transactions
+      operationId: generalLedgerTransactionsOne
+      summary: Get General Ledger Transaction
+      description: Get General Ledger Transaction
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: |
+            Backed by Xero's `Journals/{id}` endpoint. Two limitations of that endpoint surface here:
+
+            `source_type` and `source_id` are returned as `null` for every record retrieved through this single endpoint — invoices, bills, payments, manual journals, all of them. Xero's `GET /api.xro/2.0/Journals/{id}` strips those fields regardless of journal type. To recover them, query the list endpoint (`GET /accounting/general-ledger-transactions`) where these fields are populated. Note that `filter[source_id]` takes the **originating document id** (e.g., the invoice's id), not this resource's transaction id — use it when you already know the source document and want to find every GL posting it produced. To find a specific transaction by its own id, narrow the list with `filter[updated_since]` close to the transaction's `posted_at` and iterate.
+
+            `currency` and `currency_rate` are returned as `null`. Xero's `Journals` endpoint does not expose currency information; fetch the originating document via `source_type` + `source_id` (after recovering them through the list endpoint) to obtain currency.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetGeneralLedgerTransactionResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':

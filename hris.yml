@@ -4879,6 +4879,12 @@ paths:
             Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
             Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
             For getting custom field values, please use the 'Get Employee' (employeesOne) call instead of 'List Employees'.
+        - connector: hibob-oauth
+          description: |
+            HiBob allows you to define employee fields that aren't included by default on the 'List Employees' response. By using the fields parameter, you can specifically request these properties to be part of your response.
+            Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
+            Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
+            For getting custom field values, please use the 'Get Employee' (employeesOne) call instead of 'List Employees'.
         - connector: paylocity
           description: For virtual webhook events on Paylocity, we monitor the "List Employees" response, which has a very small set of fields in comparison of the "Get Employee" response.
         - connector: sage-hr
@@ -4949,6 +4955,11 @@ paths:
       description: Create Employee
       x-apideck-gotchas:
         - connector: hibob
+          description: |
+            When creating an employee is required by Hibob to include the following Unifiy fields: first_name, last_name, employment_start_date, jobs[0].location.name and an email with a primary type must be provided within the emails field.
+            For countries hibob doesn't accept iso code or name values so just the country common name. Example 'United States'
+            HiBob API just accepts one compensation, so for the request it will be considered the first one sent in the array and the payment unit is sent yearly by default.
+        - connector: hibob-oauth
           description: |
             When creating an employee is required by Hibob to include the following Unifiy fields: first_name, last_name, employment_start_date, jobs[0].location.name and an email with a primary type must be provided within the emails field.
             For countries hibob doesn't accept iso code or name values so just the country common name. Example 'United States'
@@ -5202,6 +5213,11 @@ paths:
             HiBob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response.
             Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
             Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
+        - connector: hibob-oauth
+          description: |
+            HiBob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response.
+            Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
+            Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
         - connector: sap-successfactors
           description: |
             Custom fields are extracted from both `personalInfoNav` and
@@ -5275,6 +5291,8 @@ paths:
       description: Update Employee
       x-apideck-gotchas:
         - connector: hibob
+          description: Certain fields like address, compensations, and title cannot be updated via the HiBob API.
+        - connector: hibob-oauth
           description: Certain fields like address, compensations, and title cannot be updated via the HiBob API.
       parameters:
         - $ref: '#/components/parameters/id'

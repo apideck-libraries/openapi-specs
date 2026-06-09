@@ -18443,6 +18443,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            On create, bill expense lines map from `line_items[]` (`ledger_account` → expense account, `total_amount`, `description`). On update, QuickBooks Desktop cannot modify line items — only header fields (supplier, `bill_date`, `due_date`, `bill_number`, terms, memo) change. Recreate the bill to change lines.
         - connector: xero
           description: |
             When providing both supplier.id and supplier.display_name (or supplier.name), Xero will update the contact's name if the ContactID exists. If the ContactID doesn't exist, Xero will automatically create a new contact using the provided name. This allows for automatic contact creation but may update existing contact names if the display_name differs from the stored name.
@@ -19093,6 +19096,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            On create, QuickBooks Desktop only honors `customer`, `invoice_date`, `number`, `reference` (memo), and `line_items`. Header fields such as `due_date`, `terms`, `po_number`, `customer_memo`, billing/shipping address, currency, and tracking category are ignored at create time — set them with a follow-up update. Each line item must include an `item` (QBD rejects invoices whose lines have no item). On update, line items cannot be modified — only header fields (customer, dates, ref number, memo) change; resend line edits by voiding and recreating.
         - connector: xero
           description: |
             When providing both customer.id and customer.display_name (or customer.name), Xero will update the contact's name if the ContactID exists. If the ContactID doesn't exist, Xero will automatically create a new contact using the provided name. This allows for automatic contact creation but may update existing contact names if the display_name differs from the stored name.
@@ -20541,6 +20547,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            On update, QuickBooks Desktop cannot modify credit-note line items, the AR account, or class — only customer, `date_issued`, `number`, and `note` (memo) change. Recreate the credit note to change lines.
         - connector: xero
           description: For adding invoice allocations, use the proxy API. [Know more](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#2-curl-requests-for-adding-and-removing-allocations-from-xero-credit-note)
         - connector: zoho-books
@@ -21609,6 +21618,9 @@ paths:
             schema:
               $ref: '#/components/schemas/Supplier'
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            On create, QuickBooks Desktop only honors `company_name`, `first_name`, `last_name`, `email`, the primary `phone`, and the first address (line1/line2/city/state/postal_code/country). Fields such as `title` (salutation), `middle_name`, `fax`, `supplier_category`, `terms`, `tax_number`, `display_id` (account number), and `notes` are ignored at create time — set them with a follow-up update, which supports the full field set.
         - connector: quickbooks
           description: QuickBooks only supports a single billing address. Therefore, the first item in the addresses array will always be mapped as the billing address, regardless of its original type.
         - connector: microsoft-dynamics-365-business-central
@@ -22075,6 +22087,9 @@ paths:
             schema:
               $ref: '#/components/schemas/Payment'
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop applies a payment to invoices via `allocations[]` — each `allocations[].id` is the target invoice's transaction id and `allocations[].amount` the amount applied. Without `allocations`, the payment is created unapplied. On update, QBD cannot change the applied invoices, payment method, or deposit/AR account — only customer, `transaction_date`, `reference`, `total_amount`, and `note` are updatable; recreate the payment to change allocations.
         - connector: netsuite
           description: |
             The number property could be used to override the Netsuite tranId property.
@@ -24011,6 +24026,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            On update, QuickBooks Desktop cannot modify purchase-order line items — only header fields (supplier, `issued_date`, `po_number`, memo, `expected_arrival_date`, class) change. Recreate the PO to change lines. Per-line `customer` is not supported on QBD purchase-order lines.
         - connector: xero
           description: "Xero accepts a shipping address as a string instead of separate fields. Ie: `23 Main Street\r\nCentral City\r\nMarineville\r\n1234\r\n`"
         - connector: procountor-fi

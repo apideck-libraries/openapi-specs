@@ -3836,6 +3836,13 @@ paths:
         - connector: walmart
           description: |
             The cursor for Walmart expires if it has not been used within 2 minutes of the last request.
+        - connector: bigcommerce
+          description: |
+            On the list endpoint, the product-level `options` array is not returned. BigCommerce caps results to 10 per
+            page whenever product `options` are requested, which would force slow multi-page fetches. To keep full-page
+            pagination (up to 200 per page), `options` are omitted from the list response. Each variant still includes its
+            concrete selections under `variants[].options`. To retrieve the full product-level `options` array, fetch the
+            product individually via the get-by-id endpoint.
       responses:
         '200':
           $ref: '#/components/responses/GetProductsResponse'

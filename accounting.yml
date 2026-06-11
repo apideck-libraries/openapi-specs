@@ -8304,6 +8304,11 @@ components:
             - sale
             - purchase
           nullable: true
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     InvoiceItemFilter:
       type: object
@@ -17842,6 +17847,11 @@ components:
           title: Updated Since
           description: Return projects modified after this date
           example: '2020-09-30T07:43:32.000Z'
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
     ProjectsSort:
       type: object
       x-apideck-schema-id: ProjectsSort
@@ -20138,6 +20148,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            `filter[subsidiary_id]` returns only items assigned to (or shared with) the given subsidiary, and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored. When a filter or sort triggers the SuiteQL path, `currency` and `tax_schedule_id` are not available (SOAP-only fields, absent from the SuiteQL `item` table) and `quantity` reflects total quantity on hand.
         - connector: freeagent
           description: |
             We use **price list items** from FreeAgent to support invoice items. 
@@ -28378,6 +28389,10 @@ paths:
         - connector: quickbooks
           description: |
             The `priority` field is mapped from QuickBooks integer values (0-9) to unified enum values using ranges: 0-2 → "low", 3-5 → "medium", 6-7 → "high", 8-9 → "critical".
+        - connector: netsuite
+          description: |
+            `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
+            When a filter or sort triggers the SuiteQL path, `actual_amount`, `is_billable` and `completion_percentage` are not available (those are SOAP-only fields, absent from the SuiteQL `job` table) — use the unfiltered list or the GET one endpoint for those fields.
       responses:
         '200':
           $ref: '#/components/responses/GetProjectsResponse'

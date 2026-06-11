@@ -21686,6 +21686,7 @@ paths:
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
             `filter[subsidiary_id]` scopes results to suppliers assigned to (or shared with) the given subsidiary, and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
+            When any `filter[*]`, `sort[*]`, or `pass_through[*]` parameter is present, the list call is routed through NetSuite's SuiteQL Analytics REST API. In this path, `addresses[]` entries contain only `type` and `string` fields — structured fields (`id`, `city`, `state`, `postal_code`, `country`, `contact_name`) are not available because the SuiteQL Analytics replica does not expose the address sub-table join. Full structured address data is only returned by the unfiltered SOAP path (i.e., `GET /accounting/suppliers` with no filter, sort, or pass_through parameters).
         - connector: xero
           description: |
             In Xero, contacts are not strictly separated into customers or suppliers until linked to a transaction. Apideck's approach is to return suppliers as `IsSupplier=true||IsCustomer=false` and customers as `IsCustomer=true||IsSupplier=false`. If you need other cases, use pass-through, e.g. `?pass_through[where]=IsCustomer=false AND IsSupplier=false` for uncategorized contacts. See the [Pass-through guide](https://developers.apideck.com/guides/pass-through) for more details.

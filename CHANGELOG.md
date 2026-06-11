@@ -1,3 +1,9 @@
+## v10.24.41 - (2026-06-11)
+
+### Accounting API
+
+- Added write support to [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Journal Entries](apis/accounting/reference/journal-entries), [Payments](apis/accounting/reference/payments), and [Bill Payments](apis/accounting/reference/bill-payments), and [Bills](apis/accounting/reference/bills)
+
 ## v10.24.40 - (2026-06-05)
 
 ### CRM API

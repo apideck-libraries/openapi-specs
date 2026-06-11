@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.24.40
+  version: 10.24.41
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -3312,6 +3312,11 @@ components:
             - unpaid
             - partially_paid
           example: paid
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     BillsSort:
       type: object
@@ -4680,6 +4685,11 @@ components:
           title: Credit note number
           description: Credit note number to search for
           example: OIT00546
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     CreditNotesSort:
       type: object
@@ -5577,6 +5587,11 @@ components:
           title: Supplier ID
           description: Supplier ID of customer to search for
           example: '123'
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the customer's primary subsidiary belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     CustomersSort:
       type: object
@@ -8569,6 +8584,11 @@ components:
           title: Supplier ID
           description: Supplier ID to filter invoices by
           example: '123'
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     InvoicesSort:
       type: object
@@ -8981,6 +9001,11 @@ components:
             - manual
             - system
           x-apideck-enum-id: journal_entries.scope
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     JournalEntriesSort:
       type: object
@@ -9437,6 +9462,11 @@ components:
             - active
             - inactive
           example: active
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     LedgerAccountsSort:
       type: object
@@ -10507,6 +10537,11 @@ components:
             - voided
             - deleted
           example: authorised
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     PaymentsSort:
       type: object
@@ -11304,6 +11339,11 @@ components:
           type: string
           title: Supplier ID
           example: '1234'
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     PurchaseOrdersSort:
       type: object
@@ -12114,6 +12154,11 @@ components:
           title: Updated since (timestamp)
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the supplier's primary subsidiary belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     SuppliersSort:
       type: object
@@ -15256,6 +15301,11 @@ components:
           title: Employee ID
           description: Filter by employee ID
           example: '12345'
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     GetExpenseReportResponse:
       type: object
@@ -18372,6 +18422,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: spiris
           description: |
             Spiris (Visma eAccounting) does not expose per-payment detail on the bill response. To check whether a bill is paid, use the `balance` and `total` fields:
@@ -18471,6 +18522,17 @@ paths:
         - connector: zoho-books
           description: |
             The status of the bill will be "submitted" by default when creating a bill.
+        - connector: sap-s4hana-cloud
+          description: |
+            SAP S/4HANA Cloud creates supplier invoices via the `API_SUPPLIERINVOICE_PROCESS_SRV` OData service. A CSRF token handshake is performed automatically before each create request.
+
+            Line items are routed to one of two SAP navigation properties based on whether a purchase order reference is present:
+            - Lines with `line_items[].purchase_order.id` set go into the PO-based property (`to_SuplrInvcItemPurOrdRef`). Optionally provide `line_items[].purchase_order.line_number` for the SAP `PurchaseOrderItem`.
+            - Lines without a purchase order reference go into the GL-account property (`to_SupplierInvoiceItemGLAcct`); `line_items[].ledger_account.id` (or `.code`) is required on these lines. A non-PO line with no ledger account causes a 400 error.
+
+            Required fields on create: `company_id`, `bill_date`, `supplier.id`, `currency`, `total`, and `line_items`. `PostingDate` defaults to `bill_date`; override it via `pass_through[posting_date]`.
+
+            `line_items[].tax_rate.code` maps to the SAP `TaxCode` (e.g. `V1`). SAP S/4HANA Cloud does not expose readable tax-rate master data, so the SAP tax code string must be supplied directly.
       requestBody:
         required: true
         content:
@@ -18987,6 +19049,9 @@ paths:
         - connector: freshbooks
           description: |
             Delete will set the bill to inactive and will soft delete it, meaning it will stop appearing in the list API call. However, it can still be found via the get by id call.
+        - connector: sap-s4hana-cloud
+          description: |
+            Cancellation is supported and reverses the posted supplier invoice. By default, reversal reason `01` is used and the posting date is set to today (UTC). Override via `pass_through` is supported.
       responses:
         '200':
           $ref: '#/components/responses/DeleteBillResponse'
@@ -19039,6 +19104,7 @@ paths:
           description: |
             The minimum page size accepted for Netsuite is 5. The cursor for Netsuite expires if it has not been used within 15 minutes after its creation.
             When using filters or sort parameters (which trigger the SuiteQL path), `quantity` and `unit_price` on line items may reflect base-unit values (e.g., days) rather than selling-unit values (e.g., years) for items with Units of Measure (UOM) enabled. `total_amount` is always accurate regardless. Use the GET one endpoint for selling-unit quantities.
+            `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: xero
           description: |
             Invoices in Xero can be tax inclusive, tax exclusive, or no tax. The `tax_inclusive` field is set to `true` (tax inclusive), `false` (tax exclusive), or `null` (no tax). Line items include `tax_rate` references that link to the tax-rates resource.
@@ -19096,6 +19162,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            SAP S/4HANA Cloud creates a pure FI accounting document. This is not an SD billing document — no pricing conditions, output determination, or billing workflow is triggered. company_id and customer.id are required.
         - connector: quickbooks-desktop
           description: |
             On create, QuickBooks Desktop only honors `customer`, `invoice_date`, `number`, `reference` (memo), and `line_items`. Header fields such as `due_date`, `terms`, `po_number`, `customer_memo`, billing/shipping address, currency, and tracking category are ignored at create time — set them with a follow-up update. Each line item must include an `item` (QBD rejects invoices whose lines have no item). On update, line items cannot be modified — only header fields (customer, dates, ref number, memo) change; resend line edits by voiding and recreating.
@@ -19733,6 +19802,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            `filter[subsidiary_id]` returns only accounts assigned to (or shared with) the given subsidiary, and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: alegra
@@ -20501,6 +20571,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: sage-business-cloud-accounting
           description: |
             The `allocations` field is not returned in responses. To retrieve allocation details, use the proxy API to call `/contact_allocations?contact_id={customer_id}`.
@@ -21108,6 +21179,7 @@ paths:
             The `taxable` field is read directly from the NetSuite `customer.taxable` boolean in both Legacy Tax and SuiteTax accounts. Under SuiteTax, `customer.taxable` continues to be readable but does not reflect per-jurisdiction tax exemptions — the meaningful per-nexus tax state lives in NetSuite's `customerTaxRegistration` records, which the unified API does not currently surface as first-class fields. Consumers needing per-nexus tax registration data should gate their logic on `connection.suitetax_enabled` and query `customerTaxRegistration` via pass-through SuiteQL, e.g. `?pass_through[q]=SELECT entity, nexus, taxRegistrationNumber FROM customerTaxRegistration WHERE entity = {customer_id}`.
 
             When `filter`, `sort`, or `pass_through` parameters are applied to `GET /accounting/customers`, `addresses[]` returns only the default billing and default shipping addresses, each with `type` and `string` (a multi-line formatted address). Structured fields like `line1`, `city`, `state`, `postal_code`, and `country`, and any additional custom-labeled addresses, are returned only on unfiltered list calls and on `GET /accounting/customers/{id}`.
+            `filter[subsidiary_id]` scopes results to customers assigned to (or shared with) the given subsidiary, and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: xero
@@ -21171,6 +21243,23 @@ paths:
         - connector: freeagent
           description: |
             You can create customer contacts, but they will not be visible in customer list responses until an invoice is assigned to them. FreeAgent only classifies contacts as customers after they have associated transactions. See [Set up a contact as a customer or a supplier](https://support.freeagent.com/hc/en-gb/articles/115001217850-Set-up-a-contact-as-a-customer-or-a-supplier) for more information.
+        - connector: sap-s4hana-cloud
+          description: |
+            SAP S/4HANA Cloud requires `CorrespondenceLanguage` and `BusinessPartnerGrouping` when creating a Business Partner. These default to `EN` and `BP01` respectively, and can be overridden per request via `pass_through`.
+
+            **Address with country is required.** SAP creates a customer master record (KNA1) when the FLCU00
+            role is assigned, and KNA1 requires `LAND1` (country). Therefore `addresses[0]` MUST be provided with
+            at least a `country` value (e.g. `US`, `DE`). Without it, SAP returns
+            `400 Country/Region Key (KNA1-LAND1) is a required entry field`. The connector emits the address as
+            `to_BusinessPartnerAddress.results[0]` in the deep insert; `line1`/`line2`/`city`/`state`/`postal_code`/`country`
+            map to SAP `StreetName`/`HouseNumber`/`CityName`/`Region`/`PostalCode`/`Country`.
+
+            **External vs internal number assignment.** Some tenants configure BP groupings for external
+            number assignment, meaning the caller must supply the `BusinessPartner` ID rather than SAP
+            auto-generating it. Symptom: `400 Grouping <code> has external number assignment. Please enter a
+            valid number.` Supply via `pass_through[business_partner]=99980001` (8–10 digit numeric ID,
+            unique on the tenant). If the chosen grouping is configured for internal assignment, omit
+            `pass_through[business_partner]` and SAP will auto-generate the ID.
       requestBody:
         required: true
         content:
@@ -21366,6 +21455,17 @@ paths:
           description: |
             The status field can be updated to either "active" or "inactive".
             Please send status updates separately from other updates for the customer.
+        - connector: sap-s4hana-cloud
+          description: |
+            Only top-level Business Partner fields are updatable: `first_name`, `last_name`, `company_name`,
+            `display_name`, `status` (maps to `BusinessPartnerIsBlocked`).
+
+            **Nested-field updates are hard-rejected with a 400.** SAP OData V2 does not support deep update;
+            the connector returns a clear error if the update payload includes any of `addresses`,
+            `bank_accounts`, `emails`, `phone_numbers`, or `websites`. To change those values, either supply
+            them on the create operation (deep-insert is POST-only on SAP) or modify the records directly in
+            SAP. This is a fail-fast guard, chosen over silent drop so consumers don't ship broken update
+            flows undetected.
       requestBody:
         required: true
         content:
@@ -21514,6 +21614,11 @@ paths:
         - connector: freshbooks
           description: |
             Delete will set the customer to inactive and will soft delete it, meaning it will stop appearing in the list API call. However, it can still be found via the get by id call.
+        - connector: sap-s4hana-cloud
+          description: |
+            SAP Business Partners cannot be physically deleted once used in transactions (SAP KBA 2742388). Delete
+            performs a soft-delete by setting `BusinessPartnerIsBlocked = true`; the record remains in SAP and
+            subsequent reads return `status: inactive`.
       responses:
         '200':
           $ref: '#/components/responses/DeleteCustomerResponse'
@@ -21569,6 +21674,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            `filter[subsidiary_id]` scopes results to suppliers assigned to (or shared with) the given subsidiary, and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: xero
           description: |
             In Xero, contacts are not strictly separated into customers or suppliers until linked to a transaction. Apideck's approach is to return suppliers as `IsSupplier=true||IsCustomer=false` and customers as `IsCustomer=true||IsSupplier=false`. If you need other cases, use pass-through, e.g. `?pass_through[where]=IsCustomer=false AND IsSupplier=false` for uncategorized contacts. See the [Pass-through guide](https://developers.apideck.com/guides/pass-through) for more details.
@@ -21632,6 +21738,23 @@ paths:
         - connector: workday
           description: |
             In Workday, the supplier_category, display_name, addresses, emails, company_id, currency, terms, and payment_method fields are required to create a supplier. display_name and company_id should be same.
+        - connector: sap-s4hana-cloud
+          description: |
+            SAP S/4HANA Cloud requires `CorrespondenceLanguage` and `BusinessPartnerGrouping` when creating a Business Partner. These default to `EN` and `BP01` respectively, and can be overridden per request via `pass_through`.
+
+            **Address with country is required.** SAP creates a supplier master record (LFA1) when the FLVN00
+            role is assigned, and LFA1 requires `LAND1` (country). Therefore `addresses[0]` MUST be provided with
+            at least a `country` value (e.g. `US`, `DE`). Without it, SAP returns
+            `400 Country/Region Key (LFA1-LAND1) is a required entry field`. The connector emits the address as
+            `to_BusinessPartnerAddress.results[0]` in the deep insert; `line1`/`line2`/`city`/`state`/`postal_code`/`country`
+            map to SAP `StreetName`/`HouseNumber`/`CityName`/`Region`/`PostalCode`/`Country`.
+
+            **External vs internal number assignment.** Some tenants configure BP groupings for external
+            number assignment, meaning the caller must supply the `BusinessPartner` ID rather than SAP
+            auto-generating it. Symptom: `400 Grouping <code> has external number assignment. Please enter a
+            valid number.` Supply via `pass_through[business_partner]=99980001` (8–10 digit numeric ID,
+            unique on the tenant). If the chosen grouping is configured for internal assignment, omit
+            `pass_through[business_partner]` and SAP will auto-generate the ID.
       responses:
         '201':
           $ref: '#/components/responses/CreateSupplierResponse'
@@ -21830,6 +21953,17 @@ paths:
           description: |
             The status field can be updated to either "active" or "inactive".
             Please send status updates separately from other updates for the supplier.
+        - connector: sap-s4hana-cloud
+          description: |
+            Only top-level Business Partner fields are updatable: `first_name`, `last_name`, `company_name`,
+            `display_name`, `status` (maps to `BusinessPartnerIsBlocked`).
+
+            **Nested-field updates are hard-rejected with a 400.** SAP OData V2 does not support deep update;
+            the connector returns a clear error if the update payload includes any of `addresses`,
+            `bank_accounts`, `emails`, `phone_numbers`, or `websites`. To change those values, either supply
+            them on the create operation (deep-insert is POST-only on SAP) or modify the records directly in
+            SAP. This is a fail-fast guard, chosen over silent drop so consumers don't ship broken update
+            flows undetected.
       requestBody:
         required: true
         content:
@@ -21987,6 +22121,11 @@ paths:
         - connector: freshbooks
           description: |
             Delete will set the supplier to inactive and will soft delete it, meaning it will stop appearing in the list API call.
+        - connector: sap-s4hana-cloud
+          description: |
+            SAP Business Partners cannot be physically deleted once used in transactions (SAP KBA 2742388). Delete
+            performs a soft-delete by setting `BusinessPartnerIsBlocked = true`; the record remains in SAP and
+            subsequent reads return `status: inactive`.
       responses:
         '200':
           $ref: '#/components/responses/DeleteSupplierResponse'
@@ -22033,6 +22172,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: kashflow
           description: Kashflow only allows to retrieve payments by invoice, so in order to use this endpoint the filter[invoice_number] parameter is required.
         - connector: sage-business-cloud-accounting
@@ -22087,6 +22227,9 @@ paths:
             schema:
               $ref: '#/components/schemas/Payment'
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            SAP S/4HANA Cloud creates a pure FI accounting document. This is an FI payment posting, not a bank statement import or a result of the Automatic Payment Program (F110). company_id, customer.id and account.id are required.
         - connector: quickbooks-desktop
           description: |
             QuickBooks Desktop applies a payment to invoices via `allocations[]` — each `allocations[].id` is the target invoice's transaction id and `allocations[].amount` the amount applied. Without `allocations`, the payment is created unapplied. On update, QBD cannot change the applied invoices, payment method, or deposit/AR account — only customer, `transaction_date`, `reference`, `total_amount`, and `note` are updatable; recreate the payment to change allocations.
@@ -23184,6 +23327,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: xero
           description: |
             Xero has two resources: `Journals` (postings from any source — invoices, bills, payments, manual journals, etc.) and `ManualJournals` (manual entries only). The default behaviour of `journal-entries` reads from `Journals`. From 2026-03-02 Xero moves the `Journals` endpoint to its Advanced tier; for the full general ledger view use `accounting/general-ledger-transactions` instead.
@@ -23317,6 +23461,9 @@ paths:
             Only `status: "posted"` is supported for state transitions. Other values (`draft`, `voided`, etc.) are not supported — the entry will be created or updated but will remain in Balanced state.
             Once a journal entry is Posted, it cannot be edited. Any attempt to update a Posted entry will be rejected by Acumatica with an error.
             If the release step fails after a successful create or update, the entry will exist in MYOB Advanced in Balanced state and the API will return an error. The entry is not rolled back.
+        - connector: sap-s4hana-cloud
+          description: |
+            `company_id` is required and maps to SAP `CompanyCode`. The following header fields are hardcoded with SAP-standard defaults and cannot be overridden: `BusinessTransactionType=RFBU`, `OriginalReferenceDocumentType=BKPFF`, `AccountingDocumentType=SA`.
       requestBody:
         required: true
         content:
@@ -23980,6 +24127,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: workday
           description: |
             When using the `supplier_id` filter, the `updated_since` filter should also be included.
@@ -26206,6 +26354,7 @@ paths:
         - connector: netsuite
           description: |
             In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
+            `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
         - connector: sage-business-cloud-accounting
           description: |
             Bill payments are filtered using the `transaction_type_id` parameter, which defaults to `VENDOR_PAYMENT`. Use the `type` filter to retrieve other payment transaction types.
@@ -26252,6 +26401,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            SAP S/4HANA Cloud creates a pure FI accounting document. This is a standalone outgoing payment posting, not a triggered run of the Automatic Payment Program (F110). company_id, supplier.id and account.id are required.
         - connector: quickbooks
           description: |
             Payment method is required and must be `Check` or `CreditCard`.
@@ -29237,6 +29389,10 @@ paths:
         - $ref: '#/components/parameters/expenseReportsFilter'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
       responses:
         '200':
           $ref: '#/components/responses/GetExpenseReportsResponse'

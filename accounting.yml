@@ -19212,6 +19212,13 @@ paths:
         - connector: access-financials
           description: |
             Access Financials creates invoices as live/posted transactions immediately. Live transactions cannot be updated, so to correct an invoice you must create a credit note and issue a new invoice.
+        - connector: dualentry
+          description: |
+            Posted invoices (`status: posted`) require `due_date`, an invoice-level memo (`customer_memo`, or `reference`
+            as a fallback), and a `description` on every line item. Omitting any of these returns
+            `400 ... Required for posted records`. A company must also be resolved — supplied by the connection's
+            Default Company setting, the `x-apideck-company-id` header, or `company_id` in the body (any one suffices).
+            Draft invoices (`status: draft`) have none of these requirements.
       requestBody:
         required: true
         content:
@@ -20231,6 +20238,10 @@ paths:
         - connector: myob-acumatica
           description: |
             For `sales_details.tax_rate.id`, you must provide the Tax Category ID from the MYOB Acumatica not from our tax rates resource.
+        - connector: dualentry
+          description: |
+            Creating an item requires `code` (used as the DualEntry SKU) and an income account (`income_account.id`).
+            Omitting `code` returns `400 ... missing sku`.
       requestBody:
         required: true
         content:
@@ -22267,6 +22278,14 @@ paths:
         - connector: wafeq
           description: |
             Wafeq splits payment allocations by document type into separate vendor fields: `accounts_receivable` payments populate `invoice_payments[]`, `accounts_payable` payments populate `bill_payments[]`. Wafeq requires `amount_to_pcy` (amount in primary currency) on each allocation; Apideck mirrors `amount` for single-currency cases. The target invoice or bill must be finalized before a payment can attach — drafts return `403 payment_locked`. To finalize, PATCH the document with the appropriate non-draft status (invoices/credit-notes accept `FINALIZED` or `SENT`, bills accept `AUTHORIZED`); these map to the unified `authorised` status. The bank account's currency must match the payment currency (Wafeq does not auto-convert).
+        - connector: dualentry
+          description: |
+            Apply a payment to an invoice via `allocations[]`: each `allocations[].id` is the target invoice's id
+            (its DualEntry invoice number) and `allocations[].amount` the amount applied. This is what drives the
+            invoice's derived `status` (`partially_paid` / `paid`). A memo (`note`) is required. Use
+            `status: authorised` to post the payment — `posted` is not an accepted value (allowed: `draft`,
+            `authorised`, `rejected`, `paid`, `voided`, `deleted`). Payments created with `status: draft` succeed
+            but do not affect the invoice balance or status; only posted (`authorised`) payments move the balance.
       responses:
         '201':
           $ref: '#/components/responses/CreatePaymentResponse'

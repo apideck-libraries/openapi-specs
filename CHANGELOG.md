@@ -1,3 +1,9 @@
+## v10.24.42 - (2026-06-11)
+
+### Accounting API
+
+- Added filters to [Quotes](apis/accounting/reference/quotes): filter by `number`, `updated_since`, and `created_since`. Supported on [NetSuite](connectors/netsuite), [QuickBooks](connectors/quickbooks), and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite)
+
 ## v10.24.41 - (2026-06-11)
 
 ### Accounting API

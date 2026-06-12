@@ -3742,6 +3742,13 @@ paths:
             discount application on the order, including order-wide discounts. Shopify's
             `discountAllocations` field does not distinguish between product-specific and order-wide
             discount sources — all allocations for a given line item are returned together.
+        - connector: bigcommerce
+          description: |
+            The `line_items[].discounts[]` array includes every `applied_discounts[]` entry BigCommerce
+            returns for the line — both `target: "order"` (cart-level) and `target: "product"`
+            (product-specific) allocations are returned together, with no field that reliably
+            distinguishes the original discount source. This is the same class of behavior as the
+            documented Shopify `discountAllocations` limitation.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrdersResponse'
@@ -3788,6 +3795,13 @@ paths:
             discount application on the order, including order-wide discounts. Shopify's
             `discountAllocations` field does not distinguish between product-specific and order-wide
             discount sources — all allocations for a given line item are returned together.
+        - connector: bigcommerce
+          description: |
+            The `line_items[].discounts[]` array includes every `applied_discounts[]` entry BigCommerce
+            returns for the line — both `target: "order"` (cart-level) and `target: "product"`
+            (product-specific) allocations are returned together, with no field that reliably
+            distinguishes the original discount source. This is the same class of behavior as the
+            documented Shopify `discountAllocations` limitation.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrderResponse'

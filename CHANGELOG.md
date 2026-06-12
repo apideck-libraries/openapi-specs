@@ -1,3 +1,11 @@
+## v10.24.43 - (2026-06-12)
+
+### Accounting API
+
+- Added write support (create, update, delete) to [QuickBooks Desktop](connectors/quickbooks-desktop) for [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Payments](apis/accounting/reference/payments), [Journal Entries](apis/accounting/reference/journal-entries), [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Invoice Items](apis/accounting/reference/invoice-items), and [Purchase Orders](apis/accounting/reference/purchase-orders)
+- Added filtering and sorting to [QuickBooks Desktop](connectors/quickbooks-desktop) list endpoints across its accounting resources, with cursor-based pagination
+- Added gotchas documenting [QuickBooks Desktop](connectors/quickbooks-desktop) create/update field limitations on [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Invoices](apis/accounting/reference/invoices), [Payments](apis/accounting/reference/payments), [Purchase Orders](apis/accounting/reference/purchase-orders), and [Suppliers](apis/accounting/reference/suppliers)
+
 ## v10.24.42 - (2026-06-11)
 
 ### Accounting API

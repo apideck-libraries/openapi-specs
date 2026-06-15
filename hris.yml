@@ -3420,6 +3420,10 @@ components:
               description: Cursor to navigate to the next page of results through the API
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
+        total_count:
+          type: integer
+          description: Number of records available in total for this resource
+          example: 1
     MiddleName:
       type: string
       title: Middle name
@@ -4934,6 +4938,54 @@ paths:
           description: |
             The `leaving_reason` field in Fourth is a string and not an enum. We will return `"other"` if there is a leaving reason. You can use `custom_mappings` to get the actual value.
             The `manager.id` field may be empty even when `manager.name` is present. This occurs when the manager is a former employee who is not included in the active employees list. In such cases, the manager's EmployeeID cannot be resolved from the PayrollNumber lookup.
+        - connector: adp-workforce-now
+          description: |
+            ADP Workforce Now does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate API request to the ADP count endpoint — an extra API call not currently implemented.
+        - connector: azure-active-directory
+          description: |
+            Microsoft Azure Active Directory does not include a total count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` with a `ConsistencyLevel: eventual` header — an extra requirement not currently implemented.
+        - connector: adp-run
+          description: |
+            ADP Run does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: adp-ihcm
+          description: |
+            ADP iHCM does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rippling
+          description: |
+            Rippling does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: justworks
+          description: |
+            Justworks does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: hibob
+          description: |
+            HiBob does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: ceridian-dayforce
+          description: |
+            Ceridian Dayforce does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: trinet
+          description: |
+            TriNet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: people-hr
+          description: |
+            People HR does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: sapling
+          description: |
+            Sapling does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: google-workspace
+          description: |
+            Google Workspace does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: okta
+          description: |
+            Okta does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: zoho-people
+          description: |
+            Zoho People does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a separate count endpoint with a date context — not currently implemented.
+        - connector: lucca-hr
+          description: |
+            `total_count` is available in Lucca HR but requires `?include=totalCount` query parameter. Currently not wired — `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeesResponse'
@@ -5572,6 +5624,18 @@ paths:
       x-apideck-gotchas:
         - connector: bamboohr.com
           description: BambooHR only allows access to company data for the currently authorized connection.
+        - connector: adp-ihcm
+          description: |
+            ADP iHCM does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rippling
+          description: |
+            Rippling does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: okta
+          description: |
+            Okta does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: lucca-hr
+          description: |
+            `total_count` is available in Lucca HR but requires `?include=totalCount` query parameter. Currently not wired — `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetHrisCompaniesResponse'
@@ -5877,6 +5941,36 @@ paths:
       x-apideck-gotchas:
         - connector: humaans-io
           description: Departments are mapped to teams in Humaans. Increase the limit for this API call to 200 to get the most accurate data back. The teams are inferred from number of employees defined by the limit parameter (default 20).
+        - connector: adp-ihcm
+          description: |
+            ADP iHCM does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rippling
+          description: |
+            Rippling does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: hibob
+          description: |
+            HiBob does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: ceridian-dayforce
+          description: |
+            Ceridian Dayforce does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: google-workspace
+          description: |
+            Google Workspace does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: azure-active-directory
+          description: |
+            Microsoft Azure Active Directory does not include a total count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` with a `ConsistencyLevel: eventual` header — an extra requirement not currently implemented.
+        - connector: bamboohr
+          description: |
+            BambooHR does not expose a total record count in department list responses. `meta.total_count` will not appear.
+        - connector: zoho-people
+          description: |
+            Zoho People does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a separate count endpoint with a date context — not currently implemented.
+        - connector: lucca-hr
+          description: |
+            `total_count` is available in Lucca HR but requires `?include=totalCount` query parameter. Currently not wired — `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetDepartmentsResponse'
@@ -6163,6 +6257,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: ceridian-dayforce
+          description: |
+            Ceridian Dayforce does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeePayrollsResponse'
@@ -6240,6 +6338,33 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: adp-workforce-now
+          description: |
+            ADP Workforce Now does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate API request to the ADP count endpoint — an extra API call not currently implemented.
+        - connector: azure-active-directory
+          description: |
+            Microsoft Azure Active Directory does not include a total count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` with a `ConsistencyLevel: eventual` header — an extra requirement not currently implemented.
+        - connector: bamboohr
+          description: The employment role field will return "other" for list calls when the employee is terminated. To fetch the correct employment role data, you need to call the employee detail endpoint.
+        - connector: hibob
+          description: |
+            HiBob does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rippling
+          description: |
+            Rippling does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: ceridian-dayforce
+          description: |
+            Ceridian Dayforce does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: google-workspace
+          description: |
+            Google Workspace does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: zoho-people
+          description: |
+            Zoho People does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a separate count endpoint with a date context — not currently implemented.
+        - connector: lucca-hr
+          description: |
+            `total_count` is available in Lucca HR but requires `?include=totalCount` query parameter. Currently not wired — `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeeSchedulesResponse'
@@ -6281,6 +6406,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: adp-workforce-now
+          description: |
+            ADP Workforce Now does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate API request to the ADP count endpoint — an extra API call not currently implemented.
         - connector: bamboohr
           description: BambooHR requires start_date and end_date parameters to successfully retrieve time off requests. These optional Unify parameters can be sent as filters[start_date] and filters[end_date]. If there are not present, they are sent to BambooHR with the default values of '1900-01-01' & '2100-12-31' respectively.
         - connector: hr-works
@@ -6297,6 +6425,15 @@ paths:
         - connector: charliehr
           description: |
             For CharlieHR, when filtering by start_date, the end_date parameter is required. Omitting end_date will result in no data being returned.
+        - connector: adp-ihcm
+          description: |
+            ADP iHCM does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: hibob
+          description: |
+            HiBob does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: lucca-hr
+          description: |
+            `total_count` is available in Lucca HR but requires `?include=totalCount` query parameter. Currently not wired — `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetTimeOffRequestsResponse'

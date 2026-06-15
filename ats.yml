@@ -2547,6 +2547,10 @@ components:
               description: Cursor to navigate to the next page of results through the API
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
+        total_count:
+          type: integer
+          description: Number of records available in total for this resource
+          example: 1
     NotFoundResponse:
       type: object
       x-apideck-schema-id: NotFound
@@ -3176,6 +3180,19 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: greenhouse
+          description: |
+            Greenhouse does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: lever
+          description: |
+            Lever does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: recruitee
+          description: |
+            Recruitee does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: workable
+          description: |
+            Workable does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetJobsResponse'
@@ -3529,6 +3546,19 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: greenhouse
+          description: |
+            Greenhouse does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: lever
+          description: |
+            Lever does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: recruitee
+          description: |
+            Recruitee does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: workable
+          description: |
+            Workable does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetApplicantsResponse'

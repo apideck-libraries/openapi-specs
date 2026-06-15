@@ -1290,6 +1290,10 @@ components:
               description: Cursor to navigate to the next page of results through the API
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
+        total_count:
+          type: integer
+          description: Number of records available in total for this resource
+          example: 1
     NotFoundResponse:
       type: object
       x-apideck-schema-id: NotFound
@@ -1728,6 +1732,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: twilio
+          description: |
+            Twilio does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetMessagesResponse'

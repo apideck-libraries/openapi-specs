@@ -2987,6 +2987,10 @@ components:
               description: Cursor to navigate to the next page of results through the API
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
+        total_count:
+          type: integer
+          description: Number of records available in total for this resource
+          example: 1
     MiddleName:
       type: string
       title: Middle name
@@ -3742,6 +3746,32 @@ paths:
             discount application on the order, including order-wide discounts. Shopify's
             `discountAllocations` field does not distinguish between product-specific and order-wide
             discount sources — all allocations for a given line item are returned together.
+
+            Shopify list responses do not include a total record count. `meta.total_count` will not appear. Surfacing the total requires a separate GET request to the `/admin/api/{version}/{resource}/count.json` endpoint — an extra API call that is not currently implemented.
+        - connector: wix
+          description: |
+            Wix does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a POST to the Wix Stores query endpoint (`/wix-stores/v1/{resource}/query`) which returns a `totalResults` field — an extra API call not currently implemented.
+        - connector: shopware
+          description: |
+            Shopware does not expose a native cross-page total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires setting `total-count-mode: 1` in the request criteria when calling the Shopware Admin search API — an extra requirement not currently implemented.
+        - connector: bol-com
+          description: |
+            Bol.com does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: amazon-seller-central
+          description: |
+            Amazon Seller Central does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: prestashop
+          description: |
+            PrestaShop does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: picqer
+          description: |
+            Picqer does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: lightspeed-ecommerce
+          description: |
+            Lightspeed Ecommerce does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: shopify-public-app
+          description: |
+            Shopify exposes counts via dedicated `/count.json` endpoints only — requires an extra API call not currently implemented. `meta.total_count` will not appear.
         - connector: bigcommerce
           description: |
             The `line_items[].discounts[]` array includes every `applied_discounts[]` entry BigCommerce
@@ -3857,6 +3887,30 @@ paths:
             pagination (up to 200 per page), `options` are omitted from the list response. Each variant still includes its
             concrete selections under `variants[].options`. To retrieve the full product-level `options` array, fetch the
             product individually via the get-by-id endpoint.
+        - connector: shopify
+          description: |
+            Shopify list responses do not include a total record count. `meta.total_count` will not appear. Surfacing the total requires a separate GET request to the `/admin/api/{version}/{resource}/count.json` endpoint — an extra API call that is not currently implemented.
+        - connector: wix
+          description: |
+            Wix does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a POST to the Wix Stores query endpoint (`/wix-stores/v1/{resource}/query`) which returns a `totalResults` field — an extra API call not currently implemented.
+        - connector: shopware
+          description: |
+            Shopware does not expose a native cross-page total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires setting `total-count-mode: 1` in the request criteria when calling the Shopware Admin search API — an extra requirement not currently implemented.
+        - connector: amazon-seller-central
+          description: |
+            Amazon Seller Central does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: prestashop
+          description: |
+            PrestaShop does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: picqer
+          description: |
+            Picqer does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: lightspeed-ecommerce
+          description: |
+            Lightspeed Ecommerce does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: shopify-public-app
+          description: |
+            Shopify exposes counts via dedicated `/count.json` endpoints only — requires an extra API call not currently implemented. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetProductsResponse'
@@ -3941,6 +3995,27 @@ paths:
       x-apideck-gotchas:
         - connector: woocommerce
           description: Woocommerce will only return customers that have placed an order and created and account.
+        - connector: shopify
+          description: |
+            Shopify list responses do not include a total record count. `meta.total_count` will not appear. Surfacing the total requires a separate GET request to the `/admin/api/{version}/{resource}/count.json` endpoint — an extra API call that is not currently implemented.
+        - connector: wix
+          description: |
+            Wix does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a POST to the Wix Stores query endpoint (`/wix-stores/v1/{resource}/query`) which returns a `totalResults` field — an extra API call not currently implemented.
+        - connector: shopware
+          description: |
+            Shopware does not expose a native cross-page total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires setting `total-count-mode: 1` in the request criteria when calling the Shopware Admin search API — an extra requirement not currently implemented.
+        - connector: prestashop
+          description: |
+            PrestaShop does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: picqer
+          description: |
+            Picqer does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: lightspeed-ecommerce
+          description: |
+            Lightspeed Ecommerce does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: shopify-public-app
+          description: |
+            Shopify exposes counts via dedicated `/count.json` endpoints only — requires an extra API call not currently implemented. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceCustomersResponse'

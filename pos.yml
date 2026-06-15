@@ -3188,6 +3188,10 @@ components:
               description: Cursor to navigate to the next page of results through the API
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
+        total_count:
+          type: integer
+          description: Number of records available in total for this resource
+          example: 1
     Modifier:
       type: object
       x-apideck-schema-id: Modifier
@@ -5729,6 +5733,13 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: square
+          description: |
+            Square does not expose a native cross-page total record count for this list endpoint. `meta.total_count` will not appear.
+        - connector: clover
+          description: |
+            Clover does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetOrdersResponse'
@@ -6643,6 +6654,13 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: clover
+          description: |
+            Clover does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: square
+          description: |
+            Square does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a separate search request that returns a `total_count` field — an extra API call not currently implemented.
       responses:
         '200':
           $ref: '#/components/responses/GetPosPaymentsResponse'
@@ -7032,6 +7050,13 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: clover
+          description: |
+            Clover does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: square
+          description: |
+            Square does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a separate search request that returns a `total_count` field — an extra API call not currently implemented.
       responses:
         '200':
           $ref: '#/components/responses/GetMerchantsResponse'
@@ -7315,6 +7340,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: square
+          description: |
+            Square does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a separate search request that returns a `total_count` field — an extra API call not currently implemented.
       responses:
         '200':
           $ref: '#/components/responses/GetLocationsResponse'
@@ -7582,6 +7611,13 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: square
+          description: |
+            Square does not expose a native cross-page total record count for this list endpoint. `meta.total_count` will not appear.
+        - connector: clover
+          description: |
+            Clover does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetItemsResponse'
@@ -7845,6 +7881,13 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: clover
+          description: |
+            Clover does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: square
+          description: |
+            Square does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a separate search request that returns a `total_count` field — an extra API call not currently implemented.
       responses:
         '200':
           $ref: '#/components/responses/GetModifiersResponse'
@@ -8066,6 +8109,13 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: clover
+          description: |
+            Clover does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: square
+          description: |
+            Square does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a separate search request that returns a `total_count` field — an extra API call not currently implemented.
       responses:
         '200':
           $ref: '#/components/responses/GetModifierGroupsResponse'
@@ -8301,6 +8351,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: clover
+          description: |
+            Clover does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetOrderTypesResponse'
@@ -8510,6 +8564,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: clover
+          description: |
+            Clover does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetTendersResponse'

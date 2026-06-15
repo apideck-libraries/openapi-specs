@@ -1806,6 +1806,10 @@ components:
               description: Cursor to navigate to the next page of results through the API
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
+        total_count:
+          type: integer
+          description: Number of records available in total for this resource
+          example: 1
     NotFoundResponse:
       type: object
       x-apideck-schema-id: NotFound
@@ -2758,6 +2762,15 @@ paths:
       x-apideck-gotchas:
         - connector: google-drive
           description: Google drive does not provide `previous` cursor information, so the cursors for the previous pages will be empty.
+        - connector: sharepoint
+          description: |
+            SharePoint does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query — not currently implemented.
+        - connector: dropbox
+          description: |
+            Dropbox does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: onedrive
+          description: |
+            OneDrive does not expose a total record count in list responses. `meta.total_count` will not appear.
       x-apideck-api: fileStorage
       x-codeSamples:
         - lang: TypeScript
@@ -3776,8 +3789,17 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-gotchas:
+        - connector: onedrive
+          description: |
+            OneDrive does not include a total record count in default list responses. `meta.total_count` will not appear.
+        - connector: sharepoint
+          description: |
+            SharePoint does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query — not currently implemented.
         - connector: google-drive
           description: Google drive does not provide `previous` cursor information, so the cursors for the previous pages will be empty.
+        - connector: google-drive
+          description: |
+            Google Drive does not expose a total record count in list responses. `meta.total_count` will not appear.
       x-apideck-api: fileStorage
       x-codeSamples:
         - lang: TypeScript
@@ -3974,6 +3996,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: sharepoint
+          description: |
+            SharePoint does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query — not currently implemented.
       responses:
         '200':
           $ref: '#/components/responses/GetDriveGroupsResponse'

@@ -10202,6 +10202,10 @@ components:
               description: Cursor to navigate to the next page of results through the API
               example: em9oby1jcm06OnBhZ2U6OjM=
               nullable: true
+        total_count:
+          type: integer
+          description: Number of records available in total for this resource
+          example: 1
     MiddleName:
       type: string
       title: Middle name
@@ -18177,6 +18181,53 @@ paths:
             Read-only catalog: `add`, `update`, `delete` are not exposed in this release. Global system-managed codes are list-only and return 403 on `GET /tax-rates/{id}`; org-scoped codes (when present) support get-by-id.
 
             The product tax code catalog is tenant-wide and cannot be scoped by company. The `x-apideck-company-id` header is accepted but has no effect on the returned catalog.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: access-financials
+          description: |
+            Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: freshbooks
+          description: The Freshbooks Bills api is currently in beta.
+        - connector: myob-acumatica
+          description: |
+            The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: acumatica
+          description: |
+            The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
       responses:
         '200':
           $ref: '#/components/responses/GetTaxRatesResponse'
@@ -18497,11 +18548,47 @@ paths:
         - connector: alegra
           description: |
             Each bill line is costed against either a catalog item (`line_items[].type: expense_item`, which sets `line.item`) or an expense ledger account (`expense_account`, which sets `line.ledger_account`); a single bill may mix both. See the Alegra usage guide for details.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics
+          description: |
+            Microsoft Dynamics 365 does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query or calling a separate `$count` endpoint — not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes bills by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: myob-acumatica
+          description: |
+            The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: acumatica
+          description: |
+            The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
       responses:
         '200':
           $ref: '#/components/responses/GetBillsResponse'
@@ -19164,11 +19251,50 @@ paths:
         - connector: alegra
           description: |
             Invoices are created **unstamped** (as a draft), so no CFDI folio is consumed. To stamp (timbrar), send `pass_through` with `stamp.generateStamp: true` plus the SAT fields (`paymentType`, `cfdiUse`, `regimeClient`); each line's Alegra item must have a SAT `productKey`. Update and delete work only while the invoice is a draft — a stamped invoice is immutable (void it in Alegra). The CFDI itself (UUID, seals) is not mapped to unified fields; read it via `?raw=true` or the Proxy (#11099). See the Alegra usage guide for the full stamping flow.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics
+          description: |
+            Microsoft Dynamics 365 does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query or calling a separate `$count` endpoint — not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: stripe-billing
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: access-financials
+          description: |
+            Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes invoices by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoicesResponse'
@@ -19857,11 +19983,63 @@ paths:
         - connector: alegra
           description: |
             Only **postable** accounts (`header: false`) can be used on transactions; posting against a `header: true` grouping node is rejected. Two codes are exposed — `code` (the company's own account code) and `nominal_code` (the SAT *código agrupador*); the SAT code is shared across related accounts, not unique per account. Creating an account requires a `parent_account.id`, and accounts cannot be deleted (Alegra has no delete-account endpoint).
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics
+          description: |
+            Microsoft Dynamics 365 does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query or calling a separate `$count` endpoint — not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: access-financials
+          description: |
+            Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             Ledger accounts (the chart of accounts) are tenant-wide in DualEntry and cannot be scoped by company.
             The `x-apideck-company-id` header is accepted but has no effect — all accounts across the tenant are
             returned regardless of the company ID.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: xero
+          description: Xero limits to 10 attachments per resource (invoices/bills) of 3.5MB each.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: freshbooks
+          description: The Freshbooks Bills api is currently in beta.
+        - connector: myob-acumatica
+          description: |
+            The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: acumatica
+          description: |
+            The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
       responses:
         '200':
           $ref: '#/components/responses/GetLedgerAccountsResponse'
@@ -20184,6 +20362,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
@@ -20214,6 +20398,37 @@ paths:
             Invoice items (the product catalog) are tenant-wide in DualEntry and cannot be scoped by company.
             The `x-apideck-company-id` header is accepted but has no effect — all items across the tenant are
             returned regardless of the company ID.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: xero
+          description: Xero limits to 10 attachments per resource (invoices/bills) of 3.5MB each.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: freshbooks
+          description: The Freshbooks Bills api is currently in beta.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoiceItemsResponse'
@@ -20632,11 +20847,49 @@ paths:
         - connector: alegra
           description: |
             `allocations` is not populated — Alegra exposes only the aggregate applied amount, not which invoices a credit note offset. A stamped credit note is immutable; update and delete work only while it is unstamped (open).
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics
+          description: |
+            Microsoft Dynamics 365 does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query or calling a separate `$count` endpoint — not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: access-financials
+          description: |
+            Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes credit notes by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: freshbooks
+          description: The Freshbooks Bills api is currently in beta.
+        - connector: myob-acumatica
+          description: |
+            The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: acumatica
+          description: |
+            The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNotesResponse'
@@ -21245,11 +21498,59 @@ paths:
         - connector: wafeq
           description: |
             Wafeq does not separate customers and suppliers as distinct API resources — both share `/v1/contacts/`. The unified `customers` resource sends `relationship[]=customer` to filter, and `suppliers` sends `relationship[]=supplier`. However, Wafeq's `relationship` field is internal and is NOT settable via the API on contact create/update — it is populated by Wafeq based on UI classification or transaction history. Newly-created contacts and contacts with no transactions will appear in BOTH the customers and suppliers lists until Wafeq tags them. To enforce strict customer/supplier separation, manage contact classification in the Wafeq UI.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics
+          description: |
+            Microsoft Dynamics 365 does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query or calling a separate `$count` endpoint — not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: access-financials
+          description: |
+            Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes customers by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: myob-acumatica
+          description: |
+            The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: acumatica
+          description: |
+            The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
       responses:
         '200':
           $ref: '#/components/responses/GetCustomersResponse'
@@ -21733,11 +22034,53 @@ paths:
         - connector: xero
           description: |
             In Xero, contacts are not strictly separated into customers or suppliers until linked to a transaction. Apideck's approach is to return suppliers as `IsSupplier=true||IsCustomer=false` and customers as `IsCustomer=true||IsSupplier=false`. If you need other cases, use pass-through, e.g. `?pass_through[where]=IsCustomer=false AND IsSupplier=false` for uncategorized contacts. See the [Pass-through guide](https://developers.apideck.com/guides/pass-through) for more details.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics
+          description: |
+            Microsoft Dynamics 365 does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query or calling a separate `$count` endpoint — not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: access-financials
+          description: |
+            Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes suppliers by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: myob-acumatica
+          description: |
+            The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: acumatica
+          description: |
+            The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
       responses:
         '200':
           $ref: '#/components/responses/GetSuppliersResponse'
@@ -22236,11 +22579,58 @@ paths:
         - connector: alegra
           description: |
             A payment must be applied to at least one invoice — Alegra rejects an unapplied payment.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics
+          description: |
+            Microsoft Dynamics 365 does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query or calling a separate `$count` endpoint — not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: access-financials
+          description: |
+            Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes payments by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: freshbooks
+          description: The Freshbooks Bills api is currently in beta.
+        - connector: myob-acumatica
+          description: |
+            The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: acumatica
+          description: |
+            The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentsResponse'
@@ -22662,6 +23052,9 @@ paths:
         - connector: quickbooks
           description: |
             tax_inclusive only applies to UK, AU, IN, and CA editions. US companies ignore this field silently.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetRefundsResponse'
@@ -23248,6 +23641,22 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics
+          description: |
+            Microsoft Dynamics 365 does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query or calling a separate `$count` endpoint — not currently implemented.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            `meta.total_count` requires `$count=true` OData parameter — not currently implemented. `meta.total_count` will not appear.
+        - connector: xero
+          description: |
+            Xero does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: stripe-billing
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetCompaniesResponse'
@@ -23425,11 +23834,47 @@ paths:
         - connector: alegra
           description: |
             Alegra does not assign a journal entry `number` (always empty), and journal entries have no created/updated timestamps — so they cannot be sorted by date.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics
+          description: |
+            Microsoft Dynamics 365 does not include a total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` to the OData query or calling a separate `$count` endpoint — not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes journal entries by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: freshbooks
+          description: |
+            FreshBooks does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetJournalEntriesResponse'
@@ -24187,6 +24632,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
@@ -24197,11 +24645,38 @@ paths:
         - connector: alegra
           description: |
             `delivery_date` is required on create. Each line is costed against either a catalog item (`line_items[].type: expense_item`, which sets `line.item`) or an expense ledger account (`expense_account`, which sets `line.ledger_account`); a PO may mix both. See the Alegra usage guide for details.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: procountor-fi
+          description: |
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes purchase orders by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: myob-acumatica
+          description: |
+            The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: acumatica
+          description: |
+            The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
       responses:
         '200':
           $ref: '#/components/responses/GetPurchaseOrdersResponse'
@@ -24853,9 +25328,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetSubsidiariesResponse'
@@ -25145,6 +25632,23 @@ paths:
             is flagged as a legal entity. For only entity-flagged locations (legal sub-companies under
             the top-level company), use `companies` or `subsidiaries`, which query Intacct's
             `LOCATIONENTITY` view.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: xero
+          description: Xero limits to 10 attachments per resource (invoices/bills) of 3.5MB each.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetAccountingLocationsResponse'
@@ -25427,12 +25931,24 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
         - connector: workday
           description: |
             Departments resource is not supported in Workday.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetAccountingDepartmentsResponse'
@@ -25661,6 +26177,25 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetAttachmentsResponse'
@@ -25886,12 +26421,33 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
         - connector: sage-intacct
           description: |
             Pagination is not supported when listing all bank accounts without an account_type filter.
         - connector: alegra
           description: |
             Alegra exposes no IBAN, BIC/SWIFT, routing number, currency or balance, so those fields are empty. On create, Alegra requires an opening balance — the connector sets it from the unified `balance` (or 0) at today's date.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetBankAccountsResponse'
@@ -26148,6 +26704,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
         - connector: sage-intacct
           description: The Parent ID field refers to the parent tracking category code.
         - connector: xero
@@ -26175,6 +26740,18 @@ paths:
             Pennylane is multi-plan native (`/analytic-plans` + `/analytic-accounts`). The unified
             `tracking-categories` resource flattens to one default plan; ids are unique within that plan but
             may collide across plans. Use `?raw=true` to retrieve the full multi-plan structure.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: access-financials
+          description: |
+            Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetTrackingCategoriesResponse'
@@ -26414,6 +26991,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
         - connector: netsuite
           description: |
             In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
@@ -26424,11 +27004,46 @@ paths:
         - connector: alegra
           description: |
             A bill payment must be applied to at least one bill — Alegra rejects an unapplied payment.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes bill payments by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: freshbooks
+          description: The Freshbooks Bills api is currently in beta.
+        - connector: myob-acumatica
+          description: |
+            The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: acumatica
+          description: |
+            The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
       responses:
         '200':
           $ref: '#/components/responses/GetBillPaymentsResponse'
@@ -26810,8 +27425,29 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
         - connector: xero
           description: In Xero, both suppliers (also used for employees) and customers are identified using the same contact ID, which maps to both `supplier_id` and `customer_id`. To accurately determine the contact type, use the suppliers and customers endpoints.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
             DualEntry scopes expenses by company. Pass the `x-apideck-company-id` header (or set a Default
@@ -27393,6 +28029,12 @@ paths:
           description: |
             Bank Feed Accounts in Xero represent bank accounts connected to Xero's Bank Feeds feature, which automatically imports bank transactions into Xero on a daily basis.
             For more information on setting up and using Bank Feeds with Xero, see the [Bank Feeds for Xero guide](https://developers.apideck.com/guides/bank-feeds-xero).
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: stripe
+          description: |
+            Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetBankFeedAccountsResponse'
@@ -27621,7 +28263,16 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
-      x-apideck-gotchas: null
+      x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: rillet
+          description: |
+            Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetBankFeedStatementsResponse'
@@ -27863,6 +28514,29 @@ paths:
       x-apideck-gotchas:
         - connector: workday
           description: It is required to pass the filter[type] parameter to the request. For supplier categories, use the `supplier` value. For resource/spend categories, use the `expense` value. For revenue categories, use the `revenue` value.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: odoo
+          description: |
+            Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: xero
+          description: Xero limits to 10 attachments per resource (invoices/bills) of 3.5MB each.
+        - connector: moneybird
+          description: |
+            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetCategoriesResponse'
@@ -27952,6 +28626,15 @@ paths:
         - connector: alegra
           description: |
             Each line's Alegra item must have a SAT `productKey` or creation fails (code 1035, "La clave del producto es requerida"). The customer address is returned as a single preformatted string in `billing_address.line1`, not the structured object invoices return.
+        - connector: quickbooks
+          description: |
+            QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: intuit-enterprise-suite
+          description: |
+            Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: pennylane
+          description: |
+            Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: netsuite
           description: |
             Using `filter[number]` switches quotes to the SuiteQL search path, which returns header fields only — `line_items` are omitted on filtered results. Use the GET one endpoint to retrieve full line-item detail for a quote.
@@ -28450,6 +29133,12 @@ paths:
           description: |
             `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
             When a filter or sort triggers the SuiteQL path, `actual_amount`, `is_billable` and `completion_percentage` are not available (those are SOAP-only fields, absent from the SuiteQL `job` table) — use the unfiltered list or the GET one endpoint for those fields.
+        - connector: zoho-books
+          description: |
+            Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetProjectsResponse'
@@ -28819,6 +29508,13 @@ paths:
         - $ref: '#/components/parameters/accountingEmployeesFilter'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetAccountingEmployeesResponse'
@@ -29203,6 +29899,10 @@ paths:
         - $ref: '#/components/parameters/expenseCategoriesFilter'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: afas
+          description: |
+            AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
       responses:
         '200':
           $ref: '#/components/responses/GetExpenseCategoriesResponse'

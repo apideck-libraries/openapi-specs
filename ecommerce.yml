@@ -3747,7 +3747,13 @@ paths:
             `discountAllocations` field does not distinguish between product-specific and order-wide
             discount sources — all allocations for a given line item are returned together.
 
-            Shopify list responses do not include a total record count. `meta.total_count` will not appear. Surfacing the total requires a separate GET request to the `/admin/api/{version}/{resource}/count.json` endpoint — an extra API call that is not currently implemented.
+            Shopify list responses do not include a total record count.
+        - connector: shopify-public-app
+          description: |
+            The `line_items[].discounts[]` array reflects each line item's allocated share from every
+            discount application on the order, including order-wide discounts. Shopify's
+            `discountAllocations` field does not distinguish between product-specific and order-wide
+            discount sources — all allocations for a given line item are returned together. `meta.total_count` will not appear. Surfacing the total requires a separate GET request to the `/admin/api/{version}/{resource}/count.json` endpoint — an extra API call that is not currently implemented.
         - connector: wix
           description: |
             Wix does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a POST to the Wix Stores query endpoint (`/wix-stores/v1/{resource}/query`) which returns a `totalResults` field — an extra API call not currently implemented.
@@ -3820,6 +3826,12 @@ paths:
           description: |
             Woocommerce returns the customer_id as '0' when an order was completed without registration. In this scenario, the customer data on order reflects a 'Guest Checkout'.
         - connector: shopify
+          description: |
+            The `line_items[].discounts[]` array reflects each line item's allocated share from every
+            discount application on the order, including order-wide discounts. Shopify's
+            `discountAllocations` field does not distinguish between product-specific and order-wide
+            discount sources — all allocations for a given line item are returned together.
+        - connector: shopify-public-app
           description: |
             The `line_items[].discounts[]` array reflects each line item's allocated share from every
             discount application on the order, including order-wide discounts. Shopify's

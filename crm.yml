@@ -8900,6 +8900,7 @@ paths:
         - connector: zoho-crm
           description: |
             Zoho CRM's `info.count` in list responses is a per-page count only, not a cross-page total. `meta.total_count` will not appear.
+            Zoho CRM activities are backed entirely by the Events module (`/v2.1/Events`), so every activity is returned with `type: meeting` regardless of how it was created. Other activity types (`note`, `call`, `task`, `email`) are not represented. To read notes, use the dedicated `/crm/notes` resource (mapped to Zoho's `/v5/Notes`).
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -8941,6 +8942,8 @@ paths:
           description: 'In Salesforce, when creating tasks, calls, or emails, please specify "type": "task" with correct `event_sub_type` value in the request body to ensure proper handling.'
         - connector: planhat
           description: While creating an activity, the type should always be `task`.
+        - connector: zoho-crm
+          description: "Zoho CRM maps all activities to the Events module (`POST /v2.1/Events`) regardless of the `type` value. An activity created with `type: note`, `call`, `task`, or `email` is still stored as a Zoho Event (a calendar entry), and reads of `/crm/activities` return only Events. To log a note against a record, use the dedicated `/crm/notes` resource (mapped to Zoho's `/v5/Notes`) instead."
       requestBody:
         required: true
         content:

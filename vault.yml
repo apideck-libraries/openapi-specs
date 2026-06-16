@@ -4469,6 +4469,47 @@ paths:
         - $ref: '#/components/parameters/resource_id'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: azure-active-directory
+          description: |
+            Custom fields are derived from a sampled user record (`onPremisesExtensionAttributes.*` keys and `userType`). Microsoft Entra
+            does not expose a separate attribute-schema endpoint for custom (extension) attributes — the shape of
+            `onPremisesExtensionAttributes.*` is fixed and always present on the user object, so sampling does not cause fields to
+            disappear. However, the values returned reflect the sampled user's data only.
+
+            Use `?resource_id=<user-id>` to pin sampling to a specific user for deterministic results.
+        - connector: charliehr
+          description: |
+            Custom fields are derived from the `notes[]` array on a sampled team member. CharlieHR does not expose a custom-field
+            schema endpoint, so fields without a note on the sampled team member are not returned.
+
+            Use `?resource_id=<id>` to pin sampling to a specific team member.
+        - connector: personio
+          description: |
+            Custom fields are derived from the `attributes.dynamic_*` keys on a sampled employee record. Personio dynamic attributes
+            without a value on the sampled employee are still returned (null values are not dropped), but the value will be `null`.
+
+            Use `?resource_id=<id>` to pin sampling to a specific employee for deterministic value coverage.
+        - connector: workday
+          description: |
+            Custom fields are derived from a fixed set of paths on the Workday Worker SOAP envelope: Custom_Organization references,
+            supervisory organisation, People Business Partner roles, Employee_Type_ID, Job_Category_ID, Management_Level_ID, and
+            Worker_Type. These are Workday system fields surfaced as custom fields — they do NOT reflect tenant-defined custom
+            attributes added via Workday's configuration interface. The returned list is deterministic across requests but cannot
+            be extended by tenant configuration.
+        - connector: breathehr
+          description: |
+            Custom fields are derived from the `custom_fields` object on a sampled employee record. Breathe HR does not expose a
+            separate field-definition schema endpoint, so fields not populated on the sampled employee are not returned.
+
+            Use `?resource_id=<id>` to pin sampling to a specific employee.
+        - connector: gusto
+          description: |
+            Custom fields are derived from the `custom_fields[]` array on a sampled employee record. Gusto exposes a company-level
+            custom field definitions endpoint (`/v1/companies/{company_id}/custom_fields`), but Apideck's schema-path branch does
+            not inject `company_id` into the request, so the sample-record path is used.
+
+            Use `?resource_id=<id>` to pin sampling to a specific employee for deterministic value coverage.
       responses:
         '200':
           $ref: '#/components/responses/GetCustomFieldsResponse'

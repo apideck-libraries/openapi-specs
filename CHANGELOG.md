@@ -1,3 +1,9 @@
+## v10.24.44 - (2026-06-18)
+
+### Ecommerce API
+
+- Added read-only `tax_inclusive` boolean to [Orders](apis/ecommerce/reference/orders), indicating whether the order's monetary amounts are inclusive of tax. Populated on [BigCommerce](connectors/bigcommerce), [Shopify](connectors/shopify), [Shopify (Public App)](connectors/shopify-public-app), [Shopware](connectors/shopware), [WooCommerce](connectors/woocommerce), [Wix](connectors/wix), and [Lightspeed](connectors/lightspeed)
+
 ## v10.24.43 - (2026-06-12)
 
 ### Accounting API

@@ -21537,9 +21537,7 @@ paths:
             Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
-            DualEntry scopes customers by company. Pass the `x-apideck-company-id` header (or set a Default
-            Company on the connection) to return only records belonging to that company within the tenant.
-            Without it, records across all companies in the tenant are returned.
+            DualEntry customers are org-level master data and are not scoped to any company. The `x-apideck-company-id` header has no effect on customer list or lookup results — all customers belong to the organisation, not to individual subsidiary companies.
         - connector: microsoft-dynamics-365-business-central
           description: |
             If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
@@ -22067,9 +22065,7 @@ paths:
             Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: dualentry
           description: |
-            DualEntry scopes suppliers by company. Pass the `x-apideck-company-id` header (or set a Default
-            Company on the connection) to return only records belonging to that company within the tenant.
-            Without it, records across all companies in the tenant are returned.
+            DualEntry suppliers are org-level master data and are not scoped to any company. The `x-apideck-company-id` header has no effect on supplier list or lookup results — all suppliers belong to the organisation, not to individual subsidiary companies.
         - connector: afas
           description: |
             AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.

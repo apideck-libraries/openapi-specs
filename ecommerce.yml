@@ -3972,6 +3972,31 @@ paths:
           description: Product images for PrestaShop are limited to the default image set on the product.
         - connector: wix
           description: Wix V3 catalog assigns unique SKUs and weights to each product variant. The product-level `sku` and `weight` fields represent only the first variant for backward compatibility. To access complete variant data across all product variations, reference the individual `variants[].sku` and `variants[].weight` fields which contain the accurate data for each variant.
+        - connector: magento
+          description: |
+            For simple products with customizable options, child SKUs (e.g. `WSR-POL-PPQ-001-PRB-ROL-120`)
+            are not stored as separate catalog records in Magento — they are synthesized at order time by
+            concatenating the parent SKU with each selected option value's SKU. These child SKUs do not
+            exist in the Magento catalog and calling `GET /rest/V1/products/{child_sku}` against Magento
+            directly returns 404.
+
+            **Fetching a child SKU directly via `GET /ecommerce/products/{child_sku}`** triggers an internal
+            prefix walk-back: Apideck progressively shortens the hyphen-delimited SKU to locate the parent
+            product, then verifies the remaining suffix against the parent's customizable option values
+            (including Cartesian combinations for products with multiple option groups). This recovery makes
+            up to N–1 additional Magento API calls, where N is the number of hyphen-delimited segments in
+            the child SKU (e.g. a 7-segment SKU requires up to 6 calls; a 15-segment SKU up to 14). Child
+            SKUs with more than 20 hyphen-delimited segments are not resolved and return 404.
+
+            **Price calculation:** the child SKU price is the parent base price plus the sum of each matched
+            option value's added price. Only `price_type: "fixed"` option values contribute to the price
+            delta. Option values with `price_type: "percent"` contribute 0 to the delta.
+
+            **Recommended approach:** to avoid the extra API calls and latency, fetch the parent SKU first
+            via `GET /ecommerce/products/{parent_sku}`. The `variants[]` array is pre-populated with all
+            valid option combinations, their synthesized SKUs, and their correct prices in a single call.
+            Use `variants[]` to build a local lookup table rather than calling the child SKU endpoint
+            repeatedly.
       responses:
         '200':
           $ref: '#/components/responses/GetProductResponse'

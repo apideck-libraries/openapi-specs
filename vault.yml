@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.24.44
+  version: 10.24.45
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -1904,6 +1904,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Connection'
+        meta:
+          $ref: '#/components/schemas/Meta'
         _raw:
           $ref: '#/components/schemas/Raw'
     GetConnectionsResponse:
@@ -1969,6 +1971,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/Consumer'
+        meta:
+          $ref: '#/components/schemas/Meta'
         _raw:
           $ref: '#/components/schemas/Raw'
     GetConsumersResponse:
@@ -2090,6 +2094,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/CustomMapping'
+        meta:
+          $ref: '#/components/schemas/Meta'
         _raw:
           $ref: '#/components/schemas/Raw'
     GetLogsResponse:
@@ -2136,6 +2142,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/ResourceExample'
+        meta:
+          $ref: '#/components/schemas/Meta'
         _raw:
           $ref: '#/components/schemas/Raw'
     GetResourceSchemaResponse:
@@ -2156,6 +2164,8 @@ components:
           example: OK
         data:
           $ref: '#/components/schemas/ResourceSchema'
+        meta:
+          $ref: '#/components/schemas/Meta'
         _raw:
           $ref: '#/components/schemas/Raw'
     IntegrationState:
@@ -2463,6 +2473,37 @@ components:
           type: integer
           description: Number of records available in total for this resource
           example: 1
+        warnings:
+          type: array
+          description: Non-fatal warnings emitted when optional workflow steps failed. Present only when at least one step degraded; the response status remains 200.
+          nullable: true
+          items:
+            type: object
+            x-apideck-schema-id: WorkflowWarning
+            description: Advisory warning emitted when an optional workflow step fails non-fatally. The overall request still succeeds (HTTP 200); inspect this to detect partial or degraded data.
+            properties:
+              type:
+                type: string
+                description: Discriminator for the warning kind.
+                example: downstream_request_failed
+              status_code:
+                type: integer
+                description: HTTP status code returned by the failed downstream request, when available.
+                example: 429
+                nullable: true
+              error:
+                type: string
+                description: Short error description from the downstream provider, when available.
+                nullable: true
+              operation:
+                type: string
+                description: Identifier of the workflow step that failed.
+                example: getManager
+                nullable: true
+              message:
+                type: string
+                description: Detailed message from the downstream provider, when available.
+                nullable: true
     NotFoundResponse:
       type: object
       x-apideck-schema-id: NotFound

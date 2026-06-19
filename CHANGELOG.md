@@ -1,3 +1,9 @@
+## v10.24.45 - (2026-06-19)
+
+### HRIS API
+
+- Added an optional `meta.warnings` array to single-resource (`get`) responses, surfaced when an optional enrichment step on a multi-step connector returns an error but the overall request still succeeds (HTTP `200`). Each warning includes `type`, `status_code`, `error`, `operation`, and `message`, so consumers can detect partial or degraded data instead of treating a missing field as genuinely empty. For example, when [PeopleHR](connectors/people-hr) rate-limits the manager lookup while fetching an [Employee](apis/hris/reference/employees), the response now reports a `downstream_request_failed` warning. PeopleHR also now falls back to the manager details already present on the employee record when that lookup fails, instead of returning `manager` as `null`.
+
 ## v10.24.44 - (2026-06-18)
 
 ### Ecommerce API

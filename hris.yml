@@ -4920,12 +4920,14 @@ paths:
             `PerAddressDEFLT` entity for all countries and does not surface per-country
             field semantics. See SAP KBA 2902948.
 
-            Email type is resolved from the SAP picklist label of the email category (ecEmailType). Because SAP
-            admins can configure their own email-category picklist, the label can be anything an organisation
-            defines, so we resolve the unified type from the picklist label as follows:
-            Business → work, Personal → personal, Primary → primary, Secondary → secondary, Other → other.
-            Any unlabelled email, or a label with no en_US translation or that does not match the values above,
-            resolves to other.
+            Email type is resolved from the `externalCode` of the email-category picklist
+            option (ecEmailType), which is locale-independent, so the resolved type does not
+            depend on the tenant's configured language. The externalCode to unified type
+            mapping is: B maps to work, P to personal, PI to primary, S to secondary, BI to
+            billing, and O to other. `B`, `P` and `O` are SAP-seeded defaults present in every
+            tenant; `PI`, `S` and `BI` must be configured as picklist options by the tenant to
+            take effect. Any email whose ecEmailType option uses an externalCode outside this
+            set, or has no externalCode, resolves to other.
         - connector: hr-works
           description: The employment_status supports filtering on 'active'.
         - connector: bamboohr
@@ -5302,6 +5304,15 @@ paths:
             This limitation is by SAP design: their OData v2 API exposes a single merged
             `PerAddressDEFLT` entity for all countries and does not surface per-country
             field semantics. See SAP KBA 2902948.
+
+            Email type is resolved from the `externalCode` of the email-category picklist
+            option (ecEmailType), which is locale-independent, so the resolved type does not
+            depend on the tenant's configured language. The externalCode to unified type
+            mapping is: B maps to work, P to personal, PI to primary, S to secondary, BI to
+            billing, and O to other. `B`, `P` and `O` are SAP-seeded defaults present in every
+            tenant; `PI`, `S` and `BI` must be configured as picklist options by the tenant to
+            take effect. Any email whose ecEmailType option uses an externalCode outside this
+            set, or has no externalCode, resolves to other.
         - connector: charliehr
           description: The jobs array compensation data includes only the data related to the first compensation. For more comprehensive compensation data, please refer to the compensations array.
         - connector: sympa

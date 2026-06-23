@@ -8990,7 +8990,10 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: salesforce
-          description: 'In Salesforce, when creating tasks, calls, or emails, please specify "type": "task" with correct `event_sub_type` value in the request body to ensure proper handling.'
+          description: |-
+            Salesforce activities map to the Event object by default. Creating an Event requires a start date/time, so you must send `activity_datetime` (mapped to Salesforce `ActivityDateTime`). Omitting it returns `Required fields are missing: [ActivityDateTime]`. For all-day events, send `activity_date` (mapped to `ActivityDate`) and set `all_day_event: true` instead.
+            When creating tasks, calls, or emails, please specify `"type": "task"` with the correct `event_sub_type` value in the request body to ensure proper handling. These map to the Salesforce Task object and do not require `activity_datetime`.
+            Associate the activity with a record using `contact_id` or `lead_id` (mapped to `WhoId`), and `account_id`/`opportunity_id`/etc. (mapped to `WhatId`).
         - connector: planhat
           description: While creating an activity, the type should always be `task`.
         - connector: zoho-crm

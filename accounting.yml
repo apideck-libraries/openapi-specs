@@ -27182,6 +27182,9 @@ paths:
         - connector: quickbooks
           description: |
             Payment method is required and must be `Check` or `CreditCard`.
+        - connector: sage-intacct
+          description: |
+            `payment_method` is required. A bill payment created without one is rejected with the generic downstream error `BL34000094`, which does not name the missing field. The value must match one of Sage Intacct's system AP payment methods — e.g. `Cash`, `Printed Check`, `EFT`, `Charge Card`, or `Record Transfer`. These methods are company-wide (not per-vendor or per-invoice), so a single value can be reused across all bill payments. There is no endpoint that lists payment methods; the values configured on a company can be discovered by reading existing bill payments or payments and inspecting `payment_method`. Recording an `EFT` payment does not require ACH/EFT bank setup on the vendor or account.
         - connector: netsuite
           description: |
             In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.

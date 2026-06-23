@@ -24036,10 +24036,11 @@ paths:
             Sage Intacct only supports `draft` and `posted` status fields when updating a journal entry.
             If no status is provided then the default status is "draft".
             Only Journal Entries with `draft` status can be updated.
-            Only the first tracking category is used (`tracking_categories[0]`). On create it is matched
-            by `tracking_categories[0].code` (Intacct `CLASSID`); on update it is matched by
-            `tracking_categories[0].id` (Intacct `CLASSDIMKEY`). When round-tripping a journal entry,
-            use the `id` value returned by a prior Get Journal Entry call.
+            Only the first tracking category is used (`tracking_categories[0]`). On both create and
+            update, the connector sends both `CLASSID` (from `tracking_categories[0].code`) and
+            `CLASSDIMKEY` (from `tracking_categories[0].id`), so a class may be referenced by its `id`
+            (as returned by `GET /accounting/tracking-categories`) or by its `code` on either verb;
+            supplying just one of the two is sufficient.
             Each line's `location_id` falls back to the connection's configured default entity. When
             the connection operates at the top level (no specific entity), set `location_id` explicitly
             on lines whose ledger account requires a location dimension.

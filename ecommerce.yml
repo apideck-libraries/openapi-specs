@@ -3787,6 +3787,8 @@ paths:
         - connector: walmart
           description: |
             When the `created_since` filter is not provided, Walmart only returns orders from the last 7 days. To retrieve older orders, supply `filter[created_since]` with the desired start date (e.g. `?filter[created_since]=2024-01-01T00:00:00Z`).
+
+            Walmart's order API does not expose a payment status. `payment_status` is inferred from the order line status: active orders (Created/Acknowledged/Shipped/Delivered) report `paid` because Walmart Marketplace collects customer payment upfront; `Cancelled` reports `voided` and `Refund` reports `refunded`. `total_amount` is derived by summing line-item charges (incl. tax) when Walmart omits the order-level `orderSummary`.
         - connector: shopify
           description: |
             The `line_items[].discounts[]` array reflects each line item's allocated share from every
@@ -3891,6 +3893,13 @@ paths:
             (product-specific) allocations are returned together, with no field that reliably
             distinguishes the original discount source. This is the same class of behavior as the
             documented Shopify `discountAllocations` limitation.
+        - connector: walmart
+          description: |
+            Walmart's order API does not expose a payment status. `payment_status` is inferred from the
+            order line status: active orders (Created/Acknowledged/Shipped/Delivered) report `paid` because
+            Walmart Marketplace collects customer payment upfront; `Cancelled` reports `voided` and `Refund`
+            reports `refunded`. `total_amount` is derived by summing line-item charges (incl. tax) when
+            Walmart omits the order-level `orderSummary`.
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrderResponse'

@@ -3788,6 +3788,8 @@ paths:
           description: |
             When the `created_since` filter is not provided, Walmart only returns orders from the last 7 days. To retrieve older orders, supply `filter[created_since]` with the desired start date (e.g. `?filter[created_since]=2024-01-01T00:00:00Z`).
 
+            Walmart applies markdowns before serializing orders. `line_items[].total_amount` is the PRODUCT charge amount plus applicable tax (`chargeAmount.amount + tax.taxAmount.amount` on the charge where `chargeType === 'PRODUCT'`). Walmart only exposes two charge types (`PRODUCT` and `SHIPPING`); discounts are pre-applied and not broken out separately in the order response.
+
             Walmart's order API does not expose a payment status. `payment_status` is inferred from the order line status: active orders (Created/Acknowledged/Shipped/Delivered) report `paid` because Walmart Marketplace collects customer payment upfront; `Cancelled` reports `voided` and `Refund` reports `refunded`. `total_amount` is derived by summing line-item charges (incl. tax) when Walmart omits the order-level `orderSummary`.
         - connector: shopify
           description: |
@@ -3809,6 +3811,10 @@ paths:
         - connector: shopware
           description: |
             Shopware does not expose a native cross-page total record count in default list responses. `meta.total_count` will not appear. Surfacing the total requires setting `total-count-mode: 1` in the request criteria when calling the Shopware Admin search API — an extra requirement not currently implemented.
+
+            Shopware applies order-level promotions as separate `type: promotion` line items with negative `totalPrice`, rather than reducing the price on individual product lines. As a result, `line_items[].total_amount` reflects each product line's price before order-level promotion allocation. Use the top-level `discounts[]` array to access promotion codes and applied amounts.
+
+            Line items with `type` of `promotion`, `credit`, or `discount` are excluded from `line_items[]`. Items with a `null` or unknown `type` are retained.
         - connector: bol-com
           description: |
             Bol.com does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -3824,6 +3830,8 @@ paths:
         - connector: lightspeed-ecommerce
           description: |
             Lightspeed Ecommerce does not expose a total record count in list responses. `meta.total_count` will not appear.
+
+            `line_items[].total_amount` is computed as `(price × quantity) − sum(discounts[].total) + tax`. When the store uses gross pricing (`pricesIncludeTax: true`), `items[].price` already includes tax and `items[].tax` is not added to avoid double-counting. `line_items[].unit_price` uses `items[].price`, which includes option-modifier surcharges over the base SKU price (`productPrice` is not used because it omits modifiers).
         - connector: shopify-public-app
           description: |
             Shopify exposes counts via dedicated `/count.json` endpoints only — requires an extra API call not currently implemented. `meta.total_count` will not appear.
@@ -3834,6 +3842,16 @@ paths:
             (product-specific) allocations are returned together, with no field that reliably
             distinguishes the original discount source. This is the same class of behavior as the
             documented Shopify `discountAllocations` limitation.
+        - connector: magento
+          description: |
+            `line_items[].total_amount` is computed as `items[].row_total_incl_tax − items[].discount_amount`. Magento does not expose a single post-discount, tax-inclusive line total in its REST API; the unified field is derived from these two fields (both are positive values at the item level per Adobe Commerce REST API).
+        - connector: clover
+          description: |
+            All Clover monetary values are integers in cents (`1099` = $10.99). `line_items[].total_amount` and `line_items[].unit_price` are divided by 100 to produce decimal currency values. `total_amount` uses `priceWithModifiersAndItemAndOrderDiscounts`, which includes both item-level and order-level discounts and requires the `lineItems.discounts,lineItems.orderLevelDiscounts` expand parameters — handled automatically by the connector. Order-level discount codes and amounts appear in the top-level `discounts[]` array; per-line allocation is not broken out individually.
+
+            Note: the order-level `total_amount` and other Clover monetary fields (payment amounts, order-level discount amounts) also return integers in cents. This is a known limitation of the Clover connector.
+
+            `customer.name`, `customer.emails`, `customer.phone_numbers`, `billing_address`, and `shipping_address` are not available in list responses. Clover's list orders endpoint returns only the customer ID reference — full customer details are only returned by the single order endpoint (`GET /pos/orders/{id}`).
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrdersResponse'
@@ -3893,13 +3911,27 @@ paths:
             (product-specific) allocations are returned together, with no field that reliably
             distinguishes the original discount source. This is the same class of behavior as the
             documented Shopify `discountAllocations` limitation.
+        - connector: magento
+          description: |
+            `line_items[].total_amount` is computed as `items[].row_total_incl_tax − items[].discount_amount`. Magento does not expose a single post-discount, tax-inclusive line total in its REST API; the unified field is derived from these two fields (both are positive values at the item level per Adobe Commerce REST API).
+        - connector: clover
+          description: |
+            All Clover monetary values are integers in cents (`1099` = $10.99). `line_items[].total_amount` and `line_items[].unit_price` are divided by 100 to produce decimal currency values. `total_amount` uses `priceWithModifiersAndItemAndOrderDiscounts`, which includes both item-level and order-level discounts and requires the `lineItems.discounts,lineItems.orderLevelDiscounts` expand parameters — handled automatically by the connector. Order-level discount codes and amounts appear in the top-level `discounts[]` array; per-line allocation is not broken out individually.
+
+            Note: the order-level `total_amount` and other Clover monetary fields (payment amounts, order-level discount amounts) also return integers in cents. This is a known limitation of the Clover connector.
+        - connector: shopware
+          description: |
+            Shopware applies order-level promotions as separate `type: promotion` line items with negative `totalPrice`, rather than reducing the price on individual product lines. As a result, `line_items[].total_amount` reflects each product line's price before order-level promotion allocation. Use the top-level `discounts[]` array to access promotion codes and applied amounts.
+
+            Line items with `type` of `promotion`, `credit`, or `discount` are excluded from `line_items[]`. Items with a `null` or unknown `type` are retained.
         - connector: walmart
           description: |
-            Walmart's order API does not expose a payment status. `payment_status` is inferred from the
-            order line status: active orders (Created/Acknowledged/Shipped/Delivered) report `paid` because
-            Walmart Marketplace collects customer payment upfront; `Cancelled` reports `voided` and `Refund`
-            reports `refunded`. `total_amount` is derived by summing line-item charges (incl. tax) when
-            Walmart omits the order-level `orderSummary`.
+            Walmart applies markdowns before serializing orders. `line_items[].total_amount` is the PRODUCT charge amount plus applicable tax (`chargeAmount.amount + tax.taxAmount.amount` on the charge where `chargeType === 'PRODUCT'`). Walmart only exposes two charge types (`PRODUCT` and `SHIPPING`); discounts are pre-applied and not broken out separately in the order response.
+
+            Walmart's order API does not expose a payment status. `payment_status` is inferred from the order line status: active orders (Created/Acknowledged/Shipped/Delivered) report `paid` because Walmart Marketplace collects customer payment upfront; `Cancelled` reports `voided` and `Refund` reports `refunded`. `total_amount` is derived by summing line-item charges (incl. tax) when Walmart omits the order-level `orderSummary`.
+        - connector: lightspeed-ecommerce
+          description: |
+            `line_items[].total_amount` is computed as `(price × quantity) − sum(discounts[].total) + tax`. When the store uses gross pricing (`pricesIncludeTax: true`), `items[].price` already includes tax and `items[].tax` is not added to avoid double-counting. `line_items[].unit_price` uses `items[].price`, which includes option-modifier surcharges over the base SKU price (`productPrice` is not used because it omits modifiers).
       responses:
         '200':
           $ref: '#/components/responses/GetEcommerceOrderResponse'

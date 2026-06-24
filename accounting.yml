@@ -28740,6 +28740,10 @@ paths:
           description: |
             Using `filter[number]` switches quotes to the SuiteQL search path, which returns header fields only — `line_items` are omitted on filtered results. Use the GET one endpoint to retrieve full line-item detail for a quote.
             The minimum page size accepted for NetSuite is 5, and the pagination cursor expires if not used within 15 minutes of creation.
+        - connector: sage-intacct
+          description: |
+            Quotes are Order Entry transactions (`SODOCUMENT`). The list endpoint returns header fields only — `line_items` are omitted on list results; use the GET one endpoint to retrieve full line-item detail for a quote.
+            Quotes are scoped by their transaction-definition class rather than by name, so every quote document type on the tenant is returned — including custom or renamed quote definitions. Sage Intacct lets a tenant define multiple quote document types with arbitrary names; all of them are matched.
       responses:
         '200':
           $ref: '#/components/responses/GetQuotesResponse'

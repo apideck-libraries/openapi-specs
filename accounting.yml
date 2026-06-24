@@ -27589,7 +27589,8 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: xero
-          description: When creating an expense for Xero, ensure the `account_id` corresponds to a 'bank' or 'credit_card' account type. Using other account types may result in errors or unexpected behavior.
+          description: |
+            Xero expenses map to Spend Money bank transactions and are created with status AUTHORISED — there is no draft state. Both a bank/credit-card account (`account.id`) and a supplier (`supplier.id`) are required, even though they are optional in the unified schema; omitting either returns a Xero validation error ("A Contact must be specified" / "The BankAccount must be specified"). The `account.id` must correspond to a 'bank' or 'credit_card' account type — other account types may result in errors or unexpected behavior. Xero's Expenses (expense-claims) module, where contact-less drafts can be saved in the UI, has no public write API. For a draft, payable-style expense without a bank account, use the Bills resource (Xero ACCPAY invoices) with `status: "draft"` instead.
         - connector: sage-intacct
           description: When creating an expense for Sage Intacct, the account_id must refer to a credit card account, not a ledger account. You can find the correct credit card account ID in Sage Intacct under the Credit Cards section.
         - connector: dualentry

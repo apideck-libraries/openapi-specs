@@ -27605,6 +27605,8 @@ paths:
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
             When `line_items[].customer` is set without an explicit `line_items[].rebilling.rebillable`, NetSuite defaults `rebillable` to `true`. Pass `rebilling: { rebillable: false }` explicitly if you want a customer-linked line that is not rebillable.
+
+            `line_items[].tax_rate.id` is returned on read but is not applied on create. NetSuite credit-card-charge expenses are SuiteTax-only (REST). On tenants that use a third-party tax-engine SuiteApp (e.g. STE / Vertex — identifiable by `custrecord_ste_taxcode_*` fields on the tax code), tax is determined by the engine and a manual per-line tax code supplied via the SuiteTax `taxDetails` override is rejected by NetSuite (HTTP 400 `Invalid Field Value … for taxcode`), even for an active, purchase-applicable code in the correct nexus. On a native SuiteTax tenant (no third-party engine) the standard `taxDetails.taxCode` override may be accepted. Configure tax in NetSuite / the tax engine, or use `pass_through` for tenant-specific tax fields, if line-level tax on write is required.
       requestBody:
         required: true
         content:
@@ -27828,7 +27830,10 @@ paths:
         - connector: zoho-books
           description: Zoho Books supports only one customer and one rebilling (`rebillable`) flag per expense at the header level. Only provide these in the first line_item — they will be mapped to the header-level fields and applied to all lines. If differentiated treatment is required, create separate expenses.
         - connector: netsuite
-          description: '`line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.'
+          description: |
+            `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
+
+            `line_items[].tax_rate.id` is returned on read but is not applied on update. NetSuite credit-card-charge expenses are SuiteTax-only (REST). On tenants that use a third-party tax-engine SuiteApp (e.g. STE / Vertex — identifiable by `custrecord_ste_taxcode_*` fields on the tax code), tax is determined by the engine and a manual per-line tax code supplied via the SuiteTax `taxDetails` override is rejected by NetSuite (HTTP 400 `Invalid Field Value … for taxcode`), even for an active, purchase-applicable code in the correct nexus. On a native SuiteTax tenant (no third-party engine) the standard `taxDetails.taxCode` override may be accepted. Configure tax in NetSuite / the tax engine, or use `pass_through` for tenant-specific tax fields, if line-level tax on write is required.
       requestBody:
         required: true
         content:

@@ -19477,6 +19477,13 @@ paths:
             `400 ... Required for posted records`. A company must also be resolved — supplied by the connection's
             Default Company setting, the `x-apideck-company-id` header, or `company_id` in the body (any one suffices).
             Draft invoices (`status: draft`) have none of these requirements.
+        - connector: holded
+          description: |
+            Holded ignores the `status` field on create and update. An invoice's payment status (`unpaid`,
+            `partially_paid`, `paid`) is derived by Holded from recorded payments — set it by registering
+            payments against the invoice, not by sending `status`. Draft-vs-finalized is controlled by Holded's
+            own `approveDoc` flag, which is not currently settable through the unified API. On read, `status`
+            reflects the payment state (`unpaid`/`partially_paid`/`paid`), or `draft` for unapproved documents.
       requestBody:
         required: true
         content:

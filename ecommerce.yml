@@ -3818,6 +3818,10 @@ paths:
         - connector: bol-com
           description: |
             Bol.com does not expose a total record count in list responses. `meta.total_count` will not appear.
+
+            The list endpoint (`GET /retailer/orders`) returns a reduced order schema with no pricing data. `line_items[].unit_price`, `line_items[].total_amount`, `line_items[].discounts[]`, and the order-level `total_amount` are populated only on single-order retrieval (`GET /orders/{id}`). `line_items[].discounts[]` reflects per-item promotions; Bol.com does not expose order-level discount codes separately.
+
+            Customer and address fields (`customer`, `shipping_address`, `billing_address`) are likewise absent from list responses. Fetch the single-order endpoint to retrieve these fields.
         - connector: amazon-seller-central
           description: |
             Amazon Seller Central does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -3827,6 +3831,10 @@ paths:
         - connector: picqer
           description: |
             Picqer does not expose a total record count in list responses. `meta.total_count` will not appear.
+
+            `line_items[].total_amount` is computed as `products[].price × products[].amount`. Picqer's API exposes per-unit price and quantity separately but does not return a precomputed line total.
+
+            `line_items[].unit_price` and `line_items[].total_amount` are based on `products[].price`, which is the per-unit price **excluding VAT**. Picqer does not return tax amounts on order line items; the VAT rate is only available as a VAT group reference (`idvatgroup`). If your integration requires tax-inclusive totals, apply the applicable VAT rate from the Picqer VAT Groups API.
         - connector: lightspeed-ecommerce
           description: |
             Lightspeed Ecommerce does not expose a total record count in list responses. `meta.total_count` will not appear.

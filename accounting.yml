@@ -18745,6 +18745,8 @@ paths:
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
             When `line_items[].customer` is set without an explicit `line_items[].rebilling.rebillable`, NetSuite defaults `rebillable` to `true`. Pass `rebilling: { rebillable: false }` explicitly if you want a customer-linked line that is not rebillable.
+
+            `tax_inclusive` is not supported for NetSuite bills. NetSuite's SOAP VendorBill record has no per-transaction tax-inclusive flag — the field does not exist in the NetSuite SOAP schema (`purchases.xsd`). Whether taxes are treated as inclusive or exclusive is determined by the org's TaxType master-data configuration (set by a NetSuite administrator). The field is silently ignored on create and update.
         - connector: microsoft-dynamics-365-business-central
           description: |
             If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
@@ -19051,6 +19053,8 @@ paths:
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
             `line_items[].rebilling.rebillable` cannot be changed after the bill is created — NetSuite rejects updates to `isbillable` on VendorBill. The field is silently dropped from update requests; create a new bill if you need to change the flag. Additionally, any PATCH that updates a line with `customer` set will cause NetSuite to reset `rebilling.rebillable` to its default (`true`) because the SOAP update omits the field and NetSuite re-applies the default for billable lines.
+
+            `tax_inclusive` is not supported for NetSuite bills. NetSuite's SOAP VendorBill record has no per-transaction tax-inclusive flag — the field does not exist in the NetSuite SOAP schema (`purchases.xsd`). Whether taxes are treated as inclusive or exclusive is determined by the org's TaxType master-data configuration (set by a NetSuite administrator). The field is silently ignored on create and update.
       requestBody:
         required: true
         content:

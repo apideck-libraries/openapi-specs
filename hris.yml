@@ -5328,6 +5328,19 @@ paths:
             HiBob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response.
             Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
             Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
+        - connector: microsoft-dynamics-hr
+          description: |
+            Employee data is sourced from the Dynamics 365 Finance & Operations `Workers` data entity and
+            enriched per employee from the `Employments` entity (`company_id`, `employment_start_date`,
+            `employment_end_date`) and the `PayrollFixedCompensationPlans` entity (`compensations`). These
+            enrichment fields are returned only by Get Employee (the detail endpoint); List Employees returns
+            the base `Workers` fields only. Open-ended employments have no `employment_end_date` — the F&O
+            far-future end-date sentinel (`2154-12-31`) is normalized to `null`.
+
+            `compensations` is populated only when the tenant has the Finance & Operations Payroll module
+            provisioned with data (reflecting the primary fixed-compensation plan); on tenants without payroll
+            data it is an empty array. `social_security_number` is not currently available from F&O and is
+            always `null`. Use `pass_through` to reach additional `Workers` fields.
         - connector: sap-successfactors
           description: |
             Custom fields are extracted from both `personalInfoNav` and

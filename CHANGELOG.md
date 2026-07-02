@@ -1,3 +1,9 @@
+## v10.24.46 - (2026-06-25)
+
+### Issue Tracking API
+
+- Added new [GitHub Enterprise Server](connectors/github-server) connector for self-hosted GitHub instances with support for [Collections](apis/issue-tracking/reference/collections), [Collection Tickets](apis/issue-tracking/reference/collection-tickets), [Collection Ticket Comments](apis/issue-tracking/reference/collection-ticket-comments), [Collection Users](apis/issue-tracking/reference/collection-users), and [Collection Tags](apis/issue-tracking/reference/collection-tags) resources
+
 ## v10.24.45 - (2026-06-19)
 
 ### HRIS API

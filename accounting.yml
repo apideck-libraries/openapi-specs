@@ -18749,7 +18749,9 @@ paths:
             `tax_inclusive` is not supported for NetSuite bills. NetSuite's SOAP VendorBill record has no per-transaction tax-inclusive flag — the field does not exist in the NetSuite SOAP schema (`purchases.xsd`). Whether taxes are treated as inclusive or exclusive is determined by the org's TaxType master-data configuration (set by a NetSuite administrator). The field is silently ignored on create and update.
         - connector: microsoft-dynamics-365-business-central
           description: |
-            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+            Line VAT defaults come from Business Central configuration that its API does not expose: when a line omits `tax_rate`, the VAT group configured on the G/L Account Card applies, and a foreign vendor's VAT business posting group can reduce the line VAT to 0% regardless of the `tax_rate` sent. Keep account cards and vendor posting groups configured correctly in Business Central.
+            In U.S.-localized tenants, Business Central silently resets `tax_inclusive: true` to `false`; line amounts are still computed inclusive of the sent tax rate, so totals match what was sent but the returned `tax_inclusive` flag reads `false`.
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only", the 'editable' property for that field is disabled in Business Central; enable it there to make the field writable.
         - connector: zoho-books
           description: |
             The status of the bill will be "submitted" by default when creating a bill.

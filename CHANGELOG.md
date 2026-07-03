@@ -1,3 +1,9 @@
+## v10.24.47 - (2026-07-03)
+
+### Accounting API
+
+- Added `accounting.tracking_category.created`, `accounting.tracking_category.updated`, and `accounting.tracking_category.deleted` webhook events for [Tracking Categories](apis/accounting/reference/tracking-categories). Delivered by [QuickBooks](connectors/quickbooks), which maps its native Class entity change notifications to these events (Ref #11304)
+
 ## v10.24.46 - (2026-06-25)
 
 ### Issue Tracking API

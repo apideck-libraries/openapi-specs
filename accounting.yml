@@ -19488,6 +19488,18 @@ paths:
             payments against the invoice, not by sending `status`. Draft-vs-finalized is controlled by Holded's
             own `approveDoc` flag, which is not currently settable through the unified API. On read, `status`
             reflects the payment state (`unpaid`/`partially_paid`/`paid`), or `draft` for unapproved documents.
+        - connector: exact-online
+          description: |
+            Exact Online assigns invoice status automatically (`open` by default) and ignores the `status` field on create — invoices are finalized/processed in Exact Online, not via the API.
+            Set VAT via `line_items[].tax_rate.code`; Exact derives the percentage from the code, so `line_items[].tax_rate.rate` is ignored on create.
+        - connector: exact-online-nl
+          description: |
+            Exact Online assigns invoice status automatically (`open` by default) and ignores the `status` field on create — invoices are finalized/processed in Exact Online, not via the API.
+            Set VAT via `line_items[].tax_rate.code`; Exact derives the percentage from the code, so `line_items[].tax_rate.rate` is ignored on create.
+        - connector: exact-online-uk
+          description: |
+            Exact Online assigns invoice status automatically (`open` by default) and ignores the `status` field on create — invoices are finalized/processed in Exact Online, not via the API.
+            Set VAT via `line_items[].tax_rate.code`; Exact derives the percentage from the code, so `line_items[].tax_rate.rate` is ignored on create.
       requestBody:
         required: true
         content:

@@ -1161,6 +1161,48 @@ components:
           type: string
           nullable: true
           example: vault.connection.callable
+        start_date:
+          type: string
+          format: date-time
+          example: '2024-01-01T00:00:00.000Z'
+          nullable: true
+          description: Filter logs at or after this ISO 8601 date-time (inclusive).
+        end_date:
+          type: string
+          format: date-time
+          example: '2024-01-31T23:59:59.999Z'
+          nullable: true
+          description: Filter logs at or before this ISO 8601 date-time (inclusive). Must be on or after start_date.
+        success:
+          type: boolean
+          nullable: true
+          description: Filter by delivery success or failure.
+        status_code:
+          type: number
+          example: 201
+          nullable: true
+          description: Filter by a single HTTP status code. For backward compatibility - use status_codes for multiple values.
+        status_codes:
+          type: array
+          items:
+            type: number
+            minimum: 100
+            maximum: 599
+          example:
+            - 200
+            - 201
+            - 204
+          nullable: true
+          description: Filter by multiple HTTP status codes. Values must be between 100-599. Maximum 50 status codes allowed.
+          maxItems: 50
+        event_id:
+          type: string
+          nullable: true
+          description: Filter by webhook event ID.
+        execution_attempt:
+          type: number
+          nullable: true
+          description: Filter by the delivery attempt number.
     WebhookEventType:
       x-apideck-enum-id: webhooks.event_type
       enum:

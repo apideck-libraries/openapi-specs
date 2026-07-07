@@ -1,3 +1,9 @@
+## v10.24.48 - (2026-07-06)
+
+### Vault API
+
+- [QuickBooks](connectors/quickbooks) and [NetSuite](connectors/netsuite) now populate the normalized `metadata.company_id` on [Connections](apis/vault/reference/connections) — the identifier of the authorized organization (QuickBooks realm, NetSuite account) — joining the accounting connectors that already surface it. Because `metadata.company_id` is included on the `connection.updated` webhook payload, you can detect when a consumer re-authorizes a different organization by diffing `metadata.company_id` across successive `connection.updated` events (Ref #8299)
+
 ## v10.24.47 - (2026-07-03)
 
 ### Accounting API

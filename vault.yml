@@ -639,7 +639,12 @@ components:
           type: object
           description: Attach your own consumer specific metadata
           additionalProperties: true
-          properties: {}
+          properties:
+            company_id:
+              type: string
+              description: Normalized identifier of the authorized organization, copied from the connector-specific setting (e.g. Xero tenant_id, QuickBooks realm_id, NetSuite account_id).
+              example: 4bfe0fce-9257-4a1a-a691-5eed6c957f9a
+              readOnly: true
           nullable: true
           example: &ref_1
             account:
@@ -1258,7 +1263,12 @@ components:
           type: object
           description: Attach your own consumer specific metadata
           additionalProperties: true
-          properties: {}
+          properties:
+            company_id:
+              type: string
+              description: Normalized identifier of the authorized organization, copied from the connector-specific setting (e.g. Xero tenant_id, QuickBooks realm_id, NetSuite account_id).
+              example: 4bfe0fce-9257-4a1a-a691-5eed6c957f9a
+              readOnly: true
           nullable: true
           example:
             account:

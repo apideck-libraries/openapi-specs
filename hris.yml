@@ -5341,6 +5341,25 @@ paths:
             provisioned with data (reflecting the primary fixed-compensation plan); on tenants without payroll
             data it is an empty array. `social_security_number` is not currently available from F&O and is
             always `null`. Use `pass_through` to reach additional `Workers` fields.
+        - connector: ukg-pro
+          description: |
+            `employment_role` is sourced from the UKG `employment-details` endpoint and is returned only by
+            Get Employee (the detail read), not by List Employees.
+
+            `employment_role.type` is derived from UKG's `employeeTypeCode`, which is a company-defined code
+            table (configurable per tenant), not a fixed system enum. The codes we translate are: `CON` →
+            `contractor`, `INT` → `internship`, `REG` → `employee`, `TMP` → `temp`, `SUM` → `temp`, `STU` →
+            `other`, `TES` → `other`. Any other or unrecognized code returns `other` because employee types
+            are defined by each UKG customer and vary between tenants.
+
+            `employment_role.sub_type` is derived from `fullTimeOrPartTimeCode` (`F` → `full_time`, `P` →
+            `part_time`), falling back to `salaryOrHourly` (`H` → `hourly`), otherwise `not_specified`. When
+            both are present, `fullTimeOrPartTimeCode` takes precedence (sub_type holds a single value).
+
+            To map your own `employeeTypeCode` values, add a custom mapping scoped to the `getEmploymentDetails`
+            request with the JSONPath `$['employeeTypeCode']` (do not use the picker-suggested
+            `$[*]['employeeTypeCode']` — the `[*]` form does not populate). The value is returned under
+            `custom_mappings`.
         - connector: sap-successfactors
           description: |
             Custom fields are extracted from both `personalInfoNav` and

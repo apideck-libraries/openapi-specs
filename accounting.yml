@@ -18997,6 +18997,9 @@ paths:
       x-apideck-gotchas:
         - connector: freshbooks
           description: The Freshbooks Bills api is currently in beta.
+        - connector: netsuite
+          description: |
+            NetSuite populates `payment_allocations` only on bills.get (detail), not on the bills list. To list the payments applied to a bill, use `bill-payments.list?filter[bill_id]=<bill_id>`.
         - connector: quickbooks
           description: |
             On bill line items, QuickBooks returns `ClassRef.name` as the `FullyQualifiedName`

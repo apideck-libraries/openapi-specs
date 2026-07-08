@@ -1,3 +1,9 @@
+## v10.25.0 - (2026-07-07)
+
+### CRM API
+
+- Added new read-only [Lists](apis/crm/reference/lists) resource (`GET /crm/lists` and `GET /crm/lists/{id}`) representing user-defined static or dynamic collections and segments of CRM records — HubSpot lists, Salesforce list views, Attio lists, ActiveCampaign lists, and Close smart views. Each List surfaces its `type` (`static` or `dynamic`), the `object_type` it contains (e.g. contacts, companies, opportunities), `visibility`, `record_count`, ownership, and timestamps where the downstream API provides them. Supported by [HubSpot](connectors/hubspot), [Salesforce](connectors/salesforce), [Attio](connectors/attio), [ActiveCampaign](connectors/activecampaign), and [Close](connectors/close); connector-specific field availability and pagination behavior are documented as gotchas on the resource (Ref #7725)
+
 ## v10.24.48 - (2026-07-06)
 
 ### Vault API

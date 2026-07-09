@@ -3828,6 +3828,8 @@ paths:
         - connector: prestashop
           description: |
             PrestaShop does not expose a total record count in list responses. `meta.total_count` will not appear.
+
+            `line_items[].total_amount` is the tax-inclusive per-item total after proportional allocation of order-level cart rule coupon discounts. PrestaShop does not attribute coupon amounts to individual line items in its API; coupons are distributed proportionally across lines by each line's share of the pre-coupon subtotal. This is an approximation — the exact order-level coupon total is available in the `total_discount` field.
         - connector: picqer
           description: |
             Picqer does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -3840,6 +3842,8 @@ paths:
             Lightspeed Ecommerce does not expose a total record count in list responses. `meta.total_count` will not appear.
 
             `line_items[].total_amount` is computed as `(price × quantity) − sum(discounts[].total) + tax`. When the store uses gross pricing (`pricesIncludeTax: true`), `items[].price` already includes tax and `items[].tax` is not added to avoid double-counting. `line_items[].unit_price` uses `items[].price`, which includes option-modifier surcharges over the base SKU price (`productPrice` is not used because it omits modifiers).
+
+            The list endpoint (`GET /orders`) does not embed order products, so `line_items[]` is not populated on list responses. Fetch the single-order endpoint (`GET /orders/{id}`) to retrieve `line_items[]` with per-item pricing, tax, and discounts.
         - connector: shopify-public-app
           description: |
             Shopify exposes counts via dedicated `/count.json` endpoints only — requires an extra API call not currently implemented. `meta.total_count` will not appear.

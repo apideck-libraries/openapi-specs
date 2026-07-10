@@ -1,3 +1,9 @@
+## v10.25.1 - (2026-07-10)
+
+### Accounting API
+
+- Added the `pass_through` query parameter to the list endpoints for [Expenses](apis/accounting/reference/expenses), [Expense Categories](apis/accounting/reference/expense-categories), [Expense Reports](apis/accounting/reference/expense-reports), [Employees](apis/accounting/reference/employees), [Departments](apis/accounting/reference/departments), [Locations](apis/accounting/reference/locations), [Categories](apis/accounting/reference/categories), [Companies](apis/accounting/reference/companies), [Subsidiaries](apis/accounting/reference/subsidiaries), [Quotes](apis/accounting/reference/quotes), and [Attachments](apis/accounting/reference/attachments), bringing them in line with the other Accounting list endpoints. You can now pass connector-specific query options through to the downstream API on these resources — for example Sage Intacct's `show_private` for cross-entity visibility (Ref #11479)
+
 ## v10.25.0 - (2026-07-07)
 
 ### CRM API

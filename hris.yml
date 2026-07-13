@@ -4977,6 +4977,12 @@ paths:
             tenant; `PI`, `S` and `BI` must be configured as picklist options by the tenant to
             take effect. Any email whose ecEmailType option uses an externalCode outside this
             set, or has no externalCode, resolves to other.
+
+            `preferred_language` is derived from the `externalCode` of the employee's
+            `nativePreferredLang` picklist option, which is locale-independent. The value is the
+            BCP-47 language subtag, uppercased (e.g. `ru_RU` resolves to `RU`, `en` to `EN`). It
+            is `null` when the externalCode is absent, system-generated, or not a parseable
+            ISO-639-1 two-letter code.
         - connector: hr-works
           description: The employment_status supports filtering on 'active'.
         - connector: bamboohr
@@ -5394,6 +5400,12 @@ paths:
             tenant; `PI`, `S` and `BI` must be configured as picklist options by the tenant to
             take effect. Any email whose ecEmailType option uses an externalCode outside this
             set, or has no externalCode, resolves to other.
+
+            `preferred_language` is derived from the `externalCode` of the employee's
+            `nativePreferredLang` picklist option, which is locale-independent. The value is the
+            BCP-47 language subtag, uppercased (e.g. `ru_RU` resolves to `RU`, `en` to `EN`). It
+            is `null` when the externalCode is absent, system-generated, or not a parseable
+            ISO-639-1 two-letter code.
         - connector: charliehr
           description: The jobs array compensation data includes only the data related to the first compensation. For more comprehensive compensation data, please refer to the compensations array.
         - connector: sympa

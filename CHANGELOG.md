@@ -1,3 +1,10 @@
+## v10.25.2 - (2026-07-14)
+
+### HRIS API
+
+- Added `hris.time-off-request.created`, `hris.time-off-request.updated`, and `hris.time-off-request.deleted` webhook events for [Time Off Requests](apis/hris/reference/time-off-requests).
+- Added webhook events support for [Time Off Requests](apis/hris/reference/time-off-requests) on [Employment Hero](connectors/employmenthero) connector (Ref #8318)
+
 ## v10.25.1 - (2026-07-10)
 
 ### Accounting API

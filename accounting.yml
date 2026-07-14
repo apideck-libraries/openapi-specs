@@ -28250,6 +28250,22 @@ paths:
             unsupported-operation error. Bank accounts must be set up in the Moneybird UI; once created they
             appear in the Bank Feed Accounts list and their IDs can be used as `bank_feed_account_id` when
             creating bank feed statements.
+        - connector: netsuite
+          description: |
+            `target_account_name` is required. NetSuite has no "register an existing account as a feed"
+            concept, so this operation creates a **new** General Ledger account and uses `target_account_name`
+            as its (required) account name. If it is omitted, NetSuite rejects the request with a cryptic
+            `INVALID_FLD_VALUE` ("Field must contain a value"). `target_account_number` is optional.
+
+            `target_account_id` is **not** used — this operation always creates a new GL account and never
+            links an existing one. To attach the feed to an account that already exists in NetSuite, skip this
+            create call entirely: list accounts with `GET /bank-feed-accounts`, take the `id` of the account
+            you want, and pass it as `bank_feed_account_id` when creating bank feed statements.
+
+            For reconciliation to work, the bank feed and the transactions it should match (e.g. expenses
+            posted as credit card charges) must live on the **same** NetSuite account. The reliable pattern is
+            to reuse the account both already post to — set `bank_feed_account_id` on the statement to that
+            account's id — rather than creating a separate account with this endpoint.
       requestBody:
         required: true
         content:

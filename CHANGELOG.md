@@ -1,3 +1,9 @@
+## v10.25.3 - (2026-07-14)
+
+### Issue Tracking API
+
+- Added new [GitHub Enterprise Cloud](connectors/github-enterprise-cloud) connector for GitHub Enterprise Cloud tenants with data residency (`*.ghe.com`), templating both the API host and all OAuth URLs off the tenant subdomain, with support for [Collections](apis/issue-tracking/reference/collections), [Collection Tickets](apis/issue-tracking/reference/collection-tickets), [Collection Ticket Comments](apis/issue-tracking/reference/collection-ticket-comments), [Collection Users](apis/issue-tracking/reference/collection-users), and [Collection Tags](apis/issue-tracking/reference/collection-tags) resources (Ref #11322)
+
 ## v10.25.2 - (2026-07-14)
 
 ### HRIS API

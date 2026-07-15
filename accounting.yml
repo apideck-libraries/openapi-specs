@@ -19453,6 +19453,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-business-cloud-accounting
+          description: |
+            Only `draft` and `submitted` can be set as the invoice `status` on create/update. `status: "draft"` saves a
+            non-posting draft (Sage `DRAFT`) that does not affect the accounts; `status: "submitted"` posts the invoice as
+            `UNPAID` (awaiting payment). `paid` and `partially_paid` cannot be set via the `status` field — Sage derives
+            those from recorded payments, so register a payment/allocation against the invoice instead.
+
+            Posted (non-draft) invoices require a `due_date` when the customer has no default credit days configured; draft
+            invoices have no such requirement.
         - connector: sap-s4hana-cloud
           description: |
             SAP S/4HANA Cloud creates a pure FI accounting document. This is not an SD billing document — no pricing conditions, output determination, or billing workflow is triggered. company_id and customer.id are required.

@@ -18619,6 +18619,8 @@ paths:
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
             `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
+
+            Bill line-item `tracking_categories[].name` is normalized to the leaf class name: a hierarchical class path such as `"Fruit : Apple"` returns `name: "Apple"` and `parent_name: "Fruit"` (deeper paths return the deepest leaf). NetSuite bill line items do not carry a department or location name.
         - connector: spiris
           description: |
             Spiris (Visma eAccounting) does not expose per-payment detail on the bill response. To check whether a bill is paid, use the `balance` and `total` fields:
@@ -19011,6 +19013,8 @@ paths:
         - connector: netsuite
           description: |
             NetSuite populates `payment_allocations` only on bills.get (detail), not on the bills list. To list the payments applied to a bill, use `bill-payments.list?filter[bill_id]=<bill_id>`.
+
+            Bill line-item `tracking_categories[].name` is normalized to the leaf class name: a NetSuite hierarchical class path such as `"Fruit : Apple"` returns `name: "Apple"` and `parent_name: "Fruit"` (deeper paths return the deepest leaf). NetSuite bill line items do not carry a department or location name.
         - connector: quickbooks
           description: |
             On bill line items, QuickBooks returns `ClassRef.name` as the `FullyQualifiedName`
@@ -27863,6 +27867,9 @@ paths:
           description: In Xero, both suppliers (also used for employees) and customers are identified using the same contact ID, which maps to both `supplier_id` and `customer_id`. To accurately determine the contact type, use the suppliers and customers endpoints.
         - connector: zoho-books
           description: Zoho Books supports only one customer and one rebilling (`rebillable`) flag per expense at the header level. When reading, all line_items will return the same customer and rebilling values.
+        - connector: netsuite
+          description: |
+            Line-item `tracking_categories[].name` is normalized to the leaf class name: a NetSuite hierarchical class path such as `"Fruit : Apple"` returns `name: "Apple"` and `parent_name: "Fruit"` (deeper paths return the deepest leaf as `name` and its immediate parent as `parent_name`). Line-item `department.name` and `location.name` are likewise normalized to the leaf segment.
       responses:
         '200':
           $ref: '#/components/responses/GetExpenseResponse'
@@ -30652,6 +30659,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            `tracking_categories[].name` is normalized to the leaf class name at both the expense-report header and each line item: a NetSuite hierarchical class path such as `"Fruit : Apple"` returns `name: "Apple"` and `parent_name: "Fruit"` (deeper paths return the deepest leaf). `department.name` and `location.name` (header and line items) are likewise normalized to the leaf segment.
       responses:
         '200':
           $ref: '#/components/responses/GetExpenseReportResponse'

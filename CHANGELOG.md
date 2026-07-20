@@ -1,3 +1,9 @@
+## v10.26.3 - (2026-07-17)
+
+### Accounting API
+
+- Added the `reference` field to the [ExpenseReport](apis/accounting/reference/expense-reports) resource for parity with the other transactional resources, and extended `reference` field mapping across the most-used accounting connectors (NetSuite, QuickBooks Online, Xero, Sage Intacct, Sage Business Cloud Accounting, Microsoft Dynamics 365 Business Central, DualEntry) so it round-trips to each connector's document-reference field (Ref #8395).
+
 ## v10.25.3 - (2026-07-14)
 
 ### Issue Tracking API

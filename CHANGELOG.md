@@ -1,3 +1,9 @@
+## v10.27.0 - (2026-07-22)
+
+### Accounting API
+
+- Added `billed_since` and `due_since` filters to the [Bills](apis/accounting/reference/bills) resource for narrowing by document date and due date (on or after, `YYYY-MM-DD`). `billed_since` is supported on the [Workday](connectors/workday), [Fortnox](connectors/fortnox), [DualEntry](connectors/dualentry), [Campfire](connectors/campfire), [Procountor](connectors/procountor-fi), and [Yuki](connectors/yuki) connectors; `due_since` on [Workday](connectors/workday), [DualEntry](connectors/dualentry), and [Procountor](connectors/procountor-fi) (Ref #11545).
+
 ## v10.26.3 - (2026-07-17)
 
 ### Accounting API

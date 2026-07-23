@@ -670,6 +670,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConnectorDoc'
+        overview:
+          $ref: '#/components/schemas/ConnectorOverview'
         tls_support:
           type: object
           properties:
@@ -732,6 +734,171 @@ components:
           type: string
           description: Unify entity type
           example: employee
+    ConnectorOverview:
+      type: object
+      x-apideck-schema-id: ConnectorOverview
+      description: Editorial overview metadata for the connector, used to render the connector's Overview documentation (implementation difficulty, partnership requirements, sandbox availability, and other at-a-glance facts).
+      required:
+        - difficulty
+        - difficulty_reason
+        - partnership_required
+        - apideck_credentials_available
+        - account_type_required
+        - sandbox_available
+        - consumer_access_level
+      properties:
+        beta:
+          type: boolean
+          description: Whether this connector's overview content is still in beta.
+          example: false
+        demo:
+          type: boolean
+          description: Whether this connector is demo-only.
+          example: false
+        difficulty:
+          type: string
+          description: At-a-glance implementation difficulty rating.
+          enum:
+            - straightforward
+            - moderate
+            - involved
+            - highly_complex
+          example: moderate
+        difficulty_reason:
+          type: string
+          description: Short explanation of why the connector has the given difficulty rating.
+          example: Self-Service Signup + App Review Required
+        authentication_note:
+          type: string
+          description: Notes on the connector's authentication flow.
+        webhooks:
+          type: string
+          description: Description of webhook support for this connector.
+        partnership_required:
+          type: boolean
+          description: Whether a partnership with the downstream provider is required.
+          example: true
+        partnership_url:
+          type: string
+          format: uri
+          description: URL to the downstream provider's partnership/developer portal.
+          pattern: ^https://
+        partnership_note:
+          type: string
+          description: Additional notes about the partnership requirement.
+        partnership_portal_name:
+          type: string
+          description: Name of the downstream provider's developer portal.
+        apideck_credentials_available:
+          type: boolean
+          description: Whether Apideck-managed credentials are available for this connector.
+          example: true
+        apideck_credentials_note:
+          type: string
+          description: Additional notes about Apideck-managed credentials.
+        costs:
+          type: string
+          description: Notes on costs associated with using this connector.
+        rate_limits:
+          type: string
+          description: Notes on rate limits enforced by the downstream provider.
+        account_type_required:
+          type: string
+          description: The type of downstream account required to use this connector.
+        sandbox_available:
+          type: boolean
+          description: Whether a sandbox environment is available for this connector.
+          example: true
+        sandbox_url:
+          type: string
+          format: uri
+          description: URL to the downstream provider's sandbox environment.
+          pattern: ^https://
+        sandbox_note:
+          type: string
+          description: Additional notes about the sandbox environment.
+        consumer_access_level:
+          type: string
+          description: The access level a consumer's end user needs to authorize the connection.
+        important_to_know:
+          type: array
+          description: Flat list of important facts about this connector.
+          items:
+            type: string
+          maxItems: 5
+        supported_resource_categories:
+          type: array
+          description: Grouping of the connector's supported resources by category.
+          items:
+            type: object
+            required:
+              - name
+              - resources
+            properties:
+              name:
+                type: string
+                description: Category name.
+              resources:
+                type: array
+                description: Resource ids belonging to this category.
+                items:
+                  type: string
+        external_guides:
+          type: array
+          description: Links to external guides relevant to this connector.
+          items:
+            type: object
+            required:
+              - title
+              - url
+              - source
+            properties:
+              title:
+                type: string
+                description: Guide title.
+              url:
+                type: string
+                format: uri
+                description: Guide URL.
+                pattern: ^https://
+              source:
+                type: string
+                description: Publisher of the guide.
+        responsibility_matrix:
+          type: array
+          description: Who is responsible for each area of the integration. Cell values are display strings (e.g. "✓", "Docs provided"), not booleans.
+          items:
+            type: object
+            required:
+              - area
+            properties:
+              area:
+                type: string
+                description: The responsibility area.
+              apideck:
+                type: string
+                description: Apideck's responsibility for this area.
+              consumer:
+                type: string
+                description: The consumer's responsibility for this area.
+              customer:
+                type: string
+                description: The end customer's responsibility for this area.
+        environment_notes:
+          type: array
+          description: Notes about the different environments (sandbox, production, etc.) available for this connector.
+          items:
+            type: object
+            required:
+              - environment
+              - description
+            properties:
+              environment:
+                type: string
+                description: Environment name.
+              description:
+                type: string
+                description: Description of the environment.
     ConnectorResource:
       type: object
       x-apideck-schema-id: ConnectorResource

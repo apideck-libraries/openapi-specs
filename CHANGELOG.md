@@ -1,3 +1,9 @@
+## v10.28.0 - (2026-07-24)
+
+### Issue Tracking API
+
+- Added new [Jira (API Token)](connectors/jira-api-token) connector for connecting Jira Cloud through a service account (Atlassian email + API token, HTTP Basic auth) instead of OAuth 2.0, with support for [Collections](apis/issue-tracking/reference/collections), [Collection Tickets](apis/issue-tracking/reference/collection-tickets), [Collection Ticket Comments](apis/issue-tracking/reference/collection-ticket-comments), [Collection Users](apis/issue-tracking/reference/collection-users), and [Collection Tags](apis/issue-tracking/reference/collection-tags) resources, plus native webhook events for tickets (Ref #11017)
+
 ## v10.27.0 - (2026-07-22)
 
 ### Accounting API

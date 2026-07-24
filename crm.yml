@@ -6867,6 +6867,18 @@ paths:
       x-apideck-gotchas:
         - connector: planhat
           description: The status values mentioned by planhat are prospect,coming,customer,canceled,lost.
+        - connector: microsoft-dynamics
+          description: |
+            Entity Reference (lookup) custom fields are written using Dataverse navigation-property
+            syntax automatically: supply the custom field id as either the read-side `_<attribute>_value`
+            form or the bare attribute logical name, with the target row GUID as the value, and the
+            connector emits `<navigationProperty>@odata.bind` for you.
+
+            Two limitations: polymorphic multi-target lookup columns (e.g. Customer-type columns
+            targeting both accounts and contacts) cannot be auto-resolved from a bare GUID — the request
+            fails with an actionable error; write those via pass_through with an explicit
+            `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
+            value is not supported.
       requestBody:
         required: true
         content:
@@ -7044,6 +7056,18 @@ paths:
       x-apideck-gotchas:
         - connector: planhat
           description: The status values mentioned by planhat are prospect,coming,customer,canceled,lost.
+        - connector: microsoft-dynamics
+          description: |
+            Entity Reference (lookup) custom fields are written using Dataverse navigation-property
+            syntax automatically: supply the custom field id as either the read-side `_<attribute>_value`
+            form or the bare attribute logical name, with the target row GUID as the value, and the
+            connector emits `<navigationProperty>@odata.bind` for you.
+
+            Two limitations: polymorphic multi-target lookup columns (e.g. Customer-type columns
+            targeting both accounts and contacts) cannot be auto-resolved from a bare GUID — the request
+            fails with an actionable error; write those via pass_through with an explicit
+            `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
+            value is not supported.
       requestBody:
         required: true
         content:
@@ -7298,6 +7322,18 @@ paths:
           description: When creating a contact, it is advised to always include an unique email address since Hubspot uses it to prevent duplicate contacts in HubSpot. More info on the [Hubspot developer docs](https://developers.hubspot.com/docs/api/crm/contacts).
         - connector: microsoft-outlook
           description: Microsoft Outlook allows multiple emails without a type. Please provide the first email as primary and the rest as other.
+        - connector: microsoft-dynamics
+          description: |
+            Entity Reference (lookup) custom fields are written using Dataverse navigation-property
+            syntax automatically: supply the custom field id as either the read-side `_<attribute>_value`
+            form or the bare attribute logical name, with the target row GUID as the value, and the
+            connector emits `<navigationProperty>@odata.bind` for you.
+
+            Two limitations: polymorphic multi-target lookup columns (e.g. Customer-type columns
+            targeting both accounts and contacts) cannot be auto-resolved from a bare GUID — the request
+            fails with an actionable error; write those via pass_through with an explicit
+            `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
+            value is not supported.
       requestBody:
         required: true
         content:
@@ -7468,6 +7504,18 @@ paths:
       x-apideck-gotchas:
         - connector: microsoft-outlook
           description: Microsoft Outlook allows multiple emails without a type. Please provide the first email as primary and the rest as other.
+        - connector: microsoft-dynamics
+          description: |
+            Entity Reference (lookup) custom fields are written using Dataverse navigation-property
+            syntax automatically: supply the custom field id as either the read-side `_<attribute>_value`
+            form or the bare attribute logical name, with the target row GUID as the value, and the
+            connector emits `<navigationProperty>@odata.bind` for you.
+
+            Two limitations: polymorphic multi-target lookup columns (e.g. Customer-type columns
+            targeting both accounts and contacts) cannot be auto-resolved from a bare GUID — the request
+            fails with an actionable error; write those via pass_through with an explicit
+            `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
+            value is not supported.
       requestBody:
         required: true
         content:
@@ -7716,6 +7764,18 @@ paths:
           description: The `primary_contact_id` is required in the request body
         - connector: planhat
           description: The allowed status values are `active`, `won` and `lost`. Default is `active`.
+        - connector: microsoft-dynamics
+          description: |
+            Entity Reference (lookup) custom fields are written using Dataverse navigation-property
+            syntax automatically: supply the custom field id as either the read-side `_<attribute>_value`
+            form or the bare attribute logical name, with the target row GUID as the value, and the
+            connector emits `<navigationProperty>@odata.bind` for you.
+
+            Two limitations: polymorphic multi-target lookup columns (e.g. Customer-type columns
+            targeting both accounts and contacts) cannot be auto-resolved from a bare GUID — the request
+            fails with an actionable error; write those via pass_through with an explicit
+            `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
+            value is not supported.
       requestBody:
         required: true
         content:
@@ -7837,6 +7897,18 @@ paths:
       x-apideck-gotchas:
         - connector: planhat
           description: The allowed status values are `active`, `won` and `lost`. Default is `active`.
+        - connector: microsoft-dynamics
+          description: |
+            Entity Reference (lookup) custom fields are written using Dataverse navigation-property
+            syntax automatically: supply the custom field id as either the read-side `_<attribute>_value`
+            form or the bare attribute logical name, with the target row GUID as the value, and the
+            connector emits `<navigationProperty>@odata.bind` for you.
+
+            Two limitations: polymorphic multi-target lookup columns (e.g. Customer-type columns
+            targeting both accounts and contacts) cannot be auto-resolved from a bare GUID — the request
+            fails with an actionable error; write those via pass_through with an explicit
+            `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
+            value is not supported.
       requestBody:
         required: true
         content:
@@ -8024,6 +8096,18 @@ paths:
           description: When creating a lead, it is required to include an existing `company_id`. More info on the [Pipedrive developer docs](https://pipedrive.readme.io/docs/adding-a-lead).
         - connector: freshsales
           description: 'When creating a lead, it is required to include a `"company_name": "placeholder"` in the request body.'
+        - connector: microsoft-dynamics
+          description: |
+            Entity Reference (lookup) custom fields are written using Dataverse navigation-property
+            syntax automatically: supply the custom field id as either the read-side `_<attribute>_value`
+            form or the bare attribute logical name, with the target row GUID as the value, and the
+            connector emits `<navigationProperty>@odata.bind` for you.
+
+            Two limitations: polymorphic multi-target lookup columns (e.g. Customer-type columns
+            targeting both accounts and contacts) cannot be auto-resolved from a bare GUID — the request
+            fails with an actionable error; write those via pass_through with an explicit
+            `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
+            value is not supported.
       requestBody:
         required: true
         content:
@@ -8178,6 +8262,19 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: microsoft-dynamics
+          description: |
+            Entity Reference (lookup) custom fields are written using Dataverse navigation-property
+            syntax automatically: supply the custom field id as either the read-side `_<attribute>_value`
+            form or the bare attribute logical name, with the target row GUID as the value, and the
+            connector emits `<navigationProperty>@odata.bind` for you.
+
+            Two limitations: polymorphic multi-target lookup columns (e.g. Customer-type columns
+            targeting both accounts and contacts) cannot be auto-resolved from a bare GUID — the request
+            fails with an actionable error; write those via pass_through with an explicit
+            `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
+            value is not supported.
       requestBody:
         required: true
         content:

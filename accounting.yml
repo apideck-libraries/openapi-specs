@@ -27708,7 +27708,7 @@ paths:
 
             When `line_items[].customer` is set without an explicit `line_items[].rebilling.rebillable`, NetSuite defaults `rebillable` to `true`. Pass `rebilling: { rebillable: false }` explicitly if you want a customer-linked line that is not rebillable.
 
-            `line_items[].tax_rate.id` is returned on read but is not applied on create. NetSuite credit-card-charge expenses are SuiteTax-only (REST). On tenants that use a third-party tax-engine SuiteApp (e.g. STE / Vertex — identifiable by `custrecord_ste_taxcode_*` fields on the tax code), tax is determined by the engine and a manual per-line tax code supplied via the SuiteTax `taxDetails` override is rejected by NetSuite (HTTP 400 `Invalid Field Value … for taxcode`), even for an active, purchase-applicable code in the correct nexus. On a native SuiteTax tenant (no third-party engine) the standard `taxDetails.taxCode` override may be accepted. Configure tax in NetSuite / the tax engine, or use `pass_through` for tenant-specific tax fields, if line-level tax on write is required.
+            `line_items[].tax_rate.id` is applied on create when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Tenants running a third-party tax engine (e.g. Vertex/Avalara) reject the per-line tax code — use `pass_through` there.
       requestBody:
         required: true
         content:
@@ -27940,7 +27940,7 @@ paths:
 
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
-            `line_items[].tax_rate.id` is returned on read but is not applied on update. NetSuite credit-card-charge expenses are SuiteTax-only (REST). On tenants that use a third-party tax-engine SuiteApp (e.g. STE / Vertex — identifiable by `custrecord_ste_taxcode_*` fields on the tax code), tax is determined by the engine and a manual per-line tax code supplied via the SuiteTax `taxDetails` override is rejected by NetSuite (HTTP 400 `Invalid Field Value … for taxcode`), even for an active, purchase-applicable code in the correct nexus. On a native SuiteTax tenant (no third-party engine) the standard `taxDetails.taxCode` override may be accepted. Configure tax in NetSuite / the tax engine, or use `pass_through` for tenant-specific tax fields, if line-level tax on write is required.
+            `line_items[].tax_rate.id` is applied on update when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Tenants running a third-party tax engine (e.g. Vertex/Avalara) reject the per-line tax code — use `pass_through` there.
       requestBody:
         required: true
         content:

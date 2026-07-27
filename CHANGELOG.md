@@ -1,3 +1,9 @@
+## v10.28.2 - (2026-07-27)
+
+### Ecommerce API
+
+- Added virtual (polling-based) webhook events support for [Orders](apis/ecommerce/reference/orders), [Products](apis/ecommerce/reference/products), and [Customers](apis/ecommerce/reference/customers) on the [Wix](connectors/wix) connector, covering create, update, and delete events. Wix has no runtime per-connection webhook-subscription API for API-key connections, so these events are emitted by polling the connector's list endpoints; the connector's previous unbacked `native` webhook configuration has been corrected to `virtual` (Ref #11555)
+
 ## v10.28.1 - (2026-07-24)
 
 ### Ecommerce API

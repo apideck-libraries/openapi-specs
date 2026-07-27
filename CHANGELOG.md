@@ -1,3 +1,9 @@
+## v10.28.1 - (2026-07-24)
+
+### Ecommerce API
+
+- Added native webhook events support for [Orders](apis/ecommerce/reference/orders), [Products](apis/ecommerce/reference/products), and [Customers](apis/ecommerce/reference/customers) on the [BigCommerce](connectors/bigcommerce) connector, covering create, update, and delete events. BigCommerce has no order-deletion event, so `ecommerce.order.deleted` is emitted when an order is archived (`store/order/archived`) (Ref #11554)
+
 ## v10.28.0 - (2026-07-24)
 
 ### Issue Tracking API

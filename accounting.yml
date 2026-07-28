@@ -27708,7 +27708,7 @@ paths:
 
             When `line_items[].customer` is set without an explicit `line_items[].rebilling.rebillable`, NetSuite defaults `rebillable` to `true`. Pass `rebilling: { rebillable: false }` explicitly if you want a customer-linked line that is not rebillable.
 
-            `line_items[].tax_rate.id` is applied on create when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Tenants running a third-party tax engine (e.g. Vertex/Avalara) reject the per-line tax code — use `pass_through` there.
+            `line_items[].tax_rate.id` is applied on create when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Every tax-rated line must resolve a tax type; if any cannot, the override is skipped for the whole expense and the account default applies. Some third-party tax-engine configurations (e.g. Vertex/Avalara) may reject the override — use `pass_through` for tenant-specific tax fields if needed.
       requestBody:
         required: true
         content:
@@ -27940,7 +27940,7 @@ paths:
 
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
-            `line_items[].tax_rate.id` is applied on update when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Tenants running a third-party tax engine (e.g. Vertex/Avalara) reject the per-line tax code — use `pass_through` there.
+            `line_items[].tax_rate.id` is applied on update when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Every tax-rated line must resolve a tax type; if any cannot, the override is skipped for the whole expense and the account default applies. Some third-party tax-engine configurations (e.g. Vertex/Avalara) may reject the override — use `pass_through` for tenant-specific tax fields if needed.
       requestBody:
         required: true
         content:

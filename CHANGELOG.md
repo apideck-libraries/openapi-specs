@@ -1,3 +1,9 @@
+## v10.29.1 - (2026-07-30)
+
+### Accounting API
+
+- Added the `customer_id` filter to the [Invoices](apis/accounting/reference/invoices), [Credit Notes](apis/accounting/reference/credit-notes), and [Quotes](apis/accounting/reference/quotes) resources for narrowing lists to a single customer. Supported on the [QuickBooks](connectors/quickbooks) and [NetSuite](connectors/netsuite) connectors.
+
 ## v10.29.0 - (2026-07-30)
 
 ### HRIS API

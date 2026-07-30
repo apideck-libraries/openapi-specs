@@ -1,3 +1,9 @@
+## v10.29.0 - (2026-07-30)
+
+### HRIS API
+
+- Added new [Hailey HR](connectors/haileyhr) connector with support for [Employees](apis/hris/reference/employees) (list, get, create), [Companies](apis/hris/reference/companies), [Departments](apis/hris/reference/departments), and [Time Off Requests](apis/hris/reference/time-off-requests) (list), plus virtual (polling-based) `hris.employee.created`, `hris.employee.updated`, and `hris.employee.terminated` webhook events.
+
 ## v10.28.2 - (2026-07-27)
 
 ### Ecommerce API

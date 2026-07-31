@@ -5451,6 +5451,8 @@ components:
           $ref: '#/components/schemas/CompanyName'
         company_id:
           $ref: '#/components/schemas/AccountingCompanyId'
+        subsidiary:
+          $ref: '#/components/schemas/LinkedSubsidiary'
         customer_category:
           type: string
           title: Customer Category
@@ -12101,6 +12103,8 @@ components:
           $ref: '#/components/schemas/CompanyName'
         company_id:
           $ref: '#/components/schemas/AccountingCompanyId'
+        subsidiary:
+          $ref: '#/components/schemas/LinkedSubsidiary'
         supplier_category:
           type: string
           title: Supplier Category
@@ -21851,6 +21855,9 @@ paths:
               display_name: Windsurf Shop
               company_name: SpaceX
               company_id: '12345'
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
               customer_category: Insurance
               title: CEO
               first_name: Elon
@@ -22058,6 +22065,9 @@ paths:
               display_name: Windsurf Shop
               company_name: SpaceX
               company_id: '12345'
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
               customer_category: Insurance
               title: CEO
               first_name: Elon
@@ -22381,6 +22391,9 @@ paths:
               display_name: Windsurf Shop
               company_name: SpaceX
               company_id: '12345'
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
               supplier_category: Insurance
               title: CEO
               first_name: Elon
@@ -22597,6 +22610,9 @@ paths:
               display_name: Windsurf Shop
               company_name: SpaceX
               company_id: '12345'
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
               supplier_category: Insurance
               title: CEO
               first_name: Elon
@@ -27302,6 +27318,7 @@ paths:
         - connector: sage-intacct
           description: |
             `payment_method` is required. A bill payment created without one is rejected with the generic downstream error `BL34000094`, which does not name the missing field. The value must match one of Sage Intacct's system AP payment methods — e.g. `Cash`, `Printed Check`, `EFT`, `Charge Card`, or `Record Transfer`. These methods are company-wide (not per-vendor or per-invoice), so a single value can be reused across all bill payments. There is no endpoint that lists payment methods; the values configured on a company can be discovered by reading existing bill payments or payments and inspecting `payment_method`. Recording an `EFT` payment does not require ACH/EFT bank setup on the vendor or account.
+            `account` (the bank/GL account the payment is drawn from) is also required — a bill payment without it is rejected with the generic code `BL01001973` ("Enter a valid bank account"). Like `BL34000094`, `BL01001973` is a *generic* Sage business-logic code that does not name the cause (it is also returned for closed periods, invalid dates, etc.); always read the specific reason in the error `detail` (`description2`) rather than the code alone. When routing a payment to a specific entity (`x-apideck-company-id` / `subsidiary.id`), the `account` must be one that is valid in that entity.
         - connector: netsuite
           description: |
             In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
@@ -27727,6 +27744,10 @@ paths:
             When `line_items[].customer` is set without an explicit `line_items[].rebilling.rebillable`, NetSuite defaults `rebillable` to `true`. Pass `rebilling: { rebillable: false }` explicitly if you want a customer-linked line that is not rebillable.
 
             `line_items[].tax_rate.id` is applied on create when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Every tax-rated line must resolve a tax type; if any cannot, the override is skipped for the whole expense and the account default applies. Some third-party tax-engine configurations (e.g. Vertex/Avalara) may reject the override — use `pass_through` for tenant-specific tax fields if needed.
+
+            Each tax-rated line must send **both** `tax_rate.id` and `tax_rate.rate`. A line carrying only `tax_rate.id` cannot complete the override, which disqualifies it for the whole expense — the request still returns `201`, but every line silently posts at the account's default tax code. Send the rate on every line, including any filler or remainder line.
+
+            Applying per-line tax also requires the NetSuite role to hold the `Lists → Tax Details Tab` permission at **Full**, because the connector writes a tax-details block on the Credit Card Charge. Without it the create fails as a tax-engine error rather than a permission error: `Unable to save the transaction due to an error being reported by the tax calculation engine: … Permission Violation: You need the 'Lists -> Tax Details Tab' permission`. Reading an expense's per-line `tax_rate` does not require it.
       requestBody:
         required: true
         content:

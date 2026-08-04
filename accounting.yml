@@ -21054,9 +21054,13 @@ paths:
         - connector: quickbooks
           description: |
             QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+
+            `filter[updated_since]` and `filter[created_since]` are exclusive (`>`) and `Metadata.LastUpdatedTime` / `Metadata.CreateTime` have second granularity, so a record whose timestamp equals the cursor to the exact second is skipped. For incremental sync, set the cursor one second behind the highest `updated_at` seen in the previous run and de-duplicate by `id`.
         - connector: intuit-enterprise-suite
           description: |
             Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+
+            `filter[updated_since]` and `filter[created_since]` are exclusive (`>`) and `Metadata.LastUpdatedTime` / `Metadata.CreateTime` have second granularity, so a record whose timestamp equals the cursor to the exact second is skipped. For incremental sync, set the cursor one second behind the highest `updated_at` seen in the previous run and de-duplicate by `id`.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.

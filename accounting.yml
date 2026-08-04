@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.29.1
+  version: 10.30.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -18304,6 +18304,23 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Tax rates read Sage Intacct's `tax/tax-detail` objects, and those only exist once the
+            company has a configured **tax solution**. A company without one returns an empty list —
+            that is a configuration state, not an error, and no API call can distinguish the two.
+
+            A tax solution requires the Taxes subscription, an accrual accounting method, and a
+            business user with admin privileges, and it is created in the Sage UI under
+            `Taxes > Setup > Tax solutions`. It cannot be created through the API, so an empty result
+            here is not something an integration can resolve on the customer's behalf — the customer
+            has to complete tax setup in Sage first.
+
+            Each tax detail belongs to exactly one tax solution. In a multi-entity company, verify the
+            entity is assigned the intended tax solution, operating country and tax ID: entities
+            configured against a different solution return a different set of rates.
+
+            See Sage's [advanced tax setup guide](https://www.intacct.com/ia/docs/en_US/help_action/Taxes/Indirect_Tax/VAT_and_GST/Setup/Taxes_application/Tax_solution_setup/taxes-setup-advanced.htm).
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation. NetSuite supports compound taxes through the `components` array, allowing multi-tier tax structures (e.g., state + county taxes).
@@ -18643,6 +18660,19 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `sub_total` equals `total` and does not exclude tax. Sage Intacct's REST bill object
+            exposes only document-level totals (`totalTxnAmount`, `totalBaseAmount`) with no
+            pre-tax subtotal field, so the two unified fields are populated from the same source.
+            For a bill with no tax this is correct; for a taxed bill `sub_total` will be the
+            tax-inclusive amount rather than the net. Derive the net from the line items
+            (`line_items[].total_amount`) when the distinction matters.
+
+            `accounting_period` is derived, not read from Sage. The REST bill object exposes no
+            period field, so the returned `MM-YY` is computed from the posting date. That is the
+            correct period for a calendar-aligned fiscal year; a company using custom fiscal
+            periods may see a posting near a period boundary attributed to the adjacent month.
         - connector: afas
           description: |
             AFAS Profit has no first-party purchase-invoice GetConnector on most tenants. The default `purchase_invoices_connector` setting (`Profit_Creditor_Invoices`) is the open-items / aged-creditors report — it only returns purchase invoices that are still unpaid. Posted-and-cleared invoices will not appear.
@@ -19392,6 +19422,16 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `sub_total` equals `total` and does not exclude tax. Sage's `accounts-receivable/invoice`
+            object exposes only document-level totals with no pre-tax subtotal field, so both unified
+            fields come from the same source. For an untaxed invoice that is correct; for a taxed one
+            `sub_total` is the tax-inclusive amount rather than the net. Derive the net from
+            `line_items[].total_amount` when the distinction matters.
+
+            `total_tax` is not populated: the object carries no header tax field, only a tax-solution
+            reference. Tax exists solely as per-line entries.
         - connector: afas
           description: |
             AFAS Profit derives sales invoices from `Profit_SalesorderLines` (sales-orders feed). The `limit` parameter may return fewer invoices than specified — AFAS returns flat sales-order line rows which are grouped by `OrderNumber` into complete invoices. `limit=N` caps the raw row count, not the grouped invoice count.
@@ -19498,6 +19538,26 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Line-level `item` is written as Sage's item dimension, so `line_items[].item.id` must be an item id as
+            returned by Invoice Items (Sage's internal key); `item.code` is accepted as a fallback and matches Sage's
+            human-readable item id. This tags the line with the item — it does not create an order-entry document, so
+            it has no inventory or fulfilment effect.
+
+            Line-level tax is not written. Sage only captures per-line tax under an Advanced Tax solution with
+            multi-line tax enabled; where it is not, a tax entry on a line is either rejected outright ("You cannot use
+            Tax solution '<name>' to capture tax in this transaction") or accepted with a 201 and silently discarded.
+            `line_items[].tax_rate` and `tax_amount` are therefore not sent.
+
+            Header-level `total_tax` is not supported: Sage's `accounts-receivable/invoice` object carries no tax field
+            at all, only a tax-solution reference. Tax exists solely as per-line entries on this object.
+
+            `sub_total` equals `total` and does not exclude tax. Sage's object exposes only
+            document-level totals with no pre-tax subtotal field, so both unified fields come from the
+            same source. For an untaxed document that is correct; for a taxed one `sub_total` is the
+            tax-inclusive amount rather than the net. Derive the net from `line_items[].total_amount`
+            when the distinction matters.
         - connector: sage-business-cloud-accounting
           description: |
             Only `draft` and `submitted` can be set as the invoice `status` on create/update. `status: "draft"` saves a
@@ -19857,9 +19917,19 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Send `line_items[].id` for every line you want to UPDATE. Sage matches existing lines by
+            that id; a line sent without one is added as a new line rather than replacing anything. So
+            reading an invoice and posting its lines back without their ids doubles the invoice.
+
+            Lines you leave out of the request are kept as they are — a partial update touches only the
+            lines it names, and does not delete the rest.
+
+            The same applies to bills, credit notes, journal entries and quotes.
         - connector: quickbooks
           description: |
-            Quickbooks offers limited (regional) support for applying discount on a Line Item.  Including discount_percentage or discount_amount applies to entire invoice.  The default type for a Line Item is a sales item if no type has been provided. When setting status to `void`, do not include any other fields in the request body.
+            Quickbooks offers limited (regional) support for applying discount on a Line Item. Including discount_percentage or discount_amount applies to entire invoice. The default type for a Line Item is a sales item if no type has been provided. When setting status to `void`, do not include any other fields in the request body.
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
@@ -20265,6 +20335,11 @@ paths:
       summary: Create Ledger Account
       description: Create Ledger Account
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Only `active` and `inactive` are applied. Sage's status field has no other members, so any
+            other value from the unified enum is ignored and the record keeps its current status rather
+            than the write being rejected.
         - connector: netsuite
           description: |
             The `currency` field is supported only when Multi-Currency is enabled in NetSuite. It applies mainly to Bank and Credit Card accounts and becomes read-only after creation.
@@ -20566,6 +20641,16 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `filter[type]` accepts `inventory`, `service` and `other`, but the `type` field in the
+            response can also be `non_inventory` — the unified filter enum is narrower than the
+            response enum. Two consequences:
+
+            - `filter[type]=other` matches every non-inventory Sage item type, so results can
+              include items whose `type` reads `non_inventory` as well as `other`.
+            - `filter[type]=service` always returns an empty list. Sage Intacct has no service
+              item type, so there is nothing for it to match.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -21034,6 +21119,16 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `sub_total` equals `total` and does not exclude tax. Sage's `accounts-receivable/adjustment`
+            object exposes only document-level totals with no pre-tax subtotal field, so both unified
+            fields come from the same source. Derive the net from `line_items[].total_amount` when the
+            distinction matters.
+
+            Amounts are SIGNED as Sage stores them, so a credit adjustment reports a negative
+            `total_amount` while a debit adjustment on the same endpoint reports a positive one. Nothing
+            else on the record distinguishes the two.
         - connector: afas
           description: |
             AFAS Profit derives credit notes from `Profit_SalesorderLines` by filtering rows with a negative `AmtTotal` or a credit-style `Ordersoort` (e.g. `CR`). Tenants that store credit notes in a separate journal (and not as negative sales-order lines) will return an empty list — set the `credit_notes_connector` setting to a tenant-specific GetConnector to override.
@@ -21130,6 +21225,22 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Line-level `item` is written as Sage's item dimension on the AR adjustment line, reaching parity with
+            invoices: `line_items[].item.id` takes an Invoice Items id (Sage's internal key), with `item.code` as a
+            fallback. It tags the line only — there is no inventory effect.
+
+            Line-level tax is not written, for the same reason as invoices: Sage captures per-line tax only under an
+            Advanced Tax solution with multi-line tax enabled, and otherwise discards a tax entry silently despite
+            returning 201. There is also no header-level tax field on Sage's `accounts-receivable/adjustment` object,
+            so `total_tax` cannot be set.
+
+            `sub_total` equals `total` and does not exclude tax. Sage's object exposes only
+            document-level totals with no pre-tax subtotal field, so both unified fields come from the
+            same source. For an untaxed document that is correct; for a taxed one `sub_total` is the
+            tax-inclusive amount rather than the net. Derive the net from `line_items[].total_amount`
+            when the distinction matters.
         - connector: microsoft-dynamics-365-business-central
           description: |
             `tax_inclusive` cannot be set on sales documents — the returned value reflects the Customer Card's "Prices Including VAT" setting. When `tax_inclusive: true` is sent for a document stored as tax-exclusive, line `unit_price` is written as its net value so the document totals match the sent tax-inclusive amounts.
@@ -21799,6 +21910,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Only `active` and `inactive` are applied. Sage's status field has no other members, so any
+            other value from the unified enum is ignored and the record keeps its current status rather
+            than the write being rejected.
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
@@ -22339,6 +22455,11 @@ paths:
             schema:
               $ref: '#/components/schemas/Supplier'
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Only `active` and `inactive` are applied. Sage's status field has no other members, so any
+            other value from the unified enum is ignored and the record keeps its current status rather
+            than the write being rejected.
         - connector: quickbooks-desktop
           description: |
             On create, QuickBooks Desktop only honors `company_name`, `first_name`, `last_name`, `email`, the primary `phone`, and the first address (line1/line2/city/state/postal_code/country). Fields such as `title` (salutation), `middle_name`, `fax`, `supplier_category`, `terms`, `tax_number`, `display_id` (account number), and `notes` are ignored at create time — set them with a follow-up update, which supports the full field set.
@@ -22895,6 +23016,18 @@ paths:
             schema:
               $ref: '#/components/schemas/Payment'
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Sage Intacct applies a payment to individual invoice LINES, while unified `allocations`
+            reference an invoice. Apideck resolves the invoice to its lines automatically, and applies
+            the allocation to the FIRST line of each invoice. For a multi-line invoice that means the
+            whole allocated amount lands on line 1 rather than being spread across lines.
+
+            An allocation whose invoice cannot be resolved fails the request rather than posting a
+            payment that applies to nothing.
+
+            `account.id` must be the Sage financial entity id of the bank account (for example
+            `100_SVB`), not a unified bank-account id.
         - connector: sap-s4hana-cloud
           description: |
             SAP S/4HANA Cloud creates a pure FI accounting document. This is an FI payment posting, not a bank statement import or a result of the Automatic Payment Program (F110). company_id, customer.id and account.id are required.
@@ -23272,6 +23405,23 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            A refund cannot be created on its own. Sage Intacct refunds something that already
+            exists, so a create must reference a credit memo, customer advance, over-payment or
+            negative invoice — a request without one is rejected with "No refund details were
+            found in the request."
+
+            `payment_method` accepts only two values: `eft` and `processInAP`. The AP route
+            additionally requires the customer to be linked to a vendor record, otherwise the
+            create fails with "Cannot find a linked vendor for this customer."
+
+            `number` is only populated once Sage assigns a document number; a refund created
+            without one reads back with `number: null`.
+        - connector: sage-intacct-rest
+          description: |
+            Customer refunds are off by default in Sage Intacct. Until the feature is enabled, this endpoint returns an empty list rather than an error, so an empty result does not mean the company has no refunds.
+            Enable it at Accounts Receivable > Setup > Configuration in the Customer refunds section, then set the journal refunds post to and the document sequence for refund numbers. Only after the feature is on does a Customer Refunds permission subject appear, which must then be granted on the role of the user who authorized the connection. Searching the permissions report for "refund" before enabling the feature returns no results, which looks like a missing permission but is a disabled feature.
         - connector: quickbooks
           description: |
             tax_inclusive only applies to UK, AU, IN, and CA editions. US companies ignore this field silently.
@@ -23312,6 +23462,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Customer refunds must be enabled in Sage Intacct before this operation works, and the authorizing user's role needs the Customer Refunds permission. Without the permission Sage returns "The user does not have permission for POST operation on resource objects/accounts-receivable/customer-refund"; without the feature the permission subject does not exist to grant.
+            Enable at Accounts Receivable > Setup > Configuration (Customer refunds section), choose the journal and document sequence, then grant the permission under Company > Admin > Roles. Refunds attach to a customer's existing credits, so the customer must have an unapplied credit, advance or overpayment to refund against.
         - connector: quickbooks
           description: |
             tax_inclusive only applies to UK, AU, IN, and CA editions. US companies ignore this field silently. payment_method_id is required to set the payment method. Provide the ID of a payment method record configured in QuickBooks. total_amount is required on each line item. If not provided, it is computed from quantity * unit_price. tracking_categories behavior depends on company settings. "One to entire transaction" uses top-level tracking_categories. "One to each row" requires tracking_categories on each line item.
@@ -23529,6 +23683,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Customer refunds are off by default in Sage Intacct. Until the feature is enabled, this endpoint returns an empty list rather than an error, so an empty result does not mean the company has no refunds.
+            Enable it at Accounts Receivable > Setup > Configuration in the Customer refunds section, then set the journal refunds post to and the document sequence for refund numbers. Only after the feature is on does a Customer Refunds permission subject appear, which must then be granted on the role of the user who authorized the connection. Searching the permissions report for "refund" before enabling the feature returns no results, which looks like a missing permission but is a disabled feature.
         - connector: quickbooks
           description: |
             tax_inclusive only applies to UK, AU, IN, and CA editions. US companies will not have this field in responses. payment_method returns the name of the payment method record, not the payment type category.
@@ -23568,6 +23726,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Customer refunds must be enabled in Sage Intacct before this operation works, and the authorizing user's role needs the Customer Refunds permission. Without the permission Sage rejects the request with "The user does not have permission for ... resource objects/accounts-receivable/customer-refund"; without the feature enabled the permission subject does not exist to grant in the first place.
+            Enable at Accounts Receivable > Setup > Configuration (Customer refunds section), choose the journal and document sequence, then grant the permission under Company > Admin > Roles. Refunds attach to a customer's existing credits, so the customer must have an unapplied credit, advance or overpayment to refund against.
         - connector: quickbooks
           description: |
             row_version is required for updates. tracking_categories behavior depends on company settings. "One to each row" requires tracking_categories on each line item.
@@ -23866,6 +24028,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `companiesAll` lists Sage **entities** (`company-config/entity`), which exist only in a
+            multi-entity company. In a single-entity company the list is empty, and in a multi-entity one
+            the top-level company itself is not an entity so it does not appear.
+
+            The `x-apideck-company-id` header has **no effect** on this connector. Entity scoping in Sage
+            REST is per line, not per request: a transaction carries its entity on `location`, and the
+            document header's own entity field is usually empty even on records written that way. The
+            header is accepted and ignored rather than rejected, so a request sent with it returns
+            unscoped, cross-entity data. Scope by line `location_id` instead.
+
+            This differs from the XML-based `sage-intacct` connector, which declares multi-company
+            support and takes a required Default Entity setting that scopes every request. A customer
+            migrating loses that request-level scoping with no error.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -24020,6 +24197,26 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `journal_symbol` is required when creating a journal entry, and Sage Intacct reserves
+            some journals for automated subledger posting. Posting to `ARJ` or `APJ` is rejected
+            with "Smart rule JOURNAL_CHECK was violated - this journal is reserved for automated
+            posting from a subledger". Use a general journal such as `GJ` instead, or enter the
+            adjustment through the relevant subledger (invoices, bills).
+
+            Line items must balance and each line needs `type` (`debit` or `credit`) plus a
+            `ledger_account`. In a multi-entity company each line also needs `location_id`.
+
+            `accounting_period` is derived, not read from Sage. The REST journal-entry object
+            exposes no period field, so the returned `MM-YY` is computed from the posting date.
+            That is the correct period for a calendar-aligned fiscal year; a company using custom
+            fiscal periods (a 4-4-5 calendar, or periods that do not start on the 1st) may see a
+            posting near a period boundary attributed to the adjacent month.
+
+            On write, `accounting_period` is not a substitute for a posting date — set `posted_at`.
+            A full ISO date placed in `accounting_period` is still accepted as a fallback, but a
+            period identifier such as `01-24` is ignored rather than posted as a date.
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
@@ -24134,6 +24331,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `number` cannot be set on create. Sage's `general-ledger/journal-entry` object has no writable number field
+            — the number you read back is `txnNumber`, which Sage assigns on post. The only client-supplied identifier
+            it accepts is a reference, exposed as `source_id`, so use that as the idempotency/recovery key and expect
+            `number` to be server-assigned.
         - connector: procountor-fi
           description: |
             Procountor only accepts the following values for the tax_code field: SALES, PURCHASE.
@@ -25603,7 +25806,17 @@ paths:
         - $ref: '#/components/parameters/companyId'
       security:
         - apiKey: []
-      x-apideck-gotchas: null
+      x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `display_id` becomes the Sage entity code and cannot be changed afterwards; it falls back to `name` when
+            omitted. `parent_id` and `address` have no equivalent on Sage's `company-config/entity` object and are
+            ignored, and only the first entry of `currencies` is used, as the entity's base currency.
+
+            Sage requires a tax solution on every entity, which the unified Subsidiary has no field for. The tax
+            solution an existing entity already uses is applied, falling back to the company's first configured one.
+            To pin a specific one, pass `pass_through[taxSolution][key]`. A company with no tax solution configured at
+            all cannot create entities through the API.
       requestBody:
         required: true
         content:
@@ -25724,7 +25937,12 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
-      x-apideck-gotchas: null
+      x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Only `name`, `status` and the base currency (the first entry of `currencies`) can be changed. `display_id`
+            is the Sage entity code and is fixed once the entity exists; `parent_id` and `address` have no equivalent
+            on Sage's `company-config/entity` object.
       requestBody:
         required: true
         content:
@@ -26407,6 +26625,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            At most one attachment is visible per record. Sage attaches files to a record through a
+            single *supporting document* reference on the record itself, and each upload creates a new
+            supporting document and repoints that reference at it. The previously attached file still
+            exists in Sage under Company > Supporting Documents, but it is no longer linked to the
+            record, so it does not appear here and cannot be fetched or downloaded through the
+            attachment endpoints.
+
+            Uploading a second file to the same `reference_id` therefore replaces the first rather than
+            adding to it, and returns `201` either way. If a record needs several documents, attach them
+            outside the API for now, or keep them in one file.
+
+            This is a limitation of the integration, not of Sage: a Sage supporting document can hold
+            several files, and they can be added one at a time. Lifting it is tracked work.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -26475,7 +26708,19 @@ paths:
             schema:
               type: string
               format: binary
-      x-api-deck-gotchas:
+      x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Uploading a second file to the same `reference_id` REPLACES the first rather than adding to
+            it, and returns `201` either way. Sage links files to a record through a single supporting
+            document reference; each upload creates a new supporting document and repoints that
+            reference. The earlier file remains in Sage under Company > Supporting Documents but is no
+            longer linked to the record, so it stops appearing in the attachment list and cannot be
+            fetched or downloaded.
+
+            If a record needs several documents, combine them into one file. This is a limitation of the
+            integration rather than of Sage — a Sage supporting document can hold several files — and
+            lifting it is tracked work.
         - connector: quickbooks
           description: Quickbooks limits attachment uploads to 100MB.
         - connector: xero
@@ -26560,6 +26805,13 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            The `id` must belong to the record named by `reference_type`/`reference_id`. An id from a
+            different record returns `404` rather than deleting it — attachments are scoped to the
+            record they are attached to.
+
+            The delete removes the file itself, not just the link.
         - connector: netsuite
           description: Detaches the file from the parent record. The file itself stays in the File Cabinet.
       security:
@@ -27313,6 +27565,30 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Sage Intacct applies a bill payment to individual bill LINES, while unified `allocations`
+            reference a bill. Apideck resolves the bill to its lines automatically, and applies the
+            allocation to the FIRST line of each bill. For a bill split across GL accounts or
+            departments that means the whole allocated amount lands on line 1 rather than being spread
+            across lines.
+
+            An allocation whose bill cannot be resolved fails the request rather than posting a payment
+            that applies to nothing.
+        - connector: sage-intacct-rest
+          description: |
+            Sage has one caller-settable identifier on an AP payment, and it is the payment number, so `number` is
+            what gets sent — falling back to `reference` when `number` is absent. Either way the value reads back as
+            `number`. `reference` on its own is never stored: Sage accepts the field it maps to and silently discards
+            it, so `reference` always reads back as null on payments created through the API.
+
+            `account` (the bank or GL account the payment is drawn from) is required. It maps to Sage's
+            `financialEntity`, and an AP payment submitted without it is refused by Sage's business-logic layer
+            rather than by field validation — so the rejection arrives as a generic `BL…` code that does not name
+            the cause (the same codes cover closed periods, invalid dates and similar). Read the specific reason
+            from the error `detail` (`description2`) rather than the code alone. When routing a payment to a
+            specific entity via `x-apideck-company-id` or `subsidiary.id`, the `account` must be one that is valid
+            in that entity.
         - connector: sap-s4hana-cloud
           description: |
             SAP S/4HANA Cloud creates a pure FI accounting document. This is a standalone outgoing payment posting, not a triggered run of the Automatic Payment Program (F110). company_id, supplier.id and account.id are required.
@@ -27499,6 +27775,16 @@ paths:
         - connector: freshbooks
           description: |
             The `transaction_date` field is required.
+        - connector: sage-intacct-rest
+          description: |
+            Only `note` and `payment_method` can be changed after a payment exists. Sage accepts a payment date and a
+            document id on the update call but silently discards both, and rejects any attempt to change the payment
+            number, so those fields are not sent. Amount, supplier, account and allocations are fixed at creation —
+            delete and recreate the payment to change them.
+
+            Changing `payment_method` can make Sage post the payment immediately. If the bill and the paying bank
+            account belong to different entities with no inter-entity relationship configured, that posting fails and
+            the whole update is rejected with a GL balancing error.
       requestBody:
         required: true
         content:
@@ -28555,6 +28841,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `transactions` are only returned when fetching a single statement. Sage's query
+            service cannot return child collections, so the list endpoint omits the array
+            entirely — fetch the statement by id to get its transactions.
+
+            `start_balance`, `end_balance` and their credit/debit indicators are never populated:
+            Sage's `cash-management/bank-feed` object does not carry statement balances.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -28611,6 +28905,22 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            `source_transaction_id` is only stored as Sage's `txnId` when it is entirely numeric — Sage rejects the
+            whole feed otherwise, with an error that names no field. A non-numeric value is stored as the
+            transaction's bank reference instead, and still reads back as `source_transaction_id`.
+
+            Sage derives the transaction direction from the sign of the amount, so `credit_or_debit` (falling back to
+            `transaction_type`) is what decides it: `debit` is sent as a negative amount and comes back as a
+            withdrawal. Sage ignores any explicit type on write.
+
+            Statement-level fields other than the period and the account are not supported: `start_balance`,
+            `end_balance` and their credit/debit indicators have no equivalent on Sage's `cash-management/bank-feed`
+            object, and `end_date` is ignored because a Sage feed carries a single feed date (`start_date`).
+
+            Sage requires at least one transaction — a statement with an empty `transactions` array is rejected.
+            Sage does not deduplicate on `source_transaction_id`: reposting the same statement creates duplicates.
         - connector: moneybird
           description: |
             The `bank_feed_account_id` must be the ID of an existing Moneybird financial account, as returned by the
@@ -28957,6 +29267,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Sage Intacct has no distinct quote object: quotes are order-entry documents, and that same object also holds sales orders, invoices and credit memos. Apideck restricts the list to the document types your company defines as quote-class, so `total_count` reflects quotes only.
+            Those type names are defined per company, so Apideck resolves them from your Order Entry transaction definitions on each request. If none can be resolved the list returns empty rather than returning every order-entry document.
         - connector: afas
           description: |
             AFAS Profit's default sales-quotes GetConnector (`Profit_Quotation`) only exists on tenants that have the sales-quotes module deployed. On tenants without it, the list returns empty. Override `quotes_connector` on the connection to point at a tenant-specific quotes GetConnector if available.
@@ -29016,6 +29330,27 @@ paths:
         - $ref: '#/components/parameters/companyId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Sage writes order-entry documents only against a named transaction definition
+            (`document::{definition}`), and those definitions are created per company — there is no
+            universal "quote" type. The connector resolves one for you, so no extra field is needed
+            on the request:
+
+            - If the company has exactly one active quote definition, it is used automatically.
+            - If it has several, set the one you want as the **Quote Transaction Definition**
+              (`quote_document_type`) setting on the connection. Without it the create is rejected
+              with an error naming the definitions it found, rather than guessing — the definition
+              determines the document's downstream workflow.
+
+            `line_items[].item` is a real order-entry item reference here (unlike on invoices, where
+            Sage models the item as a line dimension). Sage requires a unit on every line, so send
+            `unit_of_measure` — omitting it fails with "Missing unit Select a valid Unit in line no. N".
+
+            `total_tax` and line-level tax are not written; see the Invoices notes for why.
+
+            Creating quotes is not available on the `sage-intacct` (XML) connector.
       requestBody:
         required: true
         content:
@@ -29246,6 +29581,14 @@ paths:
             schema:
               $ref: '#/components/schemas/Quote'
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Sage writes order-entry documents only against a named transaction definition
+            (`document::{definition}`), and enforces it — addressing a quote through the wrong
+            definition returns "could not be found" rather than touching another record. The
+            connector reads the definition off the quote being written, so this needs no
+            configuration and cannot be pointed at the wrong document. A quote id that does not
+            resolve fails the request instead of falling back to a default.
         - connector: sage-intacct
           description: |
             When updating line items, each line item must include its `line_number`. Sage Intacct matches existing lines by `line_number`, not by `id`.
@@ -29430,6 +29773,15 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Sage writes order-entry documents only against a named transaction definition
+            (`document::{definition}`), and enforces it — addressing a quote through the wrong
+            definition returns "could not be found" rather than touching another record. The
+            connector reads the definition off the quote being written, so this needs no
+            configuration and cannot be pointed at the wrong document. A quote id that does not
+            resolve fails the request instead of falling back to a default.
       responses:
         '200':
           $ref: '#/components/responses/DeleteQuoteResponse'
@@ -29513,6 +29865,15 @@ paths:
       summary: Create project
       description: Create project
       x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Only `active` and `inactive` are applied on a write. Sage's own status field is an
+            enable/disable flag with no other members, so a lifecycle value from the unified enum
+            (`in_progress`, `completed`, `on_hold`, …) is ignored and the record keeps its current
+            status rather than the write being rejected.
+
+            On READ, `status` reflects Sage's Project Status (for example `in_progress`), which is a
+            different field. So a lifecycle status can be read but not written.
         - connector: quickbooks
           description: |
             The `priority` field accepts enum values ("low", "medium", "high", "critical") which are converted to QuickBooks integer values: "low" → 2, "medium" → 5, "high" → 7, "critical" → 9.
@@ -29902,6 +30263,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AccountingEmployee'
+      x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Only `active` and `inactive` are applied. Sage's status field has no other members, so any
+            other value from the unified enum is ignored and the record keeps its current status rather
+            than the write being rejected.
       responses:
         '201':
           $ref: '#/components/responses/CreateAccountingEmployeeResponse'

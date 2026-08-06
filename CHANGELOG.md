@@ -1,3 +1,9 @@
+## v10.32.0 - (2026-08-06)
+
+### CRM API
+
+- Added the [List Members](apis/crm/reference/lists) operation (`GET /crm/lists/{id}/members`) for retrieving the records that belong to a [List](apis/crm/reference/lists) — previously the Lists resource was metadata-only, exposing `record_count` but no way to enumerate which records a list contains. Returns a cursor-paginated set of members, each carrying the downstream record `id` and its `object_type`. Members are returned as bare ids rather than hydrated records, so resolve them against the resource matching the list's `object_type` (for example [Contacts](apis/crm/reference/contacts)). Supported by [HubSpot](connectors/hubspot); on HubSpot `object_type` is always `null` because the record type is a property of the List rather than of each member — read it once from `GET /crm/lists/{id}` and apply it to every member of that list. Members come back sorted by record id ascending, and for dynamic lists the result is a point-in-time snapshot of a saved segment rather than a stored set (Ref #11649)
+
 ## v10.31.0 - (2026-08-05)
 
 ### Vault API

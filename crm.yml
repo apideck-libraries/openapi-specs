@@ -49,6 +49,11 @@ tags:
     x-apideck-resource-id: lists
     x-apideck-model:
       $ref: '#/components/schemas/List'
+  - name: ListMembers
+    description: The ListMember resource represents a single CRM record that belongs to a List, identified by its downstream id and the type of record it is.
+    x-apideck-resource-id: list-members
+    x-apideck-model:
+      $ref: '#/components/schemas/ListMember'
   - name: Notes
     description: The Note resource represents textual records, such as comments or messages, associated with various entities like contacts, opportunities, or activities.
     x-apideck-resource-id: notes
@@ -3754,6 +3759,47 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetListMembersResponse:
+      type: object
+      x-apideck-schema-id: GetListMembersResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: hubspot
+        resource:
+          type: string
+          description: Unified API resource name
+          example: list-members
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListMember'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
     GetNoteResponse:
       type: object
       x-apideck-schema-id: GetNoteResponse
@@ -4441,6 +4487,23 @@ components:
           format: date-time
           example: '2020-09-30T07:43:32.000Z'
           readOnly: true
+          nullable: true
+    ListMember:
+      type: object
+      x-apideck-schema-id: ListMember
+      required:
+        - id
+      additionalProperties: false
+      properties:
+        id:
+          description: The unique identifier of the record that belongs to the List, as returned by the downstream connector.
+          type: string
+          readOnly: true
+          example: '12345'
+        object_type:
+          description: The type of CRM record this member is. Normalized to a lowercase plural noun for the vendor's standard object types (e.g. contacts, companies, opportunities, leads, tickets, campaigns, tasks, events); for vendor-specific or custom object types the raw downstream identifier is passed through unchanged, mirroring the semantics of `List.object_type`. This field is intentionally open-ended — no closed enum is enforced.
+          type: string
+          example: contacts
           nullable: true
     Links:
       type: object
@@ -6554,6 +6617,12 @@ components:
           schema:
             $ref: '#/components/schemas/GetListsResponse'
       description: Lists
+    GetListMembersResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetListMembersResponse'
+      description: List Members
     GetNoteResponse:
       content:
         application/json:
@@ -8748,6 +8817,58 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/GetListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: crm
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /crm/lists/{id}/members:
+    get:
+      tags:
+        - ListMembers
+      operationId: listMembersAll
+      summary: List list members
+      description: |
+        Retrieve the records that belong to a List. Returns a paginated set of members, each carrying the downstream record `id` and its `object_type`. Use this to enumerate the contents of a List (for example the contacts or companies a HubSpot list contains) instead of dropping to the proxy.
+      x-apideck-gotchas:
+        - connector: hubspot
+          description: |
+            HubSpot's list-memberships endpoint returns only the record id and the timestamp at which
+            the record joined the list, so `object_type` is always `null` for HubSpot members. The
+            record type is a property of the List itself, not of each member — read `object_type` from
+            `GET /crm/lists/{id}` and apply it to every member of that list.
+
+            Members are returned sorted by record id ascending, not by the order records were added to
+            the list. For dynamic lists the membership is a saved segment evaluated by HubSpot, so the
+            result is a point-in-time snapshot rather than a stored set.
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetListMembersResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':

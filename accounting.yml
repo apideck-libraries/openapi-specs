@@ -18660,6 +18660,18 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: dualentry
+          description: |
+            `updated_since` is inclusive and is applied at whole-second granularity, so a poll that
+            reuses the newest `updated_at` it received will re-receive the records from that final
+            second. De-duplicate on `id`, or advance the cursor past the boundary second.
+
+            Two DualEntry behaviours combine to cause this. Its `updated_after` filter is a
+            `>=` comparison, and while DualEntry stores update times with sub-second precision it
+            returns them truncated to the second — so a returned timestamp is always slightly earlier
+            than the value the filter compares against. Any sub-second component supplied in
+            `updated_since` is therefore rounded down before the request is sent, which guarantees no
+            record is ever skipped at the boundary, at the cost of re-delivering that second.
         - connector: sage-intacct-rest
           description: |
             `sub_total` equals `total` and does not exclude tax. Sage Intacct's REST bill object
@@ -19422,6 +19434,18 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: dualentry
+          description: |
+            `updated_since` is inclusive and is applied at whole-second granularity, so a poll that
+            reuses the newest `updated_at` it received will re-receive the records from that final
+            second. De-duplicate on `id`, or advance the cursor past the boundary second.
+
+            Two DualEntry behaviours combine to cause this. Its `updated_after` filter is a
+            `>=` comparison, and while DualEntry stores update times with sub-second precision it
+            returns them truncated to the second — so a returned timestamp is always slightly earlier
+            than the value the filter compares against. Any sub-second component supplied in
+            `updated_since` is therefore rounded down before the request is sent, which guarantees no
+            record is ever skipped at the boundary, at the cost of re-delivering that second.
         - connector: sage-intacct-rest
           description: |
             `sub_total` equals `total` and does not exclude tax. Sage's `accounts-receivable/invoice`
@@ -21119,6 +21143,18 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: dualentry
+          description: |
+            `updated_since` is inclusive and is applied at whole-second granularity, so a poll that
+            reuses the newest `updated_at` it received will re-receive the records from that final
+            second. De-duplicate on `id`, or advance the cursor past the boundary second.
+
+            Two DualEntry behaviours combine to cause this. Its `updated_after` filter is a
+            `>=` comparison, and while DualEntry stores update times with sub-second precision it
+            returns them truncated to the second — so a returned timestamp is always slightly earlier
+            than the value the filter compares against. Any sub-second component supplied in
+            `updated_since` is therefore rounded down before the request is sent, which guarantees no
+            record is ever skipped at the boundary, at the cost of re-delivering that second.
         - connector: sage-intacct-rest
           description: |
             `sub_total` equals `total` and does not exclude tax. Sage's `accounts-receivable/adjustment`

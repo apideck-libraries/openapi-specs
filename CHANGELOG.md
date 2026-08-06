@@ -1,3 +1,14 @@
+## v10.31.0 - (2026-08-05)
+
+### Vault API
+
+- Added the [Migrate Connection](apis/vault/reference/connections) operation (`POST /vault/connections/{unified_api}/{service_id}/migrate`) for converting a connection from one connector to another while keeping its credentials and connection state (settings, metadata, configuration, subscriptions, consents) — the source connection record is removed without revoking the downstream token, and retries are idempotent (a partially-completed migration resumes where it left off). Available migration targets are declared per connector and exposed as `migration_targets` on the Connector API; [QuickBooks](connectors/quickbooks) ↔ [Intuit Enterprise Suite](connectors/intuit-enterprise-suite) is the first supported pair, so a QuickBooks Online company upgraded to Intuit Enterprise Suite can be moved to the IES connector with no end-user re-authorization. Note that migrated tokens carry the source connector's OAuth scopes, so target-exclusive operations may require re-authorization (Ref #11656)
+- Added the `vault.connection.migrated` webhook event, emitted for the target connection of a migration alongside `vault.connection.created` (target) and `vault.connection.deleted` (source); its payload carries `migrated_from` with the source connector's `service_id`, and all three events share the same request id for correlation (Ref #11656)
+
+### Connector API
+
+- Added the optional `migration_targets` field to the Connector resource — the service ids a connector's connections can be migrated to via the Vault Migrate Connection operation (Ref #11656)
+
 ## v10.30.0 - (2026-08-04)
 
 ### Accounting API

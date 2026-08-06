@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.30.0
+  version: 10.31.0
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -84,7 +84,7 @@ info:
 
     Vault provides real-time webhook events to notify you of connection state changes:
 
-    - **vault.connection.created** - Triggered when a new connection is created in Vault - **vault.connection.updated** - Triggered whenever any connection data changes (credentials, settings, metadata) - **vault.connection.callable** - Triggered when a connection transitions to callable state (ready for API calls) - **vault.connection.disabled** - Triggered when the enabled property changes from true to false - **vault.connection.deleted** - Triggered when a connection is permanently removed from the system - **vault.connection.revoked** - Triggered when OAuth access is successfully revoked at the service provider level - **vault.connection.token_refresh.failed** - Triggered when automatic token refresh fails for an OAuth connection
+    - **vault.connection.created** - Triggered when a new connection is created in Vault - **vault.connection.updated** - Triggered whenever any connection data changes (credentials, settings, metadata) - **vault.connection.callable** - Triggered when a connection transitions to callable state (ready for API calls) - **vault.connection.disabled** - Triggered when the enabled property changes from true to false - **vault.connection.deleted** - Triggered when a connection is permanently removed from the system - **vault.connection.revoked** - Triggered when OAuth access is successfully revoked at the service provider level - **vault.connection.migrated** - Triggered when a connection is migrated to another connector; the payload entity carries `migrated_from` with the source `service_id`. Emitted alongside `vault.connection.created` (for the target connection) and `vault.connection.deleted` (for the source connection), all sharing the same request id. Migrated tokens keep the source connector's OAuth scopes, so operations exclusive to the target connector may require re-authorization - **vault.connection.token_refresh.failed** - Triggered when automatic token refresh fails for an OAuth connection
 
     ### Event Sequences
 
@@ -936,6 +936,16 @@ components:
           type: string
         name:
           type: string
+    ConnectionMigrateData:
+      type: object
+      x-apideck-schema-id: ConnectionMigrateData
+      properties:
+        target_service_id:
+          type: string
+          description: The service id of the connector to migrate this connection to. Must be one of the source connector's declared migration targets.
+          example: intuit-enterprise-suite
+      required:
+        - target_service_id
     ConnectionState:
       type: string
       x-apideck-schema-id: ConnectionState
@@ -1041,6 +1051,7 @@ components:
               - vault.connection.deleted
               - vault.connection.callable
               - vault.connection.revoked
+              - vault.connection.migrated
               - vault.connection.token_refresh.failed
               - vault.connection.token_refresh.pending
               - vault.connection.token_refresh.recovered
@@ -1413,6 +1424,41 @@ components:
           properties:
             confirmed:
               type: boolean
+    ConflictResponse:
+      type: object
+      x-apideck-schema-id: Conflict
+      properties:
+        status_code:
+          type: number
+          description: HTTP status code
+          example: 409
+        error:
+          type: string
+          description: Contains an explanation of the status_code as defined in HTTP/1.1 standard (RFC 7231)
+          example: Conflict
+        type_name:
+          type: string
+          description: The type of error returned
+          example: ConflictError
+        message:
+          type: string
+          description: A human-readable message providing more details about the error.
+          example: Conflict
+          x-speakeasy-error-message: true
+        detail:
+          anyOf:
+            - type: string
+              example: A connection already exists for the target connector
+            - type: object
+              x-speakeasy-detail: true
+              example:
+                error: Conflict
+                message: A connection already exists for the target connector
+          description: Contains parameter or domain specific information related to the error and why it occurred.
+        ref:
+          type: string
+          description: Link to documentation of error type
+          example: https://developers.apideck.com/errors#conflicterror
     CreateCallbackState:
       type: object
       x-apideck-schema-id: CreateCallbackState
@@ -3225,6 +3271,7 @@ components:
         - vault.connection.deleted
         - vault.connection.callable
         - vault.connection.revoked
+        - vault.connection.migrated
         - vault.connection.token_refresh.failed
         - vault.connection.token_refresh.pending
         - vault.connection.token_refresh.recovered
@@ -3277,6 +3324,12 @@ components:
           schema:
             $ref: '#/components/schemas/BadRequestResponse'
       description: Bad Request
+    ConflictResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ConflictResponse'
+      description: Conflict — a connection already exists for the target connector
     ConsumerRequestCountsInDateRangeResponse:
       content:
         application/json:
@@ -4039,6 +4092,64 @@ paths:
               credentials: *ref_3
               settings: *ref_4
               metadata: *ref_5
+  /vault/connections/{unified_api}/{service_id}/migrate:
+    post:
+      summary: Migrate connection
+      operationId: connectionsMigrate
+      description: |
+        Migrate the connection to the target connector, keeping its credentials and connection state
+        (settings, metadata, configuration, subscriptions, consents). The source connection record is
+        removed WITHOUT revoking or disconnecting the downstream token.
+
+        Available migration targets are declared per connector — refer to the connector's
+        documentation page or the Connector API's `migration_targets` field.
+
+        Migrated tokens carry the source connector's OAuth scopes, so operations exclusive to the
+        target connector may require re-authorization.
+
+        Retries are idempotent: a partially-completed migration resumes where it left off.
+      tags:
+        - Connections
+      parameters:
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/service_id'
+        - $ref: '#/components/parameters/unified_api'
+      security:
+        - apiKey: []
+      requestBody:
+        description: Fields that need to be persisted on the resource
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectionMigrateData'
+      responses:
+        '200':
+          $ref: '#/components/responses/CreateConnectionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: vault
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            serviceId: pipedrive
+            unifiedApi: crm
+            connectionsMigrate:
+              target_service_id: intuit-enterprise-suite
   /vault/connections/{unified_api}/{service_id}/token:
     post:
       tags:

@@ -1,10 +1,16 @@
+## v10.34.0 - (2026-08-07)
+
+### CRM API
+
+- Removed the `minLength: 1` constraint from `title` on the [Opportunity](apis/crm/reference/opportunities) resource. Several CRMs permit an opportunity to have no name — HubSpot deals are one case — and the constraint forced connectors to substitute a placeholder rather than report the value the downstream system actually holds. `title` remains required and non-nullable, so it is always present; it may now be an empty string when the connector's source record genuinely has no name. Clients that treat `title` as a display label should handle the empty case. This also relaxes the same constraint on opportunity writes, so an empty `title` is now accepted on create and update where the downstream connector permits it (Ref #11623, Ref #11621)
+- Fixed [HubSpot](connectors/hubspot) opportunities omitting the required `title` field entirely when a deal's name is blank. HubSpot's Search API omits blank properties from results, so the mapped response left `title` unset and violated the response contract — strict clients, including the Apideck SDKs, rejected the whole page and could not paginate past the affected record. `title` is now always emitted, falling back to an empty string when HubSpot has no deal name (Ref #11621)
+
 ## v10.33.0 - (2026-08-06)
 
 ### Accounting API
 
 - Added new [Sales Receipts](apis/accounting/reference/sales-receipts) resource.
 - Supported by [QuickBooks](connectors/quickbooks); connector-specific tax behavior per country edition is documented as gotchas on the resource.
-
 ## v10.32.0 - (2026-08-06)
 
 ### CRM API

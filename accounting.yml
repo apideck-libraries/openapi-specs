@@ -18702,6 +18702,8 @@ paths:
             `filter[subsidiary_id]` scopes results to a single subsidiary and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
 
             Bill line-item `tracking_categories[].name` is normalized to the leaf class name: a hierarchical class path such as `"Fruit : Apple"` returns `name: "Apple"` and `parent_name: "Fruit"` (deeper paths return the deepest leaf). NetSuite bill line items do not carry a department or location name.
+
+            `custom_fields` are returned on the get-by-id call (`GET /accounting/bills/{id}`) and on unfiltered list calls, but not on filtered or sorted list calls, which NetSuite serves through its SuiteQL endpoint. To retrieve custom fields when a `filter[*]` or `sort` is applied (for example incremental or large-dataset syncs), fetch each bill individually via `GET /accounting/bills/{id}`.
         - connector: spiris
           description: |
             Spiris (Visma eAccounting) does not expose per-payment detail on the bill response. To check whether a bill is paid, use the `balance` and `total` fields:

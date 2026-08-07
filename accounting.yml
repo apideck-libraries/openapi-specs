@@ -19271,6 +19271,24 @@ paths:
 
             When `line_items[].customer` is set without an explicit `line_items[].rebilling.rebillable`, NetSuite defaults `rebillable` to `true`. Pass `rebilling: { rebillable: false }` explicitly if you want a customer-linked line that is not rebillable.
 
+            `pass_through` must target a node inside the SOAP envelope. NetSuite takes an XML request body, and a root-level `extend_object` (or an `extend_paths` path that does not start at `soap:Envelope`) would place the value outside the XML document element, so it is rejected with `UnsupportedPassThroughError` instead of being sent. To set a NetSuite field the mapping does not cover — e.g. the `customForm` RecordRef — use an `extend_paths` entry addressing the record node, and note that a RecordRef is expressed as an `internalId` attribute rather than a text node:
+
+            ```json
+            "pass_through": [
+              {
+                "service_id": "netsuite",
+                "extend_paths": [
+                  {
+                    "path": "$['soap:Envelope']['soap:Body']['platformMsgs:add']['platformMsgs:record']['tranPurch:customForm']['_attributes']['internalId']",
+                    "value": "229"
+                  }
+                ]
+              }
+            ]
+            ```
+
+            On update the message node is `platformMsgs:update` instead of `platformMsgs:add`.
+
             `tax_inclusive: true` is supported via a connector-side gross-down. NetSuite's SOAP VendorBill has no native tax-inclusive flag, so when `tax_inclusive: true` the connector divides each line's `total_amount` by `(1 + tax_rate.rate / 100)` before sending. `line_items[].tax_rate.id` is required per line when `tax_inclusive: true`; `line_items[].tax_rate.rate` is optional — when omitted, the connector resolves the rate server-side from the tax code (a caller-supplied rate still takes precedence). If a tax-inclusive tax-rated line's rate genuinely cannot be resolved, the request fails fast with a `400` naming the line rather than silently sending the un-grossed amount. `tax_inclusive` is not returned on read — NetSuite's SOAP schema has no equivalent read field. Due to intermediate rounding (net is computed to 4 decimal places), the posted total may differ from the consumer gross by ±0.01 in rare rate/amount combinations where the exact net is not representable in 4dp.
 
             On SuiteTax-enabled tenants the per-line `tax_rate.id` is applied through NetSuite's SuiteTax tax-details override, so the tax is included in the bill total; the legacy per-line tax fields are used only on non-SuiteTax (legacy) tenants. The tax code must be valid for the bill's subsidiary/nexus — NetSuite rejects a mismatch with a `400` (`Invalid taxtype reference key … for nexus …`). On a SuiteTax tenant a tax-rated line whose tax code cannot be resolved fails fast with a `400` naming the line, for both `tax_inclusive: true` and `tax_inclusive: false`, rather than posting the line untaxed.

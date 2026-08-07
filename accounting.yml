@@ -13367,6 +13367,7 @@ components:
         size: medium
         reference: critical
         description: medium
+        file_url: edge-case
         folder_id: edge-case
         updated_by: edge-case
         created_by: edge-case
@@ -13403,6 +13404,11 @@ components:
           type: string
           description: Optional description of the file
           example: A sample image
+          nullable: true
+        file_url:
+          type: string
+          description: The URL to download or preview the file
+          example: https://example.com/files/sample.jpg
           nullable: true
         parent_folder_id:
           type: string
@@ -31979,6 +31985,14 @@ paths:
             To get accurate `reimbursable` values for corporate card lines, use the single record endpoint
             (`GET /expense-reports/{id}`), which reads directly from the NetSuite SOAP API where `corporateCreditCard`
             is available.
+
+            NetSuite does not support attaching receipts inline via `line_items[].receipt_url`; providing a non-empty
+            value returns a 422. To attach a receipt: (1) create the expense report, (2) upload the file via
+            `POST /accounting/attachments/expense-report/{id}` — encode the line reference in the filename
+            (e.g. `receipt-line-1-taxi.pdf`) since NetSuite attaches at the report level only, (3) store the
+            attachment `id` returned from the upload. Note: `GET /accounting/attachments/expense-report/{id}`
+            (list all) is not supported on NetSuite — retrieve individual attachments via
+            `GET /accounting/attachments/expense-report/{id}/{attachment_id}` (returns `file_url` and `description`).
       requestBody:
         required: true
         content:
@@ -32197,6 +32211,14 @@ paths:
             To get accurate `reimbursable` values for corporate card lines, use the single record endpoint
             (`GET /expense-reports/{id}`), which reads directly from the NetSuite SOAP API where `corporateCreditCard`
             is available.
+
+            NetSuite does not support attaching receipts inline via `line_items[].receipt_url`; providing a non-empty
+            value returns a 422. To attach a receipt: (1) create or update the expense report, (2) upload the file via
+            `POST /accounting/attachments/expense-report/{id}` — encode the line reference in the filename
+            (e.g. `receipt-line-1-taxi.pdf`) since NetSuite attaches at the report level only, (3) store the
+            attachment `id` returned from the upload. Note: `GET /accounting/attachments/expense-report/{id}`
+            (list all) is not supported on NetSuite — retrieve individual attachments via
+            `GET /accounting/attachments/expense-report/{id}/{attachment_id}` (returns `file_url` and `description`).
       requestBody:
         required: true
         content:

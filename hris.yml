@@ -4926,6 +4926,11 @@ paths:
       x-apideck-gotchas:
         - connector: nmbrs
           description: We keep track of the "List Employees" response for NMBRS virtual webhooks events, which contains fewer fields compared to the "Get Employee" response.
+        - connector: ukg-pro
+          description: |
+            UKG Pro serves person data and employment data from two different endpoints, so the employment fields on "List Employees" (`employment_status`, `employment_role`, `title`, `department`, `department_id`, `employment_start_date`, `employment_end_date`, `manager`) are enriched from a second call made on your behalf. If that secondary call fails, the request still succeeds with a 200 and those fields are simply absent from the affected records — the person-scope fields are unaffected. Treat their absence as "unavailable for this request", not as "empty at the source".
+            UKG returns every employee ever employed, including terminated ones. `employment_status` is derived from the presence of a termination date, so use it to scope to active staff.
+            `department` and `department_id` both resolve from the connector's organisation-level hierarchy, and `division` is not currently mapped. `jobs`, `compensations`, `custom_fields` and `bank_accounts` are only available on "Get Employee".
         - connector: ceridian-dayforce
           description: |
             The Ceridian Dayforce "List Employees" endpoint only returns employee IDs by default. To get full employee details, use the "Get Employee" endpoint. For virtual webhook events on Ceridian Dayforce, we monitor the "List Employees" response, which has a very small set of fields in comparison to the "Get Employee" response. This is the reason why we only support `hris.employee.created` events for this connector.

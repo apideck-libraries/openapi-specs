@@ -1,3 +1,10 @@
+## v10.33.0 - (2026-08-06)
+
+### Accounting API
+
+- Added new [Sales Receipts](apis/accounting/reference/sales-receipts) resource.
+- Supported by [QuickBooks](connectors/quickbooks); connector-specific tax behavior per country edition is documented as gotchas on the resource.
+
 ## v10.32.0 - (2026-08-06)
 
 ### CRM API

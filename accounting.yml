@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.32.0
+  version: 10.33.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -208,6 +208,22 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/GeneralLedgerTransactionsSort'
+    salesReceiptsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/SalesReceiptsFilter'
+    salesReceiptsSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/SalesReceiptsSort'
     journalEntriesFilter:
       name: filter
       in: query
@@ -685,6 +701,36 @@ components:
           schema:
             $ref: '#/components/schemas/GetGeneralLedgerTransactionsResponse'
       description: GeneralLedgerTransactions
+    GetSalesReceiptResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetSalesReceiptResponse'
+      description: SalesReceipt
+    GetSalesReceiptsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetSalesReceiptsResponse'
+      description: SalesReceipts
+    CreateSalesReceiptResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateSalesReceiptResponse'
+      description: SalesReceipt created
+    UpdateSalesReceiptResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateSalesReceiptResponse'
+      description: SalesReceipt updated
+    DeleteSalesReceiptResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteSalesReceiptResponse'
+      description: SalesReceipt deleted
     GetInvoiceItemResponse:
       content:
         application/json:
@@ -18083,6 +18129,373 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    SalesReceipt:
+      type: object
+      x-apideck-schema-id: SalesReceipt
+      x-apideck-weights:
+        id: critical
+        number: medium
+        customer: critical
+        currency: critical
+        currency_rate: edge-case
+        tax_inclusive: low
+        sub_total: edge-case
+        total_amount: critical
+        total_tax: edge-case
+        transaction_date: critical
+        payment_method: high
+        payment_method_reference: medium
+        payment_method_id: edge-case
+        account: critical
+        line_items: critical
+        note: low
+        reference: medium
+        billing_address: edge-case
+        shipping_address: edge-case
+        department: low
+        tracking_categories: low
+        tax_code: low
+        discount_percentage: edge-case
+        discount_amount: edge-case
+        customer_memo: edge-case
+        custom_fields: medium
+        row_version: edge-case
+        updated_by: edge-case
+        created_by: edge-case
+        created_at: medium
+        updated_at: medium
+      required:
+        - id
+        - total_amount
+      x-apideck-strict-required:
+        - total_amount
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          title: Sales Receipt ID
+          description: Unique identifier representing the sales receipt
+          example: '123456'
+          readOnly: true
+        number:
+          type: string
+          title: Sales Receipt number
+          description: Reference number for the sales receipt.
+          example: SR-00001
+          nullable: true
+        customer:
+          $ref: '#/components/schemas/LinkedCustomer'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        currency_rate:
+          $ref: '#/components/schemas/CurrencyRate'
+        tax_inclusive:
+          $ref: '#/components/schemas/TaxInclusive'
+        sub_total:
+          $ref: '#/components/schemas/SubTotal'
+        total_amount:
+          $ref: '#/components/schemas/TotalAmount'
+        total_tax:
+          $ref: '#/components/schemas/TotalTax'
+        transaction_date:
+          type: string
+          title: Transaction Date
+          description: The date of the sales receipt transaction - YYYY-MM-DDThh:mm:ss.sTZD
+          format: date-time
+          example: '2021-05-01T12:00:00.000Z'
+          nullable: true
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        payment_method_reference:
+          $ref: '#/components/schemas/PaymentMethodReference'
+        payment_method_id:
+          $ref: '#/components/schemas/WritableId'
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        line_items:
+          type: array
+          description: Line items for itemized sales receipts. Used when the sales receipt includes product/service details with quantities and pricing.
+          items:
+            $ref: '#/components/schemas/InvoiceLineItem'
+        tax_code:
+          type: string
+          title: Tax Code
+          description: Applicable tax id/code override if tax is not supplied on a line item basis.
+          example: '1234'
+          nullable: true
+        discount_percentage:
+          type: number
+          title: Discount Percent
+          description: Discount percentage applied to this sales receipt.
+          example: 5.5
+          nullable: true
+        discount_amount:
+          type: number
+          title: Discount Amount
+          description: Discount amount applied to this sales receipt.
+          example: 25
+          nullable: true
+        note:
+          type: string
+          title: Note
+          description: Optional note to be associated with the sales receipt.
+          example: Thank you for your purchase
+          nullable: true
+        customer_memo:
+          type: string
+          title: Customer memo
+          description: Customer memo
+          example: Thank you for your business and have a great day!
+          nullable: true
+        reference:
+          type: string
+          title: Reference
+          description: Optional reference message for the sales receipt.
+          example: REF-123456
+          nullable: true
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        department:
+          $ref: '#/components/schemas/LinkedDepartment'
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+    SalesReceiptsFilter:
+      type: object
+      x-apideck-schema-id: SalesReceiptsFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+        customer_id: 123abc
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        customer_id:
+          type: string
+          title: Customer ID
+          description: Filter by customer id
+          example: 123abc
+      additionalProperties: false
+    SalesReceiptsSort:
+      type: object
+      x-apideck-schema-id: SalesReceiptsSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: sales_receipts.sort_by
+          description: The field on which to sort the Sales Receipts.
+          enum:
+            - updated_at
+            - created_at
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
+    GetSalesReceiptResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: sales-receipts
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/SalesReceipt'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetSalesReceiptsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: sales-receipts
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesReceipt'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    CreateSalesReceiptResponse:
+      type: object
+      x-apideck-schema-id: CreateSalesReceiptResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: sales-receipts
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    UpdateSalesReceiptResponse:
+      type: object
+      x-apideck-schema-id: UpdateSalesReceiptResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: sales-receipts
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    DeleteSalesReceiptResponse:
+      type: object
+      x-apideck-schema-id: DeleteSalesReceiptResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: sales-receipts
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
   securitySchemes:
     apiKey:
       type: apiKey
@@ -18186,6 +18599,11 @@ tags:
     x-apideck-resource-id: general-ledger-transactions
     x-apideck-model:
       $ref: '#/components/schemas/GeneralLedgerTransaction'
+  - name: Sales Receipts
+    description: 'A Sales Receipt represents a point-of-sale transaction where payment is received at the time of sale, with no accounts-receivable leg: payment is captured at sale and the receipt closes immediately.'
+    x-apideck-resource-id: sales-receipts
+    x-apideck-model:
+      $ref: '#/components/schemas/SalesReceipt'
   - name: Purchase Orders
     description: A Purchase Order represents a request to buy goods or services from a supplier, including line items, amounts, delivery date, and status.
     x-apideck-resource-id: purchase-orders
@@ -25059,6 +25477,586 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/GetGeneralLedgerTransactionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/sales-receipts:
+    get:
+      tags:
+        - Sales Receipts
+      operationId: salesReceiptsAll
+      summary: List Sales Receipts
+      description: List Sales Receipts
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/salesReceiptsFilter'
+        - $ref: '#/components/parameters/salesReceiptsSort'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSalesReceiptsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Sales Receipts
+      operationId: salesReceiptsAdd
+      summary: Create Sales Receipt
+      description: Create Sales Receipt
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: quickbooks
+          description: |
+            tax_inclusive only applies to UK, AU, IN, and CA editions. US companies ignore this field
+            silently.
+
+            payment_method_id is required to set the payment method. Provide the ID of a payment
+            method record configured in QuickBooks.
+
+            total_amount is required on each line item. If not provided, it is computed from
+            quantity * unit_price.
+
+            tracking_categories behavior depends on company settings. "One to entire transaction"
+            uses top-level tracking_categories. "One to each row" requires tracking_categories on
+            each line item.
+
+            The deposit destination is controlled via account. Omit account to deposit to
+            Undeposited Funds (QuickBooks' default).
+
+            Tax handling depends on the company's country edition. US companies with Automated Sales
+            Tax calculate tax automatically by location: a submitted tax_code or total_tax overrides
+            the automatic calculation, so omit both to accept it. Line item tax_rate values must be
+            the pseudo-codes TAX or NON for US companies (other values are rejected with a validation
+            error).
+
+            Non-US editions require real QuickBooks tax code IDs for tax_rate instead of the US
+            pseudo-codes, and total_tax is recalculated from the line tax codes and cannot be
+            overridden.
+
+            With multicurrency enabled, currency must match the customer's currency, and
+            currency_rate is required when it differs from the company's home currency.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesReceipt'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateSalesReceiptResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            salesReceipt:
+              number: SR-00001
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 250
+              total_amount: 49.99
+              total_tax: 25
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              payment_method: cash
+              payment_method_reference: '123456'
+              payment_method_id: '12345'
+              account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  service_date: '2024-01-15'
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  worktags:
+                    - id: '123456'
+                      value: New York
+                  tax_rate:
+                    id: '123456'
+                    code: N-T
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      code: '100'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    name: Bank account
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              tax_code: '1234'
+              discount_percentage: 5.5
+              discount_amount: 25
+              note: Thank you for your purchase
+              customer_memo: Thank you for your business and have a great day!
+              reference: REF-123456
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                line5: 'Attention: Finance Dept'
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                line5: 'Attention: Finance Dept'
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              department:
+                display_id: '123456'
+                name: Acme Inc.
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+  /accounting/sales-receipts/{id}:
+    get:
+      tags:
+        - Sales Receipts
+      operationId: salesReceiptsOne
+      summary: Get Sales Receipt
+      description: Get Sales Receipt
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSalesReceiptResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+    patch:
+      tags:
+        - Sales Receipts
+      operationId: salesReceiptsUpdate
+      summary: Update Sales Receipt
+      description: Update Sales Receipt
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: quickbooks
+          description: |
+            row_version submitted in the request body is ignored. The connector always fetches the
+            latest version immediately before writing, so there is no optimistic-concurrency
+            protection — concurrent updates are last-write-wins.
+
+            tax_inclusive only applies to UK, AU, IN, and CA editions. US companies ignore this field
+            silently.
+
+            payment_method_id is required to set the payment method. Provide the ID of a payment
+            method record configured in QuickBooks.
+
+            total_amount is required on each line item. If not provided, it is computed from
+            quantity * unit_price.
+
+            tracking_categories behavior depends on company settings. "One to each row" requires
+            tracking_categories on each line item.
+
+            The deposit destination is controlled via account. Omit account to deposit to
+            Undeposited Funds (QuickBooks' default).
+
+            Tax handling depends on the company's country edition. US companies with Automated Sales
+            Tax calculate tax automatically by location: a submitted tax_code or total_tax overrides
+            the automatic calculation, so omit both to accept it. Line item tax_rate values must be
+            the pseudo-codes TAX or NON for US companies (other values are rejected with a validation
+            error).
+
+            Non-US editions require real QuickBooks tax code IDs for tax_rate instead of the US
+            pseudo-codes, and total_tax is recalculated from the line tax codes and cannot be
+            overridden.
+
+            With multicurrency enabled, currency must match the customer's currency, and
+            currency_rate is required when it differs from the company's home currency.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesReceipt'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateSalesReceiptResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            salesReceipt:
+              number: SR-00001
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 250
+              total_amount: 49.99
+              total_tax: 25
+              transaction_date: '2021-05-01T12:00:00.000Z'
+              payment_method: cash
+              payment_method_reference: '123456'
+              payment_method_id: '12345'
+              account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  service_date: '2024-01-15'
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  worktags:
+                    - id: '123456'
+                      value: New York
+                  tax_rate:
+                    id: '123456'
+                    code: N-T
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      code: '100'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    name: Bank account
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              tax_code: '1234'
+              discount_percentage: 5.5
+              discount_amount: 25
+              note: Thank you for your purchase
+              customer_memo: Thank you for your business and have a great day!
+              reference: REF-123456
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                line5: 'Attention: Finance Dept'
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                line5: 'Attention: Finance Dept'
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              department:
+                display_id: '123456'
+                name: Acme Inc.
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+    delete:
+      tags:
+        - Sales Receipts
+      operationId: salesReceiptsDelete
+      summary: Delete Sales Receipt
+      description: Delete Sales Receipt
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteSalesReceiptResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':

@@ -27738,6 +27738,14 @@ paths:
 
             This is a limitation of the integration, not of Sage: a Sage supporting document can hold
             several files, and they can be added one at a time. Lifting it is tracked work.
+        - connector: sage-intacct
+          description: |
+            Only `invoice` and `bill` are supported as a `reference_type`. Listing attachments for
+            `expense`, `expense-report` or `quote` returns an empty list rather than an error, even
+            when the record has a file attached in Sage.
+
+            Use the `sage-intacct-rest` connector if you need attachments on those record types — it
+            supports all five.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -27819,6 +27827,22 @@ paths:
             If a record needs several documents, combine them into one file. This is a limitation of the
             integration rather than of Sage — a Sage supporting document can hold several files — and
             lifting it is tracked work.
+        - connector: sage-intacct
+          description: |
+            Only `invoice` and `bill` are supported as a `reference_type`. An upload against
+            `expense`, `expense-report` or `quote` still returns `201` with an attachment `id`, but
+            the file is NOT linked to the record: it is created in Sage under
+            Company > Supporting Documents and left unattached. Listing that record's attachments
+            then returns an empty array, and deleting the returned `id` answers `200` without
+            removing anything.
+
+            Treat a `201` on those three reference types as "file stored, not attached" — no status
+            code on any of the three calls reports the problem. Use the `sage-intacct-rest` connector
+            if you need attachments on those record types; it supports all five.
+
+            The `name` you send in `x-apideck-metadata` becomes Sage's supporting-document ID, which
+            Sage limits to **20 characters**. A longer name is rejected with `400`
+            (`PL03000018 — Attachments ID is too long`).
         - connector: quickbooks
           description: Quickbooks limits attachment uploads to 100MB.
         - connector: xero
@@ -29129,6 +29153,8 @@ paths:
         - connector: microsoft-dynamics-365-business-central
           description: |
             Employee account type: set `account.type` to `"employee"` and `account.id` to the employee number (or GUID, which will be resolved automatically). Note: reading back the expense will NOT return the employee reference — employee payment lines are invisible in BC's API for draft entries, and resolve to a GL payable account when posted.
+
+            Bank account type: when an expense is created with `account.type: "bank_account"` and posted (`status: "posted"`), reading it back returns `account.type: "ledger_account"` with a **different** `account.id`. Business Central records posted transactions against the bank's associated G/L posting account, so the bank account identity is not preserved in the resulting ledger entries. Only `account.type: "ledger_account"` round-trips its `account.id` unchanged. `line_items[].account` is unaffected — expense lines are always G/L accounts and their `account.id` round-trips.
         - connector: zoho-books
           description: Zoho Books supports only one customer and one rebilling (`rebillable`) flag per expense at the header level. Only provide these in the first line_item — they will be mapped to the header-level fields and applied to all lines. If differentiated treatment is required, create separate expenses.
         - connector: netsuite
@@ -29329,6 +29355,9 @@ paths:
         - connector: netsuite
           description: |
             Line-item `tracking_categories[].name` is normalized to the leaf class name: a NetSuite hierarchical class path such as `"Fruit : Apple"` returns `name: "Apple"` and `parent_name: "Fruit"` (deeper paths return the deepest leaf as `name` and its immediate parent as `parent_name`). Line-item `department.name` and `location.name` are likewise normalized to the leaf segment.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            A posted expense (`status: "posted"`) is read from Business Central's general ledger entries, which carry no bank-account discriminator. Its header `account` is therefore always returned as `account.type: "ledger_account"` — even when the expense was created with `account.type: "bank_account"` — and `account.id` is the bank's associated G/L posting account, not the bank account that was sent on create. `line_items[].account.id` is unaffected. See the create operation's gotcha for the full round-trip behaviour.
       responses:
         '200':
           $ref: '#/components/responses/GetExpenseResponse'

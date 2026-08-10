@@ -19248,6 +19248,19 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: myob
+          description: |
+            MYOB requires a `FreightTaxCode` on bill create and update. Apideck sends the tax rate of the first line item (`line_items[0].tax_rate.id`), so every bill must include at least one line item with a `tax_rate.id`.
+
+            MYOB stores bills in layout-specific endpoints (Service, Item, Professional, Miscellaneous). On create, Apideck routes to the Item layout when any line item references an inventory item (`line_items[].item.id`) and to the Service layout otherwise. The returned `id` encodes the layout, so always use ids returned by the API.
+
+            On update, MYOB requires optimistic-locking versions: pass the bill's current `row_version` and, for every existing line, its `row_id` and `row_version` (all returned by a get call). Updates and deletes are only supported for Service and Item layout bills.
+
+            MYOB does not return the company file's base currency on bill records, so domestic bills (no foreign currency set) are reported with `currency: AUD`. For an NZD-based company file, treat the reported currency of domestic bills as the file's base currency, or read the raw payload via `raw=true`.
+
+            `filter[status]` is coarser than the unified enum. MYOB stores only `Open`, `Closed` and `Debit`, so `unpaid` and `partially_paid` both map to `Open` and return the **same** result set — they cannot be distinguished server-side. `paid` maps to `Closed`. To separate unpaid from partially paid, compare `balance` against `total` on the returned records.
+
+            For the same reason a partially-paid bill reads back as `status: submitted`, not `partially_paid` — MYOB's `Open` covers submitted, draft and partially paid, and the response mapping resolves it to `submitted`. Use `balance` versus `total` to detect partial payment.
         - connector: quickbooks-desktop
           description: |
             On create, bill expense lines map from `line_items[]` (`ledger_account` → expense account, `total_amount`, `description`). On update, QuickBooks Desktop cannot modify line items — only header fields (supplier, `bill_date`, `due_date`, `bill_number`, terms, memo) change. Recreate the bill to change lines.
@@ -21674,6 +21687,15 @@ paths:
         - connector: acumatica
           description: |
             The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
+        - connector: myob
+          description: |
+            MYOB AccountRight has no dedicated credit note endpoint. Credit notes are MYOB Sale/Invoice records with Status "Credit" (a negative balance), so credit notes share the invoice id space and numbering — the same record is visible through both the invoices and credit-notes resources.
+
+            MYOB stores credit amounts as negative numbers. Unified `total_amount`, `sub_total`, `total_tax`, `balance` and `remaining_credit` are normalized to positive values; `line_items` amounts are passed through as returned by MYOB (negative for credit lines).
+
+            Line items are only available on the detail endpoint (get one), not on the list endpoint.
+
+            Write operations (create, update, delete) are not supported on the credit-notes resource. Create a credit note via the invoices endpoint with negative line amounts — MYOB then sets its Status to "Credit" — and update or delete the underlying invoice record the same way.
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNotesResponse'
@@ -23500,6 +23522,9 @@ paths:
             schema:
               $ref: '#/components/schemas/Payment'
       x-apideck-gotchas:
+        - connector: myob
+          description: |
+            MYOB payments cannot be updated — the MYOB API allows only GET, POST and DELETE on customer payments, so the update operation is unsupported. Delete the payment and recreate it instead.
         - connector: sage-intacct-rest
           description: |
             Sage Intacct applies a payment to individual invoice LINES, while unified `allocations`
@@ -28629,6 +28654,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: myob
+          description: |
+            MYOB supplier payments cannot be updated — the update operation is unsupported. Delete the payment and recreate it instead.
+
+            `allocations[].id` accepts either a bill id returned by the bills resource (layout-encoded) or a raw MYOB purchase UID. In responses, `allocations[].id` contains the raw MYOB purchase UID.
+
+            MYOB does not return the company file's base currency on payment records, so domestic payments (no foreign currency set) are reported with `currency: AUD` and `currency_rate: 1.0`. For an NZD-based company file, treat the reported currency of domestic payments as the file's base currency.
         - connector: sage-intacct-rest
           description: |
             Sage Intacct applies a bill payment to individual bill LINES, while unified `allocations`

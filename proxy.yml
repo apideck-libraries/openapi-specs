@@ -344,6 +344,15 @@ components:
         type: integer
         default: 28000
       x-speakeasy-name-override: timeout
+    x-apideck-follow-redirects:
+      name: x-apideck-follow-redirects
+      in: header
+      description: Set to `false` to opt out of the redirect to the presigned download URL. Instead of a `30x` response, you receive a `200` JSON body `{ url, expires_at }` containing the URL and its expiry, which you can fetch explicitly. Use this if your client automatically forwards the `Authorization` header onto redirects, since the downstream storage provider will reject that request. Any value other than `false` (or omitting the header) preserves the default redirect behavior.
+      schema:
+        type: boolean
+        default: true
+      example: false
+      x-speakeasy-name-override: followRedirects
     raw:
       name: raw
       in: query
@@ -462,7 +471,7 @@ components:
             x-speakeasy-name-override: errorHtml
             type: string
     Ok:
-      description: Ok
+      description: 'Ok. When the request includes `x-apideck-follow-redirects: false` and the downstream response would otherwise redirect to a presigned URL (oversized responses), the body is instead an `application/json` object `{ url, expires_at }` — fetch `url` explicitly (without the Authorization header) to retrieve the payload.'
       content:
         application/json:
           schema:
@@ -538,6 +547,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
         - $ref: '#/components/parameters/x-apideck-timeout'
+        - $ref: '#/components/parameters/x-apideck-follow-redirects'
       security:
         - apiKey: []
       responses:
@@ -564,6 +574,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
         - $ref: '#/components/parameters/x-apideck-timeout'
+        - $ref: '#/components/parameters/x-apideck-follow-redirects'
       security:
         - apiKey: []
       responses:
@@ -590,6 +601,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
         - $ref: '#/components/parameters/x-apideck-timeout'
+        - $ref: '#/components/parameters/x-apideck-follow-redirects'
       security:
         - apiKey: []
       requestBody:
@@ -653,6 +665,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
         - $ref: '#/components/parameters/x-apideck-timeout'
+        - $ref: '#/components/parameters/x-apideck-follow-redirects'
       security:
         - apiKey: []
       requestBody:
@@ -716,6 +729,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
         - $ref: '#/components/parameters/x-apideck-timeout'
+        - $ref: '#/components/parameters/x-apideck-follow-redirects'
       security:
         - apiKey: []
       requestBody:
@@ -779,6 +793,7 @@ paths:
         - $ref: '#/components/parameters/x-apideck-downstream-url'
         - $ref: '#/components/parameters/x-apideck-downstream-authorization'
         - $ref: '#/components/parameters/x-apideck-timeout'
+        - $ref: '#/components/parameters/x-apideck-follow-redirects'
       security:
         - apiKey: []
       responses:

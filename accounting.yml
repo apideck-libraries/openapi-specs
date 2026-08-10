@@ -145,6 +145,15 @@ components:
       schema:
         type: string
         nullable: true
+    followRedirects:
+      name: x-apideck-follow-redirects
+      in: header
+      description: Set to `false` to opt out of the redirect to the presigned download URL. Instead of a `30x` response, you receive a `200` JSON body `{ url, expires_at }` containing the URL and its expiry, which you can fetch explicitly. Use this if your client automatically forwards the `Authorization` header onto redirects, since the downstream storage provider will reject that request. Any value other than `false` (or omitting the header) preserves the default redirect behavior.
+      schema:
+        type: boolean
+        default: true
+      example: false
+      x-speakeasy-name-override: followRedirects
     id:
       in: path
       name: id
@@ -1128,7 +1137,7 @@ components:
           schema:
             $ref: '#/components/schemas/GetAttachmentResponse'
     GetAttachmentDownloadResponse:
-      description: Attachment Download
+      description: 'Attachment Download. When the request includes `x-apideck-follow-redirects: false` and the download would otherwise redirect to a presigned URL, the response body is instead an `application/json` object `{ url, expires_at }` — fetch `url` explicitly (without the Authorization header) to retrieve the attachment.'
       content:
         '*/*':
           schema:
@@ -27944,6 +27953,7 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/companyId'
         - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/followRedirects'
       security:
         - apiKey: []
       responses:

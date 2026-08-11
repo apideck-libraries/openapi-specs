@@ -4997,6 +4997,20 @@ paths:
             take effect. Any email whose ecEmailType option uses an externalCode outside this
             set, or has no externalCode, resolves to other.
 
+            SAP SuccessFactors' Person entities are each keyed by `personIdExternal` plus a
+            type/category field — `PerEmail` by `emailType`, `PerPhone` by `phoneType`, and so on
+            (SAP SuccessFactors OData V2 API Reference Guide, §9.4.1.9.2). If a tenant deactivates
+            that type field, every row for the person resolves to the same key, so SAP collapses
+            them down to one before the request reaches Apideck, and there is no request-side
+            workaround — the tenant's SAP administrator must re-activate the type field to
+            retrieve every row. For `emails[]` this means a person with several email addresses
+            on file returns only one, and — since the type-decode data collapses too — that entry
+            resolves to `other` rather than its real type. SAP has confirmed this generalizes to
+            any entity sharing the same composite-key shape, which would include `PerPhone`
+            (keyed by `personIdExternal + phoneType`); `phone_numbers[]` derives `type` from
+            `isPrimary` rather than a type decode, so if the same collapse occurs there it would
+            surface as a shorter array rather than a mislabeled one.
+
             `preferred_language` is derived from the `externalCode` of the employee's
             `nativePreferredLang` picklist option, which is locale-independent. The value is the
             BCP-47 language subtag, uppercased (e.g. `ru_RU` resolves to `RU`, `en` to `EN`). It
@@ -5437,6 +5451,20 @@ paths:
             tenant; `PI`, `S` and `BI` must be configured as picklist options by the tenant to
             take effect. Any email whose ecEmailType option uses an externalCode outside this
             set, or has no externalCode, resolves to other.
+
+            SAP SuccessFactors' Person entities are each keyed by `personIdExternal` plus a
+            type/category field — `PerEmail` by `emailType`, `PerPhone` by `phoneType`, and so on
+            (SAP SuccessFactors OData V2 API Reference Guide, §9.4.1.9.2). If a tenant deactivates
+            that type field, every row for the person resolves to the same key, so SAP collapses
+            them down to one before the request reaches Apideck, and there is no request-side
+            workaround — the tenant's SAP administrator must re-activate the type field to
+            retrieve every row. For `emails[]` this means a person with several email addresses
+            on file returns only one, and — since the type-decode data collapses too — that entry
+            resolves to `other` rather than its real type. SAP has confirmed this generalizes to
+            any entity sharing the same composite-key shape, which would include `PerPhone`
+            (keyed by `personIdExternal + phoneType`); `phone_numbers[]` derives `type` from
+            `isPrimary` rather than a type decode, so if the same collapse occurs there it would
+            surface as a shorter array rather than a mislabeled one.
 
             `preferred_language` is derived from the `externalCode` of the employee's
             `nativePreferredLang` picklist option, which is locale-independent. The value is the

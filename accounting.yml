@@ -1467,6 +1467,36 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateExpenseReportResponse'
+    CreatePaymentMethodResponse:
+      description: Payment Methods
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreatePaymentMethodResponse'
+    DeletePaymentMethodResponse:
+      description: Payment Methods
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeletePaymentMethodResponse'
+    GetPaymentMethodResponse:
+      description: Payment Methods
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetPaymentMethodResponse'
+    GetPaymentMethodsResponse:
+      description: Payment Methods
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetPaymentMethodsResponse'
+    UpdatePaymentMethodResponse:
+      description: Payment Methods
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdatePaymentMethodResponse'
   schemas:
     AccountCode:
       title: Account Code
@@ -10300,6 +10330,76 @@ components:
           $ref: '#/components/schemas/CreatedAt'
         pass_through:
           $ref: '#/components/schemas/PassThroughBody'
+    AccountingPaymentMethod:
+      type: object
+      x-apideck-schema-id: PaymentMethod
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        name: critical
+        type: high
+        status: high
+        custom_mappings: low
+        downstream_id: low
+        row_version: low
+        updated_by: edge-case
+        created_by: edge-case
+        updated_at: medium
+        created_at: medium
+        pass_through: low
+      x-apideck-strict-required:
+        - id
+        - name
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+          title: Name
+          description: The name of the payment method.
+          example: Cash
+        type:
+          type: string
+          title: Type
+          description: The type of payment method.
+          x-apideck-enum-id: payment_methods.type
+          enum:
+            - cash
+            - check
+            - credit_card
+            - debit_card
+            - bank_transfer
+            - electronic
+            - other
+            - unknown
+          example: cash
+          nullable: true
+        status:
+          type: string
+          title: Status
+          description: The status of the payment method.
+          x-apideck-enum-id: payment_methods.status
+          enum:
+            - active
+            - inactive
+          example: active
+          nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
     Meta:
       type: object
       x-apideck-schema-id: Meta
@@ -10621,6 +10721,186 @@ components:
       description: Payment method used for the transaction, such as cash, credit card, bank transfer, or check
       nullable: true
       example: cash
+    GetPaymentMethodResponse:
+      type: object
+      x-apideck-schema-id: GetPaymentMethodResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: PaymentMethods
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/AccountingPaymentMethod'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetPaymentMethodsResponse:
+      type: object
+      x-apideck-schema-id: GetPaymentMethodsResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: PaymentMethods
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountingPaymentMethod'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    CreatePaymentMethodResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: PaymentMethods
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    UpdatePaymentMethodResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: PaymentMethods
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    DeletePaymentMethodResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: PaymentMethods
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     PaymentRequiredResponse:
       type: object
       x-apideck-schema-id: PaymentRequired
@@ -18735,6 +19015,11 @@ tags:
     x-apideck-resource-id: expense-categories
     x-apideck-model:
       $ref: '#/components/schemas/ExpenseCategory'
+  - name: Payment Methods
+    description: A Payment Method defines the instrument used to make a payment, such as cash, check, credit card, or bank transfer.
+    x-apideck-resource-id: payment-methods
+    x-apideck-model:
+      $ref: '#/components/schemas/AccountingPaymentMethod'
   - name: Expense Reports
     description: An Expense Report is a collection of expense line items submitted by an employee for reimbursement, including amounts, categories, and approval status.
     x-apideck-resource-id: expense-reports
@@ -32012,6 +32297,220 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DeleteExpenseCategoryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/payment-methods:
+    get:
+      tags:
+        - Payment Methods
+      operationId: paymentMethodsAll
+      summary: List Payment Methods
+      description: List Payment Methods
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/fields'
+        - $ref: '#/components/parameters/passThrough'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetPaymentMethodsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Payment Methods
+      operationId: paymentMethodsAdd
+      summary: Create Payment Method
+      description: Create Payment Method
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountingPaymentMethod'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreatePaymentMethodResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            paymentMethod:
+              name: Cash
+              type: cash
+              status: active
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+  /accounting/payment-methods/{id}:
+    get:
+      tags:
+        - Payment Methods
+      operationId: paymentMethodsOne
+      summary: Get Payment Method
+      description: Get Payment Method
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetPaymentMethodResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+    patch:
+      tags:
+        - Payment Methods
+      operationId: paymentMethodsUpdate
+      summary: Update Payment Method
+      description: Update Payment Method
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountingPaymentMethod'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdatePaymentMethodResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            paymentMethod:
+              name: Cash
+              type: cash
+              status: active
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+    delete:
+      tags:
+        - Payment Methods
+      operationId: paymentMethodsDelete
+      summary: Delete Payment Method
+      description: Delete Payment Method
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeletePaymentMethodResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':

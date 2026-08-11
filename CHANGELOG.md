@@ -1,3 +1,9 @@
+## v10.36.0 - (2026-08-11)
+
+### Accounting API
+
+- Added new [Payment Methods](apis/accounting/reference/payment-methods) resource with full CRUD support (list, get, create, update, delete). Supported by [QuickBooks](connectors/quickbooks) and [NetSuite](connectors/netsuite)
+
 ## v10.35.0 - (2026-08-07)
 
 ### Accounting API

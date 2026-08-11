@@ -1,3 +1,11 @@
+## v10.35.0 - (2026-08-07)
+
+### Accounting API
+
+- Added the optional `source_routing_number`, `source_account_number`, `balance` and `available_balance` fields to the [Bank Feed Accounts](apis/accounting/reference/bank-feed-accounts) resource. The resource previously described the source bank account by `source_account_id` alone, with no attributes attached and no balance fields of any kind — `target_account_*` describes the destination account inside the accounting platform, not the account being fed. `balance` is the current balance and `available_balance` accounts for pending transactions and overdraft, matching the naming already used on [Bank Accounts](apis/accounting/reference/bank-accounts). All four are optional and no existing field changed, so current integrations are unaffected (Ref #11748)
+- Added the optional `merchant_category_code` field to transactions on the [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) resource — the ISO 18245 merchant category code (MCC) classifying the merchant for a transaction, expected as a four-digit code such as `5812`. The format is not enforced by the API, matching the other bank identifier fields. Note that this key was already accepted on transaction objects because the transaction schema does not reject unknown properties, but was discarded rather than stored; it is now a declared field (Ref #11748)
+
+
 ## v10.34.0 - (2026-08-07)
 
 ### CRM API

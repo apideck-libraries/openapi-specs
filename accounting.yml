@@ -19427,6 +19427,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            The `balance` field is not populated for bills. Business Central's API does not expose a
+            remaining (unpaid) amount on purchase invoices — unlike sales invoices, which back the
+            invoices resource — so the open remainder of a bill cannot be read. A fully paid bill can
+            be detected via `status: paid`; partially paid amounts are not visible.
         - connector: dualentry
           description: |
             `updated_since` is inclusive and is applied at whole-second granularity, so a poll that
@@ -25285,6 +25291,17 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            Journal entries are read from the single general journal batch configured in the required
+            `journal_entries_journal_batch_name` connection setting. An unfiltered list returns only that
+            batch's draft (unposted) entries; posted entries are returned when `filter[status]` selects a
+            posted status (they are read from Business Central's general ledger entries). Journal batches
+            themselves cannot be listed or selected per request through the unified API.
+
+            `currency` and `currency_rate` are not returned. Business Central's API (the v2.0 `journalLine`
+            entity) exposes no currency fields on journal lines, so amounts are always in the company's
+            local currency.
         - connector: sage-intacct-rest
           description: |
             `journal_symbol` is required when creating a journal entry, and Sage Intacct reserves
@@ -25489,6 +25506,10 @@ paths:
         - connector: microsoft-dynamics-365-business-central
           description: |
             Employee account type: journal entry lines can reference employees via the `employee` field (use `display_id` for the employee number, or `id` with a GUID which will be resolved automatically). Note: reading back the journal entry will NOT return the employee reference — employee lines are invisible in BC's API for draft entries, and resolve to a GL payable account when posted. Send `ledger_account: {}` alongside the `employee` field to satisfy schema validation.
+
+            Journal entries are created in the general journal batch configured in the required `journal_entries_journal_batch_name` connection setting — a different journal/batch cannot be selected per entry or per request.
+
+            `currency` and `currency_rate` are not supported: Business Central's API (the v2.0 `journalLine` entity) has no currency fields on journal lines and rejects unknown properties, so amounts are always posted in the company's local currency.
         - connector: acumatica
           description: |
             Acumatica requires a separate Release action to transition a journal entry from Balanced to Posted.

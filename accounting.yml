@@ -19477,6 +19477,10 @@ paths:
             Bill line-item `tracking_categories[].name` is normalized to the leaf class name: a hierarchical class path such as `"Fruit : Apple"` returns `name: "Apple"` and `parent_name: "Fruit"` (deeper paths return the deepest leaf). NetSuite bill line items do not carry a department or location name.
 
             `custom_fields` are returned on the get-by-id call (`GET /accounting/bills/{id}`) and on unfiltered list calls, but not on filtered or sorted list calls, which NetSuite serves through its SuiteQL endpoint. To retrieve custom fields when a `filter[*]` or `sort` is applied (for example incremental or large-dataset syncs), fetch each bill individually via `GET /accounting/bills/{id}`.
+
+            On a SuiteTax account, `line_items[].tax_rate` is resolved from NetSuite's transaction-level tax details. When a line's tax splits across several jurisdictions — common for US sales tax, where one line can carry state, county, city and district codes — `rate` is the **combined** rate and `id`, `code` and `name` are omitted, because the unified `tax_rate` holds a single code and no one component names the line's tax. Single-jurisdiction lines, such as UK VAT, return the full `id`/`code`/`name`/`rate`. `tax_amount` always carries the line's full tax either way, so reconcile against that rather than against `rate`.
+
+            `tax_inclusive` is not returned on reads. NetSuite does not store it: `line_items[].total_amount` is always the net amount, with the tax in `tax_amount` and the gross in `total`. On writes it only tells NetSuite how to interpret the `total_amount` you send, so a value read back can be re-sent unchanged without setting it.
         - connector: spiris
           description: |
             Spiris (Visma eAccounting) does not expose per-payment detail on the bill response. To check whether a bill is paid, use the `balance` and `total` fields:

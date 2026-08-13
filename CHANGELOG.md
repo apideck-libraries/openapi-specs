@@ -1,3 +1,9 @@
+## v10.38.1 - (2026-08-12)
+
+### Accounting API
+
+- Fixed [Zoho Books](connectors/zoho-books) [Journal Entries](apis/accounting/reference/journal-entries) returning some records twice and skipping others when paginating a list. Lists are now ordered by Zoho's entry number, which is unique, rather than by posting date, which is not — so each entry is returned exactly once. Journal entries therefore come back newest-created first; to sort by posting date instead, pass `?pass_through[sort_column]=journal_date&pass_through[sort_order]=D`, which reinstates the pagination problem. See the connector gotchas on the resource for detail.
+
 ## v10.38.0 - (2026-08-11)
 
 ### Accounting API

@@ -11935,7 +11935,7 @@ components:
           $ref: '#/components/schemas/LinkedLedgerAccount'
         line_items:
           type: array
-          description: 'Line items for itemized refunds (type: refund_receipt). Used when the refund includes product/service details with quantities and pricing. Supported by QBO RefundReceipt and NetSuite CashRefund.'
+          description: 'Line items for itemized refunds (type: refund_receipt or sale_refund). Used when the refund includes product/service details with quantities and pricing. Supported by QBO RefundReceipt and NetSuite CashRefund.'
           items:
             $ref: '#/components/schemas/InvoiceLineItem'
         allocations:
@@ -12060,12 +12060,13 @@ components:
     RefundType:
       type: string
       title: Refund Type
-      description: Type of refund. `refund_receipt` for itemized refunds with product/service lines and payment (QBO RefundReceipt, NetSuite CashRefund). `cash_refund` for cash-out refunds with GL distribution or allocations (Sage Intacct). `credit_note_refund` for refunds applied against a credit note (Zoho Books).
+      description: Type of refund. `refund_receipt` for itemized refunds with product/service lines and payment (QBO RefundReceipt; also NetSuite's apply-list-based CustomerRefund). `cash_refund` for cash-out refunds with GL distribution or allocations (Sage Intacct). `credit_note_refund` for refunds applied against a credit note (Zoho Books). `sale_refund` for itemized refunds tied to a cash sale or return authorization, without an apply-list (NetSuite CashRefund) — NetSuite's apply-list-based CustomerRefund reports as `refund_receipt` instead.
       x-apideck-enum-id: refunds.type
       enum:
         - refund_receipt
         - cash_refund
         - credit_note_refund
+        - sale_refund
       example: refund_receipt
     GetRefundResponse:
       type: object
@@ -19458,6 +19459,15 @@ paths:
             period field, so the returned `MM-YY` is computed from the posting date. That is the
             correct period for a calendar-aligned fiscal year; a company using custom fiscal
             periods may see a posting near a period boundary attributed to the adjacent month.
+
+            `line_items` and `payment_allocations` are each attached via one extra batched query
+            per page, covering every bill on that page. Sage caps a query at 4000 rows. If the
+            combined line count across a single page of bills exceeds 4000, the remaining bills on
+            that page receive an empty (rather than incomplete) `line_items`. If the combined
+            payment-allocation count exceeds 4000, the lookup is truncated and no bill on that page
+            carries `payment_allocations` — the field is omitted rather than returned empty, so a
+            truncated page is never mistaken for a page of unpaid bills. Reduce the page size
+            (`limit`) if you have unusually large bills or bills with many applied payments.
         - connector: afas
           description: |
             AFAS Profit has no first-party purchase-invoice GetConnector on most tenants. The default `purchase_invoices_connector` setting (`Profit_Creditor_Invoices`) is the open-items / aged-creditors report — it only returns purchase invoices that are still unpaid. Posted-and-cleared invoices will not appear.
@@ -19478,7 +19488,8 @@ paths:
 
             `custom_fields` are returned on the get-by-id call (`GET /accounting/bills/{id}`) and on unfiltered list calls, but not on filtered or sorted list calls, which NetSuite serves through its SuiteQL endpoint. To retrieve custom fields when a `filter[*]` or `sort` is applied (for example incremental or large-dataset syncs), fetch each bill individually via `GET /accounting/bills/{id}`.
 
-            On a SuiteTax account, `line_items[].tax_rate` is resolved from NetSuite's transaction-level tax details. When a line's tax splits across several jurisdictions — common for US sales tax, where one line can carry state, county, city and district codes — `rate` is the **combined** rate and `id`, `code` and `name` are omitted, because the unified `tax_rate` holds a single code and no one component names the line's tax. Single-jurisdiction lines, such as UK VAT, return the full `id`/`code`/`name`/`rate`. `tax_amount` always carries the line's full tax either way, so reconcile against that rather than against `rate`.
+            On a SuiteTax account, `line_items[].tax_rate` is resolved from NetSuite's transaction-level tax details on the get-by-id call (`GET /accounting/bills/{id}`) and on unfiltered list calls. When a line's tax splits across several jurisdictions — common for US sales tax, where one line can carry state, county, city and district codes — `rate` is the **combined** rate and `id`, `code` and `name` are omitted, because the unified `tax_rate` holds a single code and no one component names the line's tax. Single-jurisdiction lines, such as UK VAT, return the full `id`/`code`/`name`/`rate`. `tax_amount` always carries the line's full tax either way, so reconcile against that rather than against `rate`.
+            On **filtered or sorted** list calls, which NetSuite serves through its SuiteQL endpoint, `line_items[].tax_rate` carries only `id` — and on a SuiteTax account not even that, because the per-line tax code SuiteQL exposes is empty there. Fetch the bill individually via `GET /accounting/bills/{id}` when you need the code or the rate alongside a filter.
 
             `tax_inclusive` is not returned on reads. NetSuite does not store it: `line_items[].total_amount` is always the net amount, with the tax in `tax_amount` and the gross in `total`. On writes it only tells NetSuite how to interpret the `total_amount` you send, so a value read back can be re-sent unchanged without setting it.
         - connector: spiris
@@ -19620,6 +19631,12 @@ paths:
         - connector: xero
           description: |
             When providing both supplier.id and supplier.display_name (or supplier.name), Xero will update the contact's name if the ContactID exists. If the ContactID doesn't exist, Xero will automatically create a new contact using the provided name. This allows for automatic contact creation but may update existing contact names if the display_name differs from the stored name.
+
+            `notes` is not written — Xero's ACCPAY invoice has no field it maps to, so the value is accepted and silently discarded. Use `line_items[].description` instead.
+
+            `reference` and `bill_number` do not collide (`Reference` and `InvoiceNumber` respectively), but Xero documents `InvoiceNumber` as the value that "will also display as Reference in the UI" on ACCPAY, and treats the `Reference` field as ACCREC-only. A value sent in `reference` therefore round-trips through the API without appearing in the Xero bill UI. See https://developer.xero.com/documentation/api/accounting/invoices
+
+            On read, `bill_number` and `po_number` are both mapped from `InvoiceNumber` and are always identical — Xero's Invoice object has no separate purchase-order-number field.
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
@@ -19628,10 +19645,17 @@ paths:
         - connector: quickbooks
           description: |
             When creating a bill in QuickBooks, each line item must be accompanied by a type designation. If the type is set to "expense_item," an item ID is required. Conversely, if the type is "expense_account," a ledger account ID must be provided.
+
+            `reference` and `notes` both map to the single `PrivateNote` field — QuickBooks' one reference-number slot (`DocNumber`) is taken by `bill_number` on bills, so `reference` shares the memo instead. Only one of the two survives a write (the other is dropped with no error), and on read both are populated from `PrivateNote` and are always identical. Send only one. Which of the two wins on write is currently under review — do not rely on it.
+
+            `bill_number` maps to `DocNumber`, limited to 21 characters; a longer value is rejected with `400 ValidationFault` (code `6000`), so a 36-character UUID does not fit.
+
             Additionally, multicurrency needs to be enabled in your QBO account. If creating a bill in your default currency, you do not need to send the currency value as long as the supplier uses the same currency. For bills with suppliers using a different currency than your default, you must include the currency value, matching the supplier's configured currency. To change the currency of a customer or vendor, a new one must be created with the desired currency. Foreign currencies can only be sent to suppliers configured with that currency.
         - connector: netsuite
           description: |
-            For creating or updating a bill in Netsuite, its required to provide the line type.
+            For creating or updating a bill in Netsuite, its required to provide the line type: each `line_items[]` entry must set `type` to `expense_account` (requires `ledger_account.id`) or `expense_item` (requires `item.id`). Lines are routed to different sublists on that discriminator, so a line with no `type` is dropped before the request is sent and the create fails with `USER_ERROR: "You must enter at least one line item for this transaction."` — an error that points away from the actual cause.
+
+            `reference`, `bill_number` and `notes` map to `externalId`, the transaction ID and the memo respectively, so all three round-trip independently. Because `reference` is the `externalId` it must be unique — reusing a value already on another bill fails with `DUP_RCRD`.
 
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
@@ -19680,6 +19704,13 @@ paths:
             When a line omits `tax_rate`, the VAT group configured on the G/L Account Card applies. A foreign vendor's VAT business posting group can zero the line VAT regardless of the `tax_rate` sent.
             In U.S.-localized tenants the returned `tax_inclusive` reads `false` even when `true` was sent; line amounts are still computed inclusive of the sent tax rate, so totals match what was sent.
             A '400 Bad Request' error "Control 'fieldName' is read-only" means that field's 'editable' property is disabled in Business Central.
+            `bill_number` and `reference` both map to the single `vendorInvoiceNumber` field, and `bill_number` wins — when both are sent, `reference` is silently discarded. On read both are populated from it and are always identical. Send only `reference` if you need it to survive a round trip.
+            `notes` is not written — Business Central's purchase invoice has no field it maps to, so the value is silently discarded.
+        - connector: sage-intacct
+          description: |
+            `bill_number` and `reference` both map to the single `DOCNUMBER` field, and `bill_number` wins — when both are sent, `reference` is silently discarded. On read both are populated from `DOCNUMBER` and are always identical. Send `reference` without `bill_number` if you rely on it as a back-reference. `bill_number` is additionally written to `RECORDID`.
+
+            `notes` is unaffected — it maps to `DESCRIPTION` and round-trips independently.
         - connector: zoho-books
           description: |
             The status of the bill will be "submitted" by default when creating a bill.
@@ -19694,6 +19725,15 @@ paths:
             Required fields on create: `company_id`, `bill_date`, `supplier.id`, `currency`, `total`, and `line_items`. `PostingDate` defaults to `bill_date`; override it via `pass_through[posting_date]`.
 
             `line_items[].tax_rate.code` maps to the SAP `TaxCode` (e.g. `V1`). SAP S/4HANA Cloud does not expose readable tax-rate master data, so the SAP tax code string must be supplied directly.
+        - connector: sage-intacct-rest
+          description: |
+            `line_items[].tax_rate`, `line_items[].unit_price` and `line_items[].type` are not supported. Sage's underlying bill-line object is a flat GL-distribution line (account + amount only) — it has no per-line tax field (rejected outright as "not a valid field", unlike the header-level `tax_inclusive`, which is writable), no quantity/unit-price breakdown, and no line-type classification.
+
+            `po_number` is not supported on write or read. Sage exposes only a linked purchasing-document reference (a full PO transaction), not a plain PO-number string field; a value here previously read back from the header's `reference` field, which was a fabricated value, not the caller's own — that has been removed rather than fixed, since Sage has nothing to fix it to.
+
+            `source_document_url` is not supported. A caller-supplied value has no field to write to, and the read side previously returned Sage's own `webURL` (a link to view the record in Sage's own UI) in its place — a different thing from the caller's source document, and indistinguishable from a real value without checking the URL's domain. Removed rather than left silently misleading.
+
+            `line_items[].location_id` is required on every line, not optional, in a multi-entity tenant — omitting it fails with `422 REST-7001 / SL-0401 / SL-0592 "Location is empty. A valid Multi-entity location must be specified"`. There is no header-level location field or default; each line needs its own. This is a tenant-setup fact to surface up front, not a mapping bug — it also applies to `expenses` (verified live) and likely every other transaction type on a multi-entity tenant.
       requestBody:
         required: true
         content:
@@ -19935,6 +19975,9 @@ paths:
             extracting the last `:` segment, so `tracking_categories[].name` returns `"Apple"` and
             `parent_name` returns `"Fruit"`. Expense line items are unaffected — QuickBooks returns
             only the short name there.
+        - connector: sage-intacct-rest
+          description: |
+            `payment_allocations` is populated on both bills.get and bills.list via an extra batched query against `accounts-payable/payment-detail`, filtered by the bill's own key — this is a permanent added query on every bill read, not something only bills with payments pay for, since a bill with none still needs the lookup to know that. Live-verified: a bill with an applied payment returns `payment_allocations: [{id: "<payment id>", allocated_amount, date}]`; one with none returns `payment_allocations: null`.
       responses:
         '200':
           $ref: '#/components/responses/GetBillResponse'
@@ -20010,6 +20053,9 @@ paths:
             late.
 
             This applies to every NetSuite date-only write field across the accounting resources.
+        - connector: sage-intacct-rest
+          description: |
+            `line_items[].tax_rate`, `line_items[].unit_price` and `line_items[].type` are not supported — Sage's bill-line object is a flat GL-distribution line with no per-line tax, quantity/unit-price, or type field. `po_number` is not supported either, on read or write — Sage exposes only a linked purchasing-document reference, not a plain PO-number string.
       requestBody:
         required: true
         content:
@@ -24510,6 +24556,9 @@ paths:
           description: |
             A NetSuite CustomerRefund settles against an existing customer credit via an internal apply list. `allocations[].type` decodes `invoice`, `journal_entry` and `credit_memo` from the underlying NetSuite document type; every other apply-list entry — including one backed by a customer deposit, which NetSuite tracks separately from invoice/credit-memo/ journal-entry applications — decodes to `other`. There is no way to tell a genuine "other" allocation apart from a customer-deposit application by reading the response alone.
             The unified `status` reflects NetSuite's CustomerRefund transaction status on a best-effort basis: `Refunded` maps to `paid` and `Voided` to `voided`; any other NetSuite status defaults to `paid`. The full CustomerRefund status vocabulary was not confirmed against a live tenant, so an unusual status may report `paid`.
+            This list also includes NetSuite `CashRefund` records — itemized refunds tied to a cash sale or return authorization rather than an apply-list — surfaced with `type: sale_refund` and populated `line_items` instead of `allocations`. `CashRefund`'s own status field has no documented enum (unlike CustomerRefund's Refunded/Voided), so its `status` mapping reuses the same connectorMapping and defaults to `paid` for any value that isn't a literal `Refunded`/`Voided` match — unconfirmed against a live tenant.
+            Every `CashRefund` line in `line_items[].type` reports `sales_item`, regardless of the underlying NetSuite item/line kind. NetSuite's CashSale/CashRefund item sublist can contain discount, shipping, non-inventory and other non-sales-item lines, and the connector cannot currently distinguish them from the captured response shape, so a non-sales-item line is mislabeled as `sales_item` rather than reported accurately.
+            Whenever a `filter`, `sort` or `pass_through` parameter is present, this list is served by a SuiteQL search rather than the SOAP list operation. That path never returns `line_items` or `allocations` for either refund type — pre-existing for CustomerRefund, and now also true for CashRefund. `type` still correctly distinguishes the two records; only the line-level detail is missing under a filtered/sorted/pass_through list.
       responses:
         '200':
           $ref: '#/components/responses/GetRefundsResponse'
@@ -24555,6 +24604,7 @@ paths:
           description: |
             A refund requires an existing customer credit to settle against — an open credit memo, unapplied customer deposit, invoice overpayment or journal entry — since a NetSuite CustomerRefund is always applied against a prior document. A refund with no allocations is not a meaningful request.
             Only `invoice`, `credit_memo` and `journal_entry` allocations can be created through the unified `allocations` array; they map to NetSuite's apply list. Customer-deposit allocations cannot be written through this endpoint: the unified `allocations[].type` enum has no `deposit` member, and this connector does not populate NetSuite's separate deposit list. Refunds against a customer deposit must be created directly in NetSuite — they will still read back correctly afterwards (as `allocations[].type: other`).
+            Set `type: sale_refund` to create a NetSuite `CashRefund` instead of the default `CustomerRefund` — an itemized refund using `line_items` (not `allocations`), for a cash sale or return authorization rather than an existing credit. Omitting `type` (or sending anything else) always creates a `CustomerRefund`, unchanged from today. `CashRefund`'s line-item fields (`price` on write, `rate` on read) reuse NetSuite's sibling CreditMemo item sublist shape, live-verified against a sandbox tenant (create, update, get, list, and delete all round-trip correctly).
       requestBody:
         required: true
         content:
@@ -24782,6 +24832,9 @@ paths:
           description: |
             A NetSuite CustomerRefund settles against an existing customer credit via an internal apply list. `allocations[].type` decodes `invoice`, `journal_entry` and `credit_memo` from the underlying NetSuite document type; every other apply-list entry — including one backed by a customer deposit, which NetSuite tracks separately from invoice/credit-memo/ journal-entry applications — decodes to `other`. There is no way to tell a genuine "other" allocation apart from a customer-deposit application by reading the response alone.
             The unified `status` reflects NetSuite's CustomerRefund transaction status on a best-effort basis: `Refunded` maps to `paid` and `Voided` to `voided`; any other NetSuite status defaults to `paid`. The full CustomerRefund status vocabulary was not confirmed against a live tenant, so an unusual status may report `paid`.
+            A NetSuite internalId does not reveal whether it belongs to a `CustomerRefund` or a `CashRefund`, so getting a refund by id makes one extra internal lookup first to resolve the record type before fetching it. If that lookup can't determine the type (a transient downstream issue, for example), the request falls back to fetching it as a `CustomerRefund`, which fails for a genuine `CashRefund` id rather than returning the wrong record.
+            This extra lookup is a second signed SOAP round-trip on **every** refund get, for **every** connection — including accounts that have never created a `CashRefund`. It is not an opt-in cost paid only by `CashRefund` users; every existing `CustomerRefund` read now takes twice as many NetSuite calls as before this connector supported `CashRefund`. A cheaper alternative (attempt as `CustomerRefund` first, resolve and retry only when NetSuite rejects it as the wrong type) was evaluated but not built — NetSuite SOAP faults return HTTP 200 with the fault in the response body rather than an error status, so the retry would need to key off body content in the same way `detectConcurrentRequestFault.ts` already does for concurrency errors, and the exact fault text for a wrong-record-type `RecordRef` has not been captured against a live tenant. Revisit if the extra round-trip proves costly in practice.
+            Every `CashRefund` line in `line_items[].type` reports `sales_item`, regardless of the underlying NetSuite item/line kind. NetSuite's CashSale/CashRefund item sublist can contain discount, shipping, non-inventory and other non-sales-item lines, and the connector cannot currently distinguish them from the captured response shape, so a non-sales-item line is mislabeled as `sales_item` rather than reported accurately.
       responses:
         '200':
           $ref: '#/components/responses/GetRefundResponse'
@@ -24829,6 +24882,8 @@ paths:
           description: |
             Only `invoice`, `credit_memo` and `journal_entry` allocations can be updated through the unified `allocations` array; they map to NetSuite's apply list. Customer-deposit allocations cannot be written through this endpoint: the unified `allocations[].type` enum has no `deposit` member, and this connector does not populate NetSuite's separate deposit list. A refund that settles against a customer deposit must be created and maintained directly in NetSuite — it will still read back correctly through this endpoint (as `allocations[].type: other`).
             A refund requires an existing customer credit to settle against — an open credit memo, unapplied customer deposit, invoice overpayment or journal entry — since a NetSuite CustomerRefund is always applied against a prior document.
+            Updating a `CashRefund` requires `type: sale_refund` in the request body — which NetSuite record shape gets sent is picked from the body itself, not looked up from the id (unlike get/delete). A GET response already includes `type`, so a normal read-modify-write cycle carries it forward automatically. Omitting it (or including it on an id that is actually a `CustomerRefund`) is rejected with a `422` naming the mismatch, before any request reaches NetSuite.
+            That mismatch check itself costs a second signed SOAP round-trip on **every** refund update, for every connection, not only ones that use `CashRefund` — the same permanent added-call cost as get/delete (see the `refundsOne` gotcha for why an attempt-then-retry alternative wasn't built instead).
       requestBody:
         required: true
         content:
@@ -25043,6 +25098,12 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            A NetSuite internalId does not reveal whether it belongs to a `CustomerRefund` or a `CashRefund`, so deleting a refund by id makes one extra internal lookup first to resolve the record type. If that lookup can't determine the type, the request falls back to deleting it as a `CustomerRefund`, which fails for a genuine `CashRefund` id rather than deleting the wrong record.
+            Same permanent cost as get/update: this is a second signed SOAP round-trip on every refund delete, for every connection, whether or not it has ever created a `CashRefund` (see the `refundsOne` gotcha for the alternative considered and why it wasn't built).
+            Separately, and true of every `*.delete` operation on this connector: NetSuite's SOAP delete response echoes success regardless of outcome, so a `200` here does not confirm the record was actually removed — read the record back to verify.
       responses:
         '200':
           $ref: '#/components/responses/DeleteRefundResponse'
@@ -29346,6 +29407,9 @@ paths:
         - connector: acumatica
           description: |
             The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
+        - connector: sage-intacct-rest
+          description: |
+            `filter[bill_id]` is a reverse lookup, not a plain field filter — Sage's payment object carries no bill reference itself, only its child `accounts-payable/payment-detail` rows do. Each request with this filter costs one extra batched query resolving the matching payment keys before the main list runs. Live-verified: a bill with a payment applied returns exactly that payment; a bill with none returns an empty list rather than every bill-payment on the connection.
       responses:
         '200':
           $ref: '#/components/responses/GetBillPaymentsResponse'
@@ -29412,6 +29476,11 @@ paths:
             from the error `detail` (`description2`) rather than the code alone. When routing a payment to a
             specific entity via `x-apideck-company-id` or `subsidiary.id`, the `account` must be one that is valid
             in that entity.
+
+            `account.id` must be the bank account's `display_id`, not the `id` that `bank_accounts.list` returns —
+            verified live: `account.id` set to the list's numeric `id` (e.g. `"1"`) is rejected
+            (`422 BL01001973 "The bank account '1' is invalid."`), while the same account's `display_id` (e.g.
+            `"100_SVB"`) succeeds.
         - connector: sap-s4hana-cloud
           description: |
             SAP S/4HANA Cloud creates a pure FI accounting document. This is a standalone outgoing payment posting, not a triggered run of the Automatic Payment Program (F110). company_id, supplier.id and account.id are required.
@@ -29828,6 +29897,14 @@ paths:
             DualEntry scopes expenses by company. Pass the `x-apideck-company-id` header (or set a Default
             Company on the connection) to return only records belonging to that company within the tenant.
             Without it, records across all companies in the tenant are returned.
+        - connector: sage-intacct-rest
+          description: |
+            `supplier_id` and `supplier.id` are read from Sage's `payee` field on the underlying
+            credit-card transaction, which has no other vendor reference. This connector writes the
+            real vendor key into `payee` on create/update, so an expense round-tripped through this
+            connector returns a resolvable id — but `payee` is free text, and an expense created
+            directly in Sage (or by another integration) can have it set to the vendor's display
+            name instead. Verify the value against `suppliers.list` before using it as a lookup key.
       responses:
         '200':
           $ref: '#/components/responses/GetExpensesResponse'
@@ -29866,6 +29943,12 @@ paths:
         - connector: xero
           description: |
             Xero expenses map to Spend Money bank transactions and are created with status AUTHORISED — there is no draft state. Both a bank/credit-card account (`account.id`) and a supplier (`supplier.id`) are required, even though they are optional in the unified schema; omitting either returns a Xero validation error ("A Contact must be specified" / "The BankAccount must be specified"). The `account.id` must correspond to a 'bank' or 'credit_card' account type — other account types may result in errors or unexpected behavior. Xero's Expenses (expense-claims) module, where contact-less drafts can be saved in the UI, has no public write API. For a draft, payable-style expense without a bank account, use the Bills resource (Xero ACCPAY invoices) with `status: "draft"` instead.
+            `reference` and `memo` both map to the single Xero `Reference` field on the underlying bank transaction, and `reference` wins — when both are sent, `memo` is silently discarded. On read both are populated from `Reference` and are always identical, so a caller cannot tell which field a value came from. Send only one of the two.
+        - connector: quickbooks
+          description: |
+            The top-level `account` must be a bank or credit-card account — the payment source the money left from — not an expense account; the expense account goes on `line_items[].account`. Sending an expense account at the top level fails with `400 "Invalid account type used"` (code `6430`), an error that names neither the field nor the type it expected.
+
+            `reference` and `memo` both map to the single `PrivateNote` field: only one survives a write (the other is dropped with no error), and on read both are populated from it and are always identical. Send only one. Which of the two wins on write is currently under review — do not rely on it.
         - connector: sage-intacct
           description: When creating an expense for Sage Intacct, the account_id must refer to a credit card account, not a ledger account. You can find the correct credit card account ID in Sage Intacct under the Credit Cards section.
         - connector: dualentry
@@ -29890,6 +29973,15 @@ paths:
             `tax_rate.id` alone is sufficient: when a tax-rated line omits `tax_rate.rate`, the connector resolves the rate server-side from the tax code (no extra call is needed on a warm per-connection cache). If a tax-rated line's tax type or rate genuinely cannot be resolved (e.g. an unknown tax code), the request now fails fast with a `400` naming the offending line rather than silently posting at the account default. A caller-supplied `tax_rate.rate` still takes precedence when present.
 
             Applying per-line tax also requires the NetSuite role to hold the `Lists → Tax Details Tab` permission at **Full**, because the connector writes a tax-details block on the Credit Card Charge. Without it the create fails as a tax-engine error rather than a permission error: `Unable to save the transaction due to an error being reported by the tax calculation engine: … Permission Violation: You need the 'Lists -> Tax Details Tab' permission`. Reading an expense's per-line `tax_rate` does not require it.
+        - connector: sage-intacct-rest
+          description: |
+            `source_document_url` has no destination on Sage's underlying credit-card transaction object — the API exposes no user-facing web link for this object at all (only internal API resource paths). The field is declared unsupported rather than mapped to anything.
+
+            `line_items[].tax_rate` is not supported on write. Sage accepts a `taxDetail` value on the line with no validation error, but it is silently discarded — verified live by creating a transaction with `taxDetail.key` set and reading it back as null. The correct write path for per-line tax on this object has not been found; treat this as an open gap, not a working feature.
+
+            `reference` and `number` are the same field downstream — Sage's credit-card transaction has one `referenceNumber`. Whichever you send is written to it and read back on **both** `reference` and `number`, so a round trip never loses the value but also cannot tell the two apart. When both are supplied, `number` wins (matching the `bill-payments` resource's existing precedence) — send only one if you need predictable behaviour.
+
+            `account.id` is Sage's credit-card account key — a different key space from the ids `bank_accounts.list` returns, and the two do not cross-reference by `display_id`. Verified live: an expense on card `TestCCId` reads back `account: { id: "9", code: "TestCCId" }`, while `bank_accounts.list` returns that same card as `id: "6"` and an unrelated savings account as `id: "9"`. Sending a `bank_accounts.list` id fails with `422 "A credit card is required"`. Take the value from an existing expense's `account.id`, or resolve the card through the Proxy API.
       requestBody:
         required: true
         content:
@@ -30079,6 +30171,14 @@ paths:
         - connector: microsoft-dynamics-365-business-central
           description: |
             A posted expense (`status: "posted"`) is read from Business Central's general ledger entries, which carry no bank-account discriminator. Its header `account` is therefore always returned as `account.type: "ledger_account"` — even when the expense was created with `account.type: "bank_account"` — and `account.id` is the bank's associated G/L posting account, not the bank account that was sent on create. `line_items[].account.id` is unaffected. See the create operation's gotcha for the full round-trip behaviour.
+        - connector: sage-intacct-rest
+          description: |
+            `supplier_id` and `supplier.id` are read from Sage's `payee` field on the underlying
+            credit-card transaction, which has no other vendor reference. This connector writes the
+            real vendor key into `payee` on create/update, so an expense round-tripped through this
+            connector returns a resolvable id — but `payee` is free text, and an expense created
+            directly in Sage (or by another integration) can have it set to the vendor's display
+            name instead. Verify the value against `suppliers.list` before using it as a lookup key.
       responses:
         '200':
           $ref: '#/components/responses/GetExpenseResponse'
@@ -30126,6 +30226,9 @@ paths:
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
             `line_items[].tax_rate.id` is applied on update when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Every tax-rated line must resolve a tax type; if any cannot, the override is skipped for the whole expense and the account default applies. Some third-party tax-engine configurations (e.g. Vertex/Avalara) may reject the override — use `pass_through` for tenant-specific tax fields if needed.
+        - connector: sage-intacct-rest
+          description: |
+            `source_document_url` has no destination on Sage's underlying credit-card transaction object and is declared unsupported. `line_items[].tax_rate` is accepted with no validation error but silently discarded on write — verified live, treat as an open gap rather than a working feature. When both `reference` and `number` are supplied, `number` wins.
       requestBody:
         required: true
         content:

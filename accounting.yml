@@ -20476,6 +20476,13 @@ paths:
       x-apideck-gotchas:
         - connector: netsuite
           description: |
+            `reference` maps to NetSuite's `externalId`, which NetSuite requires to be unique across every
+            invoice in the account — reusing a value already on another invoice fails with `DUP_RCRD`
+            ("This record already exists"). Send a distinct `reference` per invoice, or delete the record
+            holding it first (`DELETE /accounting/invoices/{id}`). This is also why retrying a create that
+            timed out returns `DUP_RCRD` rather than creating a second record: read the `retriable` and
+            `outcome` fields on the error before retrying.
+
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the
             SOAP/integration user's time zone before storing the date part, and these fields are anchored so
             they store on the intended calendar day for any integration user between UTC-10 and UTC+13.
@@ -22308,6 +22315,13 @@ paths:
         - connector: netsuite
           description: |
             Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used.
+
+            `reference` maps to NetSuite's `externalId`, which NetSuite requires to be unique across every
+            credit memo in the account — reusing a value already on another credit note fails with `DUP_RCRD`
+            ("This record already exists"). Send a distinct `reference` per credit note, or delete the record
+            holding it first (`DELETE /accounting/credit-notes/{id}`). This is also why retrying a create that
+            timed out returns `DUP_RCRD` rather than creating a second record: read the `retriable` and
+            `outcome` fields on the error before retrying.
 
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the
             SOAP/integration user's time zone before storing the date part, and these fields are anchored so
@@ -29526,6 +29540,7 @@ paths:
         - connector: netsuite
           description: |
             In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
+            `reference` maps to NetSuite's `externalId`, which NetSuite requires to be unique across every vendor payment in the account — reusing a value already on another payment fails with `DUP_RCRD` ("This record already exists"). Send a distinct `reference` per payment, or delete the record holding it first (`DELETE /accounting/bill-payments/{id}`). This is also why retrying a create that timed out returns `DUP_RCRD` rather than creating a second record: read the `retriable` and `outcome` fields on the error before retrying.
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the SOAP/integration user's time zone before storing the date part, and these fields are anchored so they store on the intended calendar day for any integration user between UTC-10 and UTC+13.
             Four zones fall outside that range and need the optional `timezone` connection setting: `Pacific/Pago_Pago`, `Pacific/Niue` and `Pacific/Midway` (UTC-11) store one day early without it, and `Pacific/Kiritimati` (UTC+14) stores one day late. Set it to the IANA zone of the NetSuite user this connection authenticates as, read from that user's Home > Set Preferences > Time Zone — Setup > Company > Company Information only supplies the default, so a user who overrode it needs their own zone.
             When the setting is used its value must be within 12 hours of that user's real zone in either direction: more than ~12h east stores dates one day early, more than ~12h west stores them one day late.

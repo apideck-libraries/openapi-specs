@@ -19612,6 +19612,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct
+          description: |
+            `line_items[].item` must reference the item by its Sage item code (`ITEMID`), not by the
+            numeric record number. Pass the value Invoice Items returns in `code` — either as
+            `item.code` (preferred; it wins when both are sent) or as `item.id`. The numeric `id`
+            returned by Invoice Items is rejected by Sage with "Item 'N' specified is not valid"
+            (BL01001973). No automatic translation is applied: Sage item codes may themselves be
+            numeric, so a record number cannot be told apart from a code.
         - connector: myob
           description: |
             MYOB requires a `FreightTaxCode` on bill create and update. Apideck sends the tax rate of the first line item (`line_items[0].tax_rate.id`), so every bill must include at least one line item with a `tax_rate.id`.
@@ -20014,6 +20022,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sage-intacct
+          description: |
+            `line_items[].item` must reference the item by its Sage item code (`ITEMID`), not by the
+            numeric record number. Pass the value Invoice Items returns in `code` — either as
+            `item.code` (preferred; it wins when both are sent) or as `item.id`. The numeric `id`
+            returned by Invoice Items is rejected by Sage with "Item 'N' specified is not valid"
+            (BL01001973). No automatic translation is applied: Sage item codes may themselves be
+            numeric, so a record number cannot be told apart from a code.
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
@@ -20476,6 +20492,14 @@ paths:
             late.
 
             This applies to every NetSuite date-only write field across the accounting resources.
+        - connector: sage-intacct
+          description: |
+            `line_items[].item` must reference the item by its Sage item code (`ITEMID`), not by the
+            numeric record number. Pass the value Invoice Items returns in `code` — either as
+            `item.code` (preferred; it wins when both are sent) or as `item.id`. The numeric `id`
+            returned by Invoice Items is rejected by Sage with "Item 'N' specified is not valid"
+            (BL01001973). No automatic translation is applied: Sage item codes may themselves be
+            numeric, so a record number cannot be told apart from a code.
         - connector: sage-intacct-rest
           description: |
             Line-level `item` is written as Sage's item dimension, so `line_items[].item.id` must be an item id as
@@ -20885,6 +20909,14 @@ paths:
             lines it names, and does not delete the rest.
 
             The same applies to bills, credit notes, journal entries and quotes.
+        - connector: sage-intacct
+          description: |
+            `line_items[].item` must reference the item by its Sage item code (`ITEMID`), not by the
+            numeric record number. Pass the value Invoice Items returns in `code` — either as
+            `item.code` (preferred; it wins when both are sent) or as `item.id`. The numeric `id`
+            returned by Invoice Items is rejected by Sage with "Item 'N' specified is not valid"
+            (BL01001973). No automatic translation is applied: Sage item codes may themselves be
+            numeric, so a record number cannot be told apart from a code.
         - connector: quickbooks
           description: |
             Quickbooks offers limited (regional) support for applying discount on a Line Item. Including discount_percentage or discount_amount applies to entire invoice. The default type for a Line Item is a sales item if no type has been provided. When setting status to `void`, do not include any other fields in the request body.

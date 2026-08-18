@@ -1,3 +1,9 @@
+## v10.40.0 - (2026-08-18)
+
+### Accounting API
+
+- Added new [Restaurant365](connectors/restaurant365) connector (beta), covering [Bills](apis/accounting/reference/bills) and [Credit Notes](apis/accounting/reference/credit-notes) with read and create support, [Journal Entries](apis/accounting/reference/journal-entries) create support, and read support for [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Suppliers](apis/accounting/reference/suppliers), [Subsidiaries](apis/accounting/reference/subsidiaries), [Company Info](apis/accounting/reference/company-info), [Payments](apis/accounting/reference/payments), [Bill Payments](apis/accounting/reference/bill-payments), [Purchase Orders](apis/accounting/reference/purchase-orders), [Locations](apis/accounting/reference/locations) and [Bank Accounts](apis/accounting/reference/bank-accounts), plus virtual (polling-based) webhook events across 10 of those resources. Connecting requires a Restaurant365-issued account, gated behind their Technology Partner program.
+
 ## v10.39.0 - (2026-08-18)
 
 ### Issue Tracking API

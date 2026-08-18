@@ -1,3 +1,9 @@
+## v10.39.0 - (2026-08-18)
+
+### Issue Tracking API
+
+- Added new [Freshservice](connectors/freshservice) connector (beta) as an auth-only connector: consumers authenticate through Vault with their Freshservice subdomain and API key (HTTP Basic auth — the key acts as the username), after which the full Freshservice v2 API is available through the [Proxy API](apis/proxy/reference). No unified Issue Tracking resources are mapped, and the API key inherits the permissions of the agent who generated it. Connections are validated against the tenant's ticket list, so the key must come from an agent account that can view tickets.
+
 ## v10.38.1 - (2026-08-12)
 
 ### Accounting API

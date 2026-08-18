@@ -23472,6 +23472,9 @@ paths:
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
             `filter[subsidiary_id]` scopes results to suppliers assigned to (or shared with) the given subsidiary, and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
             When any `filter[*]`, `sort[*]`, or `pass_through[*]` parameter is present, the list call is routed through NetSuite's SuiteQL Analytics REST API. In this path, `addresses[]` entries contain only `type` and `string` fields — structured fields (`id`, `city`, `state`, `postal_code`, `country`, `contact_name`) are not available because the SuiteQL Analytics replica does not expose the address sub-table join. Full structured address data is only returned by the unfiltered SOAP path (i.e., `GET /accounting/suppliers` with no filter, sort, or pass_through parameters).
+            `custom_fields` come back on `GET /accounting/suppliers/{id}` and on an unfiltered `GET /accounting/suppliers`, each entry carrying the NetSuite internal id, the script id and the value — for example `{"id": "987", "name": "custentity_vendor_code", "value": "ACME-123"}`. They are absent the moment any `filter[*]`, `sort[*]` or `pass_through[*]` parameter is present, because that routes the list through SuiteQL, where custom fields would require a secondary lookup per batch. So `GET /accounting/suppliers?limit=5` returns them and `GET /accounting/suppliers?filter[company_name]=Acme` does not. For an incremental sync, list with the filter to collect ids, then fetch the records you need custom fields for via `GET /accounting/suppliers/{id}`.
+            A field whose script id starts with `custpage_` is omitted. Those are injected into the NetSuite UI form by SuiteScript rather than stored on the record: they have no internal id and their value is page markup — `custpage_inlinejavascript` returns a string of inline HTML script elements pointing at NetSuite media files. Custom segments (`cseg_*`) are returned normally.
+            Each value's type comes from NetSuite's own field type, not from the shape of the text: a check box returns `true`/`false`, a numeric field returns a number, and everything else returns a string — so a text field holding `12345` returns the string `"12345"`. The one exception is a text field whose stored value is JSON, which is parsed before you receive it: a field holding `[]` returns `"value": []`, not `"[]"`. Send that value back unchanged on a write and NetSuite stores the original text.
         - connector: xero
           description: |
             In Xero, contacts are not strictly separated into customers or suppliers until linked to a transaction. Apideck's approach is to return suppliers as `IsSupplier=true||IsCustomer=false` and customers as `IsCustomer=true||IsSupplier=false`. If you need other cases, use pass-through, e.g. `?pass_through[where]=IsCustomer=false AND IsSupplier=false` for uncategorized contacts. See the [Pass-through guide](https://developers.apideck.com/guides/pass-through) for more details.
@@ -23561,6 +23564,46 @@ paths:
             schema:
               $ref: '#/components/schemas/Supplier'
       x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            `custom_fields` are writable. Identify each field either by its NetSuite internal id or by
+            its script id — both forms work, and `id` wins if you send both:
+
+            `"custom_fields": [{"id": "987", "value": "ACME-123"}, {"name": "custentity_vendor_flag", "value": true}]`
+
+            **The NetSuite field type is derived from the JSON value you send, not from the field's real
+            type**, so the value's shape decides how it is transmitted:
+
+            - `true` / `false`, or the strings `"true"` / `"false"` → check box
+            - a number, **and any string made only of digits** — `7`, `10.5`, `"12345"` → decimal number.
+              A numeric code that belongs in a text field must therefore not be sent as a digits-only
+              string, or it reaches NetSuite as a number and is rejected with `INVALID_FLD_VALUE`.
+            - a date — both `"2026-08-18"` and a full `"2026-08-18T09:00:00Z"` → date field
+            - anything else → free-form text
+            - an object or array is serialized to JSON text, so `"value": []` stores `[]`
+
+            A `cseg_*` custom segment needs both keys — its internal id in `id` and the segment script id
+            in `name`, with the referenced record's internal id as the value:
+            `{"id": "801", "name": "cseg_region", "value": "42"}`.
+
+            A value read from `GET /accounting/suppliers/{id}` can be sent back unchanged. A text field
+            holding `{"a":1}` reads back as the object `{"a": 1}`, and sending that object back stores
+            `{"a":1}` again.
+
+            Date-only values need no configuration between UTC-10 and UTC+13: the connector anchors them to
+            10:00 UTC before sending, because NetSuite resolves the instant against the account's time zone
+            and an unanchored value would store the previous calendar day. Four zones fall outside that
+            range and still shift by a day — `Pacific/Pago_Pago`, `Pacific/Niue` and `Pacific/Midway`
+            (UTC-11) store one day early, `Pacific/Kiritimati` (UTC+14) one day late. Unlike the date fields
+            on other resources, the optional `timezone` connection setting does **not** cover custom fields:
+            that anchoring runs in the mapping layer, which this path does not go through. In those four
+            zones, send the value as a full dateTime you have offset yourself.
+
+            Two rejections to expect, both naming the offending field. A field that is read-only or owned
+            by a NetSuite bundle returns `INSUFFICIENT_PERMISSION` — "You do not have permissions to set
+            a value for element custentity_x". A value whose shape does not match the field's real
+            NetSuite type returns `INVALID_FLD_VALUE` — "You have entered an Invalid Field Value hello
+            for the following field: custentity_x".
         - connector: sage-intacct-rest
           description: |
             Only `active` and `inactive` are applied. Sage's status field has no other members, so any
@@ -23786,6 +23829,46 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            `custom_fields` are writable. Identify each field either by its NetSuite internal id or by
+            its script id — both forms work, and `id` wins if you send both:
+
+            `"custom_fields": [{"id": "987", "value": "ACME-123"}, {"name": "custentity_vendor_flag", "value": true}]`
+
+            **The NetSuite field type is derived from the JSON value you send, not from the field's real
+            type**, so the value's shape decides how it is transmitted:
+
+            - `true` / `false`, or the strings `"true"` / `"false"` → check box
+            - a number, **and any string made only of digits** — `7`, `10.5`, `"12345"` → decimal number.
+              A numeric code that belongs in a text field must therefore not be sent as a digits-only
+              string, or it reaches NetSuite as a number and is rejected with `INVALID_FLD_VALUE`.
+            - a date — both `"2026-08-18"` and a full `"2026-08-18T09:00:00Z"` → date field
+            - anything else → free-form text
+            - an object or array is serialized to JSON text, so `"value": []` stores `[]`
+
+            A `cseg_*` custom segment needs both keys — its internal id in `id` and the segment script id
+            in `name`, with the referenced record's internal id as the value:
+            `{"id": "801", "name": "cseg_region", "value": "42"}`.
+
+            A value read from `GET /accounting/suppliers/{id}` can be sent back unchanged. A text field
+            holding `{"a":1}` reads back as the object `{"a": 1}`, and sending that object back stores
+            `{"a":1}` again.
+
+            Date-only values need no configuration between UTC-10 and UTC+13: the connector anchors them to
+            10:00 UTC before sending, because NetSuite resolves the instant against the account's time zone
+            and an unanchored value would store the previous calendar day. Four zones fall outside that
+            range and still shift by a day — `Pacific/Pago_Pago`, `Pacific/Niue` and `Pacific/Midway`
+            (UTC-11) store one day early, `Pacific/Kiritimati` (UTC+14) one day late. Unlike the date fields
+            on other resources, the optional `timezone` connection setting does **not** cover custom fields:
+            that anchoring runs in the mapping layer, which this path does not go through. In those four
+            zones, send the value as a full dateTime you have offset yourself.
+
+            Two rejections to expect, both naming the offending field. A field that is read-only or owned
+            by a NetSuite bundle returns `INSUFFICIENT_PERMISSION` — "You do not have permissions to set
+            a value for element custentity_x". A value whose shape does not match the field's real
+            NetSuite type returns `INVALID_FLD_VALUE` — "You have entered an Invalid Field Value hello
+            for the following field: custentity_x".
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.

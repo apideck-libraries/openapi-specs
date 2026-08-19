@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.40.0
+  version: 10.41.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -19096,6 +19096,18 @@ paths:
         - connector: xero
           description: |
             Xero tax rates include `effective_tax_rate` for the combined percentage. Tax types are categorized as INPUT (purchases), OUTPUT (sales), or NONE. Use the appropriate tax type when applying rates to invoices vs bills.
+        - connector: twinfield
+          description: |
+            Listing tax rates returns only the VAT code and its description; `effective_tax_rate` and
+            `total_tax_rate` are not populated on the list operation. Reading a single tax rate by its
+            known VAT code does return the rate.
+
+            `name` and `description` are read from Twinfield's own column header for that office's
+            configured UI language (e.g. "Naam" for a Dutch office) — this connector reads the Dutch
+            column name specifically. On a non-Dutch-language office these fields would come back empty.
+            Not verified against a non-Dutch office (this build only has access to a Dutch-language
+            tenant), but the mechanism is confirmed live: the column name in the raw response is the
+            office's own language, not a fixed English key.
         - connector: sage-intacct
           description: |
             Sage Intacct supports multi-component taxes through the `components` array. Each component can have its own rate and tax authority. Use compound taxes for jurisdictions with multiple tax layers (e.g., GST + PST in Canada).
@@ -19428,6 +19440,19 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            This connector fetches every matching bill in a single call — there is no server-side
+            pagination, so a large date range can be a large response. The `id` returned matches what
+            `bills.get` expects, and other transaction types (bank, journal entries) are excluded.
+
+            `sub_total`, `total_tax`, `line_items` and `updated_at` are not available from this list
+            view (Browse Data returns one summary row per bill, not the underlying line items); `total`
+            is derived assuming the connector's own no-VAT-on-bills limitation (see the `post` gotcha)
+            still holds, so it doubles as `sub_total` would if this list mapped it. `balance` and
+            `paid_date`, notably, ARE available here even though they are always null on `GET` by id —
+            Twinfield's transaction read omits the balancing control-account line where that data
+            lives, but Browse Data exposes it directly.
         - connector: microsoft-dynamics-365-business-central
           description: |
             The `balance` field is not populated for bills. Business Central's API does not expose a
@@ -19747,6 +19772,23 @@ paths:
             `source_document_url` is not supported. A caller-supplied value has no field to write to, and the read side previously returned Sage's own `webURL` (a link to view the record in Sage's own UI) in its place — a different thing from the caller's source document, and indistinguishable from a real value without checking the URL's domain. Removed rather than left silently misleading.
 
             `line_items[].location_id` is required on every line, not optional, in a multi-entity tenant — omitting it fails with `422 REST-7001 / SL-0401 / SL-0592 "Location is empty. A valid Multi-entity location must be specified"`. There is no header-level location field or default; each line needs its own. This is a tenant-setup fact to surface up front, not a mapping bug — it also applies to `expenses` (verified live) and likely every other transaction type on a multi-entity tenant.
+        - connector: twinfield
+          description: |
+            Both `supplier.id` and `bill_number` are required — Twinfield rejects a bill without an invoice number, and every line must post against the accounts-payable control account, which requires knowing the supplier.
+
+            The accounts-payable control account itself is per-organisation configuration Twinfield exposes no way to look up. It defaults to `1600` (Twinfield's standard chart of accounts); if this office uses a different code, configure it on the connection.
+
+            `reference` is not sent — Twinfield's purchase transaction header has no free-text field
+            distinct from the invoice number (`invoicenumber`, already used for `bill_number`) to hold
+            it. Treat `reference` as write-unsupported for this connector.
+
+            `line_items[].tax_rate` is not sent. Twinfield accepts a `vatcode` per line and will compute
+            VAT automatically, but the transaction's balancing total line must then equal the net amount
+            plus that computed VAT — this connector does not yet calculate that (it would need the tax
+            rate's percentage, which this connector's `tax-rates` resource does not currently expose).
+            Sending `vatcode` without also correcting the total line fails with a balance error on every
+            taxed bill, so it is left unmapped rather than shipped half-working. Bills post without VAT
+            recorded on the transaction until this is built.
       requestBody:
         required: true
         content:
@@ -19974,6 +20016,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            `total_tax`, `balance` and `paid_date` are always null on this get-by-id operation —
+            Twinfield's response omits the balancing line where those values would come from.
+            `sub_total` is set equal to `total` rather than left null, since this connector does not
+            currently post VAT on bills (see the bill create gotcha), so there is no tax to subtract.
+            `balance` and `paid_date` are available on `bills.list`.
         - connector: freshbooks
           description: The Freshbooks Bills api is currently in beta.
         - connector: netsuite
@@ -20363,6 +20412,16 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            This list only returns unpaid invoices — Twinfield does not expose a way to list paid or
+            historical invoices. `status`, `line_items`, `invoice_date`, `due_date`, `currency`,
+            `sub_total`, `total_tax` and `balance` are not available on the list; fetch the invoice by
+            `id` for those fields.
+
+            Because of this, webhook notifications only reliably cover new invoices — once an invoice
+            is paid it drops out of this list entirely rather than appearing as an update, so a status
+            change to paid will not reliably produce a webhook event.
         - connector: dualentry
           description: |
             `updated_since` is inclusive and is applied at whole-second granularity, so a poll that
@@ -20621,6 +20680,16 @@ paths:
           description: |
             Exact Online assigns invoice status automatically (`open` by default) and ignores the `status` field on create — invoices are finalized/processed in Exact Online, not via the API.
             Set VAT via `line_items[].tax_rate.code`; Exact derives the percentage from the code, so `line_items[].tax_rate.rate` is ignored on create.
+        - connector: twinfield
+          description: |
+            `line_items[].ledger_account.id` must reference a profit-and-loss (income or expense)
+            ledger account — Twinfield rejects an invoice line that posts to a balance-sheet account
+            (e.g. a bank or receivables account) with "Grootboekrekening bestaat niet (in de
+            PNL-groep)".
+
+            `line_items[].description` is not preserved on the created invoice line. Twinfield derives
+            the line's description from the ledger account it posts to, so the created invoice shows a
+            fixed label for that ledger account instead of the text you sent.
       requestBody:
         required: true
         content:
@@ -21258,6 +21327,16 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            `type`, `active` and `status` are not returned by this list call — Twinfield's underlying
+            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the ledger
+            account by id to read these fields.
+
+            This list only returns balance-sheet accounts (Twinfield's `BAS` dimension type). Twinfield
+            requires a single `dimtype` per list call, and Profit & Loss accounts (`type: "other"`,
+            Twinfield's `PNL` dimtype) are not included — fetching, creating, updating and deleting a
+            P&L account by id all work, but it will not appear when listing `ledger-accounts`.
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
@@ -21351,6 +21430,19 @@ paths:
       summary: Create Ledger Account
       description: Create Ledger Account
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Twinfield requires the account's dimension type (`BAS` for `type: "balancesheet"`, `PNL` for
+            `type: "other"`) up front, and its own validation enforces the code format per type: balance
+            sheet codes must match `[0-3][0-9][0-9][0-9]`; anything else is rejected as Profit & Loss.
+            Send `code` in the matching range for the `type` you request — a `type: "other"` code inside
+            the `0`–`3` range is rejected by Twinfield's own format check before this connector's mapping
+            is even reached.
+
+            Fetching, updating and deleting an existing account by id derives its type from the same
+            leading-digit rule rather than a caller-supplied value, since Twinfield's read/update/delete
+            calls need the dimension type up front and the unified request has no `type` field to read it
+            from at that point. This is Twinfield's own enforced convention, not a per-tenant setting.
         - connector: sage-intacct-rest
           description: |
             Only `active` and `inactive` are applied. Sage's status field has no other members, so any
@@ -22953,6 +23045,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            `status` is not returned by this list call — Twinfield's underlying
+            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the
+            customer by id to read it. The same applies to `emails`, `phone_numbers`, `addresses`,
+            `websites`, `tax_number`, `bank_accounts`, `updated_at` and `account` — all empty/null on
+            the list response, populated only when fetched by id.
         - connector: netsuite
           description: |
             The minimum page size accepted for Netsuite is 5. The cursor for Netsuite expires if it has not been used within 15 minutes after its creation.
@@ -23506,6 +23605,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            `status` is not returned by this list call — Twinfield's underlying
+            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the
+            supplier by id to read it. The same applies to `emails`, `phone_numbers`, `addresses`,
+            `websites`, `tax_number`, `bank_accounts`, `updated_at` and `account` — all empty/null on
+            the list response, populated only when fetched by id.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: wafeq
@@ -24150,6 +24256,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Twinfield returns every matching payment in a single call for this endpoint — there is no
+            server-side pagination, so a large date range can be a large response.
+
+            `account` and `allocations` are not populated on the list. Fetch the individual payment by
+            `id` to get those fields.
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
@@ -24265,6 +24378,17 @@ paths:
 
             Every R365 payment is an accounts-payable (vendor) payment — `customer` is always null.
             The counterparty is only available via the deprecated `supplier` field.
+        - connector: twinfield
+          description: |
+            Disabled as of 2026-08-18. Twinfield's bank-daybook transaction requires a `header.number`
+            referencing an EXISTING bank statement line already imported into Twinfield — live-reproduced:
+            a placeholder number fails "De boeking bestaat niet" (the booking does not exist). This is a
+            match against a real, previously-imported statement, not a value the caller can invent, and
+            this connector's bank-statement-import path (`bankFeedStatementsOne`) is itself disabled, so
+            there is no way to discover one. Separately, `account.id` must be a real ledger-account code
+            (e.g. `1010`) — live-confirmed the id `/accounting/bank-accounts` returns (Twinfield's bank
+            BOOK/daybook code, e.g. `BNK`) does not work here; the two are different Twinfield concepts
+            this connector does not currently bridge.
         - connector: myob
           description: |
             MYOB payments cannot be updated — the MYOB API allows only GET, POST and DELETE on customer payments, so the update operation is unsupported. Delete the payment and recreate it instead.
@@ -25548,6 +25672,23 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            This connector fetches every matching journal entry in a single call — there is no
+            server-side pagination, so a large date range can be a large response. An entry with
+            multiple lines is grouped back into one record with a nested `line_items` array.
+
+            `journal-entries.list` also returns records that were created through this connector's
+            `expenses` resource — there is no field to tell the two apart. Treat any entry whose lines
+            look like a two-line debit/credit posting as a possible `expenses` record.
+
+            `memo`, `posted_at` and `updated_at` are always null on the list. Fetch the entry by id
+            for those fields.
+
+            Twinfield transaction numbers are not globally unique — the same number can also identify
+            a `bills`/`expenses` record, or a transaction entered directly in Twinfield, and this
+            connector has no field to disambiguate. Getting a journal entry by an id sourced from
+            another resource (or from Twinfield directly) can silently return the wrong record.
         - connector: microsoft-dynamics-365-business-central
           description: |
             Journal entries are read from the single general journal batch configured in the required
@@ -25715,6 +25856,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Twinfield caps a line's description at 40 characters. A longer value is rejected outright
+            rather than truncated, and this connector does not pre-truncate
+            `line_items[].description` before sending.
         - connector: sage-intacct-rest
           description: |
             `number` cannot be set on create. Sage's `general-ledger/journal-entry` object has no writable number field
@@ -26390,6 +26536,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            This connector fetches every matching transaction in a single call — there is no
+            server-side pagination, so a large date range can be a large response. `currency_rate` and
+            `reference` are not available. Transactions created through this connector's `expenses`
+            resource are indistinguishable from manual journal entries and are returned as
+            `source_type: journal_entry`.
+
+            `posted_at` is approximated as the first day of the transaction's accounting period
+            (month), not the actual posting date, since the connector's data source for this endpoint
+            does not expose the real date.
+
+            Getting a specific transaction by `id` is not supported — Twinfield's transaction numbers
+            are not globally unique across transaction types, so there is no reliable way to look one
+            up directly.
         - connector: xero
           description: |
             Backed by Xero's `Journals` API, which moves to the Advanced app tier on 2026-03-02. Each posting (invoice, bill, payment, payroll, manual journal, etc.) appears here with its origin discriminated by `source_type` and `source_id`.
@@ -29006,6 +29167,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Listed via Twinfield's Finder service (`Search`, type `BNK`) rather than ProcessXml —
+            ProcessXml's `<list><type>banks</type></list>` and `<read><type>bank</type></read>` both
+            reject as unimplemented server-side ("Type niet geïmplementeerd", confirmed live), but
+            Finder(BNK) works and is live-verified (returns real bank/cash codes for this office, e.g.
+            "BNK"/"ABN-Amro 789", "KAS"/"Kas").
+
+            Finder only returns a code and a name per row — `account_type`, `currency`, `balance`,
+            `available_balance`, `iban` and `status` are not available from this connector.
+
+            `name`/`bank_name` are read from Twinfield's own column header for that office's configured
+            UI language (e.g. "Naam" for a Dutch office). Not verified against a non-Dutch office (this
+            build only has access to a Dutch-language tenant), but the mechanism is confirmed live — a
+            non-Dutch office would need the equivalent column name mapped instead.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -29296,6 +29472,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            `status` is not returned by this list call — Twinfield's underlying
+            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the
+            tracking category by id to read it.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -29583,6 +29764,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Twinfield returns every matching bill payment in a single call for this endpoint — there
+            is no server-side pagination, so a large date range can be a large response.
+
+            `account` and `allocations` are not populated on the list. Fetch the individual bill
+            payment by `id` to get those fields.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -29735,6 +29923,7 @@ paths:
             Four zones fall outside that range and need the optional `timezone` connection setting: `Pacific/Pago_Pago`, `Pacific/Niue` and `Pacific/Midway` (UTC-11) store one day early without it, and `Pacific/Kiritimati` (UTC+14) stores one day late. Set it to the IANA zone of the NetSuite user this connection authenticates as, read from that user's Home > Set Preferences > Time Zone — Setup > Company > Company Information only supplies the default, so a user who overrode it needs their own zone.
             When the setting is used its value must be within 12 hours of that user's real zone in either direction: more than ~12h east stores dates one day early, more than ~12h west stores them one day late.
             This applies to every NetSuite date-only write field across the accounting resources.
+            `payment_method` and `payment_method_id` are not supported on NetSuite bill payments. The NetSuite SOAP `VendorPayment` record does not expose a `paymentMethod` field (it is present on the AR-side `CustomerPayment` record only). Both fields will always be `null` in responses, and any value sent on create or update is silently ignored by NetSuite.
         - connector: xero
           description: |
             Xero rejects bill payments where the organisation base currency, the bill currency, and the
@@ -29743,6 +29932,14 @@ paths:
             `"The invoice, payment and organisation base currencies are all different. Xero cannot currently handle a 3-currency transaction."`
 
             Pay from a bank account in either the base or the bill currency (two currencies) to avoid the error.
+        - connector: twinfield
+          description: |
+            Disabled as of 2026-08-18. Same underlying constraint as the `payments` resource: Twinfield's
+            bank-daybook transaction requires `header.number` to reference an existing, already-imported
+            bank statement line, which this connector has no way to discover (its bank-statement-import
+            path, `bankFeedStatementsOne`, is itself disabled), and `account.id` needs a real
+            ledger-account code rather than the bank BOOK/daybook code `/accounting/bank-accounts` returns.
+            See the `payments` resource's gotcha for the live reproduction.
       requestBody:
         required: true
         content:
@@ -30117,6 +30314,18 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            This connector fetches every matching expense in a single call — there is no server-side
+            pagination, so a large date range can be a large response.
+
+            `transaction_date` is approximated as the first day of the expense's accounting month, not
+            the actual transaction date. `sub_total`, `total_tax` and `updated_at` are not available on
+            the list.
+
+            This list also returns records created through this connector's `journal-entries` resource
+            — there is no field to tell the two apart. Treat any entry whose lines look like a
+            multi-line journal posting as a possible `journal-entries` record.
         - connector: netsuite
           description: |
             Listing expenses returns identifiers only. Each expense in the list has `id` set and the remaining fields — including `transaction_date` — empty, because NetSuite's credit card charge list endpoint returns references rather than full records. Fetch an expense by id to read its details.
@@ -30191,6 +30400,43 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            `account_id` (or `account.id`) is required for this connector even though the unified
+            schema only requires one of them via `x-apideck-strict-any-of` — Twinfield has no implicit
+            default for the credited side.
+
+            Not every ledger account works as `account_id` — Twinfield rejects some accounts with an
+            error naming a conflicting bank/cash book or control account rather than the field itself.
+            A plain, general-purpose ledger account works; a bank, cash-book-linked, or control
+            account does not. There is no way to predict which accounts qualify from the unified
+            request alone.
+
+            An expense posted through this connector is indistinguishable from a journal entry on the
+            Twinfield side; there is no `payment_type`/cash-vs-card distinction preserved.
+
+            The write always creates a draft transaction; this connector has no way to post it
+            directly.
+
+            `delete` is disabled as of 2026-08-18. It read/deleted by transaction number alone against the
+            hardcoded `MEMO` daybook, but Twinfield transaction numbers are unique only PER DAYBOOK — the same
+            number can also identify a `journal-entries` record, or a transaction entered directly in Twinfield's
+            own UI, with no field this connector can use to tell them apart. Live-reproduced: deleting an
+            "expense" by id voided an unrelated, pre-existing journal entry that happened to share its number.
+            `get` has the same collision on the read side — it is non-destructive but can silently return a
+            hand-entered journal entry reshaped as an expense (dropping any line beyond the first debit/credit
+            pair). Do not rely on an id obtained from `journal-entries` or Twinfield's own UI being safe to pass
+            to this resource, or vice versa.
+
+            `memo` becomes the credited line's description, and Twinfield caps a transaction line's description
+            at 40 characters ("De omschrijving mag maximaal 40 tekens bevatten") — confirmed live: a 43-character
+            `memo` was rejected outright rather than truncated. This connector does not truncate `memo` or
+            `line_items[].description` before sending; a value over 40 characters fails the whole write.
+
+            `update` is not implemented, and not just for lack of time: Twinfield's transaction API has no
+            in-place update verb, only `add` (always assigns a new transaction number) and `delete`. Faking an
+            update as delete-then-recreate would return a different `id` than the one being updated, breaking
+            the update contract, so it is left unsupported rather than built as a lossy workaround.
         - connector: xero
           description: |
             Xero expenses map to Spend Money bank transactions and are created with status AUTHORISED — there is no draft state. Both a bank/credit-card account (`account.id`) and a supplier (`supplier.id`) are required, even though they are optional in the unified schema; omitting either returns a Xero validation error ("A Contact must be specified" / "The BankAccount must be specified"). The `account.id` must correspond to a 'bank' or 'credit_card' account type — other account types may result in errors or unexpected behavior. Xero's Expenses (expense-claims) module, where contact-less drafts can be saved in the UI, has no public write API. For a draft, payable-style expense without a bank account, use the Bills resource (Xero ACCPAY invoices) with `status: "draft"` instead.
@@ -31169,8 +31415,54 @@ paths:
         - connector: xero
           description: |
             In Xero, if a transaction ID has been previously used, the API will reject the entire bank feed statement.
-            However, if the statement includes multiple transactions and at least one transaction ID is unique, 
+            However, if the statement includes multiple transactions and at least one transaction ID is unique,
             the API will return a success response but will not process the transactions with duplicate IDs.
+        - connector: twinfield
+          description: |
+            Maps onto Twinfield's `<statement target="electronicstatements">` SOAP document, which is distinct from
+            the transaction-posting mechanism used by payments/bills/journal-entries and does support importing
+            transaction lines with no GL account or invoice match (`contraaccount`/`contraiban` are left empty).
+
+            Live-verified structurally: a real write reaches Twinfield, is accepted as well-formed, and is validated
+            against real bank records (confirmed via a deliberately invalid IBAN, which Twinfield rejected by name:
+            "Er bestaat geen bank met IBAN ..."). Not yet verified end-to-end with a real IBAN for this connector,
+            since Twinfield has no bank-feed-account listing endpoint to source one from (see the `bank-feed-accounts`
+            connector note) — `bank_feed_account_id` must be supplied by the caller as the target account's IBAN, with
+            no way to validate it client-side beforehand.
+
+            `source_transaction_id` on read is synthesized (`{iban}-{statement_number}-{line_index}`) because
+            Twinfield's statement transaction lines carry no client-supplied identifier of their own.
+
+            The statement currency defaults to `EUR` when not set on the connection — the unified model
+            carries no per-statement or per-transaction currency field to source it from instead. Statements
+            for a non-EUR bank account must have the connection's currency setting configured accordingly.
+
+            Twinfield requires a `currency` and a `statementnumber` per statement with no equivalent unified field;
+            currency defaults to the connection's configured currency (or EUR), and statementnumber is derived from
+            `start_date`. Twinfield does report an `importduplicate` flag on the response when a statement number was
+            already imported, which is not yet surfaced on the unified response.
+
+            `update` and `delete` are not implemented and are genuinely impossible, not merely unimplemented:
+            Twinfield's own documentation states "once a bank statement is created, it is not possible to change it."
+
+            `one` targets a completely different SOAP service (`BankStatementService.svc`, a "Command & Query"
+            framework distinct from the `ProcessXml`/`Finder` services this connector otherwise uses, authenticated
+            via an `<Authentication><AccessToken>/<CompanyCode>` header rather than ProcessXml's `<Header>`, and
+            requiring a `SOAPAction` HTTP header WCF uses for dispatch — ProcessXml/Finder don't check it). That
+            service has no "get by number" query — only date-range queries — so the connector queries the single
+            day encoded in the id and picks the matching statement (by IBAN + statement number) out of the result.
+
+            **Known broken, not yet working.** Live-tested directly against Twinfield (bypassing this connector) with
+            several request variants — with and without a duplicate legacy `<Header>` alongside `<Authentication>`,
+            and with both the office code and the organisation GUID as `CompanyCode` — all return the same
+            `InternalServiceFault`, a generic WCF fault with no detail (`IncludeExceptionDetailInFaults` is off on
+            Twinfield's server). This is a *different* fault type from the `SecurityFault`/`ActionNotSupported`
+            faults seen earlier in the same investigation, meaning auth and SOAP routing succeed and the failure is
+            inside Twinfield's query-handling logic — but which part of the request body it's rejecting could not be
+            narrowed further without Twinfield-side exception tracing. The response mapping (field names `Iban`,
+            `Number`, `StatementDate`, `Lines.BankStatementLine[].Amount`/`Description`/`ContraAccountName`, etc.,
+            sourced from Twinfield's published XSD, not an observed real response) has therefore never been exercised
+            against a real response and should be treated as unverified.
       requestBody:
         required: true
         content:
@@ -32088,6 +32380,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            `status` is not returned by this list call — Twinfield's underlying
+            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the
+            project by id to read it.
         - connector: quickbooks
           description: |
             The `priority` field is mapped from QuickBooks integer values (0-9) to unified enum values using ranges: 0-2 → "low", 3-5 → "medium", 6-7 → "high", 8-9 → "critical".
@@ -33181,6 +33478,16 @@ paths:
         - $ref: '#/components/parameters/passThrough'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Twinfield's Finder(PAY) service, the only mechanism for listing payment types, returns
+            just `code` and `name` — there is no field for the payment method's type (cash/check/
+            bank_transfer/etc.) or its active/inactive status. Both are always `null`.
+
+            `name` is read from Twinfield's own column header for that office's configured UI language
+            (e.g. "Naam" for a Dutch office). Not verified against a non-Dutch office (this build only
+            has access to a Dutch-language tenant), but the mechanism is confirmed live.
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentMethodsResponse'
@@ -33214,6 +33521,13 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Payment methods cannot be created through this connector. Twinfield's docs name a
+            ProcessXml "paymanagement" message type for maintaining pay types, but its request/
+            response XML shape is undocumented beyond that name — unlike Finder(PAY), which this
+            connector reads from and which is fully specified.
       requestBody:
         required: true
         content:
@@ -33268,6 +33582,12 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Twinfield's Finder(PAY) service, the only mechanism for reading a payment type, returns
+            just `code` and `name` — there is no field for the payment method's type (cash/check/
+            bank_transfer/etc.) or its active/inactive status. Both are always `null`.
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentMethodResponse'
@@ -33303,6 +33623,13 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Payment methods cannot be updated through this connector. Twinfield's docs name a
+            ProcessXml "paymanagement" message type for maintaining pay types, but its request/
+            response XML shape is undocumented beyond that name — unlike Finder(PAY), which this
+            connector reads from and which is fully specified.
       requestBody:
         required: true
         content:
@@ -33356,6 +33683,12 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            Payment methods cannot be deleted through this connector — no documented delete
+            mechanism exists; Twinfield's docs mention only a "maintain" (create/update) message
+            type for this data.
       responses:
         '200':
           $ref: '#/components/responses/DeletePaymentMethodResponse'

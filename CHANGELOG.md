@@ -1,3 +1,9 @@
+## v10.41.0 - (2026-08-19)
+
+### Accounting API
+
+- Added new [Twinfield](connectors/twinfield) connector (Sage/Wolters Kluwer), with full read/write/update/delete support for [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Tracking Categories](apis/accounting/reference/tracking-categories) and [Projects](apis/accounting/reference/projects); read and create support for [Bills](apis/accounting/reference/bills), [Journal Entries](apis/accounting/reference/journal-entries), [Expenses](apis/accounting/reference/expenses) and [Invoices](apis/accounting/reference/invoices) (lists unpaid invoices only; an invoice line's `ledger_account.id` must be a profit-and-loss account, and `line_items[].description` is not preserved — Twinfield derives the line's description from the ledger account it posts to); and read support for [Companies](apis/accounting/reference/companies), [Subsidiaries](apis/accounting/reference/subsidiaries), [Company Info](apis/accounting/reference/company-info), [Payments](apis/accounting/reference/payments), [Payment Methods](apis/accounting/reference/payment-methods), [Bill Payments](apis/accounting/reference/bill-payments), [Tax Rates](apis/accounting/reference/tax-rates), [Bank Accounts](apis/accounting/reference/bank-accounts) and [General Ledger Transactions](apis/accounting/reference/general-ledger-transactions), plus virtual (polling-based) webhook events across 11 of those resources. [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) supports create only.
+
 ## v10.40.0 - (2026-08-18)
 
 ### Accounting API

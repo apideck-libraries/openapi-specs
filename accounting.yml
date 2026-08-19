@@ -25646,6 +25646,14 @@ paths:
             `?pass_through[sort_column]=journal_date&pass_through[sort_order]=D` — but note this
             reinstates the duplicate-and-skip behaviour at page boundaries, so only use it for a single
             page rather than when paginating a full ledger.
+
+            Zoho Books omits `line_items` from the journal list endpoint, so each list request
+            triggers one additional detail fetch per journal to hydrate them. A 100-row page issues
+            100 detail calls in bounded concurrent batches of 5 (to fit Zoho's 100/min per-org and
+            5-concurrent Free-tier limits). Detail failures for individual journals are isolated:
+            the affected record is returned with `line_items: []` and a warning surfaced, while
+            the rest of the page returns normally. To reduce call volume, use `limit` to bound
+            the page size.
         - connector: moneybird
           description: |
             Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.

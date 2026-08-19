@@ -21262,15 +21262,6 @@ paths:
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
             `filter[subsidiary_id]` returns only accounts assigned to (or shared with) the given subsidiary, and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
-        - connector: xero
-          description: |
-            `current_balance` is sourced from Xero's Trial Balance report (as at the current date, UTC),
-            adding one extra downstream request per call — Xero's Accounts API itself returns no balance.
-            Balances are signed debit-positive: asset and expense balances are positive, liability, equity
-            and revenue balances are negative. Accounts omitted from the report (zero balance) return 0.
-            If the report is unavailable — for example the authorizing user lacks the Xero "reports" role,
-            or the connection's scopes do not include the trial-balance report scope — accounts are
-            returned without `current_balance` instead of the request failing.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: alegra
@@ -21491,13 +21482,6 @@ paths:
             it includes future-dated transactions, and system-computed accounts (e.g. Retained Earnings)
             return 0. For signed, as-of-today balances across accounts, use the list endpoint
             (`GET /accounting/ledger-accounts`).
-        - connector: xero
-          description: |
-            `current_balance` is sourced from Xero's Trial Balance report (as at the current date, UTC),
-            adding one extra downstream request per call — Xero's Accounts API itself returns no balance.
-            Balances are signed debit-positive. Accounts omitted from the report (zero balance) return 0.
-            If the report is unavailable (missing Xero "reports" role or trial-balance report scope), the
-            account is returned without `current_balance` instead of the request failing.
       responses:
         '200':
           $ref: '#/components/responses/GetLedgerAccountResponse'

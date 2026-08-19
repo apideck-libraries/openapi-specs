@@ -22977,6 +22977,10 @@ paths:
 
             When `filter`, `sort`, or `pass_through` parameters are applied to `GET /accounting/customers`, `addresses[]` returns only the default billing and default shipping addresses, each with `type` and `string` (a multi-line formatted address). Structured fields like `line1`, `city`, `state`, `postal_code`, and `country`, and any additional custom-labeled addresses, are returned only on unfiltered list calls and on `GET /accounting/customers/{id}`.
             `filter[subsidiary_id]` scopes results to customers assigned to (or shared with) the given subsidiary, and is only supported on NetSuite OneWorld accounts; on standard (single-entity) accounts it is ignored.
+
+            `filter[status]` maps to NetSuite's `isinactive` column: `active` returns customers that are not inactive, `inactive` returns those that are. NetSuite has no archived state, so `archived` and `all` both apply no status filter and return every customer.
+
+            Because any `filter` reroutes the call to NetSuite's SuiteQL path, `filter[status]=archived` and `filter[status]=all` return the same records as an unfiltered call but with the reduced `addresses[]` shape described above — structured address fields are not returned. If you want every customer *with* structured addresses, omit `filter[status]` entirely rather than passing `all`.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: xero

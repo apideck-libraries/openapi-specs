@@ -22296,6 +22296,10 @@ paths:
             Amounts are SIGNED as Sage stores them, so a credit adjustment reports a negative
             `total_amount` while a debit adjustment on the same endpoint reports a positive one. Nothing
             else on the record distinguishes the two.
+
+            On create and update, `line_items[].total_amount` is accepted in either sign and always
+            stored as a credit (negative) in Sage — this endpoint only ever creates credit adjustments,
+            never debit ones. A positive amount is not rejected or misread; it is simply normalized.
         - connector: afas
           description: |
             AFAS Profit derives credit notes from `Profit_SalesorderLines` by filtering rows with a negative `AmtTotal` or a credit-style `Ordersoort` (e.g. `CR`). Tenants that store credit notes in a separate journal (and not as negative sales-order lines) will return an empty list — set the `credit_notes_connector` setting to a tenant-specific GetConnector to override.
@@ -22422,6 +22426,13 @@ paths:
             same source. For an untaxed document that is correct; for a taxed one `sub_total` is the
             tax-inclusive amount rather than the net. Derive the net from `line_items[].total_amount`
             when the distinction matters.
+
+            `allocations` set on this resource have no effect — Sage has no way to apply a credit memo
+            to an invoice from the credit memo record itself. To apply a credit memo, create a payment
+            on the `payments` resource with two allocations: one of type `invoice` for the invoice
+            being credited and one of type `credit_memo` for this credit memo, both carrying the
+            amount being applied. The payment still requires an `account` (financial entity) even
+            though no cash moves, since Sage requires one on every payment record.
         - connector: microsoft-dynamics-365-business-central
           description: |
             `tax_inclusive` cannot be set on sales documents — the returned value reflects the Customer Card's "Prices Including VAT" setting. When `tax_inclusive: true` is sent for a document stored as tax-exclusive, line `unit_price` is written as its net value so the document totals match the sent tax-inclusive amounts.
@@ -22775,6 +22786,17 @@ paths:
         - connector: sage-intacct
           description: |
             `reference` cannot be stored — Sage Intacct's `update_aradjustment` rejects a `docnumber` element, and the `externalid` element it accepts is a create-only integration key that is never returned on read (verified live), so it cannot round-trip. The `reference` field cannot be set on create or update via this API.
+        - connector: sage-intacct-rest
+          description: |
+            `allocations` set on this resource have no effect — Sage has no way to apply a credit memo
+            to an invoice from the credit memo record itself. To apply a credit memo, create a payment
+            on the `payments` resource with two allocations: one of type `invoice` for the invoice
+            being credited and one of type `credit_memo` for this credit memo, both carrying the
+            amount being applied. The payment still requires an `account` (financial entity) even
+            though no cash moves, since Sage requires one on every payment record.
+
+            `line_items[].total_amount` is accepted in either sign and always stored as a credit
+            (negative) in Sage — this endpoint only ever updates credit adjustments, never debit ones.
       requestBody:
         required: true
         content:
@@ -24404,6 +24426,14 @@ paths:
 
             `account.id` must be the Sage financial entity id of the bank account (for example
             `100_SVB`), not a unified bank-account id.
+
+            A credit memo is applied to an invoice through this endpoint, not through the credit-note
+            resource: include one allocation of type `invoice` for the invoice being credited and one
+            of type `credit_memo` for the credit memo funding it, both carrying the amount applied.
+            `account.id` is still required even though no cash moves for a credit-only payment. At
+            most one `credit_memo` allocation is supported per request; it is applied across every
+            invoice allocation in the same request, so splitting one invoice's balance across more
+            than one credit memo needs separate calls.
         - connector: sap-s4hana-cloud
           description: |
             SAP S/4HANA Cloud creates a pure FI accounting document. This is an FI payment posting, not a bank statement import or a result of the Automatic Payment Program (F110). company_id, customer.id and account.id are required.

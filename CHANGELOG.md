@@ -1,3 +1,9 @@
+## v10.43.0 - (2026-08-20)
+
+### Accounting API
+
+- Added list filters for [Zoho Books](connectors/zoho-books) [Journal Entries](apis/accounting/reference/journal-entries): `filter[start_date]` / `filter[end_date]` (posting-date range, inclusive on both ends, new filter keys on the resource), `filter[updated_since]` and `filter[status]` (`draft` / `posted`). Previously the resource accepted no filters at all, so every sync had to paginate the full ledger. Two behaviours worth knowing: `updated_since` is applied at day granularity in the organization's local timezone and is widened one day back so no modified record is ever missed — expect results to include records modified up to two days before the requested instant, and deduplicate on `updated_at` client-side if the exact cut-off matters; a `status` value other than `draft` or `posted` is rejected by Zoho with "Invalid value passed for status" since Zoho journals have no other states. The new `start_date` / `end_date` filter keys are declared on the unified Journal Entries filter, so other connectors reject them with `UnsupportedFiltersError` until mapped.
+
 ## v10.42.0 - (2026-08-20)
 
 ### Accounting API

@@ -21374,6 +21374,18 @@ paths:
             requires a single `dimtype` per list call, and Profit & Loss accounts (`type: "other"`,
             Twinfield's `PNL` dimtype) are not included — fetching, creating, updating and deleting a
             P&L account by id all work, but it will not appear when listing `ledger-accounts`.
+        - connector: xero
+          description: |
+            `current_balance` is sourced from Xero's Trial Balance report (as at the current date, UTC),
+            adding one extra downstream request per call — Xero's Accounts API itself returns no balance.
+            Balances are signed debit-positive: asset and expense balances are positive; liability, equity
+            and revenue balances are negative. Accounts with a zero balance return 0.
+
+            Populating the field requires the connection's granted scopes to include
+            `accounting.reports.trialbalance.read` (or the legacy `accounting.reports.read`). Connections
+            authorized before this scope entered the default request list (2026-08-18) must be
+            re-authorized to grant it; until then — or when the authorizing Xero user lacks the "reports"
+            role — accounts are returned without `current_balance` instead of the request failing.
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
@@ -21611,6 +21623,17 @@ paths:
             it includes future-dated transactions, and system-computed accounts (e.g. Retained Earnings)
             return 0. For signed, as-of-today balances across accounts, use the list endpoint
             (`GET /accounting/ledger-accounts`).
+        - connector: xero
+          description: |
+            `current_balance` is sourced from Xero's Trial Balance report (as at the current date, UTC),
+            adding one extra downstream request per call — Xero's Accounts API itself returns no balance.
+            Balances are signed debit-positive. Accounts with a zero balance return 0.
+
+            Populating the field requires the connection's granted scopes to include
+            `accounting.reports.trialbalance.read` (or the legacy `accounting.reports.read`). Connections
+            authorized before this scope entered the default request list (2026-08-18) must be
+            re-authorized to grant it; until then — or when the authorizing Xero user lacks the "reports"
+            role — the account is returned without `current_balance` instead of the request failing.
       responses:
         '200':
           $ref: '#/components/responses/GetLedgerAccountResponse'

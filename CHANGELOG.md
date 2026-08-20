@@ -1,3 +1,10 @@
+## v10.42.0 - (2026-08-20)
+
+### Accounting API
+
+- Added [Payment Methods](apis/accounting/reference/payment-methods), [Projects](apis/accounting/reference/projects), [Refunds](apis/accounting/reference/refunds) and [Sales Receipts](apis/accounting/reference/sales-receipts) support for [Intuit Enterprise Suite](connectors/intuit-enterprise-suite) — each with full list, get, create, update and delete.
+- Added 15 new webhook events to [Intuit Enterprise Suite](connectors/intuit-enterprise-suite), covering bill payments, classes, estimates, projects, and supplier deletion.
+
 ## v10.41.0 - (2026-08-19)
 
 ### Accounting API

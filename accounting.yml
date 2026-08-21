@@ -30663,7 +30663,7 @@ paths:
             multi-line journal posting as a possible `journal-entries` record.
         - connector: netsuite
           description: |
-            Listing expenses returns identifiers only. Each expense in the list has `id` set and the remaining fields — including `transaction_date` — empty, because NetSuite's credit card charge list endpoint returns references rather than full records. Fetch an expense by id to read its details.
+            Listing expenses returns identifiers only. Each expense in the list has `id` set and the remaining fields — including `transaction_date` — empty, because NetSuite's credit card charge list endpoint returns references rather than full records. Fetch an expense by id to read its details. This list also never includes Credit Card Refund records (the reversal of a corporate card charge, created via a negative-amount `expensesAdd` — see the create operation's gotcha); it only enumerates Credit Card Charges.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -30799,7 +30799,30 @@ paths:
           description: Zoho Books supports only one customer and one rebilling (`rebillable`) flag per expense at the header level. Only provide these in the first line_item — they will be mapped to the header-level fields and applied to all lines. If differentiated treatment is required, create separate expenses.
         - connector: netsuite
           description: |
-            NetSuite creates every expense as a Credit Card Charge, so the top-level `account` must reference a **credit-card–type** ledger account. A bank account (or any non–credit-card account) is rejected with `Invalid Field Value … for the following field: account`. There is no bank-account expense path on NetSuite; employee reimbursements are not modelled here (use expense-reports).
+            NetSuite creates every expense as a Credit Card Charge (or, when the request has a negative
+            amount, a Credit Card Refund — see below), so the top-level `account` must reference a
+            **credit-card–type** ledger account. A bank account (or any non–credit-card account) is
+            rejected with `Invalid Field Value … for the following field: account`. There is no
+            bank-account expense path on NetSuite; employee reimbursements are not modelled here (use
+            expense-reports).
+
+            A negative overall total (or a negative `line_items[].total_amount` sum) creates a NetSuite
+            Credit Card Refund instead — NetSuite's transaction type for reversing a corporate/company
+            card charge, entered against a Vendor. This is distinct from the unified `refunds` resource,
+            which models customer-facing (AR) refunds. NetSuite itself never stores a negative amount on
+            either record type (a negative total is rejected outright); this connector sends the
+            absolute value automatically, so the sign only decides which record type gets created, not
+            what NetSuite stores. `expensesOne`, `expensesDelete` and list/search do not resolve a
+            Credit-Card-Refund-backed record (they only ever look up a Credit Card Charge by that id), so
+            capture the `id` from the `expensesAdd` response if you need to reference the reversal
+            elsewhere. `expensesUpdate` on one of these records only routes correctly when the update
+            body itself carries a negative amount (a negative `total_amount`, or a negative
+            `line_items[].total_amount` sum) — the router has no way to see the record's existing type,
+            only the body of the request in front of it. A field-only update that omits the amount
+            (e.g. changing just `memo` or the transaction date) evaluates to a total of `0`, and a
+            positive amount does too; both route to the Credit Card Charge endpoint instead and 404,
+            since the id only exists on the Credit Card Refund one. Re-send the negative amount on every
+            update to one of these records, even when only a non-amount field is changing.
 
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
@@ -31005,6 +31028,8 @@ paths:
         - connector: netsuite
           description: |
             Line-item `tracking_categories[].name` is normalized to the leaf class name: a NetSuite hierarchical class path such as `"Fruit : Apple"` returns `name: "Apple"` and `parent_name: "Fruit"` (deeper paths return the deepest leaf as `name` and its immediate parent as `parent_name`). Line-item `department.name` and `location.name` are likewise normalized to the leaf segment.
+
+            A Credit Card Refund (the reversal of a corporate card charge, created via a negative-amount `expensesAdd` — see that operation's gotcha) cannot be read by id today: `expensesOne` only looks up a Credit Card Charge, so a Credit-Card-Refund-backed id 404s here.
         - connector: microsoft-dynamics-365-business-central
           description: |
             A posted expense (`status: "posted"`) is read from Business Central's general ledger entries, which carry no bank-account discriminator. Its header `account` is therefore always returned as `account.type: "ledger_account"` — even when the expense was created with `account.type: "bank_account"` — and `account.id` is the bank's associated G/L posting account, not the bank account that was sent on create. `line_items[].account.id` is unaffected. See the create operation's gotcha for the full round-trip behaviour.
@@ -31063,6 +31088,8 @@ paths:
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
             `line_items[].tax_rate.id` is applied on update when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Every tax-rated line must resolve a tax type; if any cannot, the override is skipped for the whole expense and the account default applies. Some third-party tax-engine configurations (e.g. Vertex/Avalara) may reject the override — use `pass_through` for tenant-specific tax fields if needed.
+
+            Updating a Credit Card Refund (created via a negative-amount `expensesAdd` — see that operation's gotcha) requires re-sending a negative amount in the update body every time, even when only a non-amount field (e.g. `memo`) is changing — the router only sees the body in front of it, not the record's existing type. Omitting the amount, or sending a positive one, routes this connector to the Credit Card Charge endpoint instead, which 404s since the id only exists as a Credit Card Refund.
         - connector: sage-intacct-rest
           description: |
             `source_document_url` has no destination on Sage's underlying credit-card transaction object and is declared unsupported. `line_items[].tax_rate` is accepted with no validation error but silently discarded on write — verified live, treat as an open gap rather than a working feature. When both `reference` and `number` are supplied, `number` wins.

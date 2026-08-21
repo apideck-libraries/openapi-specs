@@ -1,3 +1,9 @@
+## v10.44.0 - (2026-08-21)
+
+### Accounting API
+
+- Added new [SnelStart](connectors/snelstart) connector with read and write support for [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoice Items](apis/accounting/reference/invoice-items), [Payments](apis/accounting/reference/payments) and [Bill Payments](apis/accounting/reference/bill-payments); get-by-id (no listing) and create for [Journal Entries](apis/accounting/reference/journal-entries); read-only [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Tax Rates](apis/accounting/reference/tax-rates), [Bank Accounts](apis/accounting/reference/bank-accounts), and [Company Info](apis/accounting/reference/company-info); and create-only [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) and [Attachments](apis/accounting/reference/attachments).
+
 ## v10.43.0 - (2026-08-20)
 
 ### Accounting API

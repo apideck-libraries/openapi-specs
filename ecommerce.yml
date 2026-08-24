@@ -4035,6 +4035,16 @@ paths:
         - connector: shopify-public-app
           description: |
             Shopify exposes counts via dedicated `/count.json` endpoints only — requires an extra API call not currently implemented. `meta.total_count` will not appear.
+        - connector: woocommerce
+          description: |
+            The `name` filter matches on the product name only on stores running WooCommerce 10.1 (August 2025)
+            or newer. On older stores the name-scoped search is not supported and the filter falls back to a
+            broader search across the product name, description, and short description — results may include
+            products whose name does not contain the search term.
+
+            The `updated_since` and `created_since` filters require WooCommerce 5.8 (October 2021) or newer.
+            On older stores they are silently ignored and the unfiltered product list is returned. Both filters
+            are exclusive boundaries (strictly after the given timestamp) and are evaluated in UTC.
       responses:
         '200':
           $ref: '#/components/responses/GetProductsResponse'

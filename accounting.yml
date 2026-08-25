@@ -23326,6 +23326,19 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            How much of each array is written depends on whether the customer is a company or an
+            individual — NetSuite keeps different contact fields on each. A company holds four phone
+            numbers (`primary`, `secondary`, `mobile`, `fax`), one email (`primary`) and one website;
+            an individual holds five phone numbers (those four plus `home`), two emails (`primary` and
+            `secondary`) and no website. Entries of any other type are ignored.
+
+            Three of those slots belong to one NetSuite layout or the other, and are ignored on the
+            wrong one. `home` and the `secondary` email exist only on a customer marked as an
+            individual, so send `individual: true` in the same request or both are dropped.
+            `websites[]` is the reverse — it exists only on a company customer, and is dropped when
+            `individual` is `true`. When two entries share a type, the first one is used.
         - connector: snelstart
           description: |
             `addresses[].country` is not written. SnelStart requires a country as a reference to an
@@ -23556,6 +23569,20 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            How much of each array is written depends on whether the customer is a company or an
+            individual — NetSuite keeps different contact fields on each. A company holds four phone
+            numbers (`primary`, `secondary`, `mobile`, `fax`), one email (`primary`) and one website;
+            an individual holds five phone numbers (those four plus `home`), two emails (`primary` and
+            `secondary`) and no website. Entries of any other type are ignored.
+
+            Three of those slots belong to one NetSuite layout or the other, and are ignored on the
+            wrong one. `home` and the `secondary` email exist only on a customer that is an
+            individual; `websites[]` is the reverse, existing only on a company customer. On an
+            update you do not need to restate `individual` — the layout is read from the existing
+            record when the request touches one of those fields. When two entries share a type, the
+            first one is used.
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
@@ -23949,6 +23976,18 @@ paths:
             a value for element custentity_x". A value whose shape does not match the field's real
             NetSuite type returns `INVALID_FLD_VALUE` — "You have entered an Invalid Field Value hello
             for the following field: custentity_x".
+
+            How much of each array is written depends on whether the supplier is a company or an
+            individual — NetSuite keeps different contact fields on each. A company holds four phone
+            numbers (`primary`, `secondary`, `mobile`, `fax`), one email (`primary`) and one website;
+            an individual holds five phone numbers (those four plus `home`), two emails (`primary` and
+            `secondary`) and no website. Entries of any other type are ignored.
+
+            Three of those slots belong to one NetSuite layout or the other, and are ignored on the
+            wrong one. `home` and the `secondary` email exist only on a supplier marked as an
+            individual, so send `individual: true` in the same request or both are dropped.
+            `websites[]` is the reverse — it exists only on a company supplier, and is dropped when
+            `individual` is `true`. When two entries share a type, the first one is used.
         - connector: sage-intacct-rest
           description: |
             Only `active` and `inactive` are applied. Sage's status field has no other members, so any
@@ -24216,6 +24255,19 @@ paths:
             a value for element custentity_x". A value whose shape does not match the field's real
             NetSuite type returns `INVALID_FLD_VALUE` — "You have entered an Invalid Field Value hello
             for the following field: custentity_x".
+
+            How much of each array is written depends on whether the supplier is a company or an
+            individual — NetSuite keeps different contact fields on each. A company holds four phone
+            numbers (`primary`, `secondary`, `mobile`, `fax`), one email (`primary`) and one website;
+            an individual holds five phone numbers (those four plus `home`), two emails (`primary` and
+            `secondary`) and no website. Entries of any other type are ignored.
+
+            Three of those slots belong to one NetSuite layout or the other, and are ignored on the
+            wrong one. `home` and the `secondary` email exist only on a supplier that is an
+            individual; `websites[]` is the reverse, existing only on a company supplier. On an
+            update you do not need to restate `individual` — the layout is read from the existing
+            record when the request touches one of those fields. When two entries share a type, the
+            first one is used.
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_DEBIT, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.

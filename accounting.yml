@@ -24622,6 +24622,27 @@ paths:
             schema:
               $ref: '#/components/schemas/Payment'
       x-apideck-gotchas:
+        - connector: exact-online
+          description: |
+            Creating a payment records the bank transaction but does not automatically reconcile it
+            with the linked invoice — the invoice status will not change to paid until the payment is
+            matched manually in Exact Online. A valid bank journal (Type=12) must be supplied via the
+            `bank_journal_code` connection setting or `pass_through[journal_code]` per request;
+            without one the API returns 'Invalid journal'.
+        - connector: exact-online-nl
+          description: |
+            Creating a payment records the bank transaction but does not automatically reconcile it
+            with the linked invoice — the invoice status will not change to paid until the payment is
+            matched manually in Exact Online. A valid bank journal (Type=12) must be supplied via the
+            `bank_journal_code` connection setting or `pass_through[journal_code]` per request;
+            without one the API returns 'Invalid journal'.
+        - connector: exact-online-uk
+          description: |
+            Creating a payment records the bank transaction but does not automatically reconcile it
+            with the linked invoice — the invoice status will not change to paid until the payment is
+            matched manually in Exact Online. A valid bank journal (Type=12) must be supplied via the
+            `bank_journal_code` connection setting or `pass_through[journal_code]` per request;
+            without one the API returns 'Invalid journal'.
         - connector: restaurant365
           description: |
             Payments cannot be created through this connector — the create operation is unsupported.
@@ -30278,6 +30299,27 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: exact-online
+          description: |
+            Creating a bill payment records the bank transaction but does not automatically reconcile
+            it with the linked bill — the bill's status will not change to paid until the payment is
+            matched manually in Exact Online. A valid bank journal (Type=12) must be supplied via the
+            `bank_journal_code` connection setting or `pass_through[journal_code]` per request;
+            without one the API returns 'Invalid journal'.
+        - connector: exact-online-nl
+          description: |
+            Creating a bill payment records the bank transaction but does not automatically reconcile
+            it with the linked bill — the bill's status will not change to paid until the payment is
+            matched manually in Exact Online. A valid bank journal (Type=12) must be supplied via the
+            `bank_journal_code` connection setting or `pass_through[journal_code]` per request;
+            without one the API returns 'Invalid journal'.
+        - connector: exact-online-uk
+          description: |
+            Creating a bill payment records the bank transaction but does not automatically reconcile
+            it with the linked bill — the bill's status will not change to paid until the payment is
+            matched manually in Exact Online. A valid bank journal (Type=12) must be supplied via the
+            `bank_journal_code` connection setting or `pass_through[journal_code]` per request;
+            without one the API returns 'Invalid journal'.
         - connector: restaurant365
           description: |
             Bill payments cannot be created through this connector — the create operation is

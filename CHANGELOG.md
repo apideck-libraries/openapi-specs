@@ -1,3 +1,9 @@
+## v10.45.0 - (2026-08-25)
+
+### Accounting API
+
+- Added `filter[ids]` — a comma-separated list of record ids — to [Invoices](apis/accounting/reference/invoices), [Credit Notes](apis/accounting/reference/credit-notes) and [Customers](apis/accounting/reference/customers), and mapped it for [DualEntry](connectors/dualentry) on all three; it was already available on DualEntry [Invoice Items](apis/accounting/reference/invoice-items). This makes fetching a known set of records possible in one call instead of one request per id. Two DualEntry behaviours are worth knowing: a response returns at most 100 records per page, so a list of more than 100 ids is paged rather than truncated — the filter is preserved across pages; and because a DualEntry invoice's or credit note's unified `id` and `number` are the same value, `filter[ids]` and `filter[number]` address the same field, with `filter[number]` taking precedence when both are supplied. The new `ids` filter key is declared on the unified Invoices, Credit Notes and Customers filters, so other connectors reject it with `UnsupportedFiltersError` until mapped.
+
 ## v10.44.0 - (2026-08-21)
 
 ### Accounting API

@@ -20472,6 +20472,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: campfire
+          description: |
+            `terms` returns the payment term's display name (for example `Net 30` or
+            `Due on Receipt`), and `terms_id` returns its identifier. Invoices with no payment
+            term set return `null` for both.
+
+            When creating or updating an invoice, set the payment term with `terms_id` — the
+            display name is read-only and is ignored on write.
         - connector: snelstart
           description: |
             `line_items`, `sub_total` and `total_tax` are never returned by this connector, on any

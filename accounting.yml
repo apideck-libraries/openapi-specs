@@ -20659,6 +20659,16 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: campfire
+          description: |
+            Every invoice line must reference a product. Set `line_items[].item.id` on each line —
+            if any line omits it, Campfire rejects the entire request with
+            `lines[0]: Invoice line must have either a product or a bundle set` and no invoice is
+            created. The rejection applies to the whole request, not just the offending line.
+
+            Retrieve the values to pass from `GET /accounting/invoice-items` and use the `id` it
+            returns. The product must already exist in Campfire; an id that does not resolve is
+            rejected too.
         - connector: netsuite
           description: |
             `reference` maps to NetSuite's `externalId`, which NetSuite requires to be unique across every
@@ -21096,6 +21106,16 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: campfire
+          description: |
+            Every invoice line must reference a product. When you send `line_items`, set
+            `line_items[].item.id` on each line — if any line omits it, Campfire rejects the entire
+            request with `lines[0]: Invoice line must have either a product or a bundle set` and no
+            change is applied.
+
+            Retrieve the values to pass from `GET /accounting/invoice-items` and use the `id` it
+            returns. The product must already exist in Campfire; an id that does not resolve is
+            rejected too.
         - connector: netsuite
           description: |
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the

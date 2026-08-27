@@ -31562,6 +31562,10 @@ paths:
 
             `source_account_id` is always `null` — Moneybird financial accounts have no concept of a separate
             "source" account distinct from the ledger account itself.
+        - connector: intuit-bank-feeds
+          description: |
+            `feed_status` reads back as `pending` for every account in this release — it does not yet reflect
+            whether QuickBooks has picked the feed up.
       responses:
         '200':
           $ref: '#/components/responses/GetBankFeedAccountsResponse'
@@ -31622,6 +31626,19 @@ paths:
             posted as credit card charges) must live on the **same** NetSuite account. The reliable pattern is
             to reuse the account both already post to — set `bank_feed_account_id` on the statement to that
             account's id — rather than creating a separate account with this endpoint.
+        - connector: intuit-bank-feeds
+          description: |
+            **No QuickBooks OAuth connection is required or used.** `intuit-bank-feeds` is a separate connector
+            with its own connection lifecycle, so a bank-feeds-only integration never authenticates to
+            QuickBooks: connecting `quickbooks` does nothing for this connector, and this connector needs
+            nothing from it.
+
+            A connection only becomes callable once it reports ready, so a newly created one can briefly stay
+            in the `added` state. Re-check it and retry rather than reading `added` as a failure.
+
+            Field handling is stricter than the unified contract: `null` is rejected rather than ignored, so
+            omit an optional field instead of sending `null` for it. `feed_status` is not returned on this
+            create response — read the account back to see it.
       requestBody:
         required: true
         content:
@@ -31689,6 +31706,10 @@ paths:
           description: |
             Moneybird does not provide a financial account detail endpoint — this operation is unsupported.
             Use the bank feed accounts list to find the account.
+        - connector: intuit-bank-feeds
+          description: |
+            `feed_status` reads back as `pending` for every account in this release — it does not yet reflect
+            whether QuickBooks has picked the feed up.
       responses:
         '200':
           $ref: '#/components/responses/GetBankFeedAccountResponse'
@@ -31856,6 +31877,10 @@ paths:
             `status` reflects Moneybird's bookkeeping reconciliation state, not feed-delivery status: `pending`
             means the transaction has not yet been manually reconciled in the Moneybird UI and can remain
             `pending` indefinitely — it does not indicate a delivery problem. Moneybird never returns `rejected`.
+        - connector: intuit-bank-feeds
+          description: |
+            List responses carry statement metadata only — `transactions` is never included, however many
+            statements the page holds. Fetch a single statement by id to read its transactions.
       responses:
         '200':
           $ref: '#/components/responses/GetBankFeedStatementsResponse'
@@ -31936,6 +31961,30 @@ paths:
             In Xero, if a transaction ID has been previously used, the API will reject the entire bank feed statement.
             However, if the statement includes multiple transactions and at least one transaction ID is unique,
             the API will return a success response but will not process the transactions with duplicate IDs.
+        - connector: intuit-bank-feeds
+          description: |
+            A successful create does **not** mean QuickBooks has the statement. This connector is pull-based:
+            the statement is stored on the Apideck side and waits there for Intuit's scheduled pull. That is a
+            fundamental difference from `xero`, where a successful push means Xero already holds the data.
+            Because delivery happens later and out of band, `status` reads back as `pending` and does not
+            advance to `success` in this release; a `status` other than `pending` sent on write is rejected.
+
+            Statements are validated on the way in, and a violation is **rejected** — never silently dropped:
+
+            - At most 1000 entries in `transactions`.
+            - Every `source_transaction_id` must be unique, both within the statement and against transactions
+              already submitted for the same bank feed.
+            - Transactions must be in chronological order: `posted_date` must be non-decreasing across the
+              array.
+            - Posted transactions only — pending or authorization-hold transactions are not accepted.
+            - `description` is limited to 255 characters.
+            - Every timestamp needs an explicit timezone offset: `start_date`, `end_date` and each
+              transaction's `posted_date` must end in `Z` or `±hh:mm`. A bare local datetime such as
+              `2026-01-15T12:00:00` is rejected, even though the unified `date-time` format permits it.
+            - `null` is rejected rather than ignored. Omit an optional field instead of sending `null` for it.
+
+            A rejected statement comes back with every violation at once, each naming the rule it broke, so a
+            single round trip shows all of them.
         - connector: snelstart
           description: |
             SnelStart has no structured bank-statement-import API: the statement is encoded into an MT940
@@ -32042,6 +32091,13 @@ paths:
           description: |
             Moneybird has no endpoint to fetch a bank feed statement directly; this operation reads the underlying
             financial mutation by id (the same id returned by the list operation and by creating a statement).
+        - connector: intuit-bank-feeds
+          description: |
+            `transactions` **is** returned here, unlike the list operation, which carries statement metadata
+            only. Fetching a statement by id is the only way to read its transactions.
+
+            `status` reads back as `pending`. See the create operation for why it does not advance to
+            `success` in this release.
       responses:
         '200':
           $ref: '#/components/responses/GetBankFeedStatementResponse'

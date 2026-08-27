@@ -19119,13 +19119,21 @@ paths:
             See Sage's [advanced tax setup guide](https://www.intacct.com/ia/docs/en_US/help_action/Taxes/Indirect_Tax/VAT_and_GST/Setup/Taxes_application/Tax_solution_setup/taxes-setup-advanced.htm).
         - connector: netsuite
           description: |
-            The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation. NetSuite supports compound taxes through the `components` array, allowing multi-tier tax structures (e.g., state + county taxes).
+            The minimum page size accepted for NetSuite is 5. The cursor expires if it has not been used within 15 minutes of creation.
+
+            NetSuite supports compound taxes through the `components` array, allowing multi-tier tax structures (e.g. state + county).
+
+            **A `null` `effective_tax_rate` does not mean 0%.** It means the tax code carries no single stored rate, and that happens in two cases which must not be conflated:
+            - **Exempt / zero-rated / not-liable** codes — effectively `0%`.
+            - **US sales-tax jurisdiction codes** (State / County / City / District) — these are **taxable**, but NetSuite assembles the rate from the jurisdiction at transaction time rather than storing it on the code. Treating them as `0%` understates tax.
+
+            Key on `effective_tax_rate`. `total_tax_rate` is a secondary non-compounded sum of components: it may be `null` or `0` on a code with no stored rate, and on accounts without SuiteTax it is never populated.
         - connector: quickbooks
           description: |
-            In quickbooks, the tax rates resource does not support pagination. QuickBooks returns tax codes rather than complete tax rate data. The `effective_tax_rate` may not be populated; use `code` to reference the tax in invoice line items.
+            In quickbooks, the tax rates resource does not support pagination. QuickBooks returns tax codes rather than complete tax rate data. `effective_tax_rate` is populated (as the sum of the code's component rates) but `total_tax_rate` is **not** returned — key on `effective_tax_rate`, not `total_tax_rate`, when reading a single percentage. When `effective_tax_rate` is unavailable, use `code` to reference the tax in invoice line items.
         - connector: intuit-enterprise-suite
           description: |
-            In Intuit Enterprise Suite, the tax rates resource does not support pagination. Intuit Enterprise Suite returns tax codes rather than complete tax rate data. The `effective_tax_rate` may not be populated; use `code` to reference the tax in invoice line items.
+            In Intuit Enterprise Suite, the tax rates resource does not support pagination. Intuit Enterprise Suite uses the same underlying QuickBooks API: `effective_tax_rate` is populated (as the sum of the code's component rates) but `total_tax_rate` is **not** returned — key on `effective_tax_rate`, not `total_tax_rate`, when reading a single percentage. When `effective_tax_rate` is unavailable, use `code` to reference the tax in invoice line items.
         - connector: xero
           description: |
             Xero tax rates include `effective_tax_rate` for the combined percentage. Tax types are categorized as INPUT (purchases), OUTPUT (sales), or NONE. Use the appropriate tax type when applying rates to invoices vs bills.
@@ -19174,7 +19182,10 @@ paths:
             Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: procountor-fi
           description: |
-            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear.
+            Procountor does not expose a total record count in list responses. `meta.total_count` will not appear. This connector returns VAT codes without rate values, so `effective_tax_rate` and `total_tax_rate` are not populated. Reference the tax by `id` or `name`.
+        - connector: workday
+          description: |
+            Workday returns transaction tax codes without rate values: `effective_tax_rate` and `total_tax_rate` are not populated, and each entry in `components` carries only the tax rate's `id` and `name`, without a `rate`. Reference the tax by `code`, or by a component `id`.
         - connector: access-financials
           description: |
             Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -19183,7 +19194,7 @@ paths:
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
         - connector: microsoft-dynamics-365-business-central
           description: |
-            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`. Business Central returns tax groups without rate values, so `effective_tax_rate` and `total_tax_rate` are both `null` on this connector. Reference the tax by `code` rather than by rate.
         - connector: afas
           description: |
             AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -19308,7 +19319,7 @@ paths:
       operationId: taxRatesOne
       summary: Get Tax Rate
       description: |
-        Get Tax Rate. Note: Not all connectors return the actual rate/percentage value. In this case, only the tax code or reference is returned. Support will soon be added to return the actual rate/percentage by doing additional calls in the background to provide the full view of a given tax rate. Connectors Affected: Quickbooks
+        Get Tax Rate. Note: Not all connectors return the actual rate/percentage value. In this case, only the tax code or reference is returned. Connectors Affected: Quickbooks
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'
@@ -19491,12 +19502,12 @@ paths:
             `bills.get` expects, and other transaction types (bank, journal entries) are excluded.
 
             `sub_total`, `total_tax`, `line_items` and `updated_at` are not available from this list
-            view (Browse Data returns one summary row per bill, not the underlying line items); `total`
-            is derived assuming the connector's own no-VAT-on-bills limitation (see the `post` gotcha)
-            still holds, so it doubles as `sub_total` would if this list mapped it. `balance` and
-            `paid_date`, notably, ARE available here even though they are always null on `GET` by id —
-            Twinfield's transaction read omits the balancing control-account line where that data
-            lives, but Browse Data exposes it directly.
+            view (Browse Data returns one summary row per bill — the accounts-payable control line —
+            not the underlying line items). `total` is the control line's own posted value (gross,
+            i.e. net + VAT once a bill carries tax). `balance` and `paid_date`, notably, ARE available
+            here even though they are always null on `GET` by id — Twinfield's transaction read omits
+            the balancing control-account line where that data lives, but Browse Data exposes it
+            directly.
         - connector: microsoft-dynamics-365-business-central
           description: |
             The `balance` field is not populated for bills. Business Central's API does not expose a
@@ -19840,13 +19851,16 @@ paths:
             distinct from the invoice number (`invoicenumber`, already used for `bill_number`) to hold
             it. Treat `reference` as write-unsupported for this connector.
 
-            `line_items[].tax_rate` is not sent. Twinfield accepts a `vatcode` per line and will compute
-            VAT automatically, but the transaction's balancing total line must then equal the net amount
-            plus that computed VAT — this connector does not yet calculate that (it would need the tax
-            rate's percentage, which this connector's `tax-rates` resource does not currently expose).
-            Sending `vatcode` without also correcting the total line fails with a balance error on every
-            taxed bill, so it is left unmapped rather than shipped half-working. Bills post without VAT
-            recorded on the transaction until this is built.
+            `line_items[].tax_rate.id` is sent to Twinfield as a per-line `vatcode`; Twinfield computes
+            the VAT and posts it as its own line, so the balancing control-account line must equal net +
+            VAT, not just net. The connector computes that VAT total itself — using each line's
+            `tax_amount` when supplied, otherwise a live lookup of the `tax_rate.id` code's percentage —
+            and adds it to the control-account line. When that lookup cannot resolve a percentage (an
+            unknown code, or the lookup call itself failing), the connector defaults the line's
+            contribution to zero rather than failing the request outright; if Twinfield's own `vatcode`
+            computes a nonzero VAT for that line regardless, the resulting mismatch causes Twinfield to
+            reject the write with its own balance error rather than silently posting an unbalanced
+            amount.
       requestBody:
         required: true
         content:
@@ -20076,11 +20090,16 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            `total_tax`, `balance` and `paid_date` are always null on this get-by-id operation —
-            Twinfield's response omits the balancing line where those values would come from.
-            `sub_total` is set equal to `total` rather than left null, since this connector does not
-            currently post VAT on bills (see the bill create gotcha), so there is no tax to subtract.
-            `balance` and `paid_date` are available on `bills.list`.
+            `balance` and `paid_date` are always null on this get-by-id operation — Twinfield's
+            response has no equivalent of the match-status/match-date data Browse Data exposes on
+            `bills.list`, where both ARE available. `sub_total` and `total_tax` are derived by
+            comparing the transaction's gross total (echoed back from the balancing
+            accounts-payable control line) against the sum of the real detail lines, so they read as
+            equal (no tax) for an untaxed bill and split correctly once a line carries a `tax_rate`.
+
+            `line_items[].total_amount` is each line's net amount (excl. VAT), read directly from
+            Twinfield's own per-line `value`. The VAT-inclusive gross total is `total` (the bill's
+            header field) — Twinfield's response carries no per-line gross figure to map instead.
         - connector: freshbooks
           description: The Freshbooks Bills api is currently in beta.
         - connector: netsuite
@@ -21034,6 +21053,12 @@ paths:
 
             If you need both individual tax values, use the `raw` query parameter (`?raw=true`) to access the original
             FreshBooks response, where both `taxName1`/`taxAmount1` and `taxName2`/`taxAmount2` are available on each line item.
+        - connector: twinfield
+          description: |
+            `line_items[].total_amount` is each line's net amount (excl. VAT), computed from
+            Twinfield's own `unitspriceexcl` × `quantity`. The VAT-inclusive gross total is `total`
+            (the invoice's header field, read from `totals.valueinc`) — Twinfield's response carries
+            no per-line gross figure to map instead.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoiceResponse'
@@ -29613,13 +29638,16 @@ paths:
             Finder(BNK) works and is live-verified (returns real bank/cash codes for this office, e.g.
             "BNK"/"ABN-Amro 789", "KAS"/"Kas").
 
-            Finder only returns a code and a name per row — `account_type`, `currency`, `balance`,
-            `available_balance`, `iban` and `status` are not available from this connector.
+            Finder only returns a code and a name per row (live-confirmed: Twinfield's documented
+            Finder API has no way to request additional columns for a `BNK`-type search) —
+            `account_number`, `iban`, `bank_name`, `account_type`, `currency`, `balance`,
+            `available_balance` and `status` are not available from this connector; only `id` and
+            `name` are populated.
 
-            `name`/`bank_name` are read from Twinfield's own column header for that office's configured
-            UI language (e.g. "Naam" for a Dutch office). Not verified against a non-Dutch office (this
-            build only has access to a Dutch-language tenant), but the mechanism is confirmed live — a
-            non-Dutch office would need the equivalent column name mapped instead.
+            `name` is read from Twinfield's own column header text ("Naam" on a Dutch-language
+            office). Not verified against a non-Dutch office (this build only has access to a
+            Dutch-language tenant) — a non-Dutch office would need the equivalent column header
+            mapped instead.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.

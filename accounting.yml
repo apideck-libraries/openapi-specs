@@ -19143,12 +19143,8 @@ paths:
             `total_tax_rate` are not populated on the list operation. Reading a single tax rate by its
             known VAT code does return the rate.
 
-            `name` and `description` are read from Twinfield's own column header for that office's
-            configured UI language (e.g. "Naam" for a Dutch office) — this connector reads the Dutch
-            column name specifically. On a non-Dutch-language office these fields would come back empty.
-            Not verified against a non-Dutch office (this build only has access to a Dutch-language
-            tenant), but the mechanism is confirmed live: the column name in the raw response is the
-            office's own language, not a fixed English key.
+            `name` and `description` are read from a Dutch-language field key. Verified only against a
+            Dutch-language office; on a non-Dutch-language office these fields would come back empty.
         - connector: sage-intacct
           description: |
             Sage Intacct supports multi-component taxes through the `components` array. Each component can have its own rate and tax authority. Use compound taxes for jurisdictions with multiple tax layers (e.g., GST + PST in Canada).
@@ -19502,12 +19498,10 @@ paths:
             `bills.get` expects, and other transaction types (bank, journal entries) are excluded.
 
             `sub_total`, `total_tax`, `line_items` and `updated_at` are not available from this list
-            view (Browse Data returns one summary row per bill — the accounts-payable control line —
-            not the underlying line items). `total` is the control line's own posted value (gross,
-            i.e. net + VAT once a bill carries tax). `balance` and `paid_date`, notably, ARE available
-            here even though they are always null on `GET` by id — Twinfield's transaction read omits
-            the balancing control-account line where that data lives, but Browse Data exposes it
-            directly.
+            view — only one summary row per bill is returned, not the underlying line items. `total`
+            is the posted gross value (net + VAT once a bill carries tax). `balance` and `paid_date`,
+            notably, ARE available here even though they are always null on `GET` by id — this list
+            surfaces data the single-record read does not.
         - connector: microsoft-dynamics-365-business-central
           description: |
             The `balance` field is not populated for bills. Business Central's API does not expose a
@@ -20517,6 +20511,13 @@ paths:
             Because of this, webhook notifications only reliably cover new invoices — once an invoice
             is paid it drops out of this list entirely rather than appearing as an update, so a status
             change to paid will not reliably produce a webhook event.
+
+            Several fields are read from Dutch-language field keys. Verified only against a
+            Dutch-language office; on a non-Dutch-language office this list may return empty.
+
+            `meta.total_count` may overstate the true number of invoices: the underlying list mixes
+            unpaid bills into the same count, and pagination needs the unfiltered total to reliably
+            fetch every page.
         - connector: dualentry
           description: |
             `updated_since` is inclusive and is applied at whole-second granularity, so a poll that
@@ -21453,14 +21454,10 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            `type`, `active` and `status` are not returned by this list call — Twinfield's underlying
-            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the ledger
-            account by id to read these fields.
+            `active` and `status` are not returned by this list call — fetch the ledger account by id
+            to read these fields.
 
-            This list only returns balance-sheet accounts (Twinfield's `BAS` dimension type). Twinfield
-            requires a single `dimtype` per list call, and Profit & Loss accounts (`type: "other"`,
-            Twinfield's `PNL` dimtype) are not included — fetching, creating, updating and deleting a
-            P&L account by id all work, but it will not appear when listing `ledger-accounts`.
+            This list includes both balance-sheet and profit & loss accounts, distinguished by `type`.
         - connector: xero
           description: |
             `current_balance` is sourced from Xero's Trial Balance report (as at the current date, UTC),
@@ -23241,9 +23238,8 @@ paths:
             platform.
         - connector: twinfield
           description: |
-            `status` is not returned by this list call — Twinfield's underlying
-            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the
-            customer by id to read it. The same applies to `emails`, `phone_numbers`, `addresses`,
+            `status` is not returned by this list call — the underlying vendor list only returns code
+            and name per row. Fetch the customer by id to read it. The same applies to `emails`, `phone_numbers`, `addresses`,
             `websites`, `tax_number`, `bank_accounts`, `updated_at` and `account` — all empty/null on
             the list response, populated only when fetched by id.
         - connector: netsuite
@@ -23850,9 +23846,8 @@ paths:
             platform.
         - connector: twinfield
           description: |
-            `status` is not returned by this list call — Twinfield's underlying
-            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the
-            supplier by id to read it. The same applies to `emails`, `phone_numbers`, `addresses`,
+            `status` is not returned by this list call — the underlying vendor list only returns code
+            and name per row. Fetch the supplier by id to read it. The same applies to `emails`, `phone_numbers`, `addresses`,
             `websites`, `tax_number`, `bank_accounts`, `updated_at` and `account` — all empty/null on
             the list response, populated only when fetched by id.
         - connector: clearbooks-uk
@@ -24688,15 +24683,11 @@ paths:
             The counterparty is only available via the deprecated `supplier` field.
         - connector: twinfield
           description: |
-            Disabled as of 2026-08-18. Twinfield's bank-daybook transaction requires a `header.number`
-            referencing an EXISTING bank statement line already imported into Twinfield — live-reproduced:
-            a placeholder number fails "De boeking bestaat niet" (the booking does not exist). This is a
-            match against a real, previously-imported statement, not a value the caller can invent, and
-            this connector's bank-statement-import path (`bankFeedStatementsOne`) is itself disabled, so
-            there is no way to discover one. Separately, `account.id` must be a real ledger-account code
-            (e.g. `1010`) — live-confirmed the id `/accounting/bank-accounts` returns (Twinfield's bank
-            BOOK/daybook code, e.g. `BNK`) does not work here; the two are different Twinfield concepts
-            this connector does not currently bridge.
+            Disabled as of 2026-08-18. Twinfield's bank transaction requires a reference to an existing,
+            already-imported bank statement line — a value the caller cannot supply directly, and this
+            connector has no way to discover one (its bank-statement-import path is itself disabled).
+            Separately, `account.id` must be a real ledger-account code (e.g. `1010`); the id returned
+            by `/accounting/bank-accounts` is a different Twinfield concept and does not work here.
         - connector: myob
           description: |
             MYOB payments cannot be updated — the MYOB API allows only GET, POST and DELETE on customer payments, so the update operation is unsupported. Delete the payment and recreate it instead.
@@ -29632,22 +29623,12 @@ paths:
             created via the API.
         - connector: twinfield
           description: |
-            Listed via Twinfield's Finder service (`Search`, type `BNK`) rather than ProcessXml —
-            ProcessXml's `<list><type>banks</type></list>` and `<read><type>bank</type></read>` both
-            reject as unimplemented server-side ("Type niet geïmplementeerd", confirmed live), but
-            Finder(BNK) works and is live-verified (returns real bank/cash codes for this office, e.g.
-            "BNK"/"ABN-Amro 789", "KAS"/"Kas").
+            Only account `code` and `name` are available — `account_type`, `currency`, `balance`,
+            `available_balance`, `bank_name`, `account_number`, `iban` and `status` are not returned
+            by this connector.
 
-            Finder only returns a code and a name per row (live-confirmed: Twinfield's documented
-            Finder API has no way to request additional columns for a `BNK`-type search) —
-            `account_number`, `iban`, `bank_name`, `account_type`, `currency`, `balance`,
-            `available_balance` and `status` are not available from this connector; only `id` and
-            `name` are populated.
-
-            `name` is read from Twinfield's own column header text ("Naam" on a Dutch-language
-            office). Not verified against a non-Dutch office (this build only has access to a
-            Dutch-language tenant) — a non-Dutch office would need the equivalent column header
-            mapped instead.
+            `name` is read from a Dutch-language field key. Verified only against a Dutch-language
+            office; a non-Dutch office may return this field empty.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -29940,9 +29921,8 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            `status` is not returned by this list call — Twinfield's underlying
-            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the
-            tracking category by id to read it.
+            `status` is not returned by this list call — the underlying vendor list only returns code
+            and name per row. Fetch the tracking category by id to read it.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -30442,11 +30422,10 @@ paths:
         - connector: twinfield
           description: |
             Disabled as of 2026-08-18. Same underlying constraint as the `payments` resource: Twinfield's
-            bank-daybook transaction requires `header.number` to reference an existing, already-imported
-            bank statement line, which this connector has no way to discover (its bank-statement-import
-            path, `bankFeedStatementsOne`, is itself disabled), and `account.id` needs a real
-            ledger-account code rather than the bank BOOK/daybook code `/accounting/bank-accounts` returns.
-            See the `payments` resource's gotcha for the live reproduction.
+            bank transaction requires a reference to an existing, already-imported bank statement line,
+            which this connector has no way to discover (its bank-statement-import path is itself
+            disabled), and `account.id` needs a real ledger-account code rather than the id
+            `/accounting/bank-accounts` returns. See the `payments` resource's gotcha for details.
       requestBody:
         required: true
         content:
@@ -30925,20 +30904,21 @@ paths:
             The write always creates a draft transaction; this connector has no way to post it
             directly.
 
-            `delete` is disabled as of 2026-08-18. It read/deleted by transaction number alone against the
-            hardcoded `MEMO` daybook, but Twinfield transaction numbers are unique only PER DAYBOOK — the same
-            number can also identify a `journal-entries` record, or a transaction entered directly in Twinfield's
-            own UI, with no field this connector can use to tell them apart. Live-reproduced: deleting an
-            "expense" by id voided an unrelated, pre-existing journal entry that happened to share its number.
-            `get` has the same collision on the read side — it is non-destructive but can silently return a
-            hand-entered journal entry reshaped as an expense (dropping any line beyond the first debit/credit
-            pair). Do not rely on an id obtained from `journal-entries` or Twinfield's own UI being safe to pass
-            to this resource, or vice versa.
+            `delete` is disabled as of 2026-08-18. Transaction numbers are only unique within the
+            specific ledger they belong to, and this operation has no way to confirm the id it is given
+            actually belongs to an expense rather than a `journal-entries` record or a transaction
+            entered directly in Twinfield's own UI — deleting one by id risks voiding an unrelated
+            record that happens to share its number. `get` has the same collision on the read side —
+            it is non-destructive but can silently return a hand-entered journal entry reshaped as an
+            expense (dropping any line beyond the first debit/credit pair). Do not rely on an id
+            obtained from `journal-entries` or Twinfield's own UI being safe to pass to this resource,
+            or vice versa.
 
-            `memo` becomes the credited line's description, and Twinfield caps a transaction line's description
-            at 40 characters ("De omschrijving mag maximaal 40 tekens bevatten") — confirmed live: a 43-character
-            `memo` was rejected outright rather than truncated. This connector does not truncate `memo` or
-            `line_items[].description` before sending; a value over 40 characters fails the whole write.
+            `memo` becomes the credited line's description, and Twinfield caps a transaction line's
+            description at 40 characters ("De omschrijving mag maximaal 40 tekens bevatten") — a
+            longer value is rejected outright rather than truncated. This connector does not truncate
+            `memo` or `line_items[].description` before sending; a value over 40 characters fails the
+            whole write.
 
             `update` is not implemented, and not just for lack of time: Twinfield's transaction API has no
             in-place update verb, only `add` (always assigns a new transaction number) and `delete`. Faking an
@@ -31978,50 +31958,23 @@ paths:
             currency field to source a different value from, and non-EUR bank accounts are not supported.
         - connector: twinfield
           description: |
-            Maps onto Twinfield's `<statement target="electronicstatements">` SOAP document, which is distinct from
-            the transaction-posting mechanism used by payments/bills/journal-entries and does support importing
-            transaction lines with no GL account or invoice match (`contraaccount`/`contraiban` are left empty).
+            Only `create` is supported. `update` and `delete` are not implemented and are not possible —
+            once a bank statement is created in Twinfield, it cannot be changed.
 
-            Live-verified structurally: a real write reaches Twinfield, is accepted as well-formed, and is validated
-            against real bank records (confirmed via a deliberately invalid IBAN, which Twinfield rejected by name:
-            "Er bestaat geen bank met IBAN ..."). Not yet verified end-to-end with a real IBAN for this connector,
-            since Twinfield has no bank-feed-account listing endpoint to source one from (see the `bank-feed-accounts`
-            connector note) — `bank_feed_account_id` must be supplied by the caller as the target account's IBAN, with
-            no way to validate it client-side beforehand.
-
-            `source_transaction_id` on read is synthesized (`{iban}-{statement_number}-{line_index}`) because
-            Twinfield's statement transaction lines carry no client-supplied identifier of their own.
+            There is no endpoint to list bank feed accounts, so `bank_feed_account_id` must be supplied
+            by the caller as the target account's IBAN, with no way to validate it beforehand.
 
             The statement currency defaults to `EUR` when not set on the connection — the unified model
-            carries no per-statement or per-transaction currency field to source it from instead. Statements
-            for a non-EUR bank account must have the connection's currency setting configured accordingly.
+            carries no per-statement or per-transaction currency field to source it from instead.
+            Statements for a non-EUR bank account must have the connection's currency setting configured
+            accordingly.
 
-            Twinfield requires a `currency` and a `statementnumber` per statement with no equivalent unified field;
-            currency defaults to the connection's configured currency (or EUR), and statementnumber is derived from
-            `start_date`. Twinfield does report an `importduplicate` flag on the response when a statement number was
-            already imported, which is not yet surfaced on the unified response.
+            `source_transaction_id` on read is a synthesized composite value (not a Twinfield-native id),
+            since Twinfield's statement transaction lines carry no identifier of their own.
 
-            `update` and `delete` are not implemented and are genuinely impossible, not merely unimplemented:
-            Twinfield's own documentation states "once a bank statement is created, it is not possible to change it."
-
-            `one` targets a completely different SOAP service (`BankStatementService.svc`, a "Command & Query"
-            framework distinct from the `ProcessXml`/`Finder` services this connector otherwise uses, authenticated
-            via an `<Authentication><AccessToken>/<CompanyCode>` header rather than ProcessXml's `<Header>`, and
-            requiring a `SOAPAction` HTTP header WCF uses for dispatch — ProcessXml/Finder don't check it). That
-            service has no "get by number" query — only date-range queries — so the connector queries the single
-            day encoded in the id and picks the matching statement (by IBAN + statement number) out of the result.
-
-            **Known broken, not yet working.** Live-tested directly against Twinfield (bypassing this connector) with
-            several request variants — with and without a duplicate legacy `<Header>` alongside `<Authentication>`,
-            and with both the office code and the organisation GUID as `CompanyCode` — all return the same
-            `InternalServiceFault`, a generic WCF fault with no detail (`IncludeExceptionDetailInFaults` is off on
-            Twinfield's server). This is a *different* fault type from the `SecurityFault`/`ActionNotSupported`
-            faults seen earlier in the same investigation, meaning auth and SOAP routing succeed and the failure is
-            inside Twinfield's query-handling logic — but which part of the request body it's rejecting could not be
-            narrowed further without Twinfield-side exception tracing. The response mapping (field names `Iban`,
-            `Number`, `StatementDate`, `Lines.BankStatementLine[].Amount`/`Description`/`ContraAccountName`, etc.,
-            sourced from Twinfield's published XSD, not an observed real response) has therefore never been exercised
-            against a real response and should be treated as unverified.
+            Reading a bank feed statement by id (`bank-feed-statements.one`) is currently non-functional —
+            every request fails with a generic server error regardless of request shape. Treat this
+            operation as unsupported until further notice.
       requestBody:
         required: true
         content:
@@ -32941,9 +32894,8 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            `status` is not returned by this list call — Twinfield's underlying
-            `<list><type>dimensions</type></list>` only returns code and name per row. Fetch the
-            project by id to read it.
+            `status` is not returned by this list call — the underlying vendor list only returns code
+            and name per row. Fetch the project by id to read it.
         - connector: quickbooks
           description: |
             The `priority` field is mapped from QuickBooks integer values (0-9) to unified enum values using ranges: 0-2 → "low", 3-5 → "medium", 6-7 → "high", 8-9 → "critical".
@@ -34052,13 +34004,12 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            Twinfield's Finder(PAY) service, the only mechanism for listing payment types, returns
-            just `code` and `name` — there is no field for the payment method's type (cash/check/
-            bank_transfer/etc.) or its active/inactive status. Both are always `null`.
+            The only source for payment types returns just `code` and `name` — there is no field for
+            the payment method's type (cash/check/bank_transfer/etc.) or its active/inactive status.
+            Both are always `null`.
 
-            `name` is read from Twinfield's own column header for that office's configured UI language
-            (e.g. "Naam" for a Dutch office). Not verified against a non-Dutch office (this build only
-            has access to a Dutch-language tenant), but the mechanism is confirmed live.
+            `name` is read from a Dutch-language field key. Verified only against a Dutch-language
+            office; a non-Dutch office may return this field empty.
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentMethodsResponse'
@@ -34095,10 +34046,9 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            Payment methods cannot be created through this connector. Twinfield's docs name a
-            ProcessXml "paymanagement" message type for maintaining pay types, but its request/
-            response XML shape is undocumented beyond that name — unlike Finder(PAY), which this
-            connector reads from and which is fully specified.
+            Payment methods cannot be created through this connector — the vendor operation for
+            maintaining payment types is not publicly documented in enough detail to implement
+            reliably, unlike the read path this connector uses.
       requestBody:
         required: true
         content:
@@ -34156,9 +34106,9 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            Twinfield's Finder(PAY) service, the only mechanism for reading a payment type, returns
-            just `code` and `name` — there is no field for the payment method's type (cash/check/
-            bank_transfer/etc.) or its active/inactive status. Both are always `null`.
+            The only source for payment types returns just `code` and `name` — there is no field for
+            the payment method's type (cash/check/bank_transfer/etc.) or its active/inactive status.
+            Both are always `null`.
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentMethodResponse'
@@ -34197,10 +34147,9 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            Payment methods cannot be updated through this connector. Twinfield's docs name a
-            ProcessXml "paymanagement" message type for maintaining pay types, but its request/
-            response XML shape is undocumented beyond that name — unlike Finder(PAY), which this
-            connector reads from and which is fully specified.
+            Payment methods cannot be updated through this connector — the vendor operation for
+            maintaining payment types is not publicly documented in enough detail to implement
+            reliably, unlike the read path this connector uses.
       requestBody:
         required: true
         content:
@@ -34258,8 +34207,7 @@ paths:
         - connector: twinfield
           description: |
             Payment methods cannot be deleted through this connector — no documented delete
-            mechanism exists; Twinfield's docs mention only a "maintain" (create/update) message
-            type for this data.
+            mechanism exists for this data.
       responses:
         '200':
           $ref: '#/components/responses/DeletePaymentMethodResponse'

@@ -19485,12 +19485,13 @@ paths:
       x-apideck-gotchas:
         - connector: snelstart
           description: |
-            `line_items`, `sub_total` and `total_tax` are never returned by this connector, on any
-            operation. SnelStart's list/read endpoint for bills is a read-only summary view with no
-            line-item detail; the debit/credit lines only exist on the underlying "purchase booking"
-            record, which `billsAdd`/`billsUpdate` write to — but has no GET endpoint of its own, and
-            per the platform's write contract the create/update response returns only `id`. There is
-            no way to retrieve these three fields through this connector once set.
+            `line_items`, `sub_total` and `total_tax` are never returned from this list — SnelStart's
+            list endpoint for bills is a read-only summary view with no line-item detail. `line_items`
+            IS available from `bills.get` (by id), which reads the underlying "purchase booking"
+            record instead (the same one `billsAdd`/`billsUpdate` write to). `sub_total` and
+            `total_tax` are not mapped there either — not because the booking model lacks the data
+            (it includes a `btw` VAT breakdown, one entry per VAT type), but because this connector
+            does not currently derive the two unified fields from it; only `total` is exposed.
         - connector: twinfield
           description: |
             This connector fetches every matching bill in a single call — there is no server-side
@@ -19835,6 +19836,10 @@ paths:
             Only `Laag`, `Hoog` and `Overig` are recognized `line_items[].tax_rate.code` values on
             write (SnelStart's purchase-side VAT types); any other value — including `Geen` — results
             in that line being booked with no VAT allocation, silently, not as an error.
+
+            `bill_date` falling in a period your accountant has locked for review or already closed is
+            rejected — see the `journal-entries` create gotcha, which this connector's bookings share
+            the same restriction with.
         - connector: twinfield
           description: |
             Both `supplier.id` and `bill_number` are required — Twinfield rejects a bill without an invoice number, and every line must post against the accounts-payable control account, which requires knowing the supplier.
@@ -20084,16 +20089,22 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            `balance` and `paid_date` are always null on this get-by-id operation — Twinfield's
-            response has no equivalent of the match-status/match-date data Browse Data exposes on
-            `bills.list`, where both ARE available. `sub_total` and `total_tax` are derived by
-            comparing the transaction's gross total (echoed back from the balancing
-            accounts-payable control line) against the sum of the real detail lines, so they read as
-            equal (no tax) for an untaxed bill and split correctly once a line carries a `tax_rate`.
-
-            `line_items[].total_amount` is each line's net amount (excl. VAT), read directly from
-            Twinfield's own per-line `value`. The VAT-inclusive gross total is `total` (the bill's
-            header field) — Twinfield's response carries no per-line gross figure to map instead.
+            `total_tax`, `balance` and `paid_date` are always null on this get-by-id operation —
+            Twinfield's response omits the balancing line where those values would come from.
+            `sub_total` is set equal to `total` rather than left null, since this connector does not
+            currently post VAT on bills (see the bill create gotcha), so there is no tax to subtract.
+            `balance` and `paid_date` are available on `bills.list`.
+        - connector: snelstart
+          description: |
+            This reads the same underlying "purchase booking" record `bills.create`/`bills.update`
+            write to — SnelStart's summary view has no per-record read of its own. `line_items` is
+            available here (unlike on `bills.list`), but `due_date` is always `null` — the booking
+            model has no due-date field at all — and `status` is always `"authorised"`, since the
+            booking model has no payment/workflow state this connector can read either. `sub_total`
+            and `total_tax` are not mapped either — the booking model does include a `btw` VAT
+            breakdown, but this connector does not currently derive the two unified fields from it, so
+            only `total` is exposed. `balance` is genuinely unavailable: the booking model has no
+            open-balance figure at all.
         - connector: freshbooks
           description: The Freshbooks Bills api is currently in beta.
         - connector: netsuite
@@ -20806,6 +20817,10 @@ paths:
             Only `Laag`, `Hoog`, `Overig` and `Verlegd` are recognized `line_items[].tax_rate.code`
             values on write (SnelStart's sales-side VAT types); any other value — including `Geen` —
             results in that line being booked with no VAT allocation, silently, not as an error.
+
+            `invoice_date` falling in a period your accountant has locked for review or already closed
+            is rejected — see the `journal-entries` create gotcha, which this connector's bookings
+            share the same restriction with.
         - connector: twinfield
           description: |
             `line_items[].ledger_account.id` must reference a profit-and-loss (income or expense)
@@ -23396,6 +23411,13 @@ paths:
             being a Netherlands-only accounting platform. `addresses[].street_number` is also not
             written separately; SnelStart stores the street name and house number as one combined
             field, so `line1` and `street_number` are concatenated into it.
+
+            A SnelStart contact can be both a customer and a supplier at once. To add the supplier
+            role to an existing customer (or vice versa), call `suppliers.update`/`customers.update`
+            with that contact's id — this connector merges in the new role rather than replacing the
+            existing one, so both survive. There is no field exposing which role(s) a contact has, so
+            a dual-tagged contact appears, unremarkably, in both `customers.list` and
+            `suppliers.list`.
         - connector: sage-intacct-rest
           description: |
             Only `active` and `inactive` are applied. Sage's status field has no other members, so any
@@ -23984,6 +24006,13 @@ paths:
             being a Netherlands-only accounting platform. `addresses[].street_number` is also not
             written separately; SnelStart stores the street name and house number as one combined
             field, so `line1` and `street_number` are concatenated into it.
+
+            A SnelStart contact can be both a customer and a supplier at once. To add the customer
+            role to an existing supplier (or vice versa), call `customers.update`/`suppliers.update`
+            with that contact's id — this connector merges in the new role rather than replacing the
+            existing one, so both survive. There is no field exposing which role(s) a contact has, so
+            a dual-tagged contact appears, unremarkably, in both `customers.list` and
+            `suppliers.list`.
         - connector: netsuite
           description: |
             `custom_fields` are writable. Identify each field either by its NetSuite internal id or by
@@ -26245,6 +26274,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: snelstart
+          description: |
+            At least two lines are required, and the debit and credit sides must balance to zero —
+            both are rejected outright rather than silently accepted. A booking date that falls in a
+            period your accountant has locked for review, or one already checked and closed, is also
+            rejected; this can make a write that succeeded last month start failing later with no
+            change on your side. The same booking-date restriction applies to `invoices`, `bills`,
+            `payments` and `bill-payments`, since they all post through the same underlying booking
+            model.
         - connector: twinfield
           description: |
             Twinfield caps a line's description at 40 characters. A longer value is rejected outright
@@ -29419,6 +29457,13 @@ paths:
               type: string
               format: binary
       x-apideck-gotchas:
+        - connector: snelstart
+          description: |
+            Files larger than 10 MB are rejected. There is no chunked or resumable upload path to work
+            around this — split or compress the source file below that size. The filename is also
+            constrained: an overly long filename, or one containing characters SnelStart does not
+            accept, is rejected. When in doubt, keep filenames short and limited to letters, digits,
+            spaces, hyphens and underscores.
         - connector: sage-intacct-rest
           description: |
             Uploading a second file to the same `reference_id` REPLACES the first rather than adding to

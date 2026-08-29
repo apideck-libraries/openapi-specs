@@ -19121,6 +19121,13 @@ paths:
           description: |
             The minimum page size accepted for NetSuite is 5. The cursor expires if it has not been used within 15 minutes of creation.
 
+            Listing tax rates requires NetSuite's legacy "Not SuiteTax" feature. On an account with
+            SuiteTax enabled, every tax-rates request fails outright rather than returning an empty or
+            partial result — this is a NetSuite platform restriction on the underlying search, not a
+            connector limitation, and there is no workaround available. This is specific to the
+            tax-rates resource: bills and expenses already support per-line tax on SuiteTax accounts
+            through a separate mechanism.
+
             NetSuite supports compound taxes through the `components` array, allowing multi-tier tax structures (e.g. state + county).
 
             **A `null` `effective_tax_rate` does not mean 0%.** It means the tax code carries no single stored rate, and that happens in two cases which must not be conflated:
@@ -19246,6 +19253,9 @@ paths:
         - connector: intuit-enterprise-suite
           description: |
             To create a tax rate, `effective_tax_rate`, `tax_payable_account_id`, `name` and a `component` is required. If `tax_payable_account_id` is unknown, make a proxy call to get list of TaxAgency. [TaxAgency doc](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/taxagency#query-a-taxagency)
+        - connector: netsuite
+          description: |
+            Creating a tax rate requires NetSuite's legacy "Not SuiteTax" feature. On an account with SuiteTax enabled, the request fails outright rather than returning a validation error about a specific field — this is a NetSuite platform restriction, not a connector limitation, and there is no workaround available.
       requestBody:
         required: true
         content:

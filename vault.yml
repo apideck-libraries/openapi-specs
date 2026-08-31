@@ -1883,6 +1883,11 @@ components:
           description: Indicates if the form field is displayed in a “read-only” mode.
           nullable: true
           example: false
+        options_fetch_error:
+          type: boolean
+          description: Indicates if the options for a form field failed to be fetched from the downstream service. Only applicable to fields with dynamic options. When true, a retry mechanism should be provided to the user.
+          nullable: true
+          example: false
         hidden:
           type: boolean
           description: Indicates if the form field is not displayed but the value that is being stored on the connection.

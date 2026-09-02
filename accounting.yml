@@ -29410,6 +29410,26 @@ paths:
         - connector: microsoft-dynamics-365-business-central
           description: |
             If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+        - connector: myob
+          description: |
+            Attachments are supported on bills only. MYOB has no attachment support on invoices,
+            credit notes, or other records. The `reference_id` must be the layout-encoded bill ID
+            returned by the bills resource (base64 JSON with `id` and `type` fields where type is
+            service, product, professional, or misc).
+
+            `attachmentsOne` (get single attachment) is unsupported — MYOB exposes no per-attachment
+            read endpoint (a GET on a single attachment returns 405). Use `attachmentsAll` to list
+            attachments for a bill and select the file by id or name.
+
+            `attachmentsDownload` is unsupported — use the `file_url` from `attachmentsAll` to
+            download files. MYOB provides presigned S3 URLs in the attachment list response. Two
+            caveats on those URLs: responses are gzip-encoded (use a client that auto-decompresses,
+            e.g. `curl --compressed`), and for image uploads MYOB may serve a PDF rendition of the
+            stored file rather than the original image bytes, while `name` keeps the original
+            extension. PDFs are returned byte-identical.
+
+            `mime_type`, `size`, `created_at` and `updated_at` are always null — MYOB's attachment
+            object does not carry them.
         - connector: pennylane
           description: |
             Pennylane does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -29467,6 +29487,23 @@ paths:
               type: string
               format: binary
       x-apideck-gotchas:
+        - connector: myob
+          description: |
+            Uploads are supported on bills only — MYOB has no attachment API for invoices, credit
+            notes, or other records; a non-bill `reference_type` is rejected with a clear error. The
+            `reference_id` must be the layout-encoded bill ID returned by the bills resource; a raw
+            MYOB UID is rejected because the bill layout cannot be derived from it. Repeat uploads of
+            the same file name create separate attachments (MYOB does not deduplicate or replace).
+
+            MYOB accepts only .pdf, .tiff, .jpg, .jpeg and .png files, requires the file name to
+            carry one of those extensions, and validates the extension against the actual content.
+            Text content types (`text/*`) are rejected upfront: they would be re-encoded as UTF-8,
+            which corrupts binary files. Send the file's real content type (e.g. application/pdf).
+            When no `x-apideck-metadata` name is provided, a name is derived from the content type.
+
+            The upload response returns the created attachment's `id` and `name` but no `file_url` —
+            MYOB does not include download URLs on the create response. Fetch the attachment list to
+            obtain the presigned `file_url`.
         - connector: snelstart
           description: |
             Files larger than 10 MB are rejected. There is no chunked or resumable upload path to work
@@ -29588,6 +29625,12 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       x-apideck-gotchas:
+        - connector: myob
+          description: |
+            Deletes are supported on bills only, and the `id` must belong to the bill named by
+            `reference_id`. An id from a different bill returns `404` rather than deleting it —
+            MYOB's own API deletes by attachment id alone, so Apideck verifies ownership before
+            forwarding the delete. The delete removes the file itself, not just the link.
         - connector: sage-intacct-rest
           description: |
             The `id` must belong to the record named by `reference_type`/`reference_id`. An id from a

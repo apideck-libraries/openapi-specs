@@ -6537,7 +6537,7 @@ paths:
       x-apideck-gotchas:
         - connector: adp-workforce-now
           description: |
-            ADP Workforce Now does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate API request to the ADP count endpoint — an extra API call not currently implemented.
+            Employee schedules are not supported by the ADP Workforce Now connector: the resource is not mapped, so this operation is unavailable. ADP itself does expose time and attendance APIs to ADP API Central subscribers whose ADP account has the Time and Attendance module enabled, so this is a gap in Apideck's coverage rather than an ADP limitation. Use the Proxy API to reach ADP's time endpoints directly in the meantime.
         - connector: azure-active-directory
           description: |
             Microsoft Azure Active Directory does not include a total count in default list responses. `meta.total_count` will not appear. Surfacing the total requires adding `$count=true` with a `ConsistencyLevel: eventual` header — an extra requirement not currently implemented.

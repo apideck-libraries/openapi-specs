@@ -105,6 +105,22 @@ components:
       schema:
         type: string
         nullable: true
+    billCreditNotesFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/BillCreditNotesFilter'
+    billCreditNotesSort:
+      name: sort
+      in: query
+      description: Apply sorting
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/BillCreditNotesSort'
     creditNotesFilter:
       name: filter
       in: query
@@ -524,6 +540,12 @@ components:
           schema:
             $ref: '#/components/schemas/CreateBankAccountResponse'
       description: Bank Account created
+    CreateBillCreditNoteResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateBillCreditNoteResponse'
+      description: Bill Credit Note created
     CreateCreditNoteResponse:
       content:
         application/json:
@@ -584,6 +606,12 @@ components:
           schema:
             $ref: '#/components/schemas/DeleteBankAccountResponse'
       description: Bank Account deleted
+    DeleteBillCreditNoteResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteBillCreditNoteResponse'
+      description: Bill Credit Note deleted
     DeleteCreditNoteResponse:
       content:
         application/json:
@@ -674,6 +702,18 @@ components:
           schema:
             $ref: '#/components/schemas/GetCompaniesResponse'
       description: Companies
+    GetBillCreditNoteResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetBillCreditNoteResponse'
+      description: Bill Credit Note
+    GetBillCreditNotesResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetBillCreditNotesResponse'
+      description: Bill Credit Notes
     GetCreditNoteResponse:
       content:
         application/json:
@@ -956,6 +996,12 @@ components:
           schema:
             $ref: '#/components/schemas/UpdateBillResponse'
       description: Bill Updated
+    UpdateBillCreditNoteResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateBillCreditNoteResponse'
+      description: Bill Credit Note updated
     UpdateCreditNoteResponse:
       content:
         application/json:
@@ -3213,6 +3259,372 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LinkedAttachment'
+    BillCreditNote:
+      type: object
+      x-apideck-schema-id: BillCreditNote
+      x-apideck-weights:
+        id: critical
+        number: low
+        supplier: high
+        subsidiary: medium
+        location: low
+        department: low
+        currency: critical
+        currency_rate: medium
+        tax_inclusive: low
+        sub_total: critical
+        total_amount: critical
+        total_tax: edge-case
+        tax_code: edge-case
+        balance: critical
+        remaining_credit: edge-case
+        status: high
+        reference: low
+        date_issued: edge-case
+        date_paid: critical
+        type: edge-case
+        account: critical
+        line_items: medium
+        allocations: medium
+        note: low
+        terms: low
+        tracking_categories: low
+        custom_fields: medium
+        row_version: edge-case
+        updated_by: low
+        created_by: low
+        created_at: medium
+        updated_at: medium
+      required:
+        - id
+        - total_amount
+      x-apideck-strict-required:
+        - total_amount
+        - currency
+        - supplier
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          title: Bill Credit Note identifier
+          description: Unique identifier representing the entity
+          example: '123456'
+          readOnly: true
+        number:
+          type: string
+          title: Bill credit note number
+          description: Bill credit note number.
+          example: OIT00546
+          nullable: true
+        supplier:
+          $ref: '#/components/schemas/LinkedSupplier'
+        subsidiary:
+          $ref: '#/components/schemas/LinkedSubsidiary'
+        location:
+          $ref: '#/components/schemas/LinkedLocation'
+        department:
+          $ref: '#/components/schemas/LinkedDepartment'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        currency_rate:
+          $ref: '#/components/schemas/CurrencyRate'
+        tax_inclusive:
+          $ref: '#/components/schemas/TaxInclusive'
+        sub_total:
+          title: Sub-total amount
+          description: Sub-total amount, normally before tax.
+          type: number
+          example: 27500
+          nullable: true
+        total_amount:
+          type: number
+          title: Total amount
+          description: Amount of transaction
+          example: 49.99
+        total_tax:
+          type: number
+          title: Total tax amount
+          description: Total tax amount applied to this bill credit note.
+          example: 2500
+          nullable: true
+        tax_code:
+          type: string
+          title: Tax Code
+          description: Applicable tax id/code override if tax is not supplied on a line item basis.
+          example: '1234'
+          nullable: true
+        balance:
+          type: number
+          title: Balance
+          description: The balance reflecting any payments made against the transaction.
+          example: 27500
+          nullable: true
+        remaining_credit:
+          type: number
+          title: Remaining Credit
+          description: Indicates the total credit amount still available to apply towards the payment.
+          example: 27500
+          nullable: true
+        status:
+          type: string
+          title: Bill Credit Note status
+          description: Status of bill credit notes
+          x-apideck-enum-id: bill-credit-notes.status
+          enum:
+            - draft
+            - authorised
+            - posted
+            - partially_paid
+            - paid
+            - voided
+            - deleted
+          example: authorised
+        reference:
+          type: string
+          title: Bill Credit Note reference
+          description: 'Optional reference message ie: Debit remittance detail.'
+          example: '123456'
+          nullable: true
+        date_issued:
+          type: string
+          title: Datetime
+          description: Date bill credit note issued - YYYY:MM::DDThh:mm:ss.sTZD
+          format: date-time
+          example: '2021-05-01T12:00:00.000Z'
+        date_paid:
+          type: string
+          title: Datetime
+          description: Date bill credit note paid - YYYY:MM::DDThh:mm:ss.sTZD
+          format: date-time
+          example: '2021-05-01T12:00:00.000Z'
+          nullable: true
+        type:
+          type: string
+          title: Bill Credit Note Type
+          description: The type of credit note. A bill credit note is always an accounts payable (supplier-side) credit.
+          x-apideck-enum-id: bill-credit-notes.type
+          enum:
+            - accounts_payable_credit
+          example: accounts_payable_credit
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillCreditNoteLineItem'
+        allocations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Allocation'
+        note:
+          type: string
+          title: Note
+          description: Optional note to be associated with the bill credit note.
+          example: Some notes about this bill credit note
+          nullable: true
+        terms:
+          type: string
+          title: Terms
+          description: Optional terms to be associated with the bill credit note.
+          example: Some terms about this bill credit note
+          nullable: true
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+    BillCreditNoteLineItem:
+      type: object
+      title: Bill Credit Note Line Item
+      x-apideck-schema-id: BillCreditNoteLineItem
+      additionalProperties: false
+      x-apideck-weights:
+        id: high
+        row_id: edge-case
+        code: medium
+        line_number: medium
+        description: high
+        type: medium
+        tax_amount: high
+        total_amount: high
+        quantity: high
+        unit_price: high
+        unit_of_measure: edge-case
+        discount_percentage: low
+        discount_amount: low
+        service_date: low
+        location: low
+        department: low
+        item: high
+        tax_rate: medium
+        ledger_account: low
+        tracking_categories: low
+        row_version: edge-case
+        created_at: edge-case
+        updated_at: high
+        updated_by: edge-case
+        created_by: edge-case
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        row_id:
+          type: string
+          title: Row ID
+          description: The unique row identifier of the line item, when the connector exposes one.
+          example: '12345'
+          nullable: true
+        code:
+          type: string
+          title: Item code
+          description: User defined item code.
+          example: 120-C
+          nullable: true
+        line_number:
+          $ref: '#/components/schemas/LineNumber'
+        description:
+          type: string
+          title: Description
+          description: User defined description for the line item.
+          example: Returned goods credit
+          nullable: true
+        type:
+          $ref: '#/components/schemas/LineItemType'
+        tax_amount:
+          $ref: '#/components/schemas/TaxAmount'
+        total_amount:
+          type: number
+          title: Total amount
+          description: Total amount of the line item.
+          example: 27500
+          nullable: true
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        unit_price:
+          $ref: '#/components/schemas/UnitPrice'
+        unit_of_measure:
+          $ref: '#/components/schemas/UnitOfMeasure'
+        discount_percentage:
+          type: number
+          title: Discount Percentage
+          description: Discount percentage applied to the line item when supported downstream.
+          example: 0.01
+          nullable: true
+        discount_amount:
+          type: number
+          title: Discount Amount
+          description: Discount amount applied to the line item when supported downstream.
+          example: 19.99
+          nullable: true
+        service_date:
+          type: string
+          format: date
+          title: Service Date
+          description: Date on which the service was provided or performed - YYYY-MM-DD.
+          example: '2024-01-15'
+          nullable: true
+        location:
+          $ref: '#/components/schemas/LinkedLocation'
+        department:
+          $ref: '#/components/schemas/LinkedDepartment'
+        item:
+          $ref: '#/components/schemas/LinkedInvoiceItem'
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        ledger_account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+    BillCreditNotesFilter:
+      type: object
+      x-apideck-schema-id: BillCreditNotesFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+        created_since: '2020-09-30T07:43:32.000Z'
+        number: OIT00546
+        supplier_id: 123abc
+        id_since: '1'
+        ids: 12345,67890
+      properties:
+        ids:
+          type: string
+          title: Bill credit note IDs
+          description: Comma-separated list of bill credit note IDs to filter by (e.g. `12345,67890`).
+          example: 12345,67890
+        id_since:
+          type: string
+          title: Since ID
+          description: Return records with a row ID greater than or equal to the given value
+          example: '1'
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        created_since:
+          type: string
+          title: Created since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        number:
+          type: string
+          title: Bill credit note number
+          description: Bill credit note number to search for
+          example: OIT00546
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
+        supplier_id:
+          type: string
+          title: Supplier Id
+          description: Filter by supplier id
+          example: 123abc
+      additionalProperties: false
+    BillCreditNotesSort:
+      type: object
+      x-apideck-schema-id: BillCreditNotesSort
+      example:
+        by: updated_at
+        direction: desc
+      properties:
+        by:
+          type: string
+          x-apideck-enum-id: bill-credit-notes.sort_by
+          description: The field on which to sort the Bill Credit Notes
+          enum:
+            - created_at
+            - updated_at
+            - id
+          example: updated_at
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      additionalProperties: false
     BillLineItem:
       type: object
       title: Bill Line Item
@@ -4209,6 +4621,41 @@ components:
           type: string
           description: Unified API resource name
           example: bills
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    CreateBillCreditNoteResponse:
+      type: object
+      x-apideck-schema-id: CreateBillCreditNoteResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: microsoft-dynamics-365-business-central
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bill-credit-notes
         operation:
           type: string
           description: Operation performed
@@ -5830,6 +6277,41 @@ components:
           $ref: '#/components/schemas/UnifiedId'
         _raw:
           $ref: '#/components/schemas/Raw'
+    DeleteBillCreditNoteResponse:
+      type: object
+      x-apideck-schema-id: DeleteBillCreditNoteResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: microsoft-dynamics-365-business-central
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bill-credit-notes
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     DeleteCreditNoteResponse:
       type: object
       x-apideck-schema-id: DeleteCreditNoteResponse
@@ -6527,6 +7009,84 @@ components:
           $ref: '#/components/schemas/Meta'
         links:
           $ref: '#/components/schemas/Links'
+    GetBillCreditNoteResponse:
+      type: object
+      x-apideck-schema-id: GetBillCreditNoteResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: microsoft-dynamics-365-business-central
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bill-credit-notes
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/BillCreditNote'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetBillCreditNotesResponse:
+      type: object
+      x-apideck-schema-id: GetBillCreditNotesResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: microsoft-dynamics-365-business-central
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bill-credit-notes
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillCreditNote'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     GetCreditNoteResponse:
       type: object
       x-apideck-schema-id: GetCreditNoteResponse
@@ -13260,6 +13820,41 @@ components:
           $ref: '#/components/schemas/UnifiedId'
         _raw:
           $ref: '#/components/schemas/Raw'
+    UpdateBillCreditNoteResponse:
+      type: object
+      x-apideck-schema-id: UpdateBillCreditNoteResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: microsoft-dynamics-365-business-central
+        resource:
+          type: string
+          description: Unified API resource name
+          example: bill-credit-notes
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     UpdateCreditNoteResponse:
       type: object
       x-apideck-schema-id: UpdateCreditNoteResponse
@@ -13781,6 +14376,7 @@ components:
       enum:
         - invoice
         - bill
+        - bill-credit-note
         - expense
         - expense-report
         - quote
@@ -18897,6 +19493,11 @@ tags:
     x-apideck-resource-id: bills
     x-apideck-model:
       $ref: '#/components/schemas/Bill'
+  - name: Bill Credit Notes
+    description: A Bill Credit Note represents a supplier-issued (accounts payable) credit, including line items, amounts, and the linked supplier.
+    x-apideck-resource-id: bill-credit-notes
+    x-apideck-model:
+      $ref: '#/components/schemas/BillCreditNote'
   - name: Company Info
     description: Company Info contains the organization's profile data including legal name, addresses, tax identifiers, currency, and fiscal year settings.
     x-apideck-resource-id: company-info
@@ -23305,6 +23906,478 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DeleteCreditNoteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/bill-credit-notes:
+    get:
+      tags:
+        - Bill Credit Notes
+      operationId: billCreditNotesAll
+      summary: List Bill Credit Notes
+      description: List Bill Credit Notes
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/billCreditNotesFilter'
+        - $ref: '#/components/parameters/billCreditNotesSort'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetBillCreditNotesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Bill Credit Notes
+      operationId: billCreditNotesAdd
+      summary: Create Bill Credit Note
+      description: Create Bill Credit Note
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            Setting `status` to `authorised` posts the credit memo; a draft remains editable while a posted one is immutable.
+            `tax_inclusive` reflects the Vendor Card's "Prices Including VAT" setting and cannot be set directly. When `tax_inclusive: true` is sent for a document stored as tax-exclusive, each line's `unit_price` is written as its net value so the document totals match the sent tax-inclusive amounts.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillCreditNote'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateBillCreditNoteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            billCreditNote:
+              number: OIT00546
+              supplier:
+                id: '12345'
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  line5: 'Attention: Finance Dept'
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
+              location:
+                id: '123456'
+                display_id: '123456'
+                name: New York Office
+              department:
+                display_id: '123456'
+                name: Acme Inc.
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_amount: 49.99
+              total_tax: 2500
+              tax_code: '1234'
+              balance: 27500
+              remaining_credit: 27500
+              status: authorised
+              reference: '123456'
+              date_issued: '2021-05-01T12:00:00.000Z'
+              date_paid: '2021-05-01T12:00:00.000Z'
+              type: accounts_payable_credit
+              account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              line_items:
+                - row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Returned goods credit
+                  type: expense_account
+                  tax_amount: 27.5
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  service_date: '2024-01-15'
+                  location:
+                    id: '123456'
+                    display_id: '123456'
+                    name: New York Office
+                  department:
+                    display_id: '123456'
+                    name: Acme Inc.
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_rate:
+                    id: '123456'
+                    code: N-T
+                    rate: 10
+                  ledger_account:
+                    id: '123456'
+                    name: Bank account
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
+                  tracking_categories:
+                    - id: '123456'
+                      code: '100'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  row_version: 1-12345
+              allocations:
+                - id: '123456'
+                  type: invoice
+                  amount: 49.99
+                  allocation_id: '123456'
+              note: Some notes about this bill credit note
+              terms: Some terms about this bill credit note
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  ref_name: Marketing
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+  /accounting/bill-credit-notes/{id}:
+    get:
+      tags:
+        - Bill Credit Notes
+      operationId: billCreditNotesOne
+      summary: Get Bill Credit Note
+      description: Get Bill Credit Note
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetBillCreditNoteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+    patch:
+      tags:
+        - Bill Credit Notes
+      operationId: billCreditNotesUpdate
+      summary: Update Bill Credit Note
+      description: Update Bill Credit Note
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            Updating `status` from `draft` to `authorised` posts the credit memo. A posted credit memo is immutable and can no longer be updated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillCreditNote'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateBillCreditNoteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            billCreditNote:
+              number: OIT00546
+              supplier:
+                id: '12345'
+                display_name: Windsurf Shop
+                address:
+                  id: '123'
+                  type: primary
+                  string: 25 Spring Street, Blackburn, VIC 3130
+                  name: HQ US
+                  line1: Main street
+                  line2: 'apt #'
+                  line3: 'Suite #'
+                  line4: delivery instructions
+                  line5: 'Attention: Finance Dept'
+                  street_number: '25'
+                  city: San Francisco
+                  state: CA
+                  postal_code: '94104'
+                  country: US
+                  latitude: '40.759211'
+                  longitude: '-73.984638'
+                  county: Santa Clara
+                  contact_name: Elon Musk
+                  salutation: Mr
+                  phone_number: 111-111-1111
+                  fax: 122-111-1111
+                  email: elon@musk.com
+                  website: https://elonmusk.com
+                  notes: Address notes or delivery instructions.
+                  row_version: 1-12345
+              subsidiary:
+                display_id: '123456'
+                name: Acme Inc.
+              location:
+                id: '123456'
+                display_id: '123456'
+                name: New York Office
+              department:
+                display_id: '123456'
+                name: Acme Inc.
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_amount: 49.99
+              total_tax: 2500
+              tax_code: '1234'
+              balance: 27500
+              remaining_credit: 27500
+              status: authorised
+              reference: '123456'
+              date_issued: '2021-05-01T12:00:00.000Z'
+              date_paid: '2021-05-01T12:00:00.000Z'
+              type: accounts_payable_credit
+              account:
+                id: '123456'
+                name: Bank account
+                nominal_code: N091
+                code: '453'
+                parent_id: '123456'
+                display_id: '123456'
+              line_items:
+                - row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Returned goods credit
+                  type: expense_account
+                  tax_amount: 27.5
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  service_date: '2024-01-15'
+                  location:
+                    id: '123456'
+                    display_id: '123456'
+                    name: New York Office
+                  department:
+                    display_id: '123456'
+                    name: Acme Inc.
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_rate:
+                    id: '123456'
+                    code: N-T
+                    rate: 10
+                  ledger_account:
+                    id: '123456'
+                    name: Bank account
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
+                  tracking_categories:
+                    - id: '123456'
+                      code: '100'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  row_version: 1-12345
+              allocations:
+                - id: '123456'
+                  type: invoice
+                  amount: 49.99
+                  allocation_id: '123456'
+              note: Some notes about this bill credit note
+              terms: Some terms about this bill credit note
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  ref_name: Marketing
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+    delete:
+      tags:
+        - Bill Credit Notes
+      operationId: billCreditNotesDelete
+      summary: Delete Bill Credit Note
+      description: Delete Bill Credit Note
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            Only a draft (unposted) Business Central Purchase Credit Memo can be deleted. Once a bill credit note has been posted (status `authorised`/`posted`), it can no longer be deleted.
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteBillCreditNoteResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':

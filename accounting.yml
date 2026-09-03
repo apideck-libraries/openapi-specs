@@ -27546,7 +27546,7 @@ paths:
             This applies to every NetSuite date-only write field across the accounting resources.
         - connector: mrisoftware
           description: |
-            MRI Software does not provide a proper ID for journal line items. Instead, each journal line item is identified by a combination of GLREFERENCE, PERIOD, and ITEM. These fields are mapped to unify with the properties number, accounting_period, and line_number, respectively. Additionally, MRI Software requires a GLSOURCE field, which is not supported by Unify. Therefore, it will be sent statically as "GL" (General Ledger).
+            MRI Software does not provide a proper ID for journal line items. Instead, each journal line item is identified by a combination of GLREFERENCE, PERIOD, and ITEM. These fields are mapped to unify with the properties number, accounting_period, and line_number, respectively. Every journal entry created through Unify is sent with GLSOURCE statically set to "TS", so entries originating from Unify can be identified in MRI by that source code. MRI treats the GL source as a free-form two-character code configured per installation, so it is not validated against a fixed list — if your MRI installation reserves "TS" for another purpose, raise a support request.
         - connector: quickbooks
           description: |
             Quickbooks only supports one tracking category at a time so only the first item in the tracking_categories list will be used.

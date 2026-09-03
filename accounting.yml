@@ -12615,6 +12615,11 @@ components:
           title: Customer ID
           description: Filter by customer id
           example: 123abc
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     RefundsSort:
       type: object
@@ -18452,6 +18457,11 @@ components:
           title: Customer Id
           description: Filter by customer id
           example: 123abc
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
       additionalProperties: false
     UpdateQuoteResponse:
       type: object
@@ -27019,6 +27029,9 @@ paths:
       summary: Get company info
       description: Get company info
       x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            Subsidiary scoping (NetSuite OneWorld) applies to transactions, entities, reference data and the financial reports. It does **not** apply to these, which are returned in full whatever subsidiary is selected: currencies, payment-methods, accounting-periods, subsidiaries, attachments, server-time, company-info and the bank-feed resources — NetSuite keeps them at account level. `tax-rates` and `expenses` are also returned in full, but for a different reason: those records **are** subsidiary-specific in NetSuite (tax nexuses are registered per subsidiary), and the surface this connector reads them through offers no way to filter by it, so a scoped consumer still receives every tax code and every expense in the account. See their own gotchas. Two further limits. **Changing the Default Subsidiary invalidates pages you have already started**: a pagination cursor carries the scope it was created under, so continuing an older cursor after changing the setting keeps returning the previous scope's records and record count. Start the list again after changing it. And **writes are never scoped** — the subsidiary of a created or updated record comes from the request body, or is derived by NetSuite from the record's own customer or vendor when the body does not name one. Neither the setting nor the `x-apideck-company-id` header moves a write. A consequence worth planning for: a scoped connection can create a record that its own list requests will not return, because the created record belongs to the subsidiary its customer does rather than to the one selected. Two behaviours that hold for every scoped resource. A per-request override is available as the `x-apideck-company-id` header, and it wins over the connection's setting while an explicit `filter[subsidiary_id]` wins over both. And a record fetched directly by its ID is returned whatever subsidiary is selected — an id is an explicit request for one record, so it is not filtered out of scope.
         - connector: snelstart
           description: |
             `country` always returns `NL`. SnelStart's company-info endpoint (`/v2/companyInfo`)
@@ -27158,6 +27171,7 @@ paths:
         - connector: netsuite
           description: |
             NetSuite date filtering resolves `filter[end_date]` to accounting period IDs via SuiteQL, then filters the SOAP request by periods up to that date. This requires the SuiteAnalytics Workbook permission for period resolution. If unavailable, returns all-time data as fallback. For Balance Sheet, only `filter[end_date]` is meaningful (point-in-time snapshot).
+            If the connection's Default Subsidiary names a subsidiary that no longer exists, this report returns every figure at zero with a 200 rather than an error — that is indistinguishable from an entity with no activity. A statement of zeros for a company you expect to have data means the selected subsidiary is stale.
         - connector: rillet
           description: |
             Rillet's `/reports/balance-sheet` endpoint returns a point-in-time snapshot keyed by a single `as_of_date` parameter (required). The unified `filter[end_date]` is mapped to `as_of_date`, so pass it to retrieve the balance sheet as of that date. `filter[start_date]` is not applicable and is ignored — a balance sheet has no start date.
@@ -27212,6 +27226,7 @@ paths:
         - connector: netsuite
           description: |
             NetSuite date filtering resolves `filter[start_date]` and `filter[end_date]` to accounting period IDs via SuiteQL, then filters the SOAP request by those periods. This requires the SuiteAnalytics Workbook permission for period resolution. If the permission is unavailable, the report returns all-time data as a fallback. For best results, keep date ranges under 16 years (200 monthly periods).
+            If the connection's Default Subsidiary names a subsidiary that no longer exists, this report returns every figure at zero with a 200 rather than an error — that is indistinguishable from an entity with no activity. A statement of zeros for a company you expect to have data means the selected subsidiary is stale.
       responses:
         '200':
           $ref: '#/components/responses/GetProfitAndLossResponse'
@@ -30020,6 +30035,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            A **Default Subsidiary** on the connection scopes this list, and this list does not follow the same rule transactions do: a record marked "include children" in NetSuite **is** returned for every descendant subsidiary, whereas filtering transactions by a parent subsidiary is **not**.
         - connector: sage-intacct
           description: |
             Returns the full set of Intacct `LOCATION` records — every location, whether or not it
@@ -30332,6 +30348,7 @@ paths:
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
+            A **Default Subsidiary** on the connection scopes this list, and this list does not follow the same rule transactions do: a record marked "include children" in NetSuite **is** returned for every descendant subsidiary, whereas filtering transactions by a parent subsidiary is **not**.
         - connector: workday
           description: |
             Departments resource is not supported in Workday.
@@ -31288,6 +31305,9 @@ paths:
         - connector: afas
           description: |
             AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: netsuite
+          description: |
+            A **Default Subsidiary** on the connection scopes this list, and this list does not follow the same rule transactions do: a record marked "include children" in NetSuite **is** returned for every descendant subsidiary, whereas filtering transactions by a parent subsidiary is **not**.
       responses:
         '200':
           $ref: '#/components/responses/GetTrackingCategoriesResponse'
@@ -32141,6 +32161,7 @@ paths:
         - connector: netsuite
           description: |
             Listing expenses returns identifiers only. Each expense in the list has `id` set and the remaining fields — including `transaction_date` — empty, because NetSuite's credit card charge list endpoint returns references rather than full records. Fetch an expense by id to read its details. This list also never includes Credit Card Refund records (the reversal of a corporate card charge, created via a negative-amount `expensesAdd` — see the create operation's gotcha); it only enumerates Credit Card Charges.
+            Expenses are **not** scoped by subsidiary — neither the connection's Default Subsidiary setting nor the `x-apideck-company-id` header narrows this list, so every subsidiary's expenses are returned. The records do carry a subsidiary in NetSuite, but this list cannot be separated by entity.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -34705,6 +34726,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            `filter[subsidiary_id]` is rejected on this resource, so the `x-apideck-company-id` header is the only per-request override of the connection's Default Subsidiary. The connector rejects every other filter here too, including the `updated_since` and `status` the schema declares.
         - connector: microsoft-dynamics-365-business-central
           description: |
             If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
@@ -35145,6 +35169,9 @@ paths:
         - connector: afas
           description: |
             AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: netsuite
+          description: |
+            A **Default Subsidiary** on the connection scopes this list, and this list does not follow the same rule transactions do: a record marked "include children" in NetSuite **is** returned for every descendant subsidiary, whereas filtering transactions by a parent subsidiary is **not**.
       responses:
         '200':
           $ref: '#/components/responses/GetExpenseCategoriesResponse'

@@ -20243,6 +20243,12 @@ paths:
         - connector: moneybird
           description: |
             Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+
+            Moneybird's native purchase invoice `state` is normalized to unified `status` as follows: `open`, `late`,
+            and `pending_payment` all map to `submitted` (a booked bill awaiting payment — Moneybird has no distinct
+            unified `overdue` value, so an overdue bill reads as `submitted`, not `draft`); `new` maps to `draft`
+            (not yet booked); `saved` maps to `posted` (booked, no payment lifecycle); `paid` maps to `paid`. To
+            distinguish these underlying states (e.g. `late` vs `open`), read the native `state` via `raw: true`.
         - connector: rillet
           description: |
             Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -21257,6 +21263,12 @@ paths:
         - connector: moneybird
           description: |
             Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+
+            Moneybird's native invoice `state` is normalized to unified `status` as follows: `open`, `late`,
+            `reminded`, and `pending_payment` all map to `submitted` (a sent invoice awaiting payment — Moneybird
+            has no distinct unified `overdue`/`unpaid` value, so an overdue invoice reads as `submitted`, not `draft`);
+            `scheduled` maps to `draft` (not yet sent); `uncollectible` maps to `void`. To distinguish these
+            underlying states (e.g. `late` vs `open`), read the native `state` via `raw: true`.
         - connector: rillet
           description: |
             Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.

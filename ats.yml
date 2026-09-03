@@ -3228,6 +3228,16 @@ paths:
         - connector: greenhouse
           description: |
             Greenhouse does not expose a total record count in list responses. `meta.total_count` will not appear.
+
+            Recruiters, hiring managers, department name/hierarchy, addresses (office locations), openings, and the job post `location` are no longer returned on jobs. This data moved to separate Harvest V3 endpoints (job post locations to `/v3/job_post_locations`) and is not mapped; the department `id` is still returned. Custom fields on a job are returned as id/value pairs only — custom field names are no longer available.
+
+            Harvest V3 strictly validates query parameters and rejects unknown ones with HTTP 422 on any page, including the first. V1-era list filters such as `created_after`/`updated_after` were removed in V3, so sending them via `pass_through` fails immediately. On cursor-based follow-up pages (page 2+), Greenhouse additionally requires the cursor to be the only query parameter, so `pass_through` parameters cause an HTTP 422 there as well.
+
+            Harvest V3 cursor pagination is forward-only — Link headers carry only `rel="next"` — so `meta.cursors.previous` is always `null` and paging backwards is not possible.
+
+            The job `url` and `links` fields are populated from the post's public job board URL as returned by Greenhouse. Internal-only job posts have no public URL, so they are returned with `url: null` and empty `links`.
+
+            `status` reflects the job post's publication state, not the job's lifecycle: a live post reads `published`, and any active, non-live post reads `draft` — including posts of closed jobs — matching Harvest V3's own live/draft vocabulary for posts (there is no separate offline state). Archived posts read `status: null` with `deleted: true`. The job's open/closed lifecycle is not exposed on job posts.
         - connector: lever
           description: |
             Lever does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -3394,6 +3404,14 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: greenhouse
+          description: |
+            A job post id that no longer exists returns an error (HTTP 400, "Job post not found") rather than an empty 200 response. Job posts deleted in the Greenhouse UI — including posts removed by deleting their job — are permanently removed by Harvest V3 and return this error; they are not retrievable afterwards. Closing a job does not remove or archive its posts; they remain readable.
+
+            If Greenhouse marks a post inactive without deleting it, the connector transparently re-fetches with `active=false` and returns the record with `deleted: true`.
+
+            `status` reflects the job post's publication state, not the job's lifecycle: a live post reads `published`, and any active, non-live post reads `draft` — including posts of closed jobs — matching Harvest V3's own live/draft vocabulary for posts (there is no separate offline state). Archived posts read `status: null` with `deleted: true`. The job's open/closed lifecycle is not exposed on job posts.
       responses:
         '200':
           $ref: '#/components/responses/GetJobResponse'
@@ -3429,6 +3447,14 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: greenhouse
+          description: |
+            Harvest V3 job-post updates accept only `title`, `description_html` (mapped to `content`), and `status`. `location`, `visibility`, `code`, `deleted`, and `published_at` sent on update are silently ignored (200 OK, no write, no error).
+
+            `status` maps only `published` (the job post goes live) and `draft`; any other value or an absent `status` is ignored. Closing or archiving a job post via update is not possible.
+
+            Publishing (`status: published`) fails with HTTP 403 "User is not authorized to perform this action" when the Greenhouse job board the post belongs to has not itself been published. The error message is misleading — it is not a permission or OAuth scope problem. Publish the job board in Greenhouse (Configure → Job Boards & Posts) and retry.
       requestBody:
         required: true
         content:
@@ -3596,6 +3622,16 @@ paths:
         - connector: greenhouse
           description: |
             Greenhouse does not expose a total record count in list responses. `meta.total_count` will not appear.
+
+            Applications data and the `recruiter`/`coordinator` fields are no longer returned on applicants. Harvest V3 moved this data to the separate Application object (`/v3/applications`); the connector only calls it to create applications when `application_ids` is sent on applicant create.
+
+            `recruiter_id`/`coordinator_id` and `photo_url` sent on candidate create or update are silently ignored, and `application_ids`/`applications` sent on update are silently ignored as well (on create, `application_ids` is supported and attaches the new applicant to those jobs).
+
+            A Greenhouse connection whose OAuth refresh token is unused for more than 24 hours will expire and must be re-authorized in Vault before it can be used again.
+
+            Harvest V3 strictly validates query parameters and rejects unknown ones with HTTP 422 on any page, including the first. V1-era list filters such as `created_after`/`updated_after` were removed in V3, so sending them via `pass_through` fails immediately. On cursor-based follow-up pages (page 2+), Greenhouse additionally requires the cursor to be the only query parameter, so `pass_through` parameters cause an HTTP 422 there as well.
+
+            Harvest V3 cursor pagination is forward-only — Link headers carry only `rel="next"` — so `meta.cursors.previous` is always `null` and paging backwards is not possible.
         - connector: lever
           description: |
             Lever does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -3638,6 +3674,14 @@ paths:
         - $ref: '#/components/parameters/serviceId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: greenhouse
+          description: |
+            The `confidential` field is ignored on applicant create. Harvest V3 rejects a privacy flag in the create body under either name — `is_private` and `private` both return HTTP 422 "disallowed additional property" (verified live 2026-08-05, despite the official V3 reference documenting `private` on create) — so the connector does not send it and new applicants are always created non-confidential. To mark an applicant confidential, update the applicant after creation — `confidential` is supported on update.
+
+            `application_ids` attaches the new applicant to those jobs: after the candidate is created, the connector creates one Greenhouse application per id via `/v3/applications` (requires the `harvest:applications:create` OAuth scope — connections authorized before this scope was added must be re-authorized in Vault). If an application create fails, the request returns an error naming the created candidate id — the applicant then exists in Greenhouse without (all of) the job associations.
+
+            `recruiter_id`/`coordinator_id` and `photo_url` sent on applicant create are silently ignored.
       requestBody:
         required: true
         content:
@@ -3767,6 +3811,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: greenhouse
+          description: |
+            An applicant id that does not exist — including candidates deleted in Greenhouse — returns an error (HTTP 400, "Applicant not found") rather than an empty 200 response. Harvest V3 has no per-id endpoint; the connector fetches via `/candidates?ids={id}` and translates the empty result into this error.
       responses:
         '200':
           $ref: '#/components/responses/GetApplicantResponse'
@@ -3802,6 +3850,10 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: greenhouse
+          description: |
+            `application_ids`/`applications`, `recruiter_id`/`coordinator_id`, and `photo_url` sent on applicant update are silently ignored (200 OK, no write, no error). Harvest V3 moved applications and recruiter/coordinator assignment to the separate Application object (`/v3/applications`); the connector only creates applications from `application_ids` on applicant create, not on update.
       requestBody:
         required: true
         content:

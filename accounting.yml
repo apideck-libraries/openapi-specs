@@ -23967,6 +23967,14 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            The minimum page size accepted by NetSuite is 5 on an unfiltered, unsorted request; `limit` values below that on that path fail with `INVALID_SEARCH_PAGE_SIZE`. Passing any `filter[]`, `sort[]` or `pass_through[q]` routes the request to a different transport with no such minimum, so e.g. `?limit=1&sort[by]=id` succeeds. The cursor expires if not used within 15 minutes of creation.
+            `filter[subsidiary_id]` is only meaningful on NetSuite OneWorld accounts. On a standard (single-entity) account the underlying `subsidiary` column is unpopulated on every record, so the filter is not ignored — it matches nothing, and the request returns an empty list rather than the unfiltered result.
+            Passing any `filter[]`, `sort[]` or `pass_through[q]` also switches which downstream API call serves the list, and that path returns a narrower record: `allocations`, `line_items`, `custom_fields`, `tracking_categories`, `department` and `location` are only populated on the plain unfiltered/unsorted list. This is a limitation of the summary-level query NetSuite's SuiteQL endpoint supports for this transaction type, not something this connector currently works around — the same gap exists on the AR-side `credit-notes` resource.
+            `status` is derived differently depending on transport. On a filtered/sorted list, it is derived from NetSuite's internal SuiteQL status codes for this record type, confirmed against a real record for the open/draft state; the codes for `paid`/`voided` states are still unconfirmed and any unmatched code is currently misreported as `draft` rather than rejected. On the plain unfiltered/unsorted list, this record type does not return an explicit status field over the connector's default transport at all — status there is inferred from the record's outstanding balance (a non-zero balance reads as `draft`, a zero balance as `paid`); `voided` cannot be distinguished this way. Do not rely on `status` to detect a voided Vendor Credit on either transport without independently checking `balance`.
+            Header-level `location` is returned on read, but cannot be set on write (see the create gotcha below) — a value read back here can never be round-tripped through an update.
       responses:
         '200':
           $ref: '#/components/responses/GetBillCreditNotesResponse'
@@ -24006,6 +24014,10 @@ paths:
           description: |
             Setting `status` to `authorised` posts the credit memo; a draft remains editable while a posted one is immutable.
             `tax_inclusive` reflects the Vendor Card's "Prices Including VAT" setting and cannot be set directly. When `tax_inclusive: true` is sent for a document stored as tax-exclusive, each line's `unit_price` is written as its net value so the document totals match the sent tax-inclusive amounts.
+        - connector: netsuite
+          description: |
+            Header-level `location` could not be set on the account this was tested against — NetSuite rejected it with `INSUFFICIENT_PERMISSION`. That error usually names a role or feature-access restriction rather than a field that is universally unsettable, and this has not been confirmed against a second account, so treat it as tested-account-specific rather than general NetSuite behavior. `line_items[].location` is accepted; on a SuiteTax-enabled account it also participates in nexus (and therefore tax) determination for the line, so it is worth setting even where it looks like pure tracking metadata. `location` set at header level via `GET` is returned unchanged, so a caller can read a header `location` back without ever being able to write it through this connector.
+            On accounts with SuiteTax enabled (Enable Features → Tax → SuiteTax; NetSuite's default engine is Legacy Tax, so most accounts are unaffected), creating a Vendor Credit fails with `USER_ERROR: ... tax calculation engine ... tax registrations setup for the subsidiary ... is incomplete` unless the subsidiary's tax registration for that nexus either has a tax engine assigned or the nexus itself is marked tax-exempt — both are one-time account configuration, not something this connector can resolve. Only the legacy per-line tax fields (`tax_rate.id`, `tax_rate.rate`) are written; a SuiteTax tenant's transaction-level tax-details override (the mechanism `bills.add` uses) is not yet implemented here, so tax on a SuiteTax account may not be calculated correctly even once the nexus is configured.
       requestBody:
         required: true
         content:
@@ -24220,6 +24232,9 @@ paths:
         - connector: microsoft-dynamics-365-business-central
           description: |
             Updating `status` from `draft` to `authorised` posts the credit memo. A posted credit memo is immutable and can no longer be updated.
+        - connector: netsuite
+          description: |
+            Header-level `location` could not be set on the account this was tested against — NetSuite rejected it with `INSUFFICIENT_PERMISSION`, not confirmed as general NetSuite behavior (see the create gotcha on `POST /accounting/bill-credit-notes` for detail). `line_items[].location` is accepted, and on a SuiteTax-enabled account also participates in nexus/tax determination for the line.
       requestBody:
         required: true
         content:

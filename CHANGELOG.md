@@ -1,3 +1,9 @@
+## v10.47.0 - (2026-09-04)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [QuickBooks](connectors/quickbooks), backed by QuickBooks Online Vendor Credits — with full list, get, create, update and delete.
+
 ## v10.46.0 - (2026-09-02)
 
 ### Accounting API

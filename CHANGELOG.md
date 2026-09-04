@@ -1,3 +1,9 @@
+## v10.47.1 - (2026-09-04)
+
+### HRIS API
+
+- Added the employee personal email for [Lucca HR](connectors/lucca-hr) [Employees](apis/hris/reference/employees), returned as a second `emails[]` entry typed `personal` on both the list and get-by-id endpoints. The existing professional address is unchanged and stays first in the array, so anything reading `emails[0]` today is unaffected. The personal entry is only present when the employee has one on file in Lucca, so select it by `type` rather than by array position. One-off note: the new field changes each record's change-detection checksum, so existing connections using employee webhooks will see a single burst of `hris.employee.updated` covering every employee on the first sync after release.
+
 ## v10.47.0 - (2026-09-04)
 
 ### Accounting API

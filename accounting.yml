@@ -20175,7 +20175,9 @@ paths:
 
             To list all bills (paid + open), the customer must deploy a tenant-specific GetConnector (e.g. one over `FbInkfct`) and set its name on the connection via `purchase_invoices_connector`.
 
-            The `limit` parameter may return fewer bills than specified. AFAS returns flat purchase-invoice line rows which are grouped by `OrderNumber` into complete bills. `limit=N` caps the raw row count, not the grouped bill count, so a single `limit=10` request can return 3 bills (rows span 3 invoices) or 10 (every row is a different invoice).
+            `Profit_Creditor_Invoices` returns one flat row per bill (header only) — there is no line-item detail, so `line_items` is always empty and `limit=N` directly caps the number of bills returned, one row per bill.
+
+            `status` is always reported as `authorised`: this GetConnector exposes no status field, so the real payment/void state of a bill (paid, draft, void) cannot be determined from it. `sub_total` and `total` are always equal for the same reason — the connector exposes a single invoice amount, with no separate pre-tax/tax breakdown, so `total_tax` is always `0`.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: freshbooks
@@ -20509,6 +20511,13 @@ paths:
             computes a nonzero VAT for that line regardless, the resulting mismatch causes Twinfield to
             reject the write with its own balance error rather than silently posting an unbalanced
             amount.
+        - connector: afas
+          description: |
+            On tenants without a dedicated purchase-invoice booking connector configured (see the
+            `bills.all` gotcha above), a created bill is not immediately retrievable via `bills.one` or
+            `bills.all` — it is recorded in AFAS's purchase-order system rather than the invoice-booking
+            system those read operations query. Reading it back requires the same tenant-specific
+            GetConnector setup described for listing bills.
       requestBody:
         required: true
         content:
@@ -29054,6 +29063,11 @@ paths:
         - connector: afas
           description: |
             AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+
+            Most AFAS tenants have no purchase-order GetConnector configured out of the box — this
+            resource returns an error rather than an empty list until the tenant deploys one. If its
+            name differs from the Apideck default (`Profit_PurchaseOrders`), pass it per call via
+            `pass_through[purchase_orders_connector]=YourConnectorName`.
         - connector: myob-acumatica
           description: |
             The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
@@ -30800,6 +30814,15 @@ paths:
           description: Intuit Enterprise Suite limits attachment uploads to 100MB.
         - connector: xero
           description: Xero limits to 10 attachments per resource (invoices/bills) of 3.5MB each.
+        - connector: afas
+          description: |
+            An uploaded file is linked to the invoice's or bill's customer/supplier, not to the specific
+            invoice or bill record itself. It will not appear when listing attachments filtered to the
+            `reference_id` it was uploaded against — list attachments by that customer/supplier's other
+            records, or fetch the attachment by the `id` returned from the upload response, to find it.
+
+            Requires a per-tenant AFAS SubjectType code, passed per call as
+            `pass_through[subject_type_id]=<code>`. A file name with no extension is rejected.
       responses:
         '201':
           $ref: '#/components/responses/CreateAttachmentResponse'

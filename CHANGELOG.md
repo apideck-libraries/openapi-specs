@@ -1,3 +1,9 @@
+## v10.50.0 - (2026-09-07)
+
+### CRM API
+
+- Added `filter[status_id]` to [Opportunities](apis/crm/reference/opportunities) to filter on the identifier of an opportunity's status — the same value returned in `status_id`. Mapped for [Close](connectors/close), [Odoo](connectors/odoo), [Microsoft Dynamics CRM](connectors/microsoft-dynamics) and [Attio](connectors/attio).
+
 ## v10.49.0 - (2026-09-07)
 
 ### Ecommerce API

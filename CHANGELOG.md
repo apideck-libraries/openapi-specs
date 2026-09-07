@@ -1,3 +1,9 @@
+## v10.51.0 - (2026-09-07)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Zoho Books](connectors/zoho-books), backed by Zoho Books Vendor Credits — with full list, get, create, update and delete.
+
 ## v10.50.0 - (2026-09-07)
 
 ### CRM API

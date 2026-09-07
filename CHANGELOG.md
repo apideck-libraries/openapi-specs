@@ -1,3 +1,9 @@
+## v10.49.0 - (2026-09-07)
+
+### Ecommerce API
+
+- Added read-only `tax_status` enum to [Products](apis/ecommerce/reference/products) on both list and get-by-id, indicating the product's tax applicability: `taxable` (the product is taxed), `shipping` (only the shipping is taxed, the product itself is exempt) or `none` (neither is taxed). Populated on [WooCommerce](connectors/woocommerce), whose native `tax_status` uses the same three values, so `shipping` is preserved as a distinct value rather than collapsed into `none`. The field is not populated on other ecommerce connectors yet; WooCommerce `tax_class` and `shipping_taxable` remain available via `?raw=true` only.
+
 ## v10.48.0 - (2026-09-04)
 
 ### Accounting API

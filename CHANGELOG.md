@@ -1,3 +1,9 @@
+## v10.48.0 - (2026-09-04)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Intuit Enterprise Suite](connectors/intuit-enterprise-suite), backed by Intuit Vendor Credits — with full list, get, create, update and delete.
+
 ## v10.47.1 - (2026-09-04)
 
 ### HRIS API

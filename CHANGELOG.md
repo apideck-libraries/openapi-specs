@@ -1,3 +1,9 @@
+## v10.52.0 - (2026-09-07)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Xero](connectors/xero), backed by Xero credit notes of type `ACCPAYCREDIT` — with full list, get, create, update and delete.
+
 ## v10.51.0 - (2026-09-07)
 
 ### Accounting API

@@ -8,6 +8,16 @@
 
 ### Accounting API
 
+### ACTION REQUIRED
+
+Beta users should note the following breaking change that may affect existing integrations implementing the `Accounting` API:
+
+- The `reference.type` enum on [Attachments](apis/accounting/reference/attachments) gains a new value, `journal-entry`. A strictly-typed client generated against the previous enum set may reject this value; the Apideck SDKs handle unknown enum values gracefully and are unaffected.
+
+- Added the [Journals](apis/accounting/reference/journals) resource (beta) — a list of an accounting system's journal types/daybooks (general, sales, purchase, cash, bank), distinct from individual [Journal Entries](apis/accounting/reference/journal-entries). Read support for [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central), [SnelStart](connectors/snelstart), [Odoo](connectors/odoo), [Fortnox](connectors/fortnox), [Sage Intacct](connectors/sage-intacct), [Pennylane](connectors/pennylane), [Twinfield](connectors/twinfield), [Exact Online](connectors/exact-online), [Exact Online NL](connectors/exact-online-nl) and [Exact Online UK](connectors/exact-online-uk); full create, update and delete support for [Odoo](connectors/odoo); create support for [Pennylane](connectors/pennylane) and [Exact Online](connectors/exact-online) (all three Exact Online variants).
+- Added journal-entry attachment support: [Journal Entries](apis/accounting/reference/journal-entries) now expose an `attachments` reference, with support for [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central), [Exact Online NL](connectors/exact-online-nl), [Zoho Books](connectors/zoho-books) and [Fortnox](connectors/fortnox).
+- Added full [Journal Entries](apis/accounting/reference/journal-entries) create, update and delete support for [MYOB](connectors/myob) and [FreeAgent](connectors/freeagent).
+- Fixed foreign-currency [Journal Entries](apis/accounting/reference/journal-entries) on [AFAS](connectors/afas): base-currency debit/credit amounts are now written correctly, and line items expose a `base_currency_amount` field.
 - Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Xero](connectors/xero), backed by Xero credit notes of type `ACCPAYCREDIT` — with full list, get, create, update and delete.
 
 ## v10.51.0 - (2026-09-07)

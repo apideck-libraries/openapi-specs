@@ -1189,6 +1189,36 @@ components:
           schema:
             type: string
             format: binary
+    GetJournalsResponse:
+      description: Journals
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetJournalsResponse'
+    GetJournalResponse:
+      description: Journals
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetJournalResponse'
+    CreateJournalResponse:
+      description: Journals
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateJournalResponse'
+    UpdateJournalResponse:
+      description: Journals
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateJournalResponse'
+    DeleteJournalResponse:
+      description: Journals
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteJournalResponse'
     GetTrackingCategoriesResponse:
       description: Tracking categories
       content:
@@ -9619,6 +9649,7 @@ components:
         row_version: edge-case
         custom_fields: medium
         tax_inclusive: medium
+        attachments: edge-case
       x-apideck-strict-required:
         - line_items
       properties:
@@ -9683,7 +9714,7 @@ components:
         journal_symbol:
           type: string
           title: Journal symbol
-          description: Journal symbol of the entry. For example IND for indirect costs
+          description: Journal symbol of the entry. For example IND for indirect costs. Where supported, list /accounting/journals to discover available journals and their posting rules. For Exact Online, supply the journal code, not its id.
           example: IND
           nullable: true
         tax_type:
@@ -9707,6 +9738,11 @@ components:
           $ref: '#/components/schemas/AccountingPeriod'
         tax_inclusive:
           $ref: '#/components/schemas/TaxInclusive'
+        attachments:
+          type: array
+          description: Files attached to this journal entry. Use the attachments endpoints with reference_type=journal-entry and this entry's id where the connector supports it.
+          items:
+            $ref: '#/components/schemas/LinkedAttachment'
         source_type:
           type: string
           title: Source Type
@@ -9815,6 +9851,7 @@ components:
         tax_amount: high
         sub_total: medium
         total_amount: high
+        base_currency_amount: medium
         type: critical
         tax_rate: medium
         tax_type: edge-case
@@ -9863,6 +9900,12 @@ components:
           type: number
           title: Total amount
           description: Debit entries are considered positive, and credit entries are considered negative.
+          example: 27500
+          nullable: true
+        base_currency_amount:
+          type: number
+          title: Base currency amount
+          description: Amount for this line in the company's base currency. Used when the journal entry currency differs from the company's base currency.
           example: 27500
           nullable: true
         type:
@@ -10290,7 +10333,7 @@ components:
           nullable: true
         is_compressed:
           type: boolean
-          description: Whether the file is c ompressed.
+          description: Whether the file is compressed.
           example: false
           nullable: true
         encoding:
@@ -14382,9 +14425,11 @@ components:
         - invoice
         - bill
         - bill-credit-note
+        - credit-note
         - expense
         - expense-report
         - quote
+        - journal-entry
     GetAttachmentsResponse:
       type: object
       required:
@@ -14703,6 +14748,267 @@ components:
           $ref: '#/components/schemas/TrackingCategory'
         meta:
           $ref: '#/components/schemas/Meta'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    Journal:
+      type: object
+      x-apideck-schema-id: Journal
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        code: critical
+        name: critical
+        description: medium
+        type: critical
+        allow_vat: medium
+        currency: medium
+        iban: edge-case
+        default_account: high
+        blocked: medium
+        created_at: medium
+        updated_at: medium
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        code:
+          type: string
+          title: Journal code
+          description: Code used to select this journal when posting entries. For Exact Online, pass this code as journal_symbol, not the journal id.
+          example: '90'
+          nullable: true
+        name:
+          type: string
+          title: Journal name
+          description: Name of the journal.
+          example: General journal
+          nullable: true
+        description:
+          type: string
+          title: Description
+          description: Description of the journal.
+          example: General journal
+          nullable: true
+        type:
+          type: string
+          title: Journal type
+          description: Normalized journal classification.
+          enum:
+            - general
+            - sales
+            - purchase
+            - sales_credit_note
+            - purchase_credit_note
+            - cash
+            - bank
+            - payment_service
+            - other
+          x-apideck-enum-id: journal.type
+          example: general
+          nullable: true
+        allow_vat:
+          type: boolean
+          title: Allow VAT
+          description: Whether the journal permits VAT on entries. Null or absent means unknown. Exact Online exposes this setting for general journals; it must not be treated as a universal VAT capability flag for other journal types.
+          example: true
+          nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
+        iban:
+          $ref: '#/components/schemas/IBAN'
+        default_account:
+          $ref: '#/components/schemas/LinkedFinancialAccount'
+        blocked:
+          type: boolean
+          title: Blocked
+          description: Whether the journal is blocked for posting.
+          example: false
+          nullable: true
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+    GetJournalsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: exact-online
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journals
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Journal'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetJournalResponse:
+      type: object
+      x-apideck-schema-id: GetJournalResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: exact-online
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journals
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/Journal'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    CreateJournalResponse:
+      type: object
+      x-apideck-schema-id: CreateJournalResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: exact-online
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journals
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    UpdateJournalResponse:
+      type: object
+      x-apideck-schema-id: UpdateJournalResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: exact-online
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journals
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    DeleteJournalResponse:
+      type: object
+      x-apideck-schema-id: DeleteJournalResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: exact-online
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journals
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
         _raw:
           $ref: '#/components/schemas/Raw'
     GetTrackingCategoriesResponse:
@@ -19618,6 +19924,11 @@ tags:
     x-apideck-resource-id: bank-accounts
     x-apideck-model:
       $ref: '#/components/schemas/AccountingBankAccount'
+  - name: Journals
+    description: Journals are daybooks used to group accounting entries and configure posting rules.
+    x-apideck-resource-id: journals
+    x-apideck-model:
+      $ref: '#/components/schemas/Journal'
   - name: Tracking Categories
     description: A Tracking Category represents a classification dimension for reporting, including name, code, status, and parent category for hierarchies.
     x-apideck-resource-id: tracking-categories
@@ -27539,6 +27850,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Line items must balance to zero — FreeAgent rejects the whole entry otherwise, rather than
+            accepting it and leaving the books unbalanced. Only `ledger_account`, `total_amount`,
+            `type` and `description` are supported per line; a category that requires an associated
+            user, stock item, capital asset, property, or contact (used for opening balances and a
+            handful of specialised ledger accounts) cannot be targeted through this connector.
         - connector: e-boekhouden
           description: |
             The first line item becomes the entry's own ledger account; every other line item becomes
@@ -27663,6 +27981,24 @@ paths:
         - connector: sap-s4hana-cloud
           description: |
             `company_id` is required and maps to SAP `CompanyCode`. The following header fields are hardcoded with SAP-standard defaults and cannot be overridden: `BusinessTransactionType=RFBU`, `OriginalReferenceDocumentType=BKPFF`, `AccountingDocumentType=SA`.
+        - connector: exact-online
+          description: |
+            A validation refusal — an unbalanced entry, an unknown or inactive reference (ledger
+            account, journal, VAT code, currency), or a missing required field — returns `422` with
+            the specific reason named. Any other `500` is a genuine unexpected downstream failure,
+            not a refusal the request itself caused.
+        - connector: exact-online-nl
+          description: |
+            A validation refusal — an unbalanced entry, an unknown or inactive reference (ledger
+            account, journal, VAT code, currency), or a missing required field — returns `422` with
+            the specific reason named. Any other `500` is a genuine unexpected downstream failure,
+            not a refusal the request itself caused.
+        - connector: exact-online-uk
+          description: |
+            A validation refusal — an unbalanced entry, an unknown or inactive reference (ledger
+            account, journal, VAT code, currency), or a missing required field — returns `422` with
+            the specific reason named. Any other `500` is a genuine unexpected downstream failure,
+            not a refusal the request itself caused.
       requestBody:
         required: true
         content:
@@ -27703,6 +28039,7 @@ paths:
                   tax_amount: 27500
                   sub_total: 27500
                   total_amount: 27500
+                  base_currency_amount: 27500
                   type: debit
                   tax_rate:
                     id: '123456'
@@ -27773,6 +28110,7 @@ paths:
                   tax_amount: 27500
                   sub_total: 27500
                   total_amount: 27500
+                  base_currency_amount: 27500
                   type: debit
                   tax_rate:
                     id: '123456'
@@ -27854,6 +28192,13 @@ paths:
                   parent_name: New York
               accounting_period: 01-24
               tax_inclusive: true
+              attachments:
+                - name: sample.jpg
+                  mime_type: image/jpeg
+                  is_compressed: false
+                  encoding: base64
+                  content: data:image/jpeg;base64,...
+                  notes: A sample image
               source_type: manual
               source_id: '12345'
               row_version: 1-12345
@@ -27924,6 +28269,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Line items must balance to zero. Only `ledger_account`, `total_amount`, `type` and
+            `description` are supported per line; a category that requires an associated user, stock
+            item, capital asset, property, or contact cannot be targeted through this connector. A
+            line included in the update is modified in place; lines from the existing entry that are
+            left out of the request are not removed.
         - connector: procountor-fi
           description: |
             Procountor only accepts the following values for the tax_code field: SALES, PURCHASE.
@@ -27985,6 +28337,14 @@ paths:
             Only `status: "posted"` is supported for state transitions. Other values (`draft`, `voided`, etc.) are not supported — the entry will be updated but will remain in Balanced state.
             Updating a posted journal entry returns an error — only `memo` can be updated on a posted entry. To correct a posted entry, use Reverse or Reclassify in MYOB Advanced.
             If the release step fails after a successful update, the entry will exist in MYOB Advanced in Balanced state and the API will return an error. The update is not rolled back.
+        - connector: myob
+          description: |
+            MYOB has no draft or pending-approval workflow for journal entries — every entry posts immediately
+            on create, so `status` is always `posted`.
+
+            Updates replace the whole record rather than patching individual fields: `posted_at`, `line_items`
+            and `row_version` must all be sent on every update, even to change only `memo`. `row_version` must
+            be the value most recently returned for that entry — a stale or missing value is rejected.
       requestBody:
         required: true
         content:
@@ -28026,6 +28386,7 @@ paths:
                   tax_amount: 27500
                   sub_total: 27500
                   total_amount: 27500
+                  base_currency_amount: 27500
                   type: debit
                   tax_rate:
                     id: '123456'
@@ -28096,6 +28457,7 @@ paths:
                   tax_amount: 27500
                   sub_total: 27500
                   total_amount: 27500
+                  base_currency_amount: 27500
                   type: debit
                   tax_rate:
                     id: '123456'
@@ -28177,6 +28539,13 @@ paths:
                   parent_name: New York
               accounting_period: 01-24
               tax_inclusive: true
+              attachments:
+                - name: sample.jpg
+                  mime_type: image/jpeg
+                  is_compressed: false
+                  encoding: base64
+                  content: data:image/jpeg;base64,...
+                  notes: A sample image
               source_type: manual
               source_id: '12345'
               row_version: 1-12345
@@ -30692,7 +31061,15 @@ paths:
             QuickBooks Online does not expose a reliable cross-page total record count. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
         - connector: microsoft-dynamics-365-business-central
           description: |
-            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central.
+            Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
+
+            For `reference_type` values `journal-entry` and `expense`, `id` is a document number rather
+            than a single Business Central record — both group every ledger line that shares that
+            document number into one unified record. Listing attachments for one of these returns every
+            file attached to any of its lines. If a document number is shared between an unposted/default
+            grouping used for both `expense` and `journal-entry`, the same attachments can appear under
+            both `reference_type` values for that document number.
         - connector: myob
           description: |
             Attachments are supported on bills only. MYOB has no attachment support on invoices,
@@ -30719,6 +31096,18 @@ paths:
         - connector: afas
           description: |
             AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: exact-online
+          description: |
+            Journal-entry attachments are not exposed by Exact Online's Journals or general journal-entry endpoints. Use pass-through against `/api/v1/{division}/documents/DocumentAttachments` for native document attachment records; link the returned document ID to the journal entry.
+        - connector: exact-online-nl
+          description: |
+            `reference_id` here is not the invoice, bill, or journal entry ID itself — it is the ID of Exact's separate `Document` object. For journal entries, `GET /journal-entries/{id}` already resolves and returns it as a `custom_fields` entry (`id: "exact_document_id"`) when Exact has a linked document; use that value as `reference_id`. For other record types, look it up yourself with `pass_through[$filter]=FinancialTransactionEntryID eq guid'{record_id}'` against `/api/v1/{division}/documents/Documents`, using the unified record's own `id` as `{record_id}`; the matching `Document.ID` is what goes in the `reference_id` path segment here. This list has no server-side total count, so pagination metadata never includes a count.
+        - connector: exact-online-uk
+          description: |
+            Journal-entry attachments are not exposed by Exact Online's Journals or general journal-entry endpoints. Use pass-through against `/api/v1/{division}/documents/DocumentAttachments` for native document attachment records; link the returned document ID to the journal entry.
+        - connector: zoho-books
+          description: |
+            Zoho Books has no standalone attachments-listing endpoint; attachment metadata is nested inside each record's own detail response as a `documents` array. `reference_id` here is the record's own unified `id` (no separate lookup needed) for `invoice`, `bill`, `expense`, and `journal-entry`, and `credit-note`. The `credit-note` list route is not live-verified — if Zoho's real credit-note detail response omits the `documents` array (unconfirmed either way), listing returns an empty result rather than an error; upload is unaffected either way.
       responses:
         '200':
           $ref: '#/components/responses/GetAttachmentsResponse'
@@ -31291,6 +31680,280 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DeleteBankAccountResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/journals:
+    get:
+      tags:
+        - Journals
+      operationId: journalsAll
+      summary: List Journals
+      description: List the journals (daybooks) available for posting accounting entries, including their codes, types, and VAT settings.
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            `type` is derived from the daybook code (e.g. purchase, sales, bank, general); a code outside that known set reports as `other`. `allow_vat` and `currency` are not exposed and are always absent. `default_account` is only present for `bank`/`cash`-type journals, where it references the same account returned by `bank-accounts`; other journal types have no linked account and omit the field.
+        - connector: exact-online
+          description: |
+            Use code as journal_symbol when creating a journal entry. The id is Exact's journal GUID. allow_vat applies to general journals (type general). Select the division with x-apideck-company-id, or the connection's default division. This list has no server-side total count, so pagination metadata never includes a count.
+        - connector: exact-online-nl
+          description: |
+            Use code as journal_symbol when creating a journal entry. allow_vat applies to general journals. x-apideck-company-id selects the division. This list has no server-side total count, so pagination metadata never includes a count.
+        - connector: exact-online-uk
+          description: |
+            Use code as journal_symbol when creating a journal entry. allow_vat applies to general journals. x-apideck-company-id selects the division. This list has no server-side total count, so pagination metadata never includes a count.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            `code` is the value to use for the connection's expense/bill-payment journal batch settings (e.g. an integration configured with journal batch "DEFAULT" posts unposted expenses and bill payments into the journal listed here with that code). `allow_vat` and `currency` are not exposed and are always absent.
+        - connector: fortnox
+          description: |
+            Use `code` as `journal_symbol` when creating a journal entry — it is the same series letter (e.g. "A") used there. `type` is derived from whether the series is manually posted to: manual series report as `general`, and every other series (invoice series, and any other automated series) reports as `other`, since Fortnox does not expose a specific sales/purchase/cash/bank category for non-manual series; `allow_vat` and `currency` are not exposed and are always absent.
+        - connector: sage-intacct
+          description: |
+            Use `code` as `journal_symbol` when creating a journal entry — it is the same symbol (e.g. "GJ") already used there. Sage Intacct journals carry no category of their own, so `type` is always `general`; `allow_vat` and `currency` are not exposed and are always absent.
+        - connector: pennylane
+          description: |
+            `type` values beyond `purchase`, `sales`, `bank`, `cash` and `general` are not distinguished and are surfaced as `other`. `allow_vat` and `currency` are not exposed and are always absent.
+        - connector: afas
+          description: |
+            `type` may return `bank` for a journal that is actually a cash account, or vice versa — AFAS does not expose a distinct category for these two types at the API level. `allow_vat` and `currency` are not exposed and are always absent.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetJournalsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Journals
+      operationId: journalsAdd
+      summary: Create Journal
+      description: Create Journal
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            `type` is required — Odoo's underlying account.journal model has no default and rejects a create with it omitted. Use one of `sales`, `purchase`, `cash`, `bank` or `general`.
+            `currency` cannot be set on create — it is returned when reading a journal but is not accepted as an input field. New journals use the company's default currency.
+        - connector: exact-online
+          description: |
+            `type: bank` requires `iban` — Exact needs a bank account reference to create a bank journal. `type: payment_service` requires a payment service provider reference that has no equivalent in this unified field set — creating a journal with that type will be rejected by Exact. Use `pass_through` to supply the required vendor field if you need `payment_service`, or use `sales`, `sales_credit_note`, `purchase`, `purchase_credit_note`, `cash` or `general` instead.
+            `type: other` has no Exact equivalent and will be rejected — `other` is a read-side fallback for values Exact might introduce in the future, not a valid input.
+        - connector: exact-online-nl
+          description: |
+            `type: bank` requires `iban` — Exact needs a bank account reference to create a bank journal. `type: payment_service` requires a payment service provider reference that has no equivalent in this unified field set — creating a journal with that type will be rejected by Exact. Use `pass_through` to supply the required vendor field if you need `payment_service`, or use `sales`, `sales_credit_note`, `purchase`, `purchase_credit_note`, `cash` or `general` instead.
+            `type: other` has no Exact equivalent and will be rejected — `other` is a read-side fallback for values Exact might introduce in the future, not a valid input.
+        - connector: exact-online-uk
+          description: |
+            `type: bank` requires `iban` — Exact needs a bank account reference to create a bank journal. `type: payment_service` requires a payment service provider reference that has no equivalent in this unified field set — creating a journal with that type will be rejected by Exact. Use `pass_through` to supply the required vendor field if you need `payment_service`, or use `sales`, `sales_credit_note`, `purchase`, `purchase_credit_note`, `cash` or `general` instead.
+            `type: other` has no Exact equivalent and will be rejected — `other` is a read-side fallback for values Exact might introduce in the future, not a valid input.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Journal'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateJournalResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            journal:
+              code: '90'
+              name: General journal
+              description: General journal
+              type: general
+              allow_vat: true
+              currency: USD
+              iban: GB33BUKB20201555555555
+              default_account:
+                id: '123456'
+                type: ledger_account
+                code: '1100'
+                display_id: '123456'
+                account_number: '123465'
+              blocked: false
+  /accounting/journals/{id}:
+    get:
+      tags:
+        - Journals
+      operationId: journalsOne
+      summary: Get Journal
+      description: Get Journal
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/GetJournalResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+    patch:
+      tags:
+        - Journals
+      operationId: journalsUpdate
+      summary: Update Journal
+      description: Update Journal
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: odoo
+          description: |
+            `currency` cannot be changed on update — it is returned when reading a journal but is not accepted as an input field.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Journal'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateJournalResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            journal:
+              code: '90'
+              name: General journal
+              description: General journal
+              type: general
+              allow_vat: true
+              currency: USD
+              iban: GB33BUKB20201555555555
+              default_account:
+                id: '123456'
+                type: ledger_account
+                code: '1100'
+                display_id: '123456'
+                account_number: '123465'
+              blocked: false
+    delete:
+      tags:
+        - Journals
+      operationId: journalsDelete
+      summary: Delete Journal
+      description: Delete Journal
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteJournalResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':

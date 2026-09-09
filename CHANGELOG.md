@@ -1,3 +1,9 @@
+## v10.53.0 - (2026-09-08)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Sage Intacct](connectors/sage-intacct), backed by Sage Intacct AP Adjustments — with full list, get, create, update and delete.
+
 ## v10.52.0 - (2026-09-07)
 
 ### Accounting API

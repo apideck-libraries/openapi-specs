@@ -1,3 +1,9 @@
+## v10.54.0 - (2026-09-11)
+
+### Accounting API
+
+- Added new [Lexware Office](connectors/lexware-office) connector (formerly lexoffice), a German SMB accounting platform, with native webhook support. List, get and create for [Invoices](apis/accounting/reference/invoices) and [Credit Notes](apis/accounting/reference/credit-notes) (no update or delete — the vendor has no path to modify a financial document once created); list, get, create and update for [Bills](apis/accounting/reference/bills) (create requires a finalized status — the vendor has no draft-bill endpoint); list, get, create and update for [Customers](apis/accounting/reference/customers) and [Suppliers](apis/accounting/reference/suppliers) (shared contacts endpoint, server-side `customer`/`vendor` role filter, no delete); and read-only, list-only [Ledger Accounts](apis/accounting/reference/ledger-accounts). [Payments](apis/accounting/reference/payments), [Journal Entries](apis/accounting/reference/journal-entries), [Journals](apis/accounting/reference/journals) and [Tax Rates](apis/accounting/reference/tax-rates) are unsupported — the vendor has no API surface for any of the four.
+
 ## v10.53.0 - (2026-09-08)
 
 ### Accounting API

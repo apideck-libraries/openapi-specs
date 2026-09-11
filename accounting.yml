@@ -20599,6 +20599,16 @@ paths:
 
             Date narrowing is supported via `filter[billed_since]` (invoice document date on or after)
             and `filter[due_since]` (invoice due date on or after).
+        - connector: lexware-office
+          description: |
+            This list always excludes overdue bills — the vendor's status filter rejects any request
+            that combines an overdue filter with other statuses. This connector does not implement
+            any filters on this resource (including `filter[status]`), so there is no way to request
+            overdue bills on their own. An overdue bill is still reachable via `bills.one` by id.
+
+            `sub_total` and `total_tax` are not returned on this list — the vendor's list endpoint
+            is a lighter summary view than the get-by-id response. Fetch the bill by `id` for those
+            fields.
       responses:
         '200':
           $ref: '#/components/responses/GetBillsResponse'
@@ -20687,6 +20697,12 @@ paths:
             `reference` and `bill_number` do not collide (`Reference` and `InvoiceNumber` respectively), but Xero documents `InvoiceNumber` as the value that "will also display as Reference in the UI" on ACCPAY, and treats the `Reference` field as ACCREC-only. A value sent in `reference` therefore round-trips through the API without appearing in the Xero bill UI. See https://developer.xero.com/documentation/api/accounting/invoices
 
             On read, `bill_number` and `po_number` are both mapped from `InvoiceNumber` and are always identical — Xero's Invoice object has no separate purchase-order-number field.
+        - connector: lexware-office
+          description: |
+            Bills can only be created in a finalized state — `status: "draft"` is rejected with a
+            `400` explaining the limitation, rather than silently creating a finalized bill. Lexware
+            Office's own create endpoint for this document type accepts only its finalized status
+            value, with no draft option.
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
@@ -21610,6 +21626,16 @@ paths:
         - connector: quickbooks-desktop
           description: |
             QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: lexware-office
+          description: |
+            This list always excludes overdue invoices — the vendor's status filter rejects any
+            request that combines an overdue filter with other statuses, and there is no unified
+            `filter[status]` on this resource to request overdue invoices on their own. An overdue
+            invoice is still reachable via `invoices.one` by id.
+
+            `due_date`, `sub_total`, `total_tax` and `billing_address` are not returned on this list
+            — the vendor's list endpoint is a lighter summary view than the get-by-id response. Fetch
+            the invoice by `id` for those fields.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoicesResponse'
@@ -22578,6 +22604,11 @@ paths:
         - connector: acumatica
           description: |
             The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
+        - connector: lexware-office
+          description: |
+            Ledger accounts are read-only and list-only on this connector — there is no get-by-id,
+            create, update or delete. The vendor's own reference list has no per-record endpoint of
+            its own.
       responses:
         '200':
           $ref: '#/components/responses/GetLedgerAccountsResponse'
@@ -23593,6 +23624,16 @@ paths:
             Line items are only available on the detail endpoint (get one), not on the list endpoint.
 
             Write operations (create, update, delete) are not supported on the credit-notes resource. Create a credit note via the invoices endpoint with negative line amounts — MYOB then sets its Status to "Credit" — and update or delete the underlying invoice record the same way.
+        - connector: lexware-office
+          description: |
+            This list always excludes overdue credit notes — the vendor's status filter rejects any
+            request that combines an overdue filter with other statuses, and there is no unified
+            `filter[status]` on this resource to request overdue credit notes on their own. An
+            overdue credit note is still reachable via `credit-notes.one` by id.
+
+            `sub_total` and `total_tax` are not returned on this list — the vendor's list endpoint
+            is a lighter summary view than the get-by-id response. Fetch the credit note by `id` for
+            those fields.
       responses:
         '200':
           $ref: '#/components/responses/GetCreditNotesResponse'
@@ -24901,6 +24942,13 @@ paths:
         - connector: acumatica
           description: |
             The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
+        - connector: lexware-office
+          description: |
+            The vendor emits a single, undifferentiated contact-change webhook event for both
+            customers and suppliers, with no role information in the notification payload — this
+            connector resolves it to the correct `customer.updated`/`supplier.updated` event by
+            looking up the contact's role before delivery. A contact that is both a customer and a
+            supplier always delivers as `customer.updated`.
       responses:
         '200':
           $ref: '#/components/responses/GetCustomersResponse'
@@ -25515,6 +25563,13 @@ paths:
         - connector: acumatica
           description: |
             The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
+        - connector: lexware-office
+          description: |
+            The vendor emits a single, undifferentiated contact-change webhook event for both
+            customers and suppliers, with no role information in the notification payload — this
+            connector resolves it to the correct `customer.updated`/`supplier.updated` event by
+            looking up the contact's role before delivery. A contact that is both a customer and a
+            supplier always delivers as `customer.updated`.
       responses:
         '200':
           $ref: '#/components/responses/GetSuppliersResponse'

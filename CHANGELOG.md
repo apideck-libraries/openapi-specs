@@ -1,3 +1,9 @@
+## v10.55.0 - (2026-09-14)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Odoo](connectors/odoo), backed by Odoo vendor credit notes (`account.move` with `move_type=in_refund`) — with full list, get, create, update and delete.
+
 ## v10.54.0 - (2026-09-11)
 
 ### Accounting API

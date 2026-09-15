@@ -1,3 +1,9 @@
+## v10.56.1 - (2026-09-15)
+
+### Accounting API
+
+- Fixed line-level tax on [Odoo](connectors/odoo) [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes) and [Bill Credit Notes](apis/accounting/reference/bill-credit-notes). A `line_items[].tax_rate` sent on create/update was silently dropped, so records were stored untaxed; tax is now written from `line_items[].tax_rate.id`. On read, each line now surfaces `tax_rate` and `tax_amount` (a line with multiple Odoo taxes reports `tax_amount` but no `tax_rate`, since a single `tax_rate` cannot represent several). The document-total mappings are unchanged, but because Odoo now applies the line tax, `total_tax`/`total_amount` on a taxed record reflect it (previously such a record was stored untaxed).
+
 ## v10.56.0 - (2026-09-15)
 
 ### Ecommerce API

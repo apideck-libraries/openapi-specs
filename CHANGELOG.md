@@ -1,3 +1,13 @@
+## v10.56.0 - (2026-09-15)
+
+### Ecommerce API
+
+- Added four granular order webhook event types: `ecommerce.order.paid`, `ecommerce.order.shipped`, `ecommerce.order.refunded` and `ecommerce.order.delivered`. [Shopify](connectors/shopify) now emits the first three.
+- `ecommerce.order.paid`, `ecommerce.order.shipped` and `ecommerce.order.refunded` are emitted **in addition to** `ecommerce.order.updated` for the same underlying change — existing subscribers to `ecommerce.order.updated` receive exactly the same events as before, and no subscription needs changing. A wildcard (`*`) subscription now receives **two** deliveries per payment, fulfilment or refund instead of one, and each delivered event counts as one billable webhook.
+- No ordering is guaranteed between the granular event and `ecommerce.order.updated`. They are separate HTTP deliveries with separate idempotency keys; treat each as independently complete.
+- `ecommerce.order.shipped` fires on **partial** fulfilment as well as full. The order's `fulfillment_status` field distinguishes them: `partial` versus `shipped`.
+- `ecommerce.order.delivered` is declared but **not emitted by any connector** — no supported ecommerce platform exposes a delivery-confirmation signal today. It is declared so the contract is stable if one becomes available.
+
 ## v10.55.3 - (2026-09-15)
 
 ### Accounting API

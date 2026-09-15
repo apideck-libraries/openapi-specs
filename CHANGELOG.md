@@ -1,3 +1,13 @@
+## v10.55.2 - (2026-09-15)
+
+### HRIS, Ecommerce & Accounting API
+
+- Fixed connection validation and hook-issued requests ignoring an integration's configured **Environment** and using the connector's default host instead. Affects [HiBob](connectors/hibob), [HiBob (OAuth)](connectors/hibob-oauth), [eBay](connectors/ebay), and the Projects GraphQL host on [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite). As a result, a HiBob integration set to **Sandbox** without a HiBob Sandbox account now reports an invalid connection instead of a healthy one — its reads were already failing with `401`. Integrations on their default environment are unaffected.
+
+### HRIS API
+
+- Clarified the **Environment** integration setting on [HiBob](connectors/hibob) and [HiBob (OAuth)](connectors/hibob-oauth): **Sandbox** (`api.sandbox.hibob.com`) is only for Bob accounts that purchased HiBob's Sandbox add-on, with a service user (HiBob) or your Marketplace app (HiBob (OAuth)) set up inside that sandbox tenant. Partner test accounts and every other account use **Production**. Routing is unchanged.
+
 ## v10.55.1 - (2026-09-15)
 
 ### Accounting API

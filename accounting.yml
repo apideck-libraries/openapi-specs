@@ -33781,7 +33781,6 @@ paths:
       operationId: agedCreditorsOne
       summary: Get Aged Creditors
       description: Get Aged Creditors
-      x-apideck-upcoming: true
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'
@@ -33803,6 +33802,12 @@ paths:
 
             Aging is bucketed by transaction date, since e-Boekhouden's outstanding-invoice rows carry
             no separate due date.
+        - connector: zoho-books
+          description: |
+            For vendors with an exceptionally large number of open bills, report generation
+            may take longer since Zoho returns bills in batches of 200 and every batch is
+            fetched before the report is built. Use `filter[supplier_id]` to scope the report to
+            a single supplier if this becomes noticeable.
       responses:
         '200':
           $ref: '#/components/responses/GetAgedCreditorsResponse'
@@ -33851,6 +33856,12 @@ paths:
 
             Aging is bucketed by transaction date, since e-Boekhouden's outstanding-invoice rows carry
             no separate due date.
+        - connector: zoho-books
+          description: |
+            For customers with an exceptionally large number of open invoices, report generation
+            may take longer since Zoho returns invoices in batches of 200 and every batch is
+            fetched before the report is built. Use `filter[customer_id]` to scope the report to
+            a single customer if this becomes noticeable.
       responses:
         '200':
           $ref: '#/components/responses/GetAgedDebtorsResponse'

@@ -1,3 +1,9 @@
+## v10.55.3 - (2026-09-15)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud), backed by supplier credit memos (Supplier Invoices flagged as credit memos) — with list, get, create and delete (delete posts a reversal, since posted documents are immutable; update is unsupported for the same reason). Supplier credit memos are now returned under this resource and are no longer mixed into the [Bills](apis/accounting/reference/bills) list.
+
 ## v10.55.2 - (2026-09-15)
 
 ### HRIS, Ecommerce & Accounting API

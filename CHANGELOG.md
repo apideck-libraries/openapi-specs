@@ -1,3 +1,10 @@
+## v10.55.1 - (2026-09-15)
+
+### Accounting API
+
+- Fixed vendor-credit allocations on [NetSuite](connectors/netsuite) [Bill Payments](apis/accounting/reference/bill-payments) and [Bill Credit Notes](apis/accounting/reference/bill-credit-notes). Both resources write to NetSuite's purchase-side records but resolved `allocations[].type` through the sales-side type table, so a `credit_memo` allocation carried a sales transaction type. Both now use purchase-side types, and `expense` and `pre_payment` allocations — previously writable but always read back as `other` — round-trip correctly.
+- Added gotchas documenting two [NetSuite](connectors/netsuite) [Bill Payments](apis/accounting/reference/bill-payments) limitations found while testing the above. Updating `allocations` **merges** into the payment's existing allocations rather than replacing them: an omitted allocation is kept, so an allocation can never be removed, and because `total_amount` is recalculated from the merged set, adding one raises the payment's total and overrides the `total_amount` sent. Separately, a bill payment can only be allocated to the supplier's most recent open items — allocating to an older open bill is rejected, and suppliers with very many open items are affected across the board.
+
 ## v10.55.0 - (2026-09-14)
 
 ### Accounting API

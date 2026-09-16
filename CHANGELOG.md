@@ -1,3 +1,11 @@
+## v10.57.2 - (2026-09-16)
+
+## v10.57.2 - (2026-09-16)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [DualEntry](connectors/dualentry), backed by DualEntry Vendor Credits — list, get, create and update (`delete` is not supported by the DualEntry API). Vendor credits carry a `supplier` counterparty, `type: accounts_payable_credit`, at most one `allocations[]` entry to a bill (or a direct expense), and item-based line items.
+
 ## v10.57.1 - (2026-09-16)
 
 ### Accounting API

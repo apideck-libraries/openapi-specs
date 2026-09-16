@@ -1,3 +1,9 @@
+## v10.57.3 - (2026-09-16)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [MYOB](connectors/myob). MYOB has no dedicated AP credit-note endpoint — bill credit notes are `Purchase/Bill` records with Status `Debit` (the AP mirror of AR credit notes, which are invoices with Status `Credit`). Read-only (list and get); negative header amounts are normalized to positive, line items are available only on get-one, and writes are unsupported (create via the bills endpoint with negative line amounts).
+
 ## v10.57.2 - (2026-09-16)
 
 ## v10.57.2 - (2026-09-16)

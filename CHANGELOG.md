@@ -1,3 +1,11 @@
+## v10.57.0 - (2026-09-16)
+
+### Accounting API
+
+- Added the [Goods Receipts](apis/accounting/reference/goods-receipts) resource (beta) — the record of goods physically received against a purchase order, the middle document in a three-way match between purchase order, receipt and bill. Read-only (list and get); `line_items[].purchase_order` carries the same `{id, line_id, line_number}` shape bills use, so purchase-order, receipt and bill lines join on identical keys. Supported for [Microsoft Dynamics 365 Business Central](connectors/microsoft-dynamics-365-business-central) (`filter[updated_since]`, sort on `updated_at`), [NetSuite](connectors/netsuite), [Odoo](connectors/odoo) (`filter[updated_since]`, `filter[supplier_id]`, `filter[purchase_order_id]`, sort on `created_at` and `updated_at`) and [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) (sort on `created_at`). Only receipts created against a purchase order are returned — returns, internal transfers and production receipts are excluded. Connector-specific caveats are published as gotchas on both operations.
+- Fixed list filters being silently ignored on every [Odoo](connectors/odoo) Accounting resource. `filter[updated_since]`, and the customer/supplier filters, were accepted and then dropped before the request reached Odoo, so a filtered list returned the same records as an unfiltered one. They are now applied downstream — a request that previously came back over-broad will return fewer records.
+- Added `meta.warnings` to [Odoo](connectors/odoo) responses whose nested lookups fail. A failed line-item fetch on [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Purchase Orders](apis/accounting/reference/purchase-orders), [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) and Goods Receipts — and a failed address or activity-type lookup on the CRM reads and writes — previously returned a clean `200` with the field silently unset. The data shape and status code are unchanged; the failure is now described in `meta.warnings`.
+
 ## v10.56.1 - (2026-09-15)
 
 ### Accounting API

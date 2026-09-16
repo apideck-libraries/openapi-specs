@@ -1,3 +1,11 @@
+## v10.57.4 - (2026-09-16)
+
+### Ecommerce API
+
+- [Shopify](connectors/shopify) now emits `ecommerce.order.delivered`, which v10.56.0 declared but left unemitted. It fires when a Shopify `fulfillments/update` reports `shipment_status: delivered`. Shopify has no dedicated delivery topic — the delivery transition rides `fulfillments/update` alongside every other shipment state (`in_transit`, `out_for_delivery`, `attempted_delivery`, …) — so for this one topic the event type is chosen from the fulfillment's `shipment_status` rather than from the topic alone. [Shopify Public App](connectors/shopify-public-app) behaves identically.
+- **Behaviour change for `ecommerce.order.shipped` subscribers.** `order.delivered` and `order.shipped` are mutually exclusive for a given `fulfillments/update`: the delivery transition now emits `order.delivered` where it previously emitted `order.shipped`. A subscriber to `order.shipped` alone therefore stops receiving a delivery as if it were a shipment; the shipment transitions that event is meant to describe are unaffected. `ecommerce.order.updated` is still emitted for the delivery, so `order.updated` and wildcard (`*`) subscribers see no change in coverage — only in which granular event accompanies it.
+- Nothing needs re-authorizing or re-subscribing. `order.delivered` rides the `fulfillments/update` subscription existing connections already hold, so no Shopify webhook is registered, replaced or orphaned. A webhook subscribing to `order.delivered` alone now registers `fulfillments/update` for it.
+
 ## v10.57.3 - (2026-09-16)
 
 ### Accounting API

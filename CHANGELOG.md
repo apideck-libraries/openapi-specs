@@ -1,3 +1,10 @@
+## v10.57.1 - (2026-09-16)
+
+### Accounting API
+
+- Added `filter[bill_number]` and `filter[reference]` to [Bills](apis/accounting/reference/bills) — exact-match lookups on a bill's `bill_number` and `reference` — and mapped both for [Xero](connectors/xero). This closes a gap in the write-timeout flow: a create that returns `outcome: uncertain` asks you to verify before retrying (a blind replay duplicates the bill), but the Bills list previously accepted only `filter[updated_since]`, so the only way to check whether a bill existed was a `/proxy` call with a hand-written vendor query. Both filters can be combined with each other and with `filter[updated_since]`; all conditions are ANDed. Three Xero behaviours are worth knowing: matching is case-insensitive but otherwise literal (surrounding whitespace must match); Xero does not enforce unique bill numbers, so `filter[bill_number]` can return more than one bill — compare `supplier.id`, `total` or `reference` on the matches rather than assuming a single hit; and without a filter or sort Xero returns bills oldest-updated first, so a bill created moments ago lands on the **last** page of an unfiltered list — use the new filters or `sort[by]=updated_at&sort[direction]=desc` to find it. The new filter keys are declared on the unified Bills filter, so other connectors reject them with `UnsupportedFiltersError` until mapped.
+- Fixed [Xero](connectors/xero) `filter[number]` on [Invoices](apis/accounting/reference/invoices) and [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) failing with a vendor `400` (`QueryParseException`) when the value contained a double quote. The value is now escaped the way Xero's query language expects, and a value shaped like a query fragment can no longer alter the query.
+
 ## v10.57.0 - (2026-09-16)
 
 ### Accounting API

@@ -1,3 +1,10 @@
+## v10.57.5 - (2026-09-17)
+
+### Accounting API
+
+- Added `balance` to [Customers](apis/accounting/reference/customers) — the amount the customer currently owes. Read-only for [QuickBooks](connectors/quickbooks), [Intuit Enterprise Suite](connectors/intuit-enterprise-suite), [Zoho Books](connectors/zoho-books), [Xero](connectors/xero), [NetSuite](connectors/netsuite), [Sage Intacct](connectors/sage-intacct), [MYOB](connectors/myob), [Workday](connectors/workday) and [FreeAgent](connectors/freeagent).
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Sage Business Cloud Accounting](connectors/sage-business-cloud-accounting), backed by Sage's dedicated `/purchase_credit_notes` endpoint — the AP mirror of the existing `credit-notes` (AR, `/sales_credit_notes`). List, get, create and update; `supplier` counterparty, `type: accounts_payable_credit`, line items, and `status` (mapped via a new `bill-credit-notes.status` table, an improvement the AR sibling lacks). Optionally links to a bill via the first `allocations[]` entry (`invoice_id`).
+
 ## v10.57.4 - (2026-09-16)
 
 ### Ecommerce API

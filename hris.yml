@@ -5140,6 +5140,8 @@ paths:
         - connector: haileyhr
           description: |
             Hailey HR does not allow duplicate email addresses across employees. Creating an employee with an `emails` value already in use by another employee returns an error.
+
+            `employee_number` cannot be set through the API. Hailey HR generates employment numbers from rules configured in Hailey, so a value supplied on create is accepted without error and silently ignored — the created employee returns `employee_number: null` until a number is entered in Hailey directly. Reading the field works normally once it has been set.
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'

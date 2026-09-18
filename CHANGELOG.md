@@ -1,3 +1,9 @@
+## v10.58.0 - (2026-09-18)
+
+### Accounting API
+
+- Added [Profit and Loss](apis/accounting/reference/profit-and-loss), [Balance Sheet](apis/accounting/reference/balance-sheet), [Aged Debtors](apis/accounting/reference/aged-debtors) and [Aged Creditors](apis/accounting/reference/aged-creditors) support for [Zoho Books](connectors/zoho-books). All four are read-only. Profit and Loss and Balance Sheet are backed by undocumented-but-verified Zoho Books report endpoints; only `filter[start_date]`/`filter[end_date]` (Profit and Loss — both required together) and `filter[end_date]` (Balance Sheet) are supported, and accounts with a zero balance for the requested period are omitted from the response entirely rather than returned with a zero value. Aged Debtors and Aged Creditors are synthesized from the existing Invoices and Bills lists respectively.
+
 ## v10.57.5 - (2026-09-17)
 
 ### Accounting API

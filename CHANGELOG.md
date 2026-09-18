@@ -1,3 +1,9 @@
+## v10.58.2 - (2026-09-18)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [MYOB Acumatica](connectors/myob-acumatica) — list, get, create, update and delete. MYOB Acumatica (MYOB Advanced, the Acumatica engine) models an AP supplier credit note as a `Bill` document with `Type: "Credit Adj."` (the AP mirror of the existing `credit-notes`, Invoice documents with `Type: "Credit Memo"`); the list is filtered to `Type eq 'Credit Adj.'`. `supplier` counterparty, `type: accounts_payable_credit`, line items, and `status` mapped via a new `bill-credit-notes.status` table. Line amounts are `unit_price × quantity`; a line supplying only `total_amount` derives its unit price as `total_amount / quantity`. Filterable by `updated_since`, `supplier_id` and `number`. Mirrors the Acumatica connector's implementation.
+
 ## v10.58.1 - (2026-09-18)
 
 ### Accounting API

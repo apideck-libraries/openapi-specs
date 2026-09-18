@@ -1,3 +1,9 @@
+## v10.58.1 - (2026-09-18)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Acumatica](connectors/acumatica) — list, get, create, update and delete. Acumatica models an AP supplier credit note as a `Bill` document with `Type: "Credit Adj."` (the AP mirror of the existing `credit-notes`, which are Invoice documents with `Type: "Credit Memo"`); the list is filtered to `Type eq 'Credit Adj.'`. `supplier` counterparty, `type: accounts_payable_credit`, line items, and `status` mapped via a new `bill-credit-notes.status` table. Line amounts are `unit_price × quantity`; a line supplying only `total_amount` derives its unit price as `total_amount / quantity`. Filterable by `updated_since`, `supplier_id` and `number`. Currency follows the supplier's configured currency, and `total_tax`/`tracking_categories` are not persisted (Acumatica computes or omits them).
+
 ## v10.58.0 - (2026-09-18)
 
 ### Accounting API

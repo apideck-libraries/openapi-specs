@@ -9917,6 +9917,8 @@ components:
         location_id: edge-case
         line_number: low
         worktags: edge-case
+        date: edge-case
+        source_id: edge-case
       required:
         - ledger_account
         - type
@@ -10006,6 +10008,19 @@ components:
           description: Worktags of the line item. This is currently only supported in Workday.
           items:
             $ref: '#/components/schemas/LinkedWorktag'
+        date:
+          type: string
+          title: Line date
+          description: "The financial date of this specific line, when it differs from the journal entry's own posted_at date - for example when booking a historical or backdated transaction. Not populated by every connector: some post the entry date at the header level only, in which case this line-level date is legitimately absent rather than wrong."
+          format: date
+          example: '2020-09-30'
+          nullable: true
+        source_id:
+          type: string
+          title: Source ID
+          description: A unique identifier for the source of this specific line, distinct from the journal entry's own source_id. Useful for reconciling an individual line back to an external system's own record when a single journal entry aggregates lines originating from more than one source.
+          example: '12345'
+          nullable: true
     Language:
       type: string
       example: EN
@@ -20532,6 +20547,15 @@ paths:
         - connector: acumatica
           description: |
             The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
+        - connector: exact-online
+          description: |
+            `status` is derived from Exact's `IsBlocked` flag (`false` -> `active`, `true` -> `inactive`). Live-verified against a real division: the raw VATCode object has no `Active`-equivalent field of its own, only `IsBlocked`. Exact has no third state, so `archived` is never returned.
+        - connector: exact-online-nl
+          description: |
+            `status` is derived from Exact's `IsBlocked` flag (`false` -> `active`, `true` -> `inactive`). Live-verified against a real division: the raw VATCode object has no `Active`-equivalent field of its own, only `IsBlocked`. Exact has no third state, so `archived` is never returned.
+        - connector: exact-online-uk
+          description: |
+            `status` is derived from Exact's `IsBlocked` flag (`false` -> `active`, `true` -> `inactive`). Live-verified against a real division: the raw VATCode object has no `Active`-equivalent field of its own, only `IsBlocked`. Exact has no third state, so `archived` is never returned.
       responses:
         '200':
           $ref: '#/components/responses/GetTaxRatesResponse'
@@ -21279,6 +21303,22 @@ paths:
             Bills are created under a fixed VAT rule ("Regelbesteuerung") — there is no field on this
             endpoint to change it. Unlike invoices and credit notes, this rule does not restrict
             `line_items[].tax_rate.rate` to a fixed set of values — any rate is accepted unchanged.
+        - connector: exact-online
+          description: |
+            `line_items[].ledger_account` is not supported on create — Exact's purchase-invoice line
+            object rejects an unknown `GLAccount` property outright (400, "The property name
+            'GLAccount' ... is not valid"), so the connector does not send it: a `ledger_account` on
+            a create request is silently dropped rather than rejected, and the created bill line will
+            not be coded to that ledger account. Code the expense via `line_items[].item` instead, or
+            use `journal-entries` for a GL-coded posting.
+        - connector: exact-online-nl
+          description: |
+            `line_items[].ledger_account` is not supported on create — Exact's purchase-invoice line
+            object rejects an unknown `GLAccount` property outright (400, "The property name
+            'GLAccount' ... is not valid"), so the connector does not send it: a `ledger_account` on
+            a create request is silently dropped rather than rejected, and the created bill line will
+            not be coded to that ledger account. Code the expense via `line_items[].item` instead, or
+            use `journal-entries` for a GL-coded posting.
       requestBody:
         required: true
         content:
@@ -26348,6 +26388,27 @@ paths:
             valid number.` Supply via `pass_through[business_partner]=99980001` (8–10 digit numeric ID,
             unique on the tenant). If the chosen grouping is configured for internal assignment, omit
             `pass_through[business_partner]` and SAP will auto-generate the ID.
+        - connector: exact-online
+          description: |
+            Exact does not enforce uniqueness on the supplier name — posting the same `display_name`/
+            `company_name` twice creates two separate suppliers, both with a `201`. This connector
+            passes the name through as sent rather than matching on write; the caller owns
+            de-duplication (for example, checking `suppliers.list` for an existing name, or storing
+            the returned `id` and reusing it) before creating a supplier that may already exist.
+        - connector: exact-online-nl
+          description: |
+            Exact does not enforce uniqueness on the supplier name — posting the same `display_name`/
+            `company_name` twice creates two separate suppliers, both with a `201`. This connector
+            passes the name through as sent rather than matching on write; the caller owns
+            de-duplication (for example, checking `suppliers.list` for an existing name, or storing
+            the returned `id` and reusing it) before creating a supplier that may already exist.
+        - connector: exact-online-uk
+          description: |
+            Exact does not enforce uniqueness on the supplier name — posting the same `display_name`/
+            `company_name` twice creates two separate suppliers, both with a `201`. This connector
+            passes the name through as sent rather than matching on write; the caller owns
+            de-duplication (for example, checking `suppliers.list` for an existing name, or storing
+            the returned `id` and reusing it) before creating a supplier that may already exist.
       responses:
         '201':
           $ref: '#/components/responses/CreateSupplierResponse'
@@ -28419,12 +28480,84 @@ paths:
         - connector: exact-online
           description: |
             Limit parameter for pagination is not supported for this resource.
+
+            `line_items` is only returned by the single-record read (fetch by id). Exact's own
+            `$expand=GeneralJournalEntryLines` is silently ignored on the list endpoint — the raw
+            list response still returns each line collection as an unexpanded `__deferred` reference
+            even though the expand parameter is sent — so the list read always returns `line_items: []`
+            and `line_items[].supplier` reflects nothing on `all`. Fetch the entry by id for line-level
+            data (mirrors the same list-vs-one gap other connectors document for this resource).
+
+            Because of that, `posted_at` on the list read is always derived from the entry's financial
+            period (month precision: the first day of `FinancialYear`/`FinancialPeriod`), since Exact's
+            own journal entry header has no date field at all and the day-precision line date is only
+            available on the single-record read. Fetch by id for day-precision `posted_at`.
+            `created_at` remains the true API-write timestamp and is not affected on either operation.
+
+            `memo` is mapped from the same `JournalDescription` field as `title` — Exact's own header
+            has no separate free-text field, only the journal's own description, so both unified
+            fields carry the same value. `updated_by`/`created_by` are not populated on either
+            operation: the header carries `Created`/`Modified` timestamps but no who-created/who-
+            modified field (those exist only per line, not on the entry itself).
+
+            On the single-record read, `line_items[].supplier` reflects Exact's line-level `Account`
+            reference. Exact does not distinguish a customer account from a supplier account at the
+            line level, so a line referencing a customer account is also reflected under `supplier`
+            rather than `customer`.
         - connector: exact-online-nl
           description: |
             Limit parameter for pagination is not supported for this resource.
+
+            `line_items` is only returned by the single-record read (fetch by id). Exact's own
+            `$expand=GeneralJournalEntryLines` is silently ignored on the list endpoint — the raw
+            list response still returns each line collection as an unexpanded `__deferred` reference
+            even though the expand parameter is sent — so the list read always returns `line_items: []`
+            and `line_items[].supplier` reflects nothing on `all`. Fetch the entry by id for line-level
+            data (mirrors the same list-vs-one gap other connectors document for this resource).
+
+            Because of that, `posted_at` on the list read is always derived from the entry's financial
+            period (month precision: the first day of `FinancialYear`/`FinancialPeriod`), since Exact's
+            own journal entry header has no date field at all and the day-precision line date is only
+            available on the single-record read. Fetch by id for day-precision `posted_at`.
+            `created_at` remains the true API-write timestamp and is not affected on either operation.
+
+            `memo` is mapped from the same `JournalDescription` field as `title` — Exact's own header
+            has no separate free-text field, only the journal's own description, so both unified
+            fields carry the same value. `updated_by`/`created_by` are not populated on either
+            operation: the header carries `Created`/`Modified` timestamps but no who-created/who-
+            modified field (those exist only per line, not on the entry itself).
+
+            On the single-record read, `line_items[].supplier` reflects Exact's line-level `Account`
+            reference. Exact does not distinguish a customer account from a supplier account at the
+            line level, so a line referencing a customer account is also reflected under `supplier`
+            rather than `customer`.
         - connector: exact-online-uk
           description: |
             Limit parameter for pagination is not supported for this resource.
+
+            `line_items` is only returned by the single-record read (fetch by id). Exact's own
+            `$expand=GeneralJournalEntryLines` is silently ignored on the list endpoint — the raw
+            list response still returns each line collection as an unexpanded `__deferred` reference
+            even though the expand parameter is sent — so the list read always returns `line_items: []`
+            and `line_items[].supplier` reflects nothing on `all`. Fetch the entry by id for line-level
+            data (mirrors the same list-vs-one gap other connectors document for this resource).
+
+            Because of that, `posted_at` on the list read is always derived from the entry's financial
+            period (month precision: the first day of `FinancialYear`/`FinancialPeriod`), since Exact's
+            own journal entry header has no date field at all and the day-precision line date is only
+            available on the single-record read. Fetch by id for day-precision `posted_at`.
+            `created_at` remains the true API-write timestamp and is not affected on either operation.
+
+            `memo` is mapped from the same `JournalDescription` field as `title` — Exact's own header
+            has no separate free-text field, only the journal's own description, so both unified
+            fields carry the same value. `updated_by`/`created_by` are not populated on either
+            operation: the header carries `Created`/`Modified` timestamps but no who-created/who-
+            modified field (those exist only per line, not on the entry itself).
+
+            On the single-record read, `line_items[].supplier` reflects Exact's line-level `Account`
+            reference. Exact does not distinguish a customer account from a supplier account at the
+            line level, so a line referencing a customer account is also reflected under `supplier`
+            rather than `customer`.
         - connector: quickbooks
           description: |
             QuickBooks only returns journal entries that were explicitly created as `JournalEntry` records.
@@ -28695,18 +28828,57 @@ paths:
             account, journal, VAT code, currency), or a missing required field — returns `422` with
             the specific reason named. Any other `500` is a genuine unexpected downstream failure,
             not a refusal the request itself caused.
+
+            VAT on a line is selected by `tax_rate.code`, not `tax_rate.rate` — the rate is not sent
+            and has no effect. Omitting the code does not mean "no VAT": Exact substitutes the ledger
+            account's own default VAT code, which changes the line's tax amount and can then reject
+            the whole entry as unbalanced with an error naming the balance mismatch rather than VAT.
+            Always send `tax_rate.code` explicitly rather than relying on a specific ledger account's
+            default.
+
+            `line_items[].date` maps to Exact's per-line `Date` (a real field, distinct from the
+            header, which has no date field at all — see the list-operation gotcha above). Historical
+            or backdated bookings should set this per line rather than relying on `posted_at`.
+            `line_items[].source_id` maps to Exact's per-line `Notes`, useful for carrying your own
+            reconciliation identifier since `description` is typically a human-readable label.
         - connector: exact-online-nl
           description: |
             A validation refusal — an unbalanced entry, an unknown or inactive reference (ledger
             account, journal, VAT code, currency), or a missing required field — returns `422` with
             the specific reason named. Any other `500` is a genuine unexpected downstream failure,
             not a refusal the request itself caused.
+
+            VAT on a line is selected by `tax_rate.code`, not `tax_rate.rate` — the rate is not sent
+            and has no effect. Omitting the code does not mean "no VAT": Exact substitutes the ledger
+            account's own default VAT code, which changes the line's tax amount and can then reject
+            the whole entry as unbalanced with an error naming the balance mismatch rather than VAT.
+            Always send `tax_rate.code` explicitly rather than relying on a specific ledger account's
+            default.
+
+            `line_items[].date` maps to Exact's per-line `Date` (a real field, distinct from the
+            header, which has no date field at all — see the list-operation gotcha above). Historical
+            or backdated bookings should set this per line rather than relying on `posted_at`.
+            `line_items[].source_id` maps to Exact's per-line `Notes`, useful for carrying your own
+            reconciliation identifier since `description` is typically a human-readable label.
         - connector: exact-online-uk
           description: |
             A validation refusal — an unbalanced entry, an unknown or inactive reference (ledger
             account, journal, VAT code, currency), or a missing required field — returns `422` with
             the specific reason named. Any other `500` is a genuine unexpected downstream failure,
             not a refusal the request itself caused.
+
+            VAT on a line is selected by `tax_rate.code`, not `tax_rate.rate` — the rate is not sent
+            and has no effect. Omitting the code does not mean "no VAT": Exact substitutes the ledger
+            account's own default VAT code, which changes the line's tax amount and can then reject
+            the whole entry as unbalanced with an error naming the balance mismatch rather than VAT.
+            Always send `tax_rate.code` explicitly rather than relying on a specific ledger account's
+            default.
+
+            `line_items[].date` maps to Exact's per-line `Date` (a real field, distinct from the
+            header, which has no date field at all — see the list-operation gotcha above). Historical
+            or backdated bookings should set this per line rather than relying on `posted_at`.
+            `line_items[].source_id` maps to Exact's per-line `Notes`, useful for carrying your own
+            reconciliation identifier since `description` is typically a human-readable label.
       requestBody:
         required: true
         content:
@@ -28814,6 +28986,8 @@ paths:
                   worktags:
                     - id: '123456'
                       value: New York
+                  date: '2020-09-30'
+                  source_id: '12345'
                 - description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
                   tax_amount: 27500
                   sub_total: 27500
@@ -28885,6 +29059,8 @@ paths:
                   worktags:
                     - id: '123456'
                       value: New York
+                  date: '2020-09-30'
+                  source_id: '12345'
               status: draft
               memo: Thank you for your business and have a great day!
               posted_at: '2020-09-30T07:43:32.000Z'
@@ -29161,6 +29337,8 @@ paths:
                   worktags:
                     - id: '123456'
                       value: New York
+                  date: '2020-09-30'
+                  source_id: '12345'
                 - description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
                   tax_amount: 27500
                   sub_total: 27500
@@ -29232,6 +29410,8 @@ paths:
                   worktags:
                     - id: '123456'
                       value: New York
+                  date: '2020-09-30'
+                  source_id: '12345'
               status: draft
               memo: Thank you for your business and have a great day!
               posted_at: '2020-09-30T07:43:32.000Z'
@@ -32022,13 +32202,49 @@ paths:
             AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
         - connector: exact-online
           description: |
-            Journal-entry attachments are not exposed by Exact Online's Journals or general journal-entry endpoints. Use pass-through against `/api/v1/{division}/documents/DocumentAttachments` for native document attachment records; link the returned document ID to the journal entry.
+            `reference_id` is the invoice, bill, or journal entry's own unified id — not Exact's
+            internal Document envelope GUID. The connector resolves between the two internally
+            (Exact's `FinancialTransactionEntryID`, live-verified to equal the unified id for all
+            three reference types), so no manual lookup or pass-through is needed.
+
+            `file_url` is Exact's own document viewer page
+            (`https://start.exactonline.{tld}/docs/SysAttachment.aspx?...`), not a direct file
+            download link — it requires an active, logged-in Exact browser session and redirects to
+            a login page for an unauthenticated request (live-verified: a plain GET returns a 302 to
+            the Exact login page, not the file). There is no other download-capable URL on this
+            connector's attachment records.
+
+            This list has no server-side total count, so pagination metadata never includes a count.
         - connector: exact-online-nl
           description: |
-            `reference_id` here is not the invoice, bill, or journal entry ID itself — it is the ID of Exact's separate `Document` object. For journal entries, `GET /journal-entries/{id}` already resolves and returns it as a `custom_fields` entry (`id: "exact_document_id"`) when Exact has a linked document; use that value as `reference_id`. For other record types, look it up yourself with `pass_through[$filter]=FinancialTransactionEntryID eq guid'{record_id}'` against `/api/v1/{division}/documents/Documents`, using the unified record's own `id` as `{record_id}`; the matching `Document.ID` is what goes in the `reference_id` path segment here. This list has no server-side total count, so pagination metadata never includes a count.
+            `reference_id` is the invoice, bill, or journal entry's own unified id — not Exact's
+            internal Document envelope GUID. The connector resolves between the two internally
+            (Exact's `FinancialTransactionEntryID`, live-verified to equal the unified id for all
+            three reference types), so no manual lookup or pass-through is needed.
+
+            `file_url` is Exact's own document viewer page
+            (`https://start.exactonline.{tld}/docs/SysAttachment.aspx?...`), not a direct file
+            download link — it requires an active, logged-in Exact browser session and redirects to
+            a login page for an unauthenticated request (live-verified: a plain GET returns a 302 to
+            the Exact login page, not the file). There is no other download-capable URL on this
+            connector's attachment records.
+
+            This list has no server-side total count, so pagination metadata never includes a count.
         - connector: exact-online-uk
           description: |
-            Journal-entry attachments are not exposed by Exact Online's Journals or general journal-entry endpoints. Use pass-through against `/api/v1/{division}/documents/DocumentAttachments` for native document attachment records; link the returned document ID to the journal entry.
+            `reference_id` is the invoice, bill, or journal entry's own unified id — not Exact's
+            internal Document envelope GUID. The connector resolves between the two internally
+            (Exact's `FinancialTransactionEntryID`, live-verified to equal the unified id for all
+            three reference types), so no manual lookup or pass-through is needed.
+
+            `file_url` is Exact's own document viewer page
+            (`https://start.exactonline.{tld}/docs/SysAttachment.aspx?...`), not a direct file
+            download link — it requires an active, logged-in Exact browser session and redirects to
+            a login page for an unauthenticated request (live-verified: a plain GET returns a 302 to
+            the Exact login page, not the file). There is no other download-capable URL on this
+            connector's attachment records.
+
+            This list has no server-side total count, so pagination metadata never includes a count.
         - connector: zoho-books
           description: |
             Zoho Books has no standalone attachments-listing endpoint; attachment metadata is nested inside each record's own detail response as a `documents` array. `reference_id` here is the record's own unified `id` (no separate lookup needed) for `invoice`, `bill`, `expense`, and `journal-entry`, and `credit-note`. The `credit-note` list route is not live-verified — if Zoho's real credit-note detail response omits the `documents` array (unconfirmed either way), listing returns an empty result rather than an error; upload is unaffected either way.
@@ -34742,6 +34958,36 @@ paths:
             Field handling is stricter than the unified contract: `null` is rejected rather than ignored, so
             omit an optional field instead of sending `null` for it. `feed_status` is not returned on this
             create response — read the account back to see it.
+        - connector: exact-online-nl
+          description: |
+            This operation always creates a **new** bank journal in Exact Online (there is no "register an
+            existing account" concept) — Exact assigns its own journal code and a linked GL account
+            automatically, live-verified against a minimal request carrying only `target_account_name`,
+            `target_account_number` and `currency`. `bank_account_type` is always returned as `bank`; Exact
+            has no separate credit-card bank-feed concept.
+
+            `source_account_id` is accepted but not persisted — Exact's journal object has no field to store
+            an external system's account identifier (live-verified: a value written to the closest candidate
+            field, `CustomField`, is silently discarded on save). Reads return `source_account_id` equal to
+            the record's own `id`, not the value originally supplied on create.
+
+            `bankFeedAccountsDelete` is unsupported in this build even though Exact's REST API does support
+            deleting a journal (`DELETE .../financial/Journals(guid'{id}')`, live-verified) — wiring the
+            operation was out of scope for this pass.
+        - connector: exact-online
+          description: |
+            Same behaviour and limitations as `exact-online-nl` (this connector's regional variants share
+            the same REST API and mapping shape): creates a new bank journal rather than registering an
+            existing account, `bank_account_type` is always `bank`, `source_account_id` is accepted but not
+            persisted, and `bankFeedAccountsDelete` is unsupported in this build despite the underlying
+            journal-delete endpoint existing.
+        - connector: exact-online-uk
+          description: |
+            Same behaviour and limitations as `exact-online-nl` (this connector's regional variants share
+            the same REST API and mapping shape): creates a new bank journal rather than registering an
+            existing account, `bank_account_type` is always `bank`, `source_account_id` is accepted but not
+            persisted, and `bankFeedAccountsDelete` is unsupported in this build despite the underlying
+            journal-delete endpoint existing.
       requestBody:
         required: true
         content:
@@ -35127,6 +35373,58 @@ paths:
             Reading a bank feed statement by id (`bank-feed-statements.one`) is currently non-functional —
             every request fails with a generic server error regardless of request shape. Treat this
             operation as unsupported until further notice.
+        - connector: exact-online-nl
+          description: |
+            Exact Online has no bank-feed-specific endpoint: a statement is a single `BankEntry` (one
+            downstream call, one `BankEntryLine` per transaction) in the connector's existing bank-entry
+            journal, the same primitive `bill-payments` already writes through, and `list`/`get` read
+            that same `BankEntry`/`BankEntryLine` data back.
+
+            `status` always reads as `success` — Exact has no delivery/acceptance status for a `BankEntry`
+            once it exists, so any record that can be read back is treated as successfully posted.
+            `pending` and `rejected` are never returned.
+
+            `start_balance`/`end_balance` on write are not sent — Exact computes the entry's
+            opening/closing balance itself from the journal's running total, and a caller-supplied value
+            that disagrees with it is silently ignored. On read, both balances and their credit/debit
+            indicators come from Exact's own `OpeningBalanceFC`/`ClosingBalanceFC`. `start_date`/`end_date`
+            have no equivalent on a `BankEntry` and are derived as the earliest/latest transaction date in
+            the statement.
+
+            Every `BankEntryLine` must post against a GL account. Since a raw bank feed transaction
+            carries no categorization, every line is posted to a single connection-level setting
+            (`bank_feed_gl_account_id` — pick any GL account in the "Default Categorization Account"
+            setting) and lands there uncategorized; re-categorize it later in Exact Online.
+
+            `source_transaction_id` is stored as `OurRef` only when it is purely numeric (Exact's
+            `OurRef` is an integer field, so an id outside the 32-bit signed range is also dropped rather
+            than persisted); when it wasn't numeric on write, a read falls back to the `BankEntryLine`'s
+            own id so the field is never empty, which will not match what was originally submitted.
+            `counterparty` and `merchant_category_code` have no equivalent field on `BankEntryLine` and
+            are not persisted or returned. `description` falls back to `reference` on write and reads
+            back as `null` when neither was set.
+
+            `bank_feed_account_id` is the source journal's GUID on both read and write, resolved from/to
+            Exact's own short `JournalCode` via an extra internal lookup — a journal that is later
+            deleted leaves the affected statements' `bank_feed_account_id` unresolved (falls back to the
+            raw code) rather than failing the read.
+
+            Exact does not deduplicate on `source_transaction_id`: reposting the same statement creates a
+            second, duplicate `BankEntry`.
+        - connector: exact-online
+          description: |
+            Same behaviour and limitations as `exact-online-nl` (this connector's regional variants share
+            the same REST API and mapping shape): `status` always reads as `success`, every line posts to
+            a single connection-level GL categorization account (`bank_feed_gl_account_id`) on write,
+            statement-level balance fields are computed by Exact rather than accepted on write, and
+            `source_transaction_id` only round-trips (as `OurRef`) when numeric.
+        - connector: exact-online-uk
+          description: |
+            Same behaviour and limitations as `exact-online-nl` (this connector's regional variants share
+            the same REST API and mapping shape): `status` always reads as `success`, every line posts to
+            a single connection-level GL categorization account (`bank_feed_gl_account_id`) on write,
+            statement-level balance fields are computed by Exact rather than accepted on write, and
+            `source_transaction_id` only round-trips (as `OurRef`) when numeric.
       requestBody:
         required: true
         content:

@@ -4931,6 +4931,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: deel
+          description: |
+            The `emails[].type` value `primary` follows the worker's own Deel account (login) email, which may be
+            either their work or their personal address and therefore varies from worker to worker. Deel does not
+            document how the flag is chosen, so treat this as observed behaviour.
+
+            To avoid depending on which address happens to be primary, the primary address is also returned a second
+            time under its real type. A worker whose account email is their work address returns both
+            `{"type": "primary"}` and `{"type": "work"}` for it, so reading the `work` entry gives the work address
+            regardless of the primary flag. Because Deel can list the same address more than once, one address may
+            appear in several entries with different types.
+
+            Deel `home` addresses are returned as `personal`.
+
+            Use `?raw=true` to see Deel's original `type` and `primary` flags.
         - connector: nmbrs
           description: We keep track of the "List Employees" response for NMBRS virtual webhooks events, which contains fewer fields compared to the "Get Employee" response.
         - connector: ukg-pro
@@ -5375,6 +5390,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: deel
+          description: |
+            The `emails[].type` value `primary` follows the worker's own Deel account (login) email, which may be
+            either their work or their personal address and therefore varies from worker to worker. Deel does not
+            document how the flag is chosen, so treat this as observed behaviour.
+
+            To avoid depending on which address happens to be primary, the primary address is also returned a second
+            time under its real type. A worker whose account email is their work address returns both
+            `{"type": "primary"}` and `{"type": "work"}` for it, so reading the `work` entry gives the work address
+            regardless of the primary flag. Because Deel can list the same address more than once, one address may
+            appear in several entries with different types.
+
+            Deel `home` addresses are returned as `personal`.
+
+            Use `?raw=true` to see Deel's original `type` and `primary` flags.
         - connector: hibob
           description: |
             HiBob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response.

@@ -1,5 +1,9 @@
 ## v10.58.5 - (2026-09-21)
 
+### Accounting API
+
+- Added **bill credit notes** (AP / supplier credit notes) to the [Workday](connectors/workday) connector, mapped to Workday's Supplier Invoice Adjustment object. List, get one, and the `supplier_id`/`subsidiary_id` filters are supported; `total_amount` reflects the sum of the credit note's line items when Workday leaves the header control total unset. Create, update, and delete are implemented but require the connection's Workday integration user to be granted the supplier-invoice-adjustment write security domain (see the resource gotchas).
+
 ### Ecommerce API
 
 - Added `order_number` to [Orders](apis/ecommerce/reference/orders) for [Magento](connectors/magento), mapped from Magento's `increment_id` — the customer-facing order number shown in the storefront and on order confirmations. Previously only Magento's internal `entity_id` was returned, as `id`, and `order_number` was absent from every record. The two are different numbers: an order with `id` `73556` has `order_number` `000071639`. Returned on both the list and get-one endpoints.

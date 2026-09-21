@@ -20547,6 +20547,9 @@ paths:
         - connector: acumatica
           description: |
             The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
+        - connector: pennylane
+          description: |
+            Pennylane has no dedicated tax rates API — VAT rates are a fixed, documented enum of 176 codes (e.g. `FR_200` for France's 20% rate) used directly on invoice/bill lines and ledger accounts, with no per-company variation and no listing endpoint. `taxRatesAll` and `taxRatesOne` return records from this fixed reference list rather than live per-company data; `add`, `update` and `delete` are not supported. A handful of codes (`FR_1_05`, `FR_1_75`, `FR_15_385`, Germany's extra-EU codes, and Spain's reverse-charge codes) encode a rate Pennylane does not document the meaning of, or have no numeric rate at all, and are returned with `effective_tax_rate: null` rather than a guessed value. Despite returning static data, each `taxRatesAll`/`taxRatesOne` call still makes one live request to Pennylane's `/me` endpoint as a required carrier call (its response is ignored) — a valid, connected Pennylane account is required, and the call still counts against Pennylane's rate limit.
         - connector: exact-online
           description: |
             `status` is derived from Exact's `IsBlocked` flag (`false` -> `active`, `true` -> `inactive`). Live-verified against a real division: the raw VATCode object has no `Active`-equivalent field of its own, only `IsBlocked`. Exact has no third state, so `archived` is never returned.
@@ -21581,6 +21584,11 @@ paths:
         - connector: sage-intacct-rest
           description: |
             `payment_allocations` is populated on both bills.get and bills.list via an extra batched query against `accounts-payable/payment-detail`, filtered by the bill's own key — this is a permanent added query on every bill read, not something only bills with payments pay for, since a bill with none still needs the lookup to know that. Live-verified: a bill with an applied payment returns `payment_allocations: [{id: "<payment id>", allocated_amount, date}]`; one with none returns `payment_allocations: null`.
+        - connector: lexware-office
+          description: |
+            `currency` is always `"EUR"` on this get-by-id operation, regardless of the bill's actual
+            currency — this endpoint does not return a currency field. `currency` is accurate on
+            `bills.list`.
       responses:
         '200':
           $ref: '#/components/responses/GetBillResponse'
@@ -22114,6 +22122,12 @@ paths:
             QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: lexware-office
           description: |
+            `status` can disagree between this list and a single-record read (`GET
+            /accounting/invoices/{id}`) for the same invoice at the same point in time — for example
+            one endpoint reporting `unpaid` while the other reports `authorised` for an invoice that
+            is open but not yet overdue. Prefer the single-record read as the source of truth for
+            status when reconciling.
+
             This list always excludes overdue invoices — the vendor's status filter rejects any
             request that combines an overdue filter with other statuses, and there is no unified
             `filter[status]` on this resource to request overdue invoices on their own. An overdue
@@ -22747,6 +22761,11 @@ paths:
         - connector: workday
           description: |
             It is required to provide tracking_categories.id in the line items, which corresponds to the worktag/cost_center_id in Workday. It is required to provide the item.id in the line items. Workday only supports `sales_item` and `service` types for line items and this is required.
+        - connector: lexware-office
+          description: |
+            Invoices cannot be updated through this connector once created — there is no update
+            operation for this resource. To correct a mistake on an issued invoice, create a credit
+            note against it and issue a new, corrected invoice instead.
       requestBody:
         required: true
         content:
@@ -23135,9 +23154,10 @@ paths:
             The Apideck service type is used for Acumatica non-stock items, and inventory is used for stock items.
         - connector: lexware-office
           description: |
-            Ledger accounts are read-only and list-only on this connector — there is no get-by-id,
-            create, update or delete. The vendor's own reference list has no per-record endpoint of
-            its own.
+            Ledger accounts map to Lexware Office's posting categories, a small, fixed,
+            vendor-managed reference list rather than a full chart of accounts. The list is
+            read-only: individual accounts cannot be fetched by id, and none can be created,
+            updated or deleted through this connector.
       responses:
         '200':
           $ref: '#/components/responses/GetLedgerAccountsResponse'
@@ -24281,6 +24301,11 @@ paths:
             `allocations[]` is not applied on create — the credit is created as a standalone `ARADJUSTMENT`. To apply it to invoices, follow up via `/vault/proxy` with `create_arpymt` drawing from the new credit's `RECORDNO` against the target `ARINVOICE`. `allocations` is not returned on read.
 
             `reference` cannot be stored — Sage Intacct's `create_aradjustment` rejects a `docnumber` element, and while it accepts an `externalid` element on create, that value is silently dropped and never returned on read (verified live). The `reference` field is only returned on reads when `DOCNUMBER` was set through another channel; it cannot be set on create or update via this API.
+        - connector: lexware-office
+          description: |
+            `line_items[].discount_percentage` is silently discarded on credit notes — the request
+            returns 201, but the line is stored at full price with no discount applied. Apply the
+            discount to `unit_price` directly instead.
         - connector: sevdesk
           description: |
             sevDesk requires every credit note to have an internal contact person (the sevDesk user
@@ -24633,6 +24658,10 @@ paths:
 
             `line_items[].total_amount` is accepted in either sign and always stored as a credit
             (negative) in Sage — this endpoint only ever updates credit adjustments, never debit ones.
+        - connector: lexware-office
+          description: |
+            Credit notes cannot be updated through this connector once created — there is no update
+            operation for this resource. Credit notes can only be created and read.
         - connector: sevdesk
           description: |
             Only `reference` and `currency` can be changed after creation. `note` is accepted by
@@ -24932,6 +24961,13 @@ paths:
         - connector: sage-business-cloud-accounting
           description: |
             The `allocations` field is not returned in responses. To retrieve allocation details, use the proxy API to call `/contact_allocations?contact_id={supplier_id}`.
+        - connector: workday
+          description: |
+            `total_amount` reflects the sum of the credit note's line items. Workday's header-level control total is optional and frequently left unset, so the header value is not relied on; when it is absent the connector reports the line-item total instead.
+
+            Only `filter[supplier_id]` and `filter[subsidiary_id]` narrow the list server-side. Other bill-credit-note filters are not offered because Workday's supplier invoice adjustment search has no equivalent server-side criterion — an unsupported filter is rejected rather than silently ignored. The `supplier_id` and `subsidiary_id` values must reference an existing supplier/company; an unknown id is rejected as an invalid reference rather than returning an empty list.
+
+            `status` is `authorised` once the credit note is approved, `draft` while unapproved, and `voided` when cancelled.
       responses:
         '200':
           $ref: '#/components/responses/GetBillCreditNotesResponse'
@@ -25028,6 +25064,13 @@ paths:
             The document currency follows the supplier's configured currency: a `currency` that differs from the supplier's is accepted but coerced to the supplier's currency.
             Line amounts are `unit_price × quantity`. When a line provides only `total_amount` and no `unit_price`, the unit price is derived as `total_amount / quantity` (quantity defaults to 1), so the line total is preserved.
             `total_tax` is computed by MYOB Acumatica from the document's tax details and cannot be set on create; `sub_total`, `currency_rate`, `tax_inclusive`, `line_items[].discount_amount` and `tracking_categories` are accepted but not persisted. The ledger account is selected by `line_items[].ledger_account.id`; `ledger_account.name` is read-only.
+        - connector: workday
+          description: |
+            A bill credit note is always issued as a supplier credit (it decreases the amount owed to the supplier). Send positive amounts; the credit direction is fixed and is not derived from the sign of the amount.
+
+            `date_issued` is stored as a calendar date — any time component is dropped. `line_items[].total_amount` is the line's extended amount (`unit_price × quantity`).
+
+            Create, update and delete require the connection's Workday integration user to be granted access to supplier invoice adjustments. Without that access Workday rejects the write as unauthorized even though read access to the same records succeeds.
       requestBody:
         required: true
         content:

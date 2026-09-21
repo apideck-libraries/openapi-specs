@@ -1,3 +1,11 @@
+## v10.58.3 - (2026-09-21)
+
+### CRM API
+
+- `parent_id` on the [Companies](apis/crm/reference/companies) resource is no longer read-only and can now be set on create and update. Supported by [HubSpot](connectors/hubspot), where a company's parent is a relationship between two companies rather than a stored field: send a company id to set or change the parent, `null` to remove it, and omit the field to leave the current parent untouched (an empty string is treated as omitted, not as a removal). A company cannot be made its own ancestor — HubSpot rejects a `parent_id` that would close a loop, at any depth. Three behaviours are worth planning for. **Reading a company back immediately after any parent change returns the previous `parent_id`**, because HubSpot derives the field from the underlying relationship and updates it a few seconds later; a read-modify-write loop that echoes a freshly-read record back will therefore re-apply the old parent, so wait for the value to settle or omit `parent_id` from updates not meant to change it. **The parent is applied before the rest of an update**, so if the request then fails for an unrelated reason — most commonly an unknown or mistyped `custom_fields` key — the parent change has already taken effect and is kept even though you receive an error; do not treat a failed company update carrying `parent_id` as "nothing happened". And **changing a parent leaves the two companies associated** under a plain, unlabelled relationship, so the previous parent still appears as a related company in HubSpot's UI without being the parent. On create, a `parent_id` naming a company that does not exist rejects the whole request and no company is created.
+- Note that `parent_id` is writable on the CRM Company model for **every** connector, but only [HubSpot](connectors/hubspot) and [Act](connectors/act) map it on writes. Other CRM connectors accept the field and silently discard it.
+- Fixed [HubSpot](connectors/hubspot) returning `parent_id` as an empty string instead of `null` for a company whose parent had been removed. A company that never had a parent already returned `null`; only the cleared state was affected. Clients checking `parent_id === ''` for "no parent" should check for `null`.
+
 ## v10.58.2 - (2026-09-18)
 
 ### Accounting API

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.58.6
+  version: 10.58.7
   title: Proxy API
   description: |+
     Welcome to the Proxy API.
@@ -25,6 +25,8 @@ info:
     | x-apideck-downstream-method        | String | No       | Downstream method. If not provided the upstream method will be inherited, depending on the verb/method of the request this will contain the request body you want to POST/PATCH/PUT. |
     | x-apideck-service-id               | String | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.                                   |
     | x-apideck-timeout                  | Integer | No      | Override the default downstream request timeout in milliseconds. Default is 28000 (28 seconds).                                                                    |
+
+    Query parameters must be included in the `x-apideck-downstream-url` header. The request URL's own query string is not forwarded downstream: it is ignored.
 
     ## Authorization
 

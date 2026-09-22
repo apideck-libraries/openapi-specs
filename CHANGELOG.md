@@ -1,3 +1,10 @@
+## v10.58.7 - (2026-09-22)
+
+### Accounting API
+
+- Added full-CRUD **bill credit notes** (AP / supplier credit notes) to the [Exact Online](connectors/exact-online) and [Exact Online (UK)](connectors/exact-online-uk) connectors, mirroring the existing [Exact Online (NL)](connectors/exact-online-nl) implementation. As on NL, an AP credit note is an Exact purchase entry (`Type 31`, distinguished from a purchase invoice by the sign of the line amounts); creating one requires the `purchase_journal_code` connection setting, and `line_items[].total_amount` must be a positive amount of at least one cent. See the resource gotchas for the full behaviour (settlement fields not returned, tax-exclusive line booking, duplicate rejection).
+- The shared Exact write-guard hook now derives its verification host from the connection's own declared server (Dutch, UK, or the multi-region base connector's `tld`) instead of a hardcoded Dutch host, so the update/delete type-check runs against the correct Exact instance for every variant.
+
 ## v10.58.6 - (2026-09-22)
 
 ### Ecommerce API

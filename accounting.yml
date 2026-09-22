@@ -23677,6 +23677,8 @@ paths:
             late.
 
             This applies to every NetSuite date-only write field across the accounting resources.
+
+            `sales_details.unit_price` is stored on the item's Base Price level, and NetSuite requires a currency for it. When `currency` is omitted, the price is put in the currency of the subsidiary the request is scoped to (the `x-apideck-company-id` header or the connection's Default Subsidiary), otherwise in the account's base currency. On a OneWorld account with several base currencies and no subsidiary scope, neither applies and NetSuite rejects the request with "Missing required field: currency" — send `currency` in that case.
         - connector: quickbooks
           description: |
             The `taxable` field is applicable to US companies only and should be sent in the request body if your QuickBooks account is in the US region.
@@ -23893,6 +23895,8 @@ paths:
             late.
 
             This applies to every NetSuite date-only write field across the accounting resources.
+
+            `sales_details.unit_price` is stored on the item's Base Price level, and NetSuite requires a currency for it. When `currency` is omitted, the price is put in the currency the item is already priced in, otherwise in the currency of the subsidiary the request is scoped to (the `x-apideck-company-id` header or the connection's Default Subsidiary), otherwise in the account's base currency. On a OneWorld account with several base currencies and no subsidiary scope, none of these apply and NetSuite rejects the request with "Missing required field: currency" — send `currency` in that case.
         - connector: quickbooks
           description: |
             The `taxable` field is applicable to US companies only and should be sent in the request body if your QuickBooks account is in the US region.

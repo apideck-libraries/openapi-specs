@@ -1,3 +1,9 @@
+## v10.58.6 - (2026-09-22)
+
+### Ecommerce API
+
+- Added a read-only `addresses` array to the [Stores](apis/ecommerce/reference/stores) model, using the existing Ecommerce address shape. [BigCommerce](connectors/bigcommerce) returns the store's default shipping origin; without the `store_inventory_read_only` scope the array is empty. `raw=true` on the BigCommerce store endpoint now returns the payload keyed by `store` and `locations`.
+
 ## v10.58.5 - (2026-09-21)
 
 ### Accounting API

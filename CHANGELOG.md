@@ -1,3 +1,9 @@
+## v10.58.12 - (2026-09-23)
+
+### Accounting API
+
+- Added `filter[number]` to [Journal Entries](apis/accounting/reference/journal-entries) — an exact-match lookup on a journal entry's `number` — and mapped it for [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite). This closes a gap in the write-timeout flow: a create that times out or returns a 5xx may still have been recorded, and the Journal Entries list previously accepted only `filter[updated_since]`, so there was no supported way to check whether an entry existed before retrying. Two QuickBooks behaviours are worth knowing: QuickBooks does not enforce unique journal entry numbers, so a retried create with the same `number` records a second entry and `filter[number]` can return more than one match — use a unique `number` per entry and look it up before retrying; and `number` is limited to 21 characters, with longer values rejected rather than truncated. The new filter key is declared on the unified Journal Entries filter, so other connectors reject it with `UnsupportedFiltersError` until mapped.
+
 ## v10.58.11 - (2026-09-23)
 
 ### Accounting API

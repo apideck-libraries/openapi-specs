@@ -1,3 +1,10 @@
+## v10.58.13 - (2026-09-23)
+
+### Accounting API
+
+- Added `bank-feed-accounts.add` support for [Zoho Books](connectors/zoho-books). Creates a new bank/credit-card account — Zoho has no way to register an existing account as a separate feed object, matching the existing behaviour of [NetSuite](connectors/netsuite) and the [Exact Online](connectors/exact-online) family for this same operation. `target_account_name` is required even though it is not strict-required by this schema; omitting it is rejected.
+- Rebuilt `bank-feed-statements` support for [Zoho Books](connectors/zoho-books) on Zoho's statement-import endpoints (`POST /bankstatements`, `GET`/`DELETE` on `.../statement/...`) instead of individually-posted bank transactions. `add` no longer requires any connector setting and now accepts multiple `transactions` per call instead of only the first. **`id` changes format for every record**, from `transaction_id-account_id` to `account_id:statement_id` — a previously stored id for this resource is no longer valid. `status` always reads as `pending`, since every transaction created through this endpoint starts uncategorized in Zoho and stays that way until categorized inside Zoho's own UI. `delete` is newly supported; `update` remains unimplemented. Zoho inverts `transactions[].credit_or_debit` between what is submitted and what is read back on this endpoint — the value returned here is the corrected direction.
+
 ## v10.58.12 - (2026-09-23)
 
 ### Accounting API

@@ -1,3 +1,10 @@
+## v10.58.11 - (2026-09-23)
+
+### Accounting API
+
+- Added full-CRUD [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Campfire](connectors/campfire) — list, get, create, update and delete. Backed by Campfire Debit Memos, the accounts-payable mirror of the existing `credit-notes` (Campfire Credit Memos, AR); carries a `supplier` counterparty and `type: accounts_payable_credit`. Filterable by `number` and `supplier_id`. `status` reflects how much of the credit has been applied: `posted` while open (nothing applied), `partially_paid` when partially used, `paid` when fully used and `voided` when voided; `balance`/`remaining_credit` report the unapplied amount. Line items are ledger-account based, so `line_items[].quantity`, `unit_price` and `item` are not populated, and `allocations` is not returned (a debit memo is applied against accounts payable rather than linked to a specific bill). On update, supplying `line_items` replaces the entire set of lines; omit it to leave existing lines unchanged.
+- Marked [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) as unsupported for [FreshBooks](connectors/freshbooks): FreshBooks exposes Bills, Vendors and Bill Payments but has no accounts-payable credit note object (no vendor/supplier credit note endpoint; its `credit_notes` endpoint is accounts-receivable/client-only) and no negative-bill representation.
+
 ## v10.58.10 - (2026-09-23)
 
 ### HRIS API

@@ -1,3 +1,9 @@
+## v10.58.14 - (2026-09-23)
+
+### HRIS API
+
+- [Workday](connectors/workday) now returns `department_id` and `department_name` when listing [Employees](apis/hris/reference/employees), with the same values as Get Employee. Previously these fields were only available on Get Employee. `company_id`, `company_name`, `division_id`, `division` and `custom_fields` are still returned on Get Employee only.
+
 ## v10.58.13 - (2026-09-23)
 
 ### Accounting API

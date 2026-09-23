@@ -1,4 +1,14 @@
+## v10.58.9 - (2026-09-23)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Access Financials](connectors/access-financials) — list, get, create and delete (Access Financials purchase transactions are immutable, so `update` is not supported). Backed by the GraphQL creditor (purchase) transaction branch — the AP mirror of the existing `credit-notes` (AR, debtor side); carries a `supplier` counterparty and `type: accounts_payable_credit`. Filterable by `number`, `supplier_id`, `updated_since` and `created_since`, and sortable by `created_at` and `updated_at`. `status` is derived from the outstanding balance: `paid` when fully settled, `posted` while outstanding, `partially_paid` in between (Access Financials posts credit notes immediately, so there is no draft lifecycle). `line_items` and `allocations` are returned only on get-one, not in the list. If the company has compulsory costing enabled, every line must carry a project and cost centre via `line_items[].tracking_categories`. Billing and shipping addresses are not available on purchase transactions.
+
 ## v10.58.8 - (2026-09-22)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [FreeAgent](connectors/freeagent). FreeAgent has no dedicated bill credit note object — a bill credit note is a FreeAgent bill with a negative total — so this resource supports get (by id), create and delete, but **not** listing: FreeAgent offers no server-side filter for credit notes, and isolating them client-side would break the bills list's pagination. Discover credit notes through [Bills](apis/accounting/reference/bills), where they appear as bills with a negative total; fetching a non-credit bill's id through this resource returns `404`. Amounts are stored negative by FreeAgent and normalized to positive on read (`total_amount`, `sub_total`, `total_tax`, `balance` and each `line_items[].total_amount`; `total_tax` is derived as `total_amount` − `sub_total`). `status` is `posted` while a balance is outstanding and `paid` once fully settled — there is no draft state. `line_items[].tax_rate.code` carries the FreeAgent sales-tax percentage; `tax_rate.id`, `remaining_credit`, `allocations`, `tax_code`, `subsidiary`, `tracking_categories`, `custom_fields` and `row_version` are not populated.
 
 ## v10.58.7 - (2026-09-22)
 
@@ -77,8 +87,6 @@
 ### Accounting API
 
 - Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [MYOB](connectors/myob). MYOB has no dedicated AP credit-note endpoint — bill credit notes are `Purchase/Bill` records with Status `Debit` (the AP mirror of AR credit notes, which are invoices with Status `Credit`). Read-only (list and get); negative header amounts are normalized to positive, line items are available only on get-one, and writes are unsupported (create via the bills endpoint with negative line amounts).
-
-## v10.57.2 - (2026-09-16)
 
 ## v10.57.2 - (2026-09-16)
 

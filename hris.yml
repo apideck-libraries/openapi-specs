@@ -5531,6 +5531,8 @@ paths:
             Job Level is omitted when the worker's job profile does not define `Job_Level_Reference` in Workday (configured per profile), or when the connection's Integration System User does not have access to the Staffing web service. Other custom fields and the rest of the response are unaffected in either case.
 
             This enrichment is intentionally not performed on List Employees to avoid an extra SOAP call per worker.
+
+            On Get Employee, `manager.name`, `manager.first_name`, `manager.last_name`, `manager.email` and `manager.employment_status` are populated from a separate lookup of the manager's own worker record (List Employees returns `manager.id` only). When Workday cannot return that record — for example the manager is terminated, or is outside the integration user's security scope — those fields are omitted, `manager.id` is still returned, the rest of the employee is unaffected, and the response carries a `meta.warnings` entry of type `downstream_request_failed`. When the employee has no manager reference, `manager` is omitted from the response entirely and no warning is emitted.
         - connector: acerta
           description: |
             `employment_start_date` may be sourced from Acerta's "date in company" value instead of

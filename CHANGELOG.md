@@ -1,3 +1,9 @@
+## v10.58.10 - (2026-09-23)
+
+### HRIS API
+
+- Added new [SD Worx BE SME OpenPayroll](connectors/sdworx-be-sme) connector with support for [Employees](apis/hris/reference/employees) and [Companies](apis/hris/reference/companies) resources, plus virtual (polling-based) `hris.employee.created`, `hris.employee.updated`, `hris.employee.terminated`, `hris.company.created` and `hris.company.updated` webhook events. The third SD Worx connector alongside [SD Worx](connectors/sdworx) and [SD Worx Webservice](connectors/sdworx-webservice), which remains the connector for time off. `companies` lists the employers (payroll files) available to a connection, which is scoped to one employer at a time via the `employer_file_number` setting; credentials are entered per connection rather than once for the whole application, so one customer's employers are never visible to another's. `employees` returns only currently active contracts for the selected employer — a contract can still read `employment_status: terminated` for a period after its leaving date passes, until SD Worx fully removes it from the active list.
+
 ## v10.58.9 - (2026-09-23)
 
 ### Accounting API

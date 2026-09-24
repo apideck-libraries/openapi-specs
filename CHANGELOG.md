@@ -1,3 +1,9 @@
+## v10.58.18 - (2026-09-24)
+
+### Accounting API
+
+- Added [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Lexware Office](connectors/lexware-office) — list, get, create and update (delete is not supported; the vendor has no delete endpoint for this document type). Backed by Lexware Office purchase credit notes (`voucherType: purchasecreditnote` on the shared `/v1/voucherlist` and `/v1/vouchers` endpoints), the accounts-payable mirror of the existing AR `credit-notes`; carries a `supplier` counterparty and `type: accounts_payable_credit`. Can only be created finalized — `status: "draft"` is rejected with a `400` rather than silently creating a finalized record — and `status` is fixed at creation (a status sent on update is ignored, as the vendor rejects status transitions on update). Amounts are stored in EUR only; a non-EUR `currency` is not persisted and reads back as `EUR`. Line items are summary-level — only `total_amount`, `tax_amount`, `tax_rate` and `ledger_account` are kept; `description`, `quantity`, `unit_price` and discounts sent on a line are dropped. The list always excludes overdue credit notes (the vendor's status filter rejects combining `overdue` with other statuses) and offers no filters; list entries carry no line items and populate `supplier.display_name`, whereas get-one returns `line_items` but only `supplier.id`. On update, supplying `line_items` replaces the entire set of lines.
+
 ## v10.58.17 - (2026-09-24)
 
 ### Accounting API

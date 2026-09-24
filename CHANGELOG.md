@@ -1,3 +1,9 @@
+## v10.58.17 - (2026-09-24)
+
+### Accounting API
+
+- Added full-CRUD [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Rillet](connectors/rillet) — list, get, create, update and delete. Backed by Rillet Vendor Credits, the accounts-payable mirror of the existing `credit-notes` (Rillet Credit Memos, AR); carries a `supplier` counterparty and `type: accounts_payable_credit`. `status` reflects how much of the credit has been applied: `posted` while open (nothing applied), `partially_paid` when partially used and `paid` when fully applied; `balance` reports the unapplied amount. `subsidiary.id` is required, and line ledger accounts are selected by `line_items[].ledger_account.id` using the account code (e.g. `50110`), not a UUID. Supplying `allocations` (type `bill`) applies the credit against those bills at create time — each allocation's `amount` is applied to its `bill_id`, and a null allocation amount defaults to the credit's `total_amount` (only when a single bill is targeted; when applying to multiple bills every allocation must carry its own amount). Rillet rejects applying a credit to a bill that contains fixed-asset lines; when an application is rejected the credit note is still created but left unapplied. An applied credit cannot be deleted and cannot be unapplied through the API. Line-level tax is not sent (`line_items[].tax_rate`/`tax_amount` are ignored — send `line_items[].total_amount` tax-inclusive), and `currency_rate` is not persisted. On update, supplying `line_items` replaces the entire set of lines. The credit note `number` cannot be changed after creation.
+
 ## v10.58.16 - (2026-09-24)
 
 ### Accounting API

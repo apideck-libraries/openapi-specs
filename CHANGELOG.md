@@ -1,3 +1,9 @@
+## v10.58.16 - (2026-09-24)
+
+### Accounting API
+
+- Added full-CRUD [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) support for [Alegra](connectors/alegra) — list, get, create, update and delete. Backed by Alegra's debit notes (`/debit-notes`, "nota débito de proveedor"), the accounts-payable document that reduces the balance owed to a supplier — the AP mirror of the existing AR `credit-notes` (Alegra credit notes). Carries a `supplier` counterparty and `type: accounts_payable_credit`; `allocations` reference the supplier bills the note is applied to. `status` is derived from the applied/outstanding amounts: `posted` while unapplied, `partially_paid` when partially applied, `paid` once fully applied (there is no draft or void state on the document). Line discounts are percentage-based; `currency` is returned as `MXN`.
+
 ## v10.58.14 - (2026-09-23)
 
 ### HRIS API

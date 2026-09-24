@@ -1,3 +1,9 @@
+## v10.58.19 - (2026-09-24)
+
+### Accounting API
+
+- [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite) now return `line_items[].ledger_account` (`id` and `name`) when getting or listing [Credit Notes](apis/accounting/reference/credit-notes), populated from the income account on each sales line, the same way as on Invoices. Previously this field was only returned on Invoices. As on Invoices, `name` is the account's own name, without its parent account path.
+
 ## v10.58.18 - (2026-09-24)
 
 ### Accounting API

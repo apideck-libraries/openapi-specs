@@ -14,7 +14,7 @@ deprecations programmatically.
 
 <!--
   ── Entry format (authoring) ─────────────────────────────────────────────────
-  Reconciled by `/sunset --write`; see `.claude/rules/sunsetting.md` for the full
+  Reconciled by `/sunset --write`; see `.claude/docs/workflows/sunsetting.md` for the full
   process, and `.claude/commands/sunset.md` for the command. Do not hand-edit
   entries that carry an anchor — the next reconcile will overwrite them.
 

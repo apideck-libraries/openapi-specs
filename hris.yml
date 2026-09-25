@@ -5132,6 +5132,15 @@ paths:
         - connector: lucca-hr
           description: |
             `total_count` is available in Lucca HR but requires `?include=totalCount` query parameter. Currently not wired — `meta.total_count` will not appear.
+
+            Lucca enforces a limit of 50 requests per minute per Lucca domain (see
+            https://developers.luccasoftware.com/documentation/limits). The quota is shared by every integration
+            connected to that domain, not per Unify connection, so other tools using the same Lucca account consume
+            it too. When the limit is exceeded, Unify returns HTTP 429. When Lucca includes a retry delay in that
+            response (it has in every observed case), the 429 also carries a `Retry-After` header (the number of
+            seconds to wait before retrying), `x-downstream-ratelimit-limit` and `x-downstream-ratelimit-reset` (the
+            Unix epoch time in milliseconds at which the window frees). Lucca provides no remaining-request count,
+            and no rate-limit headers are returned on successful responses.
         - connector: haileyhr
           description: |
             Hailey HR supports "parallel employments" (multiple Employment records per employee). `department_id`, `department_name`, `division`, `division_id`, `company_id`, `company_name`, `title`, `team`, `manager.id`, and `employment_role.type` reflect the employee's **effectual** employment — the active one, or when none is active the next-to-start, or failing that the most recent ended one (status precedence: active → will-start → ended). `priority` is a manual, user-ordered rank that is deliberately not recalculated when an employment ends, so it does not by itself indicate which employment is current. `employment_start_date`/`employment_end_date` reflect overall company tenure instead — see "Get Employee" for per-employment detail via `jobs[]`.
@@ -5600,6 +5609,16 @@ paths:
             An employee can also hold multiple titles and belong to multiple teams at once (`titleIds`/`teamIds` arrays). We only return the first of each as `title`/`team`, since the unified schema allows a single value for both.
 
             Salaries carry a `history[]` of effective-dated amounts — a raise adds a new dated entry rather than replacing the old one. `compensations[].rate`/`effective_date` reflect the entry with the most recent date that has already passed, not just the last entry added.
+        - connector: lucca-hr
+          description: |
+            Lucca enforces a limit of 50 requests per minute per Lucca domain (see
+            https://developers.luccasoftware.com/documentation/limits). The quota is shared by every integration
+            connected to that domain, not per Unify connection, so other tools using the same Lucca account consume
+            it too. When the limit is exceeded, Unify returns HTTP 429. When Lucca includes a retry delay in that
+            response (it has in every observed case), the 429 also carries a `Retry-After` header (the number of
+            seconds to wait before retrying), `x-downstream-ratelimit-limit` and `x-downstream-ratelimit-reset` (the
+            Unix epoch time in milliseconds at which the window frees). Lucca provides no remaining-request count,
+            and no rate-limit headers are returned on successful responses.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeeResponse'
@@ -5926,6 +5945,15 @@ paths:
         - connector: lucca-hr
           description: |
             `total_count` is available in Lucca HR but requires `?include=totalCount` query parameter. Currently not wired — `meta.total_count` will not appear.
+
+            Lucca enforces a limit of 50 requests per minute per Lucca domain (see
+            https://developers.luccasoftware.com/documentation/limits). The quota is shared by every integration
+            connected to that domain, not per Unify connection, so other tools using the same Lucca account consume
+            it too. When the limit is exceeded, Unify returns HTTP 429. When Lucca includes a retry delay in that
+            response (it has in every observed case), the 429 also carries a `Retry-After` header (the number of
+            seconds to wait before retrying), `x-downstream-ratelimit-limit` and `x-downstream-ratelimit-reset` (the
+            Unix epoch time in milliseconds at which the window frees). Lucca provides no remaining-request count,
+            and no rate-limit headers are returned on successful responses.
       responses:
         '200':
           $ref: '#/components/responses/GetHrisCompaniesResponse'
@@ -6063,6 +6091,16 @@ paths:
             `id` is the SD Worx employer file number (for example `1AB1234`). Only `legal_name`, `display_name` and
             `status` are available; `status` is `active` while the payroll file has no end date and `inactive` once it
             has one. An unknown employer file number returns a 404.
+        - connector: lucca-hr
+          description: |
+            Lucca enforces a limit of 50 requests per minute per Lucca domain (see
+            https://developers.luccasoftware.com/documentation/limits). The quota is shared by every integration
+            connected to that domain, not per Unify connection, so other tools using the same Lucca account consume
+            it too. When the limit is exceeded, Unify returns HTTP 429. When Lucca includes a retry delay in that
+            response (it has in every observed case), the 429 also carries a `Retry-After` header (the number of
+            seconds to wait before retrying), `x-downstream-ratelimit-limit` and `x-downstream-ratelimit-reset` (the
+            Unix epoch time in milliseconds at which the window frees). Lucca provides no remaining-request count,
+            and no rate-limit headers are returned on successful responses.
       responses:
         '200':
           $ref: '#/components/responses/GetHrisCompanyResponse'
@@ -6267,6 +6305,15 @@ paths:
         - connector: lucca-hr
           description: |
             `total_count` is available in Lucca HR but requires `?include=totalCount` query parameter. Currently not wired — `meta.total_count` will not appear.
+
+            Lucca enforces a limit of 50 requests per minute per Lucca domain (see
+            https://developers.luccasoftware.com/documentation/limits). The quota is shared by every integration
+            connected to that domain, not per Unify connection, so other tools using the same Lucca account consume
+            it too. When the limit is exceeded, Unify returns HTTP 429. When Lucca includes a retry delay in that
+            response (it has in every observed case), the 429 also carries a `Retry-After` header (the number of
+            seconds to wait before retrying), `x-downstream-ratelimit-limit` and `x-downstream-ratelimit-reset` (the
+            Unix epoch time in milliseconds at which the window frees). Lucca provides no remaining-request count,
+            and no rate-limit headers are returned on successful responses.
       responses:
         '200':
           $ref: '#/components/responses/GetDepartmentsResponse'
@@ -6353,6 +6400,17 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: lucca-hr
+          description: |
+            Lucca enforces a limit of 50 requests per minute per Lucca domain (see
+            https://developers.luccasoftware.com/documentation/limits). The quota is shared by every integration
+            connected to that domain, not per Unify connection, so other tools using the same Lucca account consume
+            it too. When the limit is exceeded, Unify returns HTTP 429. When Lucca includes a retry delay in that
+            response (it has in every observed case), the 429 also carries a `Retry-After` header (the number of
+            seconds to wait before retrying), `x-downstream-ratelimit-limit` and `x-downstream-ratelimit-reset` (the
+            Unix epoch time in milliseconds at which the window frees). Lucca provides no remaining-request count,
+            and no rate-limit headers are returned on successful responses.
       responses:
         '200':
           $ref: '#/components/responses/GetDepartmentResponse'
@@ -6730,6 +6788,15 @@ paths:
         - connector: lucca-hr
           description: |
             `total_count` is available in Lucca HR but requires `?include=totalCount` query parameter. Currently not wired — `meta.total_count` will not appear.
+
+            Lucca enforces a limit of 50 requests per minute per Lucca domain (see
+            https://developers.luccasoftware.com/documentation/limits). The quota is shared by every integration
+            connected to that domain, not per Unify connection, so other tools using the same Lucca account consume
+            it too. When the limit is exceeded, Unify returns HTTP 429. When Lucca includes a retry delay in that
+            response (it has in every observed case), the 429 also carries a `Retry-After` header (the number of
+            seconds to wait before retrying), `x-downstream-ratelimit-limit` and `x-downstream-ratelimit-reset` (the
+            Unix epoch time in milliseconds at which the window frees). Lucca provides no remaining-request count,
+            and no rate-limit headers are returned on successful responses.
         - connector: haileyhr
           description: |
             HaileyHR returns time off as one entry per calendar day, with no request-level identifier and no date range. Unify surfaces each day as its own time-off request, so start_date always equals end_date. A multi-day booking therefore appears as one request per day rather than a single spanning request. Day-based entries report units `days` (a full day = 1, a half day = 0.5); entries booked in minutes report units `hours` (minutes / 60). Unify does not merge consecutive days into a span: HaileyHR provides no request boundary, so calendar-adjacency alone cannot tell two separate same-reason bookings apart from one longer booking.
@@ -6839,6 +6906,17 @@ paths:
         - $ref: '#/components/parameters/employeeId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: lucca-hr
+          description: |
+            Lucca enforces a limit of 50 requests per minute per Lucca domain (see
+            https://developers.luccasoftware.com/documentation/limits). The quota is shared by every integration
+            connected to that domain, not per Unify connection, so other tools using the same Lucca account consume
+            it too. When the limit is exceeded, Unify returns HTTP 429. When Lucca includes a retry delay in that
+            response (it has in every observed case), the 429 also carries a `Retry-After` header (the number of
+            seconds to wait before retrying), `x-downstream-ratelimit-limit` and `x-downstream-ratelimit-reset` (the
+            Unix epoch time in milliseconds at which the window frees). Lucca provides no remaining-request count,
+            and no rate-limit headers are returned on successful responses.
       responses:
         '200':
           $ref: '#/components/responses/GetTimeOffRequestResponse'

@@ -4989,16 +4989,14 @@ paths:
             The Ceridian Dayforce "List Employees" endpoint only returns employee IDs by default. To get full employee details, use the "Get Employee" endpoint. For virtual webhook events on Ceridian Dayforce, we monitor the "List Employees" response, which has a very small set of fields in comparison to the "Get Employee" response. This is the reason why we only support `hris.employee.created` events for this connector.
         - connector: hibob
           description: |
-            HiBob allows you to define employee fields that aren't included by default on the 'List Employees' response. By using the fields parameter, you can specifically request these properties to be part of your response.
-            Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
+            If your Unify plan has the 'Custom Field Mapping' feature, you can map custom fields to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
             Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
-            For getting custom field values, please use the 'Get Employee' (employeesOne) call instead of 'List Employees'.
+            On 'List Employees', only mapped custom fields have values. Other custom fields are returned with `value: null`. For getting all custom field values, please use the 'Get Employee' (employeesOne) call instead of 'List Employees'.
         - connector: hibob-oauth
           description: |
-            HiBob allows you to define employee fields that aren't included by default on the 'List Employees' response. By using the fields parameter, you can specifically request these properties to be part of your response.
-            Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
+            If your Unify plan has the 'Custom Field Mapping' feature, you can map custom fields to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
             Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
-            For getting custom field values, please use the 'Get Employee' (employeesOne) call instead of 'List Employees'.
+            On 'List Employees', only mapped custom fields have values. Other custom fields are returned with `value: null`. For getting all custom field values, please use the 'Get Employee' (employeesOne) call instead of 'List Employees'.
         - connector: paylocity
           description: For virtual webhook events on Paylocity, we monitor the "List Employees" response, which has a very small set of fields in comparison of the "Get Employee" response.
         - connector: sage-hr
@@ -5465,13 +5463,11 @@ paths:
             Use `?raw=true` to see Deel's original `type` and `primary` flags.
         - connector: hibob
           description: |
-            HiBob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response.
-            Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
+            If your Unify plan has the 'Custom Field Mapping' feature, you can map custom fields to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
             Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
         - connector: hibob-oauth
           description: |
-            HiBob allows you to define employee fields that aren't included by default on the 'Get Employee' response. By using the fields parameter, you can specifically request these properties to be part of your response.
-            Additionally, if your Unify plan has the 'Custom Field Mapping' feature, you can map these properties to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
+            If your Unify plan has the 'Custom Field Mapping' feature, you can map custom fields to your responses. Once mapped, they will be included in the custom_mappings property within Unify responses.
             Important to know is that HiBob has permission controls for users to determine which data will be available on their API. This can lead to specific fields not being available (example: `birthday`).
         - connector: microsoft-dynamics-hr
           description: |

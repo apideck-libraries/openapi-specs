@@ -6962,6 +6962,13 @@ paths:
             updates it a few seconds later; re-read the company if you need to confirm the parent.
             Be careful not to feed that early read into a follow-up update — on the update endpoint
             an explicit `parent_id` is an instruction, so echoing a stale value back will apply it.
+        - connector: zoho-crm
+          description: |
+            `parent_id` sets the account's Parent Account at creation. An empty string is treated
+            as omitted, and the account is created without a parent.
+
+            If `parent_id` names an account that does not exist, Zoho rejects the entire create
+            and no company is created.
         - connector: planhat
           description: The status values mentioned by planhat are prospect,coming,customer,canceled,lost.
         - connector: microsoft-dynamics
@@ -6976,6 +6983,20 @@ paths:
             fails with an actionable error; write those via pass_through with an explicit
             `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
             value is not supported.
+
+            `parent_id` sets the account's Parent Account at creation. An empty string or `null` is
+            treated as omitted, and the account is created without a parent. If `parent_id` names an
+            account that does not exist, Dynamics rejects the entire create and no company is created.
+        - connector: odoo
+          description: |
+            `parent_id` is ignored on create and is never sent to Odoo. On current Odoo Online versions,
+            giving a company a parent company turns it into a contact of that parent: it takes on the
+            parent's VAT number and is no longer returned by the Companies endpoints. The connector
+            therefore does not write the parent, so the company stays available through this API.
+
+            When reading companies, `parent_id` returns the id of the parent company where one is set.
+            On Odoo Online a company with a parent is not returned by the Companies endpoints, so in
+            practice `parent_id` is only populated on release versions (Odoo.sh or self-hosted).
       requestBody:
         required: true
         content:
@@ -7197,6 +7218,21 @@ paths:
             `filter[updated_since]` poll, with nothing visibly different from your previous copy;
             and because this registers as a modification on HubSpot's side, it can trigger any of
             your own HubSpot workflows that key on company property changes or last-modified date.
+        - connector: zoho-crm
+          description: |
+            `parent_id` sets, changes or removes the account's Parent Account. Send an account id
+            to set or change the parent, `null` to remove it, and omit the field to leave the
+            current parent untouched. An empty string is treated as omitted, not as a request to
+            remove the parent.
+
+            An update that sends only `parent_id: null` returns an error, because no fields reach
+            Zoho. Send `parent_id: null` together with another field to remove the parent.
+
+            If `parent_id` names an account that does not exist, Zoho rejects the entire update.
+
+            Zoho does not guard the hierarchy: it accepts an account as its own parent, and two
+            accounts as each other's parent. Check the target before setting a parent if loops
+            matter to you.
         - connector: planhat
           description: The status values mentioned by planhat are prospect,coming,customer,canceled,lost.
         - connector: microsoft-dynamics
@@ -7211,6 +7247,25 @@ paths:
             fails with an actionable error; write those via pass_through with an explicit
             `<navigationProperty>@odata.bind` key. Clearing a lookup custom field by sending a null
             value is not supported.
+
+            `parent_id` sets, changes or removes the account's Parent Account. Send an account id to
+            set or change the parent, `null` to remove it, and omit the field to leave the current
+            parent untouched. An empty string is treated as omitted, not as a request to remove the
+            parent. Unlike lookup custom fields, `parent_id` can be cleared with `null`.
+
+            If `parent_id` names an account that does not exist, or would make an account its own
+            parent or ancestor, Dynamics rejects the entire update.
+        - connector: odoo
+          description: |
+            `parent_id` is ignored on update and is never sent to Odoo. On current Odoo Online versions,
+            giving a company a parent company turns it into a contact of that parent: it takes on the
+            parent's VAT number and is no longer returned by the Companies endpoints. The connector
+            therefore does not write the parent, so the company stays available through this API.
+            Sending `null` does not remove an existing parent either.
+
+            When reading companies, `parent_id` returns the id of the parent company where one is set.
+            On Odoo Online a company with a parent is not returned by the Companies endpoints, so in
+            practice `parent_id` is only populated on release versions (Odoo.sh or self-hosted).
       requestBody:
         required: true
         content:

@@ -1,3 +1,10 @@
+## v10.59.0 - (2026-09-25)
+
+### Accounting API
+
+- Added batch create to [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Bill Credit Notes](apis/accounting/reference/bill-credit-notes), [Payments](apis/accounting/reference/payments) and [Bill Payments](apis/accounting/reference/bill-payments): `POST /accounting/{resource}/batch` creates several records in one request. The body is an array of `{ "_ref": "...", "data": { ...record } }`, and each item's optional `_ref` comes back on its own result. Items are processed independently, so the endpoint returns `200` with one result per item in the order sent — read the per-item `status`, not the HTTP status, to see which records were written. The item limit per request depends on the connector; a request over it is rejected before anything is written. Batch update is not part of this release.
+- Added `batch_support` to the [Connector](apis/connector/reference/connectors) model, alongside `webhook_support`. It reports how a connector satisfies a batch create: `native` (one call to the provider's own batch endpoint), `loop` (a sequential fan-out, one call per item) or `none` (no batch write; the batch endpoints reject the request). The request and response contract is identical either way — the field is published so a client can anticipate latency and downstream call volume. `none` is the default, so check it before calling a batch endpoint.
+- Each batch item's `data` follows a `{Model}CreateInput` schema — the resource model with the read-only properties removed, so a batch item accepts exactly what the single-record create endpoint accepts and rejects a caller-supplied `id` the same way. The models returned on reads are unchanged.
 ## v10.58.19 - (2026-09-24)
 
 ### Accounting API

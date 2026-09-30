@@ -1,3 +1,12 @@
+## v10.59.1 - (2026-09-30)
+
+### CRM API
+
+- Added [Notes](apis/crm/reference/notes) support for [Teamleader](connectors/teamleader) — list, create, update and delete. Getting a single note by id is not supported, as Teamleader has no endpoint for it; the request returns `501`.
+- Added the optional `filter[contact_id]`, `filter[company_id]` and `filter[opportunity_id]` filters to the [Notes](apis/crm/reference/notes) list endpoint. They are available to every connector, but only connectors that support them accept them; other connectors return the existing `UnsupportedFiltersError`.
+- Teamleader only lists the notes of a single parent record, so one of these filters is required; without one, Teamleader's `400` ("filter must be present") is returned. When more than one is sent, `contact_id` is used first, then `company_id`, then `opportunity_id`. The same order applies when creating a note, which is attached to exactly one parent. No total record count is returned.
+- Teamleader treats note `content` as HTML and stores it as Markdown: special characters such as `[` and `]` are returned escaped, whitespace is trimmed, and a `<` directly followed by a letter (for example `a<b`) can cut off the rest of the text even though the request succeeds. Only `content` can be updated — a note cannot be moved to another parent. `title`, `owner_id` and `updated_at` are not available, and leads (Teamleader contacts in this connector) are addressed with `contact_id`.
+
 ## v10.59.0 - (2026-09-25)
 
 ### Accounting API

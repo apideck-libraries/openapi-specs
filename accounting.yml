@@ -33344,7 +33344,32 @@ paths:
             Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
         - connector: microsoft-dynamics-365-business-central
           description: |
-            If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central.
+            Line items are created together with the purchase order. The type of each line depends on what it references.
+            A line with `item.id` becomes an item line and a line with `ledger_account.id` becomes a general ledger account
+            line. Any other line becomes a comment line, including a line that references the item or account only by
+            `code`. Comment lines keep their `quantity` and `unit_price` but are not included in the order totals. A line
+            cannot reference both `item.id` and `ledger_account.id`.
+
+            `unit_price` is the direct unit cost of the line. `unit_of_measure` is not written, so the item's base unit of
+            measure is used. A line with a `location_id` is taxed according to that location's tax setup, which can differ
+            from the other lines on the order.
+
+            `status` cannot be set on create. Business Central creates every purchase order as Draft. `sub_total`,
+            `total_tax` and `total` are calculated from the line items and cannot be set. `po_number` is only accepted when
+            the company's purchase order number series allows manual numbers. Otherwise Business Central assigns the
+            number, and a request that sends `po_number` is rejected with "You may not enter numbers manually".
+
+            The supplier's default dimensions are added to every line automatically. Sending one of those dimensions again
+            in a line's `tracking_categories` is rejected with "The dimension set line already exists", so only send
+            dimensions that are not supplier defaults.
+
+            In companies that use Sales Tax, the response returns `tax_inclusive` as `false` even when `true` was sent. The
+            line amounts are still calculated as tax inclusive, so the totals match what was sent. In these companies
+            `tax_inclusive` can only be set when the order is created.
+
+            A 400 Bad Request error with "Control 'fieldName' is read-only" means the field is set as not editable in
+            Microsoft Dynamics 365 Business Central. To write to the field, set its 'editable' property to true in
+            Business Central.
         - connector: zoho-books
           description: |
             By default, the status of the purchase order will be set to "draft".
@@ -33679,6 +33704,27 @@ paths:
           description: |
             Delete operation cancels the purchase order (sets status to 'cancel') instead of hard-deleting it. Odoo does not allow hard deletion of purchase orders — they must be cancelled first. This follows standard accounting practice where financial documents are voided rather than deleted.
             Requires the Purchase module (purchase) to be installed on the Odoo instance.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            `line_items` replaces the order's full set of lines. A line item with an `id` updates that stored line, a line
+            item without an `id` adds a new line, and any stored line that is left out of `line_items` is removed. Sending
+            an empty `line_items` array removes every line from the order. To leave the lines as they are, leave out
+            `line_items` completely. Fields left out of a line item keep their stored values.
+
+            New lines follow the same rules as on create. Reference the item by `item.id` or the account by
+            `ledger_account.id`, but not both. A `code` on its own is not resolved. `unit_of_measure` is not written.
+
+            The header is saved first and the line changes are applied after it. If Business Central rejects a line, the
+            header change and any lines already added or updated stay in place, and the response returns the error for the
+            rejected line. Lines are only removed after all additions and updates succeed. On an order with
+            `tax_inclusive: true`, the line prices are saved once more after lines are removed, so an error at that step
+            can be returned after omitted lines are already gone. Read the order back before retrying.
+
+            When an update removes lines, the order's `sub_total`, `total_tax` and `total` can still include the removed
+            lines until the order is changed again. The returned `line_items` and their amounts are always up to date.
+
+            `status` cannot be changed. In companies that use Sales Tax, changing `tax_inclusive` on an existing order is
+            rejected.
       requestBody:
         required: true
         content:

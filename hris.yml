@@ -5596,6 +5596,16 @@ paths:
             some it equals the hire date exactly, for others it is deliberately set earlier for
             seniority calculations. Where Acerta does not supply this value, `employment_start_date`
             falls back to the agreement's start date.
+        - connector: officient-io
+          description: |
+            `employment_start_date` is the earlier of Officient's first employment date and the start
+            date of the employee's earliest role in their role history. Officient's first employment
+            date is the start of the first wage/contract period, so people who start through a temp
+            agency before getting a contract only get their real start date from role history. When
+            role history is unavailable (for example the connection lacks read access to it), the
+            first employment date is used. `employment_start_date` is only returned by Get Employee,
+            not by List Employees. Company-specific start dates kept in Officient custom fields are
+            returned unchanged in `custom_fields`.
         - connector: haileyhr
           description: |
             Hailey HR supports "parallel employments" — an employee can hold more than one Employment at once. Fields that describe a single current position (`department_id`, `department_name`, `division`, `division_id`, `company_id`, `company_name`, `title`, `team`, `manager.id`, `employment_role.type`, `probation_period.end_date`, and employment-level values in `custom_fields`) reflect the employee's **effectual** employment: the active one, or — when none is active — the one that will start next, or failing that the most recent ended one (status precedence: active → will-start → ended); these fields can be absent from the response if that value can't be resolved. `employment_start_date`/`employment_end_date` reflect overall company tenure (earliest start / latest-or-open end across ALL employments), not the effectual one. Every employment is listed in `jobs[]`, flagged via `is_primary`, with its own `start_date`/`end_date`.

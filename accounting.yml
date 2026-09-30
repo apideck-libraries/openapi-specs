@@ -47,6 +47,15 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/BankAccountsFilter'
+    bankFeedStatementsFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      required: false
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/BankFeedStatementsFilter'
     bankAccountFilter:
       name: filter
       in: query
@@ -3539,6 +3548,16 @@ components:
             - inactive
             - closed
           example: active
+    BankFeedStatementsFilter:
+      type: object
+      x-apideck-schema-id: BankFeedStatementsFilter
+      additionalProperties: false
+      properties:
+        bank_feed_account_id:
+          type: string
+          title: Bank Feed Account
+          description: Only return statements belonging to this bank feed account.
+          example: '12345'
     BankAccountsSort:
       type: object
       x-apideck-schema-id: BankAccountsSort
@@ -16288,6 +16307,7 @@ components:
         currency: medium
         iban: edge-case
         default_account: high
+        clearing_account: high
         blocked: medium
         created_at: medium
         updated_at: medium
@@ -16340,6 +16360,8 @@ components:
         iban:
           $ref: '#/components/schemas/IBAN'
         default_account:
+          $ref: '#/components/schemas/LinkedFinancialAccount'
+        clearing_account:
           $ref: '#/components/schemas/LinkedFinancialAccount'
         blocked:
           type: boolean
@@ -35966,14 +35988,17 @@ paths:
           description: |
             `type: bank` requires `iban` — Exact needs a bank account reference to create a bank journal. `type: payment_service` requires a payment service provider reference that has no equivalent in this unified field set — creating a journal with that type will be rejected by Exact. Use `pass_through` to supply the required vendor field if you need `payment_service`, or use `sales`, `sales_credit_note`, `purchase`, `purchase_credit_note`, `cash` or `general` instead.
             `type: other` has no Exact equivalent and will be rejected — `other` is a read-side fallback for values Exact might introduce in the future, not a valid input.
+            `clearing_account` is the unallocated account a bank journal parks incoming movements in. Bank feed statements posted to a journal without one never reach the reconciliation queue. Exact assigns a default on create; set it explicitly to pin a specific account. Only meaningful on `type: bank` and `type: payment_service`.
         - connector: exact-online-nl
           description: |
             `type: bank` requires `iban` — Exact needs a bank account reference to create a bank journal. `type: payment_service` requires a payment service provider reference that has no equivalent in this unified field set — creating a journal with that type will be rejected by Exact. Use `pass_through` to supply the required vendor field if you need `payment_service`, or use `sales`, `sales_credit_note`, `purchase`, `purchase_credit_note`, `cash` or `general` instead.
             `type: other` has no Exact equivalent and will be rejected — `other` is a read-side fallback for values Exact might introduce in the future, not a valid input.
+            `clearing_account` is the unallocated account a bank journal parks incoming movements in. Bank feed statements posted to a journal without one never reach the reconciliation queue. Exact assigns a default on create; set it explicitly to pin a specific account. Only meaningful on `type: bank` and `type: payment_service`.
         - connector: exact-online-uk
           description: |
             `type: bank` requires `iban` — Exact needs a bank account reference to create a bank journal. `type: payment_service` requires a payment service provider reference that has no equivalent in this unified field set — creating a journal with that type will be rejected by Exact. Use `pass_through` to supply the required vendor field if you need `payment_service`, or use `sales`, `sales_credit_note`, `purchase`, `purchase_credit_note`, `cash` or `general` instead.
             `type: other` has no Exact equivalent and will be rejected — `other` is a read-side fallback for values Exact might introduce in the future, not a valid input.
+            `clearing_account` is the unallocated account a bank journal parks incoming movements in. Bank feed statements posted to a journal without one never reach the reconciliation queue. Exact assigns a default on create; set it explicitly to pin a specific account. Only meaningful on `type: bank` and `type: payment_service`.
       requestBody:
         required: true
         content:
@@ -36009,6 +36034,12 @@ paths:
               currency: USD
               iban: GB33BUKB20201555555555
               default_account:
+                id: '123456'
+                type: ledger_account
+                code: '1100'
+                display_id: '123456'
+                account_number: '123465'
+              clearing_account:
                 id: '123456'
                 type: ledger_account
                 code: '1100'
@@ -36108,6 +36139,12 @@ paths:
               currency: USD
               iban: GB33BUKB20201555555555
               default_account:
+                id: '123456'
+                type: ledger_account
+                code: '1100'
+                display_id: '123456'
+                account_number: '123465'
+              clearing_account:
                 id: '123456'
                 type: ledger_account
                 code: '1100'
@@ -38113,34 +38150,17 @@ paths:
             create response — read the account back to see it.
         - connector: exact-online-nl
           description: |
-            This operation always creates a **new** bank journal in Exact Online (there is no "register an
-            existing account" concept) — Exact assigns its own journal code and a linked GL account
-            automatically, live-verified against a minimal request carrying only `target_account_name`,
-            `target_account_number` and `currency`. `bank_account_type` is always returned as `bank`; Exact
-            has no separate credit-card bank-feed concept.
-
-            `source_account_id` is accepted but not persisted — Exact's journal object has no field to store
-            an external system's account identifier (live-verified: a value written to the closest candidate
-            field, `CustomField`, is silently discarded on save). Reads return `source_account_id` equal to
-            the record's own `id`, not the value originally supplied on create.
-
-            `bankFeedAccountsDelete` is unsupported in this build even though Exact's REST API does support
-            deleting a journal (`DELETE .../financial/Journals(guid'{id}')`, live-verified) — wiring the
-            operation was out of scope for this pass.
+            Not supported. A bank feed account is a bank journal in Exact Online, and a usable one needs
+            a linked bank account and an unallocated account this operation cannot supply. Create it via
+            the `journals` resource — which exposes `iban`, `default_account` and `clearing_account`
+            — and pass its `id` as `bank_feed_account_id`. Reading is unaffected;
+            delete is also not wired.
         - connector: exact-online
           description: |
-            Same behaviour and limitations as `exact-online-nl` (this connector's regional variants share
-            the same REST API and mapping shape): creates a new bank journal rather than registering an
-            existing account, `bank_account_type` is always `bank`, `source_account_id` is accepted but not
-            persisted, and `bankFeedAccountsDelete` is unsupported in this build despite the underlying
-            journal-delete endpoint existing.
+            Same as `exact-online-nl`.
         - connector: exact-online-uk
           description: |
-            Same behaviour and limitations as `exact-online-nl` (this connector's regional variants share
-            the same REST API and mapping shape): creates a new bank journal rather than registering an
-            existing account, `bank_account_type` is always `bank`, `source_account_id` is accepted but not
-            persisted, and `bankFeedAccountsDelete` is unsupported in this build despite the underlying
-            journal-delete endpoint existing.
+            Same as `exact-online-nl`.
         - connector: zoho-books
           description: |
             This operation always creates a **new** bank account in Zoho Books — Zoho has no concept
@@ -38372,11 +38392,23 @@ paths:
         - $ref: '#/components/parameters/companyId'
         - $ref: '#/components/parameters/cursor'
         - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/bankFeedStatementsFilter'
         - $ref: '#/components/parameters/passThrough'
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: exact-online-nl
+          description: |
+            Use `filter[bank_feed_account_id]` to read one account's statements; it accepts the account
+            id or its short code as shown in Exact Online. An unfiltered read spans every bank account
+            in the division.
+        - connector: exact-online
+          description: |
+            Same as `exact-online-nl`.
+        - connector: exact-online-uk
+          description: |
+            Same as `exact-online-nl`.
         - connector: sage-intacct-rest
           description: |
             `transactions` are only returned when fetching a single statement. Sage's query
@@ -38603,56 +38635,25 @@ paths:
             operation as unsupported until further notice.
         - connector: exact-online-nl
           description: |
-            Exact Online has no bank-feed-specific endpoint: a statement is a single `BankEntry` (one
-            downstream call, one `BankEntryLine` per transaction) in the connector's existing bank-entry
-            journal, the same primitive `bill-payments` already writes through, and `list`/`get` read
-            that same `BankEntry`/`BankEntryLine` data back.
+            Every line is posted to the unallocated account configured on the target bank feed account,
+            which is what puts it in the bookkeeper's reconciliation queue. An account with no
+            unallocated account configured is rejected with a `400` — set one via the `journals`
+            resource's `clearing_account`.
 
-            `status` always reads as `success` — Exact has no delivery/acceptance status for a `BankEntry`
-            once it exists, so any record that can be read back is treated as successfully posted.
-            `pending` and `rejected` are never returned.
+            `status` always reads as `success`; Exact has no delivery state. `start_balance`/`end_balance`
+            are ignored on write, since Exact computes them. `counterparty` and `merchant_category_code`
+            are not persisted. Reposting a statement creates a duplicate — Exact does not deduplicate on
+            `source_transaction_id`.
 
-            `start_balance`/`end_balance` on write are not sent — Exact computes the entry's
-            opening/closing balance itself from the journal's running total, and a caller-supplied value
-            that disagrees with it is silently ignored. On read, both balances and their credit/debit
-            indicators come from Exact's own `OpeningBalanceFC`/`ClosingBalanceFC`. `start_date`/`end_date`
-            have no equivalent on a `BankEntry` and are derived as the earliest/latest transaction date in
-            the statement.
-
-            Every `BankEntryLine` must post against a GL account. Since a raw bank feed transaction
-            carries no categorization, every line is posted to a single connection-level setting
-            (`bank_feed_gl_account_id` — pick any GL account in the "Default Categorization Account"
-            setting) and lands there uncategorized; re-categorize it later in Exact Online.
-
-            `source_transaction_id` is stored as `OurRef` only when it is purely numeric (Exact's
-            `OurRef` is an integer field, so an id outside the 32-bit signed range is also dropped rather
-            than persisted); when it wasn't numeric on write, a read falls back to the `BankEntryLine`'s
-            own id so the field is never empty, which will not match what was originally submitted.
-            `counterparty` and `merchant_category_code` have no equivalent field on `BankEntryLine` and
-            are not persisted or returned. `description` falls back to `reference` on write and reads
-            back as `null` when neither was set.
-
-            `bank_feed_account_id` is the source journal's GUID on both read and write, resolved from/to
-            Exact's own short `JournalCode` via an extra internal lookup — a journal that is later
-            deleted leaves the affected statements' `bank_feed_account_id` unresolved (falls back to the
-            raw code) rather than failing the read.
-
-            Exact does not deduplicate on `source_transaction_id`: reposting the same statement creates a
-            second, duplicate `BankEntry`.
+            `source_transaction_id` is kept in the line's free-text notes field, which the bookkeeper can
+            edit in Exact Online. A line edited there reads back with whatever they typed, so treat the
+            value as advisory when matching against your own records.
         - connector: exact-online
           description: |
-            Same behaviour and limitations as `exact-online-nl` (this connector's regional variants share
-            the same REST API and mapping shape): `status` always reads as `success`, every line posts to
-            a single connection-level GL categorization account (`bank_feed_gl_account_id`) on write,
-            statement-level balance fields are computed by Exact rather than accepted on write, and
-            `source_transaction_id` only round-trips (as `OurRef`) when numeric.
+            Same as `exact-online-nl`.
         - connector: exact-online-uk
           description: |
-            Same behaviour and limitations as `exact-online-nl` (this connector's regional variants share
-            the same REST API and mapping shape): `status` always reads as `success`, every line posts to
-            a single connection-level GL categorization account (`bank_feed_gl_account_id`) on write,
-            statement-level balance fields are computed by Exact rather than accepted on write, and
-            `source_transaction_id` only round-trips (as `OurRef`) when numeric.
+            Same as `exact-online-nl`.
         - connector: zoho-books
           description: |
             Every transaction in `transactions` is imported as a genuinely uncategorized line

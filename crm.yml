@@ -6982,7 +6982,16 @@ paths:
             If `parent_id` names an account that does not exist, Zoho rejects the entire create
             and no company is created.
         - connector: planhat
-          description: The status values mentioned by planhat are prospect,coming,customer,canceled,lost.
+          description: |
+            The status values mentioned by planhat are prospect,coming,customer,canceled,lost.
+
+            `parent_id` is ignored on create and is never sent to Planhat. Planhat keeps its company
+            hierarchy in `orgPath`, but writing that field through the API does not update the rest of
+            the hierarchy (the company's level and the parent's child count stay unchanged), so the
+            connector does not write it.
+
+            When reading companies, `parent_id` returns the id of the company's direct parent in
+            Planhat's organization hierarchy.
         - connector: microsoft-dynamics
           description: |
             Entity Reference (lookup) custom fields are written using Dataverse navigation-property
@@ -7246,7 +7255,16 @@ paths:
             accounts as each other's parent. Check the target before setting a parent if loops
             matter to you.
         - connector: planhat
-          description: The status values mentioned by planhat are prospect,coming,customer,canceled,lost.
+          description: |
+            The status values mentioned by planhat are prospect,coming,customer,canceled,lost.
+
+            `parent_id` is ignored on update and is never sent to Planhat. Planhat keeps its company
+            hierarchy in `orgPath`, but writing that field through the API does not update the rest of
+            the hierarchy (the company's level and the parent's child count stay unchanged), so the
+            connector does not write it.
+
+            When reading companies, `parent_id` returns the id of the company's direct parent in
+            Planhat's organization hierarchy.
         - connector: microsoft-dynamics
           description: |
             Entity Reference (lookup) custom fields are written using Dataverse navigation-property

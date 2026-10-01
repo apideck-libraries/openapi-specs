@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.59.1
+  version: 10.60.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -583,6 +583,36 @@ components:
           schema:
             $ref: '#/components/schemas/BatchBillPaymentsResponse'
       description: Bill Payments batch processed
+    BatchLedgerAccountsResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BatchLedgerAccountsResponse'
+      description: Ledger Accounts batch processed
+    BatchTrackingCategoriesResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BatchTrackingCategoriesResponse'
+      description: Tracking Categories batch processed
+    BatchCustomersResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BatchCustomersResponse'
+      description: Customers batch processed
+    BatchSuppliersResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BatchSuppliersResponse'
+      description: Suppliers batch processed
+    BatchJournalEntriesResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BatchJournalEntriesResponse'
+      description: Journal Entries batch processed
     CompanyInfo:
       content:
         application/json:
@@ -3207,6 +3237,311 @@ components:
           type: string
           description: Unified API resource name
           example: bill-payments
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          type: array
+          description: One result per item in the request, in the order the items were sent.
+          items:
+            $ref: '#/components/schemas/BatchItemResult'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    BatchLedgerAccountsRequest:
+      type: object
+      x-apideck-schema-id: BatchLedgerAccountsRequest
+      description: 'A batch of ledger accounts to write in a single request. Each item is processed independently: some may succeed while others fail, and the response carries one result per item in the order they were sent.'
+      additionalProperties: false
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          description: 'The records to write. The per-connector limit is the real cap and is usually lower than the ceiling here: read `batch_support.resources[<resource>].max_items` on the Connector API for the connector you are calling, or the resource gotchas. This ceiling exists so an oversized array is rejected by request validation before any per-item work runs, rather than after it.'
+          minItems: 1
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - data
+            properties:
+              _ref:
+                $ref: '#/components/schemas/BatchRef'
+              data:
+                $ref: '#/components/schemas/LedgerAccountCreateInput'
+    BatchLedgerAccountsResponse:
+      type: object
+      x-apideck-schema-id: BatchLedgerAccountsResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: ledger-accounts
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          type: array
+          description: One result per item in the request, in the order the items were sent.
+          items:
+            $ref: '#/components/schemas/BatchItemResult'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    BatchTrackingCategoriesRequest:
+      type: object
+      x-apideck-schema-id: BatchTrackingCategoriesRequest
+      description: 'A batch of tracking categories to write in a single request. Each item is processed independently: some may succeed while others fail, and the response carries one result per item in the order they were sent.'
+      additionalProperties: false
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          description: 'The records to write. The per-connector limit is the real cap and is usually lower than the ceiling here: read `batch_support.resources[<resource>].max_items` on the Connector API for the connector you are calling, or the resource gotchas. This ceiling exists so an oversized array is rejected by request validation before any per-item work runs, rather than after it.'
+          minItems: 1
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - data
+            properties:
+              _ref:
+                $ref: '#/components/schemas/BatchRef'
+              data:
+                $ref: '#/components/schemas/TrackingCategoryCreateInput'
+    BatchTrackingCategoriesResponse:
+      type: object
+      x-apideck-schema-id: BatchTrackingCategoriesResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: tracking-categories
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          type: array
+          description: One result per item in the request, in the order the items were sent.
+          items:
+            $ref: '#/components/schemas/BatchItemResult'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    BatchCustomersRequest:
+      type: object
+      x-apideck-schema-id: BatchCustomersRequest
+      description: 'A batch of customers to write in a single request. Each item is processed independently: some may succeed while others fail, and the response carries one result per item in the order they were sent.'
+      additionalProperties: false
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          description: 'The records to write. The per-connector limit is the real cap and is usually lower than the ceiling here: read `batch_support.resources[<resource>].max_items` on the Connector API for the connector you are calling, or the resource gotchas. This ceiling exists so an oversized array is rejected by request validation before any per-item work runs, rather than after it.'
+          minItems: 1
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - data
+            properties:
+              _ref:
+                $ref: '#/components/schemas/BatchRef'
+              data:
+                $ref: '#/components/schemas/CustomerCreateInput'
+    BatchCustomersResponse:
+      type: object
+      x-apideck-schema-id: BatchCustomersResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: customers
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          type: array
+          description: One result per item in the request, in the order the items were sent.
+          items:
+            $ref: '#/components/schemas/BatchItemResult'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    BatchSuppliersRequest:
+      type: object
+      x-apideck-schema-id: BatchSuppliersRequest
+      description: 'A batch of suppliers to write in a single request. Each item is processed independently: some may succeed while others fail, and the response carries one result per item in the order they were sent.'
+      additionalProperties: false
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          description: 'The records to write. The per-connector limit is the real cap and is usually lower than the ceiling here: read `batch_support.resources[<resource>].max_items` on the Connector API for the connector you are calling, or the resource gotchas. This ceiling exists so an oversized array is rejected by request validation before any per-item work runs, rather than after it.'
+          minItems: 1
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - data
+            properties:
+              _ref:
+                $ref: '#/components/schemas/BatchRef'
+              data:
+                $ref: '#/components/schemas/SupplierCreateInput'
+    BatchSuppliersResponse:
+      type: object
+      x-apideck-schema-id: BatchSuppliersResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: suppliers
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          type: array
+          description: One result per item in the request, in the order the items were sent.
+          items:
+            $ref: '#/components/schemas/BatchItemResult'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    BatchJournalEntriesRequest:
+      type: object
+      x-apideck-schema-id: BatchJournalEntriesRequest
+      description: 'A batch of journal entries to write in a single request. Each item is processed independently: some may succeed while others fail, and the response carries one result per item in the order they were sent.'
+      additionalProperties: false
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          description: 'The records to write. The per-connector limit is the real cap and is usually lower than the ceiling here: read `batch_support.resources[<resource>].max_items` on the Connector API for the connector you are calling, or the resource gotchas. This ceiling exists so an oversized array is rejected by request validation before any per-item work runs, rather than after it.'
+          minItems: 1
+          maxItems: 100
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - data
+            properties:
+              _ref:
+                $ref: '#/components/schemas/BatchRef'
+              data:
+                $ref: '#/components/schemas/JournalEntryCreateInput'
+    BatchJournalEntriesResponse:
+      type: object
+      x-apideck-schema-id: BatchJournalEntriesResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: journal-entries
         operation:
           type: string
           description: Operation performed
@@ -7296,6 +7631,170 @@ components:
           $ref: '#/components/schemas/RowVersion'
         pass_through:
           $ref: '#/components/schemas/PassThroughBody'
+    CustomerCreateInput:
+      type: object
+      x-apideck-schema-id: CustomerCreateInput
+      description: The writable shape of Customer for a batch create. Identical to [Customer](the model returned on reads) with the read-only properties removed — the same properties the single-record create endpoint rejects, so a batched record and a single-record create accept exactly the same body.
+      x-apideck-weights:
+        display_id: edge-case
+        display_name: edge-case
+        company_name: high
+        company_id: medium
+        customer_category: edge-case
+        title: high
+        first_name: high
+        middle_name: low
+        last_name: high
+        suffix: low
+        individual: medium
+        addresses: high
+        phone_numbers: high
+        emails: high
+        websites: medium
+        bank_accounts: high
+        notes: low
+        tax_rate: medium
+        tax_number: medium
+        taxable: medium
+        currency: medium
+        account: medium
+        status: high
+        payment_method: edge-case
+        terms: edge-case
+        terms_id: edge-case
+        channel: edge-case
+        row_version: edge-case
+      additionalProperties: false
+      x-apideck-strict-required:
+        - emails
+        - addresses
+        - phone_numbers
+        - status
+        - updated_at
+      x-apideck-strict-any-of:
+        - required:
+            - first_name
+            - last_name
+        - required:
+            - company_name
+      properties:
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID
+          example: EMP00101
+          nullable: true
+        display_name:
+          type: string
+          title: Display Name
+          description: Display name
+          example: Windsurf Shop
+          nullable: true
+        company_name:
+          $ref: '#/components/schemas/CompanyName'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
+        subsidiary:
+          $ref: '#/components/schemas/LinkedSubsidiary'
+        customer_category:
+          type: string
+          title: Customer Category
+          description: The category/type of the customer
+          example: Insurance
+          nullable: true
+        title:
+          $ref: '#/components/schemas/Title'
+        first_name:
+          $ref: '#/components/schemas/FirstName'
+        middle_name:
+          $ref: '#/components/schemas/MiddleName'
+        last_name:
+          $ref: '#/components/schemas/LastName'
+        suffix:
+          $ref: '#/components/schemas/Suffix'
+        individual:
+          type: boolean
+          title: Is individual
+          description: Is this an individual or business customer
+          example: true
+          nullable: true
+        project:
+          type: boolean
+          title: Is project
+          description: If true, indicates this is a Project.
+          example: false
+          nullable: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        phone_numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+        websites:
+          type: array
+          items:
+            $ref: '#/components/schemas/Website'
+        bank_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccount'
+        notes:
+          type: string
+          title: Notes
+          description: Some notes about this customer
+          example: Some notes about this customer
+          nullable: true
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        tax_number:
+          $ref: '#/components/schemas/TaxNumber'
+        taxable:
+          $ref: '#/components/schemas/Taxable'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        parent:
+          $ref: '#/components/schemas/LinkedParentCustomer'
+        status:
+          type: string
+          title: Status
+          description: Customer status
+          nullable: true
+          example: active
+          x-apideck-enum-id: customers.status
+          enum:
+            - active
+            - inactive
+            - archived
+            - gdpr-erasure-request
+            - unknown
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        terms:
+          type: string
+          title: Terms
+          description: Terms of payment.
+          example: Net 30 days
+          nullable: true
+        terms_id:
+          $ref: '#/components/schemas/TermsId'
+        channel:
+          $ref: '#/components/schemas/Channel'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
     CustomersFilter:
       type: object
       x-apideck-schema-id: CustomersFilter
@@ -11040,6 +11539,7 @@ components:
       additionalProperties: false
     JournalEntry:
       type: object
+      x-apideck-schema-id: JournalEntry
       additionalProperties: false
       x-apideck-weights:
         id: critical
@@ -11184,6 +11684,142 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+    JournalEntryCreateInput:
+      type: object
+      x-apideck-schema-id: JournalEntryCreateInput
+      description: The writable shape of JournalEntry for a batch create. Identical to [JournalEntry](the model returned on reads) with the read-only properties removed — the same properties the single-record create endpoint rejects, so a batched record and a single-record create accept exactly the same body.
+      additionalProperties: false
+      x-apideck-weights:
+        source_id: low
+        display_id: low
+        title: medium
+        currency_rate: low
+        currency: medium
+        company_id: medium
+        line_items: medium
+        status: medium
+        memo: low
+        posted_at: low
+        journal_symbol: edge-case
+        tax_type: edge-case
+        tax_code: edge-case
+        number: medium
+        tracking_categories: low
+        accounting_period: low
+        source_type: edge-case
+        row_version: edge-case
+        custom_fields: medium
+        tax_inclusive: medium
+        attachments: edge-case
+      x-apideck-strict-required:
+        - line_items
+      properties:
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID of the journal entry
+          example: '12345'
+          nullable: true
+        title:
+          type: string
+          title: Journal entry title
+          description: Journal entry title
+          example: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry'
+          nullable: true
+        currency_rate:
+          $ref: '#/components/schemas/CurrencyRate'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
+        subsidiary:
+          $ref: '#/components/schemas/LinkedSubsidiary'
+        line_items:
+          type: array
+          minItems: 2
+          description: Requires a minimum of 2 line items that sum to 0
+          items:
+            $ref: '#/components/schemas/JournalEntryLineItem'
+        status:
+          type: string
+          title: Status
+          description: Journal entry status
+          example: draft
+          x-apideck-enum-id: journal_entries.status
+          enum:
+            - draft
+            - pending_approval
+            - approved
+            - posted
+            - voided
+            - rejected
+            - deleted
+            - other
+          nullable: true
+        memo:
+          type: string
+          title: Memo
+          description: Reference for the journal entry.
+          example: Thank you for your business and have a great day!
+          nullable: true
+        posted_at:
+          type: string
+          title: Posted at (timestamp)
+          description: This is the date on which the journal entry was added. This can be different from the creation date and can also be backdated.
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        journal_symbol:
+          type: string
+          title: Journal symbol
+          description: Journal symbol of the entry. For example IND for indirect costs. Where supported, list /accounting/journals to discover available journals and their posting rules. For Exact Online, supply the journal code, not its id.
+          example: IND
+          nullable: true
+        tax_type:
+          type: string
+          title: Tax Type
+          description: 'Deprecated — use line_items[].tax_type for per-line tax applicability. Kept as fallback: applies to all lines that do not set their own tax_type.'
+          example: sales
+          nullable: true
+          deprecated: true
+        tax_code:
+          $ref: '#/components/schemas/TaxCode'
+        number:
+          type: string
+          title: Journal entry number
+          description: Journal entry number.
+          example: OIT00546
+          nullable: true
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        accounting_period:
+          $ref: '#/components/schemas/AccountingPeriod'
+        tax_inclusive:
+          $ref: '#/components/schemas/TaxInclusive'
+        attachments:
+          type: array
+          description: Files attached to this journal entry. Use the attachments endpoints with reference_type=journal-entry and this entry's id where the connector supports it.
+          items:
+            $ref: '#/components/schemas/LinkedAttachment'
+        source_type:
+          type: string
+          title: Source Type
+          description: The source type of the journal entry
+          example: manual
+          nullable: true
+        source_id:
+          type: string
+          title: Source ID
+          description: A unique identifier for the source of the journal entry
+          example: '12345'
+          nullable: true
         row_version:
           $ref: '#/components/schemas/RowVersion'
         custom_fields:
@@ -11674,6 +12310,224 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+    LedgerAccountCreateInput:
+      type: object
+      x-apideck-schema-id: LedgerAccountCreateInput
+      description: The writable shape of LedgerAccount for a batch create. Identical to [LedgerAccount](the model returned on reads) with the read-only properties removed — the same properties the single-record create endpoint rejects, so a batched record and a single-record create accept exactly the same body.
+      additionalProperties: false
+      x-apideck-weights:
+        display_id: low
+        nominal_code: low
+        code: low
+        classification: edge-case
+        type: high
+        sub_type: edge-case
+        name: high
+        fully_qualified_name: edge-case
+        description: edge-case
+        opening_balance: edge-case
+        current_balance: edge-case
+        currency: edge-case
+        tax_type: edge-case
+        tax_rate: edge-case
+        level: edge-case
+        active: edge-case
+        status: medium
+        header: edge-case
+        bank_account: high
+        parent_account: high
+        sub_account: medium
+        last_reconciliation_date: edge-case
+        row_version: edge-case
+        subsidiaries: edge-case
+      properties:
+        display_id:
+          type: string
+          title: Display ID
+          description: The human readable display ID used when displaying the account
+          example: 1-12345
+        nominal_code:
+          type: string
+          title: Nominal Code
+          description: The nominal code of the ledger account.
+          example: N091
+          nullable: true
+          deprecated: true
+        code:
+          type: string
+          title: Code
+          description: The code assigned to the account.
+          example: '453'
+          nullable: true
+        classification:
+          type: string
+          title: Classification
+          description: The classification of account.
+          x-apideck-enum-id: ledger-accounts.classification
+          enum:
+            - asset
+            - equity
+            - expense
+            - liability
+            - revenue
+            - income
+            - other_income
+            - other_expense
+            - costs_of_sales
+            - other
+          example: asset
+          nullable: true
+        type:
+          type: string
+          title: Type
+          description: The type of account.
+          x-apideck-enum-id: ledger-accounts.type
+          enum:
+            - accounts_payable
+            - accounts_receivable
+            - balancesheet
+            - bank
+            - costs_of_sales
+            - credit_card
+            - current_asset
+            - current_liability
+            - equity
+            - expense
+            - fixed_asset
+            - non_current_asset
+            - non_current_liability
+            - other_asset
+            - other_expense
+            - other_income
+            - other_liability
+            - revenue
+            - sales
+            - other
+          example: bank
+        sub_type:
+          type: string
+          title: Sub Type
+          description: The sub type of account.
+          example: CHECKING_ACCOUNT
+          nullable: true
+        name:
+          type: string
+          title: Name
+          description: The name of the account.
+          example: Bank account
+          nullable: true
+        fully_qualified_name:
+          type: string
+          title: Fully Qualified Name
+          description: The fully qualified name of the account.
+          example: Asset.Bank.Checking_Account
+          nullable: true
+        description:
+          type: string
+          title: Description
+          description: The description of the account.
+          example: Main checking account
+          nullable: true
+        opening_balance:
+          type: number
+          title: Opening balance
+          description: The opening balance of the account.
+          example: 75000
+          nullable: true
+        current_balance:
+          type: number
+          title: Current balance
+          description: The current balance of the account.
+          example: 20000
+          nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
+        tax_type:
+          type: string
+          title: Tax Type
+          description: The tax type of the account.
+          example: NONE
+          nullable: true
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        level:
+          type: number
+          example: 1
+          nullable: true
+        active:
+          type: boolean
+          title: Is active
+          description: Whether the account is active or not.
+          example: true
+          nullable: true
+        status:
+          type: string
+          title: Account status
+          description: The status of the account.
+          x-apideck-enum-id: ledger-accounts.status
+          enum:
+            - active
+            - inactive
+            - archived
+          example: active
+          nullable: true
+        header:
+          type: boolean
+          title: Is header
+          description: Whether the account is a header or not.
+          example: true
+          nullable: true
+        bank_account:
+          $ref: '#/components/schemas/BankAccount'
+        parent_account:
+          type: object
+          properties:
+            id:
+              type: string
+              title: Parent account ID
+              description: The ID of the parent account.
+              example: '12345'
+            name:
+              type: string
+              title: Name
+              description: The name of the parent account.
+              example: Bank Accounts
+            display_id:
+              type: string
+              title: Display ID
+              description: The human readable display ID used when displaying the parent account
+              example: 1-1100
+        sub_account:
+          type: boolean
+          title: Is sub account
+          description: Whether the account is a sub account or not.
+          example: false
+          nullable: true
+        last_reconciliation_date:
+          type: string
+          title: Last Reconciliation Date
+          description: Reconciliation Date means the last calendar day of each Reconciliation Period.
+          format: date
+          example: '2020-09-30'
+          nullable: true
+        subsidiaries:
+          type: array
+          title: Subsidiaries
+          description: The subsidiaries the account belongs to.
+          items:
+            properties:
+              id:
+                type: string
+                title: Subsidiary ID
+                description: The ID of the subsidiary.
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
         pass_through:
           $ref: '#/components/schemas/PassThroughBody'
     LedgerAccounts:
@@ -14774,6 +15628,199 @@ components:
           title: Integration System ID
           description: The integration system the supplier belongs to.
           example: '12345'
+    SupplierCreateInput:
+      type: object
+      x-apideck-schema-id: SupplierCreateInput
+      description: The writable shape of Supplier for a batch create. Identical to [Supplier](the model returned on reads) with the read-only properties removed — the same properties the single-record create endpoint rejects, so a batched record and a single-record create accept exactly the same body.
+      x-apideck-weights:
+        display_id: edge-case
+        display_name: edge-case
+        company_name: high
+        company_id: middle
+        supplier_category: edge-case
+        title: high
+        first_name: high
+        middle_name: low
+        last_name: high
+        suffix: low
+        individual: medium
+        addresses: high
+        phone_numbers: high
+        emails: high
+        websites: medium
+        bank_accounts: high
+        notes: low
+        tax_rate: medium
+        tax_number: medium
+        taxable: medium
+        currency: medium
+        account: medium
+        status: high
+        payment_method: edge-case
+        terms: edge-case
+        terms_id: edge-case
+        channel: edge-case
+        issued_method: edge-case
+        issued_email: edge-case
+        tax_details: edge-case
+        tax_status_details: edge-case
+        custom_fields: medium
+        row_version: edge-case
+        subsidiary_id: edge-case
+        integration_system_id: edge-case
+      additionalProperties: false
+      x-apideck-strict-required:
+        - emails
+        - addresses
+        - phone_numbers
+        - status
+        - updated_at
+      x-apideck-strict-any-of:
+        - required:
+            - first_name
+            - last_name
+        - required:
+            - company_name
+      properties:
+        display_id:
+          type: string
+          title: Display ID
+          description: Display ID
+          example: EMP00101
+          nullable: true
+        display_name:
+          type: string
+          title: Display Name
+          description: Display name
+          example: Windsurf Shop
+          nullable: true
+        company_name:
+          $ref: '#/components/schemas/CompanyName'
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
+        subsidiary:
+          $ref: '#/components/schemas/LinkedSubsidiary'
+        supplier_category:
+          type: string
+          title: Supplier Category
+          description: The category/type of the supplier
+          example: Insurance
+          nullable: true
+        title:
+          $ref: '#/components/schemas/Title'
+        first_name:
+          $ref: '#/components/schemas/FirstName'
+        middle_name:
+          $ref: '#/components/schemas/MiddleName'
+        last_name:
+          $ref: '#/components/schemas/LastName'
+        suffix:
+          $ref: '#/components/schemas/Suffix'
+        individual:
+          type: boolean
+          title: Is individual
+          description: Is this an individual or business supplier
+          example: true
+          nullable: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        phone_numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+        websites:
+          type: array
+          items:
+            $ref: '#/components/schemas/Website'
+        bank_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccount'
+        notes:
+          type: string
+          title: Notes
+          description: Some notes about this supplier
+          example: Some notes about this supplier
+          nullable: true
+        tax_rate:
+          $ref: '#/components/schemas/LinkedTaxRate'
+        tax_number:
+          $ref: '#/components/schemas/TaxNumber'
+        taxable:
+          $ref: '#/components/schemas/Taxable'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        account:
+          $ref: '#/components/schemas/LinkedLedgerAccount'
+        status:
+          type: string
+          title: Status
+          description: Supplier status
+          nullable: true
+          example: active
+          x-apideck-enum-id: suppliers.status
+          enum:
+            - active
+            - inactive
+            - archived
+            - gdpr-erasure-request
+            - unknown
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        terms:
+          type: string
+          title: Terms
+          description: Terms of payment.
+          example: Net 30 days
+          nullable: true
+        terms_id:
+          $ref: '#/components/schemas/TermsId'
+        channel:
+          $ref: '#/components/schemas/Channel'
+        issued_method:
+          type: string
+          title: Issued method
+          description: Method of issuance of the purchase order for the supplier
+          example: Email
+          nullable: true
+        issued_email:
+          type: string
+          title: Issued email
+          description: Email address of the person who issued the purchase order for the supplier
+          example: john.doe@example.com
+          nullable: true
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        tax_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedTaxDetail'
+        tax_status_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkedTaxStatusDetail'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: The subsidiary the supplier belongs to.
+          example: '12345'
+        integration_system_id:
+          type: string
+          title: Integration System ID
+          description: The integration system the supplier belongs to.
+          example: '12345'
     SuppliersFilter:
       type: object
       x-apideck-schema-id: SuppliersFilter
@@ -16244,6 +17291,59 @@ components:
           $ref: '#/components/schemas/UpdatedAt'
         created_at:
           $ref: '#/components/schemas/CreatedAt'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+        subsidiaries:
+          type: array
+          title: Subsidiaries
+          description: The subsidiaries the account belongs to.
+          items:
+            properties:
+              id:
+                type: string
+                title: Subsidiary ID
+                description: The ID of the subsidiary.
+    TrackingCategoryCreateInput:
+      type: object
+      x-apideck-schema-id: TrackingCategoryCreateInput
+      description: The writable shape of TrackingCategory for a batch create. Identical to [TrackingCategory](the model returned on reads) with the read-only properties removed — the same properties the single-record create endpoint rejects, so a batched record and a single-record create accept exactly the same body.
+      x-apideck-weights:
+        parent_id: low
+        parent_name: low
+        name: critical
+        status: critical
+        code: low
+        subsidiaries: edge-case
+      additionalProperties: false
+      properties:
+        parent_id:
+          $ref: '#/components/schemas/WritableId'
+        parent_name:
+          type: string
+          description: The name of the parent tracking category.
+          example: Area
+          nullable: true
+        name:
+          type: string
+          description: The name of the tracking category.
+          example: Department
+          nullable: false
+        code:
+          type: string
+          description: The code of the tracking category.
+          example: '100'
+          nullable: true
+        status:
+          type: string
+          title: Tracking Category status
+          description: Based on the status some functionality is enabled or disabled.
+          x-apideck-enum-id: tracking_categories.status
+          enum:
+            - active
+            - inactive
+          example: active
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
         pass_through:
           $ref: '#/components/schemas/PassThroughBody'
         subsidiaries:
@@ -25706,6 +26806,163 @@ paths:
           label: Node
           source:
             id: id_example
+  /accounting/ledger-accounts/batch:
+    post:
+      tags:
+        - Ledger Accounts
+      operationId: ledgerAccountsBatchAdd
+      summary: Create Ledger Accounts in batch
+      description: Create multiple ledger accounts in a single request. Each item is processed independently, so some may be created while others fail; the response returns `200` with one result per item, in the order the items were sent. The maximum number of items accepted per request depends on the connector.
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: |
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            Xero creates ledger accounts one at a time, with bank accounts created differently
+            from other account types, so each record in the request is written separately. A
+            request of N records therefore takes about N times as long as a single write and
+            counts as N calls against your Xero rate limit.
+
+            At most 20 records per request. That ceiling has not been measured for records
+            written one at a time on this resource, so treat it as an upper
+            bound rather than a safe size: prefer smaller requests and set client timeouts from
+            your own observed per-record latency.
+
+            Each record succeeds or fails on its own; read the per-item `status` to see which
+            were written. If the request times out, the items it could not confirm come back
+            with `status: uncertain` rather than `failed` — some of them may well have been
+            written, and no ids are returned for those. Verify before retrying an `uncertain`
+            item: list the resource to find what exists, or a retry will duplicate it.
+
+            Results come back in the order the items were sent. Supply `_ref` on every item if
+            you need to tie an outcome back to your own record — it is echoed on every result,
+            including failures, and is never sent to the connector.
+        - connector: zoho-books
+          description: |
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            At most 10 records per request.
+
+            Records are written one at a time, so a request of N ledger accounts takes about N times as
+            long as a single write and counts as N requests against your plan. Each record
+            succeeds or fails on its own; read the per-item `status` to see which were written.
+        - connector: quickbooks
+          description: |
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            Records are written one at a time rather than in a single batched call, so that a
+            QuickBooks plan usage-limit error is reported on the account it applies to. A request
+            of N records therefore takes about N times as long as a single write: a full request
+            of 10 takes about 16 seconds.
+
+            At most 10 records per request.
+
+            Each record succeeds or fails on its own; read the per-item `status` to see which
+            were written. If the request times out, the items it could not confirm come back
+            with `status: uncertain` rather than `failed` — some of them may well have been
+            written, and no ids are returned for those. Verify before retrying an `uncertain`
+            item: list the resource to find what exists, or a retry will duplicate it.
+
+            Results come back in the order the items were sent. Supply `_ref` on every item if
+            you need to tie an outcome back to your own record — it is echoed on every result,
+            including failures, and is never sent to the connector.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchLedgerAccountsRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/BatchLedgerAccountsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            ledgerAccountsBatch:
+              items:
+                - _ref: item-1
+                  data:
+                    display_id: 1-12345
+                    nominal_code: N091
+                    code: '453'
+                    classification: asset
+                    type: bank
+                    sub_type: CHECKING_ACCOUNT
+                    name: Bank account
+                    fully_qualified_name: Asset.Bank.Checking_Account
+                    description: Main checking account
+                    opening_balance: 75000
+                    current_balance: 20000
+                    currency: USD
+                    tax_type: NONE
+                    tax_rate:
+                      id: '123456'
+                      code: N-T
+                      rate: 10
+                    level: 1
+                    active: true
+                    status: active
+                    header: true
+                    bank_account:
+                      bank_name: Chase Bank
+                      account_number: '123465'
+                      account_name: Main Operating Account
+                      account_type: credit_card
+                      iban: GB33BUKB20201555555555
+                      bic: CHASUS33
+                      routing_number: '021000021'
+                      bsb_number: 062-001
+                      branch_identifier: '001'
+                      bank_code: BNH
+                      currency: USD
+                      country: US
+                    parent_account:
+                      id: '12345'
+                      name: Bank Accounts
+                      display_id: 1-1100
+                    sub_account: false
+                    last_reconciliation_date: '2020-09-30'
+                    subsidiaries:
+                      - id: string
+                    custom_fields:
+                      - id: '2389328923893298'
+                        name: employee_level
+                        ref_name: Marketing
+                        description: Employee Level
+                        value: Uses Salesforce and Marketo
+                    row_version: 1-12345
+                    pass_through:
+                      - service_id: string
+                        operation_id: string
+                        extend_object: {}
+                        extend_paths:
+                          - path: $.nested.property
+                            value: *ref_0
   /accounting/invoice-items:
     get:
       tags:
@@ -27120,8 +28377,35 @@ paths:
       x-apideck-gotchas:
         - connector: xero
           description: |
-            Creating credit notes in batch is not supported. Create them one at a time
-            through the single-record endpoint instead.
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            Records are written one at a time rather than in a single batched call, because
+            this resource runs a per-record step after the write (an allocations step) and
+            that step has to see its own record. A request of N records therefore takes
+            about N times as long as a single write and counts as N calls against your
+            Xero rate limit.
+
+            At most 20 records per request. That ceiling has not been measured for records
+            written one at a time on this resource, so treat it as an upper
+            bound rather than a safe size: prefer smaller requests and set client timeouts from
+            your own observed per-record latency.
+
+            A credit note sent with `allocations` is allocated to those invoices right after it is
+            created. If an allocation fails, the item comes back with an `error` even when its
+            `status` is `created`: Xero may have kept the credit note without its allocations (an
+            authorised credit note cannot be removed) or removed it. List credit notes before
+            retrying that item, or a retry may duplicate it.
+
+            Each record succeeds or fails on its own; read the per-item `status` to see which
+            were written. If the request times out, the items it could not confirm come back
+            with `status: uncertain` rather than `failed` — some of them may well have been
+            written, and no ids are returned for those. Verify before retrying an `uncertain`
+            item: list the resource to find what exists, or a retry will duplicate it.
+
+            Results come back in the order the items were sent. Supply `_ref` on every item if
+            you need to tie an outcome back to your own record — it is echoed on every result,
+            including failures, and is never sent to the connector.
         - connector: zoho-books
           description: |
             Records are written one at a time, so the request counts as **one request per
@@ -28049,6 +29333,12 @@ paths:
             rather than a safe size: prefer smaller requests and set client timeouts from your own
             observed per-record latency.
 
+            A credit note sent with `allocations` is allocated to those invoices right after it is
+            created. If an allocation fails, the item comes back with an `error` even when its
+            `status` is `created`: Xero may have kept the credit note without its allocations (an
+            authorised credit note cannot be removed) or removed it. List credit notes before
+            retrying that item, or a retry may duplicate it.
+
             Each record succeeds or fails on its own; read the per-item `status` to see which were
             written. If the request times out, the items it could not confirm come back with
             `status: uncertain` rather than `failed` — some of them may well have been written, and
@@ -28910,6 +30200,198 @@ paths:
           label: Node
           source:
             id: id_example
+  /accounting/customers/batch:
+    post:
+      tags:
+        - Customers
+      operationId: customersBatchAdd
+      summary: Create Customers in batch
+      description: Create multiple customers in a single request. Each item is processed independently, so some may be created while others fail; the response returns `200` with one result per item, in the order the items were sent. The maximum number of items accepted per request depends on the connector.
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 customers per request. A request carrying more is rejected before any
+            customer is written.
+
+            A request that times out may still have created some or all of its customers.
+            When that happens no ids are returned for them, so treat a timed-out batch as
+            uncertain rather than failed: list customers to find what was written before
+            retrying, or a retry will duplicate them.
+
+            Results are returned in the order the items were sent. Supply `_ref` on every
+            item if you need to tie outcomes back to your own records.
+        - connector: zoho-books
+          description: |
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            At most 10 records per request.
+
+            Records are written one at a time, so a request of N customers takes about N times as
+            long as a single write and counts as N requests against your plan. Each record
+            succeeds or fails on its own; read the per-item `status` to see which were written.
+        - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 customers per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost,
+            so set client timeouts for the size of request you send.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchCustomersRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/BatchCustomersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            customersBatch:
+              items:
+                - _ref: item-1
+                  data:
+                    display_id: EMP00101
+                    display_name: Windsurf Shop
+                    company_name: SpaceX
+                    company_id: '12345'
+                    subsidiary:
+                      display_id: '123456'
+                      name: Acme Inc.
+                    customer_category: Insurance
+                    title: CEO
+                    first_name: Elon
+                    middle_name: D.
+                    last_name: Musk
+                    suffix: Jr.
+                    individual: true
+                    project: false
+                    addresses:
+                      - id: '123'
+                        type: primary
+                        string: 25 Spring Street, Blackburn, VIC 3130
+                        name: HQ US
+                        line1: Main street
+                        line2: 'apt #'
+                        line3: 'Suite #'
+                        line4: delivery instructions
+                        line5: 'Attention: Finance Dept'
+                        street_number: '25'
+                        city: San Francisco
+                        state: CA
+                        postal_code: '94104'
+                        country: US
+                        latitude: '40.759211'
+                        longitude: '-73.984638'
+                        county: Santa Clara
+                        contact_name: Elon Musk
+                        salutation: Mr
+                        phone_number: 111-111-1111
+                        fax: 122-111-1111
+                        email: elon@musk.com
+                        website: https://elonmusk.com
+                        notes: Address notes or delivery instructions.
+                        row_version: 1-12345
+                    phone_numbers:
+                      - id: '12345'
+                        country_code: '1'
+                        area_code: '323'
+                        number: 111-111-1111
+                        extension: '105'
+                        type: primary
+                    emails:
+                      - id: '123'
+                        email: elon@musk.com
+                        type: primary
+                    websites:
+                      - id: '12345'
+                        url: http://example.com
+                        type: primary
+                    bank_accounts:
+                      - bank_name: Chase Bank
+                        account_number: '123465'
+                        account_name: Main Operating Account
+                        account_type: credit_card
+                        iban: GB33BUKB20201555555555
+                        bic: CHASUS33
+                        routing_number: '021000021'
+                        bsb_number: 062-001
+                        branch_identifier: '001'
+                        bank_code: BNH
+                        currency: USD
+                        country: US
+                    notes: Some notes about this customer
+                    tax_rate:
+                      id: '123456'
+                      code: N-T
+                      rate: 10
+                    tax_number: US123945459
+                    taxable: true
+                    currency: USD
+                    account:
+                      id: '123456'
+                      name: Bank account
+                      nominal_code: N091
+                      code: '453'
+                      parent_id: '123456'
+                      display_id: '123456'
+                    parent:
+                      id: '12345'
+                      name: Windsurf Shop
+                    status: active
+                    payment_method: cash
+                    terms: Net 30 days
+                    terms_id: '12345'
+                    channel: email
+                    custom_fields:
+                      - id: '2389328923893298'
+                        name: employee_level
+                        ref_name: Marketing
+                        description: Employee Level
+                        value: Uses Salesforce and Marketo
+                    row_version: 1-12345
+                    pass_through:
+                      - service_id: string
+                        operation_id: string
+                        extend_object: {}
+                        extend_paths:
+                          - path: $.nested.property
+                            value: *ref_0
   /accounting/suppliers:
     get:
       tags:
@@ -29651,6 +31133,206 @@ paths:
           label: Node
           source:
             id: id_example
+  /accounting/suppliers/batch:
+    post:
+      tags:
+        - Suppliers
+      operationId: suppliersBatchAdd
+      summary: Create Suppliers in batch
+      description: Create multiple suppliers in a single request. Each item is processed independently, so some may be created while others fail; the response returns `200` with one result per item, in the order the items were sent. The maximum number of items accepted per request depends on the connector.
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 suppliers per request. A request carrying more is rejected before any
+            supplier is written.
+
+            A request that times out may still have created some or all of its suppliers.
+            When that happens no ids are returned for them, so treat a timed-out batch as
+            uncertain rather than failed: list suppliers to find what was written before
+            retrying, or a retry will duplicate them.
+
+            Results are returned in the order the items were sent. Supply `_ref` on every
+            item if you need to tie outcomes back to your own records.
+        - connector: zoho-books
+          description: |
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            At most 10 records per request.
+
+            Records are written one at a time, so a request of N suppliers takes about N times as
+            long as a single write and counts as N requests against your plan. Each record
+            succeeds or fails on its own; read the per-item `status` to see which were written.
+        - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 suppliers per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost,
+            so set client timeouts for the size of request you send.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchSuppliersRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/BatchSuppliersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            suppliersBatch:
+              items:
+                - _ref: item-1
+                  data:
+                    display_id: EMP00101
+                    display_name: Windsurf Shop
+                    company_name: SpaceX
+                    company_id: '12345'
+                    subsidiary:
+                      display_id: '123456'
+                      name: Acme Inc.
+                    supplier_category: Insurance
+                    title: CEO
+                    first_name: Elon
+                    middle_name: D.
+                    last_name: Musk
+                    suffix: Jr.
+                    individual: true
+                    addresses:
+                      - id: '123'
+                        type: primary
+                        string: 25 Spring Street, Blackburn, VIC 3130
+                        name: HQ US
+                        line1: Main street
+                        line2: 'apt #'
+                        line3: 'Suite #'
+                        line4: delivery instructions
+                        line5: 'Attention: Finance Dept'
+                        street_number: '25'
+                        city: San Francisco
+                        state: CA
+                        postal_code: '94104'
+                        country: US
+                        latitude: '40.759211'
+                        longitude: '-73.984638'
+                        county: Santa Clara
+                        contact_name: Elon Musk
+                        salutation: Mr
+                        phone_number: 111-111-1111
+                        fax: 122-111-1111
+                        email: elon@musk.com
+                        website: https://elonmusk.com
+                        notes: Address notes or delivery instructions.
+                        row_version: 1-12345
+                    phone_numbers:
+                      - id: '12345'
+                        country_code: '1'
+                        area_code: '323'
+                        number: 111-111-1111
+                        extension: '105'
+                        type: primary
+                    emails:
+                      - id: '123'
+                        email: elon@musk.com
+                        type: primary
+                    websites:
+                      - id: '12345'
+                        url: http://example.com
+                        type: primary
+                    bank_accounts:
+                      - bank_name: Chase Bank
+                        account_number: '123465'
+                        account_name: Main Operating Account
+                        account_type: credit_card
+                        iban: GB33BUKB20201555555555
+                        bic: CHASUS33
+                        routing_number: '021000021'
+                        bsb_number: 062-001
+                        branch_identifier: '001'
+                        bank_code: BNH
+                        currency: USD
+                        country: US
+                    notes: Some notes about this supplier
+                    tax_rate:
+                      id: '123456'
+                      code: N-T
+                      rate: 10
+                    tax_number: US123945459
+                    taxable: true
+                    currency: USD
+                    account:
+                      id: '123456'
+                      name: Bank account
+                      nominal_code: N091
+                      code: '453'
+                      parent_id: '123456'
+                      display_id: '123456'
+                    status: active
+                    payment_method: cash
+                    terms: Net 30 days
+                    terms_id: '12345'
+                    channel: email
+                    issued_method: Email
+                    issued_email: john.doe@example.com
+                    custom_fields:
+                      - id: '2389328923893298'
+                        name: employee_level
+                        ref_name: Marketing
+                        description: Employee Level
+                        value: Uses Salesforce and Marketo
+                    tax_details:
+                      - type: GST on Purchases
+                        number: '123456'
+                        is_transaction_tax: true
+                        is_primary_tax: true
+                    tax_status_details:
+                      - country: US
+                        transaction_tax_status: taxable
+                    row_version: 1-12345
+                    pass_through:
+                      - service_id: string
+                        operation_id: string
+                        extend_object: {}
+                        extend_paths:
+                          - path: $.nested.property
+                            value: *ref_0
+                    subsidiary_id: '12345'
+                    integration_system_id: '12345'
   /accounting/payments:
     get:
       tags:
@@ -30296,10 +31978,30 @@ paths:
       x-apideck-gotchas:
         - connector: xero
           description: |
-            Creating payments in batch is not supported. A single payment can be allocated
-            across several invoices, and Xero records one payment per allocation — so a batch
-            could not return one result per item you sent. Create them one at a time through the
-            single-record endpoint instead.
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            A payment allocated across several invoices is recorded by Xero as several
+            payments, so a single item you send can turn into more than one provider record.
+            Because of that, records are written one at a time rather than in a single
+            batched call, and each result returns the id of the first payment Xero creates
+            for that item. A request of N records therefore takes about N times as long as
+            a single write and counts as N calls against your Xero rate limit.
+
+            At most 20 records per request. That ceiling has not been measured for records
+            written one at a time on this resource, so treat it as an upper
+            bound rather than a safe size: prefer smaller requests and set client timeouts from
+            your own observed per-record latency.
+
+            Each record succeeds or fails on its own; read the per-item `status` to see which
+            were written. If the request times out, the items it could not confirm come back
+            with `status: uncertain` rather than `failed` — some of them may well have been
+            written, and no ids are returned for those. Verify before retrying an `uncertain`
+            item: list the resource to find what exists, or a retry will duplicate it.
+
+            Results come back in the order the items were sent. Supply `_ref` on every item if
+            you need to tie an outcome back to your own record — it is echoed on every result,
+            including failures, and is never sent to the connector.
         - connector: zoho-books
           description: |
             Records are written one at a time, so the request counts as **one request per
@@ -32443,6 +34145,295 @@ paths:
           label: Node
           source:
             id: id_example
+  /accounting/journal-entries/batch:
+    post:
+      tags:
+        - Journal Entries
+      operationId: journalEntriesBatchAdd
+      summary: Create Journal Entries in batch
+      description: Create multiple journal entries in a single request. Each item is processed independently, so some may be created while others fail; the response returns `200` with one result per item, in the order the items were sent. The maximum number of items accepted per request depends on the connector.
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: |
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            Records are written one at a time rather than in a single batched call, because
+            this resource runs a per-record step after the write and that step has to see
+            its own record. A journal created with `status: posted` takes two calls to Xero
+            (create, then look up the posted journal's id); a draft takes one. A request of N
+            posted journals therefore counts as about 2N calls against your Xero rate limit.
+
+            At most 20 records per request. A full request of 20 posted journals takes about
+            18 seconds and makes about 40 Xero calls, two thirds of Xero's 60-calls-per-minute
+            limit, so space consecutive full requests at least a minute apart or expect `429`
+            responses on the later ones. Set client timeouts accordingly.
+
+            Each record succeeds or fails on its own; read the per-item `status` to see which
+            were written. If the request times out, the items it could not confirm come back
+            with `status: uncertain` rather than `failed` — some of them may well have been
+            written, and no ids are returned for those. Verify before retrying an `uncertain`
+            item: list the resource to find what exists, or a retry will duplicate it.
+
+            Results come back in the order the items were sent. Supply `_ref` on every item if
+            you need to tie an outcome back to your own record — it is echoed on every result,
+            including failures, and is never sent to the connector.
+        - connector: zoho-books
+          description: |
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            At most 10 records per request.
+
+            Records are written one at a time, so a request of N journal entries takes about N times as
+            long as a single write and counts as N requests against your plan. Each record
+            succeeds or fails on its own; read the per-item `status` to see which were written.
+        - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 journal entries per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost,
+            so set client timeouts for the size of request you send.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchJournalEntriesRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/BatchJournalEntriesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            journalEntriesBatch:
+              items:
+                - _ref: item-1
+                  data:
+                    display_id: '12345'
+                    title: 'Purchase Invoice-Inventory (USD): 2019/02/01 Batch Summary Entry'
+                    currency_rate: 0.69
+                    currency: USD
+                    company_id: '12345'
+                    subsidiary:
+                      display_id: '123456'
+                      name: Acme Inc.
+                    line_items:
+                      - description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                        tax_amount: 27500
+                        sub_total: 27500
+                        total_amount: 27500
+                        base_currency_amount: 27500
+                        type: debit
+                        tax_rate:
+                          id: '123456'
+                          code: N-T
+                          rate: 10
+                        tax_type: sales
+                        tracking_category:
+                          id: '123456'
+                          name: New York
+                        tracking_categories:
+                          - id: '123456'
+                            code: '100'
+                            name: New York
+                            parent_id: '123456'
+                            parent_name: New York
+                        ledger_account:
+                          id: '123456'
+                          name: Bank account
+                          nominal_code: N091
+                          code: '453'
+                          parent_id: '123456'
+                          display_id: '123456'
+                        customer:
+                          id: '12345'
+                          display_name: Windsurf Shop
+                          name: Windsurf Shop
+                          email: boring@boring.com
+                        supplier:
+                          id: '12345'
+                          display_name: Windsurf Shop
+                          address:
+                            id: '123'
+                            type: primary
+                            string: 25 Spring Street, Blackburn, VIC 3130
+                            name: HQ US
+                            line1: Main street
+                            line2: 'apt #'
+                            line3: 'Suite #'
+                            line4: delivery instructions
+                            line5: 'Attention: Finance Dept'
+                            street_number: '25'
+                            city: San Francisco
+                            state: CA
+                            postal_code: '94104'
+                            country: US
+                            latitude: '40.759211'
+                            longitude: '-73.984638'
+                            county: Santa Clara
+                            contact_name: Elon Musk
+                            salutation: Mr
+                            phone_number: 111-111-1111
+                            fax: 122-111-1111
+                            email: elon@musk.com
+                            website: https://elonmusk.com
+                            notes: Address notes or delivery instructions.
+                            row_version: 1-12345
+                        employee:
+                          id: '12345'
+                          display_id: EH
+                          display_name: Ester Henderson
+                        department_id: '12345'
+                        location_id: '12345'
+                        line_number: 1
+                        worktags:
+                          - id: '123456'
+                            value: New York
+                        date: '2020-09-30'
+                        source_id: '12345'
+                      - description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                        tax_amount: 27500
+                        sub_total: 27500
+                        total_amount: 27500
+                        base_currency_amount: 27500
+                        type: debit
+                        tax_rate:
+                          id: '123456'
+                          code: N-T
+                          rate: 10
+                        tax_type: sales
+                        tracking_category:
+                          id: '123456'
+                          name: New York
+                        tracking_categories:
+                          - id: '123456'
+                            code: '100'
+                            name: New York
+                            parent_id: '123456'
+                            parent_name: New York
+                        ledger_account:
+                          id: '123456'
+                          name: Bank account
+                          nominal_code: N091
+                          code: '453'
+                          parent_id: '123456'
+                          display_id: '123456'
+                        customer:
+                          id: '12345'
+                          display_name: Windsurf Shop
+                          name: Windsurf Shop
+                          email: boring@boring.com
+                        supplier:
+                          id: '12345'
+                          display_name: Windsurf Shop
+                          address:
+                            id: '123'
+                            type: primary
+                            string: 25 Spring Street, Blackburn, VIC 3130
+                            name: HQ US
+                            line1: Main street
+                            line2: 'apt #'
+                            line3: 'Suite #'
+                            line4: delivery instructions
+                            line5: 'Attention: Finance Dept'
+                            street_number: '25'
+                            city: San Francisco
+                            state: CA
+                            postal_code: '94104'
+                            country: US
+                            latitude: '40.759211'
+                            longitude: '-73.984638'
+                            county: Santa Clara
+                            contact_name: Elon Musk
+                            salutation: Mr
+                            phone_number: 111-111-1111
+                            fax: 122-111-1111
+                            email: elon@musk.com
+                            website: https://elonmusk.com
+                            notes: Address notes or delivery instructions.
+                            row_version: 1-12345
+                        employee:
+                          id: '12345'
+                          display_id: EH
+                          display_name: Ester Henderson
+                        department_id: '12345'
+                        location_id: '12345'
+                        line_number: 1
+                        worktags:
+                          - id: '123456'
+                            value: New York
+                        date: '2020-09-30'
+                        source_id: '12345'
+                    status: draft
+                    memo: Thank you for your business and have a great day!
+                    posted_at: '2020-09-30T07:43:32.000Z'
+                    journal_symbol: IND
+                    tax_type: sales
+                    tax_code: '1234'
+                    number: OIT00546
+                    tracking_categories:
+                      - id: '123456'
+                        code: '100'
+                        name: New York
+                        parent_id: '123456'
+                        parent_name: New York
+                    accounting_period: 01-24
+                    tax_inclusive: true
+                    attachments:
+                      - name: sample.jpg
+                        mime_type: image/jpeg
+                        is_compressed: false
+                        encoding: base64
+                        content: data:image/jpeg;base64,...
+                        notes: A sample image
+                    source_type: manual
+                    source_id: '12345'
+                    row_version: 1-12345
+                    custom_fields:
+                      - id: '2389328923893298'
+                        name: employee_level
+                        ref_name: Marketing
+                        description: Employee Level
+                        value: Uses Salesforce and Marketo
+                    pass_through:
+                      - service_id: string
+                        operation_id: string
+                        extend_object: {}
+                        extend_paths:
+                          - path: $.nested.property
+                            value: *ref_0
   /accounting/general-ledger-transactions:
     get:
       tags:
@@ -36479,6 +38470,88 @@ paths:
           label: Node
           source:
             id: id_example
+  /accounting/tracking-categories/batch:
+    post:
+      tags:
+        - Tracking Categories
+      operationId: trackingCategoriesBatchAdd
+      summary: Create Tracking Categories in batch
+      description: Create multiple tracking categories in a single request. Each item is processed independently, so some may be created while others fail; the response returns `200` with one result per item, in the order the items were sent. The maximum number of items accepted per request depends on the connector.
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: |
+            Creating tracking categories is not supported on Xero.
+        - connector: zoho-books
+          description: |
+            Creating tracking categories is not supported on Zoho Books.
+        - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 tracking categories per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost,
+            so set client timeouts for the size of request you send.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchTrackingCategoriesRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/BatchTrackingCategoriesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            trackingCategoriesBatch:
+              items:
+                - _ref: item-1
+                  data:
+                    parent_id: '12345'
+                    parent_name: Area
+                    name: Department
+                    code: '100'
+                    status: active
+                    row_version: 1-12345
+                    pass_through:
+                      - service_id: string
+                        operation_id: string
+                        extend_object: {}
+                        extend_paths:
+                          - path: $.nested.property
+                            value: *ref_0
+                    subsidiaries:
+                      - id: string
   /accounting/bill-payments:
     get:
       tags:
@@ -37113,10 +39186,30 @@ paths:
       x-apideck-gotchas:
         - connector: xero
           description: |
-            Creating bill payments in batch is not supported. A single payment can be allocated
-            across several invoices, and Xero records one payment per allocation — so a batch
-            could not return one result per item you sent. Create them one at a time through the
-            single-record endpoint instead.
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            A payment allocated across several invoices is recorded by Xero as several
+            payments, so a single item you send can turn into more than one provider record.
+            Because of that, records are written one at a time rather than in a single
+            batched call, and each result returns the id of the first payment Xero creates
+            for that item. A request of N records therefore takes about N times as long as
+            a single write and counts as N calls against your Xero rate limit.
+
+            At most 20 records per request. That ceiling has not been measured for records
+            written one at a time on this resource, so treat it as an upper
+            bound rather than a safe size: prefer smaller requests and set client timeouts from
+            your own observed per-record latency.
+
+            Each record succeeds or fails on its own; read the per-item `status` to see which
+            were written. If the request times out, the items it could not confirm come back
+            with `status: uncertain` rather than `failed` — some of them may well have been
+            written, and no ids are returned for those. Verify before retrying an `uncertain`
+            item: list the resource to find what exists, or a retry will duplicate it.
+
+            Results come back in the order the items were sent. Supply `_ref` on every item if
+            you need to tie an outcome back to your own record — it is echoed on every result,
+            including failures, and is never sent to the connector.
         - connector: zoho-books
           description: |
             Records are written one at a time, so the request counts as **one request per

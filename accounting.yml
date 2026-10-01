@@ -38075,6 +38075,16 @@ paths:
             connections — a bank feed account IS the underlying bank account. Use the Bank Accounts
             endpoint to find the account you need, then pass its `id` as `bank_feed_account_id` when
             creating bank feed statements.
+        - connector: netsuite
+          description: |
+            `feed_status` reads back as `pending` for every active account — NetSuite does not expose Format Profile
+            linking. From bundle version 1.3.2, `custom_fields` carries `last_import_requested_at`: when NetSuite's
+            bank data import last asked for the account (ISO 8601, UTC). NetSuite only asks for accounts linked in a
+            Format Profile, so the value shows the account was linked at that time; it is not proof the account is
+            still linked. It is set by the first import after the account is linked (on the profile's import schedule,
+            or when a user clicks **Update Imported Bank Data**), moves forward with each import while the account
+            stays linked, and stops once it is unlinked. It is absent for accounts that have never been requested.
+            NetSuite imports an account at most once every 60 minutes, so the value moves forward at most hourly.
       responses:
         '200':
           $ref: '#/components/responses/GetBankFeedAccountsResponse'
@@ -38438,6 +38448,17 @@ paths:
             `status` reflects Moneybird's bookkeeping reconciliation state, not feed-delivery status: `pending`
             means the transaction has not yet been manually reconciled in the Moneybird UI and can remain
             `pending` indefinitely — it does not indicate a delivery problem. Moneybird never returns `rejected`.
+        - connector: netsuite
+          description: |
+            `status` is the staging state in NetSuite: `pending` until the next bank data import of an account linked in
+            the Format Profile, then `success`; from bundle version 1.3.2, `rejected` when the bundle's daily maintenance
+            script finds the statement still not imported after 7 days. There is no webhook for status changes — poll
+            this operation or Get Bank Feed Statement.
+
+            Pages are offset-based. From bundle version 1.3.2 statements are listed oldest first, so new statements
+            are added at the end; with earlier versions the order is not stable, so a statement can repeat or be
+            skipped across pages. From 1.3.2 the maintenance script deletes `success` and `rejected` statements 30 days
+            after they were created; reading a deleted statement returns `400 RCRD_DSNT_EXIST`.
         - connector: intuit-bank-feeds
           description: |
             List responses carry statement metadata only — `transactions` is never included, however many
@@ -38570,6 +38591,35 @@ paths:
             In Xero, if a transaction ID has been previously used, the API will reject the entire bank feed statement.
             However, if the statement includes multiple transactions and at least one transaction ID is unique,
             the API will return a success response but will not process the transactions with duplicate IDs.
+        - connector: netsuite
+          description: |
+            Requires the Apideck Bank Feed bundle in the customer's NetSuite account. `bank_feed_account_id` must be an
+            active Bank or Credit Card account (as listed by `GET /bank-feed-accounts`); a nonexistent or inactive
+            account is rejected with `400 INVALID_FLD_VALUE` and nothing is created. `id` and `status` in the request
+            are ignored: NetSuite assigns the id and every new statement starts as `pending`.
+
+            `pending` means staged in NetSuite and waiting for the next bank data import of an account linked in the
+            Format Profile (on the profile's import schedule, or when a user clicks **Update Imported Bank Data**). It
+            becomes `success` once imported into Match Bank Data. From bundle version 1.3.2, the bundle's daily
+            maintenance script marks a statement `rejected` once it is 7 days old and still not imported (for example
+            because its account is not linked in the Format Profile); a `rejected` statement is never imported. Before
+            1.3.2 statements are never marked `rejected`, and the maintenance script deletes staging statements older
+            than 30 days whatever their status — set its deployment (Customization → Scripting → Script Deployments →
+            Apideck Bank Feed Maintenance) to Not Scheduled until the bundle is updated.
+
+            Dates are stored and returned as the calendar date sent. With bundle versions before 1.3.2, a NetSuite user
+            whose date format is day-first (for example DD/MM/YYYY) gets day and month swapped on write and in list
+            responses, and a rejected statement (or a `null` date when listing) when the day is above 12; update the
+            bundle.
+
+            `source_transaction_id`, `counterparty` and `reference` are limited to 300 characters and `description` to
+            4,000 by NetSuite. From bundle version 1.3.2 a rejected line rolls back the whole statement — nothing is
+            saved — and the error message is prefixed with the failing line, e.g. `transactions[1]: …`; with earlier
+            bundle versions the statement and the lines before the failing one stay saved and are imported, so
+            resending the corrected statement duplicates them. From 1.3.2 a statement with more transactions than one
+            request can create and fully roll back (about 490) is rejected with `STATEMENT_TOO_LARGE` before anything
+            is saved; split it.
+            Deleting a statement is not supported.
         - connector: intuit-bank-feeds
           description: |
             A successful create does **not** mean QuickBooks has the statement. This connector is pull-based:

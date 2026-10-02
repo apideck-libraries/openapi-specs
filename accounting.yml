@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.60.0
+  version: 10.60.1
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -25131,6 +25131,118 @@ paths:
             `due_date`, `sub_total`, `total_tax` and `billing_address` are not returned on this list
             — the vendor's list endpoint is a lighter summary view than the get-by-id response. Fetch
             the invoice by `id` for those fields.
+        - connector: oracle-fusion
+          description: |
+            Invoices are Oracle **Receivables transactions**, and the resource is not restricted to
+            sales invoices: credit and debit memos come back in the same list. `type` is what
+            distinguishes them, derived from the transaction type's name — a tenant-defined name Oracle
+            does not classify, so a custom transaction type reads as `other`.
+
+            `status` combines two things Oracle keeps apart. An incomplete transaction reads as `draft`
+            and one awaiting approval as `submitted`; anything completed (or frozen, which means locked
+            against edits, not written off) reads from the balance instead — `paid`, `partially_paid`
+            or `unpaid`.
+
+            `customer.id` carries Oracle's internal party id and `customer.display_id` the customer
+            account number. **Use `customer.display_id` when creating an invoice** — Oracle accepts the
+            account number and nothing else, and rejects the party id outright. `filter[customer_id]`
+            takes the party id, matching `customer.id`.
+
+            Whether `number` is honoured depends on the connection's Receivables Transaction Source.
+            A source with automatic transaction numbering assigns Oracle's own number and ignores a
+            supplied `number` without error, so read the created invoice back for the real one. A
+            source without automatic numbering keeps the supplied `number`, requires one on every
+            create, and refuses a number already used by another transaction.
+
+            `line_items[].unit_of_measure` must be a unit of measure **name** as defined in the tenant (for example `Each`), not its short code (`Ea`); an unknown value is refused, and a tenant without units of measure defined refuses every value.
+
+            Oracle computes each line amount as quantity × unit price and rounds only the invoice
+            totals to the currency. Send any two of `quantity`, `unit_price` and `total_amount` and the
+            third is derived at ten decimals — so a value that is not an exact multiple (100 over 3)
+            reads back as 33.3333333333 and `total_amount` 99.9999999999 while the header `total` reads
+            100. This applies to a derived `quantity` just as it does to a derived `unit_price`. Send
+            `quantity` and `unit_price` when the exact line amount matters.
+
+            Sending all three is allowed, but `quantity` × `unit_price` must agree with `total_amount`
+            to within half a cent (0.005) unless a line discount explains the difference; a larger disagreement is
+            refused rather than silently resolved in favour of one of them.
+
+            `line_items[].tax_rate.code` must be a **tax classification code** defined in the tenant's
+            transaction-tax setup; an unknown code is refused, and a tenant with no tax classification
+            codes refuses every value. `tax_rate.id` is not used on a create. Oracle calculates the tax
+            from the code, so `line_items[].tax_amount` is not sent — and whether the code selects the
+            rate, or the tenant's default rate applies instead, depends on the tenant's transaction-tax
+            configuration for Receivables invoices.
+
+            Line-level tax is returned on the single-invoice read only: `line_items[].tax_amount` and
+            `tax_rate.rate` come back from `GET /invoices/{id}` (the rate only when one tax applies to
+            the line), while the list carries the header `total_tax` and the line's `tax_rate.code`.
+
+            `custom_fields` map to the segments of the tenant's transaction descriptive flexfield.
+            `custom_fields[].id` must be a deployed segment's API name (`custom_fields[].name` is
+            accepted as a fallback); an unknown id is refused, a tenant with no segments deployed
+            refuses every value, and a segment holds a single text, number or date, so object and
+            array values are refused. Reads return every segment that carries a value, with the
+            segment API name in both `id` and `name`. When the segments belong to a flexfield context,
+            set the connection's Invoice Flexfield Context to that context code.
+
+            `line_items[].item` carries the standard memo line's **name** in both `code` and `name`,
+            and no `id` — Oracle's invoice lines never expose the memo line's id. Send the name in
+            `item.code` (or `line_items[].code`) on a create; a line that names its item by `item.id`
+            alone is refused rather than created without a memo line. The match is **case-sensitive**:
+            a name whose letter case differs from the one defined in the tenant is refused exactly as
+            an unknown one is. When `item.code` and `item.name` are both sent and disagree, `code` is
+            the one used. Look it up through the Invoice Items
+            resource. Inventory items are not supported on invoice lines.
+
+            `sub_total` and `total_tax` are assembled from the transaction's installments, since Oracle
+            publishes no header split between the taxable base and the tax. Freight is included in
+            `sub_total`. They are reported only when they reconcile to `total` to within half a cent
+            (0.005), and **omitted when they do not** — on a list, installments are capped at the
+            request's `limit`, so a transaction with more installments than that would otherwise report
+            a silently understated base and tax against a header `total` that describes all of it.
+            Absent beats wrong: when both are present, `sub_total` + `total_tax` reconciles to `total`.
+            `total` itself is Oracle's header amount and is always reported, even when the other two
+            are omitted.
+
+            On a **list**, each record's `line_items` is capped at the request's `limit` — asking for 5
+            invoices returns at most 5 line items per invoice — while `total` is a header field and
+            always describes the whole document. A response whose lines may be incomplete carries a
+            `truncated_child_collection` entry in `meta.warnings` naming the field. Fetch the invoice
+            **by id** for the complete set: that read returns up to 500 lines and 500 installments, and
+            is where `sub_total` and `total_tax` are reliably present. Above 500 lines or 500
+            installments it is itself partial and says so through the same `truncated_child_collection`
+            warning — there is no route to the remainder.
+
+            `filter[ids]` is not supported: Oracle cannot match a list of ids on this resource and
+            fails the whole query when asked to. Use `filter[id_since]`, or fetch by id. Also
+            unsupported: `filter[supplier_id]`, which has no meaning on a Receivables transaction, and
+            `filter[subsidiary_id]`, because the transaction carries only the legal entity's code and
+            Oracle cannot query on it.
+
+            `subsidiary` is not available for the same reason. A Receivables transaction carries the
+            legal entity's code but not the internal id the Subsidiaries resource is keyed by, and
+            reporting the code as `subsidiary.id` would hand you an id that resolves to nothing. The
+            code is readable via `raw=true`.
+
+            `billing_address` and `shipping_address` are not available. The transaction carries only
+            bill-to and ship-to **site codes**, with no street, city, postal code or country anywhere
+            behind them; the codes are readable via `raw=true`.
+
+            Updating and deleting are not supported. Oracle will only create a completed invoice, and a
+            completed invoice cannot be deleted and accepts almost no edits — not the amounts, dates or
+            lines. Correct one the way Oracle intends: issue a credit memo or an adjustment against it.
+
+            Creating requires two connection settings, the Receivables **business unit** and
+            **transaction source**, because Oracle demands both on every transaction and defaults
+            neither. The accounting date is deliberately left to Oracle so that it lands in an open
+            period; the transaction date and payment terms default too, and the document number does on
+            a source with automatic numbering (see above). What the connection can **read** is a
+            separate matter: Receivables row-level visibility is secured by business unit on the Oracle
+            side, through the integration user's data-access grant. No invoice read sends this setting,
+            so changing it does not widen or narrow what a list returns — if invoice lists come back
+            empty, the grant is what to check, not this value. Keep the two the same anyway: an invoice
+            created against a business unit the connection cannot read is invisible to it afterwards.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoicesResponse'
@@ -25378,6 +25490,81 @@ paths:
             `line_items[].unit_of_measure` only recognizes a fixed set of German abbreviations
             (`Stk`, `kg`, `m`, `Std`, ...). Any other value — including a plain English word like
             `hour` — is silently mapped to `Stk` (piece) instead of being rejected.
+        - connector: oracle-fusion
+          description: |
+            Creating an invoice in a `currency` other than the ledger's own currency requires
+            `currency_rate` — send the conversion rate as of the invoice date. Without it, Oracle
+            refuses the request rather than defaulting or looking up a rate itself.
+
+            `line_items[].ledger_account` and `line_items[].tracking_categories` are accepted and then
+            ignored: the invoice is created, and neither value appears when it is read back. Oracle
+            Receivables derives a transaction's accounts itself rather than taking them per line — an
+            invoice created here comes back with a receivable account and a revenue account per line,
+            both chosen by the AutoAccounting rules configured in Oracle, and the cost centre is one
+            segment of that same account. To change which accounts an invoice posts to, change those
+            rules in Oracle; there is no per-line override through this API. A tracking category that
+            does not exist in the tenant is accepted for the same reason — the value is never used.
+
+            `line_items[].item` must name a memo line Oracle will accept on an invoice line, and the
+            `invoice-items` list is wider than that set: it returns every standard memo line the tenant
+            has, including ones Oracle refuses here with "the memo line you entered doesn't exist". The
+            list carries nothing that distinguishes the two, so confirm the memo lines you intend to
+            use before relying on them, or leave `item` off and let the line stand on its description
+            and amount.
+
+            Only `type: "standard"` (and omitting `type`) create a Receivables invoice through this
+            endpoint. `type: "credit"` is refused: Oracle represents a credit memo as a separate
+            document type this connector does not implement. `type: "service"`, `"product"` and
+            `"supplier"` are also refused — Oracle Receivables has no transaction class equivalent to
+            any of them. For a standard invoice — `type: "standard"`, or no `type` at all — the Oracle
+            transaction type name applied is the connection's **Invoice Transaction Type** setting (a
+            tenant-defined name; Oracle seeds one called "Invoice" by default), not a fixed translation
+            of the unified value. Send `type: "other"`, or leave that setting blank, to let Oracle apply
+            its own default instead.
+
+            Because the transaction type name is read from a free-text connection setting rather than
+            a fixed list, an invoice created while **Invoice Transaction Type** is set to a name outside
+            this connector's own recognized standard-type list (Invoice, Intercompany, PA Invoice, PA
+            Internal Invoice, PSFT Invoice, and a handful of module-specific names) reads back with
+            `type: "other"` rather than `"standard"` — the create still succeeds and the invoice is a
+            genuine standard Receivables transaction, only the unified `type` on subsequent reads is
+            affected. This only matters for a renamed or custom transaction type; the default "Invoice"
+            round-trips correctly.
+
+            A `customer` Oracle can resolve is required: send the customer **account number** in
+            `customer.display_id`. A create with no `customer`, or one carrying only a `name` or an
+            `email`, is refused — Oracle rejects those without saying why, so the connector names the
+            field instead. `customer.id` is accepted only when it holds the account number; the party
+            id it carries on reads is not accepted on a create.
+
+            `tax_inclusive: true` is refused. Receivables calculates tax on top of the line amount from
+            the tax classification code, so a price declared tax-inclusive would be billed with the tax
+            added on top of it. Send tax-exclusive amounts.
+
+            A **header** `discount_amount` or `discount_percentage` is refused. Oracle applies no
+            header-level discount to a Receivables transaction, so accepting one would bill the
+            undiscounted total with no error. Put the discount on the `line_items`, where both fields
+            are applied.
+
+            `line_items[].tax_rate` must carry `code`. A tax rate given by `name` alone is refused —
+            only the tax classification code selects a rate, and a name would create the invoice with
+            no tax at all. `tax_rate.id` is not used on a create.
+
+            `line_items[].description` holds at most 240 characters; a longer one is refused naming the
+            line and the limit.
+
+            `pass_through` cannot overwrite a field this connector computes or checks before sending:
+            the business unit, transaction source and transaction type, the bill-to customer, the
+            invoice lines and the descriptive flexfield row. A `pass_through` value for one of those is
+            refused naming the field, because it would be applied after the check and change what is
+            sent. Every other field remains writable through `pass_through` as usual.
+
+            A line's `discount_amount`/`discount_percentage` is applied by reducing the unit price —
+            Receivables has no discount field of its own. When the line also states `total_amount`,
+            that total is honoured as the intended (discounted) amount. When it does not, the
+            discounted total is computed from `quantity x unit_price` and the reduction instead.
+            Sending both a `discount_amount` and a `discount_percentage` that disagree with each other
+            is refused, as is a discount that would take the line amount negative.
       requestBody:
         required: true
         content:
@@ -26440,6 +26627,41 @@ paths:
             vendor-managed reference list rather than a full chart of accounts. The list is
             read-only: individual accounts cannot be fetched by id, and none can be created,
             updated or deleted through this connector.
+        - connector: oracle-fusion
+          description: |
+            This list is scoped to the connection's own chart of accounts: only account combinations
+            belonging to the same chart of accounts as the connection's configured ledger are
+            returned. A tenant with more than one ledger — and therefore more than one chart of
+            accounts — on the same Oracle instance will not see combinations from a different chart
+            of accounts, even though Oracle itself does not scope this list that way; without this,
+            a code combination from a chart of accounts with fewer segments than the connection's own
+            (e.g. a 2-segment code fed into a journal line expecting 3 segments) is silently
+            misinterpreted rather than rejected. A `pass_through` naming `q` or `finder` is refused
+            with a `400`, because it would replace that scope.
+
+            Oracle Fusion ledger accounts are sourced from the chart-of-accounts code-combination lookup, not from an account master with balances. `opening_balance`, `current_balance` and `last_reconciliation_date` are always `null`; `bank_account` and `subsidiaries` are not returned at all. Both `ledgerAccountsAll` and `ledgerAccountsOne` (by code-combination id) are supported; create/update/delete are not. Reading account combinations requires granting the integration user the Oracle privilege "Get Enterprise Structures Using REST Service" (`FUN_GET_ENTERPRISE_STRUCTURES_REST_SERVICE_PRIV`) via a custom role — it is not part of any seeded role.
+
+            `name`, `code` and `display_id` all carry the account combination — for example
+            `01.000.1200` — assembled from the chart-of-accounts segment values and matching what
+            Oracle shows for the same account elsewhere. Oracle publishes no description for a code
+            combination, so there is no separate natural-language account name to return.
+
+            **Use `code`, not `id`, when referencing a ledger account on a journal entry line.** A
+            journal entry line's `ledger_account.code` is the account combination, and it is split back
+            into chart-of-accounts segments on the way in; `id` is Oracle's internal code-combination
+            id, which is not a segmented account code. `id` cannot be the combination either — it is
+            the only value that fetches a single account, and Oracle's lookup does not resolve the
+            combination string.
+
+            `filter[classification]` and `filter[status]` are supported. Oracle models five account
+            classifications — asset, liability, equity, revenue and expense — so the wider unified
+            values (`income`, `other_income`, `other_expense`, `costs_of_sales`, `other`) match no
+            account and come back as an empty list rather than an unfiltered one.
+
+            `filter[name]` is not supported. There is no account name to match on for the reason above,
+            so the filter is rejected rather than ignored. `filter[updated_since]` and
+            `filter[subsidiary_id]` are not supported either — the lookup carries no timestamps and no
+            legal-entity reference. Sorting is not supported.
       responses:
         '200':
           $ref: '#/components/responses/GetLedgerAccountsResponse'
@@ -27063,6 +27285,35 @@ paths:
         - connector: quickbooks-desktop
           description: |
             QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
+        - connector: oracle-fusion
+          description: |
+            Invoice items are Oracle Receivables **standard memo lines** — the construct Oracle
+            documents for invoice lines that are not inventory items. Inventory items from the Product
+            Management item master are not returned, so `filter[type]` is not supported and `type` is
+            always `non_inventory`.
+
+            `name` and `code` both carry the memo line's name, and `code` is the value to use when
+            referencing the item on an invoice line: Receivables matches a memo line on its exact
+            name, case-sensitively, and rejects the invoice item `id`.
+
+            Not every memo line can be used on a customer invoice. Receivables refuses the ones
+            reserved for other document types — the chargeback and debit-memo-reversal lines among the
+            seeded set — with an error naming an invalid memo line. `Goods and Services` is the general
+            purpose line in a default Oracle configuration.
+
+            Filtering and sorting are not supported: `filter[name]`, `filter[ids]`,
+            `filter[updated_since]`, `filter[transaction_type]`, `filter[subsidiary_id]` and `sort` are
+            all rejected rather than silently ignored. The list pages like any other on this
+            connector, so filtering client-side means walking every page.
+
+            Only `id`, `name`, `code`, `description`, `type`, `sold`, `purchased` and `tracked` are
+            populated. Prices, quantities, currency, accounts, categories, tax schedules, tracking
+            dimensions, `active` and the audit fields have no source on a memo line. A memo line's
+            default tax classification, tax product category, unit of measure and reference data set
+            are available via `raw=true`.
+
+            Create, update and delete are not supported: memo lines are read-only over the API and are
+            maintained in Oracle's Setup and Maintenance work area (Manage Standard Memo Lines).
       responses:
         '200':
           $ref: '#/components/responses/GetInvoiceItemsResponse'
@@ -32804,6 +33055,26 @@ paths:
         - connector: netsuite
           description: |
             Subsidiary scoping (NetSuite OneWorld) applies to transactions, entities, reference data and the financial reports. It does **not** apply to these, which are returned in full whatever subsidiary is selected: currencies, payment-methods, accounting-periods, subsidiaries, attachments, server-time, company-info and the bank-feed resources — NetSuite keeps them at account level. `tax-rates` and `expenses` are also returned in full, but for a different reason: those records **are** subsidiary-specific in NetSuite (tax nexuses are registered per subsidiary), and the surface this connector reads them through offers no way to filter by it, so a scoped consumer still receives every tax code and every expense in the account. See their own gotchas. Two further limits. **Changing the Default Subsidiary invalidates pages you have already started**: a pagination cursor carries the scope it was created under, so continuing an older cursor after changing the setting keeps returning the previous scope's records and record count. Start the list again after changing it. And **writes are never scoped** — the subsidiary of a created or updated record comes from the request body, or is derived by NetSuite from the record's own customer or vendor when the body does not name one. Neither the setting nor the `x-apideck-company-id` header moves a write. A consequence worth planning for: a scoped connection can create a record that its own list requests will not return, because the created record belongs to the subsidiary its customer does rather than to the one selected. Two behaviours that hold for every scoped resource. A per-request override is available as the `x-apideck-company-id` header, and it wins over the connection's setting while an explicit `filter[subsidiary_id]` wins over both. And a record fetched directly by its ID is returned whatever subsidiary is selected — an id is an explicit request for one record, so it is not filtered out of scope.
+        - connector: oracle-fusion
+          description: |
+            `company_name` is the name of the **general ledger** the connection is scoped to, not a
+            legal entity name. Oracle Fusion exposes no company record an accounting connection can
+            read, and a ledger is the one thing guaranteed to exist and to be exactly one per
+            connection. If your ledger is named after something other than the company — a region, a
+            reporting purpose — that is what you will read here.
+
+            Most of this model is unavailable. A ledger carries no address, no tax registration, no
+            legal name, no contact details and no timestamps, so `addresses`, `phone_numbers`,
+            `emails`, `sales_tax_number`, `legal_name`, `country`, `company_start_date`,
+            `created_at` and `updated_at` are absent. `fiscal_year_start_month` is absent too: the
+            ledger names its accounting calendar but Oracle's calendar list of values does not
+            publish a start month.
+
+            `status` is always `active`. A ledger has no status attribute to derive one from, so
+            this is asserted rather than read.
+
+            `id` is the ledger's own identifier, so it matches the Ledger you selected when creating
+            the connection.
         - connector: snelstart
           description: |
             `country` always returns `NL`. SnelStart's company-info endpoint (`/v2/companyInfo`)
@@ -33084,6 +33355,70 @@ paths:
             a `bills`/`expenses` record, or a transaction entered directly in Twinfield, and this
             connector has no field to disambiguate. Getting a journal entry by an id sourced from
             another resource (or from Twinfield directly) can silently return the wrong record.
+        - connector: oracle-fusion
+          description: |
+            This list is scoped to the chart of accounts of the connection's configured ledger: only
+            journal batches belonging to that chart of accounts are returned, and batches belonging to
+            a ledger with a different chart of accounts are not, even though Oracle itself does not
+            scope this list by ledger. The scope is the chart of accounts, not the ledger: when several
+            ledgers share one chart of accounts (a primary and its secondary ledgers, for example),
+            their journal batches are all listed, read and deleted through the connection as if they
+            were its own. Reading one by id is scoped the same way, and a journal entry this connection
+            cannot see is answered identically whether it belongs to another chart of accounts or does
+            not exist at all. A `pass_through` naming `q`, `finder` or `REST-Framework-Version` is
+            refused with a `400`, because it would replace that scope.
+
+            `memo` is `null` when a journal entry created through this connector was created without
+            one: Oracle substitutes a placeholder of its own for an empty description, and that
+            placeholder is not returned. A journal imported into Oracle by anything else is read as
+            Oracle holds it, placeholder included.
+
+            `line_items` is capped at 25 lines per journal on a by-id read, and on a **list** at the
+            request's own `limit` when that is lower — asking for 5 journal entries returns at most 5
+            line items per entry, and the unified `limit` defaults to 20. A capped entry's `line_items`
+            is incomplete, so its lines may not balance. Oracle exposes no route to the remaining
+            lines, so a journal with more lines than the cap cannot be read in full through this API.
+            A response whose lines may be incomplete carries a `truncated_child_collection` entry in
+            `meta.warnings` — use that rather than the line count to tell a complete entry from a
+            capped one.
+
+            `filter[status]` matches the stored status exactly, including its letter case. A tenant
+            whose journals were created through different Oracle paths can hold both cases of the same
+            status, and a journal stored in the other case is silently absent from the filtered list
+            while still reading back with that status. Omit the filter when completeness matters.
+
+            `filter[start_date]` and `filter[end_date]` select on the Oracle **posting date**, inclusive
+            on both ends. Journals that are not yet posted have no posting date and are never returned by
+            a date-range filter; list them with `filter[status]=draft` instead.
+
+            `filter[end_date]` must be a date formatted `YYYY-MM-DD`; a timestamp or any other shape is
+            refused with a `400`.
+
+            `filter[status]=draft` returns unposted journals that have been completed. A journal saved in
+            Oracle without being completed is unposted too, but carries a different Oracle status code
+            and is not returned by this filter; it is still listed without a status filter and reads as
+            `draft`. `voided`, `rejected` and `deleted` return no records: Oracle General Ledger has no
+            such batch states (a posted journal can only be reversed). `pending_approval` and `approved`
+            return no records either, for a different reason: Oracle keeps posting state and approval
+            state on two separate fields, and this connector reads only the posting one. A journal that
+            Oracle has selected for posting, or is posting right now, reads as `other` — it is a
+            transient state with no unified equivalent, and calling it `draft` would imply it is still
+            editable when it is not.
+
+            `other` returns no records too, and it is the one value in that list this connector does
+            emit, so it is worth stating plainly: a journal can read back as `other` and still not be
+            reachable by filtering for it. To find journals in that state, list without a status filter
+            and select on the `status` field of the response.
+
+            `filter[number]`, `filter[scope]` and `filter[subsidiary_id]` are not supported and are
+            refused. Sorting is supported on `created_at` and `updated_at`.
+
+            `posted_at` is the journal's accounting date (the date that places it in its period), so it
+            is returned for unposted journals too and round-trips into a create unchanged; the
+            date-range filters select on the separate posting date, which for a posted journal is
+            on or after it. `line_items[].ledger_account` carries only `code` (the account
+            combination); look the account up through the ledger-accounts resource by `code`, not
+            by `id`.
         - connector: microsoft-dynamics-365-business-central
           description: |
             Journal entries are read from the single general journal batch configured in the required
@@ -33538,6 +33873,138 @@ paths:
             or backdated bookings should set this per line rather than relying on `posted_at`.
             `line_items[].source_id` maps to Exact's per-line `Notes`, useful for carrying your own
             reconciliation identifier since `description` is typically a human-readable label.
+        - connector: oracle-fusion
+          description: |
+            Oracle Fusion journal entries are created asynchronously: this call submits an import request to Oracle's scheduler and returns immediately, before the import job runs. The `id` in the response is a **submission receipt**, not a journal id: a value prefixed with `ess-group:` (e.g. `ess-group:238151661897615`), and it never becomes a journal id — journals have their own ids in a different space. The prefix is there so the value cannot be mistaken for one.
+
+            The receipt is usable straight away, on the same endpoints as a journal id. `journalEntriesOne` and `journalEntriesDelete` accept it: while the import is still running they answer `404`, and once the journal exists they answer for that journal exactly as they would for its own id — the `id` in that response is the real journal id, which you can keep instead of the receipt if you prefer. Expect the wait to be seconds to minutes, depending on the batch and Oracle's job queue. The receipt does not expire; it keeps resolving for as long as the journal exists. A submission Oracle will not accept is reported as a `503` (the scheduler is refusing the connection's credentials, retry later), a `403` (Oracle gives no reason; most likely the integration user lacks the privilege to submit the Journal Import process, but the check behind it cannot rule out a submission Oracle would not accept) or a `502` (undetermined, retry); no journal is created in any of those cases.
+
+            Every refusal this connector makes before submitting — an unbalanced journal, fewer than two line items, a currency that is not the ledger's, an unrecognised period name, a `posted_at` that disagrees with `accounting_period` — is answered with a `4xx`, and nothing reaches Oracle: no import is queued, no rows are written, and there is nothing to clean up. Only a `201` means Oracle accepted the submission.
+
+            Retrying is safe where this gotcha tells you to retry: a `503`, `502` or `403` means the import never started, and resubmitting the same journal does not merge with, duplicate or amend the earlier attempt — each submission stands on its own. What you cannot assume is that a request whose outcome you never saw — a client timeout, a dropped connection — created nothing: if that submission did reach Oracle, retrying produces a second journal. List journal entries and match on your own `memo` before retrying in that case.
+
+            Journal entries are immutable once posted. `journalEntriesUpdate` is not supported; `journalEntriesDelete` is supported only while the journal is still unposted (journals import unposted, so a not-yet-posted journal can be cleaned up by id). Correct a posted journal with a reversal instead.
+
+            Multi-currency journal entries are not supported: a journal is posted in the ledger's functional currency. `currency` may be omitted or name that same currency; any other currency, or a `currency_rate`, is refused with a 400.
+
+            Account and period validation errors (invalid code combination, closed period, etc.) are not returned synchronously by this call — they only surface in Oracle's asynchronous ESS import log, which is not currently exposed through this API.
+
+            `posted_at` selects the accounting date the journal is imported with, and therefore its period; the journal is still created Unposted and `posted_at` reads back as that accounting date. Only the calendar date of `posted_at` is used, as written — `2026-09-01T00:00:00+02:00` lands on 1 September, not on 31 August. `accounting_period` on its own selects the period directly (and the accounting date with it, the first day of that period's month) — send it alone to target a period without also sending `posted_at`. Oracle period names are tenant-defined, but this connector accepts only the Mon-YY calendar naming (e.g. `Jul-26`, matched case-insensitively); a name in another shape is refused with a 400. If both `posted_at` and `accounting_period` are sent and disagree, the request is refused with a 400 naming both values rather than silently picking one.
+
+            A journal needs at least **two** line items — a debit and a credit. A create with fewer,
+            or with no `line_items` at all, is refused rather than submitted: an import with no rows is
+            accepted by Oracle and simply never becomes a journal.
+
+            `posted_at` must be an ISO 8601 calendar date (`YYYY-MM-DD`, optionally with a time) and a
+            real one. A value that is not ISO (`09/15/2026`), that cannot be read as a date, or that
+            does not exist (`2026-02-30`), is refused naming the value. A non-ISO date is refused
+            rather than interpreted because its meaning depends on the writer's locale — `09/15` is
+            September 15th to one reader and May 9th to another — and the guess selects the accounting
+            period the journal lands in.
+
+            Line amounts are always **positive**, whatever the line's direction: `line_items[].type`
+            (`debit` / `credit`) carries the direction on its own, and a zero or negative
+            `total_amount` is refused. Note this differs from the field's own description in the
+            unified schema, which describes credits as negative; send the absolute amount here.
+
+            Every line needs a `ledger_account.code` — the account combination as a
+            period-delimited string, e.g. `01.000.4000`. It is the only part of `ledger_account` that
+            is read: `id`, `name` and `nominal_code` are ignored, and a line without a non-empty
+            `code` is refused. A code with more than 30 segments is refused rather than truncated.
+
+            Tax is not carried on a journal entry through this connector: `tax_code`, `tax_type` and a
+            line's `tax_amount`, `tax_rate` or `tax_type` are refused if present, rather than accepted
+            and dropped. Record the tax through the resource that owns it. (`tax_inclusive` is the one
+            exception — it is currently ignored rather than refused.)
+
+            Journals are always imported **Unposted**; a caller-supplied `status` is ignored. Posting
+            is a separate step in Oracle that this connector does not perform.
+
+            Fields accepted by the unified schema and **not** written to Oracle: `number`,
+            `display_id`, `company_id`, `subsidiary`, `journal_symbol`, `tracking_categories`,
+            `tax_inclusive`, `custom_fields`, `custom_mappings`, `attachments`, `source_type`,
+            `source_id`, and per line `base_currency_amount`, `tracking_category`,
+            `tracking_categories`, `customer`, `supplier`, `employee`, `department_id`, `location_id`
+            and `worktags`. Oracle's journal import takes a fixed set of columns; anything outside it
+            has nowhere to land. Cost centres, departments and similar dimensions are segments of the
+            account combination, so they are set through `ledger_account.code`, not through the
+            tracking fields. The journal's source and category come from the connection's **Default
+            Journal Source** and **Default Journal Category** settings and cannot be chosen per
+            request.
+
+            A carriage return or line feed inside `title`, `memo` or a line's `description` is
+            replaced with a single space before the value reaches Oracle. Other control characters are
+            replaced the same way.
+
+            Emoji and other characters outside the Basic Multilingual Plane count as **four**
+            characters against the length limits for `title`, `memo` and a line's `description`, and a
+            value that exceeds its limit once counted that way is refused with a `400` naming both
+            counts. The four is the width such a character occupies on a tenant whose database cannot
+            hold it, where it also reads back as replacement characters; the limit is applied that way
+            for every tenant, so a value is never accepted that some tenant would silently mangle.
+
+            A connection missing any of **Ledger**, **Data Access Set**, **Default Journal Source** or
+            **Default Journal Category** is refused with a `422` naming the missing setting, before
+            Oracle is contacted. The currency the `currency` check above compares against is the
+            ledger's own functional currency, read from Oracle per request — there is nothing to
+            configure, and nothing to get wrong. If Oracle cannot be asked for it the create is refused
+            with a `502` rather than submitted with a guessed currency, since an import carrying the
+            wrong currency is discarded silently after the create has already returned.
+
+            The **Default Journal Source** must be a journal source your General Ledger accepts for
+            import. Oracle does not validate it when the request is submitted: a source it cannot use
+            is answered with the same `201` and `ess-group:` receipt as a good one, and no journal is
+            ever created. If creates return an id but no journal appears, check this setting first.
+
+            `memo` holds at most 214 characters, each line's `description` at most 240, and `title` at
+            most 87 —
+            it becomes the journal batch's name, a narrower field, and Oracle appends its own reference
+            to that name and then trims the result from the title end. A longer value is refused up
+            front, naming the field and its own limit, because neither thing Oracle does with one is
+            something you would want silently: past roughly 91 characters it keeps the journal and
+            quietly drops the tail of your title, and past 100 it discards the whole import. The 87 is
+            deliberately a little under the measured boundary, which moves as Oracle's own reference
+            grows.
+
+            `pass_through` is not supported on this operation and is refused up front: Oracle refuses
+            the whole submission outright — without saying why — when anything is added to or changed
+            in it, so a `pass_through` value would produce a submission that quietly never becomes a
+            journal. Send what you need through the journal entry's own fields.
+
+            Line amounts are rounded to the ledger currency's precision before the entry is balanced
+            and submitted — two decimals for most currencies, none for JPY, three for KWD. A payload
+            that balances only at full floating-point precision is refused up front, naming the
+            residue, rather than accepted and then discarded by Oracle's import: Oracle stores each
+            amount at that precision, so three lines of `33.333333333333336` against a credit of `100`
+            become `33.33` each and leave the journal a cent out.
+
+            **Creates are not deduplicated.** Each create is a separate submission, so
+            sending the same journal entry twice creates two journals — deliberately: a caller may
+            legitimately post an identical entry twice, and merging them would lose one silently with
+            a `201` for both. There is no idempotency key on this operation, so a client that retries
+            after a timeout — and therefore never saw a receipt — should first list journal entries and
+            match on its own `memo` before resending. The `memo` reads back normalised, not always
+            byte for byte: control characters become spaces, trailing whitespace is dropped, and
+            characters outside the Basic Multilingual Plane can come back as replacement characters on
+            some tenants — compare against your memo normalised the same way, or put a plain-ASCII
+            unique token in it to match on. Both journals import Unposted and either can be deleted while it stays
+            that way.
+
+            An Oracle journal **batch** is a container of journals, and this connector surfaces one
+            batch as one journal entry. Journal Import writes a separate journal inside the batch for
+            each accounting date, category and currency, so a batch created in Oracle or by another
+            integration can hold several — every batch this connector creates holds exactly one. When a
+            batch does hold several, `line_items` carries the lines of all of them, and any entry-level
+            field the journals disagree on (`currency`, `posted_at`, `accounting_period`, `memo`) is
+            reported as **absent** rather than taking one journal's value and stating it over
+            another's lines. `number` is not one of them: it names the batch, not a journal inside it,
+            so it is always present. `line_items[].id` is qualified so it stays unique within the entry;
+            `line_items[].line_number` is Oracle's own per-journal number and therefore repeats across
+            a multi-journal batch.
+
+            Line order is not preserved: Oracle numbers the imported lines itself, so `line_items` can come back in a different order than sent, and `line_items[].line_number` is ignored on create.
+
+            `title` and `number` do not come back as sent. Oracle names the imported journal after the title you send followed by the journal source, the balance type, a group id, the import request id and a reversal flag, so the values read back are longer than the values written and differ for every import. `memo` round-trips, normalised as described above. To find the journal, use the receipt the create returned — it reads and deletes like a journal id once the import has run.
       requestBody:
         required: true
         content:
@@ -33775,6 +34242,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: oracle-fusion
+          description: |
+            Because journal entries are imported asynchronously (see the `journalEntriesAdd` gotcha), the `id` returned by `journalEntriesAdd` is a submission receipt prefixed with `ess-group:`, not a journal id. This operation accepts it: while the import is still running it answers `404`, and once the journal exists it answers for that journal exactly as it would for the journal's own id — which is what the `id` in that response is. The receipt does not expire.
       responses:
         '200':
           $ref: '#/components/responses/GetJournalEntryResponse'
@@ -33888,6 +34359,9 @@ paths:
             Updates replace the whole record rather than patching individual fields: `posted_at`, `line_items`
             and `row_version` must all be sent on every update, even to change only `memo`. `row_version` must
             be the value most recently returned for that entry — a stale or missing value is rejected.
+        - connector: oracle-fusion
+          description: |
+            Oracle Fusion has no API to edit journal content (amounts, accounts, lines). `journalEntriesUpdate` is not supported — to change a journal, delete it while unposted (`journalEntriesDelete`) and recreate it, or reverse it once posted.
       requestBody:
         required: true
         content:
@@ -34124,6 +34598,10 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: oracle-fusion
+          description: |
+            Oracle Fusion only allows deleting **unposted** journals. Because this connector imports journals unposted, `journalEntriesDelete` deletes the underlying journal batch by its id (Oracle deletes at batch level). Once a journal has been posted it can no longer be deleted — reverse it instead.
       responses:
         '200':
           $ref: '#/components/responses/DeleteJournalEntryResponse'
@@ -36250,6 +36728,30 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: oracle-fusion
+          description: |
+            Subsidiaries are Oracle Fusion **legal entities**. Oracle exposes no other entity of this
+            shape that an accounting connection can read.
+
+            This list is **tenant-wide, not scoped to your connection's ledger** — unlike the
+            journal-entry and ledger-account reads on this connector. Oracle's legal-entities list of values publishes no finders, so
+            there is no way to ask it for the entities assigned to one ledger. Expect to see legal
+            entities that have nothing to do with the ledger you connected.
+
+            `id` is Oracle's internal legal-entity id. The human-readable code an administrator assigns
+            (for example `APIDECK-LE-01`) is returned as `display_id` — it does not address the record,
+            so it cannot be used in place of `id`.
+
+            `status` is derived from the legal entity's effective dates: it is `inactive` once the end
+            date has passed, and also before the start date arrives, since Oracle allows an entity to be
+            created ahead of the date it takes effect. The dates are compared with the current date in
+            UTC, so on the first or last day of an entity's effective window `status` can differ by one
+            day from what the date in your tenant's time zone would give.
+
+            `address`, `currencies` and `parent_id` are not available — the list of values carries no
+            address, no currency and no hierarchy. Create, update and delete are not supported either:
+            Oracle refuses writes on this resource, and legal entities are maintained in its setup work
+            area.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -38198,6 +38700,35 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: oracle-fusion
+          description: |
+            Tracking categories are Oracle chart-of-accounts **segment values**. Reads only — creating,
+            updating or deleting one is an Oracle setup task performed in the Setup and Maintenance work
+            area, and Oracle marks the value itself unmodifiable, so it could not be changed through the
+            API even with setup privileges.
+
+            **A connection exposes exactly one segment**, chosen by the **Tracking Segment Value Set
+            Code** connection setting, so that tracking category ids stay unambiguous. A `pass_through`
+            naming `valueSets_Id` is refused with a `400`, because it would read a different segment. Oracle's chart of
+            accounts has several segments — company, natural account, and, only when the tenant has
+            configured one, cost centre / department / project — and it is one of that last kind the
+            setting should point at. Oracle offers no way to discover the code through the API, so it has
+            to be supplied when the connection is created; your Oracle administrator finds it in Setup
+            and Maintenance.
+
+            **This needs a tenant whose chart of accounts actually has such a segment.** A chart built
+            from only a company and a natural-account segment has no tracking dimension to expose.
+            Without the **Tracking Segment Value Set Code** setting the list is refused rather than
+            answered empty, so the setting is what this resource depends on, not the chart alone.
+            Oracle does not return a total record count for this list; `meta.total_count` will not
+            appear.
+
+            `id` is Oracle's identifier for the segment value and `code` is the value itself (for example
+            `100`). Address a single tracking category by `id` — the `code` is not addressable.
+
+            The integration user needs an Oracle role beyond the baseline accounting one to read this
+            resource; without it Oracle returns `403`. Ask your Oracle administrator to follow the
+            connection guide before relying on it.
         - connector: twinfield
           description: |
             `status` is not returned by this list call — the underlying vendor list only returns code

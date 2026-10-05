@@ -1,3 +1,9 @@
+## v10.61.1 - (2026-10-05)
+
+### Accounting API
+
+- [NetSuite](connectors/netsuite) and [Sage Intacct](connectors/sage-intacct) now return `number` when listing or getting [Journal Entries](apis/accounting/reference/journal-entries) — the journal number NetSuite assigns (for example `JE1493`) and the batch number Intacct assigns — and both support `filter[number]` as an exact-match lookup on it. Sage Intacct additionally stores `source_id` on create and update, returns it on reads, and supports the new `filter[source_id]`, so a caller can find an entry again by the reference it supplied. Together these close the write-timeout gap: a create that times out or returns a 5xx may still have been recorded, and there was previously no supported way to check before retrying. On both connectors `number` cannot be set on create — the value sent is ignored and the connector-assigned number is returned instead. On Sage Intacct both filters are exact-match and case-sensitive. Intacct numbers batches per journal, so `filter[number]` can return one entry per journal (check `journal_symbol`, or combine it with `filter[source_id]`), and `source_id` is not enforced as unique, so `filter[source_id]` can return several entries if the same value was reused; use a unique value per entry. [Sage Intacct REST](connectors/sage-intacct-rest), which already stored and returned `source_id`, now supports `filter[source_id]` as well (exact, case-sensitive). The `filter[source_id]` key is declared on the unified Journal Entries filter, so other connectors reject it with `UnsupportedFiltersError` until mapped. Note for NetSuite: filtered lists (any `filter[...]`) previously returned NetSuite's internal transaction number in `number`; they now return the journal number, matching the unfiltered list and get.
+
 ## v10.61.0 - (2026-10-05)
 
 ### Ecommerce API

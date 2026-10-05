@@ -23557,6 +23557,22 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: exact-online-nl
+          description: |
+            Only `updated_since`, `bill_number` and `billed_since` can be filtered on. Exact Online
+            refuses a filter on the fields behind `reference`, `due_since` and `status` — its
+            purchase-invoice endpoint answers *"Filtering on these fields is not supported"* — so
+            those are rejected rather than silently ignored.
+
+            A filter value Exact cannot be asked about, such as a malformed date or a non-numeric
+            `bill_number`, returns an **empty page rather than an error**, so an empty result does
+            not by itself mean there are no matching bills.
+        - connector: exact-online
+          description: |
+            Same as `exact-online-nl`.
+        - connector: exact-online-uk
+          description: |
+            Same as `exact-online-nl`.
         - connector: e-boekhouden
           description: |
             The list returns a summary view of each bill: `line_items`, `total_tax`, `notes`,
@@ -24964,6 +24980,50 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: exact-online-nl
+          description: |
+            Exact Online has no balance field on an invoice, so `balance` is derived from its
+            cash-flow data. When that derivation cannot run — the connection's app registration
+            lacks cash-flow access, or the call is rate-limited or fails — `balance` comes back
+            `null`, meaning *not determined*, never `0` and never the invoice total. Treat `null`
+            as unknown rather than unpaid.
+
+            A draft invoice is the exception: it has no number, nothing is derived for it, and its
+            `balance` is its own total, which is correct since none of it has been settled.
+
+            Reading a single invoice by id derives the balance the same way, so the two paths agree.
+
+            Exact Online's own invoice lifecycle carries four states, mapped to `draft` (not yet
+            issued, no number), `submitted` (issued, not yet due), `unpaid` (past its due date and not
+            settled) and `paid`. It has no part-paid state of its own, so `partially_paid` is derived
+            here: an invoice whose `balance` is above zero but below its `total` is reported
+            `partially_paid` rather than `unpaid` or `submitted`.
+
+            That derivation needs the balance, so it is skipped whenever `balance` is `null` — an
+            invoice whose balance could not be determined keeps the state Exact gave it.
+
+            An invoice that carries no number is reported `draft`, which is also how `balance` treats
+            it. Should Exact ever return an invoice with a number but no recognisable lifecycle value,
+            `status` is `null` — *not determined* — rather than guessed at.
+
+            **Sales credit notes are returned here too.** Exact stores them in the same entity as
+            invoices, so this endpoint serves both, and they are marked `type: "credit"` (an ordinary
+            invoice is `type: "standard"`). Three things follow. Their `balance` is what the customer
+            is owed, not what they owe, and Exact does not enforce a negative sign on the amounts — a
+            credit note can carry a positive `total` and a positive `balance`. The same document is
+            also served by `/accounting/credit-notes` under a **different** id, so syncing both
+            endpoints double-counts it unless `type` is used to filter here. And `status` on a credit
+            note is Exact's own document lifecycle, not a refund state.
+
+            A filter value Exact cannot be asked about — a malformed date, an `ids` or `customer_id`
+            that is not a GUID, a non-numeric `number` — returns an **empty page rather than an
+            error**, so an empty result does not by itself mean there are no matching invoices.
+        - connector: exact-online
+          description: |
+            Same as `exact-online-nl`.
+        - connector: exact-online-uk
+          description: |
+            Same as `exact-online-nl`.
         - connector: campfire
           description: |
             `terms` returns the payment term's display name (for example `Net 30` or
@@ -25427,14 +25487,38 @@ paths:
           description: |
             Exact Online assigns invoice status automatically (`open` by default) and ignores the `status` field on create — invoices are finalized/processed in Exact Online, not via the API.
             Set VAT via `line_items[].tax_rate.code`; Exact derives the percentage from the code, so `line_items[].tax_rate.rate` is ignored on create.
+            `shipping_address` creates a CRM address record against the customer, but **does not
+            attach it to the invoice**: the invoice is saved with whatever delivery address the
+            customer already had, so only the first address ever sent for a given customer takes
+            effect. A later, different address is stored on the customer and then ignored by the
+            invoice. Set the delivery address on the customer record when it needs to change.
+
+            On read, `shipping_address.string` returns that address record's identifier rather than a
+            formatted address, and the individual lines are not returned.
         - connector: exact-online-nl
           description: |
             Exact Online assigns invoice status automatically (`open` by default) and ignores the `status` field on create — invoices are finalized/processed in Exact Online, not via the API.
             Set VAT via `line_items[].tax_rate.code`; Exact derives the percentage from the code, so `line_items[].tax_rate.rate` is ignored on create.
+            `shipping_address` creates a CRM address record against the customer, but **does not
+            attach it to the invoice**: the invoice is saved with whatever delivery address the
+            customer already had, so only the first address ever sent for a given customer takes
+            effect. A later, different address is stored on the customer and then ignored by the
+            invoice. Set the delivery address on the customer record when it needs to change.
+
+            On read, `shipping_address.string` returns that address record's identifier rather than a
+            formatted address, and the individual lines are not returned.
         - connector: exact-online-uk
           description: |
             Exact Online assigns invoice status automatically (`open` by default) and ignores the `status` field on create — invoices are finalized/processed in Exact Online, not via the API.
             Set VAT via `line_items[].tax_rate.code`; Exact derives the percentage from the code, so `line_items[].tax_rate.rate` is ignored on create.
+            `shipping_address` creates a CRM address record against the customer, but **does not
+            attach it to the invoice**: the invoice is saved with whatever delivery address the
+            customer already had, so only the first address ever sent for a given customer takes
+            effect. A later, different address is stored on the customer and then ignored by the
+            invoice. Set the delivery address on the customer record when it needs to change.
+
+            On read, `shipping_address.string` returns that address record's identifier rather than a
+            formatted address, and the individual lines are not returned.
         - connector: snelstart
           description: |
             Only `Laag`, `Hoog`, `Overig` and `Verlegd` are recognized `line_items[].tax_rate.code`
@@ -25805,6 +25889,46 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: exact-online-nl
+          description: |
+            Exact Online has no balance field on an invoice, so `balance` is derived from its
+            cash-flow data. When that derivation cannot run — the connection's app registration
+            lacks cash-flow access, or the call is rate-limited or fails — `balance` comes back
+            `null`, meaning *not determined*, never `0` and never the invoice total. Treat `null`
+            as unknown rather than unpaid.
+
+            A draft invoice is the exception: it has no number, nothing is derived for it, and its
+            `balance` is its own total, which is correct since none of it has been settled.
+
+            The list endpoint derives the balance the same way, so the two paths agree.
+
+            Exact Online's own invoice lifecycle carries four states, mapped to `draft` (not yet
+            issued, no number), `submitted` (issued, not yet due), `unpaid` (past its due date and not
+            settled) and `paid`. It has no part-paid state of its own, so `partially_paid` is derived
+            here: an invoice whose `balance` is above zero but below its `total` is reported
+            `partially_paid` rather than `unpaid` or `submitted`.
+
+            That derivation needs the balance, so it is skipped whenever `balance` is `null` — an
+            invoice whose balance could not be determined keeps the state Exact gave it.
+
+            An invoice that carries no number is reported `draft`, which is also how `balance` treats
+            it. Should Exact ever return an invoice with a number but no recognisable lifecycle value,
+            `status` is `null` — *not determined* — rather than guessed at.
+
+            **Sales credit notes are returned here too.** Exact stores them in the same entity as
+            invoices, so this endpoint serves both, and they are marked `type: "credit"` (an ordinary
+            invoice is `type: "standard"`). Three things follow. Their `balance` is what the customer
+            is owed, not what they owe, and Exact does not enforce a negative sign on the amounts — a
+            credit note can carry a positive `total` and a positive `balance`. The same document is
+            also served by `/accounting/credit-notes` under a **different** id, so syncing both
+            endpoints double-counts it unless `type` is used to filter here. And `status` on a credit
+            note is Exact's own document lifecycle, not a refund state.
+        - connector: exact-online
+          description: |
+            Same as `exact-online-nl`.
+        - connector: exact-online-uk
+          description: |
+            Same as `exact-online-nl`.
         - connector: freshbooks
           description: |
             FreshBooks supports up to two taxes per line item (`taxName1`/`taxAmount1` and `taxName2`/`taxAmount2`).
@@ -25918,8 +26042,6 @@ paths:
           Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
           Procountor only accepts the following values for the payment_method field: BANK_TRANSFER, DIRECT_PAYMENT, CLEARING, CREDIT_CARD_CHARGE, FOREIGN_PAYMENT, OTHER, CASH, DOMESTIC_PAYMENT_PLUSGIRO, DOMESTIC_PAYMENT_BANKGIRO, DOMESTIC_PAYMENT_CREDITOR, DKLMPKRE, NETS.
           Procountor only accepts the following values for the channel field: EMAIL, MAIL, ELECTRONIC_INVOICE, EDIFACT, PAPER_INVOICE, NO_SENDING.
-        - connector: exact-online
-          description: To configure the shipping address for invoices, it is recommended to update the customer resource. If there is a need to change this property, modifying the customer information is advised.
         - connector: xero
           description: For updating invoices, there are some limitations. Check out [here](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#1-limitations-and-rules-for-updating-xero-invoices)
         - connector: xero

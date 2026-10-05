@@ -33600,83 +33600,62 @@ paths:
           description: |
             Limit parameter for pagination is not supported for this resource.
 
-            `line_items` is only returned by the single-record read (fetch by id). Exact's own
-            `$expand=GeneralJournalEntryLines` is silently ignored on the list endpoint — the raw
-            list response still returns each line collection as an unexpanded `__deferred` reference
-            even though the expand parameter is sent — so the list read always returns `line_items: []`
-            and `line_items[].supplier` reflects nothing on `all`. Fetch the entry by id for line-level
-            data (mirrors the same list-vs-one gap other connectors document for this resource).
+            The list returns the same `line_items` as the single-record read, so no fetch by id is
+            needed for line-level data.
 
-            Because of that, `posted_at` on the list read is always derived from the entry's financial
-            period (month precision: the first day of `FinancialYear`/`FinancialPeriod`), since Exact's
-            own journal entry header has no date field at all and the day-precision line date is only
-            available on the single-record read. Fetch by id for day-precision `posted_at`.
-            `created_at` remains the true API-write timestamp and is not affected on either operation.
+            Exact's journal entry header has no date field, so `posted_at` is derived from the lines:
+            it is the earliest `line_items[].date`. Only an entry with no dated line falls back to the
+            first day of its financial period (`FinancialYear`/`FinancialPeriod`), which is month
+            precision. `created_at` is when the entry was created in Exact, not its accounting date.
 
-            `memo` is mapped from the same `JournalDescription` field as `title` — Exact's own header
-            has no separate free-text field, only the journal's own description, so both unified
-            fields carry the same value. `updated_by`/`created_by` are not populated on either
-            operation: the header carries `Created`/`Modified` timestamps but no who-created/who-
-            modified field (those exist only per line, not on the entry itself).
+            `title` is the journal's own description. `memo` is the first non-empty
+            `line_items[].description`, or null when no line has one. `updated_by`/`created_by` are
+            not populated: Exact's header records when it was created and modified, but not by whom.
 
-            On the single-record read, `line_items[].supplier` reflects Exact's line-level `Account`
-            reference. Exact does not distinguish a customer account from a supplier account at the
-            line level, so a line referencing a customer account is also reflected under `supplier`
-            rather than `customer`.
+            Exact does not distinguish a customer account from a supplier account at the line level,
+            so each line's account is returned under both `line_items[].supplier` and
+            `line_items[].customer`. To tell which it is, match the id against the suppliers or
+            customers list; an account that is both appears in both.
         - connector: exact-online-nl
           description: |
             Limit parameter for pagination is not supported for this resource.
 
-            `line_items` is only returned by the single-record read (fetch by id). Exact's own
-            `$expand=GeneralJournalEntryLines` is silently ignored on the list endpoint — the raw
-            list response still returns each line collection as an unexpanded `__deferred` reference
-            even though the expand parameter is sent — so the list read always returns `line_items: []`
-            and `line_items[].supplier` reflects nothing on `all`. Fetch the entry by id for line-level
-            data (mirrors the same list-vs-one gap other connectors document for this resource).
+            The list returns the same `line_items` as the single-record read, so no fetch by id is
+            needed for line-level data.
 
-            Because of that, `posted_at` on the list read is always derived from the entry's financial
-            period (month precision: the first day of `FinancialYear`/`FinancialPeriod`), since Exact's
-            own journal entry header has no date field at all and the day-precision line date is only
-            available on the single-record read. Fetch by id for day-precision `posted_at`.
-            `created_at` remains the true API-write timestamp and is not affected on either operation.
+            Exact's journal entry header has no date field, so `posted_at` is derived from the lines:
+            it is the earliest `line_items[].date`. Only an entry with no dated line falls back to the
+            first day of its financial period (`FinancialYear`/`FinancialPeriod`), which is month
+            precision. `created_at` is when the entry was created in Exact, not its accounting date.
 
-            `memo` is mapped from the same `JournalDescription` field as `title` — Exact's own header
-            has no separate free-text field, only the journal's own description, so both unified
-            fields carry the same value. `updated_by`/`created_by` are not populated on either
-            operation: the header carries `Created`/`Modified` timestamps but no who-created/who-
-            modified field (those exist only per line, not on the entry itself).
+            `title` is the journal's own description. `memo` is the first non-empty
+            `line_items[].description`, or null when no line has one. `updated_by`/`created_by` are
+            not populated: Exact's header records when it was created and modified, but not by whom.
 
-            On the single-record read, `line_items[].supplier` reflects Exact's line-level `Account`
-            reference. Exact does not distinguish a customer account from a supplier account at the
-            line level, so a line referencing a customer account is also reflected under `supplier`
-            rather than `customer`.
+            Exact does not distinguish a customer account from a supplier account at the line level,
+            so each line's account is returned under both `line_items[].supplier` and
+            `line_items[].customer`. To tell which it is, match the id against the suppliers or
+            customers list; an account that is both appears in both.
         - connector: exact-online-uk
           description: |
             Limit parameter for pagination is not supported for this resource.
 
-            `line_items` is only returned by the single-record read (fetch by id). Exact's own
-            `$expand=GeneralJournalEntryLines` is silently ignored on the list endpoint — the raw
-            list response still returns each line collection as an unexpanded `__deferred` reference
-            even though the expand parameter is sent — so the list read always returns `line_items: []`
-            and `line_items[].supplier` reflects nothing on `all`. Fetch the entry by id for line-level
-            data (mirrors the same list-vs-one gap other connectors document for this resource).
+            The list returns the same `line_items` as the single-record read, so no fetch by id is
+            needed for line-level data.
 
-            Because of that, `posted_at` on the list read is always derived from the entry's financial
-            period (month precision: the first day of `FinancialYear`/`FinancialPeriod`), since Exact's
-            own journal entry header has no date field at all and the day-precision line date is only
-            available on the single-record read. Fetch by id for day-precision `posted_at`.
-            `created_at` remains the true API-write timestamp and is not affected on either operation.
+            Exact's journal entry header has no date field, so `posted_at` is derived from the lines:
+            it is the earliest `line_items[].date`. Only an entry with no dated line falls back to the
+            first day of its financial period (`FinancialYear`/`FinancialPeriod`), which is month
+            precision. `created_at` is when the entry was created in Exact, not its accounting date.
 
-            `memo` is mapped from the same `JournalDescription` field as `title` — Exact's own header
-            has no separate free-text field, only the journal's own description, so both unified
-            fields carry the same value. `updated_by`/`created_by` are not populated on either
-            operation: the header carries `Created`/`Modified` timestamps but no who-created/who-
-            modified field (those exist only per line, not on the entry itself).
+            `title` is the journal's own description. `memo` is the first non-empty
+            `line_items[].description`, or null when no line has one. `updated_by`/`created_by` are
+            not populated: Exact's header records when it was created and modified, but not by whom.
 
-            On the single-record read, `line_items[].supplier` reflects Exact's line-level `Account`
-            reference. Exact does not distinguish a customer account from a supplier account at the
-            line level, so a line referencing a customer account is also reflected under `supplier`
-            rather than `customer`.
+            Exact does not distinguish a customer account from a supplier account at the line level,
+            so each line's account is returned under both `line_items[].supplier` and
+            `line_items[].customer`. To tell which it is, match the id against the suppliers or
+            customers list; an account that is both appears in both.
         - connector: quickbooks
           description: |
             QuickBooks only returns journal entries that were explicitly created as `JournalEntry` records.

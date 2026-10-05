@@ -1,3 +1,11 @@
+## v10.61.0 - (2026-10-05)
+
+### Ecommerce API
+
+- Added read-only `tax_number` to [Customers](apis/ecommerce/reference/customers) on both list and get-by-id, at two levels: on the customer itself and on each entry in its `addresses`. It carries the tax or VAT identification number as free text, with leading and trailing whitespace removed and internal spacing kept as registered (for example `GB 123 456 789`). It is always present and is `null` when no number is registered, including when the stored value is blank. Populated on [Magento](connectors/magento) from the customer's `taxvat` and each address's own `vat_id`; an address without a `vat_id` is `null` and does not inherit the customer-level number. The field is not populated on other ecommerce connectors yet.
+
+- Fixed [Magento](connectors/magento) list pagination returning the first page twice on [Customers](apis/ecommerce/reference/customers), [Products](apis/ecommerce/reference/products) and [Orders](apis/ecommerce/reference/orders). Magento numbers pages from 1 and treats page 0 as page 1, so the first two pages of a cursor walk held the same records. No records were skipped, so a full walk now returns each record exactly once and reaches the end one page sooner; clients that de-duplicated by `id` see no difference. Cursors issued before this change continue from the correct position.
+
 ## v10.60.1 - (2026-10-02)
 
 ### Accounting API

@@ -1,3 +1,11 @@
+## v10.62.0 - (2026-10-06)
+
+### Accounting API
+
+- Added [Plaid Core Exchange](connectors/plaid-exchange) to the Accounting API (early access) for [Bank Feed Accounts](apis/accounting/reference/bank-feed-accounts) and [Bank Feed Statements](apis/accounting/reference/bank-feed-statements). It works like [Intuit Bank Feeds](connectors/intuit-bank-feeds): accounts and statements you create are stored on the Apideck side for Plaid to read, rather than pushed into a ledger. Plaid requires account holder contact data, so every account must carry at least one entry in each of `account_holders`, `emails`, `addresses` and `phone_numbers`, or it is rejected with one `contact_required` violation per missing list. Client authentication between Plaid and Apideck is still pending, so ingested data is stored but not yet served to Plaid.
+
+- Added optional `account_holders`, `emails`, `addresses` and `phone_numbers` to [Bank Feed Accounts](apis/accounting/reference/bank-feed-accounts). `account_holders` items carry `type` (`consumer` or `business`), `relationship`, `first_name`, `middle_name`, `last_name`, `suffix` and `business_name`; the other three lists use the same item shapes as on customers and suppliers. [Intuit Bank Feeds](connectors/intuit-bank-feeds) and Plaid Core Exchange forward up to 10 items per list and only the fields the bank-feed provider stores: an address keeps `type`, `line1` to `line3`, `city`, `state`, `postal_code` and `country`, and an item's `id` is not forwarded.
+
 ## v10.61.1 - (2026-10-05)
 
 ### Accounting API

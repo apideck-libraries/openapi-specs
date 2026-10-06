@@ -5209,6 +5209,15 @@ paths:
             Hailey HR does not allow duplicate email addresses across employees. Creating an employee with an `emails` value already in use by another employee returns an error.
 
             `employee_number` cannot be set through the API. Hailey HR generates employment numbers from rules configured in Hailey, so a value supplied on create is accepted without error and silently ignored — the created employee returns `employee_number: null` until a number is entered in Hailey directly. Reading the field works normally once it has been set.
+        - connector: bamboohr
+          description: |
+            BambooHR has no primary email or phone field, so only these `emails[].type` and `phone_numbers[].type`
+            values are written: emails `work` → Work Email and `personal` → Home Email; phone numbers `work` → Work
+            Phone (with `extension` → Work Phone Extension), `mobile` → Mobile Phone and `home` → Home Phone. Any
+            other type, including `primary`, is ignored and that email or phone number is not saved.
+
+            List Employees and Get Employee return a `primary` email that is a read-only copy of the work email. To
+            change it, send the `work` email.
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'
@@ -5681,6 +5690,18 @@ paths:
           description: Certain fields like address, compensations, and title cannot be updated via the HiBob API.
         - connector: hibob-oauth
           description: Certain fields like address, compensations, and title cannot be updated via the HiBob API.
+        - connector: bamboohr
+          description: |
+            BambooHR has no primary email or phone field, so only these `emails[].type` and `phone_numbers[].type`
+            values are written: emails `work` → Work Email and `personal` → Home Email; phone numbers `work` → Work
+            Phone (with `extension` → Work Phone Extension), `mobile` → Mobile Phone and `home` → Home Phone. Any
+            other type, including `primary`, is ignored and that email or phone number is not saved.
+
+            If nothing else in the update maps to a BambooHR field (for example, a request that only contains
+            `primary` entries), BambooHR rejects the empty update with a 400 `Malformed JSON` error.
+
+            List Employees and Get Employee return a `primary` email that is a read-only copy of the work email. To
+            change it, send the `work` email.
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/consumerId'

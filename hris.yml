@@ -5070,7 +5070,13 @@ paths:
         - connector: hr-works
           description: The employment_status supports filtering on 'active'.
         - connector: bamboohr
-          description: The employment role field will return "other" for list calls when the employee is terminated. To fetch the correct employment role data, you need to call the employee detail endpoint.
+          description: |
+            The employment role field will return "other" for list calls when the employee is terminated. To fetch the correct employment role data, you need to call the employee detail endpoint.
+
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request for the record or list you asked for, Unify returns HTTP 429. When BambooHR includes a retry
+            delay, the 429 carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch
+            time in milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: rippling
           description: Include pass_through[include_terminated] in the query params to include terminated employees in the response.
         - connector: workday
@@ -5170,6 +5176,12 @@ paths:
       summary: Create Employee
       description: Create Employee
       x-apideck-gotchas:
+        - connector: bamboohr
+          description: |
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request to create the employee, Unify returns HTTP 429. When BambooHR includes a retry delay, the 429
+            carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch time in
+            milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: hibob
           description: |
             When creating an employee is required by Hibob to include the following Unifiy fields: first_name, last_name, employment_start_date, jobs[0].location.name and an email with a primary type must be provided within the emails field.
@@ -5430,6 +5442,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: bamboohr
+          description: |
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request for the record or list you asked for, Unify returns HTTP 429. When BambooHR includes a retry
+            delay, the 429 carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch
+            time in milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: sdworx-be-sme
           description: |
             `id` is the SD Worx person id. Reading an employee requires the `employer_file_number` connection setting
@@ -5653,6 +5671,12 @@ paths:
       summary: Update Employee
       description: Update Employee
       x-apideck-gotchas:
+        - connector: bamboohr
+          description: |
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request to update the employee, Unify returns HTTP 429. When BambooHR includes a retry delay, the 429
+            carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch time in
+            milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: hibob
           description: Certain fields like address, compensations, and title cannot be updated via the HiBob API.
         - connector: hibob-oauth
@@ -5937,8 +5961,14 @@ paths:
             The list contains every employer (payroll file) the integration's registered client may access, and it is
             returned in full on every call; `limit` and `cursor` page through that list. An employee connection reads
             one employer at a time: the `employer_file_number` connection setting picks one of these records.
-        - connector: bamboohr.com
-          description: BambooHR only allows access to company data for the currently authorized connection.
+        - connector: bamboohr
+          description: |
+            BambooHR only allows access to company data for the currently authorized connection.
+
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request for the record or list you asked for, Unify returns HTTP 429. When BambooHR includes a retry
+            delay, the 429 carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch
+            time in milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: adp-ihcm
           description: |
             ADP iHCM does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -6092,6 +6122,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: bamboohr
+          description: |
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request for the record or list you asked for, Unify returns HTTP 429. When BambooHR includes a retry
+            delay, the 429 carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch
+            time in milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: sdworx-be-sme
           description: |
             `id` is the SD Worx employer file number (for example `1AB1234`). Only `legal_name`, `display_name` and
@@ -6305,6 +6341,11 @@ paths:
         - connector: bamboohr
           description: |
             BambooHR does not expose a total record count in department list responses. `meta.total_count` will not appear.
+
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request for the record or list you asked for, Unify returns HTTP 429. When BambooHR includes a retry
+            delay, the 429 carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch
+            time in milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: zoho-people
           description: |
             Zoho People does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the total requires a separate count endpoint with a date context — not currently implemented.
@@ -6407,6 +6448,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: bamboohr
+          description: |
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request for the record or list you asked for, Unify returns HTTP 429. When BambooHR includes a retry
+            delay, the 429 carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch
+            time in milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: lucca-hr
           description: |
             Lucca enforces a limit of 50 requests per minute per Lucca domain (see
@@ -6770,7 +6817,13 @@ paths:
           description: |
             ADP Workforce Now does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate API request to the ADP count endpoint — an extra API call not currently implemented.
         - connector: bamboohr
-          description: BambooHR requires start_date and end_date parameters to successfully retrieve time off requests. These optional Unify parameters can be sent as filters[start_date] and filters[end_date]. If there are not present, they are sent to BambooHR with the default values of '1900-01-01' & '2100-12-31' respectively.
+          description: |
+            BambooHR requires start_date and end_date parameters to successfully retrieve time off requests. These optional Unify parameters can be sent as filters[start_date] and filters[end_date]. If there are not present, they are sent to BambooHR with the default values of '1900-01-01' & '2100-12-31' respectively.
+
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request for the record or list you asked for, Unify returns HTTP 429. When BambooHR includes a retry
+            delay, the 429 carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch
+            time in milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: hr-works
           description: In HR Works the start_date and end_date are required fields and the maximum date interval is one year between start_date and end_date. It doesn't support pagination right now, it can be created as per customer request.
         - connector: kenjo
@@ -6913,6 +6966,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: bamboohr
+          description: |
+            BambooHR does not publish its rate limits and throttles at its discretion. When BambooHR throttles the
+            request for the record or list you asked for, Unify returns HTTP 429. When BambooHR includes a retry
+            delay, the 429 carries `Retry-After` (seconds to wait) and `x-downstream-ratelimit-reset` (Unix epoch
+            time in milliseconds after which to retry). No limit or remaining-request headers are provided.
         - connector: lucca-hr
           description: |
             Lucca enforces a limit of 50 requests per minute per Lucca domain (see

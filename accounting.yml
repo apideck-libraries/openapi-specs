@@ -23910,7 +23910,21 @@ paths:
             Additionally, multicurrency needs to be enabled in your Intuit Enterprise Suite account. If creating a bill in your default currency, you do not need to send the currency value as long as the supplier uses the same currency. For bills with suppliers using a different currency than your default, you must include the currency value, matching the supplier's configured currency. To change the currency of a customer or vendor, a new one must be created with the desired currency. Foreign currencies can only be sent to suppliers configured with that currency.
         - connector: netsuite
           description: |
-            For creating or updating a bill in Netsuite, its required to provide the line type: each `line_items[]` entry must set `type` to `expense_account` (requires `ledger_account.id`) or `expense_item` (requires `item.id`). Lines are routed to different sublists on that discriminator, so a line with no `type` is dropped before the request is sent and the create fails with `USER_ERROR: "You must enter at least one line item for this transaction."` — an error that points away from the actual cause.
+            NetSuite bills have two kinds of line: expense lines (posted to a ledger account)
+            and item lines (posted against an item). Set `line_items[].type` to choose:
+            `expense_account` (requires `ledger_account.id`) or `expense_item` (requires
+            `item.id`).
+
+            An explicit `type` always wins. When `type` is omitted, the line is routed on the
+            reference it carries: a line with `item.id` is sent as an item line, otherwise a
+            line with `ledger_account.id` is sent as an expense line. A line that carries both
+            and no `type` is sent as an item line and its `ledger_account` is not used; set
+            `type: expense_account` to post it to the ledger account instead.
+
+            A line with `type: other`, or with no `type` and neither reference, is not sent.
+            When other lines remain the bill is created without it; when no line remains,
+            NetSuite rejects the request with `USER_ERROR: "You must enter at least one line
+            item for this transaction."`
 
             `reference`, `bill_number` and `notes` map to `externalId`, the transaction ID and the memo respectively, so all three round-trip independently. Because `reference` is the `externalId` it must be unique — reusing a value already on another bill fails with `DUP_RCRD`.
 
@@ -24395,6 +24409,24 @@ paths:
           description: Bills in xero can be tax inclusive, tax exclusive or no tax. The tax_inclusive field should be set to true, false or null if the bill is tax inclusive, tax exclusive or no tax.
         - connector: netsuite
           description: |
+            NetSuite bills have two kinds of line: expense lines (posted to a ledger account)
+            and item lines (posted against an item). Set `line_items[].type` to choose:
+            `expense_account` (requires `ledger_account.id`) or `expense_item` (requires
+            `item.id`).
+
+            An explicit `type` always wins. When `type` is omitted, the line is routed on the
+            reference it carries: a line with `item.id` is sent as an item line, otherwise a
+            line with `ledger_account.id` is sent as an expense line. A line that carries both
+            and no `type` is sent as an item line and its `ledger_account` is not used; set
+            `type: expense_account` to post it to the ledger account instead.
+
+            A line with `type: other`, or with no `type` and neither reference, is not sent.
+
+            Sending `line_items` on an update replaces every existing line of the same kind (expense
+            lines or item lines): lines of that kind that are left out of the request are removed, and
+            lines sent without a `line_number` are re-created rather than matched. Include every line
+            you want to keep, with its `line_number`. Lines of the other kind are left untouched.
+
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
             `line_items[].rebilling.rebillable` cannot be changed after the bill is created — NetSuite rejects updates to `isbillable` on VendorBill. The field is silently dropped from update requests; create a new bill if you need to change the flag. Additionally, any PATCH that updates a line with `customer` set will cause NetSuite to reset `rebilling.rebillable` to its default (`true`) because the SOAP update omits the field and NetSuite re-applies the default for billable lines.

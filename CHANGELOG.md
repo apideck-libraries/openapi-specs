@@ -1,3 +1,23 @@
+## v10.63.0 - (2026-10-07)
+
+### Accounting API
+
+- [FreeAgent](connectors/freeagent) now supports [Bill Payments](apis/accounting/reference/bill-payments), [Payments](apis/accounting/reference/payments), [Projects](apis/accounting/reference/projects), [General Ledger Transactions](apis/accounting/reference/general-ledger-transactions) (read-only), [Expenses](apis/accounting/reference/expenses), [Quotes](apis/accounting/reference/quotes), [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) and [Attachments](apis/accounting/reference/attachments) on bills, bill credit notes and expenses, plus deleting [Bank Accounts](apis/accounting/reference/bank-accounts). FreeAgent records a payment as an explanation on a bank account, so each bill payment or payment settles exactly one document and lists are read across every bank account. A bill, credit note or expense holds one attachment, and uploading again replaces it. Bank feed statements cannot be updated. See the FreeAgent notes on each resource for the details.
+
+- [FreeAgent](connectors/freeagent) now supports virtual webhooks for invoices, credit notes, customers, suppliers, bills, bill payments, payments, invoice items, ledger accounts, projects, expenses and quotes (`created` and `updated` events).
+
+- [FreeAgent](connectors/freeagent) [Invoices](apis/accounting/reference/invoices) and [Bills](apis/accounting/reference/bills) that FreeAgent marks `Overdue` were returned as `draft` (invoices) and now return `submitted`; `Zero Value` returns `paid`. An open or overdue invoice or bill with part of its amount paid now returns `partially_paid` instead of `submitted`, and an invoice FreeAgent marks `Part written-off` returns `partially_paid` only while an amount is still due (`paid` otherwise).
+
+- [FreeAgent](connectors/freeagent) [Credit Notes](apis/accounting/reference/credit-notes) that FreeAgent marks `Overdue` were returned as `draft` and now return `authorised`; a credit note with part of its amount refunded returns `partially_paid`. `balance` is now the amount still to be refunded (it was always `null`), and `date_issued` is now sent when creating a credit note (it was ignored and FreeAgent used the current date).
+
+- [FreeAgent](connectors/freeagent) [Bills](apis/accounting/reference/bills) now support `filter[status]` (`paid` and `unpaid`; `partially_paid` is rejected with a 400) and `filter[updated_since]`.
+
+- Fixed [FreeAgent](connectors/freeagent) writes that FreeAgent rejected or silently changed: creating an invoice with `status: submitted` left it as a draft (it is now marked as sent, without emailing the customer); credit notes were created with positive amounts, which FreeAgent cannot send; invoices with only a `due_date`, or with `terms` such as `Net 30 days`, were rejected for missing payment terms; and balanced [Journal Entries](apis/accounting/reference/journal-entries) with positive credit amounts were rejected as unbalanced.
+
+- Fixed [FreeAgent](connectors/freeagent) [Invoices](apis/accounting/reference/invoices) and [Credit Notes](apis/accounting/reference/credit-notes) returning an empty `line_items[].tax_amount`: it is now the line's net amount × `sales_tax_rate`. Creating or updating a [Journal Entry](apis/accounting/reference/journal-entries) now returns only `id`, as the unified contract specifies.
+
+- Fixed [FreeAgent](connectors/freeagent) [Profit and Loss](apis/accounting/reference/profit-and-loss) failing schema validation: `income.records` and `expenses.records` are now returned (empty, as FreeAgent's summary has no per-account lines).
+
 ## v10.62.1 - (2026-10-07)
 
 ### Accounting API

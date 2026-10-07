@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.62.1
+  version: 10.63.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -23667,6 +23667,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            `filter[status]` supports `paid` and `unpaid`. `unpaid` returns every bill with an amount
+            still due, including partly paid bills (`status: partially_paid`); check `balance` to tell
+            them apart. `partially_paid` cannot be filtered and is rejected with a 400.
+
+            The list includes supplier credit notes, which FreeAgent stores as bills with a negative
+            total. `filter[updated_since]` is supported.
         - connector: exact-online-nl
           description: |
             Only `updated_since`, `bill_number` and `billed_since` can be filtered on. Exact Online
@@ -25127,6 +25135,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            FreeAgent's `Overdue` status is returned as `submitted` (or `partially_paid` when part of
+            the invoice has been paid); there is no separate overdue status. Treat an invoice as overdue
+            when `balance > 0` and `due_date` is in the past. For the same reason an invoice turning
+            overdue does not by itself produce an `accounting.invoice.updated` webhook.
         - connector: exact-online-nl
           description: |
             Exact Online has no balance field on an invoice, so `balance` is derived from its
@@ -25495,6 +25509,16 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            FreeAgent needs payment terms in days. Send `terms` containing the number of days (for
+            example `Net 30`), or a `due_date`, from which the days after `invoice_date` are used. An
+            invoice with neither is rejected.
+
+            FreeAgent creates every invoice as a draft. Send `status: submitted` (or `authorised`) to
+            have it marked as sent straight after creation; the customer is not emailed. If that step
+            fails the invoice is still created, as a draft, and the response carries a warning. Other
+            statuses cannot be set on create.
         - connector: e-boekhouden
           description: |
             This connector maps `invoices` to e-Boekhouden's Mutation booking object rather than its
@@ -28065,6 +28089,12 @@ paths:
             `line_items`, and no `next` cursor is returned. Results are newest first. Use the maximum
             `limit` (200) and narrow the set with `created_since` or `updated_since`; a document with
             more lines than fit on a page cannot be read completely from the list — fetch it by `id`.
+        - connector: freeagent
+          description: |
+            FreeAgent's `Overdue` status is returned as `authorised` (or `partially_paid` when part of
+            the credit note has been refunded); there is no separate overdue status. `balance` is the
+            amount FreeAgent still has to refund, carrying FreeAgent's sign (negative, like
+            `total_amount`), and is `0` once the credit note is `paid`.
         - connector: dualentry
           description: |
             `updated_since` is inclusive and is applied at whole-second granularity, so a poll that
@@ -31935,6 +31965,19 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            FreeAgent stores a payment as an explanation on a bank account, and it can only list those
+            per bank account. Each list request therefore reads the explanations of every bank account
+            before returning a page, so it gets slower as the ledger grows. Use `filter[updated_since]`
+            for incremental syncs, and `filter[invoice_id]` to read the payments of one invoice.
+            `meta.total_count` is not returned.
+
+            `customer` is not populated. Read the invoice in `allocations[0].id` to get its customer.
+
+            A refund paid out against a credit note is returned with `type: accounts_receivable_credit`
+            and an allocation of type `credit_memo`; a customer payment with `type: accounts_receivable`
+            and an allocation of type `invoice`. `total_amount` is always positive.
         - connector: twinfield
           description: |
             Twinfield returns every matching payment in a single call for this endpoint — there is no
@@ -32054,6 +32097,19 @@ paths:
             schema:
               $ref: '#/components/schemas/Payment'
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            A FreeAgent payment settles exactly one invoice or credit note: send one `allocations` entry
+            with `type: invoice` (or `credit_memo` for a credit note refund) and its `id`. To settle
+            several documents, create one payment per document. `account.id` is required and must be a
+            FreeAgent bank account id.
+
+            Send `total_amount` as a positive number. A `credit_memo` allocation or
+            `type: accounts_receivable_credit` records money paid out to the customer.
+
+            `total_amount` is recorded in the bank account's currency. Paying an invoice in another
+            currency is not supported here; record it in FreeAgent. `reference` is set by FreeAgent and
+            cannot be supplied.
         - connector: e-boekhouden
           description: |
             `allocations[].id` must be the invoice's own invoice number (the human-readable string,
@@ -32317,6 +32373,11 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
+            settle an invoice or credit note (a bill payment, transfer or expense).
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentResponse'
@@ -32354,6 +32415,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
+            settle an invoice or credit note (a bill payment, transfer or expense).
+
+            `allocations` is optional; when sent it must be one entry with `type: invoice` or
+            `credit_memo`.
         - connector: netsuite
           description: |
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the
@@ -32516,6 +32584,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
+            settle an invoice or credit note (a bill payment, transfer or expense).
         - connector: freshbooks
           description: |
             Delete will set the payment to inactive and will soft delete it, meaning it will stop appearing in the list API call. However, it can still be found via the get by id call.
@@ -35273,6 +35345,20 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            FreeAgent records ledger lines without a transaction id. Lines are returned grouped into one
+            transaction per source document and date, with the `id` of the transaction's first line;
+            each transaction balances to zero. Zero-value documents, which post no amounts, are left out.
+
+            The list covers the company's current accounting year (FreeAgent does not return ledger
+            lines across accounting years in one request). `filter[source_type]`, `filter[source_id]` and
+            `filter[updated_since]` are not supported; `sort` supports `posted_at` only.
+
+            `source_type` is `invoice` for both invoices and credit notes (they share FreeAgent's invoice
+            ids), and `other` for bank transaction explanations such as payments and receipts, with the
+            explanation id in `source_id`. `currency` is not returned; amounts are in the company's
+            currency.
         - connector: e-boekhouden
           description: |
             `source_type: payment` covers both payments received and payments sent, since the unified
@@ -35361,6 +35447,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            The id of any line of a transaction returns the whole transaction, with the id of its first
+            line.
         - connector: xero
           description: |
             Backed by Xero's `Journals/{id}` endpoint. Two limitations of that endpoint surface here:
@@ -37966,6 +38056,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Supported `reference_type` values are `bill`, `bill-credit-note` and `expense`. A FreeAgent
+            bill, bill credit note or expense holds at most one attachment, so the list has zero or one
+            entry. A bill credit note is only found as `bill-credit-note`, and a bill only as `bill`.
+
+            `file_url` is FreeAgent's own signed link and stops working 30 seconds after the list or get
+            call; use the download endpoint, which returns the file itself, instead of storing it.
+            `created_at` and `updated_at` are not returned.
         - connector: sage-intacct-rest
           description: |
             At most one attachment is visible per record. Sage attaches files to a record through a
@@ -38152,6 +38251,11 @@ paths:
               type: string
               format: binary
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Uploading replaces the attachment the bill, bill credit note or expense already has. FreeAgent
+            accepts PDF, PNG, JPEG and GIF files up to 5MB; other content types are refused with a 415
+            and larger files with a 413. A paid bill still accepts a new attachment.
         - connector: myob
           description: |
             Uploads are supported on bills only — MYOB has no attachment API for invoices, credit
@@ -38271,6 +38375,10 @@ paths:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/fields'
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Only the record's current attachment is found: an earlier attachment id returns 404 after a
+            newer file was uploaded, and so does an id that belongs to another record.
         - connector: sevdesk
           description: |
             The `id` must belong to the record named by `reference_type`/`reference_id`. An id from a
@@ -38317,6 +38425,10 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Only the record's current attachment is found: an earlier attachment id returns 404 after a
+            newer file was uploaded, and so does an id that belongs to another record.
         - connector: myob
           description: |
             Deletes are supported on bills only, and the `id` must belong to the bill named by
@@ -38380,6 +38492,11 @@ paths:
         - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/followRedirects'
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Returns the file itself, with its content type and file name. An id that is not the record's
+            current attachment, or a bill requested as a `bill-credit-note` (or the reverse), returns a
+            400 validation error rather than a 404.
         - connector: sevdesk
           description: |
             The `id` must belong to the record named by `reference_type`/`reference_id`. An id from a
@@ -39444,6 +39561,18 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            FreeAgent stores a bill payment as an explanation on a bank account, and it can only list
+            those per bank account. Each list request therefore reads the explanations of every bank
+            account before returning a page, so it gets slower as the ledger grows. Use
+            `filter[updated_since]` for incremental syncs, and `filter[bill_id]` to read the payments of
+            one bill. `meta.total_count` is not returned.
+
+            `supplier` is not populated. Read the bill in `allocations[0].id` to get its supplier.
+
+            A refund received against a bill credit note is returned with `type: accounts_payable_credit`;
+            payments made are returned with `type: accounts_payable`. `total_amount` is always positive.
         - connector: twinfield
           description: |
             Twinfield returns every matching bill payment in a single call for this endpoint — there
@@ -39551,6 +39680,20 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            A FreeAgent bill payment pays exactly one bill: send one `allocations` entry with
+            `type: bill` and the bill `id`. To pay several bills, create one bill payment per bill.
+            `account.id` is required and must be a FreeAgent bank account id.
+
+            Send `total_amount` as a positive number. Set `type: accounts_payable_credit` to record a
+            refund received from the supplier instead of a payment made.
+
+            `total_amount` is recorded in the bank account's currency. Paying a bill in another currency
+            is not supported here; record it in FreeAgent.
+
+            `reference` is set by FreeAgent (for example "Bill refund against BCN-001 (Supplier Ltd)")
+            and cannot be supplied.
         - connector: e-boekhouden
           description: |
             `allocations[].id` must be the bill's own bill number (the human-readable string), not its
@@ -39799,6 +39942,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
+            pay a bill (an invoice receipt, transfer or expense).
         - connector: netsuite
           description: |
             In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
@@ -39838,6 +39985,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
+            pay a bill (an invoice receipt, transfer or expense).
+
+            `allocations` is optional; when sent it must be one entry with `type: bill`. Without `type`,
+            the payment keeps its direction (payment made or refund received).
         - connector: restaurant365
           description: |
             Bill payments cannot be updated through the unified update operation — it is unmapped.
@@ -40009,6 +40163,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
+            pay a bill (an invoice receipt, transfer or expense).
         - connector: restaurant365
           description: |
             Bill payments cannot be deleted through this connector — the delete operation is
@@ -40234,6 +40392,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            A FreeAgent expense is a single claim, so each expense has exactly one entry in `line_items`.
+            `total_amount` is always positive; `type` is `expense` for money spent and `refund` for money
+            paid back to the claimant. `line_items[0].account.id` is the expense category, using the same ids
+            as Ledger Accounts.
+
+            `account` and `supplier` are not returned: FreeAgent records who claimed the expense, not the
+            account it was paid from or the supplier. `status` is always `posted`.
         - connector: twinfield
           description: |
             This connector fetches every matching expense in a single call — there is no server-side
@@ -40321,6 +40488,17 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Send exactly one `line_items` entry with `total_amount` and `account.id` (a ledger account id);
+            more than one line is rejected. `transaction_date` and a description (`memo` or the line's
+            `description`) are required by FreeAgent.
+
+            The expense is claimed by the FreeAgent user who authorized the connection. To claim it for
+            another user, send their FreeAgent user URL as `user` through `pass_through`.
+
+            Send `total_amount` as a positive number and set `type: refund` for a refund; anything else is
+            recorded as money spent.
         - connector: twinfield
           description: |
             `account_id` (or `account.id`) is required for this connector even though the unified
@@ -40664,6 +40842,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            On update, `line_items` may hold at most one entry. Without `type`, the expense keeps its
+            direction (spent or refund).
         - connector: dualentry
           description: DualEntry requires `company_id`, `supplier` (vendor_id), `account` (account_number), and `currency` (currency_iso_4217_code) when updating a direct expense, even though these fields are optional in the unified schema.
         - connector: zoho-books
@@ -41504,6 +41686,19 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            FreeAgent keeps no statement record: statements are rebuilt from the transactions FreeAgent
+            imported into each bank account, one per import, and identified by
+            `<bank_feed_account_id>:<first posted date>:<last posted date>`. A statement holds every
+            imported transaction of its account between those dates, so imports covering the same
+            dates are returned as one statement. Use `filter[bank_feed_account_id]` to read one account.
+            Each request reads all imported transactions of the accounts involved before returning a
+            page.
+
+            `status` is always `success` (only imported transactions exist), and balances and
+            `merchant_category_code` are not returned. `transaction_type` is returned when the import
+            recorded one (`credit`, `debit`, `deposit`, `transfer`, `payment`, otherwise `other`).
         - connector: exact-online-nl
           description: |
             Use `filter[bank_feed_account_id]` to read one account's statements; it accepts the account
@@ -41646,6 +41841,18 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            FreeAgent imports the statement lines into the bank account `bank_feed_account_id`. The
+            import runs in the background: a successful response means FreeAgent accepted the
+            statement, and the lines appear on the bank account within seconds. The returned `id` is
+            `<bank_feed_account_id>:<first posted date>:<last posted date>`, so sending the same
+            statement again returns the same id, and it can be used to read or delete the statement.
+
+            A line whose `source_transaction_id` was imported before is skipped, so a statement can
+            safely be sent again after a timeout. Send `amount` as a positive number with
+            `credit_or_debit`; `description` falls back to `counterparty`, then `reference`.
+            Balances, `merchant_category_code` and `status` are not sent to FreeAgent.
         - connector: sage-intacct-rest
           description: |
             `source_transaction_id` is only stored as Sage's `txnId` when it is entirely numeric — Sage rejects the
@@ -41907,6 +42114,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Returns every transaction FreeAgent imported into the bank account between the two dates in
+            the id (`<bank_feed_account_id>:<first posted date>:<last posted date>`), including lines
+            from other imports covering the same dates. An id in another format, or a range without
+            imported transactions, returns 404.
         - connector: moneybird
           description: |
             Moneybird has no endpoint to fetch a bank feed statement directly; this operation reads the underlying
@@ -41968,7 +42181,12 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
-      x-apideck-gotchas: null
+      x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Not supported: a FreeAgent statement is the set of transactions an import created and cannot
+            be changed. Delete it (while none of its transactions has been explained) and create it
+            again.
       requestBody:
         required: true
         content:
@@ -42030,6 +42248,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            Deletes every transaction FreeAgent imported into the bank account between the two dates in
+            the id. If any of them has already been explained (matched to an invoice, bill, transfer or
+            expense) the request is refused with 409 and nothing is deleted; remove those explanations
+            first. Each transaction is deleted with its own FreeAgent request, so a large statement uses
+            a correspondingly large share of FreeAgent's rate limit; if a delete stops part-way, the
+            error says how many were removed and repeating the request deletes the rest.
         - connector: moneybird
           description: |
             Moneybird can only delete an entire bank statement batch, not a single transaction. The connector
@@ -42191,6 +42417,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            FreeAgent estimates are returned as quotes. FreeAgent stores a sent estimate as Open, which is
+            returned as `sent`; an estimate converted to an invoice is returned as `converted`.
+
+            `sub_total` and `total` are after `discount_percentage`; `discount_amount` is the discount.
+            `expiry_date` and `terms` are not available in FreeAgent.
         - connector: sage-intacct-rest
           description: |
             Sage Intacct has no distinct quote object: quotes are order-entry documents, and that same object also holds sales orders, invoices and credit memos. Apideck restricts the list to the document types your company defines as quote-class, so `total_count` reflects quotes only.
@@ -42255,6 +42488,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            `number` becomes the FreeAgent estimate reference; without it FreeAgent numbers the quote
+            itself. `status` can be `draft` (the default), `sent`, `accepted` or `rejected`; other
+            statuses are rejected. A line without a FreeAgent unit in `unit_of_measure` (for example
+            `Hours`, `Services` or `Products`) takes one from its `type`, or `-no unit-`. Every line needs
+            a `description`.
         - connector: netsuite
           description: |
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the
@@ -42525,6 +42765,14 @@ paths:
             schema:
               $ref: '#/components/schemas/Quote'
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            `status` can be set to `draft`, `sent`, `accepted` or `rejected`. `converted` is not settable:
+            convert the estimate to an invoice in FreeAgent.
+
+            When `line_items` is sent, it replaces the quote's lines: lines with an `id` are updated, lines
+            without one are added, and existing lines left out are deleted. Leave `line_items` out to keep
+            the lines as they are.
         - connector: netsuite
           description: |
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the
@@ -42738,6 +42986,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            FreeAgent only deletes draft estimates, so a sent, accepted or rejected quote is set back to
+            draft and then deleted.
         - connector: sage-intacct-rest
           description: |
             Sage writes order-entry documents only against a named transaction definition
@@ -42789,6 +43041,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            `status` is `active`, `completed`, `cancelled`, or `other` for FreeAgent's Hidden projects;
+            `filter[status]` accepts those four values. `filter[customer_id]` with an id that is not a
+            FreeAgent contact returns 404 rather than an empty list. `filter[name]` and
+            `filter[updated_since]` are not supported.
+
+            FreeAgent keeps one budget per project: `budget_amount` is returned for a monetary budget and
+            `budget_hours` for a budget in hours (or days, converted with the project's hours per day).
         - connector: twinfield
           description: |
             `status` is not returned by this list call — the underlying vendor list only returns code
@@ -42836,6 +43097,13 @@ paths:
       summary: Create project
       description: Create project
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            `customer.id` is required: every FreeAgent project belongs to a contact. When not supplied,
+            `status` defaults to `active` and `currency` to the company's currency. Send either
+            `budget_amount` or `budget_hours`, not both; `hourly_rate` is billed per hour.
+            `on_hold`, `draft`, `in_progress` and `approved` are not FreeAgent statuses and are
+            rejected.
         - connector: sage-intacct-rest
           description: |
             Only `active` and `inactive` are applied on a write. Sage's own status field is an
@@ -43019,6 +43287,11 @@ paths:
       summary: Update project
       description: Update project
       x-apideck-gotchas:
+        - connector: freeagent
+          description: |
+            `on_hold`, `draft`, `in_progress` and `approved` are not FreeAgent statuses and are
+            rejected. Sending `budget_amount` or `budget_hours` switches the project's budget to that
+            unit.
         - connector: quickbooks
           description: |
             The `priority` field accepts enum values ("low", "medium", "high", "critical") which are converted to QuickBooks integer values: "low" → 2, "medium" → 5, "high" → 7, "critical" → 9.

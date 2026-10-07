@@ -23930,6 +23930,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: campfire
+          description: |
+            `bill_number` is required on create, even though the unified schema treats it as
+            optional — omitting it fails with `bill_number: This field is required.` and no bill
+            is created.
         - connector: e-boekhouden
           description: |
             Every line item is sent as a line of the bill; the payable-account side of the entry is
@@ -25174,6 +25179,16 @@ paths:
 
             When creating or updating an invoice, set the payment term with `terms_id` — the
             display name is read-only and is ignored on write.
+
+            `sub_total` and `total_tax` are both derived, not returned by Campfire, which reports
+            no invoice-level sub-total or tax figure. `total_tax` is the sum of the per-line
+            `tax_amount` values and `sub_total` is `total` minus that sum, each rounded to four
+            decimal places, so `sub_total + total_tax` reconciles to `total`.
+
+            On a small number of records Campfire's own header total and line amounts disagree, and
+            on those the derived `sub_total` will not equal the sum of `line_items[].total_amount`.
+
+            Both are omitted rather than zero when Campfire returns no line detail for the record.
         - connector: snelstart
           description: |
             `line_items`, `sub_total` and `total_tax` are never returned by this connector, on any
@@ -25505,6 +25520,9 @@ paths:
             Retrieve the values to pass from `GET /accounting/invoice-items` and use the `id` it
             returns. The product must already exist in Campfire; an id that does not resolve is
             rejected too.
+
+            `due_date` is also required on create, even though the unified schema treats it as
+            optional — omitting it fails with `due_date: This field is required.`
         - connector: netsuite
           description: |
             `reference` maps to NetSuite's `externalId`, which NetSuite requires to be unique across every

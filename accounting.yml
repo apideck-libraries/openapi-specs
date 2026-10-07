@@ -24105,15 +24105,17 @@ paths:
             The status of the bill will be "submitted" by default when creating a bill.
         - connector: sap-s4hana-cloud
           description: |
-            SAP S/4HANA Cloud creates supplier invoices via the `API_SUPPLIERINVOICE_PROCESS_SRV` OData service. A CSRF token handshake is performed automatically before each create request.
+            Required fields on create: `company_id`, `bill_date`, `supplier.id`, `currency`, `total` and `line_items`.
+            The posting date is set to `bill_date`.
 
-            Line items are routed to one of two SAP navigation properties based on whether a purchase order reference is present:
-            - Lines with `line_items[].purchase_order.id` set go into the PO-based property (`to_SuplrInvcItemPurOrdRef`). Optionally provide `line_items[].purchase_order.line_number` for the SAP `PurchaseOrderItem`.
-            - Lines without a purchase order reference go into the GL-account property (`to_SupplierInvoiceItemGLAcct`); `line_items[].ledger_account.id` (or `.code`) is required on these lines. A non-PO line with no ledger account causes a 400 error.
+            Each line item is either a purchase-order line or a G/L line:
+            - Lines with `line_items[].purchase_order.id` are posted against that purchase order. Optionally provide
+              `line_items[].purchase_order.line_number` for the purchase order item.
+            - All other lines are G/L lines and require `line_items[].ledger_account.id` (or `.code`). A line with
+              neither a purchase order nor a ledger account is rejected with a 400.
 
-            Required fields on create: `company_id`, `bill_date`, `supplier.id`, `currency`, `total`, and `line_items`. `PostingDate` defaults to `bill_date`; override it via `pass_through[posting_date]`.
-
-            `line_items[].tax_rate.code` maps to the SAP `TaxCode` (e.g. `V1`). SAP S/4HANA Cloud does not expose readable tax-rate master data, so the SAP tax code string must be supplied directly.
+            `line_items[].tax_rate.code` takes the SAP tax code (e.g. `V1`). SAP S/4HANA Cloud does not expose tax
+            rates as readable data, so the tax code must be supplied directly.
         - connector: sage-intacct-rest
           description: |
             `line_items[].tax_rate`, `line_items[].unit_price` and `line_items[].type` are not supported. Sage's underlying bill-line object is a flat GL-distribution line (account + amount only) — it has no per-line tax field (rejected outright as "not a valid field", unlike the header-level `tax_inclusive`, which is writable), no quantity/unit-price breakdown, and no line-type classification.
@@ -25135,6 +25137,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            `number` is the SAP document number, which is only unique within a company code, so `filter[number]` can
+            return invoices from more than one company code. Use the full `id`
+            (`<company code>:<fiscal year>:<document number>`, e.g. `1710:2026:1800000001`) to identify an invoice.
         - connector: freeagent
           description: |
             FreeAgent's `Overdue` status is returned as `submitted` (or `partially_paid` when part of
@@ -25547,6 +25554,14 @@ paths:
 
             `due_date` is also required on create, even though the unified schema treats it as
             optional — omitting it fails with `due_date: This field is required.`
+        - connector: moneybird
+          description: |
+            Moneybird creates every invoice as a draft. Send `status: "submitted"` (or `"authorised"`)
+            to finalise it on create: it is marked as sent, without Moneybird emailing the customer, and
+            is returned with `status: "submitted"`. Any other status leaves a draft.
+
+            Payments can only be registered on a finalised invoice; a payment allocated to a draft is
+            rejected with `Cannot register a payment for this SalesInvoice`.
         - connector: netsuite
           description: |
             `reference` maps to NetSuite's `externalId`, which NetSuite requires to be unique across every
@@ -25611,7 +25626,17 @@ paths:
             invoices have no such requirement.
         - connector: sap-s4hana-cloud
           description: |
-            SAP S/4HANA Cloud creates a pure FI accounting document. This is not an SD billing document — no pricing conditions, output determination, or billing workflow is triggered. company_id and customer.id are required.
+            SAP S/4HANA Cloud creates the invoice as a financial accounting posting, not a billing document: no
+            pricing, output or billing workflow is triggered.
+
+            Required: `company_id`, `customer.id`, `currency`, `total`, and at least one line item with
+            `ledger_account.id`.
+
+            - `total` must equal the sum of `line_items[].total_amount`.
+            - The G/L account is taken from each line's `ledger_account`. The top-level `ledger_account` is not used.
+            - The customer and each line's G/L account must already be set up in the company code given in
+              `company_id`. `GET /accounting/subsidiaries` lists the company codes.
+            - Optional per line: `department_id` (cost center) and `tracking_categories[0].id` (profit center).
         - connector: quickbooks-desktop
           description: |
             On create, QuickBooks Desktop only honors `customer`, `invoice_date`, `number`, `reference` (memo), and `line_items`. Header fields such as `due_date`, `terms`, `po_number`, `customer_memo`, billing/shipping address, currency, and tracking category are ignored at create time — set them with a follow-up update. Each line item must include an `item` (QBD rejects invoices whose lines have no item). On update, line items cannot be modified — only header fields (customer, dates, ref number, memo) change; resend line edits by voiding and recreating.
@@ -27018,9 +27043,10 @@ paths:
             The `currency` field is supported only when Multi-Currency is enabled in NetSuite. It applies mainly to Bank and Credit Card accounts and becomes read-only after creation.
         - connector: moneybird
           description: |
-            When the Moneybird administration uses the RGS chart-of-accounts scheme (the default for new Dutch
-            administrations), Moneybird requires an `rgs_code` when creating a ledger account and returns
-            `Rgs Code is required` otherwise. Provide it via pass_through:
+            Moneybird requires an `rgs_code` when creating a ledger account and returns
+            `Rgs Code is required` otherwise. This applies to administrations outside the Netherlands too.
+            The code must be an RGS 3.5 code that suits the account `type` (an unknown code is rejected with
+            `Given RGS code does not belong to a taxonomy item of version 3.5`). Provide it via pass_through:
             `"pass_through": [{"service_id": "moneybird", "extend_object": {"rgs_code": "WOmzNopOlv"}}]`
       parameters:
         - $ref: '#/components/parameters/raw'
@@ -30383,21 +30409,19 @@ paths:
             You can create customer contacts, but they will not be visible in customer list responses until an invoice is assigned to them. FreeAgent only classifies contacts as customers after they have associated transactions. See [Set up a contact as a customer or a supplier](https://support.freeagent.com/hc/en-gb/articles/115001217850-Set-up-a-contact-as-a-customer-or-a-supplier) for more information.
         - connector: sap-s4hana-cloud
           description: |
-            SAP S/4HANA Cloud requires `CorrespondenceLanguage` and `BusinessPartnerGrouping` when creating a Business Partner. These default to `EN` and `BP01` respectively, and can be overridden per request via `pass_through`.
+            Creating a customer requires a correspondence language and a business partner grouping. They default to `EN`
+            and `BP01`. Override either one with `pass_through` (`extend_object`), for example:
 
-            **Address with country is required.** SAP creates a customer master record (KNA1) when the FLCU00
-            role is assigned, and KNA1 requires `LAND1` (country). Therefore `addresses[0]` MUST be provided with
-            at least a `country` value (e.g. `US`, `DE`). Without it, SAP returns
-            `400 Country/Region Key (KNA1-LAND1) is a required entry field`. The connector emits the address as
-            `to_BusinessPartnerAddress.results[0]` in the deep insert; `line1`/`line2`/`city`/`state`/`postal_code`/`country`
-            map to SAP `StreetName`/`HouseNumber`/`CityName`/`Region`/`PostalCode`/`Country`.
+            `"pass_through": [{"service_id": "sap-s4hana-cloud", "extend_object": {"BusinessPartnerGrouping": "BP02", "CorrespondenceLanguage": "DE"}}]`
 
-            **External vs internal number assignment.** Some tenants configure BP groupings for external
-            number assignment, meaning the caller must supply the `BusinessPartner` ID rather than SAP
-            auto-generating it. Symptom: `400 Grouping <code> has external number assignment. Please enter a
-            valid number.` Supply via `pass_through[business_partner]=99980001` (8–10 digit numeric ID,
-            unique on the tenant). If the chosen grouping is configured for internal assignment, omit
-            `pass_through[business_partner]` and SAP will auto-generate the ID.
+            **Which grouping to use depends on the SAP tenant.** Each tenant configures whether a grouping assigns
+            numbers automatically. If the grouping requires a manually assigned number, SAP returns
+            `400 Grouping <code> has external number assignment. Please enter a valid number.` Either use a grouping
+            that assigns numbers automatically, or supply the number in the same `extend_object` as
+            `"BusinessPartner": "<8–10 digit number, unique in the tenant>"`.
+
+            **An address with a country is required.** Provide `addresses[0]` with at least `country` (e.g. `US`, `DE`).
+            Without it, SAP returns `400 Country/Region Key ... is a required entry field`.
       requestBody:
         required: true
         content:
@@ -30623,15 +30647,10 @@ paths:
             Please send status updates separately from other updates for the customer.
         - connector: sap-s4hana-cloud
           description: |
-            Only top-level Business Partner fields are updatable: `first_name`, `last_name`, `company_name`,
-            `display_name`, `status` (maps to `BusinessPartnerIsBlocked`).
+            Only `first_name`, `last_name`, `company_name`, `display_name` and `status` can be updated.
 
-            **Nested-field updates are hard-rejected with a 400.** SAP OData V2 does not support deep update;
-            the connector returns a clear error if the update payload includes any of `addresses`,
-            `bank_accounts`, `emails`, `phone_numbers`, or `websites`. To change those values, either supply
-            them on the create operation (deep-insert is POST-only on SAP) or modify the records directly in
-            SAP. This is a fail-fast guard, chosen over silent drop so consumers don't ship broken update
-            flows undetected.
+            Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
+            with a 400. Set those values when creating the record, or change them directly in SAP.
       requestBody:
         required: true
         content:
@@ -30786,9 +30805,9 @@ paths:
             Delete will set the customer to inactive and will soft delete it, meaning it will stop appearing in the list API call. However, it can still be found via the get by id call.
         - connector: sap-s4hana-cloud
           description: |
-            SAP Business Partners cannot be physically deleted once used in transactions (SAP KBA 2742388). Delete
-            performs a soft-delete by setting `BusinessPartnerIsBlocked = true`; the record remains in SAP and
-            subsequent reads return `status: inactive`.
+            SAP does not allow deleting a customer that has been used in transactions. Delete blocks the customer instead:
+            the record stays in SAP and subsequent reads return `status: inactive`. Updating `status` to `active`
+            unblocks it.
       responses:
         '200':
           $ref: '#/components/responses/DeleteCustomerResponse'
@@ -31252,21 +31271,19 @@ paths:
             In Workday, the supplier_category, display_name, addresses, emails, company_id, currency, terms, and payment_method fields are required to create a supplier. display_name and company_id should be same.
         - connector: sap-s4hana-cloud
           description: |
-            SAP S/4HANA Cloud requires `CorrespondenceLanguage` and `BusinessPartnerGrouping` when creating a Business Partner. These default to `EN` and `BP01` respectively, and can be overridden per request via `pass_through`.
+            Creating a supplier requires a correspondence language and a business partner grouping. They default to `EN`
+            and `BP01`. Override either one with `pass_through` (`extend_object`), for example:
 
-            **Address with country is required.** SAP creates a supplier master record (LFA1) when the FLVN00
-            role is assigned, and LFA1 requires `LAND1` (country). Therefore `addresses[0]` MUST be provided with
-            at least a `country` value (e.g. `US`, `DE`). Without it, SAP returns
-            `400 Country/Region Key (LFA1-LAND1) is a required entry field`. The connector emits the address as
-            `to_BusinessPartnerAddress.results[0]` in the deep insert; `line1`/`line2`/`city`/`state`/`postal_code`/`country`
-            map to SAP `StreetName`/`HouseNumber`/`CityName`/`Region`/`PostalCode`/`Country`.
+            `"pass_through": [{"service_id": "sap-s4hana-cloud", "extend_object": {"BusinessPartnerGrouping": "BP02", "CorrespondenceLanguage": "DE"}}]`
 
-            **External vs internal number assignment.** Some tenants configure BP groupings for external
-            number assignment, meaning the caller must supply the `BusinessPartner` ID rather than SAP
-            auto-generating it. Symptom: `400 Grouping <code> has external number assignment. Please enter a
-            valid number.` Supply via `pass_through[business_partner]=99980001` (8–10 digit numeric ID,
-            unique on the tenant). If the chosen grouping is configured for internal assignment, omit
-            `pass_through[business_partner]` and SAP will auto-generate the ID.
+            **Which grouping to use depends on the SAP tenant.** Each tenant configures whether a grouping assigns
+            numbers automatically. If the grouping requires a manually assigned number, SAP returns
+            `400 Grouping <code> has external number assignment. Please enter a valid number.` Either use a grouping
+            that assigns numbers automatically, or supply the number in the same `extend_object` as
+            `"BusinessPartner": "<8–10 digit number, unique in the tenant>"`.
+
+            **An address with a country is required.** Provide `addresses[0]` with at least `country` (e.g. `US`, `DE`).
+            Without it, SAP returns `400 Country/Region Key ... is a required entry field`.
         - connector: exact-online
           description: |
             Exact does not enforce uniqueness on the supplier name — posting the same `display_name`/
@@ -31547,15 +31564,10 @@ paths:
             Please send status updates separately from other updates for the supplier.
         - connector: sap-s4hana-cloud
           description: |
-            Only top-level Business Partner fields are updatable: `first_name`, `last_name`, `company_name`,
-            `display_name`, `status` (maps to `BusinessPartnerIsBlocked`).
+            Only `first_name`, `last_name`, `company_name`, `display_name` and `status` can be updated.
 
-            **Nested-field updates are hard-rejected with a 400.** SAP OData V2 does not support deep update;
-            the connector returns a clear error if the update payload includes any of `addresses`,
-            `bank_accounts`, `emails`, `phone_numbers`, or `websites`. To change those values, either supply
-            them on the create operation (deep-insert is POST-only on SAP) or modify the records directly in
-            SAP. This is a fail-fast guard, chosen over silent drop so consumers don't ship broken update
-            flows undetected.
+            Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
+            with a 400. Set those values when creating the record, or change them directly in SAP.
       requestBody:
         required: true
         content:
@@ -31719,9 +31731,9 @@ paths:
             Delete will set the supplier to inactive and will soft delete it, meaning it will stop appearing in the list API call.
         - connector: sap-s4hana-cloud
           description: |
-            SAP Business Partners cannot be physically deleted once used in transactions (SAP KBA 2742388). Delete
-            performs a soft-delete by setting `BusinessPartnerIsBlocked = true`; the record remains in SAP and
-            subsequent reads return `status: inactive`.
+            SAP does not allow deleting a supplier that has been used in transactions. Delete blocks the supplier instead:
+            the record stays in SAP and subsequent reads return `status: inactive`. Updating `status` to `active`
+            unblocks it.
       responses:
         '200':
           $ref: '#/components/responses/DeleteSupplierResponse'
@@ -32034,7 +32046,28 @@ paths:
             If you encounter a '400 Bad Request' error indicating "Control 'fieldName' is read-only" it means the 'editable' property for this field in Microsoft Dynamics 365 Business Central is currently set to false. To resolve this issue and make the field writable, simply update the 'editable' property to true in Microsoft Dynamics 365 Business Central. Additionally, line item tax rates must be specified by tax rate *code* (e.g., "G3"), not by ID. In U.S.-regionalized Business Central tenants, the `tax_inclusive` field cannot be set to `true`.
         - connector: moneybird
           description: |
-            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+            Moneybird has no way to list payments, so this list operation is not supported. Retrieve a
+            single payment by `id`, or read the payments on the parent sales invoice.
+
+            Moneybird ties a payment to one sales invoice. A payment allocated to several sales invoices is
+            stored as one Moneybird payment per allocation: every allocation needs an `amount`, the amounts
+            must add up to `total_amount`, and no sales invoice may appear twice. Such a payment gets a
+            composite `id` (the Moneybird ids joined with `:`), which works for retrieving and deleting it
+            as a whole. If any part is refused, the parts already registered are removed and nothing is
+            kept. A composite `id` is only valid as returned: repeating a part is rejected. Moneybird
+            reports each part separately, so webhooks deliver one `payment.created` per part, carrying that
+            part's own id, and a refused split can deliver a created and a deleted event for a part
+            that was removed again.
+
+            The payment is recorded in the sales invoice's own currency for `total_amount`; `currency`,
+            `currency_rate` and `payment_method` are not applied. `reference` is stored. Allocations must
+            be of type `invoice` (or untyped), and an allocation `amount` must match
+            `total_amount`. Moneybird accepts a payment larger than the open balance, leaving a
+            negative balance on the sales invoice.
+
+            Moneybird does not say whether a deleted payment belonged to a sales invoice or a purchase
+            invoice. Every payment deletion is therefore delivered as both `payment.deleted` and
+            `bill_payment.deleted`, with the same `entity_id`. Ignore the event for an `id` you do not hold.
         - connector: afas
           description: |
             AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -32186,7 +32219,8 @@ paths:
             than one credit memo needs separate calls.
         - connector: sap-s4hana-cloud
           description: |
-            SAP S/4HANA Cloud creates a pure FI accounting document. This is an FI payment posting, not a bank statement import or a result of the Automatic Payment Program (F110). company_id, customer.id and account.id are required.
+            SAP S/4HANA Cloud creates the payment as a financial accounting posting. It is not a bank statement import
+            or a payment-program run. `company_id`, `customer.id` and `account.id` are required.
         - connector: quickbooks-desktop
           description: |
             QuickBooks Desktop applies a payment to invoices via `allocations[]` — each `allocations[].id` is the target invoice's transaction id and `allocations[].amount` the amount applied. Without `allocations`, the payment is created unapplied. On update, QBD cannot change the applied invoices, payment method, or deposit/AR account — only customer, `transaction_date`, `reference`, `total_amount`, and `note` are updatable; recreate the payment to change allocations.
@@ -34226,7 +34260,8 @@ paths:
             If the release step fails after a successful create or update, the entry will exist in MYOB Advanced in Balanced state and the API will return an error. The entry is not rolled back.
         - connector: sap-s4hana-cloud
           description: |
-            `company_id` is required and maps to SAP `CompanyCode`. The following header fields are hardcoded with SAP-standard defaults and cannot be overridden: `BusinessTransactionType=RFBU`, `OriginalReferenceDocumentType=BKPFF`, `AccountingDocumentType=SA`.
+            `company_id` (the SAP company code) is required. Journal entries are posted as standard G/L postings; the
+            SAP document type cannot be changed.
         - connector: exact-online
           description: |
             A validation refusal — an unbalanced entry, an unknown or inactive reference (ledger
@@ -39617,7 +39652,28 @@ paths:
             Stripe removed `total_count` from list responses in March 2025 (API version 2025-03-31.basil). `meta.total_count` will not appear.
         - connector: moneybird
           description: |
-            Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
+            Moneybird has no way to list bill payments, so this list operation is not supported. Retrieve a
+            single bill payment by `id`, or read the bill payments on the parent purchase invoice.
+
+            Moneybird ties a bill payment to one purchase invoice. A bill payment allocated to several purchase invoices is
+            stored as one Moneybird bill payment per allocation: every allocation needs an `amount`, the amounts
+            must add up to `total_amount`, and no purchase invoice may appear twice. Such a bill payment gets a
+            composite `id` (the Moneybird ids joined with `:`), which works for retrieving and deleting it
+            as a whole. If any part is refused, the parts already registered are removed and nothing is
+            kept. A composite `id` is only valid as returned: repeating a part is rejected. Moneybird
+            reports each part separately, so webhooks deliver one `bill_payment.created` per part, carrying that
+            part's own id, and a refused split can deliver a created and a deleted event for a part
+            that was removed again.
+
+            The bill payment is recorded in the purchase invoice's own currency for `total_amount`; `currency`,
+            `currency_rate` and `payment_method` are not applied. `reference` is stored. Allocations must
+            be of type `bill` (or untyped), and an allocation `amount` must match
+            `total_amount`. Moneybird accepts a bill payment larger than the open balance, leaving a
+            negative balance on the purchase invoice.
+
+            Moneybird does not say whether a deleted payment belonged to a sales invoice or a purchase
+            invoice. Every payment deletion is therefore delivered as both `bill_payment.deleted` and
+            `payment.deleted`, with the same `entity_id`. Ignore the event for an `id` you do not hold.
         - connector: rillet
           description: |
             Rillet does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -39769,7 +39825,8 @@ paths:
             `"100_SVB"`) succeeds.
         - connector: sap-s4hana-cloud
           description: |
-            SAP S/4HANA Cloud creates a pure FI accounting document. This is a standalone outgoing payment posting, not a triggered run of the Automatic Payment Program (F110). company_id, supplier.id and account.id are required.
+            SAP S/4HANA Cloud creates the bill payment as a standalone financial accounting posting. It does not run
+            SAP's automatic payment program. `company_id`, `supplier.id` and `account.id` are required.
         - connector: quickbooks
           description: |
             Payment method is required and must be `Check` or `CreditCard`.

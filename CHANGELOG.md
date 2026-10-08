@@ -1,3 +1,9 @@
+## v10.66.1 - (2026-10-08)
+
+### Accounting API
+
+- Added `accounting.sales_receipt.created`, `accounting.sales_receipt.updated`, `accounting.sales_receipt.deleted`, `accounting.refund.created`, `accounting.refund.updated` and `accounting.refund.deleted` webhook events for [Sales Receipts](apis/accounting/reference/sales-receipts) and [Refunds](apis/accounting/reference/refunds). Delivered by [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite), which map their native SalesReceipt and RefundReceipt change notifications to these events; emailed and voided notifications are delivered as the corresponding `.updated` event.
+
 ## v10.66.0 - (2026-10-08)
 
 ### Accounting API

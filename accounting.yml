@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.64.0
+  version: 10.66.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -371,6 +371,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ProjectsSort'
+    salesOrdersFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/SalesOrdersFilter'
     purchaseOrdersSort:
       name: sort
       in: query
@@ -1564,6 +1572,36 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateProjectResponse'
+    GetSalesOrdersResponse:
+      description: Sales Orders
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetSalesOrdersResponse'
+    GetSalesOrderResponse:
+      description: Sales Orders
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetSalesOrderResponse'
+    CreateSalesOrderResponse:
+      description: Sales Orders
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateSalesOrderResponse'
+    UpdateSalesOrderResponse:
+      description: Sales Orders
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateSalesOrderResponse'
+    DeleteSalesOrderResponse:
+      description: Sales Orders
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteSalesOrderResponse'
     CreateAccountingEmployeeResponse:
       description: Employees
       content:
@@ -2245,6 +2283,12 @@ components:
       type: string
       example: '123456'
       readOnly: true
+    AccountingQuoteId:
+      type: string
+      title: Quote ID
+      description: The unique identifier for the quote.
+      example: '123456'
+      nullable: true
     AccountingSalesOrderId:
       type: string
       title: Sales Order ID
@@ -22317,6 +22361,453 @@ components:
           example: update
         data:
           $ref: '#/components/schemas/UnifiedId'
+    SalesOrder:
+      type: object
+      x-apideck-schema-id: SalesOrder
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        downstream_id: low
+        number: high
+        customer: critical
+        quote_id: low
+        invoice_id: medium
+        company_id: medium
+        department_id: low
+        location_id: low
+        project_id: medium
+        subsidiary_id: medium
+        order_date: high
+        delivery_date: medium
+        terms: low
+        terms_id: edge-case
+        order_type: medium
+        po_number: medium
+        reference: medium
+        status: critical
+        currency: medium
+        currency_rate: low
+        tax_inclusive: low
+        sub_total: high
+        total_tax: high
+        tax_code: medium
+        discount_percentage: medium
+        discount_amount: medium
+        total: critical
+        unbilled_amount: low
+        shipping_method: low
+        payment_method: low
+        customer_memo: low
+        notes: low
+        line_items: critical
+        billing_address: medium
+        shipping_address: high
+        tracking_categories: medium
+        template_id: edge-case
+        source_document_url: edge-case
+        custom_fields: medium
+        row_version: low
+        updated_by: low
+        created_by: low
+        created_at: high
+        updated_at: high
+        pass_through: low
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        downstream_id:
+          $ref: '#/components/schemas/DownstreamId'
+        number:
+          type: string
+          title: Sales order number
+          description: Sales order number, as assigned by the accounting system.
+          example: SO000123
+          nullable: true
+        customer:
+          $ref: '#/components/schemas/LinkedCustomer'
+        quote_id:
+          $ref: '#/components/schemas/AccountingQuoteId'
+        invoice_id:
+          type: string
+          title: Invoice ID
+          description: ID of the invoice created from this sales order. Populated when the accounting system records a single invoice on the order (see the connector gotchas); null when the order has not been invoiced, or when it was invoiced in parts and the system keeps no single link.
+          example: '123456'
+          readOnly: true
+          nullable: true
+        company_id:
+          $ref: '#/components/schemas/AccountingCompanyId'
+        department_id:
+          $ref: '#/components/schemas/DepartmentId'
+        location_id:
+          $ref: '#/components/schemas/LocationId'
+        project_id:
+          $ref: '#/components/schemas/AccountingProjectId'
+        subsidiary_id:
+          $ref: '#/components/schemas/SubsidiaryId'
+        order_date:
+          type: string
+          title: Order date
+          description: Date the sales order was placed - YYYY-MM-DD.
+          format: date
+          example: '2020-09-30'
+          nullable: true
+        delivery_date:
+          type: string
+          title: Delivery date
+          description: 'The requested delivery date: the date the customer asked to receive the goods or services - YYYY-MM-DD. Promised ship dates and payment due dates are not mapped here.'
+          format: date
+          example: '2020-10-15'
+          nullable: true
+        order_type:
+          type: string
+          title: Order type
+          description: The order or transaction type of the sales order, as configured in the accounting system. On create, selects the type to create when the system supports several; omit to use the connection default. See the connector gotchas for the values each system accepts.
+          example: SO
+          nullable: true
+        terms:
+          type: string
+          title: Terms
+          description: Payment terms of the sales order.
+          example: Net 30
+          nullable: true
+        terms_id:
+          $ref: '#/components/schemas/TermsId'
+        po_number:
+          type: string
+          title: Purchase Order number
+          description: A PO Number uniquely identifies a purchase order and is generally defined by the buyer. The buyer will match the PO number in the invoice to the Purchase Order.
+          example: '90000117'
+          nullable: true
+        reference:
+          $ref: '#/components/schemas/Reference'
+        status:
+          type: string
+          title: Status
+          description: 'Sales order status, in order of precedence: `cancelled`; `closed` (the order is closed or completed, whether or not it was billed); `invoiced` (fully billed but not yet closed); `back_ordered`; `on_hold` (including credit hold); `draft` (including pending approval); `open` (every other active state, including partially shipped and partially invoiced); `other` for states that fit none of these.'
+          example: open
+          x-apideck-enum-id: sales-orders.status
+          enum:
+            - draft
+            - open
+            - on_hold
+            - back_ordered
+            - invoiced
+            - closed
+            - cancelled
+            - other
+          nullable: true
+        currency:
+          $ref: '#/components/schemas/Currency'
+        currency_rate:
+          $ref: '#/components/schemas/CurrencyRate'
+        tax_inclusive:
+          $ref: '#/components/schemas/TaxInclusive'
+        sub_total:
+          title: Sub-total amount
+          description: Sub-total amount, normally before tax.
+          type: number
+          example: 27500
+          nullable: true
+        total_tax:
+          type: number
+          title: Total tax amount
+          description: Total tax amount applied to this sales order.
+          example: 2500
+          nullable: true
+        tax_code:
+          type: string
+          title: Tax Code
+          description: Applicable tax id/code override if tax is not supplied on a line item basis.
+          example: '1234'
+          nullable: true
+        discount_percentage:
+          type: number
+          title: Discount Percent
+          description: Discount percentage applied to this sales order.
+          example: 5.5
+          nullable: true
+        discount_amount:
+          type: number
+          title: Discount Amount
+          description: Discount amount applied to this sales order.
+          example: 25
+          nullable: true
+        total:
+          type: number
+          title: Total amount
+          description: Total amount of the sales order, including tax.
+          example: 30000
+          nullable: true
+        unbilled_amount:
+          type: number
+          title: Unbilled amount
+          description: 'Amount of the sales order not yet invoiced. Not the amount owed: see `balance` on the invoices created from the order for that.'
+          example: 30000
+          readOnly: true
+          nullable: true
+        shipping_method:
+          type: string
+          title: Shipping method
+          description: Shipping method or carrier code for the order.
+          example: FEDEX
+          nullable: true
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        customer_memo:
+          type: string
+          title: Customer memo
+          description: Message to the customer, shown on the sales order.
+          example: Thank you for your order!
+          nullable: true
+        notes:
+          type: string
+          title: Notes
+          description: Internal notes for the sales order, not shown to the customer.
+          example: Ship with next consignment
+          nullable: true
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceLineItem'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        tracking_categories:
+          $ref: '#/components/schemas/LinkedTrackingCategories'
+        template_id:
+          type: string
+          title: Template
+          description: Optional sales order template
+          example: '123456'
+          nullable: true
+        source_document_url:
+          type: string
+          title: Source document URL
+          description: URL link to a source document - shown as 'Go to [appName]' in the downstream app.
+          example: https://www.ordersolution.com/order/123456
+          nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        row_version:
+          $ref: '#/components/schemas/RowVersion'
+        updated_by:
+          $ref: '#/components/schemas/UpdatedBy'
+        created_by:
+          $ref: '#/components/schemas/CreatedBy'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        pass_through:
+          $ref: '#/components/schemas/PassThroughBody'
+    SalesOrdersFilter:
+      type: object
+      x-apideck-schema-id: SalesOrdersFilter
+      example:
+        updated_since: '2020-09-30T07:43:32.000Z'
+        created_since: '2020-09-30T07:43:32.000Z'
+        number: SO000123
+        customer_id: 123abc
+      properties:
+        updated_since:
+          type: string
+          title: Updated since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        created_since:
+          type: string
+          title: Created since (timestamp)
+          format: date-time
+          example: '2020-09-30T07:43:32.000Z'
+        number:
+          type: string
+          title: Sales order number
+          description: Sales order number to search for
+          example: SO000123
+        customer_id:
+          type: string
+          title: Customer Id
+          description: Filter by customer id
+          example: 123abc
+        subsidiary_id:
+          type: string
+          title: Subsidiary ID
+          description: Filter by the subsidiary (legal entity) the record belongs to. Only honored on connectors that support multi-entity scoping (e.g. NetSuite OneWorld); ignored elsewhere.
+          example: '12345'
+      additionalProperties: false
+    GetSalesOrdersResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: acumatica
+        resource:
+          type: string
+          description: Unified API resource name
+          example: SalesOrders
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SalesOrder'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+    GetSalesOrderResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: acumatica
+        resource:
+          type: string
+          description: Unified API resource name
+          example: SalesOrders
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/SalesOrder'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    CreateSalesOrderResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: acumatica
+        resource:
+          type: string
+          description: Unified API resource name
+          example: SalesOrders
+        operation:
+          type: string
+          description: Operation performed
+          example: add
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    UpdateSalesOrderResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: acumatica
+        resource:
+          type: string
+          description: Unified API resource name
+          example: SalesOrders
+        operation:
+          type: string
+          description: Operation performed
+          example: update
+        data:
+          $ref: '#/components/schemas/UnifiedId'
+    DeleteSalesOrderResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: acumatica
+        resource:
+          type: string
+          description: Unified API resource name
+          example: SalesOrders
+        operation:
+          type: string
+          description: Operation performed
+          example: delete
+        data:
+          $ref: '#/components/schemas/UnifiedId'
     SalesReceipt:
       type: object
       x-apideck-schema-id: SalesReceipt
@@ -23227,6 +23718,11 @@ tags:
     x-apideck-resource-id: projects
     x-apideck-model:
       $ref: '#/components/schemas/Project'
+  - name: Sales Orders
+    description: A Sales Order represents a customer's committed order for goods or services, including line items with product references, quantities, prices, delivery date, shipping details and fulfilment status, before it is invoiced.
+    x-apideck-resource-id: sales-orders
+    x-apideck-model:
+      $ref: '#/components/schemas/SalesOrder'
   - name: Employees
     description: An Employee represents an individual within the organization for accounting purposes, including name, department, hire date, and employment status.
     x-apideck-resource-id: employees
@@ -23675,6 +24171,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Lists the bills of every fiscal year in the administration; `filter[billed_since]`
+            returns the bills dated on or after that date. `status` and `balance` come from Minox's open items: `paid` when nothing is
+            open (an overpayment shows as a negative `balance`), `partially_paid` when part is,
+            `authorised` when all of it is. Minox keeps no open item for some older bills; those are
+            `posted` with `balance` `null`. The same applies when two of Minox's open items match one document (same number, date and kind). Sorting is not supported: Minox bookings have no created
+            or updated timestamps.
         - connector: freeagent
           description: |
             `filter[status]` supports `paid` and `unpaid`. `unpaid` returns every bill with an amount
@@ -23958,6 +24462,34 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Creates the bill as a booking on the administration's purchase journal, which
+            updates the payables straight away. Required: `bill_number` (a whole number of at
+            most 8 digits; Minox stores no letters in bill numbers), `supplier.id`, `bill_date`
+            and, on every line, `ledger_account.id` plus either `total_amount` or `quantity` and
+            `unit_price`.
+
+            VAT is calculated per line from the `tax_rate` percentage, rounded to the cent,
+            unless the line sends its own `tax_amount`; with `tax_inclusive: true` the line
+            amounts include VAT. A `total` that does not match the lines is rejected. The total
+            must be positive: book credits as credit notes. `due_date` defaults to the
+            supplier's payment terms.
+
+            A `bill_number` the same supplier already used in that fiscal year is rejected with
+            `409`; the same number on a different supplier is accepted. Updating is not
+            supported: delete the bill and create it again.
+
+            Minox bookings have no discounts: `discount_percentage` and `discount_amount`, on the
+            document or a line, are rejected; send the discounted amounts. A line `tax_amount`
+            needs a `tax_rate`.
+
+            Bookings are posted on create: `status: draft` is rejected. `currency` must be the
+            administration's own currency: Minox needs an exchange rate with any other, which this record
+            has no field for, so another currency is rejected with a `400`. `currency_rate`,
+            document-level `tracking_categories` and `terms` are not stored. The booking goes on the
+            administration's purchase journal; when it has more than one, choose it in the
+            connection's purchase journal setting, or the create is rejected with a `400`.
         - connector: campfire
           description: |
             `bill_number` is required on create, even though the unified schema treats it as
@@ -25183,6 +25715,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Lists the invoices of every fiscal year in the administration. `status` and `balance` come from Minox's open items: `paid` when nothing is
+            open (an overpayment shows as a negative `balance`), `partially_paid` when part is,
+            `unpaid` when all of it is. Minox keeps no open item for some older invoices; those are
+            `posted` with `balance` `null`. The same applies when two of Minox's open items match one document (same number, date and kind). Sorting is not supported: Minox
+            bookings have no created or updated timestamps.
         - connector: sap-s4hana-cloud
           description: |
             `number` is the SAP document number, which is only unique within a company code, so `filter[number]` can
@@ -25563,6 +26102,34 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Creates the invoice as a booking on the administration's sales journal, which
+            updates the receivables straight away. Required: `number` (a whole number of at most
+            8 digits; Minox stores no letters in invoice numbers), `customer.id`, `invoice_date`
+            and, on every line, `ledger_account.id` plus either `total_amount` or `quantity` and
+            `unit_price`.
+
+            VAT is calculated per line from the `tax_rate` percentage, rounded to the cent,
+            unless the line sends its own `tax_amount`; with `tax_inclusive: true` the line
+            amounts include VAT. A `total` that does not match the lines is rejected. The total
+            must be positive: book credits as credit notes. `due_date` defaults to the
+            customer's payment terms.
+
+            A `number` the same customer already used in that fiscal year is rejected with
+            `409`; the same number on a different customer is accepted. Updating is not
+            supported: delete the invoice and create it again.
+
+            Minox bookings have no discounts: `discount_percentage` and `discount_amount`, on the
+            document or a line, are rejected; send the discounted amounts. A line `tax_amount`
+            needs a `tax_rate`.
+
+            Bookings are posted on create: `status: draft` is rejected. `currency` must be the
+            administration's own currency: Minox needs an exchange rate with any other, which this record
+            has no field for, so another currency is rejected with a `400`. `currency_rate`,
+            document-level `tracking_categories` and `terms` are not stored. The booking goes on the
+            administration's sales journal; when it has more than one, choose it in the
+            connection's sales journal setting, or the create is rejected with a `400`.
         - connector: freeagent
           description: |
             FreeAgent needs payment terms in days. Send `terms` containing the number of days (for
@@ -26935,6 +27502,22 @@ paths:
             `subsidiaries` are always empty. `bank_account` is also empty — e-Boekhouden's ledger
             account object carries only a code, a name and a category, none of the bank details
             (account number, IBAN, etc.) that field requires.
+        - connector: minox
+          description: |
+            `classification` and `type` come from the account's RGS code (the Dutch reference chart of
+            accounts). Total accounts (`header: true`) and accounts Minox has not mapped to an RGS code
+            have neither. The balance sheet and profit and loss reports classify by RGS too, but they
+            follow the side the balance is on: an account that can swing either way, such as a current
+            account with the owner, is classified here as an asset and appears under liabilities in the
+            balance sheet while its balance is a credit.
+            `type` is `accounts_receivable`, `accounts_payable` or `bank` only where the RGS code names
+            that role; other accounts get the general type of their group, such as `current_asset`.
+
+            The chart is flat: there are no parent accounts, sub-accounts or subsidiaries, and balances
+            are not returned (use the balance sheet and profit and loss reports).
+
+            Supported filters: `name` (matches anywhere in the name, ignoring case), `status` and
+            `classification`. They apply to the whole chart, not page by page. Sorting is not supported.
         - connector: twinfield
           description: |
             `active` and `status` are not returned by this list call — fetch the ledger account by id
@@ -27088,6 +27671,11 @@ paths:
       summary: Create Ledger Account
       description: Create Ledger Account
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            `code` is required: a number from 0 to 999999, and it becomes the ledger account id. A code that is already in use is rejected with a `409` instead of overwriting that account. Use a code with the same number of digits as the administration's existing accounts: Minox rejects longer codes with a `400` (for example a 6-digit code in an administration with 4-digit account numbers).
+
+            `tax_rate.id` sets the account's default VAT code. `classification` and `type` cannot be set: Minox derives them from the account's RGS code, which is assigned in Minox only, so sending either on create is rejected with a `400`. On update they are accepted when they equal what the account reads (as in a record sent back) and rejected otherwise. A new account reads without `classification` or `type` until Minox maps it to an RGS code (the account read has none), but the balance sheet and profit and loss already classify it by the RGS code Minox assigns in its RGS trial balance.
         - connector: twinfield
           description: |
             Twinfield requires the account's dimension type (`BAS` for `type: "balancesheet"`, `PNL` for
@@ -27298,6 +27886,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            `classification` and `type` are derived from the account's RGS code, which is assigned in
+            Minox only: they are accepted when they equal what the account reads (as in a record read
+            and sent back) and rejected with a `400` otherwise. `code` cannot be changed (it is the
+            account's id); sending a different one is rejected with a `400`. Fields that are not sent
+            keep their current value.
         - connector: zoho-books
           description: |
             For ledger accounts, please update the "active" status separately from other updates.
@@ -27628,6 +28223,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            `filter[name]` matches anywhere in the item name, ignoring case. Sorting is not supported:
+            Minox items have no created or updated timestamps.
         - connector: sage-intacct-rest
           description: |
             `filter[type]` accepts `inventory`, `service` and `other`, but the `type` field in the
@@ -27773,6 +28372,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            `code` and `category_id` are required. `code` becomes the item id (letters, digits, dot, dash
+            or underscore); a code that is already in use is rejected with a `409` instead of replacing that
+            item. `category_id` is the item group.
+
+            Prices are per single unit. An item Minox prices per a larger quantity (for example per 100)
+            keeps that quantity: a unit price sent on update is stored scaled to it, and the price that is
+            not sent keeps its value.
         - connector: netsuite
           description: |
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the
@@ -27991,6 +28599,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Prices are per single unit. An item Minox prices per a larger quantity (for example per 100)
+            keeps that quantity: a sales price (`unit_price` or `sales_details.unit_price`) or
+            `purchase_details.unit_price` sent on update is stored scaled to it, and the price that is
+            not sent keeps its value. The item's code cannot be changed; sending a different `code` is
+            rejected with a `400`.
         - connector: netsuite
           description: |
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the
@@ -28185,6 +28800,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Lists the credit notes of every fiscal year in the administration. A Minox credit note is a
+            negative booking on a sales journal; it is returned here with positive amounts and does not
+            appear in the invoices list. `status`, `balance` and
+            `remaining_credit` come from Minox's open items (`paid`, `partially_paid`, or `authorised` while all of
+            it is open; `posted` with `balance` and `remaining_credit` `null` when Minox has no open item, or when two of Minox's open items match one credit note (same number, date and kind));
+            allocations are not returned. Sorting is not supported.
         - connector: sap-s4hana-cloud
           description: |
             Credit notes are SAP FI customer credit memos read from the accounting-document line
@@ -28367,6 +28990,26 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Books the credit note on the administration's sales journal, which updates the
+            receivables straight away. Required: `number` (a whole number of at most 8 digits),
+            `customer.id`, `date_issued`, `total_amount` and, on every line, `ledger_account.id` plus
+            either `total_amount` or `quantity` and `unit_price`. Send the credited amounts as positive
+            numbers. A `total_amount` that does not match the lines is rejected, and a `number` the same
+            customer already used in that fiscal year (on an invoice or a credit note) is rejected with
+            `409`. Updating is not supported: delete the credit note and create it again.
+
+            Minox bookings have no discounts: `discount_percentage` and `discount_amount`, on the
+            document or a line, are rejected; send the discounted amounts. A line `tax_amount`
+            needs a `tax_rate`.
+
+            Bookings are posted on create: `status: draft` is rejected. `currency` must be the
+            administration's own currency: Minox needs an exchange rate with any other, which this record
+            has no field for, so another currency is rejected with a `400`. `currency_rate`,
+            document-level `tracking_categories` and `terms` are not stored. The booking goes on the
+            administration's sales journal; when it has more than one, choose it in the
+            connection's sales journal setting, or the create is rejected with a `400`.
         - connector: sap-s4hana-cloud
           description: |
             SAP S/4HANA Cloud creates a pure FI customer credit memo (the accounts-receivable mirror of
@@ -29395,6 +30038,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Lists the bill credit notes of every fiscal year in the administration. A Minox bill credit note is a negative booking on a purchase journal; it
+            is returned here with positive amounts and no longer appears in the bills list. `status`, `balance`
+            and `remaining_credit` come from Minox's open items (`paid`, `partially_paid`, or `authorised` while all of
+            it is open; `posted` with `balance` and `remaining_credit` `null` when Minox has no open item, or when two of Minox's open items match one credit note (same number, date and kind));
+            allocations are not returned. Sorting is not supported.
         - connector: access-financials
           description: |
             Bill credit notes are Access Financials purchase (creditor) credit-note transactions, distinct from the customer (AR) `credit-notes` resource. They post immediately (there is no draft/approval lifecycle), so `status` is derived from the outstanding balance versus the total: `paid` when nothing is outstanding, `posted` when the full amount is outstanding, and `partially_paid` in between. `line_items` and `allocations` are returned only when fetching a single bill credit note, not in the list. Billing and shipping addresses are not available on purchase transactions.
@@ -29498,6 +30148,26 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Books the credit note on the administration's purchase journal, which updates the
+            payables straight away. Required: `number` (a whole number of at most 8 digits),
+            `supplier.id`, `date_issued`, `total_amount` and, on every line, `ledger_account.id` plus
+            either `total_amount` or `quantity` and `unit_price`. Send the credited amounts as positive
+            numbers. A `total_amount` that does not match the lines is rejected, and a `number` the same
+            supplier already used in that fiscal year is rejected with `409`. Updating is not supported:
+            delete the credit note and create it again.
+
+            Minox bookings have no discounts: `discount_percentage` and `discount_amount`, on the
+            document or a line, are rejected; send the discounted amounts. A line `tax_amount`
+            needs a `tax_rate`.
+
+            Bookings are posted on create: `status: draft` is rejected. `currency` must be the
+            administration's own currency: Minox needs an exchange rate with any other, which this record
+            has no field for, so another currency is rejected with a `400`. `currency_rate`,
+            document-level `tracking_categories` and `terms` are not stored. The booking goes on the
+            administration's purchase journal; when it has more than one, choose it in the
+            connection's purchase journal setting, or the create is rejected with a `400`.
         - connector: access-financials
           description: |
             The credit note is booked against the supplier identified by `supplier.display_id` (the Access Financials account code); line ledger accounts are selected by `line_items[].ledger_account.code`. `update` is not supported — a posted purchase transaction cannot be amended, so correct a bill credit note by deleting it.
@@ -30320,6 +30990,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Supported filters: `company_name`, `display_name`, `email` and `status`. Name filters match anywhere in the name, ignoring case.
+            `filter[email]` returns the customers that have that email address. Sorting is not supported:
+            Minox customers have no created or updated timestamps.
         - connector: e-boekhouden
           description: |
             `customers` and `suppliers` both list the same underlying set of relations. e-Boekhouden
@@ -30488,6 +31163,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            `custom_fields` are returned but cannot be written: Minox accepts them without storing them, so they are left out of create and update requests. `tax_number` must be a valid VAT number; Minox rejects an invalid one with a `400`. Customers cannot be deleted.
+
+            `currency` must be the administration's own currency; Minox stores a currency together with an exchange rate, which this record has no field for, so any other currency is rejected with a `400`. A customer in another currency (set up in Minox) cannot be updated through the API: Minox resets the currency of a customer to the administration's on every update that does not send it, and does not expose the exchange rate to send it back with, so such an update is rejected with a `400`. Sending `notes` empty or `null` clears them. Minox keeps one free-text contact person per address (often with a title, such as "De heer G. van der Heiden"), which is not split into `first_name` and `last_name`; those fields, and `individual`, are not supported. Minox has three address types: `billing` and `primary` are stored as the postal address, `shipping` as the delivery address and any other type as the street address, which reads back as `office`. One address of each Minox type is sent: when several map to the same type, `billing` wins over `primary`, and otherwise the first one is used.
         - connector: netsuite
           description: |
             How much of each array is written depends on whether the customer is a company or an
@@ -30744,6 +31424,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            A customer in a currency other than the administration's (set up in Minox) cannot be
+            updated: Minox resets a customer's currency to the administration's on every update that
+            does not send it, and never returns the exchange rate it would have to be sent back with, so
+            the update is rejected with a `400` rather than silently changing the currency. `currency`,
+            when sent, must be the administration's own. Only the fields sent are changed: addresses and
+            contacts are left alone unless `addresses`, `company_name`, `emails`, `phone_numbers` or
+            `websites` are in the body. Sending `notes` empty or `null` clears them.
         - connector: netsuite
           description: |
             How much of each array is written depends on whether the customer is a company or an
@@ -31186,6 +31875,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Supported filters: `company_name`, `display_name` and `email`. Name filters match anywhere in the name, ignoring case.
+            `filter[email]` returns the suppliers that have that email address. Sorting is not supported:
+            Minox suppliers have no created or updated timestamps.
         - connector: e-boekhouden
           description: |
             `customers` and `suppliers` both list the same underlying set of relations. e-Boekhouden
@@ -31324,6 +32018,11 @@ paths:
             schema:
               $ref: '#/components/schemas/Supplier'
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            `custom_fields` are returned but cannot be written: Minox accepts them without storing them, so they are left out of create and update requests. `tax_number` must be a valid VAT number; Minox rejects an invalid one with a `400`. Suppliers cannot be deleted.
+
+            `currency` must be the administration's own currency; Minox stores a currency together with an exchange rate, which this record has no field for, so any other currency is rejected with a `400`. A supplier in another currency (set up in Minox) cannot be updated through the API: Minox resets the currency of a supplier to the administration's on every update that does not send it, and does not expose the exchange rate to send it back with, so such an update is rejected with a `400`. Sending `notes` empty or `null` clears them. Minox keeps one free-text contact person per address (often with a title, such as "De heer G. van der Heiden"), which is not split into `first_name` and `last_name`; those fields, and `individual`, are not supported. Minox has three address types: `billing` and `primary` are stored as the postal address, `shipping` as the delivery address and any other type as the street address, which reads back as `office`. One address of each Minox type is sent: when several map to the same type, `billing` wins over `primary`, and otherwise the first one is used.
         - connector: snelstart
           description: |
             `addresses[].country` is not written. SnelStart requires a country as a reference to an
@@ -31637,6 +32336,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            A supplier in a currency other than the administration's (set up in Minox) cannot be
+            updated: Minox resets the currency to the administration's on every update that does not
+            send it, and never returns the exchange rate it would have to be sent back with, so the
+            update is rejected with a `400` rather than silently changing the currency. `currency`, when
+            sent, must be the administration's own. Only the fields sent are changed: addresses and
+            contacts are left alone unless `addresses`, `company_name`, `emails`, `phone_numbers` or
+            `websites` are in the body. Sending `notes` empty or `null` clears them.
         - connector: netsuite
           description: |
             `custom_fields` are writable. Identify each field either by its NetSuite internal id or by
@@ -33817,6 +34525,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Balances are kept per accounting period: `filter[end_date]` returns the position at the end of the period that date falls in. With monthly periods (most administrations) the report's `end_date` is that month's last day. Minox does not expose the dates of other period layouts (quarters, 13 periods), so there the report covers the whole fiscal year: `filter[end_date]` must be the fiscal year end or left out, and any other date is rejected with a `400`. Without it, the report is as of the end of the current period or of the latest fiscal year. A date after the last fiscal year returns that year's closing position. `filter[period_count]` is not supported.
+
+            Accounts are classified by their RGS code (the Dutch reference chart of accounts), as Minox's RGS trial balance assigns it, which includes accounts created through the API. An account without one is placed by its profit/loss/balance group in Minox: in a balance-sheet group it is listed under `uncategorized_items`; in a profit-and-loss group it counts towards the result of the open fiscal year, shown as an equity item; without a group it is listed under `uncategorized_items` and counted in neither result. The year result equals the net income of a profit and loss report over the same fiscal year from its first period.
         - connector: quickbooks
           description: When using start and end date filters, QuickBooks requires both to be sent. However, the report only reflects the balance sheet situation as of the end date.
         - connector: intuit-enterprise-suite
@@ -33879,6 +34592,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Amounts are kept per accounting period: `filter[start_date]` and `filter[end_date]` are widened to the periods they fall in and must fall in the same fiscal year. With monthly periods (most administrations) the report's `start_date` and `end_date` are the dates it actually covers. Minox does not expose the dates of other period layouts (quarters, 13 periods), so there the report covers the whole fiscal year: the filters must be the fiscal year's first and last day or left out, and any other range is rejected with a `400`. Without filters the report covers the current or latest fiscal year up to the end of the current period. Accounts are classified by their RGS code (the Dutch reference chart of accounts), as Minox's RGS trial balance assigns it, which includes accounts created through the API. An account without one that is in a profit-and-loss group in Minox is listed under `uncategorized_accounts` and counts towards net income; one without any group is left out (the balance sheet lists it as uncategorized). Over a fiscal year from its first period, net income equals the balance sheet's result for that year.
         - connector: sage-intacct
           description: |
             Sage Intacct's Profit and Loss report is structured around account groups.  To retrieve accurate data, all income statement accounts must be mapped to one  of the following categories: Revenue, Cost of Revenue, Operating Expense, or Other Expenses.  Any income statement accounts that are not mapped to one of these categories  will appear under the `uncategorized_accounts` property.
@@ -33943,6 +34659,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Without filters, journal entries of every fiscal year are listed. `filter[start_date]` and `filter[end_date]` narrow by posting date, apply to whole entries and may span fiscal years. Sorting is not supported: Minox entries have no created or updated timestamps.
+
+            Invoices, bills and credit notes are not listed here; read and delete them through their own resources (their ids answer `404` as journal entries). Each entry has the id returned on create. On bank and cash journals Minox posts one counter line per journal page; each entry carries its own share of it, as a line on the bank's ledger account (and, for lines with VAT, its share of Minox's VAT postings), so the entry balances. Postings made outside the API that only balance as a group (such as an automatic payment run) are returned per journal page, with an id of the form `JOURNAL:fiscal_year:page` (for example `AB:2022:1`); these can be read by that id but not deleted. Opening-balance entries are returned as Minox holds them and do not always balance on their own.
         - connector: snelstart
           description: |
             Listing journal entries is not supported. SnelStart's B2B API has no list endpoint for
@@ -34308,6 +35029,11 @@ paths:
             returns the entry's own top-level memo for every line, regardless of what was sent for that
             specific line. Use the entry-level `memo` for anything you need to
             find the entry by; don't rely on distinguishing lines by their own description text.
+        - connector: minox
+          description: |
+            `journal_symbol` is required and must be the code of an existing Minox journal (for example `MEMO`), and an entry needs at least two lines. `currency` must be the administration's own currency: Minox needs an exchange rate with any other, which a journal entry has no field for, so another currency is rejected with a `400`. On bank and cash journals Minox books line amounts including VAT: amounts sent with a `tax_rate` and `tax_amount` are stored as sent (net, plus VAT; a `tax_amount` of `0` stays `0`), a `tax_rate` without a `tax_amount` gets the VAT code's percentage and is booked as net plus that VAT, as on invoices, and a line without a `tax_rate` on such a journal gets the ledger account's default VAT code, which Minox takes out of the amount. A customer line on a sales journal, or a supplier line on a purchase journal, is rejected: that books an invoice or bill, which is created through its own resource. A line with a `customer` or `supplier` is posted to that customer or supplier, which Minox books on the matching control account, and its `ledger_account` is ignored. Other lines post to `line_items[].ledger_account`. `number`, when given, must be a whole number of at most 8 digits. The accounting period follows from `posted_at`. The entry is booked as a whole: if any line is rejected, nothing is booked.
+
+            Minox does not store `memo` or `title` (a line without a `description` takes the memo as its description), `currency_rate`, or any tracking category after the first on a line. VAT codes (`tax_rate`) can only be used on journals and accounts set up for VAT in Minox; anywhere else the entry is rejected with a `400`. `pass_through` is not supported. Updating an entry is not supported; delete it and create it again.
         - connector: snelstart
           description: |
             At least two lines are required, and the debit and credit sides must balance to zero —
@@ -34866,6 +35592,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Accepts the id returned on create, or a journal page id (`JOURNAL:fiscal_year:page`) from the list. It returns the same lines as the list, including an entry's share of the counter line Minox adds on bank and cash journals. Invoices, bills and credit notes, and postings that only exist inside a journal page entry, answer `404` by their own id.
         - connector: oracle-fusion
           description: |
             Because journal entries are imported asynchronously (see the `journalEntriesAdd` gotcha), the `id` returned by `journalEntriesAdd` is a submission receipt prefixed with `ess-group:`, not a journal id. This operation accepts it: while the import is still running it answers `404`, and once the journal exists it answers for that journal exactly as it would for the journal's own id — which is what the `id` in that response is. The receipt does not expire.
@@ -35222,6 +35951,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Only entries identified by the id returned on create can be deleted. Journal page ids (`JOURNAL:fiscal_year:page`) are rejected with a `400`, and an unknown id with a `404`.
         - connector: oracle-fusion
           description: |
             Oracle Fusion only allows deleting **unposted** journals. Because this connector imports journals unposted, `journalEntriesDelete` deletes the underlying journal batch by its id (Oracle deletes at batch level). Once a journal has been posted it can no longer be deleted — reverse it instead.
@@ -38283,6 +39015,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Attachments are supported on journal entries, invoices, bills, credit notes and bill credit
+            notes (`reference_type=journal-entry`, `invoice`, `bill`, `credit-note` or
+            `bill-credit-note`), with `reference_id` the record's id. A record holds at most one
+            document.
         - connector: freeagent
           description: |
             Supported `reference_type` values are `bill`, `bill-credit-note` and `expense`. A FreeAgent
@@ -38478,6 +39216,14 @@ paths:
               type: string
               format: binary
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            Attachments are supported on journal entries, invoices, bills, credit notes and bill credit
+            notes (`reference_type=journal-entry`, `invoice`, `bill`, `credit-note` or
+            `bill-credit-note`), with `reference_id` the record's id; an id of another type, such as an
+            invoice's id with `reference_type=journal-entry`, answers `404`. Each record holds one PDF:
+            uploading replaces the existing document. Deleting an
+            attachment removes the document only; the record stays.
         - connector: freeagent
           description: |
             Uploading replaces the attachment the bill, bill credit note or expense already has. FreeAgent
@@ -39156,6 +39902,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            `code` is required: 1 to 4 letters or digits, and it becomes the journal id. A code that is already in use, in any letter case, is rejected with a `409` instead of overwriting that journal. Journals cannot be deleted. `currency` must be the administration's own currency (or, on update, the journal's current one); any other currency is rejected with a `400`, since a journal has no field for the exchange rate Minox requires.
         - connector: odoo
           description: |
             `type` is required — Odoo's underlying account.journal model has no default and rejects a create with it omitted. Use one of `sales`, `purchase`, `cash`, `bank` or `general`.
@@ -39276,6 +40025,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            The journal's code cannot be changed (it is the journal's id); sending a different `code` is
+            rejected with a `400`. `currency` must be the administration's own, or the journal's current
+            currency, which is then left unchanged; any other currency is rejected with a `400`, since a
+            journal has no field for the exchange rate Minox requires.
         - connector: odoo
           description: |
             `currency` cannot be changed on update — it is returned when reading a journal but is not accepted as an input field.
@@ -39502,6 +40257,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: minox
+          description: |
+            `code` is required: a positive whole number, and it becomes the tracking category id. A code that is already in use is rejected with a `409`. Tracking categories cannot be deleted.
         - connector: sage-intacct
           description: When creating a category with parent ID please use the tracking category code.
       requestBody:
@@ -41372,6 +42130,9 @@ paths:
 
             Aging is bucketed by transaction date, since e-Boekhouden's outstanding-invoice rows carry
             no separate due date.
+        - connector: minox
+          description: |
+            Minox reports what is outstanding today: `filter[report_as_of_date]` ages today's open bills as of that date and leaves out bills dated after it, but cannot restore bills that have been paid since. Items are aged by due date, and amounts in other currencies are reported per currency. Each item's `transaction_id` is Minox's own open-item id, not the bill id; `transaction_number` is the bill number.
         - connector: zoho-books
           description: |
             For vendors with an exceptionally large number of open bills, report generation
@@ -41426,6 +42187,9 @@ paths:
 
             Aging is bucketed by transaction date, since e-Boekhouden's outstanding-invoice rows carry
             no separate due date.
+        - connector: minox
+          description: |
+            Minox reports what is outstanding today: `filter[report_as_of_date]` ages today's open invoices as of that date and leaves out invoices dated after it, but cannot restore invoices that have been paid since. Items are aged by due date, and amounts in other currencies are reported per currency. Each item's `transaction_id` is Minox's own open-item id, not the invoice id; `transaction_number` is the invoice number.
         - connector: zoho-books
           description: |
             For customers with an exceptionally large number of open invoices, report generation
@@ -43716,6 +44480,625 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/DeleteProjectResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/sales-orders:
+    get:
+      tags:
+        - Sales Orders
+      operationId: salesOrdersAll
+      summary: List Sales Orders
+      description: List Sales Orders
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/salesOrdersFilter'
+        - $ref: '#/components/parameters/passThrough'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: acumatica
+          description: |
+            Sales orders are read from the `SalesOrder` entity, so the API user of the connection needs access to the Sales Orders screen (SO301000); without it every request fails with "insufficient rights". The list returns every order type on the tenant, and `order_type` carries the type of each order: besides sales orders (`SO` and custom types) that includes invoice-type orders (`IN`), quotes (`QT`) and the return and credit types (`RC`, `RR`, `CM`, `CR`), whose amounts flow in the opposite direction, so filter on `order_type` client-side when you only want sales. Order numbers are only unique within an order type, so `filter[number]` can match more than one order. `line_items` are included on list results. `unbilled_amount` is the order's unbilled amount, not its unpaid balance.
+        - connector: myob-acumatica
+          description: |
+            Sales orders are read from the `SalesOrder` entity, so the API user of the connection needs access to the Sales Orders screen (SO301000); without it every request fails with "insufficient rights". The list returns every order type on the tenant, and `order_type` carries the type of each order: besides sales orders (`SO` and custom types) that includes invoice-type orders (`IN`), quotes (`QT`) and the return and credit types (`RC`, `RR`, `CM`, `CR`), whose amounts flow in the opposite direction, so filter on `order_type` client-side when you only want sales. Order numbers are only unique within an order type, so `filter[number]` can match more than one order. `line_items` are included on list results. `unbilled_amount` is the order's unbilled amount, not its unpaid balance.
+        - connector: sage-intacct-rest
+          description: |
+            Sage Intacct has no distinct sales order object: sales orders are order-entry documents, and that same object also holds quotes, shippers, invoices and credit memos. Apideck restricts the list to the document types your company defines as order-class, so `total_count` reflects sales orders only. Sage's own system-generated `SYS-` definitions (for example `SYS-Fulfillment Order`, the fulfilment document created behind a customer order) are excluded.
+            Those type names are defined per company, so Apideck resolves them from your Order Entry transaction definitions on each request. If none can be resolved the list returns empty rather than returning every order-entry document. Line items are attached with one extra query per page. `line_items[].total_amount` is quantity x unit price, because Sage returns no extended amount. `total_tax` is the sum of line tax and is omitted when no line carries tax. Addresses are not returned. The warehouse of an inventory line is returned as the `warehouse_id` entry of `line_items[].custom_fields`. `delivery_date` is Sage's requested shipping date. `po_number` is the customer PO number and `reference` the document's reference number.
+            `customer.id` is the Sage customer record key (as on every resource of this connector), and `filter[customer_id]` takes that same key — it is translated to the customer's display id with one extra lookup, because Sage cannot filter order-entry documents by record key. An unknown key returns an empty list.
+        - connector: fortnox
+          description: |
+            Sales orders are Fortnox customer orders (`/3/orders`, scope `order`). `status` is derived: `cancelled` when the order is cancelled, `invoiced` once an invoice has been created from it (`invoice_id` then carries that invoice's number), `open` when it has been sent or marked not completed, otherwise `draft`. `quote_id` is the offer the order was created from, when any. Fortnox has no timestamps on orders, so `created_at`/`updated_at` are not returned; `filter[updated_since]` uses Fortnox's `lastmodified` and is accurate to the minute.
+            The list returns Fortnox's order headers only: `line_items`, amounts other than `total`, addresses, references and memos come back on get-by-id. On the list `status` can only be `cancelled`, `open` or `draft`; whether an order has been invoiced is visible on get-by-id (`invoiced`, with `invoice_id`). `po_number` is the customer's order number (*Your order number*); `reference` is not returned.
+        - connector: sage-intacct
+          description: |
+            Sales orders are Order Entry documents (`SODOCUMENT`) of the Order class. System-generated fulfilment documents (transaction definitions starting with `SYS-`) are not returned. The list returns order headers only — `line_items` are returned when you retrieve a single sales order. `delivery_date` is the order's need-by date and is null when none was entered. `po_number` is the customer PO number and `reference` the document's reference number. `status` is `back_ordered` when the order is flagged as back-ordered and still open; `invoiced` means the order is fully converted. Sage Intacct does not record the invoice created from an order, so `invoice_id` is not returned. The document the order was converted from is exposed by its record number as the `source_document_key` custom field rather than as `quote_id`, because it is not necessarily a quote.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSalesOrdersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+    post:
+      tags:
+        - Sales Orders
+      operationId: salesOrdersAdd
+      summary: Create Sales Order
+      description: Create Sales Order
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: acumatica
+          description: |
+            `customer.id` and at least one line are required. Every line needs an inventory item: send `line_items[].item.id` (or `code`) with the Acumatica `InventoryID`; a line without one is rejected by Acumatica. `order_type` selects the Acumatica order type and defaults to `SO`. Totals, tax and `status` are computed by Acumatica — `sub_total`, `total_tax`, `total` and `status` sent on create are ignored, except `status: on_hold`, which places the order on hold. `number` is only honoured when the order type is configured for manual numbering; otherwise Acumatica assigns it. Address fields are only written when at least one address field is sent, and then override the customer's default address on the order.
+        - connector: myob-acumatica
+          description: |
+            `customer.id` and at least one line are required. Every line needs an inventory item: send `line_items[].item.id` (or `code`) with the MYOB Acumatica `InventoryID`; a line without one is rejected. `order_type` selects the order type and defaults to `SO`. Totals, tax and `status` are computed by MYOB Acumatica — `sub_total`, `total_tax`, `total` and `status` sent on create are ignored, except `status: on_hold`, which places the order on hold. `number` is only honoured when the order type is configured for manual numbering; otherwise it is assigned. Address fields are only written when at least one address field is sent, and then override the customer's default address on the order.
+        - connector: sage-intacct-rest
+          description: |
+            Sage writes order-entry documents only against a named transaction definition
+            (`document::{definition}`), and those definitions are created per company — there is
+            no universal "sales order" type. The connector resolves one for you:
+
+            - `order_type` on the request, if sent, takes precedence. It must be one of the
+              company's active sales order definitions, otherwise the create is rejected with an
+              error naming them.
+            - Else the **Sales Order Transaction Definition** (`sales_order_document_type`)
+              setting on the connection.
+            - Else the company's single active sales order definition (`SYS-` definitions do not
+              count). If there are several, the create is rejected with an error naming them
+              rather than guessing — the definition determines the document's downstream workflow.
+
+            `line_items[].item` is a real order-entry item reference. Sage requires a unit on
+            every line, so send `unit_of_measure` — omitting it fails with "Missing unit Select a
+            valid Unit in line no. N". An inventory definition (for example `Sales Order-Inventory`)
+            also requires a warehouse on every line: send it as the `warehouse_id` entry of
+            `line_items[].custom_fields` (the warehouse id, such as `WH1`), or the create fails
+            with "The required field warehouse is missing". `po_number` is written as the
+            customer PO number and `reference` as the document reference number. `status`,
+            `currency`, `total_tax`, `customer_memo`, `notes` and addresses are not written.
+        - connector: sage-intacct
+          description: |
+            Sage Intacct creates a sales order against a named Order transaction definition.
+            Send it as `order_type` (for example `Sales Order-Inventory`). If you omit it, the
+            connection setting **Sales Order Transaction Definition** (`sales_order_document_type`)
+            is used, and if that is blank the company's single active Order definition is used.
+            If the company has several active Order definitions the request fails and lists
+            them; set `order_type` or the connection setting.
+
+            Every line needs `item.id` (or `item.code`) and `unit_of_measure`, and the customer,
+            item and location must exist; on a multi-entity company each line also needs
+            `location_id`. A sales order needs at least one line. `status` accepts `draft` or
+            `open`; other values are ignored. `delivery_date` is written as the need-by date.
+            `currency` is written with `currency_rate` when given, otherwise Intacct's daily rate
+            is used. Address `contact_name` must match an existing contact; other address fields
+            are not written. `po_number` is written as the customer PO number, `reference` as
+            the document reference number; `notes` is not written. `warehouse_id` and
+            `discount_memo` are accepted as line `custom_fields`.
+        - connector: fortnox
+          description: |
+            `customer.id` (the Fortnox customer number) is required; Fortnox assigns `number`. Lines take `item.id` (or `code`) as the article number, `quantity`, `unit_price`, `unit_of_measure`, `tax_rate.rate` (the VAT percentage) and `discount_percentage`; a line without an article needs `description` and `ledger_account.code`. Totals and tax are computed by Fortnox. `po_number` is written as the customer's order number (*Your order number*); `reference` is not written. `status` is not written on create — an order starts as a draft; cancel it with `DELETE`. Address `string` holds the street line, as on Invoices.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrder'
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateSalesOrderResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            salesOrder:
+              number: SO000123
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              quote_id: '123456'
+              company_id: '12345'
+              department_id: '12345'
+              location_id: '12345'
+              project_id: '12345'
+              subsidiary_id: '12345'
+              order_date: '2020-09-30'
+              delivery_date: '2020-10-15'
+              order_type: SO
+              terms: Net 30
+              terms_id: '12345'
+              po_number: '90000117'
+              reference: INV-2024-001
+              status: open
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_tax: 2500
+              tax_code: '1234'
+              discount_percentage: 5.5
+              discount_amount: 25
+              total: 30000
+              shipping_method: FEDEX
+              payment_method: cash
+              customer_memo: Thank you for your order!
+              notes: Ship with next consignment
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  service_date: '2024-01-15'
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  worktags:
+                    - id: '123456'
+                      value: New York
+                  tax_rate:
+                    id: '123456'
+                    code: N-T
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      code: '100'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    name: Bank account
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      ref_name: Marketing
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                line5: 'Attention: Finance Dept'
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                line5: 'Attention: Finance Dept'
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              template_id: '123456'
+              source_document_url: https://www.ordersolution.com/order/123456
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  ref_name: Marketing
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+  /accounting/sales-orders/{id}:
+    get:
+      tags:
+        - Sales Orders
+      operationId: salesOrdersOne
+      summary: Get Sales Order
+      description: Get Sales Order
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: sage-intacct-rest
+          description: |
+            Sage keeps sales orders, quotes, shippers, invoices and credit memos in one order-entry object. An id that is not an order-class document (or is a system `SYS-` fulfilment order) returns 404 rather than being rendered as a sales order.
+        - connector: sage-intacct
+          description: |
+            Returns the full sales order including `line_items`. Line `line_number` is 0-based, as Sage Intacct numbers Order Entry lines; use it to address lines on update.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSalesOrderResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+    patch:
+      tags:
+        - Sales Orders
+      operationId: salesOrdersUpdate
+      summary: Update Sales Order
+      description: Update Sales Order
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: acumatica
+          description: |
+            Updates are a PUT of the fields you send. To change an existing line include its `line_items[].id` (the Acumatica line id returned on read); a line without an `id` is added as a new line, and lines you omit are left untouched. `order_type` cannot be changed after creation.
+        - connector: myob-acumatica
+          description: |
+            Updates are a PUT of the fields you send. To change an existing line include its `line_items[].id` (the line id returned on read); a line without an `id` is added as a new line, and lines you omit are left untouched. `order_type` cannot be changed after creation.
+        - connector: sage-intacct-rest
+          description: |
+            Sage writes order-entry documents only against a named transaction definition and enforces it. The connector reads the definition off the sales order being written, so this needs no configuration, and `order_type` is ignored on update. An id that is not a sales order (a quote, shipper or invoice, or a system `SYS-` fulfilment order) is refused instead of being modified.
+        - connector: sage-intacct
+          description: |
+            The customer, `order_type`, `status` and totals cannot be changed on update. Lines are matched by `line_number`; lines without a `line_number` are appended. Orders that have been converted to an invoice (status `invoiced`, or partially converted) are rejected by Sage Intacct and cannot be updated or deleted.
+        - connector: fortnox
+          description: |
+            Updates are a PUT of the fields you send, and Fortnox replaces the whole row list with the `line_items` you send: include every line you want to keep (with its `line_items[].id`, the Fortnox row id), because lines you omit are removed. An order that has been invoiced or cancelled cannot be updated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalesOrder'
+      responses:
+        '200':
+          $ref: '#/components/responses/UpdateSalesOrderResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+            salesOrder:
+              number: SO000123
+              customer:
+                id: '12345'
+                display_name: Windsurf Shop
+                name: Windsurf Shop
+                email: boring@boring.com
+              quote_id: '123456'
+              company_id: '12345'
+              department_id: '12345'
+              location_id: '12345'
+              project_id: '12345'
+              subsidiary_id: '12345'
+              order_date: '2020-09-30'
+              delivery_date: '2020-10-15'
+              order_type: SO
+              terms: Net 30
+              terms_id: '12345'
+              po_number: '90000117'
+              reference: INV-2024-001
+              status: open
+              currency: USD
+              currency_rate: 0.69
+              tax_inclusive: true
+              sub_total: 27500
+              total_tax: 2500
+              tax_code: '1234'
+              discount_percentage: 5.5
+              discount_amount: 25
+              total: 30000
+              shipping_method: FEDEX
+              payment_method: cash
+              customer_memo: Thank you for your order!
+              notes: Ship with next consignment
+              line_items:
+                - id: '12345'
+                  row_id: '12345'
+                  code: 120-C
+                  line_number: 1
+                  description: Model Y is a fully electric, mid-size SUV, with seating for up to seven, dual motor AWD and unparalleled protection.
+                  type: sales_item
+                  tax_amount: 27500
+                  total_amount: 27500
+                  quantity: 1
+                  unit_price: 27500.5
+                  unit_of_measure: pc.
+                  discount_percentage: 0.01
+                  discount_amount: 19.99
+                  service_date: '2024-01-15'
+                  category_id: '12345'
+                  location_id: '12345'
+                  department_id: '12345'
+                  subsidiary_id: '12345'
+                  shipping_id: '12345'
+                  memo: Some memo
+                  prepaid: true
+                  item:
+                    id: '12344'
+                    code: 120-C
+                    name: Model Y
+                  tax_applicable_on: Domestic_Purchase_of_Goods_and_Services
+                  tax_recoverability: Fully_Recoverable
+                  tax_method: Due_to_Supplier
+                  worktags:
+                    - id: '123456'
+                      value: New York
+                  tax_rate:
+                    id: '123456'
+                    code: N-T
+                    rate: 10
+                  tracking_categories:
+                    - id: '123456'
+                      code: '100'
+                      name: New York
+                      parent_id: '123456'
+                      parent_name: New York
+                  ledger_account:
+                    id: '123456'
+                    name: Bank account
+                    nominal_code: N091
+                    code: '453'
+                    parent_id: '123456'
+                    display_id: '123456'
+                  custom_fields:
+                    - id: '2389328923893298'
+                      name: employee_level
+                      ref_name: Marketing
+                      description: Employee Level
+                      value: Uses Salesforce and Marketo
+                  row_version: 1-12345
+              billing_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                line5: 'Attention: Finance Dept'
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              shipping_address:
+                id: '123'
+                type: primary
+                string: 25 Spring Street, Blackburn, VIC 3130
+                name: HQ US
+                line1: Main street
+                line2: 'apt #'
+                line3: 'Suite #'
+                line4: delivery instructions
+                line5: 'Attention: Finance Dept'
+                street_number: '25'
+                city: San Francisco
+                state: CA
+                postal_code: '94104'
+                country: US
+                latitude: '40.759211'
+                longitude: '-73.984638'
+                county: Santa Clara
+                contact_name: Elon Musk
+                salutation: Mr
+                phone_number: 111-111-1111
+                fax: 122-111-1111
+                email: elon@musk.com
+                website: https://elonmusk.com
+                notes: Address notes or delivery instructions.
+                row_version: 1-12345
+              tracking_categories:
+                - id: '123456'
+                  code: '100'
+                  name: New York
+                  parent_id: '123456'
+                  parent_name: New York
+              template_id: '123456'
+              source_document_url: https://www.ordersolution.com/order/123456
+              custom_fields:
+                - id: '2389328923893298'
+                  name: employee_level
+                  ref_name: Marketing
+                  description: Employee Level
+                  value: Uses Salesforce and Marketo
+              row_version: 1-12345
+              pass_through:
+                - service_id: string
+                  operation_id: string
+                  extend_object: {}
+                  extend_paths:
+                    - path: $.nested.property
+                      value: *ref_0
+    delete:
+      tags:
+        - Sales Orders
+      operationId: salesOrdersDelete
+      summary: Delete Sales Order
+      description: Delete Sales Order
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: fortnox
+          description: |
+            Fortnox does not delete orders. `DELETE` cancels the order (it stays readable with `status: cancelled`), as with Invoices on this connector.
+      responses:
+        '200':
+          $ref: '#/components/responses/DeleteSalesOrderResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
         '401':

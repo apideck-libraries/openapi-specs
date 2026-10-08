@@ -24816,6 +24816,10 @@ paths:
         - connector: sap-s4hana-cloud
           description: |
             Cancellation is supported and reverses the posted supplier invoice. By default, reversal reason `01` is used and the posting date is set to today (UTC). Override via `pass_through` is supported.
+
+            Only a bill can be cancelled here: the id of a bill credit note returns `404` and nothing is cancelled (use
+            `DELETE /accounting/bill-credit-notes/{id}`). If the document type can't be verified (for example SAP is
+            unavailable), the request fails and nothing is cancelled; a `429` or `5xx` can be retried.
       responses:
         '200':
           $ref: '#/components/responses/DeleteBillResponse'
@@ -29919,6 +29923,12 @@ paths:
         - connector: microsoft-dynamics-365-business-central
           description: |
             Only a draft (unposted) Business Central Purchase Credit Memo can be deleted. Once a bill credit note has been posted (status `authorised`/`posted`), it can no longer be deleted.
+        - connector: sap-s4hana-cloud
+          description: |
+            Deleting cancels the posted credit note: SAP posts a reversal document and the credit note reads back as
+            `voided`. Only a bill credit note can be cancelled here: the id of a bill returns `404` and nothing is
+            cancelled (use `DELETE /accounting/bills/{id}`). If the document type can't be verified (for example SAP is
+            unavailable), the request fails and nothing is cancelled; a `429` or `5xx` can be retried.
       responses:
         '200':
           $ref: '#/components/responses/DeleteBillCreditNoteResponse'

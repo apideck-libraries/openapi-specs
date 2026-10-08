@@ -23809,6 +23809,13 @@ paths:
             extracting the last `:` segment, so `tracking_categories[].name` returns `"Apple"` and
             `parent_name` returns `"Fruit"`. Expense line items are unaffected — QuickBooks returns
             only the short name there.
+        - connector: intuit-enterprise-suite
+          description: |
+            On bill line items, Intuit Enterprise Suite returns `ClassRef.name` as the `FullyQualifiedName`
+            (e.g. `"Fruit:Apple"`) rather than the leaf class name. Apideck normalises this by
+            extracting the last `:` segment, so `tracking_categories[].name` returns `"Apple"` and
+            `parent_name` returns `"Fruit"`. Expense line items are unaffected — Intuit Enterprise Suite returns
+            only the short name there.
         - connector: visma-eaccounting
           description: |
             Visma eAccounting does not expose per-payment detail on the bill response. To check whether a bill is paid, use the `balance` and `total` fields:
@@ -24466,6 +24473,13 @@ paths:
             extracting the last `:` segment, so `tracking_categories[].name` returns `"Apple"` and
             `parent_name` returns `"Fruit"`. Expense line items are unaffected — QuickBooks returns
             only the short name there.
+        - connector: intuit-enterprise-suite
+          description: |
+            On bill line items, Intuit Enterprise Suite returns `ClassRef.name` as the `FullyQualifiedName`
+            (e.g. `"Fruit:Apple"`) rather than the leaf class name. Apideck normalises this by
+            extracting the last `:` segment, so `tracking_categories[].name` returns `"Apple"` and
+            `parent_name` returns `"Fruit"`. Expense line items are unaffected — Intuit Enterprise Suite returns
+            only the short name there.
         - connector: sage-intacct-rest
           description: |
             `payment_allocations` is populated on both bills.get and bills.list via an extra batched query against `accounts-payable/payment-detail`, filtered by the bill's own key — this is a permanent added query on every bill read, not something only bills with payments pay for, since a bill with none still needs the lookup to know that. Live-verified: a bill with an applied payment returns `payment_allocations: [{id: "<payment id>", allocated_amount, date}]`; one with none returns `payment_allocations: null`.
@@ -24906,6 +24920,21 @@ paths:
             long as a single write and counts as N requests against your plan. Each record
             succeeds or fails on its own; read the per-item `status` to see which were written.
         - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 bills per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost:
+            a full request of 20 takes roughly 27 seconds. Set client timeouts accordingly.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
+        - connector: intuit-enterprise-suite
           description: |
             The whole request is one call to the provider, so it counts as **one request**
             against your plan however many records it carries.
@@ -26280,6 +26309,9 @@ paths:
         - connector: quickbooks
           description: |
             When setting tax rates on line items, QuickBooks requires valid tax codes. The `tax_rate.id` must reference an existing tax code from the tax-rates endpoint. QuickBooks automatically calculates tax amounts based on the tax code's rate.
+        - connector: intuit-enterprise-suite
+          description: |
+            When setting tax rates on line items, Intuit Enterprise Suite requires valid tax codes. The `tax_rate.id` must reference an existing tax code from the tax-rates endpoint. Intuit Enterprise Suite automatically calculates tax amounts based on the tax code's rate.
         - connector: freshbooks
           description: |
             The status field can be set to either "submitted" or "draft". The other available statuses are set by the Freshbooks API and cannot be updated manually. The due_date and invoice_date fields are required for the due date to be updated.
@@ -26610,6 +26642,21 @@ paths:
             long as a single write and counts as N requests against your plan. Each record
             succeeds or fails on its own; read the per-item `status` to see which were written.
         - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 invoices per request. A request carrying more is rejected before any
+            invoice is created.
+
+            Response time scales with the number of records rather than being a fixed cost:
+            a full request of 20 takes roughly 27 seconds. Set client timeouts accordingly.
+
+            A request that times out may still have created some or all of its invoices. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list invoices to find what was written before retrying, or a
+            retry will duplicate them.
+        - connector: intuit-enterprise-suite
           description: |
             The whole request is one call to the provider, so it counts as **one request**
             against your plan however many records it carries.
@@ -27452,6 +27499,27 @@ paths:
             Results come back in the order the items were sent. Supply `_ref` on every item if
             you need to tie an outcome back to your own record — it is echoed on every result,
             including failures, and is never sent to the connector.
+        - connector: intuit-enterprise-suite
+          description: |
+            Records are written one at a time, so the request counts as **one request per
+            record** against your plan — batching saves you round trips, not quota.
+
+            Records are written one at a time rather than in a single batched call, so that a
+            Intuit Enterprise Suite plan usage-limit error is reported on the account it applies to. A request
+            of N records therefore takes about N times as long as a single write: a full request
+            of 10 takes about 16 seconds.
+
+            At most 10 records per request.
+
+            Each record succeeds or fails on its own; read the per-item `status` to see which
+            were written. If the request times out, the items it could not confirm come back
+            with `status: uncertain` rather than `failed` — some of them may well have been
+            written, and no ids are returned for those. Verify before retrying an `uncertain`
+            item: list the resource to find what exists, or a retry will duplicate it.
+
+            Results come back in the order the items were sent. Supply `_ref` on every item if
+            you need to tie an outcome back to your own record — it is echoed on every result,
+            including failures, and is never sent to the connector.
       requestBody:
         required: true
         content:
@@ -27573,6 +27641,9 @@ paths:
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
+        - connector: quickbooks
+          description: |
+            QuickBooks does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
         - connector: intuit-enterprise-suite
           description: |
             Intuit Enterprise Suite uses the same underlying QuickBooks API. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
@@ -29088,6 +29159,21 @@ paths:
             that happens no ids are returned for them, so treat a timed-out batch as uncertain
             rather than failed: list the records to find what was written before retrying, or a
             retry will duplicate them.
+        - connector: intuit-enterprise-suite
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 credit notes per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost:
+            a full request of 20 takes roughly 27 seconds. Set client timeouts accordingly.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
       requestBody:
         required: true
         content:
@@ -30036,6 +30122,21 @@ paths:
             that happens no ids are returned for them, so treat a timed-out batch as uncertain
             rather than failed: list the records to find what was written before retrying, or a
             retry will duplicate them.
+        - connector: intuit-enterprise-suite
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 bill credit notes per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost:
+            a full request of 20 takes roughly 27 seconds. Set client timeouts accordingly.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
       requestBody:
         required: true
         content:
@@ -30898,6 +30999,21 @@ paths:
             long as a single write and counts as N requests against your plan. Each record
             succeeds or fails on its own; read the per-item `status` to see which were written.
         - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 customers per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost,
+            so set client timeouts for the size of request you send.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
+        - connector: intuit-enterprise-suite
           description: |
             The whole request is one call to the provider, so it counts as **one request**
             against your plan however many records it carries.
@@ -31838,6 +31954,21 @@ paths:
             that happens no ids are returned for them, so treat a timed-out batch as uncertain
             rather than failed: list the records to find what was written before retrying, or a
             retry will duplicate them.
+        - connector: intuit-enterprise-suite
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 suppliers per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost,
+            so set client timeouts for the size of request you send.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
       requestBody:
         required: true
         content:
@@ -32728,6 +32859,21 @@ paths:
             long as a single write and counts as N requests against your plan. Each record
             succeeds or fails on its own; read the per-item `status` to see which were written.
         - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 payments per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost:
+            a full request of 20 takes roughly 27 seconds. Set client timeouts accordingly.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
+        - connector: intuit-enterprise-suite
           description: |
             The whole request is one call to the provider, so it counts as **one request**
             against your plan however many records it carries.
@@ -35152,6 +35298,21 @@ paths:
             long as a single write and counts as N requests against your plan. Each record
             succeeds or fails on its own; read the per-item `status` to see which were written.
         - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 journal entries per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost,
+            so set client timeouts for the size of request you send.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
+        - connector: intuit-enterprise-suite
           description: |
             The whole request is one call to the provider, so it counts as **one request**
             against your plan however many records it carries.
@@ -39560,6 +39721,21 @@ paths:
             that happens no ids are returned for them, so treat a timed-out batch as uncertain
             rather than failed: list the records to find what was written before retrying, or a
             retry will duplicate them.
+        - connector: intuit-enterprise-suite
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 tracking categories per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost,
+            so set client timeouts for the size of request you send.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
       requestBody:
         required: true
         content:
@@ -40339,6 +40515,21 @@ paths:
             long as a single write and counts as N requests against your plan. Each record
             succeeds or fails on its own; read the per-item `status` to see which were written.
         - connector: quickbooks
+          description: |
+            The whole request is one call to the provider, so it counts as **one request**
+            against your plan however many records it carries.
+
+            At most 20 bill payments per request. A request carrying more is rejected before any
+            record is written.
+
+            Response time scales with the number of records rather than being a fixed cost:
+            a full request of 20 takes roughly 27 seconds. Set client timeouts accordingly.
+
+            A request that times out may still have written some or all of its records. When
+            that happens no ids are returned for them, so treat a timed-out batch as uncertain
+            rather than failed: list the records to find what was written before retrying, or a
+            retry will duplicate them.
+        - connector: intuit-enterprise-suite
           description: |
             The whole request is one call to the provider, so it counts as **one request**
             against your plan however many records it carries.

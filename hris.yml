@@ -5008,13 +5008,16 @@ paths:
             `employmentNav.jobInfoNav` on each employee record. Custom fields stored on
             other navs are not surfaced in `custom_fields` — use `pass_through` to access them.
 
-            `custom_fields[].value` is human-readable only for picklist-backed properties. For those,
-            the tenant's picklist label is returned (`"Monday to Sunday"` rather than the option ID
-            `"663865"`), resolved by preferring `en_GB`, then `en_US`, then any other English locale,
-            then the sole authored locale when a tenant-created picklist has only one; if no label is
-            usable the option's external code is returned. Properties backed by a Foundation Object
-            (for example `position`, `costCenter`) are not picklists and still return the raw
-            downstream ID — expect a mix of readable labels and raw IDs across `custom_fields`.
+            `custom_fields[].value` is human-readable for picklist-backed properties and for a
+            verified set of Foundation-Object-backed properties (`position`, `costCenter`,
+            `payGrade`, `businessUnit`, `employeeClass`). For picklists, the tenant's picklist label
+            is returned (`"Monday to Sunday"` rather than the option ID `"663865"`), resolved by
+            preferring `en_GB`, then `en_US`, then any other English locale, then the sole authored
+            locale when a tenant-created picklist has only one; if no label is usable the option's
+            external code is returned. Foundation-Object-backed properties are resolved by matching
+            each object's own active-status and label convention — a best-effort convention match,
+            not a guarantee, so any other Foundation-Object-backed property still returns the raw
+            downstream ID. Expect a mix of readable labels and raw IDs across `custom_fields`.
 
             `custom_fields[].name` carries the property's SAP field label (`"FLSA Work Week"`) and is
             populated for every custom field the tenant's metadata describes.
@@ -5534,13 +5537,16 @@ paths:
             `employmentNav.jobInfoNav` on each employee record. Custom fields stored on
             other navs are not surfaced in `custom_fields` — use `pass_through` to access them.
 
-            `custom_fields[].value` is human-readable only for picklist-backed properties. For those,
-            the tenant's picklist label is returned (`"Monday to Sunday"` rather than the option ID
-            `"663865"`), resolved by preferring `en_GB`, then `en_US`, then any other English locale,
-            then the sole authored locale when a tenant-created picklist has only one; if no label is
-            usable the option's external code is returned. Properties backed by a Foundation Object
-            (for example `position`, `costCenter`) are not picklists and still return the raw
-            downstream ID — expect a mix of readable labels and raw IDs across `custom_fields`.
+            `custom_fields[].value` is human-readable for picklist-backed properties and for a
+            verified set of Foundation-Object-backed properties (`position`, `costCenter`,
+            `payGrade`, `businessUnit`, `employeeClass`). For picklists, the tenant's picklist label
+            is returned (`"Monday to Sunday"` rather than the option ID `"663865"`), resolved by
+            preferring `en_GB`, then `en_US`, then any other English locale, then the sole authored
+            locale when a tenant-created picklist has only one; if no label is usable the option's
+            external code is returned. Foundation-Object-backed properties are resolved by matching
+            each object's own active-status and label convention — a best-effort convention match,
+            not a guarantee, so any other Foundation-Object-backed property still returns the raw
+            downstream ID. Expect a mix of readable labels and raw IDs across `custom_fields`.
 
             `custom_fields[].name` carries the property's SAP field label (`"FLSA Work Week"`) and is
             populated for every custom field the tenant's metadata describes.

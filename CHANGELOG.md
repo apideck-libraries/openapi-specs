@@ -1,3 +1,13 @@
+## v10.66.2 - (2026-10-08)
+
+### Accounting API
+
+- [NetSuite](connectors/netsuite) now supports number filters on every transaction list that offers one: `filter[number]` on [Credit Notes](apis/accounting/reference/credit-notes) and [Bill Credit Notes](apis/accounting/reference/bill-credit-notes), and `filter[bill_number]` and `filter[reference]` on [Bills](apis/accounting/reference/bills), joining [Invoices](apis/accounting/reference/invoices), [Quotes](apis/accounting/reference/quotes) and [Journal Entries](apis/accounting/reference/journal-entries). Each is an exact match on the value the list and get return, and combines with the other filters. A bill number is the supplier's own, so `filter[bill_number]` can return bills from several suppliers.
+
+- Fixed [NetSuite](connectors/netsuite) [Bill Credit Notes](apis/accounting/reference/bill-credit-notes) returning `number: null` on filtered lists (any `filter[...]`); they now return the same number (for example `VENDCRED4`) as the unfiltered list and get.
+
+- Fixed [NetSuite](connectors/netsuite) [Products](apis/accounting/reference/invoice-items) creates and updates for Service items with a price returning `Please enter missing quantity level(s)` when NetSuite had actually rejected them for another reason, such as a missing tax schedule; the error now carries NetSuite's actual reason.
+
 ## v10.66.1 - (2026-10-08)
 
 ### Accounting API

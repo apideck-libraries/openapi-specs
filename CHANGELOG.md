@@ -1,3 +1,9 @@
+## v10.64.0 - (2026-10-07)
+
+### Accounting API
+
+- Added an optional `Idempotency-Key` header to [Journal Entries](apis/accounting/reference/journal-entries), [Invoices](apis/accounting/reference/invoices) and [Bills](apis/accounting/reference/bills) creates, so a create that times out or ends with an uncertain outcome can be retried safely. Generate one key per record you create (a UUID is recommended; 1-255 printable ASCII characters, sent bare or as a quoted string) and resend it with the same body on every retry: the record is created at most once. A key is remembered for 24 hours from its first use, or for the connector's own deduplication window where that is shorter ([Xero](connectors/xero): 6 minutes); after that, the same key is treated as a new request, so retry within the window. A retry while the first attempt is still running returns `409`, reusing a key with a different body returns `422`, and a key sent to a connector or operation that cannot honour it returns `400` instead of creating the record unprotected. Requests without the header are unchanged. Support is enabled per connector, starting with [Xero](connectors/xero) Bills creates.
+
 ## v10.63.0 - (2026-10-07)
 
 ### Accounting API

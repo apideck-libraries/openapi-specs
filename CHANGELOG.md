@@ -1,3 +1,9 @@
+## v10.66.3 - (2026-10-09)
+
+### Accounting API
+
+- Changed the example value of the `Idempotency-Key` header on [Journal Entries](apis/accounting/reference/journal-entries), [Invoices](apis/accounting/reference/invoices) and [Bills](apis/accounting/reference/bills) creates from a UUID to a readable placeholder. Behaviour is unchanged.
+
 ## v10.66.2 - (2026-10-08)
 
 ### Accounting API

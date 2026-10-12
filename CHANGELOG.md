@@ -1,3 +1,11 @@
+## v10.66.4 - (2026-10-09)
+
+### Accounting API
+
+- Added the optional `Idempotency-Key` header to [Invoices](apis/accounting/reference/invoices) updates. A key on an update is scoped to the invoice it updates; connectors that cannot honour it reject it with `400`.
+
+- [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite) now honour the `Idempotency-Key` header on [Journal Entries](apis/accounting/reference/journal-entries) and [Invoices](apis/accounting/reference/invoices) creates and on [Invoices](apis/accounting/reference/invoices) updates, voids included. A retry with the same key and body returns the original result instead of writing again, for 24 hours from the first attempt.
+
 ## v10.66.3 - (2026-10-09)
 
 ### Accounting API

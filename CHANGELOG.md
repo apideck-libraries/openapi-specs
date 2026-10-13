@@ -1,3 +1,9 @@
+## v10.67.2 - (2026-10-13)
+
+### Accounting API
+
+- [NetSuite](connectors/netsuite) now honours the `Idempotency-Key` header on [Journal Entries](apis/accounting/reference/journal-entries) creates. The key is sent as the journal entry's `externalId`, so a retry with the same key and body returns the original journal entry's id instead of writing again or failing with `DUP_RCRD`, including after a create that timed out but was saved. Creates without the header are unchanged.
+
 ## v10.67.1 - (2026-10-13)
 
 ### Ecommerce API

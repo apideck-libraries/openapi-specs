@@ -1,3 +1,9 @@
+## v10.68.0 - (2026-10-13)
+
+### Accounting API
+
+- Added [e-conomic](connectors/e-conomic) as an Accounting API connector (beta), for Danish businesses on e-conomic. It supports [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Products](apis/accounting/reference/invoice-items), [Quotes](apis/accounting/reference/quotes) and [Sales Orders](apis/accounting/reference/sales-orders) (read and write), [Invoices](apis/accounting/reference/invoices) and [Credit Notes](apis/accounting/reference/credit-notes) (booked records to read; drafts to create, update and delete), [Journal Entries](apis/accounting/reference/journal-entries), [Bills](apis/accounting/reference/bills) and [Bill Payments](apis/accounting/reference/bill-payments) (create and read), and [Ledger Accounts](apis/accounting/reference/ledger-accounts), [Tax Rates](apis/accounting/reference/tax-rates), [Journals](apis/accounting/reference/journals), [Payment Methods](apis/accounting/reference/payment-methods), [Departments](apis/accounting/reference/departments), [Fiscal Periods](apis/accounting/reference/fiscal-periods), [Trial Balance](apis/accounting/reference/trial-balance) and [Company Info](apis/accounting/reference/company-info) (read). Webhooks are delivered natively for customers, suppliers, products, invoices, quotes, ledger accounts and tax rates; credit notes arrive as invoice events. A connection takes the Agreement Grant Token the customer receives when they approve your e-conomic app.
+
 ## v10.67.2 - (2026-10-13)
 
 ### Accounting API

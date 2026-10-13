@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.67.2
+  version: 10.68.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -24857,6 +24857,20 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Bills are created as unbooked supplier invoices in e-conomic journal 1. `status` is
+            always `draft`: once the journal is booked in e-conomic the voucher leaves the journal,
+            and the bill can no longer be read through its `id`. Required: `supplier.id` (the supplier
+            number) and, on every line, `ledger_account.id` (the expense account number) and
+            `total_amount`. Line amounts include VAT; e-conomic splits the VAT off by the line's
+            `tax_rate.id` (a VAT code such as `I25`). Send line amounts positive; negative line amounts
+            are rejected.
+            `bill_date` must fall in an accounting year set up in e-conomic. The returned `id` has
+            the form `{journal}-{accounting year}-{voucher number}`; a split accounting year such as
+            `2025/2026` is written `2025_6_2026`. Listing, updating and deleting
+            bills are not supported. `reference` (or `notes`, when there is no reference) becomes the text of lines without a `description` and is not returned as a separate field. Dates are taken as written, regardless of time zone.
+            A `status` other than `draft` is rejected with a 400, because e-conomic bills are written as drafts only.
         - connector: minox
           description: |
             Creates the bill as a booking on the administration's purchase journal, which
@@ -26110,6 +26124,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            The list returns booked (posted) invoices only, as headers without `line_items`: fetch a single invoice to get its lines. Draft invoices are not listed but can be read by id. `status` is derived from the outstanding balance: `paid` when nothing is outstanding, `partially_paid` when part of the total is, and `unpaid` otherwise. Invoices with a negative total are credit notes and are returned by `/accounting/credit-notes`, not here. Because e-conomic cannot filter on the total, a page can hold fewer invoices than `limit`, or none, while more pages remain: keep following the next cursor. Supported filters: `number`, `ids` and `customer_id`. Invoice created and updated webhook events also fire for credit notes, which e-conomic records as invoices: if the invoice of such an event returns `404` here, it is a credit note, available from `/accounting/credit-notes`.
+            `filter[ids]` matches booked invoices only; draft ids (`draft-N`) match nothing.
+            Line items of a draft have no `tax_amount` or `tax_rate.rate`; e-conomic returns VAT per line only for booked documents.
         - connector: minox
           description: |
             Lists the invoices of every fiscal year in the administration. `status` and `balance` come from Minox's open items: `paid` when nothing is
@@ -26497,6 +26516,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Invoices are created as drafts and returned with an id of the form `draft-{number}` and `status` `draft`; booking them is done in e-conomic, after which they get a new booked invoice number. Only `customer.id` is required: the recipient (name, address and VAT zone), payment terms, invoice layout and currency are taken from the customer unless you send them. `line_items[].item.id` is the product number; VAT is calculated by e-conomic from the product group and the customer's VAT zone. Only draft invoices can be updated or deleted; an update changes only the fields you send, and `line_items`, when sent, replace all lines. Booked invoices are final and cannot be changed. On create, `due_date` is ignored: e-conomic calculates the due date from the payment terms (`terms_id`). An update can set `due_date`; an update that changes `invoice_date` without sending `due_date` makes e-conomic recalculate the due date from the payment terms. An invoice whose lines add up to a negative total is rejected; create a credit note instead. An update cannot clear a field: empty values are ignored. Changing `customer.id` readdresses the draft to the new customer.
+            A `status` other than `draft` is rejected with a 400, because e-conomic invoices are written as drafts only.
         - connector: minox
           description: |
             Creates the invoice as a booking on the administration's sales journal, which
@@ -27885,6 +27908,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            `classification` and `type` are derived from the account type and the account's normal balance side: profit and loss accounts are `revenue` (credit) or `expense` (debit), and balance sheet accounts are `asset` (debit) or `liability` (credit). e-conomic does not mark equity or contra accounts separately, so the normal balance side decides: equity accounts are returned as `liability`, accumulated depreciation (a credit-side asset account) as `liability`, and owner's drawings (a debit-side equity account) as `asset`. Headings and total accounts, which cannot be posted to, have `header` set to `true` and `type` `other`. Supported filter: `name`. Ledger accounts are read-only.
+            An account barred in e-conomic has `status` `inactive` and `active` `false`.
         - connector: e-boekhouden
           description: |
             e-Boekhouden's own account category has no separate value for revenue vs. expense — both
@@ -28623,6 +28650,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Supported filters: `name` (matches anywhere in the name, ignoring case), `ids` and `updated_since`. Sorting is not supported. `type` is `inventory` for products in a product group with inventory enabled and `non_inventory` otherwise; e-conomic does not distinguish services.
         - connector: minox
           description: |
             `filter[name]` matches anywhere in the item name, ignoring case. Sorting is not supported:
@@ -28772,6 +28802,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            `code` is required: e-conomic products are identified by a product number that you choose, and `code` becomes both the product number and the `id`. A create puts the product in product group 1, which determines its sales accounts and VAT; to use another group, send `pass_through` with `productGroup.productGroupNumber`. An update changes only the fields you send.
         - connector: minox
           description: |
             `code` and `category_id` are required. `code` becomes the item id (letters, digits, dot, dash
@@ -29200,6 +29233,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            e-conomic has no separate credit note document: credit notes are invoices with a negative total. Amounts and quantities are returned as positive values. Booked credit notes are listed without `line_items` (fetch one to get its lines); draft credit notes are not listed but can be read by id (`draft-{number}`). Because e-conomic cannot filter on the total, a page can hold fewer credit notes than `limit`, or none, while more pages remain: keep following the next cursor. Credit notes have no webhook events of their own: their changes arrive as invoice events.
+            e-conomic sends the same webhook events for credit notes as for invoices, so a booked or changed credit note is delivered as an `invoice.created` or `invoice.updated` event; its id is read through credit notes, not invoices. No `credit_note.*` events are sent.
+            `filter[ids]` matches booked credit notes only; draft ids (`draft-N`) match nothing.
+            Line items of a draft have no `tax_amount` or `tax_rate.rate`; e-conomic returns VAT per line only for booked documents.
         - connector: minox
           description: |
             Lists the credit notes of every fiscal year in the administration. A Minox credit note is a
@@ -29390,6 +29429,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Credit notes are created as draft invoices with negative line quantities: send the quantities you credit as positive numbers, and a charge on the credit note (such as a fee) as a negative quantity, the same signs a read returns. The id has the form `draft-{number}`; booking is done in e-conomic. Only `customer.id` is needed besides the lines; the recipient, VAT zone, payment terms, layout and currency come from the customer unless you send them. Only draft credit notes can be updated or deleted. Lines must add up to a credit: a credit note whose charges outweigh the credited lines is rejected, because e-conomic would store it as an invoice. `total_amount` is required by the request schema but not used; the total is calculated from the lines.
+            A `status` other than `draft` is rejected with a 400, because e-conomic credit notes are written as drafts only.
         - connector: minox
           description: |
             Books the credit note on the administration's sales journal, which updates the
@@ -31390,6 +31433,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Supported filters: `company_name`, `display_name` (both match anywhere in the name, ignoring case), `email`, `ids` and `updated_since`. Sorting is not supported. e-conomic customers have no creation timestamp, and custom fields are not supported.
         - connector: minox
           description: |
             Supported filters: `company_name`, `display_name`, `email` and `status`. Name filters match anywhere in the name, ignoring case.
@@ -31563,6 +31609,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            `company_name` (or `display_name`) and `currency` are required. e-conomic also requires a customer group, a VAT zone and payment terms on every customer: a create uses customer group 1 and VAT zone 1, the domestic defaults of a new e-conomic agreement, and payment terms 1 unless you send `terms_id`. To use another group or VAT zone, send `pass_through` with `customerGroup.customerGroupNumber` or `vatZone.vatZoneNumber`. An update changes only the fields you send. Only the first email address and the first website are stored. To clear a field, send an empty string; `null` leaves it unchanged.
+            e-conomic has only a barred flag: `status` `inactive` or `archived` bars the customer and reads back as `inactive`; any other value leaves it active.
         - connector: minox
           description: |
             `custom_fields` are returned but cannot be written: Minox accepts them without storing them, so they are left out of create and update requests. `tax_number` must be a valid VAT number; Minox rejects an invalid one with a `400`. Customers cannot be deleted.
@@ -32275,6 +32325,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Supported filters: `company_name`, `display_name` (both match anywhere in the name, ignoring case) and `email`. Sorting is not supported. e-conomic suppliers have no created or updated timestamps, so `updated_since` is not supported, and custom fields are not supported.
         - connector: minox
           description: |
             Supported filters: `company_name`, `display_name` and `email`. Name filters match anywhere in the name, ignoring case.
@@ -32418,6 +32471,10 @@ paths:
             schema:
               $ref: '#/components/schemas/Supplier'
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            `company_name` (or `display_name`) and `currency` are required. e-conomic also requires a supplier group, a VAT zone and payment terms on every supplier: a create uses supplier group 1 and VAT zone 1, the domestic defaults of a new e-conomic agreement, and payment terms 1 unless you send `terms_id`. To use another group or VAT zone, send `pass_through` with `supplierGroup.supplierGroupNumber` or `vatZone.vatZoneNumber`. An update changes only the fields you send. e-conomic suppliers have no VAT number or website field, so `tax_number` and `websites` are not stored.
+            e-conomic has only a barred flag: `status` `inactive` or `archived` bars the supplier and reads back as `inactive`; any other value leaves it active.
         - connector: minox
           description: |
             `custom_fields` are returned but cannot be written: Minox accepts them without storing them, so they are left out of create and update requests. `tax_number` must be a valid VAT number; Minox rejects an invalid one with a `400`. Suppliers cannot be deleted.
@@ -35430,6 +35487,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Journal entries are created as unbooked vouchers in an e-conomic journal: `status` is always `draft`: once the journal is booked in e-conomic the voucher leaves the journal, and the entry can no longer be read through its `id`. `journal_symbol` is the journal number (list them with `/accounting/journals`); it defaults to journal 1. Each line needs `ledger_account.id` (the account number), `type` (`debit` or `credit`) and `total_amount`, and debits and credits must balance. `posted_at` must fall in an accounting year set up in e-conomic. The returned `id` has the form `{journal}-{accounting year}-{voucher number}`; a split accounting year such as `2025/2026` is written `2025_6_2026`. Listing, updating and deleting journal entries are not supported. `currency_rate` and `number` are not stored: e-conomic applies its own exchange rate and numbers the voucher itself. `title` (or `memo`) becomes the text of lines without a `description` and is not returned as a separate field.
+            A `status` other than `draft` is rejected with a 400, because e-conomic journal entries are written as drafts only.
         - connector: freeagent
           description: |
             Line items must balance to zero — FreeAgent rejects the whole entry otherwise, rather than
@@ -40623,6 +40684,9 @@ paths:
         - connector: snelstart
           description: |
             SnelStart has no fiscal-year list. Years are generated from the administration's fiscal-year start month: the current fiscal year and the 9 before it, listed newest first. SnelStart exposes no creation date, so years before the administration existed can be listed. If the company ever changed its fiscal year-end, earlier years are reported on the current year-end, not the one in force at the time. Every record has `type: year`; `id` is the year's start date (`YYYY- MM-DD`) and `name` and `fiscal_year` are the year in which it ends. SnelStart does not expose whether a year is closed, so `status` and `locked_through` are null.
+        - connector: e-conomic
+          description: |
+            Each period of every e-conomic accounting year is returned as a `period` record, in year and period order; a list makes one extra request per accounting year. Ids have the form `{accounting year}-{e-conomic period number}`. e-conomic numbers periods consecutively across all accounting years, so the first period of a company's fifth year has an id such as `2026-49`; `period_number` is the period's position within its year (`1` for that period), and getting a single period makes two extra requests. A split accounting year such as `2025/2026` is written `2025_6_2026` in ids. `fiscal_year` is the calendar year the accounting year ends in (`2026` for `2025/2026`). `name` is generated from the accounting year and the position (for example `2025/2026-P01`) because e-conomic has no period name. e-conomic closes whole accounting years, not single periods: `status` is `closed` for every period of a closed accounting year and `open` otherwise. `locked_through`, `is_adjustment`, `created_at` and `updated_at` are not available.
       responses:
         '200':
           $ref: '#/components/responses/GetFiscalPeriodsResponse'
@@ -40782,6 +40846,8 @@ paths:
           description: 'Built from Visma''s account balances at `filter[end_date]` (today by default), following every page, with the fiscal year from the fiscal years endpoint. Visma documents `Balance` only as "the total account balance at the given date", without a sign convention or whether income statement accounts reset at the start of the fiscal year, and no live response has been checked yet. The connector reads `Balance` as debit minus credit, takes income and expense accounts as the fiscal year''s figure and treats earlier results as already in equity through the opening balances. Two checks turn a wrong reading into a `502` instead of a plausible report: the lines must balance (half a cent, on the unrounded balances), and, for Swedish companies only (company country `SE`, BAS chart), asset accounts (class 1) must not net to a credit while class 2 nets to a debit, which is what a credit-positive feed would produce; other countries'' charts use the class digits differently, so that check is skipped for them and when the country cannot be read. `account_id` is the account number, the id of `GET /ledger-accounts/{id}`; a balance row without an account number is returned with `line_type` `unmapped` and null `account_id`. Accounts with a zero balance are left out. The basis follows the fiscal year''s bookkeeping method (invoicing is accrual, or cash); Visma does not convert between them, so `filter[accounting_method]` must match that year''s method or the request returns a `400`, and without the filter the year''s own method is used. A year set to no bookkeeping has no ledger and returns a `400`. Currency is not returned.'
         - connector: rillet
           description: "Built from Rillet's trial balance report, using each account's ending balance, which is debit positive (Rillet returns credit totals as negative amounts); a line whose ending balance is not its beginning balance plus its debits and credits returns a `502`, as does a report whose ending balances do not balance (debits and credits differ by half a cent or more, compared before amounts are rounded to cents). Rillet's report resets income and expense accounts at the report's start date and carries everything before it in Retained Earnings. Its API does not expose the fiscal year start, so the report runs from 1 January of the `filter[end_date]` year (today by default) and `start_date` is that date: income and expense accounts are calendar year-to-date, which is not the fiscal year-to-date for organizations whose fiscal year is not the calendar year, though debits still equal credits. `x-apideck-company-id` selects the subsidiary. Every line has `line_type` `account`, and `account_id` is Rillet's account id. Accrual only: `filter[accounting_method]=cash` returns a `400`. Accounts whose balance rounds to zero are left out."
+        - connector: e-conomic
+          description: 'Reported as of `filter[end_date]` (today in UTC by default) within the e-conomic accounting year that contains it; a date outside every accounting year returns a `400`. `start_date` is the first day of that accounting year. Income and expense accounts are year-to-date. Balance sheet accounts are cumulative: they include every earlier accounting year back to the last closed one, whose balances e-conomic carries forward when a year is closed. The result of earlier years that are not closed is not yet in equity, so it is returned as one extra line, "Result of previous fiscal years (not yet appropriated)", with null `account_id` and `code`, which keeps debits equal to credits. Heading and total accounts and accounts with a zero balance are left out. `account_id` and `code` are the account number. Amounts are in the company''s base currency. e-conomic books on posting dates only, so `filter[accounting_method]=cash` returns a `400`. Each earlier accounting year that is not closed costs one extra request, and a date inside an accounting year a few more. A report whose debits and credits do not balance returns a `502`.'
       responses:
         '200':
           $ref: '#/components/responses/GetTrialBalanceResponse'
@@ -41547,6 +41613,8 @@ paths:
             which this connector has no way to discover (its bank-statement-import path is itself
             disabled), and `account.id` needs a real ledger-account code rather than the id
             `/accounting/bank-accounts` returns. See the `payments` resource's gotcha for details.
+        - connector: e-conomic
+          description: "A bill payment is created as a draft supplier payment voucher in e-conomic's daybook (journal 1), paid from `account` (normally the bank account); it reaches the ledger when the daybook is booked in e-conomic. Each `bill` allocation becomes one payment line, linked to the bill by its supplier and `bill_number`: a bill without a `bill_number` cannot be paid this way, and booked bills are found as well as draft ones. Only `bill` allocations are supported. All allocated bills must belong to one supplier, `supplier.id` (optional when allocating) must match it, and the allocation amounts must add up to `total_amount`; a single allocation without an amount takes `total_amount`. Because e-conomic does not keep bill numbers unique, a payment is refused when another bill of the same supplier has the same `bill_number`, booked in any accounting year or a draft in any daybook; this check costs one extra request per accounting year and per daybook. A payment is in one currency: `currency` defaults to the bills' currency, and bills in different currencies or a `currency` that is not theirs are refused. Without allocations, `supplier.id` and `total_amount` make one payment on the supplier's account. Amounts are positive. List, update and delete are not supported."
       requestBody:
         required: true
         content:
@@ -41678,6 +41746,8 @@ paths:
         - connector: netsuite
           description: |
             In order to read or write the `status` field, you must enable Approval Routing for Vendor Payments in Netsuite. Navigate to Setup > Accounting Preferences > Approval Routing > Vendor Payments > Approval Routing.
+        - connector: e-conomic
+          description: Reads a bill payment while it is a draft voucher in e-conomic's daybook; once it is booked it is no longer returned. `allocations` carry the paid bill's `bill_number` as `code` (not the bill `id`), with the amount paid on it. `status` is always `draft`.
       responses:
         '200':
           $ref: '#/components/responses/GetBillPaymentResponse'
@@ -44167,6 +44237,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Only draft quotes are returned, and the list returns them without `line_items`: fetch a single one to get its lines. Sent and archived quotes are not included. Supported filters: `number`, `customer_id` and `updated_since`.
         - connector: freeagent
           description: |
             FreeAgent estimates are returned as quotes. FreeAgent stores a sent estimate as Open, which is
@@ -44238,6 +44311,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Only `customer.id` is required: the recipient (name, address and VAT zone), payment terms, layout and currency are taken from the customer unless you send them. `line_items[].item.id` is the product number. Quotes are created as drafts; an update changes only the fields you send, and `line_items`, when sent, replace all lines. An update cannot clear a field: empty values are ignored. Changing `customer.id` readdresses the quote to the new customer.
+            A `status` other than `draft` is rejected with a 400, because e-conomic quotes are written as drafts only.
         - connector: freeagent
           description: |
             `number` becomes the FreeAgent estimate reference; without it FreeAgent numbers the quote
@@ -45223,6 +45300,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Only draft orders are returned, and the list returns them without `line_items`: fetch a single one to get its lines. Sent and archived orders are not included. Supported filters: `number`, `customer_id` and `updated_since`.
         - connector: acumatica
           description: |
             Sales orders are read from the `SalesOrder` entity, so the API user of the connection needs access to the Sales Orders screen (SO301000); without it every request fails with "insufficient rights". The list returns every order type on the tenant, and `order_type` carries the type of each order: besides sales orders (`SO` and custom types) that includes invoice-type orders (`IN`), quotes (`QT`) and the return and credit types (`RC`, `RR`, `CM`, `CR`), whose amounts flow in the opposite direction, so filter on `order_type` client-side when you only want sales. Order numbers are only unique within an order type, so `filter[number]` can match more than one order. `line_items` are included on list results. `unbilled_amount` is the order's unbilled amount, not its unpaid balance.
@@ -45276,6 +45356,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: e-conomic
+          description: |
+            Only `customer.id` is required: the recipient (name, address and VAT zone), payment terms, layout and currency are taken from the customer unless you send them. `line_items[].item.id` is the product number. Orders are created as drafts; an update changes only the fields you send, and `line_items`, when sent, replace all lines. An update cannot clear a field: empty values are ignored. Changing `customer.id` readdresses the order to the new customer.
+            A `status` other than `draft` is rejected with a 400, because e-conomic sales orders are written as drafts only.
         - connector: acumatica
           description: |
             `customer.id` and at least one line are required. Every line needs an inventory item: send `line_items[].item.id` (or `code`) with the Acumatica `InventoryID`; a line without one is rejected by Acumatica. `order_type` selects the Acumatica order type and defaults to `SO`. Totals, tax and `status` are computed by Acumatica — `sub_total`, `total_tax`, `total` and `status` sent on create are ignored, except `status: on_hold`, which places the order on hold. `number` is only honoured when the order type is configured for manual numbering; otherwise Acumatica assigns it. Address fields are only written when at least one address field is sent, and then override the customer's default address on the order.

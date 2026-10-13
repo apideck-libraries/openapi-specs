@@ -5042,6 +5042,17 @@ paths:
             `PerAddressDEFLT` entity for all countries and does not surface per-country
             field semantics. See SAP KBA 2902948.
 
+            On the home address (`addresses[].type` `home`), `city`, `state` and `postal_code` can
+            contain SAP's numeric option IDs (for example `"358"`) when the tenant's home-address
+            layout for that country makes the field a dropdown. SAP does not report which countries
+            use dropdowns, so list them in the Employees configuration settings (Countries where home
+            address City, State or Postal Code is a dropdown, as 3-letter country codes such as
+            `BEL`). For a listed country, `city` and `state` return the option's label
+            (`"Antwerpen"`) and `postal_code` returns the postal code itself (`"2060"`). A value stays
+            the raw option ID when its country is not listed, when the tenant's address setup has no
+            dropdown for that field, or when the lookup cannot be completed. Other address types, such as `primary`,
+            are not resolved and may still contain option IDs.
+
             Email type is resolved from the `externalCode` of the email-category picklist
             option (ecEmailType), which is locale-independent, so the resolved type does not
             depend on the tenant's configured language. The externalCode to unified type
@@ -5570,6 +5581,17 @@ paths:
             This limitation is by SAP design: their OData v2 API exposes a single merged
             `PerAddressDEFLT` entity for all countries and does not surface per-country
             field semantics. See SAP KBA 2902948.
+
+            On the home address (`addresses[].type` `home`), `city`, `state` and `postal_code` can
+            contain SAP's numeric option IDs (for example `"358"`) when the tenant's home-address
+            layout for that country makes the field a dropdown. SAP does not report which countries
+            use dropdowns, so list them in the Employees configuration settings (Countries where home
+            address City, State or Postal Code is a dropdown, as 3-letter country codes such as
+            `BEL`). For a listed country, `city` and `state` return the option's label
+            (`"Antwerpen"`) and `postal_code` returns the postal code itself (`"2060"`). A value stays
+            the raw option ID when its country is not listed, when the tenant's address setup has no
+            dropdown for that field, or when the lookup cannot be completed. Other address types, such as `primary`,
+            are not resolved and may still contain option IDs.
 
             Email type is resolved from the `externalCode` of the email-category picklist
             option (ecEmailType), which is locale-independent, so the resolved type does not

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.66.4
+  version: 10.67.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -38,6 +38,14 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/BalanceSheetFilter'
+    trialBalanceFilter:
+      name: filter
+      in: query
+      description: Apply filters
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/TrialBalanceFilter'
     bankAccountsFilter:
       name: filter
       in: query
@@ -1308,6 +1316,24 @@ components:
           schema:
             type: string
             format: binary
+    GetFiscalPeriodsResponse:
+      description: Fiscal Periods
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetFiscalPeriodsResponse'
+    GetFiscalPeriodResponse:
+      description: Fiscal Period
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetFiscalPeriodResponse'
+    GetTrialBalanceResponse:
+      description: Trial Balance
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GetTrialBalanceResponse'
     GetJournalsResponse:
       description: Journals
       content:
@@ -17456,6 +17482,359 @@ components:
           $ref: '#/components/schemas/Meta'
         _raw:
           $ref: '#/components/schemas/Raw'
+    FiscalPeriod:
+      type: object
+      x-apideck-schema-id: FiscalPeriod
+      additionalProperties: false
+      x-apideck-weights:
+        id: critical
+        name: critical
+        start_date: critical
+        end_date: critical
+        status: high
+        locked_through: medium
+        fiscal_year: high
+        period_number: medium
+        type: medium
+        is_adjustment: edge-case
+        created_at: medium
+        updated_at: medium
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        name:
+          type: string
+          title: Name
+          description: Name of the fiscal period as shown in the accounting system.
+          example: Jan 2026
+          nullable: true
+        fiscal_year:
+          type: string
+          title: Fiscal year
+          description: The calendar year in which the period's fiscal year ends, as four digits (Jul 2025 to Jun 2026 is `2026`). Derived from the fiscal year's end date; the accounting system's own label is in `name`.
+          pattern: ^\d{4}$
+          example: '2026'
+          nullable: true
+        period_number:
+          type: integer
+          title: Period number
+          description: Position of the period within its fiscal year, starting at 1.
+          example: 1
+          nullable: true
+        start_date:
+          type: string
+          title: Start date
+          description: First day of the period (inclusive).
+          format: date
+          example: '2026-01-01'
+          nullable: true
+        end_date:
+          type: string
+          title: End date
+          description: Last day of the period (inclusive).
+          format: date
+          example: '2026-01-31'
+          nullable: true
+        status:
+          type: string
+          title: Status
+          description: "Whether transactions can be posted into the period. `open`: postings are accepted on at least the last day of the period; a lock date inside the period still rejects earlier dates (see `locked_through`). `locked`: posting is blocked for some users or transaction types only, for example everyone except advisers or administrators. `closed`: posting is blocked for all users until the period or year is reopened. `future`: the accounting system reports the period as not yet opened. Null or absent means the connector does not expose the period's status."
+          enum:
+            - open
+            - locked
+            - closed
+            - future
+          x-apideck-enum-id: fiscal_period.status
+          example: open
+          nullable: true
+        locked_through:
+          type: string
+          title: Locked through
+          description: "The last date in the period on which the accounting system's lock date rejects postings for at least some users: the lock date itself, or the period's end date when the lock date is later. Null when no lock date reaches the period or the connector does not expose lock dates."
+          format: date
+          example: '2026-09-30'
+          nullable: true
+        type:
+          type: string
+          title: Period type
+          description: Whether this record is a posting period, or a quarter or year that groups posting periods.
+          enum:
+            - period
+            - quarter
+            - year
+          x-apideck-enum-id: fiscal_period.type
+          example: period
+          nullable: true
+        is_adjustment:
+          type: boolean
+          title: Adjustment period
+          description: Whether the period is an adjustment (closing) period used for year-end entries rather than regular postings.
+          example: false
+          nullable: true
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/UpdatedAt'
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+    GetFiscalPeriodsResponse:
+      type: object
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: fiscal-periods
+        operation:
+          type: string
+          description: Operation performed
+          example: all
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FiscalPeriod'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        links:
+          $ref: '#/components/schemas/Links'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    GetFiscalPeriodResponse:
+      type: object
+      x-apideck-schema-id: GetFiscalPeriodResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: netsuite
+        resource:
+          type: string
+          description: Unified API resource name
+          example: fiscal-periods
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/FiscalPeriod'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        _raw:
+          $ref: '#/components/schemas/Raw'
+    TrialBalance:
+      type: object
+      x-apideck-schema-id: TrialBalance
+      title: Trial Balance
+      description: The balance of every ledger account as of a date, split into debit and credit columns. Balance sheet accounts are cumulative to `end_date`; income and expense accounts are year-to-date within the fiscal year that contains `end_date`.
+      x-apideck-weights:
+        report_name: low
+        start_date: medium
+        end_date: critical
+        currency: medium
+        accounts: critical
+        total_debit: high
+        total_credit: high
+        custom_mappings: edge-case
+      additionalProperties: false
+      required:
+        - end_date
+        - accounts
+      properties:
+        report_name:
+          type: string
+          title: Report Name
+          description: The name of the report as returned by the connector.
+          example: Trial Balance
+          nullable: true
+        start_date:
+          type: string
+          title: Start Date
+          description: 'The date income and expense balances accumulate from: the start of the fiscal year containing `end_date`, unless the connector notes say otherwise. Null when the connector does not report it.'
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2025-01-01'
+          nullable: true
+        end_date:
+          type: string
+          title: End Date
+          description: The date the balances are reported as of. Connectors that only report per period round the requested date up to the end of its period; this field returns the date actually used.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2025-12-31'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        accounts:
+          type: array
+          title: Accounts
+          description: One line per ledger account with a non-zero balance, plus any line the connector adds to make the report complete (see `line_type`).
+          items:
+            type: object
+            x-apideck-schema-id: TrialBalanceAccount
+            x-apideck-weights:
+              account_id: critical
+              line_type: high
+              code: high
+              name: high
+              debit: critical
+              credit: critical
+              balance: high
+            additionalProperties: false
+            required:
+              - debit
+              - credit
+            properties:
+              line_type:
+                type: string
+                title: Line Type
+                description: '`account`: a ledger account. `unappropriated_result`: the result of earlier fiscal years not yet posted to an equity account, added by the connector. `unmapped`: a balance the accounting system reports without a ledger account.'
+                enum:
+                  - account
+                  - unappropriated_result
+                  - unmapped
+                x-apideck-enum-id: trial-balance.line-type
+                example: account
+              account_id:
+                type: string
+                title: Account Id
+                description: The ledger account's id, the same id `GET /accounting/ledger-accounts/{id}` takes. Null when `line_type` is not `account`, or when the connector cannot resolve the ledger account.
+                example: '123456'
+                nullable: true
+                readOnly: true
+              code:
+                type: string
+                title: Account Code
+                description: The ledger account's code (account number).
+                example: '1100'
+                nullable: true
+                readOnly: true
+              name:
+                type: string
+                title: Account Name
+                description: The ledger account's name.
+                example: Current assets
+                nullable: true
+                readOnly: true
+              debit:
+                type: number
+                title: Debit
+                description: The account's balance when it is a debit balance, otherwise 0.
+                example: 1250.5
+              credit:
+                type: number
+                title: Credit
+                description: The account's balance when it is a credit balance, otherwise 0.
+                example: 0
+              balance:
+                type: number
+                title: Balance
+                description: 'The signed balance: debit minus credit.'
+                example: 1250.5
+                nullable: true
+        total_debit:
+          type: number
+          title: Total Debit
+          description: The sum of the debit column.
+          example: 98250
+          nullable: true
+        total_credit:
+          type: number
+          title: Total Credit
+          description: 'The sum of the credit column. Equals total_debit, up to rounding of the individual lines: connectors return a 502 rather than a report whose debits and credits differ by half a cent or more.'
+          example: 98250
+          nullable: true
+        custom_mappings:
+          $ref: '#/components/schemas/CustomMappings'
+    TrialBalanceFilter:
+      type: object
+      x-apideck-schema-id: TrialBalanceFilter
+      example:
+        end_date: '2025-12-31'
+        accounting_method: accrual
+      properties:
+        end_date:
+          type: string
+          title: End date
+          description: The date the balances are reported as of (YYYY-MM-DD). Defaults to today (UTC). Connectors that only report per period round it up to the end of its period; the response `end_date` is the date used.
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: '2025-12-31'
+        accounting_method:
+          x-apideck-enum-id: trial-balance.accounting-method
+          type: string
+          title: Accounting Method
+          description: 'The accounting method used for the report: cash or accrual.'
+          example: accrual
+          enum:
+            - cash
+            - accrual
+      additionalProperties: false
+    GetTrialBalanceResponse:
+      type: object
+      x-apideck-schema-id: GetTrialBalanceResponse
+      required:
+        - status_code
+        - status
+        - service
+        - resource
+        - operation
+        - data
+      properties:
+        status_code:
+          type: integer
+          description: HTTP Response Status Code
+          example: 200
+        status:
+          type: string
+          description: HTTP Response Status
+          example: OK
+        service:
+          type: string
+          description: Apideck ID of service provider
+          example: quickbooks
+        resource:
+          type: string
+          description: Unified API resource name
+          example: TrialBalance
+        operation:
+          type: string
+          description: Operation performed
+          example: one
+        data:
+          $ref: '#/components/schemas/TrialBalance'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        _raw:
+          $ref: '#/components/schemas/Raw'
     Journal:
       type: object
       x-apideck-schema-id: Journal
@@ -23674,6 +24053,16 @@ tags:
     x-apideck-resource-id: journals
     x-apideck-model:
       $ref: '#/components/schemas/Journal'
+  - name: Fiscal Periods
+    description: A Fiscal Period is a posting period of the company's fiscal calendar, with its start and end dates and whether it is open for posting.
+    x-apideck-resource-id: fiscal-periods
+    x-apideck-model:
+      $ref: '#/components/schemas/FiscalPeriod'
+  - name: Trial Balance
+    description: A Trial Balance lists every ledger account's debit or credit balance as of a date.
+    x-apideck-resource-id: trial-balance
+    x-apideck-model:
+      $ref: '#/components/schemas/TrialBalance'
   - name: Tracking Categories
     description: A Tracking Category represents a classification dimension for reporting, including name, code, status, and parent category for hierarchies.
     x-apideck-resource-id: tracking-categories
@@ -40131,6 +40520,265 @@ paths:
           label: Node
           source:
             id: id_example
+  /accounting/fiscal-periods:
+    get:
+      tags:
+        - Fiscal Periods
+      operationId: fiscalPeriodsAll
+      summary: List Fiscal Periods
+      description: List the fiscal (accounting) periods of the company, with their dates and whether they are open for posting.
+      parameters:
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            Read from NetSuite's accounting periods. `type` follows NetSuite's year and quarter flags, so years and quarters are returned alongside posting periods. `status` is `closed` when the period is closed (NetSuite stops everyone from posting to a closed period until it is reopened), `locked` when all, AP, AR or payroll transactions are locked (users with the Override Period Restrictions permission can still post), otherwise `open`; `future` is never returned. `fiscal_year` is the calendar year in which the period's fiscal year ends, from the end date of the parent year period (`2026` for `FY 2026`); the year period itself is a record with `type: year`. Inactive periods are included. With multiple fiscal calendars enabled, the periods of every calendar are returned together and are not distinguished. `locked_through`, `period_number`, `created_at` and `updated_at` are not available.
+        - connector: oracle-fusion
+          description: |
+            Periods are the General Ledger calendar of the ledger selected on the connection, so only that ledger's periods are returned. The id is the period name (for example `Jan-26`). Oracle's closing status maps as Open to `open`, Closed and Permanently Closed to `closed`, and Future Enterable and Never Opened to `future`; Close Pending returns a null `status`, because Oracle does not say whether it stops postings. `fiscal_year` is Oracle's period year as four digits (null otherwise). Oracle's calendar setup defines it as the year in which the fiscal year ends, and Apideck passes it through without recomputing it from the dates, so a calendar set up with another convention reports its own. Adjustment periods are flagged with `is_adjustment`. `locked_through`, `created_at` and `updated_at` are not available.
+        - connector: microsoft-dynamics-365-business-central
+          description: |
+            Business Central stores only a period's start date. `end_date` (the day before the next period starts), `fiscal_year` (the calendar year in which the fiscal year ends, so Jul 2025 to Jun 2026 is `2026`; 12 months are assumed for the company's last fiscal year) and `period_number` are derived from the company's full period list, which costs one extra request, and are null if that list cannot be read; `end_date` is always null for the company's last period. `status` and `locked_through` come from the company's General Ledger Setup (Allow Posting From / Allow Posting To), read with one more request; the accounting period's own Closed and Date Locked flags are not used, because they do not stop posting (entries can still be posted to a closed year and are flagged Prior-Year Entry). A period that ends before Allow Posting From or starts after Allow Posting To is `locked`, never `closed`, because User Setup can give individual users a different window; otherwise it is `open`. `locked_through` is the day before Allow Posting From, capped at the period's end date, and null when that day is before the period starts or Allow Posting From is empty. `future` is never returned. If the connection's user cannot read the General Ledger Setup (403), `status` and `locked_through` are null; other failures of that read fail the request. `is_adjustment` and `created_at` are not available.
+        - connector: exact-online
+          description: |
+            Periods of the selected division, in fiscal year and period order. `name` is generated as `{fiscal_year}-P{period_number}` (for example `2026-P01`) because Exact has no period name. `fiscal_year` is the calendar year in which the period's fiscal year ends, taken from the latest period end of that fiscal year (one extra read of the division's periods; null if it cannot be read); Exact's own financial year label, which can be the start year, is the first part of `name`. `status`, `locked_through` and `is_adjustment` are not exposed by Exact and are always null.
+        - connector: exact-online-nl
+          description: |
+            Periods of the selected division, in fiscal year and period order. `name` is generated as `{fiscal_year}-P{period_number}` (for example `2026-P01`) because Exact has no period name. `fiscal_year` is the calendar year in which the period's fiscal year ends, taken from the latest period end of that fiscal year (one extra read of the division's periods; null if it cannot be read); Exact's own financial year label, which can be the start year, is the first part of `name`. `status`, `locked_through` and `is_adjustment` are not exposed by Exact and are always null.
+        - connector: exact-online-uk
+          description: |
+            Periods of the selected division, in fiscal year and period order. `name` is generated as `{fiscal_year}-P{period_number}` (for example `2026-P01`) because Exact has no period name. `fiscal_year` is the calendar year in which the period's fiscal year ends, taken from the latest period end of that fiscal year (one extra read of the division's periods; null if it cannot be read); Exact's own financial year label, which can be the start year, is the first part of `name`. `status`, `locked_through` and `is_adjustment` are not exposed by Exact and are always null.
+        - connector: twinfield
+          description: |
+            Twinfield returns periods one fiscal year at a time, so a list makes one extra request per year and covers at most the 10 most recent years, plus one request for the year before the oldest so its first `start_date` matches a get-one; if any of those years cannot be read the list fails with a 502 rather than returning a gap. Ids have the form `{year}-{period number}` (for example `2026-01`). Twinfield returns no start date: `start_date` is the day after the previous period ends and is null for the earliest period Twinfield has. `fiscal_year` is the calendar year in which the fiscal year ends (the year of its last period's end date), whatever Twinfield calls the year; `name` is Twinfield's period name. `status` is `open` or `closed` from Twinfield's open flag: a period that is not open accepts no postings from anyone until it is reopened (https://taasupportportal.wolterskluwer.com/nl/nl-nl/artikel/perioden-3041044), and `locked` and `future` are not used. `locked_through` is null. `is_adjustment`, `created_at` and `updated_at` are not available.
+        - connector: visma-netvisor
+          description: |
+            Netvisor's accounting periods are fiscal years, so every record has `type: year` and `period_number` is null. `fiscal_year` is the calendar year the period ends in. `status` is derived from the company's lock dates: `closed` when the period ends on or before the accounting period lock date (Netvisor blocks changes until the fiscal year is reopened), `locked` when it ends on or before the VAT or accounts payable lock date only (users with a personal VAT override and accountants still post), otherwise `open`; a year the lock date falls inside reads `open`. Netvisor reports no "not yet opened" state, so `future` is never returned. `locked_through` is the latest of the three lock dates, capped at the period's end date, and null when it falls before the period starts. `created_at` and `updated_at` are not available.
+        - connector: procountor-fi
+          description: |
+            Each Procountor tracking period is returned as a `period` record, with `period_number` its position in the fiscal year and `fiscal_year` the year the fiscal year ends in; a fiscal year without tracking periods is returned as one `year` record. Ids are `{fiscalYearId}:{trackingPeriodId}` for periods and `{fiscalYearId}` for years, so a year that gains tracking periods is replaced by period records with new ids. `status` maps Open to `open` and Closed to `closed`; a tracking period of a closed fiscal year is `closed` whatever its own status, because Procountor does not allow editing or opening it. Pending, which Procountor sets on a period whose material a Solo customer has delivered and that is not yet closed, returns null because Procountor does not document whether it blocks postings. `locked` and `future` are never returned and `locked_through` is null (Procountor has no lock date). `name` is derived from the dates. The list is not paginated by Procountor.
+        - connector: pennylane
+          description: |
+            Pennylane exposes fiscal years only, so every record has `type: year` and `period_number`, `is_adjustment` and `locked_through` are not available. `name` is derived from the dates (for example `2026`, or `2025-2026` for a fiscal year spanning two calendar years); `fiscal_year` is the calendar year the fiscal year ends in (`2026` for both). `status` maps Pennylane's `open` and `reopen` to `open` and `closed` to `closed`; `frozen` returns a null `status`, because Pennylane does not document whom a frozen year stops.
+        - connector: fortnox
+          description: |
+            Fortnox exposes financial years only, so every record has `type: year` and `period_number` is null. `name` and `fiscal_year` are the year in which the financial year ends. `status` comes from the company's locked period: `locked` when the year ends on or before it, otherwise `open`; a lock date inside a year leaves it `open`. Fortnox lets an administrator lock a period for some or all users and returns one date without saying which, so `closed` is never returned. `locked_through` is the locked date capped at the year's end, when it is on or after the year's start, otherwise null. Reading the locked period needs the opt-in Fortnox `settings` scope, which connections do not request by default: a connection authorized without it gets `status` and `locked_through` null. Connections store the scopes Fortnox granted and skip the locked period call when `settings` is not among them; connections authorized before that was stored try the call and treat Fortnox error code 2000663 (no access to the scope) as the same case.
+        - connector: spiris
+          description: |
+            Spiris exposes fiscal years only, so every record has `type: year` and `period_number` is null. `status` is `closed` when the year is locked for accounting (`IsLockedForAccounting`), otherwise `open`: Spiris documents a locked year as closed to postings for every user, apart from the year's first and last day, until the lock is removed. It exposes no lock date, so `locked_through` is null, and `locked` and `future` are never returned. `name` and `fiscal_year` are the year in which the fiscal year ends.
+        - connector: visma-eaccounting
+          description: |
+            Visma eAccounting exposes fiscal years only, so every record has `type: year` and `period_number` is null. `status` is `closed` when the year is locked for accounting (`IsLockedForAccounting`, "no longer possible to bookkeep on the year"), otherwise `open`; the lock applies to every user until it is removed. It exposes no lock date, so `locked_through` is null, and `locked` and `future` are never returned. `name` and `fiscal_year` are the year in which the fiscal year ends.
+        - connector: datev-unternehmen-online
+          description: |
+            DATEV exposes fiscal years only, so every record has `type: year`. DATEV's fiscal-year data has no open, closed or locked indicator, so `status` is always null. The id is the year's start date as `YYYYMMDD`; `fiscal_year` is the calendar year of the year's end date. `locked_through` is null. Only fiscal years for which the client has data at DATEV are listed. A list makes one extra request per fiscal year.
+        - connector: minox
+          description: |
+            Minox exposes fiscal years only, so every record has `type: year` and `period_number` is null. `name` is Minox's own fiscal year number; `fiscal_year` is the calendar year of the fiscal year's end date (null if the end date is missing), so a broken fiscal year that Minox numbers by its start year still reports its end year. `status` is `closed` when every regular period of the year is closed, permanently or provisionally (Minox's "voorlopig afgesloten", which can be undone); a year with only some periods closed is `open`, and `locked` and `future` are never returned. Minox also keeps a correction period after the last regular one, which `status` does not reflect. `locked_through` is not available.
+        - connector: xero
+          description: |
+            Xero has no fiscal-year list. Years are generated from the organisation's financial year-end setting: the current fiscal year and the 9 before it, listed newest first, never a year that ended before the organisation was created in Xero. Xero does not return the conversion date, so history converted from an earlier system, or dated before the organisation was created, is not listed. If the company ever changed its fiscal year-end, earlier years are reported on the current year-end, not the one in force at the time. Every record has `type: year`; `id` is the year's start date (`YYYY-MM-DD`) and `name` and `fiscal_year` are the year in which it ends. `status` comes from the lock dates: `closed` when the year ends on or before the end-of-year lock date (it stops every user, advisers included), `locked` when it ends on or before the period lock date (it stops every user except advisers), otherwise `open`; a lock date inside a year leaves it `open`. `locked_through` is the later of the two lock dates capped at the year's end, when it is on or after the year's start, otherwise null.
+        - connector: quickbooks
+          description: |
+            QuickBooks has no fiscal-year list. Years are generated from the company's fiscal-year start month: the current fiscal year and the 9 before it, listed newest first, never a year that ends before the company start date. If the company ever changed its fiscal year-end, earlier years are reported on the current year-end, not the one in force at the time. Every record has `type: year`; `id` is the year's start date (`YYYY-MM-DD`) and `name` and `fiscal_year` are the year in which it ends. `status` is `locked` when the year ends on or before the books closing date, otherwise `open`: QuickBooks only asks for a warning confirmation or the closing-date password, so users who have the password can still post and `closed` is never returned. Preferences does not say which of the two settings is on, so a closing date set to warning-only is also reported `locked`. A closing date inside a year leaves it `open`. `locked_through` is the closing date capped at the year's end, when it is on or after the year's start, otherwise null. Each request reads CompanyInfo and Preferences and fails if either cannot be read.
+        - connector: odoo
+          description: |
+            Odoo has no fiscal-year list. Years are generated from the company's fiscal year-end setting: the current fiscal year and the 9 before it, never one ending before the company's accounting opening date (or creation date), listed newest first. If the company ever changed its fiscal year-end, earlier years are reported on the current year-end, not the one in force at the time. Every record has `type: year`; `id` is the year's start date (`YYYY-MM- DD`) and `name` and `fiscal_year` are the year in which it ends. `status` is `closed` when the year ends on or before the fiscal-year lock date or the hard lock date (Odoo 18+), which stop every user; `locked` when it ends on or before the period lock date (Odoo 17 and earlier, stops everyone except Advisers) or a sales, purchase or tax lock date, which block only some users or transaction types; otherwise `open`. A lock date inside a year leaves it `open`. `locked_through` is the latest of those lock dates capped at the year's end, when it is on or after the year's start, otherwise null. Odoo 18 per-user lock exceptions and parent-company locks are not considered, and a lock date field the Odoo version does not have is ignored. Send `x-apideck-company-id` (or set a default company) for a multi-company database, otherwise the request returns 422. Odoo Enterprise fiscal-year records are not used. An invalid API key returns 401 and a user without access to the company returns 403.
+        - connector: freeagent
+          description: |
+            Years are FreeAgent's own accounting years for the company, listed newest first, with the year's start date as `id`; every record has `type: year`. `status` comes from the account locks (the year-end or filed-return locks and the user lock): `closed` when the year ends on or before the latest lock date, otherwise `open`; a lock date inside a year leaves it `open`. FreeAgent locks stop every user, accountants included, so `locked` is never returned. `locked_through` is the latest lock date capped at the year's end, when it is on or after the year's start, otherwise null. Account locks need FreeAgent's Full Access level: below it, `status` and `locked_through` are null.
+        - connector: snelstart
+          description: |
+            SnelStart has no fiscal-year list. Years are generated from the administration's fiscal-year start month: the current fiscal year and the 9 before it, listed newest first. SnelStart exposes no creation date, so years before the administration existed can be listed. If the company ever changed its fiscal year-end, earlier years are reported on the current year-end, not the one in force at the time. Every record has `type: year`; `id` is the year's start date (`YYYY- MM-DD`) and `name` and `fiscal_year` are the year in which it ends. SnelStart does not expose whether a year is closed, so `status` and `locked_through` are null.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetFiscalPeriodsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
+  /accounting/fiscal-periods/{id}:
+    get:
+      tags:
+        - Fiscal Periods
+      operationId: fiscalPeriodsOne
+      summary: Get Fiscal Period
+      description: Get Fiscal Period
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/raw'
+        - $ref: '#/components/parameters/fields'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: netsuite
+          description: |
+            An id with no accounting period answers 404.
+        - connector: pennylane
+          description: |
+            Pennylane has no endpoint for a single fiscal year, so this lists the company's fiscal years and returns the matching one.
+        - connector: visma-netvisor
+          description: |
+            Netvisor has no endpoint for a single accounting period, so this lists the periods and returns the matching one.
+        - connector: procountor-fi
+          description: |
+            Procountor has no endpoint for a single period, so this lists the fiscal years and returns the matching period or year.
+        - connector: twinfield
+          description: |
+            For the first period of a year, `start_date` needs the previous year's periods, which costs one extra request; it is null if that year cannot be read. A malformed id, or a year the office does not have, answers 404 before any period is requested; a period number the year does not have answers 404 as well.
+        - connector: xero
+          description: |
+            An id outside the generated 10-year window answers 404.
+        - connector: quickbooks
+          description: |
+            An id outside the generated 10-year window answers 404.
+        - connector: odoo
+          description: |
+            An id outside the generated 10-year window answers 404.
+        - connector: snelstart
+          description: |
+            An id outside the generated 10-year window answers 404.
+        - connector: freeagent
+          description: |
+            FreeAgent has no endpoint for a single accounting year, so this reads the company's years and returns the matching one.
+      responses:
+        '200':
+          $ref: '#/components/responses/GetFiscalPeriodResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source:
+            id: id_example
+  /accounting/trial-balance:
+    get:
+      tags:
+        - Trial Balance
+      operationId: trialBalanceOne
+      summary: Get Trial Balance
+      description: Get the trial balance as of a date. Read-only.
+      parameters:
+        - $ref: '#/components/parameters/consumerId'
+        - $ref: '#/components/parameters/applicationId'
+        - $ref: '#/components/parameters/serviceId'
+        - $ref: '#/components/parameters/companyId'
+        - $ref: '#/components/parameters/passThrough'
+        - $ref: '#/components/parameters/trialBalanceFilter'
+        - $ref: '#/components/parameters/raw'
+      security:
+        - apiKey: []
+      x-apideck-gotchas:
+        - connector: xero
+          description: 'Built from Xero''s `GET /Reports/TrialBalance`, using its YTD Debit and YTD Credit columns: balance sheet accounts are cumulative to `end_date`, income and expense accounts run from the start of the financial year that contains `end_date`. Xero''s separate Debit and Credit columns (that month''s movement only) are not used. `filter[end_date]` maps to Xero''s `date` (today in UTC when left out, since Xero''s own default is not today) and `filter[accounting_method]=cash` to `paymentsOnly=true`. Accounts whose YTD debit and credit net to zero are left out. `account_id` is Xero''s AccountID, the id `GET /accounting/ledger-accounts/{id}` takes; a balance row without an AccountID has `line_type: unmapped` and a null `account_id`. `code` and the full account `name` come from Xero''s accounts list (one extra request), because the report''s "Name (Code)" label cannot tell a code from a name that ends in parentheses; `code` is absent for accounts that have none. `currency` and `start_date` come from the organisation''s base currency and financial year end (one extra request), and are null if that lookup fails. Both extra requests are made for the organisation named by `x-apideck-company-id`, like the report itself. A report whose debits and credits differ by half a cent or more returns a `502`.'
+        - connector: quickbooks
+          description: Built from QuickBooks' `TrialBalance` report. QuickBooks reports income and expense accounts for the report period only, so Apideck sets the period start to the first day of the fiscal year that contains `end_date` (from the company's fiscal year start month, one extra CompanyInfo call); balance sheet accounts are cumulative to `end_date`. `end_date` defaults to today (UTC). Accounts with a zero balance are left out, so a company with no data returns an empty list. `account_id` is the QuickBooks account id, the id ledger accounts use; a balance the report shows without an account id is returned with `line_type` `unmapped` and no `account_id`. Account numbers are not in the report, so `code` is not returned. Amounts are in the company's home currency. A report whose debits and credits do not balance returns a `502`.
+        - connector: pennylane
+          description: "Pennylane's trial balance is a movement report, not an as-of balance: Apideck requests the postings from the first day of the fiscal year that contains `end_date` (from Pennylane's fiscal years) up to `end_date`, which is today in UTC when left out, or the last day of the last fiscal year when today is after it. Income and expense accounts are therefore year-to-date. Balance sheet accounts are correct as of `end_date` only when earlier years' balances were carried forward into that fiscal year, as Pennylane does when a year is closed, so the request returns a `422` while an earlier fiscal year is still open or reopened. A company without fiscal years returns a `422`, and an explicit `filter[end_date]` outside every fiscal year returns a `400`. Customer and supplier sub-accounts are rolled up into their general account, and accounts with a zero balance are left out. `code` is the 9-digit account number and every line has `line_type` `account`; `account_id` is null because Pennylane's report carries no ledger account id, so match lines to ledger accounts on `code`. `currency` is null. Pennylane reports on the accrual basis: `filter[accounting_method]=accrual` is accepted and `cash` returns a `400`. All report pages are fetched before responding, so a large chart of accounts costs several Pennylane requests. A report whose debits and credits differ by half a cent or more returns a `502`."
+        - connector: exact-online
+          description: 'Built from `financial/ReportingBalance`, which is kept per fiscal period. `filter[end_date]` is resolved to the fiscal period that contains it, and the report is as of the end of that period (`end_date` in the response); `start_date` is the first day of that fiscal year. Income and expense accounts cover that fiscal year up to and including that period. For the current and previous fiscal year, balance sheet accounts are Exact''s opening balance for that year (after the result appropriation, the same source as the balance sheet) plus that year''s movements up to and including the period; for older years they are summed over every earlier fiscal year, which reads the ledger''s full history and can take many requests or fail with a `502` on a long-lived administration. Accounts with a zero balance are left out. A result of earlier years that has not been appropriated to equity is returned as one extra line, "Result of previous fiscal years (not yet appropriated)", with `line_type` `unappropriated_result` and null `account_id` and `code`. On the opening-balance path that line is the opening balance''s own net, negated, never derived from the requested year''s movements, so a report whose debits and credits do not balance returns a `502` instead of being absorbed into it; an empty opening balance is not trusted and the earlier years are read instead. `account_id` is the G/L account''s id, the same id the ledger accounts take; a balance without an account would be `unmapped`. Exact is accrual-only: `filter[accounting_method]=cash` returns a `400`. Without `filter[end_date]` the current period is used, today in UTC (the latest period if today is past the last one); a date outside every fiscal period returns a `400`, and a division without any financial period returns a `422`. `currency` is null.'
+        - connector: exact-online-nl
+          description: 'Built from `financial/ReportingBalance`, which is kept per fiscal period. `filter[end_date]` is resolved to the fiscal period that contains it, and the report is as of the end of that period (`end_date` in the response); `start_date` is the first day of that fiscal year. Income and expense accounts cover that fiscal year up to and including that period. For the current and previous fiscal year, balance sheet accounts are Exact''s opening balance for that year (after the result appropriation, the same source as the balance sheet) plus that year''s movements up to and including the period; for older years they are summed over every earlier fiscal year, which reads the ledger''s full history and can take many requests or fail with a `502` on a long-lived administration. Accounts with a zero balance are left out. A result of earlier years that has not been appropriated to equity is returned as one extra line, "Result of previous fiscal years (not yet appropriated)", with `line_type` `unappropriated_result` and null `account_id` and `code`. On the opening-balance path that line is the opening balance''s own net, negated, never derived from the requested year''s movements, so a report whose debits and credits do not balance returns a `502` instead of being absorbed into it; an empty opening balance is not trusted and the earlier years are read instead. `account_id` is the G/L account''s id, the same id the ledger accounts take; a balance without an account would be `unmapped`. Exact is accrual-only: `filter[accounting_method]=cash` returns a `400`. Without `filter[end_date]` the current period is used, today in UTC (the latest period if today is past the last one); a date outside every fiscal period returns a `400`, and a division without any financial period returns a `422`. `currency` is null.'
+        - connector: exact-online-uk
+          description: 'Built from `financial/ReportingBalance`, which is kept per fiscal period. `filter[end_date]` is resolved to the fiscal period that contains it, and the report is as of the end of that period (`end_date` in the response); `start_date` is the first day of that fiscal year. Income and expense accounts cover that fiscal year up to and including that period. For the current and previous fiscal year, balance sheet accounts are Exact''s opening balance for that year (after the result appropriation, the same source as the balance sheet) plus that year''s movements up to and including the period; for older years they are summed over every earlier fiscal year, which reads the ledger''s full history and can take many requests or fail with a `502` on a long-lived administration. Accounts with a zero balance are left out. A result of earlier years that has not been appropriated to equity is returned as one extra line, "Result of previous fiscal years (not yet appropriated)", with `line_type` `unappropriated_result` and null `account_id` and `code`. On the opening-balance path that line is the opening balance''s own net, negated, never derived from the requested year''s movements, so a report whose debits and credits do not balance returns a `502` instead of being absorbed into it; an empty opening balance is not trusted and the earlier years are read instead. `account_id` is the G/L account''s id, the same id the ledger accounts take; a balance without an account would be `unmapped`. Exact is accrual-only: `filter[accounting_method]=cash` returns a `400`. Without `filter[end_date]` the current period is used, today in UTC (the latest period if today is past the last one); a date outside every fiscal period returns a `400`, and a division without any financial period returns a `422`. `currency` is null.'
+        - connector: snelstart
+          description: "Built from SnelStart's `rapportages/kolommenbalans` report, which needs the `rapportage` scope on the SnelStart connection key: a key without it gets a `401`/`403`. The report runs from the first day of the fiscal year that contains `end_date` (from the company's fiscal year start month) to `end_date`, which defaults to today. Income and expense accounts are year-to-date; whether the balance sheet columns include the opening balance carried into the fiscal year has not been checked against a live administration, and the report is returned as SnelStart answers for that range. Each account's balance sheet and profit and loss columns are netted into one debit or credit, and accounts with a zero balance are left out. `filter[accounting_method]=cash` returns a `400`: SnelStart reports on booking dates. `currency` is null. A report whose debits and credits do not balance returns a `502`. An administration without a fiscal year start month returns a `422`. `account_id` is the ledger account's id and every line has `line_type` `account`. The response shape is taken from Invantive's data model of the SnelStart API, not from SnelStart's own OpenAPI file, and has not been read live."
+        - connector: odoo
+          description: 'Built from Odoo''s posted journal items (`account.move.line`, posted entries only), summed per account for the company selected by `x-apideck-company-id` or the connection''s company; a database with several companies and no selection returns a `422`. Balance sheet accounts are cumulative to `end_date`; income and expense accounts (account types income, income_other, expense, expense_depreciation, expense_direct_cost; Odoo 16 and later) run from the start of the fiscal year that contains `end_date`, from the company''s fiscal year-end setting. Odoo does not close income and expense into equity entry by entry, so the result of earlier fiscal years is returned as one line named "Result of previous fiscal years (not yet appropriated)" with `line_type: unappropriated_result` and null `account_id` and `code`; it is summed from its own read, not computed as the difference, so a report whose debits and credits differ by half a cent or more returns a `502`. Off-balance accounts are excluded and accounts with a zero balance are left out. `account_id` is the account''s Odoo id, the id `GET /accounting/ledger-accounts/{id}` takes; a balance whose account cannot be read has `line_type: unmapped` and null `account_id`, `code` and `name`. `code` and `name` come from the company''s chart of accounts, archived accounts included. The fiscal year start comes from the company''s fiscal year-end setting: Enterprise fiscal-year records with other dates are not read, and postings of branch companies (Odoo 17+) are not included, only those of the selected company. An invalid API key returns `401` and a user without access to the company `403`. `currency` is the company currency. `filter[accounting_method]=cash` returns a `400`: Odoo''s cash basis is a tax-reporting setting, not a ledger mode. Each request makes four Odoo calls.'
+        - connector: microsoft-dynamics-365-business-central
+          description: 'Built from the API v2.0 `trialBalances` entity for the period from the fiscal year start to `end_date`. Balance sheet accounts use Business Central''s balance at `end_date`; income and expense accounts use that fiscal year''s debits minus credits up to `end_date`. Income statement accounts are identified by their G/L account category (Income, Cost of Goods Sold, Expense); an account without a category is treated as a balance sheet account. The fiscal year start comes from the company''s accounting periods: a date before the first fiscal year or after the last fiscal year set up in Business Central returns a `400` (without `filter[end_date]`, a today past the last fiscal year reports as of that year''s end), and a company without accounting periods, or without `filter[end_date]` and a fiscal year started yet, returns a `422`. Only posting accounts are listed; heading and total rows are left out. A prior year''s income statement result that was never closed to equity is returned as one line named "Result of previous fiscal years (not yet appropriated)" with `line_type` `unappropriated_result` and null `account_id` and `code`; it is derived from the income statement accounts'' own cumulative and year-to-date balances. `account_id` is the G/L account''s id, the same id the ledger accounts take. `filter[accounting_method]=cash` returns a `400`. `currency` is null. The company is the one selected by `x-apideck-company-id`, else the connection''s company. A report whose debits and credits do not balance returns a `502`.'
+        - connector: sage-intacct
+          description: "Built from Sage Intacct's `get_trialbalance` on the reporting book that matches `filter[accounting_method]`: the accrual book by default and for `accrual`, the cash book for `cash`. If Intacct rejects the cash book, for example because the company has no cash book, the request returns a `502` with Intacct's message. The report is requested from the first day of the fiscal year that contains `end_date` to `end_date`, which defaults to today. Balance sheet accounts are cumulative to `end_date`; income and expense accounts are year-to-date. The fiscal year start is the selected entity's own first fiscal month, else the company's; if neither can be read the request returns a `502` rather than assuming January. Intacct closes earlier years into retained earnings itself, so debits equal credits without an extra line. Each account's balance is netted into one debit or credit, and accounts with a zero balance are left out. Statistical accounts are excluded; any other balance without a matching ledger account is returned with `line_type` `unmapped`, `code` set to its account number and null `account_id` and `name`. For every other line `line_type` is `account`, `account_id` is the ledger account's record number (the id `GET /accounting/ledger-accounts/{id}` takes), `code` its account number and `name` its title (extra requests read the chart of accounts and the fiscal year setting). The report covers the entity selected by `x-apideck-company-id`, else the connection's entity. `x-apideck-company-id: top-level` on a connection whose Default Entity is a specific entity returns a `422`, because the connection's session is fixed to that entity; use a top-level connection instead. A report that spans several currencies returns a `422`, so select an entity. A date before the ledger starts returns an empty report. A failure reading Intacct returns a `502`, or `429` when Intacct throttles. A report whose debits and credits differ by half a cent or more returns a `502`."
+        - connector: netsuite
+          description: 'Built from NetSuite SuiteQL over posted ledger lines (`transactionaccountingline`, primary accounting book). NetSuite reports by posting period, so `filter[end_date]` is resolved to the posting month that contains it and the report is as of that period''s end, returned as `end_date`, which can be later than the date requested. Balance sheet accounts are cumulative to that period; income and expense accounts run from the start of the fiscal year that contains it (`start_date`). NetSuite computes Retained Earnings virtually, so earlier years'' income and expense is returned as one line named "Result of previous fiscal years (not yet appropriated)" with `line_type` `unappropriated_result` and null `account_id` and `code`; it is taken from the ledger''s earlier-year income and expense, not from the other lines, so a ledger whose debits and credits differ returns a `502`. Every other line has `line_type` `account` and the account''s internal id as `account_id`, the id ledger accounts use. Statistical and non-posting accounts are left out. The report covers the subsidiary selected by `x-apideck-company-id`, else the connection''s default subsidiary, by transaction subsidiary; a subsidiary that does not exist, or that the integration role cannot see, returns a `404`. With none selected it sums all subsidiaries without intercompany elimination, and returns a `422` if their base currencies differ, so select one subsidiary. Amounts are in the subsidiary''s base currency, returned as `currency`. A date outside every posting period returns a `400`. `filter[accounting_method]=cash` returns a `400`: cash basis is a NetSuite report option, not ledger data. Amounts are attributed to a subsidiary by the transaction''s header subsidiary, so on intercompany journals a subsidiary''s report can differ from NetSuite''s own. Without OneWorld the report covers the whole account; if NetSuite''s answer to the OneWorld check is anything other than the missing subsidiary table, the request returns a `502` instead of assuming a single entity. If the account has several fiscal calendars whose periods differ for the date, the request returns a `422`. Without `filter[end_date]`, today''s date in UTC is used. Accounts with a zero balance are left out; `code` is null for accounts without an account number. A report whose debits and credits differ by half a cent or more returns a `502`.'
+        - connector: intuit-enterprise-suite
+          description: Built from the `TrialBalance` report. It reports income and expense accounts for the report period only, so Apideck sets the period start to the first day of the fiscal year that contains `end_date` (from the company's fiscal year start month, one extra CompanyInfo call); balance sheet accounts are cumulative to `end_date`. `end_date` defaults to today (UTC). Accounts with a zero balance are left out, so a company with no data returns an empty list. `account_id` is the QuickBooks account id, the id ledger accounts use; a balance the report shows without an account id is returned with `line_type` `unmapped` and no `account_id`. Account numbers are not in the report, so `code` is not returned. Amounts are in the company's home currency. A report whose debits and credits do not balance returns a `502`. The company is the connection's.
+        - connector: freeagent
+          description: 'Built from FreeAgent''s trial balance summary, requested up to `filter[end_date]` (today in UTC when left out, always sent to FreeAgent); FreeAgent reports from the start of the accounting year that contains that date, so income and expense accounts are year-to-date. Each line''s signed total is netted into one debit or credit, reading a positive total as a debit; this assumption was checked against recorded examples only, not a live company, and a report with every sign flipped would still balance. Lines with a zero balance are left out. `account_id` is the FreeAgent category id, the id ledger accounts use. Bank account (750) and user (900–910) lines share their category''s id, so several lines can have the same `account_id`; tell them apart by `name` and `code`, the code shown in FreeAgent''s reports. `end_date` is the requested date, because FreeAgent''s response carries no date; `start_date` and `currency` are null. `filter[accounting_method]=cash` returns a `400`: FreeAgent''s cash basis applies to VAT only. A report whose debits and credits do not balance returns a `502`. The connection needs at least the "Tax, Accounting & Users" access level; a lower level, or API access turned off for the company, returns FreeAgent''s `403`.'
+        - connector: dualentry
+          description: "Built from DualEntry's account balances, which DualEntry documents as equivalent to a trial balance: balance sheet accounts are cumulative to `filter[end_date]` (today by default) and income and expense accounts are year-to-date in the fiscal year that contains it, with earlier years in Retained Earnings. The report covers one company: send `x-apideck-company-id` or set a default company on the connection, otherwise the request returns a `422`. Each account's signed balance, in the company's base currency, is netted into one debit or credit; accounts with a zero balance are left out. `account_id` and `code` are both the DualEntry account number, matching ledger account ids, and the line has `line_type` `account`; a balance row without an account number has `line_type` `unmapped` and a null `account_id`. `start_date` is null. `filter[accounting_method]=cash` returns a `400`. All result pages are read before responding. A report whose debits and credits differ by half a cent or more returns a `502`."
+        - connector: zoho-books
+          description: "Zoho Books reads the trial balance from an undocumented report endpoint (it is not in Zoho's published API reference; the balance sheet and profit and loss use the same kind of endpoint), which Zoho can change without notice. The report is as of `filter[end_date]` (today by default): balance sheet accounts are cumulative and income and expense accounts are year-to-date for the fiscal year that contains it, with earlier years' earnings in the Retained Earnings line. Zoho's trial balance leaves that account's id empty, so Apideck reads it from Zoho's balance sheet report as of the same date (one extra request); if that request fails, or the balance sheet does not identify the account, `account_id` on that line is null and the response carries a warning. Every line has `line_type` `account`, and accounts with a zero balance are left out. `filter[accounting_method]=cash` returns Zoho's cash-basis report; accrual is the default. The lines must add up to Zoho's own report total, and a request whose explicit `filter[end_date]` Zoho answers for a different date fails, both with a `502`; so does a report whose debits and credits differ by half a cent or more. `start_date` is null, and `code` is null for accounts without one."
+        - connector: minox
+          description: 'Built from Minox''s period trial balance. Balances are kept per accounting period, so `filter[end_date]` returns the position at the end of the period that date falls in; with monthly periods (most administrations) the report''s `end_date` is that month''s last day. Minox does not expose the dates of other period layouts (quarters, 13 periods), so there the report covers the whole fiscal year: `filter[end_date]` must be the fiscal year end or left out, and any other date returns a `400`. Without it, the report is as of the end of the current period (today in UTC) or of the latest fiscal year. An explicit date after the last fiscal year or before the first returns a `400`; an administration without any fiscal year returns a `422`. `start_date` is the first day of the fiscal year; fiscal years are labelled by Minox''s own number. Balance sheet accounts include the opening balance Minox carries (which already holds the result of closed years); income and expense accounts are year-to-date, and `start_date` is the fiscal year''s first day. Accounts are classified by their RGS code, as in the balance sheet. Income or expense amounts found in the opening balance (a prior year not closed into equity) are returned as one line "Result of previous fiscal years (not yet appropriated)" with `line_type` `unappropriated_result` and null `account_id` and `code`. `account_id` is the ledger account number, the id the ledger accounts take. Accounts with a zero balance are left out. A report whose debits and credits do not balance returns a `502`. Minox keeps a correction period after the last regular period; the report covers the regular periods only, so postings in the correction period are not included (needs live confirmation that the period trial balance returns it). `filter[accounting_method]=cash` returns a `400`. `currency` is the administration''s currency.'
+        - connector: sage-business-cloud-accounting
+          description: 'Built from Sage''s trial balance and the chart of accounts: balance sheet accounts (asset, liability, capital) are cumulative to `filter[end_date]` (today by default), and income and expense accounts are year-to-date from the start of the financial year that contains it, from the business''s financial year end (assumed to fall on the same day every year). Sage does not move earlier years'' income and expense into equity, so that result is returned as one line "Result of previous fiscal years (not yet appropriated)" with `line_type` `unappropriated_result` and null `account_id` and `code`. It is the cumulative income and expense balance minus the year-to-date movement, read from Sage''s report rather than from the other lines, so a ledger whose debits and credits differ by half a cent or more returns a `502`. Every other line has `line_type` `account` and Sage''s ledger account id as `account_id`. The report follows the business''s own accounting scheme, which is used when `filter[accounting_method]` is left out; requesting the other method returns a `400`, as does an invalid `filter[end_date]`. Pass `x-apideck-company-id` to select the business, otherwise the connection''s business is used. Each request makes at least four Sage calls: the business''s financial settings, the cumulative trial balance, the year-to-date trial balance, and one call per 200 ledger accounts. A call that Sage answers with `429`, `401` or `403` returns that status; any other failure returns a `502`, never a partial report. Accounts with a zero balance are left out.'
+        - connector: campfire
+          description: "Built from Campfire's trial balance with income statement accounts on a fiscal year-to-date basis: balance sheet accounts are cumulative to `filter[end_date]` (today by default) and income and expense accounts run from the start of the entity's fiscal year (`start_date`); retained earnings is its own line. Each account's ending balance is netted into one debit or credit, and accounts with a zero balance are left out. Every line has `line_type` `account` and Campfire's account id as `account_id`. The entity is the one in `x-apideck-company-id`, else the connection's entity; child entities are not rolled up. Unlike Campfire's balance sheet and profit and loss in this API, which are not filtered by entity, the trial balance is scoped to that entity, so the three reports can differ on a multi-entity account. Without an entity the report covers the entities the API key can see, and returns a `422` if they use more than one currency, inactive entities included. `currency` is the entity's base currency. `filter[accounting_method]=cash` returns a `400`. A report whose debits and credits differ by half a cent or more returns a `502`."
+        - connector: moneybird
+          description: 'Built from Moneybird''s general ledger report. Moneybird reports whole months, so `filter[end_date]` (today by default) is resolved to the month that contains it and the report is as of the end of that month, returned as `end_date`. Moneybird''s fiscal years are always calendar years, so the report covers 1 January of that year up to that month (`start_date`): income and expense accounts are year-to-date and balance sheet accounts carry earlier years'' balances. Each account''s final balance is netted into one debit or credit, and accounts with a zero balance are left out. Until a year is closed, Moneybird keeps its result on the balance sheet as "Resultaat openstaand boekjaar", which is not a ledger account; the report then has one extra line, "Result of previous fiscal years (not yet appropriated)", with `line_type` `unappropriated_result` and null `account_id` and `code`. That line is taken from Moneybird''s balance sheet report, not derived from the other lines, so a general ledger report that does not agree with the balance sheet (debits and credits differ) returns a `502`. `account_id` is the ledger account''s id, the id `GET /accounting/ledger-accounts/{id}` takes, and every other line has `line_type` `account`. `code` is the ledger account''s number, read with one extra request for the whole chart of accounts (Moneybird does not paginate it). A report as of the last month of a closed year includes Moneybird''s closing entry, so income and expense accounts read near zero and the year''s result sits in equity; the report has no filter to leave that entry out. `currency` is null. `filter[accounting_method]=cash` returns a `400`. Only the connection''s administration is reported.'
+        - connector: datev-unternehmen-online
+          description: Built from DATEV's sums and balances list (Summen- und Saldenliste) of the fiscal year that contains `filter[end_date]` (today by default; the close of the newest fiscal year when today is past it). DATEV only has monthly figures, so the report is as of the end of the month containing `end_date`, capped at the fiscal year end, and returned as `end_date`; `start_date` is the fiscal year start. Each balance is the opening balance plus the monthly balances up to that month, so income and expense accounts are year-to-date and balance sheet accounts include the carried-forward opening balance only once DATEV has run the Saldenvortrag for the fiscal year; before that they hold the year's movements only and the report still balances, which cannot be detected. Year-end closing postings are included only for a report as of the last month of the fiscal year. Personal accounts (Personenkonten) are left out, because their control accounts already contain them; they are recognised by the client's account length. Statistical accounts in class 9 (such as sales days, headcount, counter accounts, provisions and contingent liabilities, partner capital-development statistics, 9101-9140, 9190-9299, 9500-9799, 9806-9809, 9890-9919 and 9960-9999 in SKR03 and SKR04) are left out; the carry-forward accounts 9000-9099 and the partner capital, private and clearing accounts (9141-9189, 9300-9499, 9800-9805, 9810-9889, 9920-9959) are kept. Accounts with a zero balance are left out. A response that does not balance returns a `502`. `filter[accounting_method]=cash` returns a `400`. A date outside every fiscal year returns a `400`; a client without fiscal years returns a `422`. Every line has `line_type` `account` and the account number as `account_id`.
+        - connector: freshbooks
+          description: "Built from FreshBooks' accounting trial balance report for the business in the connection, as of `filter[end_date]` (today by default). Balance sheet accounts are cumulative to that date and income and expense accounts are fiscal year-to-date, with earlier years' income already closed into retained earnings by FreshBooks; `start_date` is the fiscal year start FreshBooks reports, and a window that is not a valid fiscal year to date returns a `502`. Lines are sub-accounts, so parents are not counted twice; accounts with a zero balance are left out. The report is accrual only: `filter[accounting_method]=cash` returns a `400`. FreshBooks' accounting reports need a Plus, Premium or Select plan. A report whose debits and credits do not balance returns a `502`. Not verified against a live FreshBooks business: the route, the mandatory `use_ledger_entries=true` and the response shape follow FreshBooks' API reference, but no real response has been read, so the connector is unverified. `start_date` is not sent (the business's fiscal year start is not available); the window FreshBooks answers with is validated and returned. `account_id` is the row's `sub_accountid`, whose match with the ledger account `id` is unverified. Every line has `line_type` `account`."
+        - connector: twinfield
+          description: 'Built from Twinfield''s "Annual report (totals)" browse (code 040_1), which returns each period''s activity per general ledger account, signed debit positive (confirmed live). `filter[end_date]` (today by default) is resolved to the period that contains it in the office''s own fiscal calendar (PeriodService), and the report is as of the end of that period (`end_date`); `start_date` is the first day of that fiscal year. Year-end handling follows Wolters Kluwer''s Twinfield documentation (the year-end closing checklist and the support articles "Hoe zet ik een beginbalans in Twinfield" and "Waarom staat er een dubbel saldo op mijn balans in periode 0?"): closing a year, concept or definitive, posts the next year''s opening balance into period 0, built from the totals of the balance sheet accounts; a concept closing can be re-run and then overwrites it. So balance sheet accounts are summed from period 0 of the latest year that has period-0 lines (concept and final lines alike), or over the whole history when no year has any; income and expense accounts cover the fiscal year from period 1. Period 56 (the closing entries in the old year: result reversal and transfer to equity, write-offs) is always left out, and period 55 (year-end adjustments) is included only when `end_date` reaches the end of the year''s last regular period. Results of earlier years that are not yet closed are returned as one extra line, "Result of previous fiscal years (not yet appropriated)", with `line_type` `unappropriated_result` and null `account_id` and `code`; every other line has `line_type` `account` and the account code as `account_id`, which is the id `GET /accounting/ledger-accounts/{id}` takes. A balance entered manually in period 0 and then also generated by a closing appears twice in period 0 (a known Twinfield behaviour); the report passes through what Twinfield holds. Opening balance detection and the period 0/55/56 handling are mock-tested only: the live test office has no closed year, so it is not live-verified that the browse returns periods 0, 55 and 56 as ordinary period numbers. Each request makes one GetYears call, up to four GetPeriods calls, up to three opening-balance probes (the three most recent years) and the browse itself, so at most nine Twinfield calls (limit 25); the probes cannot be merged into one call without reading three years of rows, so the cost is accepted. If Twinfield rejects the `YYYY/00` lower bound (not live-verified), the request returns a `502`; the browse is never started at period 1 instead, because that would drop the earliest year''s opening balance without any signal. Provisional and final transactions are both included. Accounts with a zero balance are left out, the office is the connection''s office or `x-apideck-company-id`, `currency` is null, `filter[accounting_method]=cash` returns a `400`, a date outside every fiscal period returns a `400`, and an office without fiscal years returns a `422`. A report whose debits and credits do not balance returns a `502`.'
+        - connector: visma-netvisor
+          description: 'Built from Netvisor''s account balances on `filter[end_date]` (today by default), on the day before the fiscal year starts and on its first day; the fiscal year comes from Netvisor''s accounting periods, so non-calendar fiscal years are supported. Netvisor documents the balance as debit minus credit. Accounts are classified as balance sheet or income statement by Netvisor''s `IsCumulative` flag (the Finnish standard chart, classes 1 and 2 as balance sheet, only when an account is missing from the account list). Balance sheet accounts are cumulative to the date; income and expense accounts are reduced to the fiscal year by subtracting their balance on the day before it starts, and the subtracted amount is returned as one extra line, "Result of previous fiscal years (not yet appropriated)" (`line_type` `unappropriated_result`). This assumes Netvisor reports income statement balances cumulatively from the start of the books, which Netvisor does not document and no live response has confirmed yet. The balance on the first day of the fiscal year is compared with the one before it: when income statement balances do not carry over (they reset each fiscal year), the request returns a `502` instead of a report that counts the previous result twice. That check is a heuristic and has not been run against a company with a closed year. Because the extra line is the sum of the subtracted amounts, the debit = credit check only proves that Netvisor''s own balances balance (a `502` otherwise). `account_id` is the account''s `NetvisorKey`, the id of `GET /ledger-accounts/{id}`. Account group rows are left out so subtotals are not counted twice, as are accounts with a zero balance. Accrual only: `filter[accounting_method]=cash` returns a `400`. Currency is not returned. A `FAILED` answer from Netvisor while reading the periods or accounts is a `401` for failed authentication, a `403` for no access to the company, otherwise a `502`.'
+        - connector: spiris
+          description: 'Built from Visma''s account balances at `filter[end_date]` (today by default), following every page, with the fiscal year from the fiscal years endpoint. Visma documents `Balance` only as "the total account balance at the given date", without a sign convention or whether income statement accounts reset at the start of the fiscal year, and no live response has been checked yet. The connector reads `Balance` as debit minus credit, takes income and expense accounts as the fiscal year''s figure and treats earlier results as already in equity through the opening balances. Two checks turn a wrong reading into a `502` instead of a plausible report: the lines must balance (half a cent, on the unrounded balances), and, for Swedish companies only (company country `SE`, BAS chart), asset accounts (class 1) must not net to a credit while class 2 nets to a debit, which is what a credit-positive feed would produce; other countries'' charts use the class digits differently, so that check is skipped for them and when the country cannot be read. `account_id` is the account number, the id of `GET /ledger-accounts/{id}`; a balance row without an account number is returned with `line_type` `unmapped` and null `account_id`. Accounts with a zero balance are left out. The basis follows the fiscal year''s bookkeeping method (invoicing is accrual, or cash); Visma does not convert between them, so `filter[accounting_method]` must match that year''s method or the request returns a `400`, and without the filter the year''s own method is used. A year set to no bookkeeping has no ledger and returns a `400`. Currency is not returned.'
+        - connector: visma-eaccounting
+          description: 'Built from Visma''s account balances at `filter[end_date]` (today by default), following every page, with the fiscal year from the fiscal years endpoint. Visma documents `Balance` only as "the total account balance at the given date", without a sign convention or whether income statement accounts reset at the start of the fiscal year, and no live response has been checked yet. The connector reads `Balance` as debit minus credit, takes income and expense accounts as the fiscal year''s figure and treats earlier results as already in equity through the opening balances. Two checks turn a wrong reading into a `502` instead of a plausible report: the lines must balance (half a cent, on the unrounded balances), and, for Swedish companies only (company country `SE`, BAS chart), asset accounts (class 1) must not net to a credit while class 2 nets to a debit, which is what a credit-positive feed would produce; other countries'' charts use the class digits differently, so that check is skipped for them and when the country cannot be read. `account_id` is the account number, the id of `GET /ledger-accounts/{id}`; a balance row without an account number is returned with `line_type` `unmapped` and null `account_id`. Accounts with a zero balance are left out. The basis follows the fiscal year''s bookkeeping method (invoicing is accrual, or cash); Visma does not convert between them, so `filter[accounting_method]` must match that year''s method or the request returns a `400`, and without the filter the year''s own method is used. A year set to no bookkeeping has no ledger and returns a `400`. Currency is not returned.'
+        - connector: rillet
+          description: "Built from Rillet's trial balance report, using each account's ending balance, which is debit positive (Rillet returns credit totals as negative amounts); a line whose ending balance is not its beginning balance plus its debits and credits returns a `502`, as does a report whose ending balances do not balance (debits and credits differ by half a cent or more, compared before amounts are rounded to cents). Rillet's report resets income and expense accounts at the report's start date and carries everything before it in Retained Earnings. Its API does not expose the fiscal year start, so the report runs from 1 January of the `filter[end_date]` year (today by default) and `start_date` is that date: income and expense accounts are calendar year-to-date, which is not the fiscal year-to-date for organizations whose fiscal year is not the calendar year, though debits still equal credits. `x-apideck-company-id` selects the subsidiary. Every line has `line_type` `account`, and `account_id` is Rillet's account id. Accrual only: `filter[accounting_method]=cash` returns a `400`. Accounts whose balance rounds to zero are left out."
+      responses:
+        '200':
+          $ref: '#/components/responses/GetTrialBalanceResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '402':
+          $ref: '#/components/responses/PaymentRequiredResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableResponse'
+        default:
+          $ref: '#/components/responses/UnexpectedErrorResponse'
+      x-apideck-api: accounting
+      x-codeSamples:
+        - lang: TypeScript
+          label: Node
+          source: {}
   /accounting/tracking-categories:
     get:
       tags:

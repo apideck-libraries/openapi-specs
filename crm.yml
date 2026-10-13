@@ -6903,7 +6903,17 @@ paths:
             Please use the **List Contacts** endpoint to retrieve this data. Use [custom mappings](https://developers.apideck.com/apis/crm/reference#tag/Contacts/operation/contactsAll) to retrieve the `type` field to distinguish between contacts and companies.
         - connector: pipedrive
           description: |
-            Pipedrive does not expose a cross-page total record count in standard list responses. `meta.total_count` will not appear. Surfacing the total requires additional request parameters or a separate API call — not currently implemented.
+            Pipedrive does not expose a cross-page total record count in list responses. `meta.total_count` will not appear.
+
+            Companies are paginated with an opaque cursor. A cursor obtained before the move to cursor pagination is rejected with `InvalidCursorError`; restart the listing from the first page instead of resuming it.
+
+            Sorting is limited to `created_at` and `updated_at`; `sort[by]=name` returns an unsupported-sort error.
+
+            `filter[name]` is served by Pipedrive's search: it is a partial, case-insensitive match and needs at least 2 characters. Filtered results contain only `id`, `name`, `owner_id` and the address as a single `addresses[0].string`; they omit `created_at`, `updated_at`, `deleted`, `websites`, `social_links`, `industry`, `annual_revenue`, `number_of_employees` and `custom_fields`. A supported `sort` (`created_at` / `updated_at`) combined with the filter is ignored; `sort[by]=name` still returns the unsupported-sort error. Pipedrive's search index can keep returning deleted companies for a while, without a `deleted` value; confirm with `GET /crm/companies/{id}` (`deleted: true`).
+
+            The built-in Pipedrive organization fields are mapped to `websites[0]`, `social_links[]` (type `linkedin`), `industry`, `annual_revenue` and `number_of_employees`. `industry` and `annual_revenue` are Pipedrive option ids, not labels. The same values are also available in `custom_fields` under the ids `website`, `linkedin`, `industry`, `annual_revenue`, `employee_count`, `label_ids` (only when labels are set) and `visible_to`, so readers of those ids keep working. Custom-field option values are returned as numeric option ids; monetary and date-range fields are split into `<key>` plus `<key>_currency` / `<key>_until` entries.
+
+            A deleted company disappears from the list but `GET /crm/companies/{id}` keeps returning it with `deleted: true`. A non-numeric id such as `/crm/companies/abc` is answered with a 403 by Pipedrive.
         - connector: zendesk-sell
           description: |
             Zendesk Sell does not expose a native cross-page total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate request to the Zendesk Sell `GET /v2/{resource}/count` endpoint — an extra API call not currently implemented.
@@ -6981,6 +6991,13 @@ paths:
 
             If `parent_id` names an account that does not exist, Zoho rejects the entire create
             and no company is created.
+        - connector: pipedrive
+          description: |
+            `owner_id` must be a numeric Pipedrive user id; `industry` and `annual_revenue` must be Pipedrive option ids and `number_of_employees` a whole number (thousands separators are accepted, decimals are rounded). Any other value is forwarded and rejected by Pipedrive with a 400.
+
+            Only `addresses[0]` is stored: `string` becomes the full address (composed from the parts when omitted), `line1` the street, `line2` the suite/apartment, plus `street_number`, `city`, `state`, `county`, `postal_code` and `country` (stored as sent, not geocoded). Further entries are ignored. `websites[0].url` and the first `social_links` entry of type `linkedin` are stored; other websites and social types are ignored, as are `phone_numbers`, `emails`, `description`, `tags`, `status` and `parent_id`.
+
+            `custom_fields[].id` must be the Pipedrive custom field key and the value must match the field type: text fields take a string, single-option fields the numeric option id (a label or a quoted id is rejected), monetary fields `{"value": 2300, "currency": "EUR"}` or the flat entries `<key>` plus `<key>_currency`, date-range fields `{"value", "until"}` or `<key>` plus `<key>_until`. A bare number for a monetary field, a `<key>_currency` entry without its base entry, or an unknown key is rejected with a 400. The ids `name`, `owner_id`, `address` (a string or a Pipedrive address object, plus the v1 `address_*` part keys), `label` (one or more label ids), `website`, `linkedin`, `industry`, `annual_revenue`, `employee_count`, `label_ids` and `visible_to` inside `custom_fields` write the corresponding built-in field; the unified field wins when both are sent, and a null or empty value for `name`, `owner_id`, `address` or `label` is ignored (clear through the unified field). Any other non-custom key inside `custom_fields` (for example `cc_email`) is rejected by Pipedrive with a 400.
         - connector: planhat
           description: |
             The status values mentioned by planhat are prospect,coming,customer,canceled,lost.
@@ -7195,6 +7212,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: pipedrive
+          description: |
+            Updates are partial: only the fields you send change. The value rules of create apply (numeric `owner_id`, option ids for `industry` and `annual_revenue`, whole `number_of_employees`, typed `custom_fields` values).
+
+            Clearing: `websites: []` or `social_links: []` clears the website or LinkedIn URL; `custom_fields: [{"id": "<key>", "value": null}]` clears a custom field and `{"id": "label_ids", "value": null}` removes all labels. `industry`, `annual_revenue`, `number_of_employees` and `owner_id` cannot be cleared with `null` (Pipedrive rejects it with a 400); Pipedrive accepts `0` for the three numeric fields, which then reads back as `"0"`. The address cannot be cleared, and `addresses[0]` replaces the whole stored address: send every part you want to keep, or the other parts are wiped. A date-range custom field sent as `{"value": ...}` without `until` clears the end date.
+
+            `visible_to` in `custom_fields` is applied only for values the Pipedrive plan allows; other values are accepted but ignored. A deleted company cannot be updated (403) or deleted again (400).
         - connector: hubspot
           description: |
             `parent_id` sets, changes or removes the company's parent. In HubSpot the parent is a
@@ -7959,10 +7983,12 @@ paths:
         - connector: salesforce
           description: Salesforce imposes a maximum offset limit of 2000. Exceeding this offset will result in an error from Salesforce. For result sets larger than 2000 items, it is necessary to set the pagination limit to 200, as this will enforce the use of batchSize for pagination. Note that setting a limit lower than 200 will not reduce the batchSize due to Salesforce's minimum batch size policy of 200, as detailed in their documentation [here](https://developer.salesforce.com/docs/atlas.en-us.250.0.api_rest/api_rest/headers_queryoptions.htm) and will have no effect.
         - connector: pipedrive
-          description: Pipedrive supports filtering by either title or company_id, but not both simultaneously.
-        - connector: pipedrive
           description: |
-            Pipedrive does not expose a cross-page total record count in standard list responses. `meta.total_count` will not appear. Surfacing the total requires additional request parameters or a separate API call — not currently implemented.
+            Pipedrive supports filtering by either title or company_id, but not both simultaneously.
+
+            Pipedrive does not expose a cross-page total record count in list responses. `meta.total_count` will not appear.
+
+            With `filter[company_id]` the list is served by Pipedrive's v2 deals endpoint: it is paginated with an opaque cursor (a cursor from before the change is rejected with `InvalidCursorError`), sorting is limited to `created_at` and `updated_at` (`sort[by]=title` returns an unsupported-sort error), `company_name` is not returned, `deleted` is returned, custom-field option values are numeric option ids with monetary and date-range fields split into `<key>` plus `<key>_currency` / `<key>_until` entries, and an unknown or non-numeric `company_id` is answered with a 400 instead of a 404. Deals of a deleted company return an empty list; archived deals are not included.
         - connector: zoho-crm
           description: |
             Zoho CRM's `info.count` in list responses is a per-page count only, not a cross-page total. `meta.total_count` will not appear.

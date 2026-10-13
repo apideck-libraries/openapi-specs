@@ -33355,6 +33355,27 @@ paths:
             filters SnelStart's bank-booking list to entries carrying a sales-booking reconciliation
             line, so a bank booking that only posts to a general ledger account, or that reconciles
             against a purchase booking (a bill payment) instead, never appears here.
+        - connector: exact-online
+          description: |
+            Payments are read from Exact Online's cash-flow area, so the Exact Online app registration
+            needs read access to it (the `financial.cashflow` scope, set in the app's Data & Security
+            Review). Without it, every call returns a 403 `AppScopeViolated` error while the connection
+            still shows as Connected and other resources keep working. Invoice `balance` is derived from
+            the same area and comes back `null` in that case.
+        - connector: exact-online-nl
+          description: |
+            Payments are read from Exact Online's cash-flow area, so the Exact Online app registration
+            needs read access to it (the `financial.cashflow` scope, set in the app's Data & Security
+            Review). Without it, every call returns a 403 `AppScopeViolated` error while the connection
+            still shows as Connected and other resources keep working. Invoice `balance` is derived from
+            the same area and comes back `null` in that case.
+        - connector: exact-online-uk
+          description: |
+            Payments are read from Exact Online's cash-flow area, so the Exact Online app registration
+            needs read access to it (the `financial.cashflow` scope, set in the app's Data & Security
+            Review). Without it, every call returns a 403 `AppScopeViolated` error while the connection
+            still shows as Connected and other resources keep working. Invoice `balance` is derived from
+            the same area and comes back `null` in that case.
       responses:
         '200':
           $ref: '#/components/responses/GetPaymentsResponse'
@@ -41327,6 +41348,27 @@ paths:
             filters SnelStart's bank-booking list to entries carrying a purchase-booking reconciliation
             line, so a bank booking that only posts to a general ledger account, or that reconciles
             against a sales booking instead (a payment), never appears here.
+        - connector: exact-online
+          description: |
+            Bill payments are read from Exact Online's cash-flow area, so the Exact Online app registration
+            needs read access to it (the `financial.cashflow` scope, set in the app's Data & Security
+            Review). Without it, every call returns a 403 `AppScopeViolated` error while the connection
+            still shows as Connected and other resources keep working. Invoice `balance` is derived from
+            the same area and comes back `null` in that case.
+        - connector: exact-online-nl
+          description: |
+            Bill payments are read from Exact Online's cash-flow area, so the Exact Online app registration
+            needs read access to it (the `financial.cashflow` scope, set in the app's Data & Security
+            Review). Without it, every call returns a 403 `AppScopeViolated` error while the connection
+            still shows as Connected and other resources keep working. Invoice `balance` is derived from
+            the same area and comes back `null` in that case.
+        - connector: exact-online-uk
+          description: |
+            Bill payments are read from Exact Online's cash-flow area, so the Exact Online app registration
+            needs read access to it (the `financial.cashflow` scope, set in the app's Data & Security
+            Review). Without it, every call returns a 403 `AppScopeViolated` error while the connection
+            still shows as Connected and other resources keep working. Invoice `balance` is derived from
+            the same area and comes back `null` in that case.
       responses:
         '200':
           $ref: '#/components/responses/GetBillPaymentsResponse'

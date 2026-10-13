@@ -1,3 +1,11 @@
+## v10.68.1 - (2026-10-13)
+
+### Accounting API
+
+- [NetSuite](connectors/netsuite) [Credit Notes](apis/accounting/reference/credit-notes) now return `status` from how much of the credit has been applied: `authorised` when none of it has, `partially_paid` when part of it has, `paid` when all of it has, and `voided` for voided credit memos. Open credit memos were returned as `draft` before, and `partially_paid` was never returned. A status NetSuite reports without amounts that Apideck does not recognise is now left out instead of being returned as `draft`.
+
+- [NetSuite](connectors/netsuite) [Invoices](apis/accounting/reference/invoices) now return `authorised` for open invoices instead of `draft`, `partially_paid` for open invoices with part of the amount paid (on filtered lists, where NetSuite reports the paid amount), `submitted` while pending approval, `draft` when rejected and `void` when voided. An unrecognised status is left out instead of being returned as `draft`.
+
 ## v10.68.0 - (2026-10-13)
 
 ### Accounting API

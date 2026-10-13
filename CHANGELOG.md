@@ -1,3 +1,9 @@
+## v10.67.1 - (2026-10-13)
+
+### Ecommerce API
+
+- [Shopify (Public App)](connectors/shopify-public-app) now requests Shopify's expiring offline access tokens on authorization (`expiring=1`) and refreshes them automatically using the issued refresh token, as Shopify requires for all public apps from 2027-01-01 (and already for apps created since 2026-04-01). Connections authorized before this release hold a non-expiring token without a refresh token and need to be re-authorized once through Vault.
+
 ## v10.67.0 - (2026-10-10)
 
 ### Accounting API

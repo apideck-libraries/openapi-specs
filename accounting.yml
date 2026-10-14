@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.68.1
+  version: 10.69.1
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -24159,6 +24159,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken has no VAT-code endpoint, so tax rates are a fixed list of Fiken's VAT types (HIGH 25%, MEDIUM 15%, LOW 12%, RAW_FISH 11.11%, the zero-rated, exempt and outside types, and the purchase-only reverse-charge, basis and foreign-service types) that is the same for every company. It does not reflect whether the company is VAT-registered, and it is not read from the company's account.
+
+            Use the tax rate `id` (the Fiken VAT type, for example `HIGH`) as `tax_rate.id` when creating invoices, bills and products. `type` shows where it is valid: `sales`, `purchase` or `both`; Fiken documents each type as valid for sales, purchases or both, so use only types valid for the document you create. Types ending in `_BASIS` only report the VAT base and carry no VAT amount, so their `effective_tax_rate` is `0`.
+
+            The list is not paginated and does not support filtering. `tax_payable_account_id` and `tax_remitted_account_id` are not available.
         - connector: sage-intacct-rest
           description: |
             Tax rates read Sage Intacct's `tax/tax-detail` objects, and those only exist once the
@@ -24407,6 +24414,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken has no VAT-code endpoint, so tax rates are a fixed list that is the same for every company. The `id` is the Fiken VAT type (for example `HIGH`), matched case-insensitively. The numeric Fiken VAT code that general ledger lines report (for example `3` for sales or `1` for purchases at the high rate) is also accepted and returns the same VAT type.
       responses:
         '200':
           $ref: '#/components/responses/GetTaxRateResponse'
@@ -25153,6 +25164,11 @@ paths:
             a create request is silently dropped rather than rejected, and the created bill line will
             not be coded to that ledger account. Code the expense via `line_items[].item` instead, or
             use `journal-entries` for a GL-coded posting.
+        - connector: fiken
+          description: |
+            Every line needs a `ledger_account.id` (an expense account such as `6300`) and a `tax_rate.id` that is a Fiken purchase VAT code such as `HIGH`, `MEDIUM`, `LOW`, `NONE` or `HIGH_DIRECT`. `terms` is not stored, and a bill is always created as a posted bill, so `status` `draft` comes back as a submitted bill. A bill created with `status` `paid` needs the bank account it was paid from in `bank_account` (its `id` from `/accounting/bank-accounts`, or its 11-digit `account_number`).
+
+            For a bill in NOK, send `unit_price` (or `total_amount`) as the net amount and `tax_amount` as the VAT amount. For another currency, send the net amount in that currency and leave `tax_amount` out.
       requestBody:
         required: true
         content:
@@ -25786,6 +25802,9 @@ paths:
             Only a bill can be cancelled here: the id of a bill credit note returns `404` and nothing is cancelled (use
             `DELETE /accounting/bill-credit-notes/{id}`). If the document type can't be verified (for example SAP is
             unavailable), the request fails and nothing is cancelled; a `429` or `5xx` can be retried.
+        - connector: fiken
+          description: |
+            Fiken does not remove bills. Deleting a bill posts a reversal of it, so the bill and its reversal stay in the books and are both visible in Fiken.
       responses:
         '200':
           $ref: '#/components/responses/DeleteBillResponse'
@@ -26896,6 +26915,15 @@ paths:
             discounted total is computed from `quantity x unit_price` and the reduction instead.
             Sending both a `discount_amount` and a `discount_percentage` that disagree with each other
             is refused, as is a discount that would take the line amount negative.
+        - connector: fiken
+          description: |
+            Invoices are final the moment they are created. Fiken has no draft invoice through this API: the invoice gets its number immediately, it cannot be deleted, and afterwards only `due_date` can be changed. Correct a mistake with a credit note.
+
+            The bank account the invoice is paid into is required: send `bank_account.id` (from `/accounting/bank-accounts`), or the 11-digit `bank_account.account_number` that invoice and bank-account reads return. Every line needs a `tax_rate.id` that is a Fiken VAT code such as `HIGH` (25%), `MEDIUM` (15%), `LOW` (12%), `NONE`, `EXEMPT` or `OUTSIDE`, or a `tax_rate.rate`. A line needs a `ledger_account.id` unless its `item` already defines an income account.
+
+            A company that has never issued an invoice may need its invoice number counter set up before the first invoice can be created. If the create call is rejected for that reason, set the counter once with the Proxy API (`POST /invoices/counter`) or create one invoice in Fiken.
+
+            `discount_percentage` is a percentage (`10` is 10%), and `unit_price` is read back as the price before the discount. With `tax_inclusive: true`, each `unit_price` is taken to include VAT and is converted to Fiken's price excluding VAT with the rate of the line's `tax_rate` (its `rate`, or the standard rate of its Fiken VAT code), rounded to øre; a line whose VAT rate cannot be determined that way is rejected. Records are always read back with prices excluding VAT.
       requestBody:
         required: true
         content:
@@ -27321,6 +27349,9 @@ paths:
             Invoices cannot be updated through this connector once created — there is no update
             operation for this resource. To correct a mistake on an issued invoice, create a credit
             note against it and issue a new, corrected invoice instead.
+        - connector: fiken
+          description: |
+            Only `due_date` can be updated on a Fiken invoice. Any other field in the request is ignored. Invoices cannot be deleted; issue a credit note to reverse one.
       requestBody:
         required: true
         content:
@@ -27907,6 +27938,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            `current_balance` is the account's closing balance as of today (Oslo time), in the company currency, with debit balances positive and credit balances negative (a revenue account with sales shows a negative balance). It is an extra read of Fiken's account balances, so a balance is only returned when that read succeeds; otherwise the accounts are returned without `current_balance` and the response carries a warning. An account without any postings has a `current_balance` of `0`.
+
+            Sub-ledger accounts (for example customer accounts such as `1500:10001`) are listed as separate accounts with `sub_account` set to `true`. `type` is derived from the account number range of the usual Norwegian chart of accounts ranges rather than read from Fiken, so it is only as accurate as the company's use of those ranges.
         - connector: e-conomic
           description: |
             `classification` and `type` are derived from the account type and the account's normal balance side: profit and loss accounts are `revenue` (credit) or `expense` (debit), and balance sheet accounts are `asset` (debit) or `liability` (credit). e-conomic does not mark equity or contra accounts separately, so the normal balance side decides: equity accounts are returned as `liability`, accumulated depreciation (a credit-side asset account) as `liability`, and owner's drawings (a debit-side equity account) as `asset`. Headings and total accounts, which cannot be posted to, have `header` set to `true` and `type` `other`. Supported filter: `name`. Ledger accounts are read-only.
@@ -28239,6 +28275,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            `current_balance` is the account's closing balance as of today (Oslo time), in the company currency, with debit balances positive and credit balances negative (a revenue account with sales shows a negative balance). It is an extra read of Fiken's account balances, so a balance is only returned when that read succeeds; otherwise the accounts are returned without `current_balance` and the response carries a warning. An account without any postings has a `current_balance` of `0`.
+
+            Sub-ledger accounts (for example customer accounts such as `1500:10001`) are listed as separate accounts with `sub_account` set to `true`. `type` is derived from the account number range of the usual Norwegian chart of accounts ranges rather than read from Fiken, so it is only as accurate as the company's use of those ranges.
         - connector: e-boekhouden
           description: |
             e-Boekhouden's own account category has no separate value for revenue vs. expense — both
@@ -28861,6 +28902,11 @@ paths:
           description: |
             Creating an item requires `code` (used as the DualEntry SKU) and an income account (`income_account.id`).
             Omitting `code` returns `400 ... missing sku`.
+        - connector: fiken
+          description: |
+            Fiken requires an `income_account.id` (for example `3000`) and a `sales_details.tax_rate.id` that is a Fiken VAT code such as `HIGH`, `MEDIUM`, `LOW`, `NONE` or `EXEMPT`. A request without them is rejected.
+
+            Fiken creates every item active: `active: false` is ignored on create. To add an inactive item, create it and then update it with `active: false`.
       requestBody:
         required: true
         content:
@@ -29031,6 +29077,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken replaces the whole item on update, so one extra call reads the current item and the
+            fields you send are applied over it; fields you leave out, including `active`, keep their
+            value.
         - connector: minox
           description: |
             Prices are per single unit. An item Minox prices per a larger quantity (for example per 100)
@@ -29591,6 +29642,13 @@ paths:
             a recognized country. This affects the tax rule sevDesk applies (this endpoint uses a
             cross-border OSS VAT rule), so an omitted or unrecognized country code is treated as a
             domestic (Germany) transaction rather than being rejected.
+        - connector: fiken
+          description: |
+            To credit a specific invoice, pass it as an `allocations` entry with `type` set to `invoice` and `allocation_id` set to the invoice id. Every line needs a `tax_rate.id` that is a Fiken VAT code (for example `HIGH`). Amounts are returned as positive numbers, although Fiken stores credit notes with negative amounts. Fiken calculates the totals from the lines, so `total_amount` is not sent.
+
+            `discount_percentage` is a percentage (`10` is 10%), and `unit_price` is read back as the price before the discount. With `tax_inclusive: true`, each `unit_price` is taken to include VAT and is converted to Fiken's price excluding VAT with the rate of the line's `tax_rate` (its `rate`, or the standard rate of its Fiken VAT code), rounded to øre; a line whose VAT rate cannot be determined that way is rejected. Lines take a Fiken VAT type, so a `tax_rate` with a `rate` but no `id` is rejected. Records are always read back with prices excluding VAT.
+
+            A new Fiken company has no credit note counter, and creating a credit note is rejected until it exists. Create one credit note in Fiken, or set the starting number once through the Proxy API (`POST /creditNotes/counter` with an empty body starts at 10001).
       requestBody:
         required: true
         content:
@@ -31574,6 +31632,9 @@ paths:
             such event is delivered as `customer.updated`, including a change to a vendor-only
             contact (no customer role at all) — there is currently no way to distinguish or
             subscribe to supplier-only contact changes separately.
+        - connector: fiken
+          description: |
+            Countries are returned as ISO 3166-1 alpha-2 codes. Fiken stores a country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.
       responses:
         '200':
           $ref: '#/components/responses/GetCustomersResponse'
@@ -31680,6 +31741,9 @@ paths:
 
             **An address with a country is required.** Provide `addresses[0]` with at least `country` (e.g. `US`, `DE`).
             Without it, SAP returns `400 Country/Region Key ... is a required entry field`.
+        - connector: fiken
+          description: |
+            A country sent as an ISO 3166-1 alpha-2 code is saved under its Norwegian name, as Fiken's own screens save it. A customer saved without a country is stored with Norway.
       requestBody:
         required: true
         content:
@@ -31838,6 +31902,9 @@ paths:
             versus its supplier role, so if the same contact is also used as a supplier, an
             outstanding bill against them lowers `balance` (or makes it negative) rather than being
             excluded. Draft invoices and bills are not included until posted.
+        - connector: fiken
+          description: |
+            Customers and suppliers are both Fiken contacts. A contact that is a supplier but not a customer returns `404` here. Countries are returned as ISO 3166-1 alpha-2 codes. Fiken stores a country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.
       responses:
         '200':
           $ref: '#/components/responses/GetCustomerResponse'
@@ -31918,6 +31985,9 @@ paths:
 
             Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
             with a 400. Set those values when creating the record, or change them directly in SAP.
+        - connector: fiken
+          description: |
+            Fiken replaces the whole contact on every update, so fields you leave out keep their current value, including the contact persons, language, discount, default payment terms and member number that the unified model does not expose. Send a field as `null` to clear it. An address sent with only some fields changes only those fields. The contact name is taken from `company_name`, then `display_name`, then the name parts, so send the one you want to change. Customers and suppliers are both Fiken contacts. A contact that is a supplier but not a customer returns `404` here. A country sent as an ISO 3166-1 alpha-2 code is saved under its Norwegian name, as Fiken's own screens save it. A customer saved without a country is stored with Norway.
       requestBody:
         required: true
         content:
@@ -32075,6 +32145,9 @@ paths:
             SAP does not allow deleting a customer that has been used in transactions. Delete blocks the customer instead:
             the record stays in SAP and subsequent reads return `status: inactive`. Updating `status` to `active`
             unblocks it.
+        - connector: fiken
+          description: |
+            Customers and suppliers are both Fiken contacts. A contact that is a supplier but not a customer returns `404` here.
       responses:
         '200':
           $ref: '#/components/responses/DeleteCustomerResponse'
@@ -32430,6 +32503,9 @@ paths:
             such event is delivered as `customer.updated`, including a change to a vendor-only
             contact (no customer role at all) — there is currently no way to distinguish or
             subscribe to supplier-only contact changes separately.
+        - connector: fiken
+          description: |
+            Countries are returned as ISO 3166-1 alpha-2 codes. Fiken stores a country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.
       responses:
         '200':
           $ref: '#/components/responses/GetSuppliersResponse'
@@ -32604,6 +32680,9 @@ paths:
             passes the name through as sent rather than matching on write; the caller owns
             de-duplication (for example, checking `suppliers.list` for an existing name, or storing
             the returned `id` and reusing it) before creating a supplier that may already exist.
+        - connector: fiken
+          description: |
+            A country sent as an ISO 3166-1 alpha-2 code is saved under its Norwegian name, as Fiken's own screens save it. A supplier saved without a country is stored with Norway.
       responses:
         '201':
           $ref: '#/components/responses/CreateSupplierResponse'
@@ -32756,6 +32835,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Customers and suppliers are both Fiken contacts. A contact that is a customer but not a supplier returns `404` here. Countries are returned as ISO 3166-1 alpha-2 codes. Fiken stores a country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.
       responses:
         '200':
           $ref: '#/components/responses/GetSupplierResponse'
@@ -32876,6 +32959,9 @@ paths:
 
             Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
             with a 400. Set those values when creating the record, or change them directly in SAP.
+        - connector: fiken
+          description: |
+            Fiken replaces the whole contact on every update, so fields you leave out keep their current value, including the contact persons, language, discount, default payment terms and member number that the unified model does not expose. Send a field as `null` to clear it. An address sent with only some fields changes only those fields. The contact name is taken from `company_name`, then `display_name`, then the name parts, so send the one you want to change. Customers and suppliers are both Fiken contacts. A contact that is a customer but not a supplier returns `404` here. A country sent as an ISO 3166-1 alpha-2 code is saved under its Norwegian name, as Fiken's own screens save it. A supplier saved without a country is stored with Norway.
       requestBody:
         required: true
         content:
@@ -33042,6 +33128,9 @@ paths:
             SAP does not allow deleting a supplier that has been used in transactions. Delete blocks the supplier instead:
             the record stays in SAP and subsequent reads return `status: inactive`. Updating `status` to `active`
             unblocks it.
+        - connector: fiken
+          description: |
+            Customers and suppliers are both Fiken contacts. A contact that is a customer but not a supplier returns `404` here.
       responses:
         '200':
           $ref: '#/components/responses/DeleteSupplierResponse'
@@ -33300,6 +33389,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken has no payments list: the payments are read from the company's invoices, so a list
+            reads up to 2,000 invoices (20 requests of 100); beyond that, the response carries a warning that the list is
+            incomplete. `limit` and the cursor page through the payments, and every page reads the invoices again, so walking a long list costs several Fiken requests per page; prefer a filter where you can. `filter[customer_id]`
+            is applied by Fiken; `filter[invoice_id]` reads only that invoice, in one request.
+            `filter[updated_since]` is not supported (Fiken does not expose a payment modification date).
+
+            Only payments on invoices are listed: a customer payment is attached to the invoice's sale. Payments
+            on sales that did not come from an invoice are not returned.
+
+            The payment `id` is composite, `<invoice_id>:<payment_id>`, because Fiken only addresses a payment
+            through its parent. `allocations[0].id` is the unified invoice id. `total_amount` is in the payment's
+            `currency`; `currency_rate` is derived from Fiken's `amountInNok` for foreign-currency payments.
+            Bank fees (`fee`) are not exposed. `customer` carries the id and name only.
         - connector: freeagent
           description: |
             FreeAgent stores a payment as an explanation on a bank account, and it can only list those
@@ -33474,6 +33578,15 @@ paths:
             schema:
               $ref: '#/components/schemas/Payment'
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Creates the payment on the invoice's sale (Fiken `POST /sales/{saleId}/payments`). Send exactly one
+            `allocations[]` entry with `type: invoice` and the invoice id; a Fiken payment settles one invoice,
+            so several allocations are refused with 422. `account.id` is the bank account the money was received
+            in: either a Fiken account code (`1920:10001`) or the bank account id from `/accounting/bank-accounts`.
+            `total_amount` is in `currency` (default NOK); for a foreign-currency payment send `currency_rate`
+            to fix the NOK amount, otherwise Fiken converts at the rate of `transaction_date`. The response id is
+            composite, `<invoice_id>:<payment_id>`. A payment cannot be updated; delete and recreate it.
         - connector: freeagent
           description: |
             A FreeAgent payment settles exactly one invoice or credit note: send one `allocations` entry
@@ -33754,6 +33867,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            The id is composite, `<invoice_id>:<payment_id>`, as returned by list and create. Fiken answers 400
+            "No payment found with this id" for a payment that does not exist or was deleted. One extra call
+            reads the invoice to resolve its sale.
         - connector: freeagent
           description: |
             Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
@@ -33964,6 +34082,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Undoes the payment the way Fiken's "Angre" action does: an open payment is deleted, a payment in a
+            closed period is reversed with a counter-entry so the audit trail is kept. Fiken refuses it for
+            payments on a written-off sale or related to debt collection. The id is composite,
+            `<invoice_id>:<payment_id>`.
         - connector: freeagent
           description: |
             Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
@@ -34886,6 +35010,9 @@ paths:
             Restaurant365 does not have a dedicated company info endpoint. This operation returns the
             first legal entity from the tenant's legal entities list. For multi-entity accounts, use the
             subsidiaries endpoint to get all legal entities.
+        - connector: fiken
+          description: |
+            `country` and the address country are ISO 3166-1 alpha-2 codes. Fiken stores the country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.
       parameters:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/consumerId'
@@ -35840,6 +35967,11 @@ paths:
             Line order is not preserved: Oracle numbers the imported lines itself, so `line_items` can come back in a different order than sent, and `line_items[].line_number` is ignored on create.
 
             `title` and `number` do not come back as sent. Oracle names the imported journal after the title you send followed by the journal source, the balance type, a group id, the import request id and a reversal flag, so the values read back are longer than the values written and differ for every import. `memo` round-trips, normalised as described above. To find the journal, use the receipt the create returned — it reads and deletes like a journal id once the import has run.
+        - connector: fiken
+          description: |
+            Fiken creates a posting (transaction) and returns its id, not the id of a journal entry. Apideck reads the posting back and returns the `id` of the first journal entry in it, which you can use with Get Journal Entry. Lines must use accounts that exist in the company's chart of accounts; bank and customer or supplier accounts use their sub-ledger code, for example `1920:10001`. Journal entries cannot be updated or deleted.
+
+            With a tax rate on a line, Fiken reads a debit line's amount as net (the VAT is added to it) and a credit line's amount as gross (the VAT is taken out of it): Apideck sends `sub_total` (or `total_amount` minus `tax_amount`) for debit lines and `total_amount` for credit lines. A negative amount reverses its line: a debit line of `-100` credits the account.
       requestBody:
         required: true
         content:
@@ -36790,6 +36922,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Each Fiken transaction is one record, and it can hold several journal entries: an invoice and the payments registered against it share one transaction. `line_items` combines the lines of all its entries, with the VAT of a sale or purchase on its own line against the VAT account, so `net_amount` is excluding VAT and the lines of a transaction sum to zero. `posted_at` and `number` come from the transaction's first entry.
+
+            `source_type` is derived from Fiken's transaction type: sales (`Salg`) is `invoice`, purchases (`Kjøp`) is `bill`, sales and purchase credit notes are `credit_note`, free postings are `journal_entry`, payroll is `payroll`, and cash outlays are `expense`. Every other Fiken type, including cancellations and bank postings, is `other`. `source_id` is not returned, so a sale or purchase cannot be fetched from its transaction.
+
+            Cancelling a record in Fiken posts a reversing transaction instead of removing the original; both are returned and net to zero. `currency` is always `NOK` and amounts are in the company currency.
+
+            `filter[updated_since]` works at day granularity: every transaction modified on or after that date is returned. `filter[source_type]` supports `invoice`, `bill`, `journal_entry`, `payroll` and `expense`; other values, including `credit_note`, are rejected with a 400. `sort` is not supported and results come back in Fiken's order.
         - connector: freeagent
           description: |
             FreeAgent records ledger lines without a transaction id. Lines are returned grouped into one
@@ -36892,6 +37033,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Each Fiken transaction is one record, and it can hold several journal entries: an invoice and the payments registered against it share one transaction. `line_items` combines the lines of all its entries, with the VAT of a sale or purchase on its own line against the VAT account, so `net_amount` is excluding VAT and the lines of a transaction sum to zero. `posted_at` and `number` come from the transaction's first entry.
+
+            `source_type` is derived from Fiken's transaction type: sales (`Salg`) is `invoice`, purchases (`Kjøp`) is `bill`, sales and purchase credit notes are `credit_note`, free postings are `journal_entry`, payroll is `payroll`, and cash outlays are `expense`. Every other Fiken type, including cancellations and bank postings, is `other`. `source_id` is not returned, so a sale or purchase cannot be fetched from its transaction.
+
+            Cancelling a record in Fiken posts a reversing transaction instead of removing the original; both are returned and net to zero. `currency` is always `NOK` and amounts are in the company currency.
         - connector: freeagent
           description: |
             The id of any line of a transaction returns the whole transaction, with the id of its first
@@ -36945,6 +37093,12 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Sales receipts are Fiken's cash sales ("Annet salg" paid at the time of sale). Fiken's invoice sales, whether issued in Fiken or registered from an external invoice, are not sales receipts; deleted cash sales are not returned either. Fiken cannot filter by kind, so the connector reads Fiken's sales pages and keeps the cash sales, which makes a list call read as many sales pages as the company has (up to 2,000 sales, after which the response carries a warning that the list is incomplete).
+
+            Cash sales never have a customer or a customer memo in Fiken, so `customer` is not returned and `filter[customer_id]` always returns an empty list. `number` is the sale number, which is only present when one was set when the receipt was created. `filter[updated_since]` works at day granularity.
       responses:
         '200':
           $ref: '#/components/responses/GetSalesReceiptsResponse'
@@ -36980,6 +37134,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Creates a cash sale in Fiken ("Annet salg"). `account` is required: it is the bank or cash ledger account (for example `1920:10001`) the sale was paid into, and the sale is registered as paid in full on `transaction_date`. Each line item needs `tax_rate.id` (a Fiken VAT type from tax rates that is valid for sales) and `ledger_account.id` (the revenue account).
+
+            A customer cannot be attached to a cash sale; Fiken rejects it, so `customer` is not sent. Fiken also rejects cash sales in a foreign currency that carry Norwegian VAT, and the connector has only been verified with `NOK`. `number` sets the sale number.
+
+            Each line's VAT is its `tax_amount`, or, when that is left out, is calculated from the line's `tax_rate`; with `tax_inclusive: true` the line amounts include VAT. Each line's amount and VAT are rounded to øre, and the amount paid is the sum of the lines. A `total_amount` that differs from that sum by more than one øre per line is rejected with a `422`.
         - connector: quickbooks
           description: |
             tax_inclusive only applies to UK, AU, IN, and CA editions. US companies ignore this field
@@ -37244,6 +37405,10 @@ paths:
         - $ref: '#/components/parameters/fields'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Only live cash sales are sales receipts. Fetching the id of an invoice or a deleted sale returns 404. Cash sales never have a customer in Fiken, so `customer` is not returned.
       responses:
         '200':
           $ref: '#/components/responses/GetSalesReceiptResponse'
@@ -37550,6 +37715,10 @@ paths:
         - $ref: '#/components/parameters/companyId'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Deleting a sales receipt cancels the cash sale in Fiken: its postings are reversed by a counter-transaction (visible in general ledger transactions) rather than removed, and the receipt no longer appears in the list. Only live cash sales can be deleted: the id of an invoice's sale or of an already deleted sale returns 404.
       responses:
         '200':
           $ref: '#/components/responses/DeleteSalesReceiptResponse'
@@ -39501,6 +39670,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Supported `reference_type` values are `invoice`, `bill` and `journal-entry`; every other
+            value is rejected with `422`. Fiken does not paginate attachments, so the full list of the
+            record is returned in one page. `size`, `created_at` and `updated_at` are not returned by
+            Fiken, and `file_url` needs the same bearer token as the API, so use the download
+            endpoint instead of handing the link to a browser.
         - connector: minox
           description: |
             Attachments are supported on journal entries, invoices, bills, credit notes and bill credit
@@ -39702,6 +39878,19 @@ paths:
               type: string
               format: binary
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Supported `reference_type` values are `invoice`, `bill` and `journal-entry`; every other
+            value (including `credit-note`, `quote` and `expense`) is rejected with `422`. Accepted
+            file types are PDF, PNG, JPEG and GIF, and the file name from the `x-apideck-metadata`
+            header must end in one of those extensions.
+
+            Fiken does not return the id of the new attachment, so Apideck reads the record's
+            attachments after the upload and returns the newest one with the uploaded file name. A
+            concurrent upload of the same file name to the same record can therefore return the other
+            upload's id. When no attachment carries the file name, the upload still succeeds and `id`
+            is null. `description` is not stored: Fiken only keeps a comment on contact
+            attachments. On a bill the file is attached as documentation of the purchase itself.
         - connector: minox
           description: |
             Attachments are supported on journal entries, invoices, bills, credit notes and bill credit
@@ -39834,6 +40023,10 @@ paths:
         - $ref: '#/components/parameters/raw'
         - $ref: '#/components/parameters/fields'
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken has no endpoint to read a single attachment, so the record's attachment list is read
+            and the attachment is picked by `id`. An id that belongs to another record returns `404`.
         - connector: freeagent
           description: |
             Only the record's current attachment is found: an earlier attachment id returns 404 after a
@@ -39884,6 +40077,11 @@ paths:
         - $ref: '#/components/parameters/serviceId'
         - $ref: '#/components/parameters/raw'
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            The `id` must belong to the record named by `reference_type`/`reference_id`; an id from
+            another record returns `404` rather than deleting it. The delete only removes the link
+            between the record and the file; the file stays in the company's Fiken archive.
         - connector: freeagent
           description: |
             Only the record's current attachment is found: an earlier attachment id returns 404 after a
@@ -39951,6 +40149,10 @@ paths:
         - $ref: '#/components/parameters/fields'
         - $ref: '#/components/parameters/followRedirects'
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Returns the file itself with Fiken's content type and file name. The `id` must belong to the
+            record named by `reference_type`/`reference_id`; an id from another record returns `404`.
         - connector: freeagent
           description: |
             Returns the file itself, with its content type and file name. An id that is not the record's
@@ -40095,6 +40297,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            `account_number` must be an 11-digit Norwegian bank account number with a valid check digit (for example `12345678903`), and it cannot be the number of a bank account that is already active in the company. Bank accounts can be created and read, but not updated or deleted through Apideck. An account with a `currency` other than NOK is created as a Fiken foreign account, with `bank_name` as its foreign service. `account_type` `checking`, `savings` and `money_market` become a normal Fiken account and `credit_card` a credit card account; `line_of_credit`, `other` and `cash` have no Fiken equivalent and are rejected.
         - connector: zoho-books
           description: |
             `account_type` is clamped to what Zoho Books stores: `savings`, `money_market` and `other` are
@@ -40870,6 +41075,8 @@ paths:
           description: 'Built from Visma''s account balances at `filter[end_date]` (today by default), following every page, with the fiscal year from the fiscal years endpoint. Visma documents `Balance` only as "the total account balance at the given date", without a sign convention or whether income statement accounts reset at the start of the fiscal year, and no live response has been checked yet. The connector reads `Balance` as debit minus credit, takes income and expense accounts as the fiscal year''s figure and treats earlier results as already in equity through the opening balances. Two checks turn a wrong reading into a `502` instead of a plausible report: the lines must balance (half a cent, on the unrounded balances), and, for Swedish companies only (company country `SE`, BAS chart), asset accounts (class 1) must not net to a credit while class 2 nets to a debit, which is what a credit-positive feed would produce; other countries'' charts use the class digits differently, so that check is skipped for them and when the country cannot be read. `account_id` is the account number, the id of `GET /ledger-accounts/{id}`; a balance row without an account number is returned with `line_type` `unmapped` and null `account_id`. Accounts with a zero balance are left out. The basis follows the fiscal year''s bookkeeping method (invoicing is accrual, or cash); Visma does not convert between them, so `filter[accounting_method]` must match that year''s method or the request returns a `400`, and without the filter the year''s own method is used. A year set to no bookkeeping has no ledger and returns a `400`. Currency is not returned.'
         - connector: rillet
           description: "Built from Rillet's trial balance report, using each account's ending balance, which is debit positive (Rillet returns credit totals as negative amounts); a line whose ending balance is not its beginning balance plus its debits and credits returns a `502`, as does a report whose ending balances do not balance (debits and credits differ by half a cent or more, compared before amounts are rounded to cents). Rillet's report resets income and expense accounts at the report's start date and carries everything before it in Retained Earnings. Its API does not expose the fiscal year start, so the report runs from 1 January of the `filter[end_date]` year (today by default) and `start_date` is that date: income and expense accounts are calendar year-to-date, which is not the fiscal year-to-date for organizations whose fiscal year is not the calendar year, though debits still equal credits. `x-apideck-company-id` selects the subsidiary. Every line has `line_type` `account`, and `account_id` is Rillet's account id. Accrual only: `filter[accounting_method]=cash` returns a `400`. Accounts whose balance rounds to zero are left out."
+        - connector: fiken
+          description: 'Reported as of `filter[end_date]` (today in UTC by default); `filter[accounting_method]=cash` returns a `400`, since Fiken reports on posting dates. Customer and supplier sub-ledger accounts (codes such as `1500:10001`) are returned as their own lines, with the same `account_id` the ledger accounts list uses, rather than rolled up into their control account. `start_date` is the start of the fiscal year containing the date: Fiken fiscal years are calendar years, and the first one starts on the company''s accounting start date. Before that date the report is empty and `start_date` is null. Fiken does not close earlier years'' results into equity, so from the second fiscal year on they are returned as one extra line, "Result of previous fiscal years (not yet appropriated)", with `line_type` `unappropriated_result` and null `account_id` and `code`, so debits equal credits. `currency` is always `NOK`.'
         - connector: e-conomic
           description: 'Reported as of `filter[end_date]` (today in UTC by default) within the e-conomic accounting year that contains it; a date outside every accounting year returns a `400`. `start_date` is the first day of that accounting year. Income and expense accounts are year-to-date. Balance sheet accounts are cumulative: they include every earlier accounting year back to the last closed one, whose balances e-conomic carries forward when a year is closed. The result of earlier years that are not closed is not yet in equity, so it is returned as one extra line, "Result of previous fiscal years (not yet appropriated)", with null `account_id` and `code`, which keeps debits equal to credits. Heading and total accounts and accounts with a zero balance are left out. `account_id` and `code` are the account number. Amounts are in the company''s base currency. e-conomic books on posting dates only, so `filter[accounting_method]=cash` returns a `400`. Each earlier accounting year that is not closed costs one extra request, and a date inside an accounting year a few more. A report whose debits and credits do not balance returns a `502`.'
       responses:
@@ -40912,6 +41119,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Tracking categories are Fiken projects, Fiken's only analytic dimension, so they are the same
+            records as `/accounting/projects`. They are flat: `parent_id` and `parent_name` are never set.
+            `code` is the project number and `status` is `inactive` for a completed project. Creating one sets
+            Fiken's required project start date to today (Europe/Oslo). The Fiken company needs the Project and
+            Timeføring (time tracking) add-ons; without them Fiken answers 402.
         - connector: oracle-fusion
           description: |
             Tracking categories are Oracle chart-of-accounts **segment values**. Reads only — creating,
@@ -41031,6 +41245,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken requires a project number, so `code` is required; a tracking category without it is
+            rejected with `400`.
         - connector: minox
           description: |
             `code` is required: a positive whole number, and it becomes the tracking category id. A code that is already in use is rejected with a `409`. Tracking categories cannot be deleted.
@@ -41335,6 +41553,17 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken has no bill payments list: the payments are read from the company's purchases, so a list
+            reads up to 2,000 purchases (20 requests of 100); beyond that, the response carries a warning that the list is
+            incomplete. `limit` and the cursor page through the payments, and every page reads the purchases again, so walking a long list costs several Fiken requests per page; prefer a filter where you can. `filter[supplier_id]`
+            is applied by Fiken; `filter[bill_id]` reads only that bill, in one request.
+            `filter[updated_since]` is not supported.
+
+            The payment `id` is composite, `<bill_id>:<payment_id>`, because Fiken only addresses a payment
+            through its purchase. `allocations[0].id` is the unified bill id. Bank fees (`fee`) are not exposed.
+            `supplier` carries the id and name only.
         - connector: freeagent
           description: |
             FreeAgent stores a bill payment as an explanation on a bank account, and it can only list
@@ -41496,6 +41725,15 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Creates the payment on the purchase (Fiken `POST /purchases/{purchaseId}/payments`). Send exactly
+            one `allocations[]` entry with `type: bill` and the bill id; a Fiken payment settles one purchase, so
+            several allocations are refused with 422. `account.id` is the bank account the payment was made from:
+            either a Fiken account code (`1920:10001`) or the bank account id from `/accounting/bank-accounts`.
+            `total_amount` is in `currency` (default NOK); for a foreign-currency payment send `currency_rate`
+            to fix the NOK amount. The response id is composite, `<bill_id>:<payment_id>`. A payment cannot be
+            updated; delete and recreate it.
         - connector: freeagent
           description: |
             A FreeAgent bill payment pays exactly one bill: send one `allocations` entry with
@@ -41763,6 +42001,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            The id is composite, `<bill_id>:<payment_id>`, as returned by list and create. Fiken answers 400
+            "No payment found with this id" for a payment that does not exist or was deleted.
         - connector: freeagent
           description: |
             Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
@@ -41986,6 +42228,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Undoes the payment the way Fiken's "Angre" action does: an open payment is deleted, a payment in a
+            closed period is reversed with a counter-entry so the audit trail is kept. The id is composite,
+            `<bill_id>:<payment_id>`.
         - connector: freeagent
           description: |
             Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
@@ -44227,6 +44474,12 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken quotes (offers) have no status field. `status` is derived: `accepted` when Fiken records an
+            acceptance date, `sent` when the quote has been dispatched, otherwise `draft`. A `draft` Fiken quote
+            is already numbered and final, just not sent yet; Fiken's editable drafts are not listed.
+            Amounts are converted from Fiken's øre (cents).
         - connector: e-conomic
           description: |
             Only draft quotes are returned, and the list returns them without `line_items`: fetch a single one to get its lines. Sent and archived quotes are not included. Supported filters: `number`, `customer_id` and `updated_since`.
@@ -44350,6 +44603,13 @@ paths:
             `total_tax` and line-level tax are not written; see the Invoices notes for why.
 
             Creating quotes is not available on the `sage-intacct` (XML) connector.
+        - connector: fiken
+          description: |
+            Fiken creates a quote in two steps, a draft and then the finished quote, and the `id` returned is the finished quote's. Fiken has no quote expiry, so `expiry_date` is only used to set the number of days until the due date (14 days when it is missing or not after `quote_date`). Every line needs a `tax_rate.id` that is a Fiken VAT code such as `HIGH`.
+
+            `discount_percentage` is a percentage (`10` is 10%), and `unit_price` is read back as the price before the discount. With `tax_inclusive: true`, each `unit_price` is taken to include VAT and is converted to Fiken's price excluding VAT with the rate of the line's `tax_rate` (its `rate`, or the standard rate of its Fiken VAT code), rounded to øre; a line whose VAT rate cannot be determined that way is rejected. Lines take a Fiken VAT type, so a `tax_rate` with a `rate` but no `id` is rejected. Records are always read back with prices excluding VAT.
+
+            A new Fiken company has no quote counter, and creating a quote is rejected until it exists. Create one quote in Fiken, or set the starting number once through the Proxy API (`POST /offers/counter` with an empty body starts at 10001).
       requestBody:
         required: true
         content:
@@ -44887,6 +45147,11 @@ paths:
         - connector: afas
           description: |
             AFAS does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: fiken
+          description: |
+            Projects need Fiken's Project and time tracking modules, which are ordered per company in Fiken. Without them Fiken rejects project requests with a payment required error.
+
+            `filter[status]` accepts only `active` and `completed`, the only states Fiken has; any other status is rejected with `400`.
       responses:
         '200':
           $ref: '#/components/responses/GetProjectsResponse'
@@ -44914,6 +45179,10 @@ paths:
       summary: Create project
       description: Create project
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken requires a project number: send `display_id` (or `reference_id`); a project without one
+            is rejected with `400`. Without `start_date`, the project starts today (Europe/Oslo).
         - connector: freeagent
           description: |
             `customer.id` is required: every FreeAgent project belongs to a contact. When not supplied,
@@ -45400,6 +45669,13 @@ paths:
         - connector: fortnox
           description: |
             `customer.id` (the Fortnox customer number) is required; Fortnox assigns `number`. Lines take `item.id` (or `code`) as the article number, `quantity`, `unit_price`, `unit_of_measure`, `tax_rate.rate` (the VAT percentage) and `discount_percentage`; a line without an article needs `description` and `ledger_account.code`. Totals and tax are computed by Fortnox. `po_number` is written as the customer's order number (*Your order number*); `reference` is not written. `status` is not written on create — an order starts as a draft; cancel it with `DELETE`. Address `string` holds the street line, as on Invoices.
+        - connector: fiken
+          description: |
+            Fiken creates an order confirmation in two steps, a draft and then the finished order confirmation, and the `id` returned is the finished order confirmation's. `delivery_date` is only used to set the number of days until the due date (14 days when it is missing or not after `order_date`). Every line needs a `tax_rate.id` that is a Fiken VAT code such as `HIGH`.
+
+            `discount_percentage` is a percentage (`10` is 10%), and `unit_price` is read back as the price before the discount. With `tax_inclusive: true`, each `unit_price` is taken to include VAT and is converted to Fiken's price excluding VAT with the rate of the line's `tax_rate` (its `rate`, or the standard rate of its Fiken VAT code), rounded to øre; a line whose VAT rate cannot be determined that way is rejected. Lines take a Fiken VAT type, so a `tax_rate` with a `rate` but no `id` is rejected. Records are always read back with prices excluding VAT.
+
+            A new Fiken company has no order confirmation counter, and creating one is rejected until it exists. Create one order confirmation in Fiken, or set the starting number once through the Proxy API (`POST /orderConfirmations/counter` with an empty body starts at 10001).
       requestBody:
         required: true
         content:
@@ -46621,6 +46897,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: fiken
+          description: |
+            Fiken has no payment-method list: a payment is booked against the bank account it was paid
+            to or from. Payment methods are therefore the company's Fiken bank accounts. `id` is the bank
+            account id and `downstream_id` its ledger code (e.g. `1920:10001`); either can be sent as
+            `account.id` on `POST /accounting/payments` and `POST /accounting/bill-payments`. `type` is
+            `bank_transfer` for normal and foreign accounts, `credit_card` for credit-card accounts and
+            `other` for tax-deduction accounts. Read-only: create bank accounts via `/accounting/bank-accounts`.
         - connector: twinfield
           description: |
             The only source for payment types returns just `code` and `name` — there is no field for

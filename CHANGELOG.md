@@ -1,3 +1,12 @@
+## v10.69.3 - (2026-10-14)
+
+### Accounting API
+
+- [Sage Intacct](connectors/sage-intacct) now honours the `Idempotency-Key` header on [Journal Entries](apis/accounting/reference/journal-entries), [Invoices](apis/accounting/reference/invoices) and [Credit Notes](apis/accounting/reference/credit-notes) creates. A 32-character value derived from the key is sent as the create's control id with Sage Intacct's duplicate check switched on, so a retry with the same key and body never creates a second record. It returns the original record's id when the values you sent identify it: a journal entry by its `source_id`, an invoice or credit note by its `number` (or an invoice's `code`) and customer. Otherwise (no such value, or document sequencing replaced the number you sent) the retry returns Sage Intacct's "already recorded" error instead; nothing is written onto the record to find it. Creates without the header are unchanged.
+- [Sage Intacct REST](connectors/sage-intacct-rest) now honours the `Idempotency-Key` header on [Journal Entries](apis/accounting/reference/journal-entries), [Invoices](apis/accounting/reference/invoices) and [Credit Notes](apis/accounting/reference/credit-notes) creates. A 32-character value derived from the key is sent as Sage's own `Idempotency-Key` header, and Sage answers a retry with the same key and body with the original record, id included. Keys are remembered for 1 hour. Creates without the header are unchanged.
+- [Sage Intacct](connectors/sage-intacct) [Credit Notes](apis/accounting/reference/credit-notes) lists now support `filter[number]` (exact match).
+- Documented the Sage Intacct Accounts Receivable setting **If duplicate numbers**, which rejects an [Invoices](apis/accounting/reference/invoices) or [Credit Notes](apis/accounting/reference/credit-notes) create whose `number` already exists for the same customer.
+
 ## v10.69.1 - (2026-10-14)
 
 ### Accounting API

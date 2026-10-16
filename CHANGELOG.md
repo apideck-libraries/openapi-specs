@@ -1,3 +1,9 @@
+## v10.69.5 - (2026-10-16)
+
+### Unified APIs
+
+- Application success and error responses now return the existing parent Logs ID in the `x-apideck-request-id` header, so you can correlate requests with Dashboard logs and share the ID with support. Proxy keeps its existing behavior. API Gateway-generated failures may omit the header. No `request_id` field is added to response bodies.
+
 ## v10.69.4 - (2026-10-15)
 
 ### Accounting API

@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  version: 10.69.4
+  version: 10.69.5
   title: Accounting API
-  description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nEach API request has an associated request identifier. You can find this value in the response headers, under Request-Id. You can also find request identifiers in the URLs of individual request logs in your Dashboard. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
+  description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nApplication responses include the parent Apideck request identifier in the `x-apideck-request-id` response header, on both success and error responses. This value matches the parent request log ID in your Dashboard; it does not identify a child request to a downstream service. Include it when contacting support about a request. Errors generated by API Gateway before application code runs may omit this header.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
     email: hello@apideck.com
     url: https://developers.apideck.com
@@ -566,750 +566,1250 @@ components:
       x-speakeasy-name-override: idempotencyKey
   responses:
     BadRequestResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BadRequestResponse'
       description: Bad Request
     BatchInvoicesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchInvoicesResponse'
       description: Invoices batch processed
     BatchBillsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchBillsResponse'
       description: Bills batch processed
     BatchCreditNotesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchCreditNotesResponse'
       description: Credit Notes batch processed
     BatchBillCreditNotesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchBillCreditNotesResponse'
       description: Bill Credit Notes batch processed
     BatchPaymentsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchPaymentsResponse'
       description: Payments batch processed
     BatchBillPaymentsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchBillPaymentsResponse'
       description: Bill Payments batch processed
     BatchLedgerAccountsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchLedgerAccountsResponse'
       description: Ledger Accounts batch processed
     BatchTrackingCategoriesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchTrackingCategoriesResponse'
       description: Tracking Categories batch processed
     BatchCustomersResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchCustomersResponse'
       description: Customers batch processed
     BatchSuppliersResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchSuppliersResponse'
       description: Suppliers batch processed
     BatchJournalEntriesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BatchJournalEntriesResponse'
       description: Journal Entries batch processed
     CompanyInfo:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CompanyInfo'
       description: Company Info
     CreateBillResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateBillResponse'
       description: Bill created
     CreateBankAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateBankAccountResponse'
       description: Bank Account created
     CreateBillCreditNoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateBillCreditNoteResponse'
       description: Bill Credit Note created
     CreateCreditNoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateCreditNoteResponse'
       description: Credit Note created
     CreateCustomerResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateCustomerResponse'
       description: Customers
     CreateInvoiceItemResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateInvoiceItemResponse'
       description: InvoiceItems
     CreateInvoiceResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateInvoiceResponse'
       description: Invoice created
     CreateLedgerAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateLedgerAccountResponse'
       description: LedgerAccount created
     CreatePaymentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreatePaymentResponse'
       description: Payment created
     CreateSupplierResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateSupplierResponse'
       description: Supplier created
     CreateTaxRateResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateTaxRateResponse'
       description: TaxRate created
     DeleteBillResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteBillResponse'
       description: Bill deleted
     DeleteBankAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteBankAccountResponse'
       description: Bank Account deleted
     DeleteBillCreditNoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteBillCreditNoteResponse'
       description: Bill Credit Note deleted
     DeleteCreditNoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteCreditNoteResponse'
       description: Credit Note deleted
     DeleteCustomerResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteCustomerResponse'
       description: Customers
     DeleteInvoiceItemResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteTaxRateResponse'
       description: InvoiceItems
     DeleteInvoiceResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteInvoiceResponse'
       description: Invoice deleted
     DeleteLedgerAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteLedgerAccountResponse'
       description: LedgerAccount deleted
     DeletePaymentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeletePaymentResponse'
       description: Payment deleted
     DeleteSupplierResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteSupplierResponse'
       description: Supplier deleted
     DeleteTaxRateResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteTaxRateResponse'
       description: TaxRates deleted
     GetBalanceSheetResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBalanceSheetResponse'
       description: BalanceSheet
     GetBankAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBankAccountResponse'
       description: Bank Account
     GetBankAccountsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBankAccountsResponse'
       description: Bank Accounts
     GetBillResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBillResponse'
       description: Bill
     GetBillsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBillsResponse'
       description: Bills
     GetCompanyInfoResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetCompanyInfoResponse'
       description: CompanyInfo
     GetCompaniesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetCompaniesResponse'
       description: Companies
     GetBillCreditNoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBillCreditNoteResponse'
       description: Bill Credit Note
     GetBillCreditNotesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBillCreditNotesResponse'
       description: Bill Credit Notes
     GetCreditNoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetCreditNoteResponse'
       description: Credit Note
     GetCreditNotesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetCreditNotesResponse'
       description: Credit Notes
     GetCustomerResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetCustomerResponse'
       description: Customer
     GetCustomersResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetCustomersResponse'
       description: Customers
     GetGeneralLedgerTransactionResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetGeneralLedgerTransactionResponse'
       description: GeneralLedgerTransaction
     GetGeneralLedgerTransactionsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetGeneralLedgerTransactionsResponse'
       description: GeneralLedgerTransactions
     GetSalesReceiptResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetSalesReceiptResponse'
       description: SalesReceipt
     GetSalesReceiptsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetSalesReceiptsResponse'
       description: SalesReceipts
     GetGoodsReceiptResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetGoodsReceiptResponse'
       description: GoodsReceipt
     GetGoodsReceiptsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetGoodsReceiptsResponse'
       description: GoodsReceipts
     CreateSalesReceiptResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateSalesReceiptResponse'
       description: SalesReceipt created
     UpdateSalesReceiptResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateSalesReceiptResponse'
       description: SalesReceipt updated
     DeleteSalesReceiptResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteSalesReceiptResponse'
       description: SalesReceipt deleted
     GetInvoiceItemResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetInvoiceItemResponse'
       description: InvoiceItems
     GetInvoiceItemsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetInvoiceItemsResponse'
       description: InvoiceItems
     GetInvoiceResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetInvoiceResponse'
       description: Invoice
     GetInvoicesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetInvoicesResponse'
       description: Invoices
     GetLedgerAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetLedgerAccountResponse'
       description: LedgerAccount
     GetLedgerAccountsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetLedgerAccountsResponse'
       description: LedgerAccounts
     GetPaymentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetPaymentResponse'
       description: Payment
     GetPaymentsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetPaymentsResponse'
       description: Payments
     CreateSubsidiaryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Subsidiaries
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateSubsidiaryResponse'
     DeleteSubsidiaryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Subsidiarys
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteSubsidiaryResponse'
     GetSubsidiariesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetSubsidiariesResponse'
       description: Subsidiaries
     GetSubsidiaryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetSubsidiaryResponse'
       description: Subsidiary
     GetAccountingLocationsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAccountingLocationsResponse'
       description: Locations
     GetAccountingLocationResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAccountingLocationResponse'
       description: Location
     CreateAccountingLocationResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Location
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateAccountingLocationResponse'
     UpdateAccountingLocationResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Location
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateAccountingLocationResponse'
     DeleteAccountingLocationResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Location deleted
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteAccountingLocationResponse'
     GetAccountingDepartmentsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAccountingDepartmentsResponse'
       description: Departments
     GetAccountingDepartmentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAccountingDepartmentResponse'
       description: Location
     CreateAccountingDepartmentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Department
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateAccountingDepartmentResponse'
     UpdateAccountingDepartmentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Department
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateAccountingDepartmentResponse'
     DeleteAccountingDepartmentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Department deleted
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteAccountingDepartmentResponse'
     UpdateSubsidiaryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Subsidiaries
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateSubsidiaryResponse'
     GetSupplierResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetSupplierResponse'
       description: Supplier
     GetSuppliersResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetSuppliersResponse'
       description: Suppliers
     GetTaxRateResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetTaxRateResponse'
       description: TaxRate
     GetTaxRatesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetTaxRatesResponse'
       description: TaxRates
     NotFoundResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/NotFoundResponse'
       description: The specified resource was not found
     NotImplementedResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/NotImplementedResponse'
       description: Not Implemented
     PaymentRequiredResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/PaymentRequiredResponse'
       description: Payment Required
     TooManyRequestsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/TooManyRequestsResponse'
       description: Too Many Requests
     UnauthorizedResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UnauthorizedResponse'
       description: Unauthorized
     UnexpectedErrorResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UnexpectedErrorResponse'
       description: Unexpected error
     UnprocessableResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UnprocessableResponse'
       description: Unprocessable
     UpdateBankAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateBankAccountResponse'
       description: Bank Account updated
     UpdateBillResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateBillResponse'
       description: Bill Updated
     UpdateBillCreditNoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateBillCreditNoteResponse'
       description: Bill Credit Note updated
     UpdateCreditNoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateCreditNoteResponse'
       description: Credit Note updated
     UpdateCustomerResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateCustomerResponse'
       description: Customers
     UpdateInvoiceItemResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateInvoiceItemsResponse'
       description: InvoiceItems
     UpdateInvoiceResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateInvoiceResponse'
       description: Invoice updated
     UpdateLedgerAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateLedgerAccountResponse'
       description: LedgerAccount updated
     UpdatePaymentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdatePaymentResponse'
       description: Payment Updated
     UpdateSupplierResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateSupplierResponse'
       description: Supplier updated
     UpdateTaxRateResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateTaxRateResponse'
       description: TaxRate updated
     GetProfitAndLossResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetProfitAndLossResponse'
       description: Profit & Loss Report
     CreateJournalEntryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: JournalEntries
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateJournalEntryResponse'
     DeleteJournalEntryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: JournalEntries
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteJournalEntryResponse'
     GetJournalEntryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: JournalEntries
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetJournalEntryResponse'
     GetJournalEntriesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: JournalEntry
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetJournalEntriesResponse'
     JournalEntry:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: JournalEntries
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/JournalEntry'
     UpdateJournalEntryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: JournalEntries
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateJournalEntryResponse'
     CreatePurchaseOrderResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: PurchaseOrders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreatePurchaseOrderResponse'
     DeletePurchaseOrderResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: PurchaseOrders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeletePurchaseOrderResponse'
     GetPurchaseOrderResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: PurchaseOrders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetPurchaseOrderResponse'
     GetPurchaseOrdersResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: PurchaseOrders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetPurchaseOrdersResponse'
     PurchaseOrder:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: PurchaseOrders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/PurchaseOrder'
     UpdatePurchaseOrderResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: PurchaseOrders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdatePurchaseOrderResponse'
     GetRefundResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Refund
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetRefundResponse'
     GetRefundsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Refunds
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetRefundsResponse'
     CreateRefundResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Refund created
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateRefundResponse'
     UpdateRefundResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Refund updated
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateRefundResponse'
     DeleteRefundResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Refund deleted
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteRefundResponse'
     GetAttachmentsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Attachments
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAttachmentsResponse'
     CreateAttachmentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Attachments
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateAttachmentResponse'
     DeleteAttachmentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Attachments
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteAttachmentResponse'
     GetAttachmentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Attachments
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAttachmentResponse'
     GetAttachmentDownloadResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: 'Attachment Download. When the request includes `x-apideck-follow-redirects: false` and the download would otherwise redirect to a presigned URL, the response body is instead an `application/json` object `{ url, expires_at }` — fetch `url` explicitly (without the Authorization header) to retrieve the attachment.'
       content:
         '*/*':
@@ -1317,438 +1817,730 @@ components:
             type: string
             format: binary
     GetFiscalPeriodsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Fiscal Periods
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetFiscalPeriodsResponse'
     GetFiscalPeriodResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Fiscal Period
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetFiscalPeriodResponse'
     GetTrialBalanceResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Trial Balance
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetTrialBalanceResponse'
     GetJournalsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Journals
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetJournalsResponse'
     GetJournalResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Journals
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetJournalResponse'
     CreateJournalResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Journals
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateJournalResponse'
     UpdateJournalResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Journals
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateJournalResponse'
     DeleteJournalResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Journals
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteJournalResponse'
     GetTrackingCategoriesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Tracking categories
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetTrackingCategoriesResponse'
     GetTrackingCategoryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Tracking category
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetTrackingCategoryResponse'
     CreateTrackingCategoryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Tracking category created
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateTrackingCategoryResponse'
     UpdateTrackingCategoryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Tracking category updated
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateTrackingCategoryResponse'
     DeleteTrackingCategoryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Tracking category deleted
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteTrackingCategoryResponse'
     GetBillPaymentsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bill Payments
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBillPaymentsResponse'
     GetBillPaymentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bill Payment
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBillPaymentResponse'
     CreateBillPaymentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bill Payment created
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateBillPaymentResponse'
     UpdateBillPaymentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bill Payment updated
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateBillPaymentResponse'
     DeleteBillPaymentResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bill Payment deleted
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteBillPaymentResponse'
     CreateExpenseResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expenses
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateExpenseResponse'
     DeleteExpenseResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expenses
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteExpenseResponse'
     GetExpenseResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expenses
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetExpenseResponse'
     GetExpensesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expenses
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetExpensesResponse'
     UpdateExpenseResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expenses
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateExpenseResponse'
     GetAgedCreditorsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Aged Creditors
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAgedCreditorsResponse'
     GetAgedDebtorsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Aged Debtors
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAgedDebtorsResponse'
     CreateBankFeedAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Accounts
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateBankFeedAccountResponse'
     DeleteBankFeedAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Accounts
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteBankFeedAccountResponse'
     GetBankFeedAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Accounts
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBankFeedAccountResponse'
     GetBankFeedAccountsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Accounts
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBankFeedAccountsResponse'
     UpdateBankFeedAccountResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Accounts
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateBankFeedAccountResponse'
     CreateBankFeedStatementResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Statements
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateBankFeedStatementResponse'
     DeleteBankFeedStatementResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Statements
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteBankFeedStatementResponse'
     GetBankFeedStatementResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Statements
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBankFeedStatementResponse'
     GetBankFeedStatementsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Statements
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetBankFeedStatementsResponse'
     UpdateBankFeedStatementResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Bank Feed Statements
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateBankFeedStatementResponse'
     GetCategoryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Category
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetCategoryResponse'
     GetCategoriesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Categories
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetCategoriesResponse'
     CreateQuoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Quotes
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateQuoteResponse'
     DeleteQuoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Quotes
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteQuoteResponse'
     GetQuoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Quotes
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetQuoteResponse'
     GetQuotesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Quotes
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetQuotesResponse'
     UpdateQuoteResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Quotes
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateQuoteResponse'
     CreateProjectResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Projects
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateProjectResponse'
     DeleteProjectResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Projects
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteProjectResponse'
     GetProjectResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Projects
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetProjectResponse'
     GetProjectsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Projects
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetProjectsResponse'
     UpdateProjectResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Projects
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateProjectResponse'
     GetSalesOrdersResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Sales Orders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetSalesOrdersResponse'
     GetSalesOrderResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Sales Orders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetSalesOrderResponse'
     CreateSalesOrderResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Sales Orders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateSalesOrderResponse'
     UpdateSalesOrderResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Sales Orders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateSalesOrderResponse'
     DeleteSalesOrderResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Sales Orders
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteSalesOrderResponse'
     CreateAccountingEmployeeResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Employees
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateAccountingEmployeeResponse'
     DeleteAccountingEmployeeResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Employees
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteAccountingEmployeeResponse'
     GetAccountingEmployeeResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Employees
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAccountingEmployeeResponse'
     GetAccountingEmployeesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Employees
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetAccountingEmployeesResponse'
     UpdateAccountingEmployeeResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Employees
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateAccountingEmployeeResponse'
     CreateExpenseCategoryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Categories
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateExpenseCategoryResponse'
     DeleteExpenseCategoryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Categories
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteExpenseCategoryResponse'
     GetExpenseCategoryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Categories
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetExpenseCategoryResponse'
     GetExpenseCategoriesResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Categories
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetExpenseCategoriesResponse'
     UpdateExpenseCategoryResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Categories
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateExpenseCategoryResponse'
     CreateExpenseReportResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Reports
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreateExpenseReportResponse'
     DeleteExpenseReportResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Reports
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeleteExpenseReportResponse'
     GetExpenseReportResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Reports
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetExpenseReportResponse'
     GetExpenseReportsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Reports
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetExpenseReportsResponse'
     UpdateExpenseReportResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Expense Reports
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdateExpenseReportResponse'
     CreatePaymentMethodResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Payment Methods
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/CreatePaymentMethodResponse'
     DeletePaymentMethodResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Payment Methods
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/DeletePaymentMethodResponse'
     GetPaymentMethodResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Payment Methods
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetPaymentMethodResponse'
     GetPaymentMethodsResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Payment Methods
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/GetPaymentMethodsResponse'
     UpdatePaymentMethodResponse:
+      headers:
+        x-apideck-request-id:
+          schema:
+            $ref: '#/components/schemas/RequestId'
       description: Payment Methods
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdatePaymentMethodResponse'
   schemas:
+    RequestId:
+      description: Identifier of the parent Apideck request, matching its request log ID. Included on application responses, including errors. Errors generated by API Gateway before application code runs may omit this header.
+      type: string
+      example: 0b5f7480-5550-4f5c-a5fc-3c01ac43dd0f
     AccountCode:
       title: Account Code
       description: The account code of the account
@@ -25086,6 +25878,12 @@ paths:
 
             `line_items[].tax_rate.code` takes the SAP tax code (e.g. `V1`). SAP S/4HANA Cloud does not expose tax
             rates as readable data, so the tax code must be supplied directly.
+
+            SAP has no due-date field: it calculates the due date from a baseline date plus the days of the payment
+            terms. `due_date` is sent as the baseline date, so it is the actual due date only when the payment terms
+            add no days (e.g. `0001`). With terms such as net 30, SAP makes the bill due 30 days after `due_date`.
+            `terms` sets the payment terms; when omitted, the supplier's default terms apply. Without `due_date`,
+            SAP derives the baseline date from the payment terms.
         - connector: sage-intacct-rest
           description: |
             `line_items[].tax_rate`, `line_items[].unit_price` and `line_items[].type` are not supported. Sage's underlying bill-line object is a flat GL-distribution line (account + amount only) — it has no per-line tax field (rejected outright as "not a valid field", unlike the header-level `tax_inclusive`, which is writable), no quantity/unit-price breakdown, and no line-type classification.
@@ -31935,6 +32733,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            Customers and suppliers are both SAP business partners. A business partner that does not have the
+            customer role returns `404` here, even if it exists as a supplier.
         - connector: freeagent
           description: |
             `balance` reflects the contact's net position across both sales invoices and purchase
@@ -32025,6 +32827,10 @@ paths:
 
             Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
             with a 400. Set those values when creating the record, or change them directly in SAP.
+
+            A business partner that does not have the customer role returns `404` and nothing is changed. If the
+            role can't be verified (for example SAP is unavailable), the request fails and nothing is changed; a
+            `429` or `5xx` can be retried.
         - connector: fiken
           description: |
             Fiken replaces the whole contact on every update, so fields you leave out keep their current value, including the contact persons, language, discount, default payment terms and member number that the unified model does not expose. Send a field as `null` to clear it. An address sent with only some fields changes only those fields. The contact name is taken from `company_name`, then `display_name`, then the name parts, so send the one you want to change. Customers and suppliers are both Fiken contacts. A contact that is a supplier but not a customer returns `404` here. A country sent as an ISO 3166-1 alpha-2 code is saved under its Norwegian name, as Fiken's own screens save it. A customer saved without a country is stored with Norway.
@@ -32185,6 +32991,13 @@ paths:
             SAP does not allow deleting a customer that has been used in transactions. Delete blocks the customer instead:
             the record stays in SAP and subsequent reads return `status: inactive`. Updating `status` to `active`
             unblocks it.
+
+            The block applies to the whole SAP business partner. If the same business partner is also a supplier,
+            it is blocked as a supplier too and reads `status: inactive` under suppliers until it is unblocked.
+
+            A business partner that does not have the customer role returns `404` and nothing is blocked. If the
+            role can't be verified (for example SAP is unavailable), the request fails and nothing is blocked; a
+            `429` or `5xx` can be retried.
         - connector: fiken
           description: |
             Customers and suppliers are both Fiken contacts. A contact that is a supplier but not a customer returns `404` here.
@@ -32876,6 +33689,10 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            Customers and suppliers are both SAP business partners. A business partner that does not have the
+            supplier role returns `404` here, even if it exists as a customer.
         - connector: fiken
           description: |
             Customers and suppliers are both Fiken contacts. A contact that is a customer but not a supplier returns `404` here. Countries are returned as ISO 3166-1 alpha-2 codes. Fiken stores a country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.
@@ -32999,6 +33816,10 @@ paths:
 
             Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
             with a 400. Set those values when creating the record, or change them directly in SAP.
+
+            A business partner that does not have the supplier role returns `404` and nothing is changed. If the
+            role can't be verified (for example SAP is unavailable), the request fails and nothing is changed; a
+            `429` or `5xx` can be retried.
         - connector: fiken
           description: |
             Fiken replaces the whole contact on every update, so fields you leave out keep their current value, including the contact persons, language, discount, default payment terms and member number that the unified model does not expose. Send a field as `null` to clear it. An address sent with only some fields changes only those fields. The contact name is taken from `company_name`, then `display_name`, then the name parts, so send the one you want to change. Customers and suppliers are both Fiken contacts. A contact that is a customer but not a supplier returns `404` here. A country sent as an ISO 3166-1 alpha-2 code is saved under its Norwegian name, as Fiken's own screens save it. A supplier saved without a country is stored with Norway.
@@ -33168,6 +33989,13 @@ paths:
             SAP does not allow deleting a supplier that has been used in transactions. Delete blocks the supplier instead:
             the record stays in SAP and subsequent reads return `status: inactive`. Updating `status` to `active`
             unblocks it.
+
+            The block applies to the whole SAP business partner. If the same business partner is also a customer,
+            it is blocked as a customer too and reads `status: inactive` under customers until it is unblocked.
+
+            A business partner that does not have the supplier role returns `404` and nothing is blocked. If the
+            role can't be verified (for example SAP is unavailable), the request fails and nothing is blocked; a
+            `429` or `5xx` can be retried.
         - connector: fiken
           description: |
             Customers and suppliers are both Fiken contacts. A contact that is a customer but not a supplier returns `404` here.
@@ -42581,7 +43409,7 @@ paths:
             multi-line journal posting as a possible `journal-entries` record.
         - connector: netsuite
           description: |
-            Listing expenses returns identifiers only. Each expense in the list has `id` set and the remaining fields — including `transaction_date` — empty, because NetSuite's credit card charge list endpoint returns references rather than full records. Fetch an expense by id to read its details. This list also never includes Credit Card Refund records (the reversal of a corporate card charge, created via a negative-amount `expensesAdd` — see the create operation's gotcha); it only enumerates Credit Card Charges.
+            Listing expenses returns Credit Card Charges and Checks, ordered by id. Each expense carries its header fields only: `line_items` are not included, so fetch an expense by id to read its line items. `payment_type` is `credit_card` for a card charge and `check` for a check, and `account.type` is `ledger_account` for a card charge and `bank_account` for a check. This list never includes Credit Card Refund records (the reversal of a corporate card charge, created via a negative-amount `expensesAdd` — see the create operation's gotcha). The maximum `limit` is 200; a higher value returns a `400`.
             Expenses are **not** scoped by subsidiary — neither the connection's Default Subsidiary setting nor the `x-apideck-company-id` header narrows this list, so every subsidiary's expenses are returned. The records do carry a subsidiary in NetSuite, but this list cannot be separated by entity.
         - connector: odoo
           description: |
@@ -42730,30 +43558,44 @@ paths:
           description: Zoho Books supports only one customer and one rebilling (`rebillable`) flag per expense at the header level. Only provide these in the first line_item — they will be mapped to the header-level fields and applied to all lines. If differentiated treatment is required, create separate expenses.
         - connector: netsuite
           description: |
-            NetSuite creates every expense as a Credit Card Charge (or, when the request has a negative
-            amount, a Credit Card Refund — see below), so the top-level `account` must reference a
-            **credit-card–type** ledger account. A bank account (or any non–credit-card account) is
-            rejected with `Invalid Field Value … for the following field: account`. There is no
-            bank-account expense path on NetSuite; employee reimbursements are not modelled here (use
-            expense-reports).
+            NetSuite expenses are either Credit Card Charges or Checks. Set `payment_type: "check"` to
+            create a NetSuite Check: `account` must then reference a **bank account** and `supplier` is
+            the payee. Any other `payment_type` (or none) creates a Credit Card Charge (or, when the
+            request has a negative amount, a Credit Card Refund — see below), so the top-level `account`
+            must reference a **credit-card–type** ledger account. A bank account (or any non–credit-card
+            account) is rejected with `Invalid Field Value … for the following field: account`.
+            Employee reimbursements are not modelled here (use expense-reports).
+
+            NetSuite Checks expose no tax fields through the API. A check whose `line_items` carry
+            a `tax_rate` (an id, a code or a non-zero rate) or a non-zero `tax_amount` is rejected with a `400`, and a check's `total_tax` is empty:
+            `total_amount` and `sub_total` both equal the check total. Checks cannot be voided through
+            the API.
 
             A negative overall total (or a negative `line_items[].total_amount` sum) creates a NetSuite
             Credit Card Refund instead — NetSuite's transaction type for reversing a corporate/company
-            card charge, entered against a Vendor. This is distinct from the unified `refunds` resource,
-            which models customer-facing (AR) refunds. NetSuite itself never stores a negative amount on
-            either record type (a negative total is rejected outright); this connector sends the
-            absolute value automatically, so the sign only decides which record type gets created, not
-            what NetSuite stores. `expensesOne`, `expensesDelete` and list/search do not resolve a
-            Credit-Card-Refund-backed record (they only ever look up a Credit Card Charge by that id), so
-            capture the `id` from the `expensesAdd` response if you need to reference the reversal
-            elsewhere. `expensesUpdate` on one of these records only routes correctly when the update
-            body itself carries a negative amount (a negative `total_amount`, or a negative
-            `line_items[].total_amount` sum) — the router has no way to see the record's existing type,
-            only the body of the request in front of it. A field-only update that omits the amount
-            (e.g. changing just `memo` or the transaction date) evaluates to a total of `0`, and a
-            positive amount does too; both route to the Credit Card Charge endpoint instead and 404,
-            since the id only exists on the Credit Card Refund one. Re-send the negative amount on every
-            update to one of these records, even when only a non-amount field is changing.
+            card charge, entered against a Vendor — unless `payment_type` is `check`, which takes
+            precedence (NetSuite then rejects the negative check). This is distinct from the unified
+            `refunds` resource, which models customer-facing (AR) refunds. NetSuite itself never stores a
+            negative amount on either record type (a negative total is rejected outright); this connector
+            sends the absolute value automatically, so the sign only decides which record type gets
+            created, not what NetSuite stores. `expensesOne`, `expensesUpdate` and `expensesDelete`
+            look the id up as a Credit Card Charge first and, if no card charge exists with that id, as
+            a Check, then read, update or delete that record. Reading a Credit Card Charge takes one
+            NetSuite request as before; reading a Check, and every update or delete, takes one more. An
+            id that exists as neither returns NetSuite's `404`; a Credit Card Refund id (or any other
+            transaction type) returns NetSuite's `400` "Transaction type specified is incorrect", and the
+            list never includes Credit Card Refunds, so capture the `id` from the `expensesAdd` response
+            if you need to reference the reversal elsewhere. `payment_type` in an
+            update body is ignored for routing, because a record's type cannot change. `expensesUpdate`
+            on a Credit Card Refund only routes correctly when the update body itself carries a negative
+            amount (a negative `total_amount`, or a negative `line_items[].total_amount` sum) — the
+            router only sees the body of the request in front of it. A field-only update that omits the
+            amount (e.g. changing just `memo` or the transaction date) evaluates to a total of `0`, and a
+            positive amount does too; both route to the Credit Card Charge/Check lookup instead and are
+            rejected with NetSuite's `400` "Transaction type specified is incorrect", since the id only
+            exists as a Credit Card Refund. Re-send the negative amount on every
+            update to one of these records, even when only a non-amount field is changing. A negative-total
+            update on a Check is also routed to Credit Card Refund update and fails at NetSuite.
 
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
@@ -42763,7 +43605,7 @@ paths:
 
             `tax_rate.id` alone is sufficient: when a tax-rated line omits `tax_rate.rate`, the connector resolves the rate server-side from the tax code (no extra call is needed on a warm per-connection cache). If a tax-rated line's tax type or rate genuinely cannot be resolved (e.g. an unknown tax code), the request now fails fast with a `400` naming the offending line rather than silently posting at the account default. A caller-supplied `tax_rate.rate` still takes precedence when present.
 
-            Applying per-line tax also requires the NetSuite role to hold the `Lists → Tax Details Tab` permission at **Full**, because the connector writes a tax-details block on the Credit Card Charge. Without it the create fails as a tax-engine error rather than a permission error: `Unable to save the transaction due to an error being reported by the tax calculation engine: … Permission Violation: You need the 'Lists -> Tax Details Tab' permission`. Reading an expense's per-line `tax_rate` does not require it.
+            Applying per-line tax on a Credit Card Charge also requires the NetSuite role to hold the `Lists → Tax Details Tab` permission at **Full**, because the connector writes a tax-details block on the record. Without it the create fails as a tax-engine error rather than a permission error: `Unable to save the transaction due to an error being reported by the tax calculation engine: … Permission Violation: You need the 'Lists -> Tax Details Tab' permission`. Reading an expense's per-line `tax_rate` does not require it.
         - connector: sage-intacct-rest
           description: |
             `source_document_url` has no destination on Sage's underlying credit-card transaction object — the API exposes no user-facing web link for this object at all (only internal API resource paths). The field is declared unsupported rather than mapped to anything.
@@ -42960,7 +43802,7 @@ paths:
           description: |
             Line-item `tracking_categories[].name` is normalized to the leaf class name: a NetSuite hierarchical class path such as `"Fruit : Apple"` returns `name: "Apple"` and `parent_name: "Fruit"` (deeper paths return the deepest leaf as `name` and its immediate parent as `parent_name`). Line-item `department.name` and `location.name` are likewise normalized to the leaf segment.
 
-            A Credit Card Refund (the reversal of a corporate card charge, created via a negative-amount `expensesAdd` — see that operation's gotcha) cannot be read by id today: `expensesOne` only looks up a Credit Card Charge, so a Credit-Card-Refund-backed id 404s here.
+            `expensesOne` reads the id as a Credit Card Charge first and, if no card charge exists with that id, as a Check (one extra NetSuite request for a check). `payment_type` is `credit_card` for a card charge and `check` for a check, and `account.type` is `ledger_account` or `bank_account` respectively. NetSuite Checks expose no tax fields through the API, so a check's `total_tax` is empty and `total_amount` and `sub_total` both equal the check total. An id that exists as neither returns NetSuite's `404`; a Credit Card Refund id or any other transaction type returns NetSuite's `400` "Transaction type specified is incorrect". A Credit Card Refund (the reversal of a corporate card charge, created via a negative-amount `expensesAdd` — see that operation's gotcha) cannot be read by id today.
         - connector: microsoft-dynamics-365-business-central
           description: |
             A posted expense (`status: "posted"`) is read from Business Central's general ledger entries, which carry no bank-account discriminator. Its header `account` is therefore always returned as `account.type: "ledger_account"` — even when the expense was created with `account.type: "bank_account"` — and `account.id` is the bank's associated G/L posting account, not the bank account that was sent on create. `line_items[].account.id` is unaffected. See the create operation's gotcha for the full round-trip behaviour.
@@ -43018,13 +43860,13 @@ paths:
           description: Zoho Books supports only one customer and one rebilling (`rebillable`) flag per expense at the header level. Only provide these in the first line_item — they will be mapped to the header-level fields and applied to all lines. If differentiated treatment is required, create separate expenses.
         - connector: netsuite
           description: |
-            NetSuite creates every expense as a Credit Card Charge, so the top-level `account` must reference a **credit-card–type** ledger account. A bank account (or any non–credit-card account) is rejected with `Invalid Field Value … for the following field: account`. There is no bank-account expense path on NetSuite; employee reimbursements are not modelled here (use expense-reports).
+            NetSuite expenses are either Credit Card Charges or Checks, and an update first reads the id as a Credit Card Charge, then as a Check if no card charge exists, and writes to the record it found (one extra NetSuite request per update). A Credit Card Charge's top-level `account` must reference a **credit-card–type** ledger account, and a Check's must reference a **bank account**; anything else is rejected with `Invalid Field Value … for the following field: account`. `payment_type` in the update body is ignored for routing: a record's type cannot change. An id that exists as neither returns NetSuite's `404`; a Credit Card Refund id that is not routed by amount (see below) returns NetSuite's `400` "Transaction type specified is incorrect". NetSuite Checks expose no tax fields through the API, so an update to a check whose `line_items` carry a `tax_rate` (an id, a code or a non-zero rate) or a non-zero `tax_amount` is rejected with a `400`. Employee reimbursements are not modelled here (use expense-reports).
 
             `line_items[].tracking_categories` maps to the NetSuite per-line `class` (Classification), which accepts only one value — entries at index 1 or beyond are dropped silently.
 
             `line_items[].tax_rate.id` is applied on update when the connection has SuiteTax enabled (the `suitetax_enabled` setting), so mixed-rate expenses post the correct per-line tax. Without it, NetSuite applies the account's default tax code to every line (a 0% line under a 20%-default account posts at 20%). Every tax-rated line must resolve a tax type; if any cannot, the override is skipped for the whole expense and the account default applies. Some third-party tax-engine configurations (e.g. Vertex/Avalara) may reject the override — use `pass_through` for tenant-specific tax fields if needed.
 
-            Updating a Credit Card Refund (created via a negative-amount `expensesAdd` — see that operation's gotcha) requires re-sending a negative amount in the update body every time, even when only a non-amount field (e.g. `memo`) is changing — the router only sees the body in front of it, not the record's existing type. Omitting the amount, or sending a positive one, routes this connector to the Credit Card Charge endpoint instead, which 404s since the id only exists as a Credit Card Refund.
+            Updating a Credit Card Refund (created via a negative-amount `expensesAdd` — see that operation's gotcha) requires re-sending a negative amount in the update body every time, even when only a non-amount field (e.g. `memo`) is changing — the router only sees the body in front of it, not the record's existing type. Omitting the amount, or sending a positive one, routes this connector to the Credit Card Charge/Check lookup instead, which NetSuite rejects with `400` "Transaction type specified is incorrect" since the id only exists as a Credit Card Refund. A negative-total update on a Check is routed the same way, to Credit Card Refund update, and fails at NetSuite.
         - connector: sage-intacct-rest
           description: |
             `source_document_url` has no destination on Sage's underlying credit-card transaction object and is declared unsupported. `line_items[].tax_rate` is accepted with no validation error but silently discarded on write — verified live, treat as an open gap rather than a working feature. When both `reference` and `number` are supplied, `number` wins.

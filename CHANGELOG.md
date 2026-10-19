@@ -1,3 +1,13 @@
+## v10.69.6 - (2026-10-16)
+
+### Webhook API
+
+- One Intuit webhook URL now delivers events for companies connected through either [QuickBooks](connectors/quickbooks) or [Intuit Enterprise Suite](connectors/intuit-enterprise-suite). When the company (realm) of an incoming event has no connection under the connector the URL belongs to, the event is delivered through its connection under the other connector, with that connector's `service_id`. A company connected through both receives the event only through the URL's connector. A disabled or invalid connection under the URL's connector still counts, so when a company moves between the two connectors, remove the old connection rather than disabling it. Delivery for companies that have a connection under the URL's connector is unchanged.
+
+### Connector API
+
+- `webhook_support` on connectors now includes `shared_with`: the service IDs of connectors whose connections also receive events from this connector's webhook URL. [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite) list each other.
+
 ## v10.69.5 - (2026-10-16)
 
 ### Unified APIs

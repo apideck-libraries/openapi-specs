@@ -5311,6 +5311,49 @@ paths:
           description: |
             Hailey HR supports "parallel employments" (multiple Employment records per employee). `department_id`, `department_name`, `division`, `division_id`, `company_id`, `company_name`, `title`, `team`, `manager.id`, and `employment_role.type` reflect the employee's **effectual** employment — the active one, or when none is active the next-to-start, or failing that the most recent ended one (status precedence: active → will-start → ended). `priority` is a manual, user-ordered rank that is deliberately not recalculated when an employment ends, so it does not by itself indicate which employment is current. `employment_start_date`/`employment_end_date` reflect overall company tenure instead — see "Get Employee" for per-employment detail via `jobs[]`.
             An employee can also hold multiple titles and belong to multiple teams at once (`titleIds`/`teamIds` arrays). We only return the first of each as `title`/`team`, since the unified schema allows a single value for both.
+        - connector: humaans-io
+          description: |
+            By default, listing employees makes one Humaans call per page and returns only the person record:
+            `title`, `manager`, `department`, `department_name`, `bank_accounts`, `compensations` and `custom_fields`
+            are not returned, `jobs[]` carries only the location id, and `addresses` holds only the primary address.
+            Use Get Employee for the full record.
+
+            To get the same fields as Get Employee in the list, set "Include full details when listing employees" to
+            Yes in the connection's Employees configuration settings. Through the Vault API, this is the employees
+            resource config `enrich_employee_list` set to `"true"`.
+
+            Humaans returns these fields from five separate endpoints (bank accounts, compensations, job roles, custom
+            field values and office locations). Every page with employees on it makes at least one extra request to
+            each of the first four, plus one to office locations when someone on the page works from an office.
+            Humaans returns at most 250 rows per request, so an endpoint takes more requests when there are many rows
+            to read, and a page of more than about 150 employees takes at least two requests for every endpoint except
+            office locations. For example, a page of 100 employees with 25 custom field values each takes 10 requests
+            for custom field values alone. Every extra request counts against the rate limit of the Humaans access
+            token the connection uses.
+
+            With the setting on, `fields` limits the extra requests to the ones the requested fields need. A list that
+            asks only for fields from the person record, such as `fields=id,first_name,emails`, makes no extra
+            requests. `addresses` and `jobs` also request office locations when needed, and `custom_mappings`
+            requests custom field values. With the setting off, `fields` cannot turn the extra details on.
+
+            When the setting is on, a failed extra request does not fail the list. If Humaans rejects one, rate
+            limits it, or it does not finish in time, the response is still a 200 with an entry in `meta.warnings`.
+            The same happens when one endpoint would need too many requests for the page. The entry's `operation`
+            names the endpoint, and the fields it provides are unavailable for that request, not empty in Humaans:
+            - `bankAccountsAll`, `compensationsAll`: `bank_accounts`, `compensations` are missing.
+            - `customValuesAll`: `custom_fields` and the custom mappings that read them are missing.
+            - `jobRolesAll`: `title`, `manager`, `department` and `department_name` are missing, and `jobs[]` is
+              returned as without the setting, with only the location.
+            - `locationsAll`: `addresses` has no office entry, and the office in `jobs[].location` carries only its id.
+
+            A `status_code` of 403 means the Humaans access token is not allowed to read that data. It repeats on every
+            page, and smaller pages or spacing out requests do not help: grant the permission in Humaans, or leave the
+            fields that endpoint provides out of `fields`.
+
+            For other warnings on large pages, request smaller pages with `limit` (default 20, maximum 200). A smaller
+            page has fewer rows to read, so it makes fewer extra requests at once and finishes sooner. Listing every
+            employee then takes more pages, and each page repeats the person and office location requests, so the
+            total number of requests grows slightly. Spacing out page requests also helps against rate limits.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeesResponse'

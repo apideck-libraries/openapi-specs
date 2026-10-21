@@ -32631,6 +32631,9 @@ paths:
         - connector: fiken
           description: |
             A country sent as an ISO 3166-1 alpha-2 code is saved under its Norwegian name, as Fiken's own screens save it. A customer saved without a country is stored with Norway.
+        - connector: visma-netvisor
+          description: |
+            `tax_number` is the customer's Finnish Business ID (Y-tunnus, for example `1234567-1`), not the VAT number (`FI12345678`), and reads back the same way. For a private-person customer Netvisor also accepts a Finnish personal identity code in this field. Netvisor stores no separate display name: `display_name` reads back as the company name.
       requestBody:
         required: true
         content:
@@ -33593,6 +33596,9 @@ paths:
         - connector: fiken
           description: |
             A country sent as an ISO 3166-1 alpha-2 code is saved under its Norwegian name, as Fiken's own screens save it. A supplier saved without a country is stored with Norway.
+        - connector: visma-netvisor
+          description: |
+            `tax_number` is required: send the supplier's Finnish Business ID (Y-tunnus, for example `1234567-1`), not the VAT number (`FI12345678`). It reads back the same way. Netvisor stores no separate display name: `display_name` reads back as the company name.
       responses:
         '201':
           $ref: '#/components/responses/CreateSupplierResponse'
@@ -44397,6 +44403,10 @@ paths:
             omit an optional field instead of sending `null` for it. `feed_status` is not returned on this
             create response — read the account back to see it.
 
+            Posting the same `source_account_id` again updates that account rather than creating another,
+            and returns the same `id`, so retrying a create that timed out is safe. The update replaces the
+            account: fields left out of it are cleared.
+
             `account_holders`, `emails`, `addresses` and `phone_numbers` are optional here. Each list holds at
             most 10 items. Only the fields the bank-feed provider stores are forwarded: an address keeps
             `type`, `line1`–`line3`, `city`, `state`, `postal_code` and `country`, and `id` is dropped from
@@ -44421,8 +44431,9 @@ paths:
             An address that carries only fields the bank-feed provider does not store (for example only
             `string`) is dropped, and the account is then rejected as if the list were empty.
 
-            Creating an account is not idempotent: posting the same `source_account_id` twice creates two
-            accounts, and Plaid serves both. If a create times out, list the accounts before retrying.
+            Posting the same `source_account_id` again updates that account rather than creating another,
+            and returns the same `id`, so retrying a create that timed out is safe. The update replaces the
+            account: fields left out of it are cleared.
 
             A connection only becomes callable once it reports ready, so a newly created one can briefly stay
             in the `added` state. Re-check it and retry rather than reading `added` as a failure.

@@ -1,3 +1,31 @@
+## v10.69.9 - (2026-10-21)
+
+## v10.69.9 - (2026-10-21)
+
+### HRIS API
+
+- Fixed [Workday](connectors/workday) [Employees](apis/hris/reference/employees) dropping every address line when Workday returns more than one address component. `addresses[].line1`, `line2` and `line3` were `null` for such addresses (most non-US formats, for example France, Germany, the Netherlands, Sweden, Singapore and Japan), with only `string` populated. `line1` now holds the street line with the house number appended when Workday's country format has a separate house-number component, that number is returned as `street_number`, and further components (building, unit, floor) fill `line2` to `line5` in Workday's order. `jobs[].location` follows the same rules and now also returns `street_number`. Addresses with a single `ADDRESS_LINE_1` component, such as US ones, are unchanged apart from trimming of surrounding whitespace.
+
+### ATS API
+
+- Fixed [Workday](connectors/workday) [Applicants](apis/ats/reference/applicants) dropping every address line when Workday returns more than one address component. `addresses[].line1` now holds the street line with the house number appended when the country format has a separate house-number component, `street_number` holds that number, and further components fill `line2` to `line5`. Addresses with a single `ADDRESS_LINE_1` component, such as US ones, are unchanged apart from trimming of surrounding whitespace.
+
+### Accounting API
+
+- Fixed [Workday](connectors/workday) [Customers](apis/accounting/reference/customers) and [Suppliers](apis/accounting/reference/suppliers) returning an empty `addresses[].line1` when Workday returns more than one address component. `line1` now holds the street line with the house number appended when the country format has a separate house-number component, and `line2` to `line5` and `street_number` are now returned. Addresses with a single `ADDRESS_LINE_1` component, such as US ones, are unchanged apart from trimming of surrounding whitespace.
+
+## v10.69.8 - (2026-10-20)
+
+### Accounting API
+
+- Fixed missing nested data on [Odoo](connectors/odoo) connections using data scopes. Requested and consented `line_items` are now returned on [Bills](apis/accounting/reference/bills), [Invoices](apis/accounting/reference/invoices), [Credit Notes](apis/accounting/reference/credit-notes), [Bill Credit Notes](apis/accounting/reference/bill-credit-notes), [Purchase Orders](apis/accounting/reference/purchase-orders) and [Goods Receipts](apis/accounting/reference/goods-receipts); `transactions` on [Bank Feed Statements](apis/accounting/reference/bank-feed-statements), `allocations` on [Payments](apis/accounting/reference/payments) and [Bill Payments](apis/accounting/reference/bill-payments), and `default_account` on [Journals](apis/accounting/reference/journals) are also retained. These fields could previously be empty or missing. Applications without data scopes are unchanged, and consent is not widened.
+
+## v10.69.7 - (2026-10-19)
+
+### CRM API
+
+- [HubSpot](connectors/hubspot) webhooks now deliver events from HubSpot's `object.*` subscription format (`object.creation`, `object.propertyChange`, `object.deletion`), the default in HubSpot's current developer UI, for contacts, companies and deals, as `crm.contact.*`, `crm.company.*` and `crm.opportunity.*` created, updated and deleted events. Previously these events were accepted and dropped without an error, so only subscriptions using the classic names (`contact.creation`, …) delivered. Subscribing to the same event in both formats delivers it twice; both deliveries carry the same `x-apideck-idempotency-key` header. Merge, restore and association-change events are not delivered in either format.
+
 ## v10.69.6 - (2026-10-16)
 
 ### Webhook API

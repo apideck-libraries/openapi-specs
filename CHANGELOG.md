@@ -1,3 +1,13 @@
+## v10.71.0 - (2026-10-22)
+
+### Vault API
+
+- Applications can now hide connection form fields they don't use from their consumers in Vault. In the dashboard, under Configuration → the unified API → the connector, untick fields in **Fields visible in Vault**: those fields come back with `hidden: true` in the connection's `form_fields`, so Vault no longer shows them. Only optional fields can be hidden; required and required-for-authorization fields always stay visible, so consumers can always complete the connection. Hiding only affects the form: a value already saved on a connection keeps applying. Other applications using the same connector are unaffected.
+
+### Connector API
+
+- [Connectors](apis/connector/reference/connectors) `settings[]` now include `required`, `required_for_authorization`, `hidden` and, when present, `description`, so you can tell which connection settings can be hidden from Vault and what each one is for.
+
 ## v10.70.0 - (2026-10-22)
 
 ### Accounting API

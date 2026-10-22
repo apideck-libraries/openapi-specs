@@ -21407,6 +21407,7 @@ components:
         available_balance: edge-case
         currency: medium
         feed_status: medium
+        status: medium
         country: medium
         account_holders: edge-case
         emails: edge-case
@@ -21479,6 +21480,15 @@ components:
             - pending
             - rejected
           example: pending
+        status:
+          type: string
+          title: Status
+          description: Whether the data consumer may see this account. `revoked` hides it from the consumer without deleting it; `active` restores it. Unrelated to `feed_status`. Only connectors that list it support it; others ignore the field, so setting it there changes nothing.
+          x-apideck-enum-id: bank_feed_accounts.status
+          enum:
+            - active
+            - revoked
+          example: active
         country:
           $ref: '#/components/schemas/Country'
         account_holders:
@@ -27770,6 +27780,11 @@ paths:
             A company that has never issued an invoice may need its invoice number counter set up before the first invoice can be created. If the create call is rejected for that reason, set the counter once with the Proxy API (`POST /invoices/counter`) or create one invoice in Fiken.
 
             `discount_percentage` is a percentage (`10` is 10%), and `unit_price` is read back as the price before the discount. With `tax_inclusive: true`, each `unit_price` is taken to include VAT and is converted to Fiken's price excluding VAT with the rate of the line's `tax_rate` (its `rate`, or the standard rate of its Fiken VAT code), rounded to øre; a line whose VAT rate cannot be determined that way is rejected. Records are always read back with prices excluding VAT.
+        - connector: visma-netvisor
+          description: |
+            `number` must be numeric: Netvisor stores invoice numbers as integers, so a value such as `INV-001` is rejected.
+            Each line's `code` must be the code of an existing Netvisor product; letter case is ignored, accents are not. Any other code is rejected as product not found.
+            Send `status` `draft` (saved as unsent) or `submitted` (saved as open). Any other value, or no `status`, is rejected.
       requestBody:
         required: true
         content:
@@ -28198,6 +28213,9 @@ paths:
         - connector: fiken
           description: |
             Only `due_date` can be updated on a Fiken invoice. Any other field in the request is ignored. Invoices cannot be deleted; issue a credit note to reverse one.
+        - connector: visma-netvisor
+          description: |
+            Send the full invoice, including `status` and every line item: a body with only the changed fields is rejected with `400` and nothing is changed.
       requestBody:
         required: true
         content:
@@ -33599,6 +33617,7 @@ paths:
         - connector: visma-netvisor
           description: |
             `tax_number` is required: send the supplier's Finnish Business ID (Y-tunnus, for example `1234567-1`), not the VAT number (`FI12345678`). It reads back the same way. Netvisor stores no separate display name: `display_name` reads back as the company name.
+            Also send `currency`, an address with `country`, and at least one phone number or email; Netvisor rejects a supplier without them.
       responses:
         '201':
           $ref: '#/components/responses/CreateSupplierResponse'
@@ -34682,6 +34701,9 @@ paths:
             `status: authorised` to post the payment — `posted` is not an accepted value (allowed: `draft`,
             `authorised`, `rejected`, `paid`, `voided`, `deleted`). Payments created with `status: draft` succeed
             but do not affect the invoice balance or status; only posted (`authorised`) payments move the balance.
+        - connector: visma-netvisor
+          description: |
+            Always send `payment_method`, spelled exactly like a payment method set up in the company's Netvisor. Any other value is rejected as an unknown payment method, and so is a payment sent without one.
       responses:
         '201':
           $ref: '#/components/responses/CreatePaymentResponse'
@@ -38878,6 +38900,10 @@ paths:
           description: |
             It is required to provide supplier.id, issued_date, company_id. Required fields for line items: tracking_categories.id (maps to Workday worktag/cost_center_id), description, category_id, budget, total_amount and type (must be either `sales_item` or `service`). For `sales_item` type, it is required to provide quantity, unit_price and unit_of_measure.
             To create a purchase order with a status `draft`, you need to provide the `status` field with a value `draft`. Default status is `open` (approved).
+        - connector: visma-netvisor
+          description: |
+            `supplier.id` must be the supplier's numeric `id` from `GET /suppliers`; the supplier code is rejected with no vendor found (bills accept either).
+            Send `status` `open`; other values are rejected. Also required: `supplier.address` with `country`, `shipping_address` with `name` and `country`, and `delivery_date`.
       requestBody:
         required: true
         content:
@@ -39226,6 +39252,10 @@ paths:
 
             `status` cannot be changed. In companies that use Sales Tax, changing `tax_inclusive` on an existing order is
             rejected.
+        - connector: visma-netvisor
+          description: |
+            Send the full purchase order header, including `status`, the addresses and `delivery_date`: a body with only the changed fields is rejected with `400` and nothing is changed.
+            Leave `line_items` out unless you are adding lines. Every line you send is currently added to the order, so resending the existing lines duplicates them and increases the total. An update without `line_items` keeps the order's lines as they are.
       requestBody:
         required: true
         content:
@@ -44308,10 +44338,12 @@ paths:
         - connector: intuit-bank-feeds
           description: |
             `feed_status` reads back as `pending` for every account in this release — it does not yet reflect
-            whether QuickBooks has picked the feed up.
+            whether QuickBooks has picked the feed up. `status` is returned for every account, including
+            revoked ones.
         - connector: plaid-exchange
           description: |
-            `feed_status` reads back as `pending` for every account in this release.
+            `feed_status` reads back as `pending` for every account in this release. `status` is returned
+            for every account, including revoked ones.
         - connector: zoho-books
           description: |
             Returns only the accounts that can receive a feed: active accounts of type bank or credit card.
@@ -44407,6 +44439,10 @@ paths:
             and returns the same `id`, so retrying a create that timed out is safe. The update replaces the
             account: fields left out of it are cleared.
 
+            `status` sets a new account's consent: send `revoked` to create it without sharing it with the
+            data consumer. Omitted, it defaults to `active`. When the `source_account_id` already exists,
+            `status` is ignored and the account keeps its current status; change it with an update.
+
             `account_holders`, `emails`, `addresses` and `phone_numbers` are optional here. Each list holds at
             most 10 items. Only the fields the bank-feed provider stores are forwarded: an address keeps
             `type`, `line1`–`line3`, `city`, `state`, `postal_code` and `country`, and `id` is dropped from
@@ -44441,6 +44477,10 @@ paths:
             Omit an optional field instead of sending `null` for it: `null` is rejected on `type` and on the
             holder name fields. `feed_status` is not returned on this create response — read the account
             back to see it.
+
+            `status` sets a new account's consent: send `revoked` to create it without sharing it with the
+            data consumer. Omitted, it defaults to `active`. When the `source_account_id` already exists,
+            `status` is ignored and the account keeps its current status; change it with an update.
 
             Plaid cannot read the data yet: client authentication between Plaid and Apideck's FDX data
             provider is still pending, so ingested accounts are stored but not yet served to Plaid.
@@ -44512,6 +44552,7 @@ paths:
               available_balance: 24500
               currency: USD
               feed_status: pending
+              status: active
               country: US
               account_holders:
                 - type: consumer
@@ -44590,9 +44631,13 @@ paths:
           description: |
             `feed_status` reads back as `pending` for every account in this release — it does not yet reflect
             whether QuickBooks has picked the feed up.
+
+            `status` is the consent for this account: `revoked` means QuickBooks no longer receives it.
         - connector: plaid-exchange
           description: |
             `feed_status` reads back as `pending` for every account in this release.
+
+            `status` is the consent for this account: `revoked` means Plaid no longer receives it.
         - connector: zoho-books
           description: |
             `source_account_id` is not returned: there is no aggregator-side account behind a Zoho Books
@@ -44637,6 +44682,16 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: intuit-bank-feeds
+          description: |
+            Only `status` is changed: set it to `revoked` to stop the data consumer receiving this account,
+            and to `active` to restore it. Nothing is deleted. Other fields in the request are ignored, and a
+            request without `status` is rejected by the provider.
+        - connector: plaid-exchange
+          description: |
+            Only `status` is changed: set it to `revoked` to stop the data consumer receiving this account,
+            and to `active` to restore it. Nothing is deleted. Other fields in the request are ignored, and a
+            request without `status` is rejected by the provider.
         - connector: zoho-books
           description: |
             Not supported: a bank feed account is the bank account itself, so there is nothing separate to
@@ -44680,6 +44735,7 @@ paths:
               available_balance: 24500
               currency: USD
               feed_status: pending
+              status: active
               country: US
               account_holders:
                 - type: consumer

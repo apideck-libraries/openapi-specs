@@ -1,3 +1,9 @@
+## v10.70.0 - (2026-10-22)
+
+### Accounting API
+
+- [Zoho Books](connectors/zoho-books) now supports [General Ledger Transactions](apis/accounting/reference/general-ledger-transactions) (list only). It returns every posting in the ledger, including invoices, payments, credit notes, expenses and manual journals, not only the manual journals that [Journal Entries](apis/accounting/reference/journal-entries) returns. Each transaction comes back whole with its balanced lines, and `source_type` and `source_id` identify the document that posted it; `id` is the document id plus the posting date, because a document can post on more than one date (for example a payment received in advance and applied to an invoice later). The list covers the organization's full history; narrow it with `pass_through[from_date]` and `pass_through[to_date]`, and use `pass_through[cash_based]=true` for cash basis. `filter[...]` is not supported, a single transaction cannot be read by `id`, and a page can hold fewer records than `limit` because `limit` counts ledger lines: follow `next` until it is `null`.
+
 ## v10.69.10 - (2026-10-21)
 
 ### HRIS API

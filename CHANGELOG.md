@@ -1,3 +1,9 @@
+## v10.69.10 - (2026-10-21)
+
+### HRIS API
+
+- [Workday](connectors/workday) [Employees](apis/hris/reference/employees) lists now support `filter[as_of_date]` (`YYYY-MM-DD`) to return workers as of that date. Workday answers as of today by default, so future-dated hires were never returned; passing a future date includes them. The date applies to every worker in the list, so future-dated job and compensation changes are also returned as of that date. Lists without the filter are unchanged, and Get Employee does not accept it and always returns the worker as of today.
+
 ## v10.69.9 - (2026-10-21)
 
 ## v10.69.9 - (2026-10-21)

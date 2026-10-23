@@ -1,3 +1,9 @@
+## v10.72.0 - (2026-10-23)
+
+### Accounting API
+
+- [NetSuite](connectors/netsuite) virtual webhooks now send `accounting.*.deleted` events for customers, suppliers, invoices, invoice items, ledger accounts, bills, bill payments, payments, purchase orders, projects, credit notes, quotes and expenses, so these events are advertised in `supported_events` again. Deletes are detected from NetSuite's deleted-records log after each sync, so delete events arrive with the sync cadence, starting from each resource's second sync. Connections scoped to a subsidiary receive delete events for the whole account, because NetSuite does not record the subsidiary of a deleted record. Tax rates are not covered. Delete events need the Deleted Records and SuiteAnalytics Workbook permissions on the connection's role (both are in the Apideck NetSuite bundle; Deleted Records from v1.5.0); without them, created and updated events keep arriving and no delete events are sent.
+
 ## v10.71.1 - (2026-10-22)
 
 ### Connector API

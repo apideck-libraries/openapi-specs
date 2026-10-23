@@ -32584,6 +32584,10 @@ paths:
             `custom_fields` are returned but cannot be written: Minox accepts them without storing them, so they are left out of create and update requests. `tax_number` must be a valid VAT number; Minox rejects an invalid one with a `400`. Customers cannot be deleted.
 
             `currency` must be the administration's own currency; Minox stores a currency together with an exchange rate, which this record has no field for, so any other currency is rejected with a `400`. A customer in another currency (set up in Minox) cannot be updated through the API: Minox resets the currency of a customer to the administration's on every update that does not send it, and does not expose the exchange rate to send it back with, so such an update is rejected with a `400`. Sending `notes` empty or `null` clears them. Minox keeps one free-text contact person per address (often with a title, such as "De heer G. van der Heiden"), which is not split into `first_name` and `last_name`; those fields, and `individual`, are not supported. Minox has three address types: `billing` and `primary` are stored as the postal address, `shipping` as the delivery address and any other type as the street address, which reads back as `office`. One address of each Minox type is sent: when several map to the same type, `billing` wins over `primary`, and otherwise the first one is used.
+        - connector: moneybird
+          description: |
+            Moneybird rejects an email address on a domain that cannot receive mail (for example `example.com`)
+            with a `422`.
         - connector: netsuite
           description: |
             How much of each array is written depends on whether the customer is a company or an
@@ -33487,6 +33491,10 @@ paths:
             `custom_fields` are returned but cannot be written: Minox accepts them without storing them, so they are left out of create and update requests. `tax_number` must be a valid VAT number; Minox rejects an invalid one with a `400`. Suppliers cannot be deleted.
 
             `currency` must be the administration's own currency; Minox stores a currency together with an exchange rate, which this record has no field for, so any other currency is rejected with a `400`. A supplier in another currency (set up in Minox) cannot be updated through the API: Minox resets the currency of a supplier to the administration's on every update that does not send it, and does not expose the exchange rate to send it back with, so such an update is rejected with a `400`. Sending `notes` empty or `null` clears them. Minox keeps one free-text contact person per address (often with a title, such as "De heer G. van der Heiden"), which is not split into `first_name` and `last_name`; those fields, and `individual`, are not supported. Minox has three address types: `billing` and `primary` are stored as the postal address, `shipping` as the delivery address and any other type as the street address, which reads back as `office`. One address of each Minox type is sent: when several map to the same type, `billing` wins over `primary`, and otherwise the first one is used.
+        - connector: moneybird
+          description: |
+            Moneybird rejects an email address on a domain that cannot receive mail (for example `example.com`)
+            with a `422`.
         - connector: snelstart
           description: |
             `addresses[].country` is not written. SnelStart requires a country as a reference to an

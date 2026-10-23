@@ -5250,7 +5250,9 @@ paths:
           description: |
             To avoid request timeouts when fetching all employees, it's recommended to use a limit of 20. Workday can return large amounts of data per employee, and requests exceeding 30 seconds will timeout with an "Endpoint request timed out" error.
 
-            List Employees returns the employee's department (`department_id`, `department_name`), with the same values as Get Employee. `company_id`, `company_name`, `division_id`, `division` and `custom_fields` are returned on Get Employee only.
+            List Employees returns the employee's department (`department_id`, `department_name`) and company (`company_id`, `company_name`), with the same values as Get Employee. `division_id`, `division` and `custom_fields` are returned on Get Employee only.
+
+            `company_id` and `company_name` are the worker's legal company: the Workday organization of type Company assigned to the worker's primary job. Company hierarchies (consolidation roll-ups such as regions) are not returned. When the worker has no job data visible to the integration user, both fields are empty.
 
             List Employees returns workers as of today, so future-dated hires (hire date after today) are not included by default. Pass `filter[as_of_date]` (YYYY-MM-DD) with a future date to include them; it is sent to Workday as `Response_Filter.As_Of_Effective_Date`. Note that a future as-of date also returns existing workers as of that date, including any future-dated job or compensation changes. Get Employee does not accept this filter and always returns the worker as of today.
 
@@ -5842,6 +5844,8 @@ paths:
             This enrichment is intentionally not performed on List Employees to avoid an extra SOAP call per worker.
 
             On Get Employee, `manager.name`, `manager.first_name`, `manager.last_name`, `manager.email` and `manager.employment_status` are populated from a separate lookup of the manager's own worker record (List Employees returns `manager.id` only). When Workday cannot return that record — for example the manager is terminated, or is outside the integration user's security scope — those fields are omitted, `manager.id` is still returned, the rest of the employee is unaffected, and the response carries a `meta.warnings` entry of type `downstream_request_failed`. When the employee has no manager reference, `manager` is omitted from the response entirely and no warning is emitted.
+
+            `company_id` and `company_name` are the worker's legal company: the Workday organization of type Company assigned to the worker's primary job. Company hierarchies (consolidation roll-ups such as regions) are not returned. When the worker has no job data visible to the integration user, both fields are empty.
 
             Address lines: when the country's Workday address format has a separate house-number component, `addresses[].line1` is the street-name component (or, if the format has none, the lowest-numbered other component) with the house number appended, and that number is also returned as `street_number`. The remaining typed components (building, unit, floor and similar) fill `line2` to `line5` in Workday's line order. For formats without a house-number component (for example the US), `line1` is the lowest-numbered address line as Workday returns it, the others follow in `line2` to `line5`, and `street_number` is omitted. `jobs[].location` applies the same `line1` and `street_number` rules; its `line2` to `line5` are not mapped.
         - connector: acerta

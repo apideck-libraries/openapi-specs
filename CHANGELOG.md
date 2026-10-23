@@ -1,3 +1,9 @@
+## v10.71.1 - (2026-10-22)
+
+### Connector API
+
+- [Connectors](apis/connector/reference/connectors) `supported_events` no longer lists `*.deleted` events for [NetSuite](connectors/netsuite), [Sage Intacct](connectors/sage-intacct), [Sage Intacct REST](connectors/sage-intacct-rest), [Zoho Books](connectors/zoho-books), [Workday](connectors/workday), [Magento](connectors/magento), [PrestaShop](connectors/prestashop) and [Wix](connectors/wix). These connectors use virtual (polling) webhooks, which detect created and updated records but not deletions, so these events were never sent. Existing webhook subscriptions are unchanged, and created and updated events keep arriving as before.
+
 ## v10.71.0 - (2026-10-22)
 
 ### Vault API

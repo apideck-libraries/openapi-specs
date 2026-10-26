@@ -1,3 +1,10 @@
+## v10.73.0 - (2026-10-26)
+
+### Accounting API
+
+- [MYOB](connectors/myob) now supports [Suppliers](apis/accounting/reference/suppliers): list, get, create, update and delete. Suppliers return their purchase tax code (`tax_rate`), ABN or tax number (`tax_number`), default expense account (`account`), remittance bank account (`bank_accounts`), up to five addresses and their contact details. Create requires `tax_rate.id`. `tax_number` is saved as the ABN when it has 11 digits, otherwise as the Tax ID number. An update changes only the fields you send and keeps the rest of the supplier, including details the unified model does not expose; it reads the supplier first, so it also needs read consent on suppliers. `row_version` is optional and a stale one returns `409`. MYOB keeps no address type, so addresses read back by position (`primary`, `secondary`, then `other`). Each address has an `id` (its position, `"1"` to `"5"`) to update it in place; addresses cannot be removed, and requests MYOB cannot store, such as more than five addresses or more than one bank account, are rejected with a `400`.
+- Fixed [MYOB](connectors/myob) [Customers](apis/accounting/reference/customers) never returning `display_id`. It now returns the MYOB card ID (for example `CUS00011`); writes were unaffected.
+
 ## v10.72.1 - (2026-10-26)
 
 ### Accounting API

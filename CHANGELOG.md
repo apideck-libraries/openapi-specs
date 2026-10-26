@@ -1,3 +1,9 @@
+## v10.72.1 - (2026-10-26)
+
+### Accounting API
+
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) [Invoice Items](apis/accounting/reference/invoice-items) now return `unit_price` and `purchase_details.unit_price` from the product's valuation (cost) price, with its `currency`, and `quantity` from unrestricted-use stock (needs the SAP_COM_0164 communication scenario, otherwise `quantity` is `null` and the response carries a warning). [Invoices](apis/accounting/reference/invoices) now also lists invoices created by SAP billing (financial accounting document type RV); billing credit memos and cancellations are not listed. For those invoices `line_items` are the billing items, with `item`, `quantity`, `unit_price` and `unit_of_measure` (needs the SAP_COM_0120 communication scenario, otherwise the lines stay G/L account lines and the response carries a warning), and line ids are `<billing document>:<item>`.
+
 ## v10.72.0 - (2026-10-23)
 
 ### Accounting API

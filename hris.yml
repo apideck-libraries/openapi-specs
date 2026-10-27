@@ -5206,6 +5206,23 @@ paths:
             dropdown for that field, or when the lookup cannot be completed. Other address types, such as `primary`,
             are not resolved and may still contain option IDs.
 
+            If a lookup behind these readable values fails, the response is still a 200 and the
+            affected values are returned as SAP stores them. `meta.warnings` then carries an entry of
+            type `downstream_request_failed` whose `operation` names the lookup:
+            - `picklistMetadata`: `custom_fields[].name` is missing and picklist values in
+              `custom_fields` are returned as option IDs.
+            - `picklistLabels`: picklist values in `custom_fields` are returned as option IDs;
+              `custom_fields[].name` is still present.
+            - `homeAddressPicklists`: `city`, `state` and `postal_code` on home addresses are returned
+              as option IDs.
+
+            `status_code` is the HTTP status of the failed lookup when one is available (a lookup that
+            timed out is reported as 504). It is absent when the request could not be built, when SAP's
+            response could not be used, or when the lookup was not requested because the page would
+            exceed SAP's URL length limit; in that case request fewer employees per page with `limit`.
+            Raw IDs without such an entry are normally the cases described above; they can also follow
+            an unexpected error in Unify's own enrichment, which is not reported in `meta.warnings`.
+
             Email type is resolved from the `externalCode` of the email-category picklist
             option (ecEmailType), which is locale-independent, so the resolved type does not
             depend on the tenant's configured language. The externalCode to unified type
@@ -5794,6 +5811,23 @@ paths:
             the raw option ID when its country is not listed, when the tenant's address setup has no
             dropdown for that field, or when the lookup cannot be completed. Other address types, such as `primary`,
             are not resolved and may still contain option IDs.
+
+            If a lookup behind these readable values fails, the response is still a 200 and the
+            affected values are returned as SAP stores them. `meta.warnings` then carries an entry of
+            type `downstream_request_failed` whose `operation` names the lookup:
+            - `picklistMetadata`: `custom_fields[].name` is missing and picklist values in
+              `custom_fields` are returned as option IDs.
+            - `picklistLabels`: picklist values in `custom_fields` are returned as option IDs;
+              `custom_fields[].name` is still present.
+            - `homeAddressPicklists`: `city`, `state` and `postal_code` on home addresses are returned
+              as option IDs.
+
+            `status_code` is the HTTP status of the failed lookup when one is available (a lookup that
+            timed out is reported as 504). It is absent when the request could not be built, when SAP's
+            response could not be used, or when the lookup was not requested because the page would
+            exceed SAP's URL length limit; in that case request fewer employees per page with `limit`.
+            Raw IDs without such an entry are normally the cases described above; they can also follow
+            an unexpected error in Unify's own enrichment, which is not reported in `meta.warnings`.
 
             Email type is resolved from the `externalCode` of the email-category picklist
             option (ecEmailType), which is locale-independent, so the resolved type does not

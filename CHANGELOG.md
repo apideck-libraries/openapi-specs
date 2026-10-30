@@ -1,3 +1,10 @@
+## v10.73.1 - (2026-10-26)
+
+### Unified APIs
+
+- `name` on [Pipelines](apis/crm/reference/pipelines) no longer carries a `minLength: 1` constraint and may be an empty string. It is now always returned: [HubSpot](connectors/hubspot), [Pipedrive](connectors/pipedrive), [ActiveCampaign](connectors/activecampaign) and [folk](connectors/folk) return an empty string for a pipeline without a name, where the field used to be left out.
+- Contact lists (`phone_numbers`, `emails`, `websites` and `social_links`) no longer include entries without a value on [Act](connectors/act), [ADP iHCM](connectors/adp-ihcm), [ADP run](connectors/adp-run), [ADP Workforce Now](connectors/adp-workforce-now), [Exact Online](connectors/exact-online), [Exact Online (NL)](connectors/exact-online-nl), [Exact Online (UK)](connectors/exact-online-uk), [Folks HR](connectors/folks-hr), [Freshsales](connectors/freshsales), [Intuit Bank Feeds](connectors/intuit-bank-feeds), [JumpCloud](connectors/jumpcloud), [Liantis](connectors/liantis), [Microsoft Dynamics HR](connectors/microsoft-dynamics-hr), [Odoo](connectors/odoo), [Paylocity](connectors/paylocity), [Plaid Core Exchange](connectors/plaid-exchange), [Salesflare](connectors/salesflare), [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud), [SAP SuccessFactors](connectors/sap-successfactors), [UKG Pro](connectors/ukg-pro), [Wix](connectors/wix), [Workday](connectors/workday) and [Zoho People](connectors/zoho-people). These connectors could return an entry such as `{ "id": "primary" }` without its `email`, or a phone entry with an `extension` but no `number`, which made strict clients reject the whole response; a record with none now returns an empty list. [Lightspeed](connectors/lightspeed) order phone numbers are now returned in `number`.
+
 ## v10.73.0 - (2026-10-26)
 
 ### Accounting API

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.73.1
+  version: 10.75.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nApplication responses include the parent Apideck request identifier in the `x-apideck-request-id` response header, on both success and error responses. This value matches the parent request log ID in your Dashboard; it does not identify a child request to a downstream service. Include it when contacting support about a request. Errors generated by API Gateway before application code runs may omit this header.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -11114,6 +11114,7 @@ components:
         shipping_address: medium
         template_id: edge-case
         source_document_url: edge-case
+        quotes: medium
         payment_method: low
         channel: low
         language: low
@@ -11329,6 +11330,8 @@ components:
                 example: '2020-09-30T07:43:32.000Z'
                 nullable: true
           nullable: true
+        quotes:
+          $ref: '#/components/schemas/LinkedQuotes'
         payment_method:
           $ref: '#/components/schemas/PaymentMethod'
         channel:
@@ -11398,6 +11401,7 @@ components:
         shipping_address: medium
         template_id: edge-case
         source_document_url: edge-case
+        quotes: medium
         payment_method: low
         channel: low
         language: low
@@ -11605,6 +11609,8 @@ components:
                 example: '2020-09-30T07:43:32.000Z'
                 nullable: true
           nullable: true
+        quotes:
+          $ref: '#/components/schemas/LinkedQuotes'
         payment_method:
           $ref: '#/components/schemas/PaymentMethod'
         channel:
@@ -12937,6 +12943,7 @@ components:
         description: edge-case
         opening_balance: edge-case
         current_balance: edge-case
+        fixed_asset: edge-case
         currency: edge-case
         tax_type: edge-case
         tax_rate: edge-case
@@ -13058,6 +13065,56 @@ components:
           description: The current balance of the account.
           example: 20000
           nullable: true
+        fixed_asset:
+          type: object
+          title: Fixed asset
+          description: For an account that holds the cost of fixed assets, the fixed-asset register's figures for the assets recorded in it. Null for other accounts, including accumulated-depreciation accounts, and when the accounting system does not provide them.
+          nullable: true
+          readOnly: true
+          properties:
+            cost:
+              type: number
+              title: Cost
+              description: The total cost of the fixed assets recorded in the account.
+              example: 13495
+              nullable: true
+            accumulated_depreciation:
+              type: number
+              title: Accumulated depreciation
+              description: The depreciation accumulated so far on the fixed assets recorded in the account, as a positive amount.
+              example: 1000
+              nullable: true
+            acquisition_date:
+              type: string
+              title: Acquisition date
+              description: The date the assets were purchased - YYYY-MM-DD. Set only when every asset recorded in the account shares the same date.
+              format: date
+              example: '2026-01-01'
+              nullable: true
+            depreciation_method:
+              type: string
+              title: Depreciation method
+              description: "The depreciation method of the assets, normalised across accounting systems: declining-balance variants (for example 150% or 200%) are all `declining_balance`, and the accounting system's own value is in `downstream_depreciation_method`. Set only when every asset recorded in the account uses the same method."
+              x-apideck-enum-id: ledger-accounts.fixed_asset.depreciation_method
+              enum:
+                - other
+                - straight_line
+                - declining_balance
+                - none
+              example: straight_line
+              nullable: true
+            downstream_depreciation_method:
+              type: string
+              title: Downstream depreciation method
+              description: The depreciation method exactly as the accounting system names it, under the same condition as `depreciation_method`.
+              example: StraightLine
+              nullable: true
+            useful_life_months:
+              type: integer
+              title: Useful life (months)
+              description: The useful life of the assets, in months. Set only when every asset recorded in the account has the same useful life.
+              example: 60
+              nullable: true
         currency:
           $ref: '#/components/schemas/Currency'
         tax_type:
@@ -19076,6 +19133,32 @@ components:
             title: Date
             description: Date of the payment
             example: '2020-09-30T07:43:32.000Z'
+            nullable: true
+    LinkedQuotes:
+      type: array
+      x-apideck-schema-id: LinkedQuotes
+      title: Linked quotes
+      description: A list of quotes linked to this record.
+      nullable: true
+      items:
+        type: object
+        x-apideck-weights:
+          id: critical
+          number: low
+        required:
+          - id
+        properties:
+          id:
+            type: string
+            title: Quote ID
+            description: The unique identifier of the quote.
+            example: '123456'
+          number:
+            type: string
+            title: Quote number
+            description: The quote number.
+            example: QT00546
+            readOnly: true
             nullable: true
     LineNumber:
       title: Line number
@@ -26996,6 +27079,16 @@ paths:
             For an invoice that comes from a billing document, `line_items` are the billing items: `item`, `quantity`, `unit_price` (net per unit), `unit_of_measure`, `total_amount` (net) and `tax_amount`. Their `id` is `<billing document>:<item>` and they have no `ledger_account`. This needs the **SAP_COM_0120** (Billing Integration) communication scenario: without it, or when the lookup fails, the lines are G/L account lines and the response carries a warning in `meta.warnings`.
 
             Invoices posted directly in financial accounting, including those created through this API, have G/L account lines only.
+
+            `limit` caps the SAP posting lines read per page, not the invoices, so a page can hold fewer
+            invoices than `limit`. An invoice is never split across pages: one with more posting lines
+            than `limit` is returned complete on a page of its own. Only an invoice with more than 5,000
+            posting lines, or one whose lines cannot all be read within the request's time budget, still
+            appears on consecutive pages with the same `id`, each carrying part of its lines; if SAP
+            fails while they are read, the request returns a retryable error. Follow `meta.cursors.next`
+            until it is `null`. `meta.total_count` will not appear and `meta.cursors.previous` is always
+            `null`. `pass_through` cannot set `$top`, `$skip` or `$orderby` on this list; such a request
+            is refused with a 400.
         - connector: freeagent
           description: |
             FreeAgent's `Overdue` status is returned as `submitted` (or `partially_paid` when part of
@@ -27162,6 +27255,24 @@ paths:
         - connector: intuit-enterprise-suite
           description: |
             Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+        - connector: quickbooks
+          description: |
+            `quotes` lists the estimates linked to the invoice with their `id` only; `quotes[].number`
+            is not returned on the list. Read it from `GET /accounting/invoices/{id}` or
+            `GET /accounting/quotes/{id}`.
+        - connector: intuit-enterprise-suite
+          description: |
+            `quotes` lists the estimates linked to the invoice with their `id` only; `quotes[].number`
+            is not returned on the list. Read it from `GET /accounting/invoices/{id}` or
+            `GET /accounting/quotes/{id}`.
+        - connector: netsuite
+          description: |
+            `quotes` lists the estimate the invoice was created from. An invoice created from a sales
+            order has no `quotes`, even when that sales order was created from an estimate. On a list
+            without filters, sorting or `pass_through`, NetSuite does not say which kind of transaction
+            an invoice was created from, so the page's invoices are checked with one extra request.
+            When that request fails, `quotes` is omitted and `meta.warnings` has an entry with
+            `operation: quotesAll`.
         - connector: odoo
           description: |
             Odoo does not include a total record count in list responses. `meta.total_count` will not appear. Surfacing the true total requires a separate `search_count` call to the Odoo XML-RPC API — an extra API call that is not currently implemented.
@@ -27450,6 +27561,11 @@ paths:
 
             Payments can only be registered on a finalised invoice; a payment allocated to a draft is
             rejected with `Cannot register a payment for this SalesInvoice`.
+        - connector: moneybird
+          description: |
+            `quotes` links the invoice to an existing Moneybird estimate: send the quote's `id`
+            (`number` is read-only and is not sent). Moneybird links one estimate per invoice, so only
+            the first quote in `quotes` is sent.
         - connector: netsuite
           description: |
             `reference` maps to NetSuite's `externalId`, which NetSuite requires to be unique across every
@@ -27539,6 +27655,13 @@ paths:
 
             Posted (non-draft) invoices require a `due_date` when the customer has no default credit days configured; draft
             invoices have no such requirement.
+        - connector: sage-business-cloud-accounting
+          description: |
+            `quotes` links the invoice to an existing Sage quote or estimate: send the quote's `id`
+            (`number` is read-only and is not sent). Sage links one quote or estimate per invoice, so
+            only the first quote in `quotes` is sent. A quote `id` that is not an existing Sage quote or
+            estimate fails the request. Sage offers quotes on Accounting Standard and Plus and estimates
+            on Accounting Plus only, so no quote can be linked on Accounting Start.
         - connector: sap-s4hana-cloud
           description: |
             SAP S/4HANA Cloud creates the invoice as a financial accounting posting, not a billing document: no
@@ -27571,6 +27694,26 @@ paths:
           description: |
             Intuit Enterprise Suite offers limited (regional) support for applying discount on a Line Item. Including discount_percentage or discount_amount applies to entire invoice. The default type for a Line Item is a sales item if no type has been provided.
             Send an `Idempotency-Key` to make retrying a create safe: it reaches Intuit Enterprise Suite as its `requestid`. Intuit Enterprise Suite keeps a `requestid` for at least 24 hours and can keep it longer, so after the 24-hour window a key reused for a different invoice may get the original invoice back, with the new body ignored. Use a new key for every invoice. Your key can be 1-255 characters: Unify sends Intuit Enterprise Suite a 32-character `requestid` derived from it, so Intuit Enterprise Suite's 50-character `requestid` limit never applies.
+        - connector: quickbooks
+          description: |
+            `quotes` links the invoice to existing QuickBooks estimates: send each quote's `id`
+            (`number` is read-only and is not sent). Only Pending or Accepted estimates are linked. An
+            estimate that is closed, rejected or already linked to an invoice is ignored without an
+            error: the request succeeds and that quote is missing from the invoice's `quotes` when it is
+            read back. A quote `id` that does not exist fails the request with a `400`. An estimate can
+            be linked to only one invoice. Linking does not copy the estimate's lines onto the invoice;
+            send `line_items` yourself. Linking changes the estimate's status: it reads back from
+            `GET /accounting/quotes/{id}` as `void`.
+        - connector: intuit-enterprise-suite
+          description: |
+            `quotes` links the invoice to existing Intuit Enterprise Suite estimates: send each quote's
+            `id` (`number` is read-only and is not sent). Only Pending or Accepted estimates are linked.
+            An estimate that is closed, rejected or already linked to an invoice is ignored without an
+            error: the request succeeds and that quote is missing from the invoice's `quotes` when it is
+            read back. A quote `id` that does not exist fails the request with a `400`. An estimate can
+            be linked to only one invoice. Linking does not copy the estimate's lines onto the invoice;
+            send `line_items` yourself. Linking changes the estimate's status: it reads back from
+            `GET /accounting/quotes/{id}` as `converted`.
         - connector: procountor-fi
           description: ''
           Procountor only accepts the following values for the language field: EN, FI, SV, ET, NO, and DA.
@@ -27587,6 +27730,16 @@ paths:
         - connector: zoho-books
           description: |
             By default, the status of the invoice will be set to "draft".
+        - connector: zoho-books
+          description: |
+            `quotes` links the invoice to an existing Zoho Books estimate: send the quote's `id`
+            (`number` is read-only and is not sent). Zoho Books links one estimate per invoice, so only
+            the first quote in `quotes` is sent. The estimate must belong to the invoice's customer: a
+            quote `id` that does not exist, or that belongs to another customer, fails the request.
+            Zoho Books does not check the estimate's status (draft and declined estimates are linked
+            too), and one estimate can be linked to more than one invoice. Linking does not copy the
+            estimate's lines onto the invoice; send `line_items` yourself. Linking marks the estimate as
+            invoiced in Zoho Books.
         - connector: netsuite
           description: |
             Netsuite only supports one tracking category at a time so only the first item in the tracking_categories list will be used. While creating an invoice, revenue start date and revenue end date should be passed in the custom fields object inside the line items.
@@ -27981,6 +28134,8 @@ paths:
                 - id: '123456'
                   allocated_amount: 1000
                   date: '2020-09-30T07:43:32.000Z'
+              quotes:
+                - id: '123456'
               payment_method: cash
               channel: email
               language: EN
@@ -28102,6 +28257,25 @@ paths:
             including one that is partially paid — the vendor's status field only distinguishes
             finalized from paid/paidoff, with no distinct partially-paid state and no applied/
             remaining amount field. A fully paid invoice correctly reports `balance` as `0`.
+        - connector: quickbooks
+          description: |
+            `quotes` lists the estimates linked to the invoice.
+            `quotes[].number` is read from the linked estimates with one extra request. When that
+            request fails, or the invoice links more quotes than fit in one request, `quotes[].number`
+            is omitted and `meta.warnings` has an entry with `operation: quotesAll`.
+        - connector: intuit-enterprise-suite
+          description: |
+            `quotes` lists the estimates linked to the invoice.
+            `quotes[].number` is read from the linked estimates with one extra request. When that
+            request fails, or the invoice links more quotes than fit in one request, `quotes[].number`
+            is omitted and `meta.warnings` has an entry with `operation: quotesAll`.
+        - connector: netsuite
+          description: |
+            `quotes` lists the estimate the invoice was created from. An invoice created from a sales
+            order has no `quotes`, even when that sales order was created from an estimate. NetSuite
+            does not say which kind of transaction an invoice was created from, so it is checked with
+            one extra request. When that request fails, `quotes` is omitted and `meta.warnings` has an
+            entry with `operation: quotesAll`.
       responses:
         '200':
           $ref: '#/components/responses/GetInvoiceResponse'
@@ -28207,6 +28381,22 @@ paths:
         - connector: intuit-enterprise-suite
           description: |
             When setting tax rates on line items, Intuit Enterprise Suite requires valid tax codes. The `tax_rate.id` must reference an existing tax code from the tax-rates endpoint. Intuit Enterprise Suite automatically calculates tax amounts based on the tax code's rate.
+        - connector: quickbooks
+          description: |
+            `quotes` only adds quote links. Each quote `id` you send is linked to the invoice, and
+            quotes that are already linked stay linked. Sending `quotes: []`, `null` or a shorter list
+            removes no quote link: quote links cannot be removed by updating the invoice. The invoice's
+            other linked transactions (payments, time activities and billable charges) are kept. The
+            linking rules of invoice create apply: only Pending or Accepted estimates are linked, others
+            are ignored without an error, and a quote `id` that does not exist fails with a `400`.
+        - connector: intuit-enterprise-suite
+          description: |
+            `quotes` only adds quote links. Each quote `id` you send is linked to the invoice, and
+            quotes that are already linked stay linked. Sending `quotes: []`, `null` or a shorter list
+            removes no quote link: quote links cannot be removed by updating the invoice. The invoice's
+            other linked transactions (payments, time activities and billable charges) are kept. The
+            linking rules of invoice create apply: only Pending or Accepted estimates are linked, others
+            are ignored without an error, and a quote `id` that does not exist fails with a `400`.
         - connector: freshbooks
           description: |
             The status field can be set to either "submitted" or "draft". The other available statuses are set by the Freshbooks API and cannot be updated manually. The due_date and invoice_date fields are required for the due date to be updated.
@@ -28418,6 +28608,8 @@ paths:
                 - id: '123456'
                   allocated_amount: 1000
                   date: '2020-09-30T07:43:32.000Z'
+              quotes:
+                - id: '123456'
               payment_method: cash
               channel: email
               language: EN
@@ -28759,6 +28951,8 @@ paths:
                       - id: '123456'
                         allocated_amount: 1000
                         date: '2020-09-30T07:43:32.000Z'
+                    quotes:
+                      - id: '123456'
                     payment_method: cash
                     channel: email
                     language: EN
@@ -28879,6 +29073,24 @@ paths:
             authorized before this scope entered the default request list (2026-08-18) must be
             re-authorized to grant it; until then — or when the authorizing Xero user lacks the "reports"
             role — accounts are returned without `current_balance` instead of the request failing.
+
+            Fixed assets: the `fixed_asset` object comes from Xero's fixed-asset register, for an account
+            that holds asset cost: the registered assets whose asset type uses it as the fixed-asset
+            account (disposed and draft assets are not counted). `fixed_asset.cost` and
+            `fixed_asset.accumulated_depreciation` are totals over those assets; they come from the
+            register, not the ledger, so they can differ from `current_balance`. An account usually holds
+            several assets, so `acquisition_date`, `depreciation_method`, `downstream_depreciation_method`
+            and `useful_life_months` are set only when every one of its assets has the same value.
+            Methods are compared as Xero names them, so `DiminishingValue150` and `DiminishingValue200`
+            differ; a rate-based asset has no useful life. The object needs the `assets.read` scope:
+            connections authorized before it entered the default request list must be re-authorized, and
+            until then it is not set. It is computed only when `fields` names `fixed_asset` or one of its
+            sub-fields (for example `fields=id,name,current_balance,fixed_asset`), because it costs one
+            request for the asset types plus one per 200 registered assets; otherwise no extra request is
+            made. With Data Scopes, name the consented sub-fields (`fixed_asset.cost`, and so on). With
+            more than 2,000 registered assets, or when reading the register takes past 20 seconds of the
+            request, it is not set. Accumulated-depreciation accounts and other accounts have no
+            `fixed_asset`.
         - connector: netsuite
           description: |
             The minimun page size accepted for Netsuite is 5. The cursor for Netsuite expires if they have not been used within 15 minutes after its creation.
@@ -28892,6 +29104,7 @@ paths:
         - connector: quickbooks
           description: |
             QuickBooks Online does not expose a reliable cross-page total record count. The `QueryResponse.totalCount` field in list responses reflects the count for that page only, not the full dataset. `meta.total_count` will not appear in list responses. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
+            Fixed assets: `fixed_asset.cost` and `fixed_asset.accumulated_depreciation` are set on top-level accounts of type Fixed Asset. QuickBooks keeps a tracked asset as such an account with sub-accounts for its cost and its accumulated depreciation. `fixed_asset.cost` is the account's own balance plus its sub-accounts other than accumulated depreciation, amortization or depletion. `fixed_asset.accumulated_depreciation` is the total of those contra sub-accounts as a positive amount, or `null` when the account has none. Sub-accounts and other accounts have no `fixed_asset`: their balances roll up into the top-level account, whose own `current_balance` excludes them and is often `0`. The net book value is `fixed_asset.cost` minus `fixed_asset.accumulated_depreciation`. One extra QuickBooks request per page reads the fixed-asset sub-accounts, and only when the page holds a top-level fixed-asset account; with 1,000 or more fixed-asset sub-accounts the figures are not set. QuickBooks has no acquisition date, depreciation method or useful life, so the other `fixed_asset` sub-fields are not returned.
         - connector: intuit-enterprise-suite
           description: |
             Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
@@ -28904,6 +29117,7 @@ paths:
         - connector: zoho-books
           description: |
             Zoho Books does not expose a total record count in list responses. `meta.total_count` will not appear.
+            Fixed assets: the `fixed_asset` object comes from Zoho Books' fixed-asset register, for an account that holds asset cost: the active and fully depreciated assets whose asset account it is, matched by account name (unique in Zoho Books). `fixed_asset.cost` and `fixed_asset.accumulated_depreciation` are totals over those assets, accumulated depreciation being each asset's cost minus its current value; they come from the register, not the ledger, so they can differ from `current_balance`. An account usually holds several assets, so `acquisition_date`, `depreciation_method`, `downstream_depreciation_method` and `useful_life_months` are set only when every one of its assets has the same value; methods are compared as Zoho Books names them, so `150_declining_method` and `200_declining_method` differ. The object needs a Premium plan with the Fixed Asset module enabled; otherwise it is not set. It is computed only when `fields` names `fixed_asset` or one of its sub-fields (for example `fields=id,name,current_balance,fixed_asset`) and the connection was authorized with a fixed-asset scope (`ZohoBooks.fullaccess.all`, the default, or `ZohoBooks.fixedasset.*`); it then costs one extra request per 200 assets in the register. With Data Scopes, name the consented sub-fields (`fixed_asset.cost`, and so on). With more than 2,000 assets, or when reading the register takes past 20 seconds of the request, it is not set. Accumulated-depreciation accounts and other accounts have no `fixed_asset`.
         - connector: moneybird
           description: |
             Moneybird does not expose a total record count in list responses. `meta.total_count` will not appear.
@@ -29186,6 +29400,9 @@ paths:
             it includes future-dated transactions, and system-computed accounts (e.g. Retained Earnings)
             return 0. For signed, as-of-today balances across accounts, use the list endpoint
             (`GET /accounting/ledger-accounts`).
+
+            The `fixed_asset` object comes from the fixed-asset register, as described on the list:
+            computed only when `fields` names `fixed_asset` or one of its sub-fields.
         - connector: xero
           description: |
             `current_balance` is sourced from Xero's Trial Balance report (as at the current date, UTC),
@@ -29197,6 +29414,16 @@ paths:
             authorized before this scope entered the default request list (2026-08-18) must be
             re-authorized to grant it; until then — or when the authorizing Xero user lacks the "reports"
             role — the account is returned without `current_balance` instead of the request failing.
+
+            The `fixed_asset` object comes from the fixed-asset register, as described on the list:
+            computed only when `fields` names `fixed_asset` or one of its sub-fields, with the
+            `assets.read` scope, at the cost of extra requests.
+        - connector: quickbooks
+          description: |
+            `fixed_asset.cost` and `fixed_asset.accumulated_depreciation` are set on a top-level account
+            of type Fixed Asset, from the account and its sub-accounts, as described on the list. Other
+            accounts have no `fixed_asset`. QuickBooks has no acquisition date, depreciation method or
+            useful life.
       responses:
         '200':
           $ref: '#/components/responses/GetLedgerAccountResponse'
@@ -30206,11 +30433,15 @@ paths:
             company and fiscal year, so `filter[number]` can return several records — use `id`
             (`company:fiscal_year:document`) to address a single one.
 
-            `limit` applies to SAP posting lines, not to credit notes: a page can hold fewer credit
-            notes than `limit`, the last credit note on a page can be returned with only some of its
-            `line_items`, and no `next` cursor is returned. Results are newest first. Use the maximum
-            `limit` (200) and narrow the set with `created_since` or `updated_since`; a document with
-            more lines than fit on a page cannot be read completely from the list — fetch it by `id`.
+            Results are newest first. `limit` caps the SAP posting lines read per page, not the credit
+            notes, so a page can hold fewer credit notes than `limit`. A credit note is never split
+            across pages: one with more posting lines than `limit` is returned complete on a page of its
+            own. Only a credit note with more than 5,000 posting lines, or one whose lines cannot all be
+            read within the request's time budget, still appears on consecutive pages with the same
+            `id`, each carrying part of its lines; if SAP fails while they are read, the request returns
+            a retryable error. Follow `meta.cursors.next` until it is `null`. `meta.total_count` will
+            not appear and `meta.cursors.previous` is always `null`. `pass_through` cannot set `$top`,
+            `$skip` or `$orderby` on this list; such a request is refused with a 400.
         - connector: freeagent
           description: |
             FreeAgent's `Overdue` status is returned as `authorised` (or `partially_paid` when part of
@@ -31689,6 +31920,10 @@ paths:
             `date_issued` is stored as a calendar date — any time component is dropped. `line_items[].total_amount` is the line's extended amount (`unit_price × quantity`).
 
             Create, update and delete require the connection's Workday integration user to be granted access to supplier invoice adjustments. Without that access Workday rejects the write as unauthorized even though read access to the same records succeeds.
+
+            Workday requires an adjustment reason on every credit note, and the unified model has no field for it. Send the Workday adjustment reason ID with `pass_through`, for example `[{"service_id": "workday", "extend_paths": [{"path": "$['soapenv:Envelope']['soapenv:Body']['wd:Submit_Supplier_Invoice_Adjustment_Request']['wd:Supplier_Invoice_Adjustment_Data']['wd:Adjustment_Reason_Reference']", "value": {"wd:ID": {"_attributes": {"wd:type": "Adjustment_Reason_ID"}, "_text": "Miscellaneous"}}}]}]`; without it Workday rejects the credit note.
+
+            Each line must reference an active Workday purchase item in `line_items[].item.id`; Workday rejects a line that has neither a purchase item nor a spend category, and a spend category cannot be set on a unified credit note line.
         - connector: rillet
           description: |
             `subsidiary.id` is required, and line ledger accounts are selected by `line_items[].ledger_account.id` using the account code (e.g. `50110`), not a UUID.
@@ -33468,7 +33703,7 @@ paths:
             Countries are returned as ISO 3166-1 alpha-2 codes. Fiken stores a country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.
         - connector: workday
           description: |
-            Address lines on supplier reads: when the country's Workday address format has a separate house-number component, `addresses[].line1` is the street-name component (or, if the format has none, the lowest-numbered other component) with the house number appended, and that number is also returned as `street_number`. The remaining typed components (building, unit, floor and similar) fill `line2` to `line5` in Workday's line order. For formats without a house-number component (for example the US), `line1` is the lowest-numbered address line as Workday returns it, the others follow in `line2` to `line5`, and `street_number` is omitted.
+            Address lines on supplier reads: when Workday's address format for the country splits the street into components, `addresses[].line1` is built from them in this order: the street type when there is one (for example Spanish `Calle` or `Carrer`), then the street name, then the house number; so a Spanish address reads `Calle Montesa 16` and the house number is also returned as `street_number`. `line1` always places the house number after the street name, even where Workday's own formatted address in `string` puts it first, as for France and South Africa (`Rue Juliette Lamber 13`). When the format has a house number but no labelled street name, the lowest-numbered other component is used as the street name. The remaining typed components (building, unit, floor and similar) fill `line2` to `line5` in Workday's line order. For formats without a street-type or street-name component and without a house-number component (for example the US), `line1` is the lowest-numbered address line as Workday returns it, the others follow in `line2` to `line5`, and `street_number` is omitted.
       responses:
         '200':
           $ref: '#/components/responses/GetSuppliersResponse'
@@ -33822,7 +34057,7 @@ paths:
             Customers and suppliers are both Fiken contacts. A contact that is a customer but not a supplier returns `404` here. Countries are returned as ISO 3166-1 alpha-2 codes. Fiken stores a country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.
         - connector: workday
           description: |
-            Address lines on supplier reads: when the country's Workday address format has a separate house-number component, `addresses[].line1` is the street-name component (or, if the format has none, the lowest-numbered other component) with the house number appended, and that number is also returned as `street_number`. The remaining typed components (building, unit, floor and similar) fill `line2` to `line5` in Workday's line order. For formats without a house-number component (for example the US), `line1` is the lowest-numbered address line as Workday returns it, the others follow in `line2` to `line5`, and `street_number` is omitted.
+            Address lines on supplier reads: when Workday's address format for the country splits the street into components, `addresses[].line1` is built from them in this order: the street type when there is one (for example Spanish `Calle` or `Carrer`), then the street name, then the house number; so a Spanish address reads `Calle Montesa 16` and the house number is also returned as `street_number`. `line1` always places the house number after the street name, even where Workday's own formatted address in `string` puts it first, as for France and South Africa (`Rue Juliette Lamber 13`). When the format has a house number but no labelled street name, the lowest-numbered other component is used as the street name. The remaining typed components (building, unit, floor and similar) fill `line2` to `line5` in Workday's line order. For formats without a street-type or street-name component and without a house-number component (for example the US), `line1` is the lowest-numbered address line as Workday returns it, the others follow in `line2` to `line5`, and `street_number` is omitted.
       responses:
         '200':
           $ref: '#/components/responses/GetSupplierResponse'
@@ -34393,6 +34628,19 @@ paths:
             `filter[updated_since]` compares on whole days: SAP keeps only the date of the last change, so the time
             part is ignored and the filter is inclusive of the given day (in UTC). Records changed earlier that day are
             returned again; dedupe by `id`.
+
+            `limit` caps the SAP posting lines read per page, not the payments, so a page can hold fewer
+            payments than `limit`. A payment is never split across pages: one with more posting lines
+            than `limit` is returned complete on a page of its own. Only a payment with more than 5,000
+            posting lines, or one whose lines cannot all be read within the request's time budget, still
+            appears on consecutive pages with the same `id`, each carrying part of its lines; if SAP
+            fails while they are read, the request returns a retryable error. Follow `meta.cursors.next`
+            until it is `null`. `meta.total_count` will not appear and `meta.cursors.previous` is always
+            `null`. `pass_through` cannot set `$top`, `$skip` or `$orderby` on this list; such a request
+            is refused with a 400.
+
+            A `pass_through[$filter]` replaces the connector's document-type filter, so the list skips
+            documents of other types and can end before the last payment.
         - connector: fiken
           description: |
             Fiken has no payments list: the payments are read from the company's invoices, so a list
@@ -36276,6 +36524,16 @@ paths:
             `filter[updated_since]` compares on whole days: SAP keeps only the date of the last change, so the time
             part is ignored and the filter is inclusive of the given day (in UTC). Records changed earlier that day are
             returned again; dedupe by `id`.
+
+            `limit` caps the SAP posting lines read per page, not the journal entries, so a page can
+            hold fewer journal entries than `limit`. A journal entry is never split across pages: one
+            with more posting lines than `limit` is returned complete on a page of its own. Only a
+            journal entry with more than 5,000 posting lines, or one whose lines cannot all be read
+            within the request's time budget, still appears on consecutive pages with the same `id`,
+            each carrying part of its lines; if SAP fails while they are read, the request returns a
+            retryable error. Follow `meta.cursors.next` until it is `null`. `meta.total_count` will not
+            appear and `meta.cursors.previous` is always `null`. `pass_through` cannot set `$top`,
+            `$skip` or `$orderby` on this list; such a request is refused with a 400.
         - connector: minox
           description: |
             Without filters, journal entries of every fiscal year are listed. `filter[start_date]` and `filter[end_date]` narrow by posting date, apply to whole entries and may span fiscal years. Sorting is not supported: Minox entries have no created or updated timestamps.
@@ -36784,6 +37042,9 @@ paths:
             Status should be set to "draft" or "posted". Default status is "draft".
             Only Journal Entries with `draft` status can be updated.
             It is required to provide Cost_Center_Reference_ID as worktag in the line items, otherwise the status will automatically be set to "draft".
+            A journal entry saved as `draft` returns no `line_items` on Get Journal Entry or List Journal Entries: Workday does not
+            return the lines of a journal that has not been submitted. The lines are stored, and are returned once the journal is posted.
+            `source_type` is the Workday journal source; when it is not sent the journal is created with the `Manual_Journal` source.
         - connector: microsoft-dynamics-365-business-central
           description: |
             Employee account type: journal entry lines can reference employees via the `employee` field (use `display_id` for the employee number, or `id` with a GUID which will be resolved automatically). Note: reading back the journal entry will NOT return the employee reference — employee lines are invisible in BC's API for draft entries, and resolve to a GL payable account when posted. Send `ledger_account: {}` alongside the `employee` field to satisfy schema validation.
@@ -37248,6 +37509,10 @@ paths:
         - connector: oracle-fusion
           description: |
             Because journal entries are imported asynchronously (see the `journalEntriesAdd` gotcha), the `id` returned by `journalEntriesAdd` is a submission receipt prefixed with `ess-group:`, not a journal id. This operation accepts it: while the import is still running it answers `404`, and once the journal exists it answers for that journal exactly as it would for the journal's own id — which is what the `id` in that response is. The receipt does not expire.
+        - connector: workday
+          description: |
+            A journal entry saved as `draft` returns no `line_items` on Get Journal Entry or List Journal Entries: Workday does not
+            return the lines of a journal that has not been submitted. The lines are stored, and are returned once the journal is posted.
       responses:
         '200':
           $ref: '#/components/responses/GetJournalEntryResponse'
@@ -42650,6 +42915,19 @@ paths:
             `filter[updated_since]` compares on whole days: SAP keeps only the date of the last change, so the time
             part is ignored and the filter is inclusive of the given day (in UTC). Records changed earlier that day are
             returned again; dedupe by `id`.
+
+            `limit` caps the SAP posting lines read per page, not the bill payments, so a page can hold
+            fewer bill payments than `limit`. A bill payment is never split across pages: one with more
+            posting lines than `limit` is returned complete on a page of its own. Only a bill payment
+            with more than 5,000 posting lines, or one whose lines cannot all be read within the
+            request's time budget, still appears on consecutive pages with the same `id`, each carrying
+            part of its lines; if SAP fails while they are read, the request returns a retryable error.
+            Follow `meta.cursors.next` until it is `null`. `meta.total_count` will not appear and
+            `meta.cursors.previous` is always `null`. `pass_through` cannot set `$top`, `$skip` or
+            `$orderby` on this list; such a request is refused with a 400.
+
+            A `pass_through[$filter]` replaces the connector's document-type filter, so the list skips
+            documents of other types and can end before the last bill payment.
         - connector: fiken
           description: |
             Fiken has no bill payments list: the payments are read from the company's purchases, so a list

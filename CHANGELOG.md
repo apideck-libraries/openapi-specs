@@ -1,3 +1,53 @@
+## v10.75.0 - (2026-11-02)
+
+### Accounting API
+
+- Added `fixed_asset` to [Ledger Accounts](apis/accounting/reference/ledger-accounts) (read-only), for an account that holds the cost of fixed assets: `cost` and `accumulated_depreciation` (totals over the assets in the account), and `acquisition_date`, `depreciation_method` (normalised, with the system's own value in `downstream_depreciation_method`) and `useful_life_months`. An account usually holds several assets, so the date, method and useful life are set only when every asset in the account has the same value. Other accounts, including accumulated-depreciation accounts, have no `fixed_asset`.
+- [QuickBooks](connectors/quickbooks): `fixed_asset.cost` and `fixed_asset.accumulated_depreciation` on each top-level account of type Fixed Asset, from the account and its sub-accounts. QuickBooks has no acquisition date, depreciation method or useful life.
+- [Xero](connectors/xero) and [Zoho Books](connectors/zoho-books): the whole `fixed_asset` object, from the fixed-asset register. Reading the register costs extra requests, so it is computed only when `fields` names `fixed_asset` or one of its sub-fields. Xero needs the `assets.read` scope, which is now in Apideck's default scope set: connections authorized before this release must be re-authorized, and until then `fixed_asset` is not set. Zoho Books needs a Premium plan or higher with the Fixed Asset module enabled.
+
+## v10.74.2 - (2026-11-02)
+
+### Ecommerce API
+
+- [Amazon Seller Central](connectors/amazon-seller-central) integrations have a new optional **Selling Partner Appstore listing** setting. **Not listed (Draft)**, the default, keeps today's behaviour; choose **Listed on the Selling Partner Appstore (Published)** once your SP-API app is published there, so authorisation no longer requests your app's Draft version (`version=beta`). The setup guides were also corrected: apps that are not listed are supported (Amazon allows up to 25 seller authorisations for them), and MD1000, MD9000 and MD9100 are explained.
+
+## v10.74.1 - (2026-11-02)
+
+### Accounting API
+
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) [Invoices](apis/accounting/reference/invoices), [Credit Notes](apis/accounting/reference/credit-notes), [Journal Entries](apis/accounting/reference/journal-entries), [Payments](apis/accounting/reference/payments) and [Bill Payments](apis/accounting/reference/bill-payments) lists now return `meta.cursors.next` and page through every record; before, they stopped after the first page. `limit` counts SAP posting lines, so a page can hold fewer records than `limit`; a record with more posting lines than `limit` comes back complete on a page of its own unless it has more than 5,000 lines or cannot be read within the request's time budget. `meta.total_count` is no longer returned for these lists and `meta.cursors.previous` is always `null`; `pass_through` of `$top`, `$skip` or `$orderby` on them returns 400.
+
+## v10.74.0 - (2026-10-30)
+
+### Accounting API
+
+- [Invoices](apis/accounting/reference/invoices) now include `quotes`: the quotes (estimates) linked to an invoice, each with its `id` and, where available, `number`. Supported on [QuickBooks](connectors/quickbooks), [Intuit Enterprise Suite](connectors/intuit-enterprise-suite), [Zoho Books](connectors/zoho-books), [Sage Business Cloud Accounting](connectors/sage-business-cloud-accounting), [Moneybird](connectors/moneybird), [Pennylane](connectors/pennylane) and [NetSuite](connectors/netsuite). Creates can link quotes on all of these except Pennylane and NetSuite, and updates only on QuickBooks and Intuit Enterprise Suite; QuickBooks and Intuit Enterprise Suite accept several quotes per invoice, the others one. Zoho Books returns `quotes` on get but not on list.
+
+## v10.73.2 - (2026-10-29)
+
+### HRIS API
+
+- Fixed [Workday](connectors/workday) [Employees](apis/hris/reference/employees) returning parts of the street line in `addresses[].line2` for some countries. Spanish addresses with a separate street type (`Calle`, `Carrer`) now return it at the start of `line1` (for example `Calle Montesa 16`), and French addresses whose house number Workday labels `Street Number` now return it in `street_number` and at the end of `line1` (for example `Rue Juliette Lamber 13`). In both cases `line2` no longer carries that component. Street-name components labelled `Street`, `Name of Street` or `Street Name and Type` are now recognised directly instead of by position, and a labelled street name now goes to `line1` even when it is not Workday's first address line. `jobs[].location` follows the same rules.
+- Fixed [Workday](connectors/workday) [Companies](apis/hris/reference/companies) and [Departments](apis/hris/reference/departments) lists failing with a `500` on tenants whose company or cost center hierarchy organization type has a different reference ID (for example `COMPANY_HIERARCHY_TYPE`). The list is now requested again without the hierarchy type and returns the companies and cost centers; tenants where the hierarchy type exists are unchanged.
+- [Workday](connectors/workday) [Time-Off Requests](apis/hris/reference/time-off-requests) now return `501` (unsupported). Workday's web services have no operation that reads time off requests, and the previous mapping failed on every call.
+- Fixed [Workday](connectors/workday) [Employees](apis/hris/reference/employees) returning `compensations[].payment_unit` and `jobs[].payment_unit` as `null` for workers paid hourly or weekly. They now return `hour` or `week`, alongside `month` and `year`; other pay frequencies (for example bi-weekly) return `other`.
+
+### ATS API
+
+- Fixed [Workday](connectors/workday) [Applicants](apis/ats/reference/applicants) returning parts of the street line in `addresses[].line2` for some countries. A separate street type (Spanish `Calle`, `Carrer`) now starts `line1` (for example `Calle Montesa 16`), and a house number that Workday labels `Street Number` is now returned in `street_number` and at the end of `line1` (for example `Rue Juliette Lamber 13`). In both cases `line2` no longer carries that component. Street-name components labelled `Street`, `Name of Street` or `Street Name and Type` are now recognised directly, and a labelled street name now goes to `line1` even when it is not Workday's first address line.
+- [Workday](connectors/workday) [Applicants](apis/ats/reference/applicants) create, update and delete now return `501` (unsupported) instead of `404`. These operations were never implemented for Workday; listing and getting applicants is unchanged.
+
+### Accounting API
+
+- Fixed [Workday](connectors/workday) [Customers](apis/accounting/reference/customers) and [Suppliers](apis/accounting/reference/suppliers) returning parts of the street line in `addresses[].line2` for some countries. A separate street type (Spanish `Calle`, `Carrer`) now starts `line1` (for example `Calle Montesa 16`), and a house number that Workday labels `Street Number`, as on South African addresses, is now returned in `street_number` and at the end of `line1` (for example `Swartkoppies Road 35`). In both cases `line2` no longer carries that component. Street-name components labelled `Street`, `Name of Street` or `Street Name and Type` are now recognised directly, and a labelled street name now goes to `line1` even when it is not Workday's first address line.
+- Fixed [Workday](connectors/workday) [Payments](apis/accounting/reference/payments) returning no `id` for payments without a payment reference ID. The `id` now falls back to the Workday WID, which get and update accept; payments that have a reference ID keep it as their `id`.
+- Fixed [Workday](connectors/workday) [Bills](apis/accounting/reference/bills) and [Purchase Orders](apis/accounting/reference/purchase-orders) delete always failing with a Workday validation error; they now cancel the bill or purchase order. Fixed purchase order update failing whenever `shipping_address.id` or `billing_address.id` was sent.
+- Fixed [Workday](connectors/workday) [Bills](apis/accounting/reference/bills) returning attachment `notes` as an object instead of the comment text.
+- Fixed [Workday](connectors/workday) [Journal Entries](apis/accounting/reference/journal-entries) create failing with a Workday validation error when `source_type` is not sent. The journal source now defaults to `Manual_Journal`.
+- Fixed [Workday](connectors/workday) [Suppliers](apis/accounting/reference/suppliers) returning no `payment_method` when the supplier accepts several payment types; it now returns the default payment type. A supplier update now keeps the supplier's other accepted payment types instead of replacing them with `payment_method`, which becomes the default.
+- [Workday](connectors/workday) [Customers](apis/accounting/reference/customers) and [Suppliers](apis/accounting/reference/suppliers) create and update now use `display_name` as the business entity name when `company_id` is not sent. Workday requires the two names to match, so a create with only `display_name` no longer fails.
+
 ## v10.73.1 - (2026-10-26)
 
 ### Unified APIs

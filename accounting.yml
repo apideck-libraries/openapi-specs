@@ -30698,7 +30698,10 @@ paths:
           description: |
             On update, QuickBooks Desktop cannot modify credit-note line items, the AR account, or class — only customer, `date_issued`, `number`, and `note` (memo) change. Recreate the credit note to change lines.
         - connector: xero
-          description: For adding invoice allocations, use the proxy API. [Know more](https://developers.apideck.com/connectors/xero/docs/application_owner+oauth_credentials#2-curl-requests-for-adding-and-removing-allocations-from-xero-credit-note)
+          description: |
+            - `type` is required. Without it Xero returns a 400 ("Please ensure the invoice type is set") and nothing is created.
+            - Allocations are applied after the credit note is created. The credit note and the invoice must both be `authorised`, with the same contact and currency, and the allocation amount can't be more than the invoice balance.
+            - If an allocation fails, the request returns a 400 and the credit note is rolled back: an `authorised` credit note is voided (after removing the allocations that already succeeded), a `draft` one is deleted. If the rollback itself fails, the error says the credit note is still in Xero and gives its id; void or delete it before retrying.
         - connector: zoho-books
           description: |
             By default, the status of the bill will be set to "authorised".
@@ -34965,6 +34968,12 @@ paths:
             `"The invoice, payment and organisation base currencies are all different. Xero cannot currently handle a 3-currency transaction."`
 
             Pay from a bank account in either the base or the invoice currency (two currencies) to avoid the error.
+
+            Refunding a credit note (for example when the invoice is already paid):
+            - Send an allocation with `type: credit_memo` and the credit note id. Xero records it as a credit note refund (`ARCREDITPAYMENT`). The credit note becomes `paid` when the refund settles its remaining credit in full.
+            - The `account` must be a bank account, or have "Enable payments to this account" ticked in Xero. Otherwise Xero returns "Account type is invalid for making a payment to/from".
+            - Bank accounts often have no code in Xero. Send `account.id` instead of `account.code`.
+            - The amount can't be more than the credit note's remaining credit ("Payment amount exceeds the amount outstanding on this document").
         - connector: quickbooks
           description: |
             Payment allocations in QuickBooks are processed asynchronously. While the allocations are included in the request, they may not appear in the immediate response. The allocations will be applied and become visible in subsequent list or get calls.

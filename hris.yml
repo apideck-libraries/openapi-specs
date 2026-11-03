@@ -5382,6 +5382,35 @@ paths:
             page has fewer rows to read, so it makes fewer extra requests at once and finishes sooner. Listing every
             employee then takes more pages, and each page repeats the person and office location requests, so the
             total number of requests grows slightly. Spacing out page requests also helps against rate limits.
+        - connector: silae-fr
+          description: |
+            By default, listing employees makes one Silae request per page and returns only `id`, `display_name`,
+            `social_security_number` and `emails`. Use Get Employee for the full record.
+
+            To get the Get Employee details in the list as well, set "Include full details when listing employees" to
+            Yes in the connection's Employees configuration settings. Through the Vault API, this is the employees
+            resource config `enrich_employee_list` set to `"true"`. The list then also returns `first_name`,
+            `last_name`, `salutation`, `marital_status`, `title`, `employment_start_date`, `employment_end_date`,
+            `birthday`, `jobs`, `addresses` and `phone_numbers`.
+
+            Silae returns these details one employee at a time, so with the setting on every page makes one extra
+            request for each employee on it: a page of 200 employees makes 200 extra requests. Every extra request
+            counts against the connection's Silae API limits.
+
+            With the setting on, `fields` limits the extra requests to lists that need them: a list that asks only for
+            `id`, `display_name`, `social_security_number` and `emails` makes no extra requests. With the setting off,
+            `fields` cannot turn the extra details on.
+
+            When the setting is on, a failed extra request does not fail the list. If Silae rejects the request for an
+            employee, or the page takes too long to read every employee, the response is still a 200, those employees
+            are returned without the extra details, and `meta.warnings` has an entry whose `operation` is
+            `employeesOne`. If Silae refuses access or rate-limits the connection, no further extra requests are made
+            for that page and its remaining employees are returned without the extra details. A warning that the
+            connection is not allowed to read employee records repeats on every page: grant that access for the dossier
+            in Silae, or leave the setting off.
+
+            To make fewer extra requests per page and finish each page sooner, request smaller pages with `limit`
+            (default 20, maximum 200).
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeesResponse'
@@ -5920,6 +5949,17 @@ paths:
             seconds to wait before retrying), `x-downstream-ratelimit-limit` and `x-downstream-ratelimit-reset` (the
             Unix epoch time in milliseconds at which the window frees). Lucca provides no remaining-request count,
             and no rate-limit headers are returned on successful responses.
+        - connector: silae-fr
+          description: |
+            `gender` is not returned: Silae does not document its gender codes.
+
+            `employment_start_date`, `employment_end_date` and `title` describe the employee's current contract (the
+            active job, or the most recent one when none is active), and `jobs` contains only that job.
+            `employment_start_date` is the contract start date, not the date of the latest change to the job.
+            `employment_end_date` is null while the contract has no end date.
+
+            `jobs[].id` identifies Silae's current job record. Silae starts a new record whenever it registers a payroll
+            change, such as a salary change, so the id can change while the contract stays the same.
       responses:
         '200':
           $ref: '#/components/responses/GetEmployeeResponse'

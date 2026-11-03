@@ -1,3 +1,9 @@
+## v10.76.0 - (2026-11-02)
+
+### Accounting API
+
+- [Yuki](connectors/yuki) now supports [Bank Feed Statements](apis/accounting/reference/bank-feed-statements): create, list and get. Yuki has no bank statement API, so a created statement is uploaded to the administration's archive as a CAMT.053 bank file, which Yuki books on its own, usually within a minute; the response returns the archive document `id`. `bank_feed_account_id` is the bank account's IBAN, which does not need to exist in Yuki beforehand; an IBAN with invalid check digits, or the wrong length for a SEPA country, returns a `400`. `start_balance` is required, and an `end_balance` that does not equal the start balance plus the transactions returns a `400`. `status` is `pending` until Yuki has booked the file and `success` after; Yuki never reports a rejection, so a file it could not process stays `pending`, and a statement for a period already imported for the same IBAN is accepted but its transactions are skipped. Get returns the balances and `transactions` read from the stored file; the list returns statement headers only, including files a bookkeeper uploaded directly. The currency is always `EUR`, statements cannot be updated or deleted, and bank feed accounts are not supported because Yuki has no API to list bank accounts.
+
 ## v10.75.0 - (2026-11-02)
 
 ### Accounting API

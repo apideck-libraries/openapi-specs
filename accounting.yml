@@ -47538,6 +47538,18 @@ paths:
             late.
 
             This applies to every NetSuite date-only write field across the accounting resources.
+
+            `status` sets the estimate's sales stage: `sent` sets Proposal, `accepted` sets Purchasing and
+            `rejected` sets Closed Lost, which also closes the estimate in NetSuite. Proposal, Purchasing and
+            Closed Lost are matched by exact name: if one of them is renamed in NetSuite, even only in case, the
+            status that sets it returns 422 until the stage is named back. NetSuite has no draft stage: a quote
+            created with `draft`, or without `status`, starts at the account's default stage, which is Proposal
+            unless the account changed it, so it reads back as `sent`. A different default stage reads back as
+            the status that stage maps to, or as `draft` for a stage the account added itself. `converted`,
+            `void`, `expired` and `deleted` are set by NetSuite itself and return 422. When the quote's customer
+            is a prospect, NetSuite also moves the prospect's own status to the same stage; an existing
+            customer's status is not changed. A status that cannot be set rejects the whole request, including
+            its other fields.
         - connector: sage-intacct-rest
           description: |
             Sage writes order-entry documents only against a named transaction definition
@@ -47823,6 +47835,21 @@ paths:
             late.
 
             This applies to every NetSuite date-only write field across the accounting resources.
+
+            `status` sets the estimate's sales stage: `sent` sets Proposal, `accepted` sets Purchasing and
+            `rejected` sets Closed Lost, which also closes the estimate in NetSuite. A status the quote already
+            reads as changes nothing, so a quote read and sent back unchanged still saves, and a quote at
+            another stage that reads as `sent` (In Discussion, Identified Decision Makers or In Negotiation)
+            keeps that stage. Proposal, Purchasing and Closed Lost are matched by exact name: if one of them is
+            renamed in NetSuite, even only in case, the status that sets it returns 422 until the stage is named
+            back. A quote at a renamed stage, or at a stage the account added, reads as `draft`. `draft` is
+            accepted but sets no sales stage, as NetSuite has no draft stage. `converted`, `void` and `expired`
+            are set by NetSuite itself: they are accepted only when the quote already has that status, and
+            otherwise return 422, as does `deleted`. On a converted or expired quote, `accepted` changes the
+            sales stage, but the quote keeps reading as `converted` or `expired`. When the quote's customer is a
+            prospect, NetSuite also moves the prospect's own status to the same stage; an existing customer's
+            status is not changed. A status that cannot be set rejects the whole request, including its other
+            fields.
         - connector: sage-intacct-rest
           description: |
             Sage writes order-entry documents only against a named transaction definition

@@ -1,3 +1,9 @@
+## v10.76.1 - (2026-11-03)
+
+### Accounting API
+
+- [NetSuite](connectors/netsuite) [Quotes](apis/accounting/reference/quotes): `status` can now be set on create and update; before, it was accepted and ignored. `sent`, `accepted` and `rejected` set the estimate's sales stage (Proposal, Purchasing and Closed Lost), and `draft` is accepted but sets no sales stage: a new quote starts at the account's default stage, and an update leaves the stage unchanged. On an update, a status the quote already reads as changes nothing, so a quote at another stage that reads as `sent`, such as In Negotiation, keeps it. Proposal, Purchasing and Closed Lost are matched by exact name, so renaming one of them in NetSuite makes the status that sets it return 422; a quote at any other renamed stage reads `draft`. `converted`, `void`, `expired` and `deleted`, which NetSuite sets itself, now return 422, except that an update may send back `converted`, `void` or `expired` when the quote already has that status, so a quote read and sent back unchanged still saves. For a quote whose customer is a prospect, NetSuite also moves the prospect's status to the same stage. Reads also changed: a rejected (Closed Lost) quote reads `rejected`, an expired one `expired` and a voided one `void`, where all three used to read `draft`; an open quote in a sales stage of the account's own reads `draft` instead of `rejected`; and filtered or sorted lists now report the same `status` as unfiltered ones, including on later pages, instead of always `draft`. These read changes do not update a quote's last-modified date, so a sync that filters on `updated_since` keeps the old values until it runs a full resync.
+
 ## v10.76.0 - (2026-11-02)
 
 ### Accounting API

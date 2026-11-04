@@ -1,3 +1,9 @@
+## v10.77.0 - (2026-11-03)
+
+### HRIS API
+
+- Added new [SD Worx (Web service)](connectors/sdworx-webservice-oidc) connector with support for [Employees](apis/hris/reference/employees) and [Time Off Requests](apis/hris/reference/time-off-requests). It reads the same SD Worx HR Selfservice Absences webservice as the existing SOAP connector, now over REST with OIDC client credentials: SD Worx registers a certificate per customer and issues a Client ID for it, which the consumer enters together with the certificate's private key in the connection form. SD Worx no longer activates the username/password access the SOAP connector relies on, so that connector is now named [SD Worx (Web service) Legacy](connectors/sdworx-webservice) and declares the new connector as its migration target; existing legacy connections keep working. `time-off-requests` returns one record per employee per day (or day part) from the absence report, requires the `start_date`, `end_date`, `company_id` and `employee_id` filters (one employee per request, as the legacy connector does), returns `end_date` (equal to `start_date`, one record per day) and `description` (the absence code label), and converts `updated_at` and the `updated_since` filter between UTC and the Belgian local time SD Worx records; SD Worx limits each Client ID to 1,000 requested employee-months per day. `employees` exposes id, first name, last name and company id only.
+
 ## v10.76.1 - (2026-11-03)
 
 ### Accounting API

@@ -1,3 +1,9 @@
+## v10.78.0 - (2026-11-05)
+
+### Issue Tracking API
+
+- Ticket [Webhook Events](apis/issue-tracking/reference/webhook-events) (`issue-tracking.ticket.created`, `issue-tracking.ticket.updated` and `issue-tracking.ticket.deleted`) now include `collection_id`: the [Collection](apis/issue-tracking/reference/collections) (repository or project) the ticket belongs to, the same value already in `entity_url`. Together with `entity_id` it identifies the ticket for [Collection Tickets](apis/issue-tracking/reference/collection-tickets) calls without searching every collection, which matters on [GitHub](connectors/github), where `entity_id` is the issue number and is only unique within a repository. It is sent for [GitHub](connectors/github), [GitLab](connectors/gitlab), [GitLab on-prem](connectors/gitlab-server), [Jira](connectors/jira) and [Jira (API Token)](connectors/jira-api-token). Other connectors, such as [Linear](connectors/linear), do not include it, so treat `collection_id` as optional.
+
 ## v10.77.0 - (2026-11-03)
 
 ### HRIS API

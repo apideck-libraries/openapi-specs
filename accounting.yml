@@ -28558,21 +28558,21 @@ paths:
             is no way to retrieve these three fields through this connector once set.
         - connector: twinfield
           description: |
-            This list only returns unpaid invoices — Twinfield does not expose a way to list paid or
-            historical invoices. `status`, `line_items`, `invoice_date`, `due_date`, `currency`,
-            `sub_total`, `total_tax` and `balance` are not available on the list; fetch the invoice by
-            `id` for those fields.
+            Lists booked sales invoices from the configured sales daybook (setting "Sales invoice
+            daybook", default VRK), paid and unpaid. Credit notes are not included, and concept
+            invoices are not listed until they are finalised in Twinfield. `id` and `number` are the
+            invoice number, the same number customer payments use in `allocations[].id`.
 
-            Because of this, webhook notifications only reliably cover new invoices — once an invoice
-            is paid it drops out of this list entirely rather than appearing as an update, so a status
-            change to paid will not reliably produce a webhook event.
+            `line_items`, `sub_total` and `total_tax` are only returned when fetching an invoice by
+            `id`. `balance` is in the invoice currency and changes only when a payment is matched to
+            the invoice in Twinfield.
 
-            Several fields are read from Dutch-language field keys. Verified only against a
-            Dutch-language office; on a non-Dutch-language office this list may return empty.
+            `updated_at` is Twinfield's last-modified time labelled as UTC, so it may be 1-2 hours
+            ahead of true UTC. It is the time the receivable line last changed, so it can differ from
+            the `updated_at` of the same invoice read by `id`. `updated_since` may return slightly more records than strictly changed;
+            de-duplicate on `id`.
 
-            `meta.total_count` may overstate the true number of invoices: the underlying list mixes
-            unpaid bills into the same count, and pagination needs the unfiltered total to reliably
-            fetch every page.
+            Every call reads the office's full sales history, so large offices see slower responses.
         - connector: dualentry
           description: |
             `updated_since` is inclusive and is applied at whole-second granularity, so a poll that
@@ -29638,10 +29638,26 @@ paths:
             FreshBooks response, where both `taxName1`/`taxAmount1` and `taxName2`/`taxAmount2` are available on each line item.
         - connector: twinfield
           description: |
-            `line_items[].total_amount` is each line's net amount (excl. VAT), computed from
-            Twinfield's own `unitspriceexcl` × `quantity`. The VAT-inclusive gross total is `total`
-            (the invoice's header field, read from `totals.valueinc`) — Twinfield's response carries
-            no per-line gross figure to map instead.
+            `line_items[].total_amount` is the booked net line amount (excl. VAT) and there is no VAT
+            line item. `sub_total` + `total_tax` = `total`.
+
+            `balance` is the open amount in the invoice currency. For an invoice in a currency other
+            than the office's base currency, Twinfield may only return the open amount in the base
+            currency; `balance` is then left empty and `status` is worked out in the base currency. A
+            fully paid invoice returns `balance` 0, and an overpaid one a negative `balance`.
+
+            `id` is the invoice number, the same number customer payments use in
+            `allocations[].id`. Twinfield does not enforce unique invoice numbers: when two booked
+            transactions in the sales daybook share one, the read returns 409. A credit note's
+            invoice number returns `type: credit`.
+
+            An invoice that is not booked yet (a concept created through this API) is read from
+            Twinfield's invoicing module, which gives `quantity` and `unit_price` and no customer
+            name.
+
+            `updated_at` is the transaction's modification time, which can differ from the
+            `updated_at` the list returns for the same invoice (the list uses the time the
+            receivable line last changed).
         - connector: lexware-office
           description: |
             `balance` reports the full gross amount for any invoice that is not yet fully paid,

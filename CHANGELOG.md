@@ -1,3 +1,16 @@
+## v10.79.0 - (2026-11-09)
+
+### Accounting API
+
+- [Sage Intacct](connectors/sage-intacct) virtual webhooks now send `accounting.*.deleted` events for invoices, bills, bill payments, payments and ledger accounts, so these events are advertised in `supported_events` again. Deletes are read from the company's Sage Intacct audit trail after each sync, so delete events arrive with the sync cadence, starting from each resource's second sync. Sage can take several minutes to record a delete in the audit trail, so each sync also looks back over the 2 hours before the previous sync started: a delete made within 2 hours before a sync starts can be sent more than once, and a delete Sage takes more than 2 hours to record can be missed. Customers, suppliers and invoice items are not covered, because their audit-trail entries do not carry the record id; tax rates are not covered, because no tax-rate delete has been seen in the audit trail. If the Web Services user cannot read the audit trail, no delete events are sent.
+- [Sage Intacct REST](connectors/sage-intacct-rest) virtual webhooks now send `accounting.*.deleted` events for invoices, bills, payments, bill payments, credit notes, ledger accounts and tracking categories, so these events are advertised in `supported_events` again. Deletes are read from the company's audit history after each sync, starting from each resource's second sync. As on Sage Intacct, each sync looks back over the 2 hours before the previous sync started: a delete made within 2 hours before a sync starts can be sent more than once, and a delete the audit history takes more than 2 hours to record can be missed. Customers, suppliers, invoice items, projects, quotes and expenses are not covered. If the authorizing user cannot read the audit history, no delete events are sent.
+
+## v10.78.2 - (2026-11-09)
+
+### Webhook API
+
+- An Intuit webhook event is now delivered through the company's working connection. When a company's connection under the connector the URL belongs to ([QuickBooks](connectors/quickbooks) or [Intuit Enterprise Suite](connectors/intuit-enterprise-suite)) cannot be called (for example disabled, or invalid outside its refresh retention window) and its connection under the other connector works, the event is delivered through the working one, with that connector's `service_id`. Previously that connection kept the event and it was dropped. After moving a company from QuickBooks Online to Intuit Enterprise Suite, disable the old QuickBooks connection: its events then go to the Intuit Enterprise Suite connection. When neither connection works, the event is not delivered, as before.
+
 ## v10.78.1 - (2026-11-09)
 
 ### Accounting API

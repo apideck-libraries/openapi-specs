@@ -8629,7 +8629,9 @@ paths:
         - apiKey: []
       x-apideck-gotchas:
         - connector: hubspot
-          description: When creating a lead, it is advised to always include an unique email address since Hubspot uses it to prevent duplicate contacts in HubSpot. More info on the [Hubspot developer docs](https://developers.hubspot.com/docs/api/crm/contacts).
+          description: |-
+            HubSpot stores a lead as a Contact. The returned `id` is the HubSpot contact id, and the lifecycle stage comes from the connection's Leads **Lifecycle stage** setting when it is set; otherwise HubSpot's default applies. When creating an activity or note for this lead, pass the id as `lead_id` or `contact_id`; both associate it with the contact.
+            When creating a lead, it is advised to always include an unique email address since Hubspot uses it to prevent duplicate contacts in HubSpot. More info on the [Hubspot developer docs](https://developers.hubspot.com/docs/api/crm/contacts).
         - connector: pipedrive
           description: When creating a lead, it is required to include an existing `company_id`. More info on the [Pipedrive developer docs](https://pipedrive.readme.io/docs/adding-a-lead).
         - connector: freshsales
@@ -9436,6 +9438,8 @@ paths:
       x-apideck-gotchas:
         - connector: salesforce
           description: When creating a note in Salesforce, you can only associate it with one resource (such as a lead, company or opportunity) at a time. You cannot combine multiple resources or associate the note with more than one resource in a single API call.
+        - connector: hubspot
+          description: HubSpot leads are Contacts, so `lead_id` and `contact_id` both associate the note with a HubSpot contact. When both are sent with different ids, the note is associated with both contacts.
         - connector: close
           description: When creating a note in Close, the content of the note should be sent in html surrounded by the <body> tags and at least other inner element. If these tags are not sent, unify will surround the note with <body> and <p> tags.
         - connector: teamleader
@@ -10041,6 +10045,8 @@ paths:
             Associate the activity with a record using `contact_id` or `lead_id` (mapped to `WhoId`), and `account_id`/`opportunity_id`/etc. (mapped to `WhatId`).
         - connector: planhat
           description: While creating an activity, the type should always be `task`.
+        - connector: hubspot
+          description: HubSpot leads are Contacts, so `lead_id` and `contact_id` both associate the activity with a HubSpot contact. When both are sent with different ids, the activity is associated with both contacts.
         - connector: zoho-crm
           description: "Zoho CRM maps all activities to the Events module (`POST /v2.1/Events`) regardless of the `type` value. An activity created with `type: note`, `call`, `task`, or `email` is still stored as a Zoho Event (a calendar entry), and reads of `/crm/activities` return only Events. To log a note against a record, use the dedicated `/crm/notes` resource (mapped to Zoho's `/v5/Notes`) instead."
       requestBody:

@@ -1,3 +1,9 @@
+## v10.78.1 - (2026-11-09)
+
+### Accounting API
+
+- Fixed [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite) [Invoice Items](apis/accounting/reference/invoice-items) returning the wrong `type` for three QuickBooks item types. Non-inventory items now return `non_inventory` instead of `other`, and category and bundle (group) items now return `other` instead of `inventory`; any item type QuickBooks adds later also returns `other`. If you identify non-inventory items by `other`, or treat every `inventory` item as stock-tracked, update that logic. Creating or updating an item with `type: non_inventory` now creates a non-inventory item instead of being rejected by QuickBooks. `type: other` still creates a non-inventory item, as before; send `non_inventory` instead, and omit `type` when updating a category or bundle item to leave its type unchanged.
+
 ## v10.78.0 - (2026-11-05)
 
 ### Issue Tracking API

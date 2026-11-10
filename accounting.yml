@@ -28648,6 +28648,16 @@ paths:
             Intuit Enterprise Suite uses the same underlying QuickBooks API. The `QueryResponse.totalCount` field in list responses reflects the per-page count only. `meta.total_count` will not appear. Surfacing the true total requires a separate `SELECT COUNT(*) FROM {Entity}` query — an extra API call that is not currently implemented.
         - connector: quickbooks
           description: |
+            A bundle (group item) is returned as its component lines. Each item in the bundle is its own
+            `sales_item` line with its item, quantity, unit price and amount, and these lines add up to
+            the bundle's total. The bundle itself is not returned as a line item.
+        - connector: intuit-enterprise-suite
+          description: |
+            A bundle (group item) is returned as its component lines. Each item in the bundle is its own
+            `sales_item` line with its item, quantity, unit price and amount, and these lines add up to
+            the bundle's total. The bundle itself is not returned as a line item.
+        - connector: quickbooks
+          description: |
             `quotes` lists the estimates linked to the invoice with their `id` only; `quotes[].number`
             is not returned on the list. Read it from `GET /accounting/invoices/{id}` or
             `GET /accounting/quotes/{id}`.
@@ -29666,6 +29676,16 @@ paths:
             remaining amount field. A fully paid invoice correctly reports `balance` as `0`.
         - connector: quickbooks
           description: |
+            A bundle (group item) is returned as its component lines. Each item in the bundle is its own
+            `sales_item` line with its item, quantity, unit price and amount, and these lines add up to
+            the bundle's total. The bundle itself is not returned as a line item.
+        - connector: intuit-enterprise-suite
+          description: |
+            A bundle (group item) is returned as its component lines. Each item in the bundle is its own
+            `sales_item` line with its item, quantity, unit price and amount, and these lines add up to
+            the bundle's total. The bundle itself is not returned as a line item.
+        - connector: quickbooks
+          description: |
             `quotes` lists the estimates linked to the invoice.
             `quotes[].number` is read from the linked estimates with one extra request. When that
             request fails, or the invoice links more quotes than fit in one request, `quotes[].number`
@@ -29766,6 +29786,18 @@ paths:
             returned by Invoice Items is rejected by Sage with "Item 'N' specified is not valid"
             (BL01001973). No automatic translation is applied: Sage item codes may themselves be
             numeric, so a record number cannot be told apart from a code.
+        - connector: quickbooks
+          description: |
+            Sending `line_items` replaces every line on the invoice. A bundle (group item) is read as its
+            component lines, so writing those lines back stores them as separate lines: the totals stay
+            the same, but the bundle grouping is lost. To keep a bundle, update the invoice without
+            `line_items`.
+        - connector: intuit-enterprise-suite
+          description: |
+            Sending `line_items` replaces every line on the invoice. A bundle (group item) is read as its
+            component lines, so writing those lines back stores them as separate lines: the totals stay
+            the same, but the bundle grouping is lost. To keep a bundle, update the invoice without
+            `line_items`.
         - connector: quickbooks
           description: |
             Quickbooks offers limited (regional) support for applying discount on a Line Item. Including discount_percentage or discount_amount applies to entire invoice. The default type for a Line Item is a sales item if no type has been provided. When setting status to `void`, do not include any other fields in the request body. Send an `Idempotency-Key` to make retrying an update (including a void) safe: it reaches QuickBooks as its `requestid`. QuickBooks keeps a `requestid` for at least 24 hours and can keep it longer, so after the 24-hour window a key reused for a different update may get the original update's result back, with the new body ignored. Use a new key for every update. Your key can be 1-255 characters: Unify sends QuickBooks a 32-character `requestid` derived from it, so QuickBooks' 50-character `requestid` limit never applies.

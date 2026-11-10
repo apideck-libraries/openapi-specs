@@ -37839,12 +37839,12 @@ paths:
 
             Accounts are classified by their RGS code (the Dutch reference chart of accounts), as Minox's RGS trial balance assigns it, which includes accounts created through the API. An account without one is placed by its profit/loss/balance group in Minox: in a balance-sheet group it is listed under `uncategorized_items`; in a profit-and-loss group it counts towards the result of the open fiscal year, shown as an equity item; without a group it is listed under `uncategorized_items` and counted in neither result. The year result equals the net income of a profit and loss report over the same fiscal year from its first period.
         - connector: quickbooks
-          description: When using start and end date filters, QuickBooks requires both to be sent. However, the report only reflects the balance sheet situation as of the end date.
+          description: The balance sheet is returned as at `filter[end_date]`. `filter[start_date]` is not needed and does not change the result, because a balance sheet has no start date; send `filter[end_date]` only.
         - connector: intuit-enterprise-suite
-          description: When using start and end date filters, Intuit Enterprise Suite requires both to be sent. However, the report only reflects the balance sheet situation as of the end date.
+          description: The balance sheet is returned as at `filter[end_date]`. `filter[start_date]` is not needed and does not change the result, because a balance sheet has no start date; send `filter[end_date]` only.
         - connector: netsuite
           description: |
-            NetSuite date filtering resolves `filter[end_date]` to accounting period IDs via SuiteQL, then filters the SOAP request by periods up to that date. This requires the SuiteAnalytics Workbook permission for period resolution. If unavailable, returns all-time data as fallback. For Balance Sheet, only `filter[end_date]` is meaningful (point-in-time snapshot).
+            NetSuite date filtering resolves `filter[end_date]` to accounting period IDs via SuiteQL, then filters the SOAP request by periods up to that date. This requires the SuiteAnalytics Workbook permission for period resolution. If unavailable, returns all-time data as fallback. For Balance Sheet, send `filter[end_date]` only: `filter[start_date]` currently excludes the accounting periods before that date, which changes the totals.
             If the connection's Default Subsidiary names a subsidiary that no longer exists, this report returns every figure at zero with a 200 rather than an error — that is indistinguishable from an entity with no activity. A statement of zeros for a company you expect to have data means the selected subsidiary is stale.
         - connector: rillet
           description: |
@@ -37861,6 +37861,11 @@ paths:
 
             Accounts with a zero balance as of the requested date are omitted from the response
             entirely rather than returned with a zero value.
+        - connector: freeagent
+          description: |
+            The balance sheet is returned as at `filter[end_date]`, or today when it is omitted. `filter[start_date]` is accepted and ignored, because a balance sheet has no start date. `filter[period_count]` and `filter[period_type]` are not supported.
+
+            `filter[end_date]` must fall within one of the company's accounting periods in FreeAgent: from the date the company's books start in FreeAgent to the end of its latest accounting year. A date outside that range returns a `400` ("No accounting period includes the specified dates"). Limit the dates you request to that range, for example by not asking for year ends before the company started using FreeAgent.
       responses:
         '200':
           $ref: '#/components/responses/GetBalanceSheetResponse'

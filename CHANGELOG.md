@@ -1,3 +1,9 @@
+## v10.80.3 - (2026-11-12)
+
+### HRIS API
+
+- [BambooHR](connectors/bamboohr) [Employees](apis/hris/reference#tag/Employees): listing employees now pages through BambooHR's List Employees endpoint instead of fetching the full report on every page. Each page reads report fields for its own employees only, and field and list metadata are reused for up to five minutes, so a page makes two BambooHR requests instead of four (five when that metadata is refreshed). Employees are returned in BambooHR employee-ID order. A `cursor` issued before this release no longer continues a listing: the request returns the first page instead. If BambooHR rejects a stored cursor, for example because the employee it points to was deleted, the listing restarts from the first page and the response carries a warning. New custom fields can take up to five minutes to appear, both in the list and when reading a single employee. Raw employee data no longer includes the unmapped `stateCode` field. The list also now includes employees whose records have not changed since October 2012, which the previous report filter left out. An address with no state now returns `state: null` instead of an empty string. With virtual webhooks, the first sync after this release sends one `employee.updated` event for each previously listed employee that has a state code (because `stateCode` left the raw data) and one `employee.created` event for each newly listed employee.
+
 ## v10.80.2 - (2026-11-10)
 
 ### Management API

@@ -1,3 +1,15 @@
+## v10.81.0 - (2026-11-11)
+
+### ACTION REQUIRED
+
+Users should note the following breaking change that may affect existing integrations implementing any Unified API:
+
+- A request for an operation a connector doesn't support now returns `405 Method Not Allowed` with `type_name: ConnectorOperationUnsupportedError`, on every connector, when the connector has no operation that serves it. Before, it returned `404` `ConnectorExecutionError` ("Connector Returned Error") when the connector did not declare the operation unsupported, which read like a record missing at the provider even though no request was sent to it, and `501` when it did. A batch request or batch item the connector can't write also returns `405` instead of `501`. If your integration checks for `404` or `501` to detect an unsupported operation, check for `405` instead; like `501` before, retrying will not help.
+- A list or single-record read the connector doesn't support returns the `405` even when its `filter` or `sort` is also unsupported. Before, it returned `400` (`UnsupportedFiltersError`, `MissingRequiredFiltersError` or `UnsupportedSortFieldError`) first, and the `404` only after the filter or sort was removed. A filter or sort the connector doesn't support on an operation it does serve still returns `400`.
+- The `405` response carries an `Allow` header with the other methods that connector implements on the same URL (empty when no other method is known to be served; a method it serves only under some connection settings is left out), exposed to browsers through `Access-Control-Expose-Headers`, and `Vary: x-apideck-service-id, x-apideck-service, x-apideck-consumer-id, x-apideck-app-id, x-apideck-application-id`, since without `x-apideck-service-id` the connector is the consumer's only connection for the API. Its `detail` keeps `context`, plus `error` when there is a reason to give: the connector's declared reason, or `{ reason, error }` when a batch request is refused.
+- A batch request for a resource whose batch workflow is misconfigured on our side still returns `501`, now with `type_name: ConnectorWorkflowMappingError` instead of `ConnectorOperationUnsupportedError`: the operation is supported, our configuration is at fault.
+- Every connector-backed operation in the OpenAPI specs now documents the `405` response, so the SDKs can return it as a typed error instead of the default one. The Errors section lists `405` and describes `ConnectorOperationUnsupportedError`.
+
 ## v10.80.3 - (2026-11-12)
 
 ### HRIS API

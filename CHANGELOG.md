@@ -1,3 +1,21 @@
+## v10.80.2 - (2026-11-10)
+
+### Management API
+
+- [Integrations](apis/management/reference/integrations) now include a read-only `webhook_delivery` field for connectors with manually registered native webhooks. It is `execute_url` when you register `webhook_execute_url` in the vendor, `apideck_app` when events arrive through Apideck's own vendor app, and `unavailable_with_apideck_credentials` when native webhooks need your own vendor credentials. Integrations on Apideck credentials for [HubSpot](connectors/hubspot), [QuickBooks](connectors/quickbooks), [Intuit Enterprise Suite](connectors/intuit-enterprise-suite), [Xero](connectors/xero), [Linear](connectors/linear) and [Employment Hero](connectors/employmenthero) no longer return `webhook_execute_url`, because the vendor stores one webhook URL per developer app, which cannot be set for a customer.
+
+## v10.80.1 - (2026-11-10)
+
+### Connector API
+
+- `webhook_support` on connectors now includes `target_url_scope` and `vendor_app_url`. `target_url_scope` says where the vendor stores the webhook target URL: `app` means one URL per vendor developer app, which customers using Apideck's own credentials cannot configure, and `tenant` means each customer's vendor account holds its own URL. `vendor_app_url` says whether Unify accepts webhook URLs scoped to a vendor developer app, rather than to one Apideck application, for the connector. [HubSpot](connectors/hubspot), [QuickBooks](connectors/quickbooks), [Intuit Enterprise Suite](connectors/intuit-enterprise-suite), [Xero](connectors/xero), [Linear](connectors/linear) and [Employment Hero](connectors/employmenthero) report `target_url_scope: app`, and [Officient](connectors/officient-io) reports `tenant`.
+
+## v10.80.0 - (2026-11-09)
+
+### Accounting API
+
+- Added [SAP Business One](connectors/sap-business-one) as an Accounting API connector (beta), through the SAP Business One Service Layer. It supports [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Products](apis/accounting/reference/invoice-items), [Invoices](apis/accounting/reference/invoices), [Bills](apis/accounting/reference/bills), [Credit Notes](apis/accounting/reference/credit-notes), [Payments](apis/accounting/reference/payments), [Quotes](apis/accounting/reference/quotes), [Sales Orders](apis/accounting/reference/sales-orders), [Purchase Orders](apis/accounting/reference/purchase-orders), [Bank Accounts](apis/accounting/reference/bank-accounts), [Departments](apis/accounting/reference/departments) and [Employees](apis/accounting/reference/employees) (read and write), [Expense Categories](apis/accounting/reference/expense-categories) (create, read and delete), [Tracking Categories](apis/accounting/reference/tracking-categories) and [Journal Entries](apis/accounting/reference/journal-entries) (create and read), [Ledger Accounts](apis/accounting/reference/ledger-accounts) and [Tax Rates](apis/accounting/reference/tax-rates) (read), and [Attachments](apis/accounting/reference/attachments) on invoices, bills, credit notes and quotes (list, get, upload and download). Bank accounts return the bank name, and the currency and balance of the linked G/L account. SAP Business One cannot delete quotes or sales orders, so a delete cancels them. Uploads need the company's attachments folder to be set up in SAP Business One, a file name can be used only once per company, and attachments cannot be deleted. Webhooks are not supported. A connection logs in to the customer's Service Layer with an SAP Business One user name and password, so the Service Layer must be reachable over HTTPS with a CA-signed certificate.
+
 ## v10.79.0 - (2026-11-09)
 
 ### Accounting API

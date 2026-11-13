@@ -1,3 +1,19 @@
+## v10.82.1 - (2026-11-13)
+
+### Accounting API
+
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) [Invoices](apis/accounting/reference/invoices), [Payments](apis/accounting/reference/payments) and [Bill Payments](apis/accounting/reference/bill-payments) now store `reference` on create and return it on read. `reference` is the SAP document reference: the value sent on create, the billing document number for invoices created by SAP billing, and `null` when the document has none. Before, `reference` was not stored and reads returned the SAP document number, which `number` still returns. SAP keeps up to 16 characters and stores them in upper case; a longer value is cut.
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) invoice `customer_memo`, payment and bill payment `note`, and [Journal Entries](apis/accounting/reference/journal-entries) `memo` now return the document header text, which is where a create stores them (up to 25 characters), and `null` when it is empty. Before, they returned the text of the document's first line. Invoice line `description` is now stored on create (up to 50 characters) and returned.
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) creates of invoices, [Credit Notes](apis/accounting/reference/credit-notes), payments, bill payments and journal entries now return the same `id` that list and get return, without leading zeros in the document number (`1110:2026:100000001`, not `1110:2026:0100000001`). An id returned by an earlier create still works on get.
+
+## v10.82.0 - (2026-11-12)
+
+### Accounting API
+
+- Added optional `balance_as_of` to [Bank Feed Accounts](apis/accounting/reference/bank-feed-accounts): when `balance` was true, as an ISO 8601 date-time with a timezone offset. [Intuit Bank Feeds](connectors/intuit-bank-feeds) and [Plaid Core Exchange](connectors/plaid-exchange) forward it on create and return it on reads. When `balance` is sent without `balance_as_of`, the time the balance was received is recorded instead. A value without a timezone offset (`Z` or `±hh:mm`), or one that is not a valid date-time, is rejected with `timezone_offset`.
+- [Intuit Bank Feeds](connectors/intuit-bank-feeds) now requires account holder contact data, as [Plaid Core Exchange](connectors/plaid-exchange) already does: every [Bank Feed Account](apis/accounting/reference/bank-feed-accounts) must carry at least one entry in each of `account_holders`, `emails`, `addresses` and `phone_numbers`, or it is rejected with one `contact_required` violation per missing list. QuickBooks reads these details with each account.
+- [Intuit Bank Feeds](connectors/intuit-bank-feeds) [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) now pass each transaction's `transaction_type`, `merchant_category_code` and `counterparty` to QuickBooks, as the transaction type, the merchant category and (on `bank` accounts only) the payee. When `transaction_type` contradicts `credit_or_debit`, `credit_or_debit` decides.
+
 ## v10.81.0 - (2026-11-11)
 
 ### ACTION REQUIRED

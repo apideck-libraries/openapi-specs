@@ -1,3 +1,11 @@
+## v10.82.2 - (2026-11-13)
+
+### Accounting API
+
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud): the connection has three new optional settings for creating [Customers](apis/accounting/reference/customers) and [Suppliers](apis/accounting/reference/suppliers). **Default Business Partner Grouping** replaces the fixed `BP01` grouping, so tenants where `BP01` expects a manually assigned number can create records without overriding the grouping on every request. Creating a customer or supplier with `company_id` and a reconciliation account (`account.id`, or the new **Default Customer Reconciliation Account** / **Default Supplier Reconciliation Account** setting) now also sets the record up in that company code, so invoices, bills and payments can be posted against it. Send `terms` with an SAP payment terms key (for example `0004`) to set the payment terms in that company code; a bill for a supplier created without `terms` needs `due_date`. None of these fields is returned when the record is read. Requests that send neither behave as before. If you already send both `company_id` and `account.id` on these requests, they were ignored until now and are applied from this version, so they must be a company code and reconciliation account that exist in SAP.
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud): updating a [Customer](apis/accounting/reference/customers) or [Supplier](apis/accounting/reference/suppliers) that is a person no longer fails with `Language Key ... is a required entry field`. Every update sent an empty language, which SAP refuses for a person.
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud): updating a [Customer](apis/accounting/reference/customers) or [Supplier](apis/accounting/reference/suppliers) without `status` no longer reactivates an inactive record. An update that contains none of the fields that can be updated (`first_name`, `last_name`, `company_name`, `display_name`, `status`) and no `pass_through` now returns a `400` that names them; it used to return `200`.
+
 ## v10.82.1 - (2026-11-13)
 
 ### Accounting API

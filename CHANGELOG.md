@@ -1,3 +1,12 @@
+## v10.83.1 - (2026-11-17)
+
+### Accounting API
+
+- [Workday](connectors/workday): updating a [Purchase Order](apis/accounting/reference/purchase-orders) that is issued in Workday now works. The update is sent to Workday as a change order: send only the fields to change and the line items to change with each line's `id`. A line with `quantity` 0 is cancelled and a line without `id` is added. `supplier.id`, `company_id`, `po_number` and `currency` cannot be changed. Before, these updates failed with a Workday error. When Workday has an approval process for purchase orders, the changed purchase order goes through it again, and reads return it with status `open` until it is approved.
+- [Workday](connectors/workday): updating a purchase order that is in progress (for example awaiting approval), approved but not issued, or that has a change order in progress now returns `400` with the reason. Before, Workday's `500` was returned.
+- [Workday](connectors/workday): new optional connection setting **Purchase order approvals** on the purchase orders resource. Set to follow the Workday approval process, new purchase orders wait for the approvers Workday assigns instead of being approved automatically. When it is left empty, nothing changes.
+- [Workday](connectors/workday): when Workday accepts a purchase order update but reports a problem with it, the problem is now returned in `meta.warnings`.
+
 ## v10.83.0 - (2026-11-16)
 
 ### Accounting API

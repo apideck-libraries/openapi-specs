@@ -729,6 +729,10 @@ components:
           type: string
           description: Link to documentation of error type
           example: https://developers.apideck.com/errors#requestlimiterror
+    ResolveWebhookEventIdRequest:
+      type: string
+      x-apideck-schema-id: ResolveWebhookEventIdRequest
+      description: A webhook body that is a single JSON string, such as the id of a deleted record.
     ResolveWebhookEventRequest:
       type: object
       x-apideck-schema-id: ResolveWebhookEventRequest
@@ -1791,6 +1795,7 @@ paths:
               oneOf:
                 - $ref: '#/components/schemas/ResolveWebhookEventRequest'
                 - $ref: '#/components/schemas/ResolveWebhookEventsRequest'
+                - $ref: '#/components/schemas/ResolveWebhookEventIdRequest'
           application/cloudevents-batch+json:
             schema:
               oneOf:

@@ -1,3 +1,9 @@
+## v10.83.0 - (2026-11-16)
+
+### Accounting API
+
+- [SAP S/4HANA](connectors/sap-s4hana-cloud) (formerly SAP S/4HANA Cloud) now connects to SAP S/4HANA On-Premise and Private Cloud Edition systems as well as Public Edition tenants. The Vault field **Tenant ID** is now **SAP System URL**: it takes a Public Edition tenant ID as before, the Fiori launchpad address as pasted from the browser, or the HTTPS address (with optional port and path prefix) of a gateway in front of an On-Premise or Private Cloud system. Existing connections keep working without changes. A new optional **SAP Client** setting selects the SAP client on gateway connections; it is sent as the `sap-client` query parameter on unified requests and as the `sap-client` header on Proxy API requests, and never on Public Edition. On gateway connections, creating [Invoices](apis/accounting/reference/invoices), [Credit Notes](apis/accounting/reference/credit-notes), [Journal Entries](apis/accounting/reference/journal-entries), [Payments](apis/accounting/reference/payments) and [Bill Payments](apis/accounting/reference/bill-payments) returns `501`; reading them works. Proxy API URLs that use `{tenant_id}` receive the bare tenant ID on Public Edition and the gateway address on other connections, whichever form was entered in Vault.
+
 ## v10.82.2 - (2026-11-13)
 
 ### Accounting API

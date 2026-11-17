@@ -1,3 +1,10 @@
+## v10.84.0 - (2026-11-17)
+
+### Accounting API
+
+- [Sage Intacct (REST)](connectors/sage-intacct-rest) now works in one entity of a multi-entity company. Set the new **Default Entity** connection setting, or send the `x-apideck-company-id` header with an entity's id (for example `100`); the header wins, and `top-level` works across the whole company. The ids that [Companies](apis/accounting/reference/companies) returns (entity keys, for example `1`) are accepted too; a header value that is the id of one entity and the key of another is rejected with `400`. Inside an entity, lists return that entity's records, including the ones it keeps private, and records created there belong to it: they can only be read, updated and deleted with the same entity. An entity Sage does not know, or an elimination entity (Sage does not let requests work inside one), is rejected with `400` instead of silently answering at top level. Connections without a Default Entity and requests without the header behave as before. If you already send `x-apideck-company-id` to this connector, it was ignored until now and is applied from this version.
+- [Sage Intacct (REST)](connectors/sage-intacct-rest): listing [Invoices](apis/accounting/reference/invoices) and [Quotes](apis/accounting/reference/quotes) no longer fails with `REST-1107` ("field does not exist"). Sage moved four project contract billing fields under nested objects, and the list requests asked for the old names.
+
 ## v10.83.1 - (2026-11-17)
 
 ### Accounting API

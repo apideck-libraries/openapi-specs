@@ -1,3 +1,9 @@
+## v10.84.3 - (2026-11-18)
+
+### HRIS API
+
+- [HiBob](connectors/hibob) and [HiBob (OAuth)](connectors/hibob-oauth) virtual webhooks no longer send `hris.employee.updated` on every sync for terminated [Employees](apis/hris/reference#tag/Employees). HiBob recalculates each terminated employee's time since termination every day, and that was detected as a change to the employee. The first sync after this release still sends one `hris.employee.updated` per terminated employee, as every sync did before; after that, the event is sent only when the employee's data changes. Events for active employees are unchanged.
+
 ## v10.84.2 - (2026-11-18)
 
 ### Accounting API

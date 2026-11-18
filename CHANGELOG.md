@@ -1,3 +1,10 @@
+## v10.84.4 - (2026-11-18)
+
+### Accounting API
+
+- [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite): updating an [Invoice](apis/accounting/reference/invoices), [Payment](apis/accounting/reference/payments), [Bill](apis/accounting/reference/bills), [Expense](apis/accounting/reference/expenses), [Purchase Order](apis/accounting/reference/purchase-orders), [Quote](apis/accounting/reference/quotes), [Refund](apis/accounting/reference/refunds), [Sales Receipt](apis/accounting/reference/sales-receipts) or [Bill Credit Note](apis/accounting/reference/bill-credit-notes) now returns `429` when QuickBooks rate-limits a read the update depends on (the current record, the company's country or the tax rates), with a `retry-after` header when QuickBooks sends one. These requests used to return `400`, or `502` for an invoice update that sets `quotes`, or were sent with `tax_inclusive` amounts left uncorrected. The update is not sent, so it is safe to retry.
+- [Sage Intacct (REST)](connectors/sage-intacct-rest): an update sent for one entity (the `x-apideck-company-id` header or the **Default Entity** setting) that is stopped because Sage rate-limits the entity lookup now returns the same rate-limit error as a rate-limited request, with the `x-downstream-ratelimit-*` headers. The status was already `429` and the update is still not sent; before, the response was a connector error about the entity list, without the rate-limit headers.
+
 ## v10.84.3 - (2026-11-18)
 
 ### HRIS API

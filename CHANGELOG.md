@@ -1,3 +1,9 @@
+## v10.84.2 - (2026-11-18)
+
+### Accounting API
+
+- [NetSuite](connectors/netsuite) [Customers](apis/accounting/reference/customers) and [Suppliers](apis/accounting/reference/suppliers): creates and updates now set the NetSuite Customer ID or Vendor ID (`entityId`) only when `display_id` is sent. Before, a request without `display_id` sent `company_name` as the ID (for suppliers, `display_name` and then `company_name`). On accounts that auto-number customers and allow the number to be overridden, a create skipped the auto-number and an update that included `company_name` (or, for suppliers, `display_name`) replaced the existing ID with that name. Where overriding is not allowed, the request failed with `INSUFFICIENT_PERMISSION`. Without `display_id`, a create now gets the ID NetSuite assigns (the next auto-number, or the name on accounts without auto-numbering) and an update keeps the existing ID. **Behaviour change:** on accounts without auto-numbering, renaming a customer or supplier no longer renames its ID; send `display_id` to change it.
+
 ## v10.84.1 - (2026-11-18)
 
 ### Unified APIs

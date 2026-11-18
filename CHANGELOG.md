@@ -1,3 +1,9 @@
+## v10.84.1 - (2026-11-18)
+
+### Unified APIs
+
+- Custom mappings: a request now applies the application owner's mappings for its connector and resource, overridden per key by the requesting consumer's own mappings, and nothing else. Until now, on a connector whose id is the start of another connector's id (for example `sdworx-webservice` and `sdworx-webservice-oidc`, `quickbooks` and `quickbooks-desktop`, `sage-intacct` and `sage-intacct-rest`, `jira` and `jira-data-center`), a key mapped on both connectors was read with the longer connector's path. A consumer-level mapping was also applied to the application's other consumers that had no mapping of their own for that key, and a consumer's mapping on one resource could be applied to another resource. Requests for consumers and connectors that are not in one of these situations are unchanged.
+
 ## v10.84.0 - (2026-11-17)
 
 ### Accounting API

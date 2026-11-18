@@ -27505,13 +27505,16 @@ paths:
             `line_items[].tax_rate.id` is sent to Twinfield as a per-line `vatcode`; Twinfield computes
             the VAT and posts it as its own line, so the balancing control-account line must equal net +
             VAT, not just net. The connector computes that VAT total itself — using each line's
-            `tax_amount` when supplied, otherwise a live lookup of the `tax_rate.id` code's percentage —
-            and adds it to the control-account line. When that lookup cannot resolve a percentage (an
-            unknown code, or the lookup call itself failing), the connector defaults the line's
-            contribution to zero rather than failing the request outright; if Twinfield's own `vatcode`
-            computes a nonzero VAT for that line regardless, the resulting mismatch causes Twinfield to
-            reject the write with its own balance error rather than silently posting an unbalanced
-            amount.
+            `tax_amount` when supplied, otherwise the `tax_rate.id` code's rate in effect on
+            `bill_date` (today when `bill_date` is omitted) — and adds it to the control-account line.
+
+            A code that books its VAT to both sides (reverse charge, EU acquisition) adds nothing to the
+            control-account line; the connector recognises one by its VAT accounts' shares of the VAT
+            adding up to 0. A supplied `tax_amount` is added as sent, so on such lines omit it or send
+            `tax_amount: 0`.
+
+            An unknown `tax_rate.id`, or one the connector cannot read from Twinfield, fails the request
+            with a 400 that names the code.
         - connector: afas
           description: |
             On tenants without a dedicated purchase-invoice booking connector configured (see the
@@ -27788,11 +27791,11 @@ paths:
       x-apideck-gotchas:
         - connector: twinfield
           description: |
-            `total_tax`, `balance` and `paid_date` are always null on this get-by-id operation —
-            Twinfield's response omits the balancing line where those values would come from.
-            `sub_total` is set equal to `total` rather than left null, since this connector does not
-            currently post VAT on bills (see the bill create gotcha), so there is no tax to subtract.
-            `balance` and `paid_date` are available on `bills.list`.
+            `line_items` are the bill's net lines. A line's VAT code, when it has one, is returned as
+            `tax_rate.id`. The VAT line Twinfield books for the bill is not a line item, and a line's
+            own `tax_amount` is not returned. `sub_total` is the sum of `line_items`, and `total_tax` is
+            `total` minus `sub_total`. `balance` and `paid_date` are always null on this get-by-id
+            operation; they are available on `bills.list`.
         - connector: snelstart
           description: |
             This reads the same underlying "purchase booking" record `bills.create`/`bills.update`

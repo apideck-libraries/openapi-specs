@@ -28585,6 +28585,12 @@ paths:
 
             Invoices posted directly in financial accounting, including those created through this API, have G/L account lines only.
 
+            On G/L account lines, `total_amount` is signed against the invoice: a line on the revenue side reads
+            positive, and a line on the other side (an offsetting or reversing posting inside the same document)
+            reads negative. `total` stays the absolute sum of the customer lines, so the lines do not always add
+            up to it (for example when a down payment is cleared on the invoice). On create, every line's `total_amount` is posted as its
+            absolute value on the revenue side, so remove or adjust negative lines before posting a read invoice again.
+
             `limit` caps the SAP posting lines read per page, not the invoices, so a page can hold fewer
             invoices than `limit`. An invoice is never split across pages: one with more posting lines
             than `limit` is returned complete on a page of its own. Only an invoice with more than 5,000
@@ -32051,6 +32057,13 @@ paths:
             rather than as `total_tax`. `sub_total`, `total_tax`, `balance` and `allocations` are not
             returned. `created_at` is the date the document was entered and `date_issued` its document
             date; both carry a date only (midnight UTC).
+
+            A line's `total_amount` is signed against the credit note: a line on the revenue side reads
+            positive, and a line on the other side (an offsetting posting inside the same document) reads
+            negative. `total_amount` stays the absolute sum of the customer lines, so the lines do not always
+            add up to it. On create, every line's `total_amount` is posted as its
+            absolute value on the revenue side, so remove or adjust negative lines before posting a read
+            credit note again.
 
             Supported filters are `updated_since`, `created_since` and `number`; `customer_id` is not
             supported. The date filters compare on whole days (the time part is ignored) and are
@@ -44506,6 +44519,25 @@ paths:
             The integration user needs an Oracle role beyond the baseline accounting one to read this
             resource; without it Oracle returns `403`. Ask your Oracle administrator to follow the
             connection guide before relying on it.
+        - connector: sap-s4hana-cloud
+          description: |
+            Tracking categories are SAP profit centers and are read-only: creating, updating or deleting
+            one returns an unsupported-operation error, so maintain profit centers in SAP itself.
+
+            `id` and `code` are the profit center code (for example `YB110`). This is the value to send
+            as `line_items[].tracking_categories[0].id` when creating invoices, credit notes and journal
+            entries, and the value those resources return. Only the first tracking category on a line
+            is posted.
+
+            Only profit centers with an open-ended validity (`ValidityEndDate` 9999-12-31) are listed and
+            can be fetched: one whose validity ends on a fixed date is not listed and returns 404, and one
+            whose open-ended period starts in the future is already listed. `subsidiaries` lists the
+            company codes the profit center is assigned to. Profit centers are flat here: `parent_id`
+            and `parent_name` are not set.
+
+            If your SAP tenant uses more than one controlling area and the same profit center code
+            exists in several of them, the list returns each of them under the same `id`, and fetching
+            that `id` returns only one.
         - connector: twinfield
           description: |
             `status` is not returned by this list call — the underlying vendor list only returns code

@@ -1,3 +1,32 @@
+## v10.85.0 - (2026-11-19)
+
+### ATS API
+
+- [Lever](connectors/lever) [Applicants](apis/ats/reference#tag/Applicants): creating an applicant is now supported. Lever creates every applicant on behalf of a Lever user, so `owner_id` is required: it is sent as Lever's `perform_as` and becomes the applicant's creator and owner. Lever matches candidates by email: an email that belongs to an existing candidate adds the new applicant to that candidate's contact, and that contact's details take precedence over the ones sent. `archived` is not sent on create.
+
+### Connector API
+
+- [Sage HR](connectors/sage-hr): `supported_operations` for applicants no longer lists `update` and `delete`. Sage HR has no endpoint for either, so requests for them answer `405 ConnectorOperationUnsupportedError`, as they already did.
+
+## v10.84.7 - (2026-11-19)
+
+### HRIS API
+
+- **Breaking change for [SAP SuccessFactors](connectors/sap-successfactors) [Employees](apis/hris/reference#tag/Employees) `custom_fields`** (live since 2026-11-17). When the SAP tenant declares the same field name on both Personal Information (`PerPersonal`) and Job Information (`EmpJob`), for example `customString7`, the two entries are now returned with their own ids, `PerPersonal:customString7` and `EmpJob:customString7`. Before, both entries had the bare id `customString7`, so a custom mapping or a lookup by `id` could not tell them apart and read whichever came first, which varied by employee. Fields declared on only one of the two keep their current id. **If you read a shared field by its bare id, switch to the prefixed id of the entity you want, and re-pick any custom mapping on it.**
+- [SAP SuccessFactors](connectors/sap-successfactors) [Employees](apis/hris/reference#tag/Employees): when the picklist label lookup fails, `custom_fields` still returns the raw picklist option id as `value`, and `meta.warnings` now reports the failed lookup. Before, the fallback was silent.
+
+## v10.84.6 - (2026-11-19)
+
+### Accounting API
+
+- [NetSuite](connectors/netsuite) [Tax Rates](apis/accounting/reference/tax-rates) on accounts with SuiteTax: an update now sends only the fields in the request. Before, an update without `status` made an inactive tax rate active again, and an update that left out `effective_tax_rate` or `total_tax_rate` failed with `500` ("'value' on DoubleCustomFieldRef is required").
+
+## v10.84.5 - (2026-11-18)
+
+### Accounting API
+
+- [Visma Netvisor](connectors/visma-netvisor) now connects to production Netvisor companies. A new **Environment** connection setting picks Netvisor's host: **Production** sends requests to `integration.netvisor.fi`, the host Netvisor requires for production partner credentials and production companies; **Test** sends them to `isvapi.netvisor.fi`, the test host the connector always used. Until now every connection used the test host, so production credentials could not work. Connections without the setting keep using the test host.
+
 ## v10.84.4 - (2026-11-18)
 
 ### Accounting API

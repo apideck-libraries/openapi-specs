@@ -28719,6 +28719,13 @@ paths:
             posted" (for example because a tax condition could not be determined) has no accounting document yet
             and is not listed. Billing credit memos and cancellations are not listed.
 
+            `status` is `partially_paid` when part of the invoice is still open after a partial payment in
+            SAP: either the invoice itself is still open, or a residual-item payment cleared it and left a
+            new open item for the remainder. Otherwise it is `paid` when the invoice is cleared in SAP and
+            `authorised` when it is not. Finding partial payments adds one SAP read per page of invoices,
+            plus one for every further 40 invoices on the page and every further 500 matching items. If it
+            fails, the request returns an error rather than the page.
+
             For an invoice that comes from a billing document, `line_items` are the billing items: `item`, `quantity`, `unit_price` (net per unit), `unit_of_measure`, `total_amount` (net) and `tax_amount`. Their `id` is `<billing document>:<item>` and they have no `ledger_account`. This needs the **SAP_COM_0120** (Billing Integration) communication scenario: without it, or when the lookup fails, the lines are G/L account lines and the response carries a warning in `meta.warnings`.
 
             Invoices posted directly in financial accounting, including those created through this API, have G/L account lines only.
@@ -29875,6 +29882,12 @@ paths:
             For an invoice that comes from a billing document, `line_items` are the billing items (`item`, `quantity`, `unit_price`, `unit_of_measure`, `total_amount`, `tax_amount`) with ids `<billing document>:<item>` and no `ledger_account`, as when listing invoices. This needs the **SAP_COM_0120** communication scenario; without it the lines are G/L account lines and the response carries a warning in `meta.warnings`. Invoices posted directly in financial accounting have G/L account lines only.
             A billing document that is not yet posted to accounting has no invoice here: it appears once SAP has
             created its accounting document.
+
+            `status` is `partially_paid` when part of the invoice is still open after a partial payment in
+            SAP: either the invoice itself is still open, or a residual-item payment cleared it and left a
+            new open item for the remainder. Otherwise it is `paid` when the invoice is cleared in SAP and
+            `authorised` when it is not. Finding partial payments adds one SAP read; if it fails, the
+            request returns an error.
         - connector: exact-online-nl
           description: |
             Exact Online has no balance field on an invoice, so `balance` is derived from its
@@ -36584,6 +36597,16 @@ paths:
 
             A `pass_through[$filter]` replaces the connector's document-type filter, so the list skips
             documents of other types and can end before the last payment.
+
+            `allocations` lists the documents SAP cleared the payment against: `invoice` and `credit_memo` with the unified id of the invoice or credit note, or
+            `journal_entry` with id `<company code>:<fiscal year>:<document number>` for a document that no
+            other resource returns. `amount` is the part of the payment applied to each document; a partial
+            payment lists the document with the partial amount. An uncleared payment returns `allocations` as `null`.
+            When one clearing in SAP settled several payments together, those payments also return
+            `allocations` as `null`, because SAP does not record which payment paid which document.
+            `reconciled` is `true` only when the whole payment is cleared, so one with an open remainder is
+            not. Reading allocations adds SAP reads, usually one or two per page and only when the page has
+            cleared payments. If one of them fails, the request returns an error rather than the page.
         - connector: fiken
           description: |
             Fiken has no payments list: the payments are read from the company's invoices, so a list
@@ -36889,6 +36912,40 @@ paths:
             Creating payments is not yet available on SAP S/4HANA On-Premise and Private Cloud connections
             (connections whose SAP System URL is your own gateway rather than an SAP-hosted Public Edition tenant on `*.s4hana.cloud.sap` or `*.s4hana.ondemand.com`):
             the request returns `501` and nothing is posted. Reading payments works on those connections.
+
+            `allocations` are applied in SAP by clearing. The payment is posted, then cleared against its
+            targets, and the request returns `201` only once SAP shows the allocations as applied.
+            Supported `type` values are `invoice` and `credit_memo`. `id` is the unified id of the invoice
+            or credit note (`<company code>:<fiscal year>:<document number>`). Each target must be in the
+            payment's company code, for the same customer and in the same currency. A payment takes up to
+            20 allocations, each to a different document. `amount` is required when there is more than one
+            allocation; a single allocation without `amount` applies the whole `total_amount`. Credit memo
+            amounts are subtracted, and the allocations must net to more than 0 and no more than
+            `total_amount`.
+
+            An allocation for less than the invoice's open amount is a partial payment: the invoice stays
+            open and reads `partially_paid`. If the allocations net to less than `total_amount`, the
+            remainder stays on the customer's account as an open payment item. A document with more than
+            one open item (installments) cannot be allocated. No cash discount is taken.
+
+            Every allocation is checked in SAP before anything is posted. The request returns `400` naming
+            the allocation (for example `allocations[1]`), and posts nothing, when the document is not
+            found, is already cleared, has a different customer, company code or currency, or has less
+            open than the allocated `amount`, or when `type` does not match the document. Allocations also need
+            the Journal Entry – Clearing service in the **SAP_COM_0002** communication arrangement. Without
+            it the request returns `400` and nothing is posted. If SAP cannot be read during these checks,
+            the request returns `503`, nothing is posted, and you can retry.
+
+            `408` means too little of the request's time was left to post and clear the payment. Nothing
+            was posted, so retry the request.
+
+            `409` means the payment was posted but SAP has not confirmed its allocations as applied. The
+            message gives the payment `id` and says whether the clearing was not sent, may have been sent,
+            or was sent but not confirmed in time. Do not resend the request, because that posts a second
+            payment. Read the payment instead: its `allocations` show what SAP applied. In a batch, the
+            item is reported as created with this error. The first clearing after the SAP tenant has been
+            idle can take longer than the request allows and return this `409`; SAP may still apply it
+            afterwards, so read the payment to see whether it did.
         - connector: quickbooks-desktop
           description: |
             QuickBooks Desktop applies a payment to invoices via `allocations[]` — each `allocations[].id` is the target invoice's transaction id and `allocations[].amount` the amount applied. Without `allocations`, the payment is created unapplied. On update, QBD cannot change the applied invoices, payment method, or deposit/AR account — only customer, `transaction_date`, `reference`, `total_amount`, and `note` are updatable; recreate the payment to change allocations.
@@ -37087,6 +37144,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            `allocations` and `reconciled` are read as when listing payments: `allocations` lists the
+            documents SAP cleared the payment against, and is `null` for an uncleared payment or one that SAP
+            cleared together with other payments. `reconciled` is `true` only when the whole payment is
+            cleared. Reading allocations adds one or two SAP reads when the payment is cleared; if one of
+            them fails, the request returns an error.
         - connector: fiken
           description: |
             The id is composite, `<invoice_id>:<payment_id>`, as returned by list and create. Fiken answers 400
@@ -45151,6 +45215,16 @@ paths:
 
             A `pass_through[$filter]` replaces the connector's document-type filter, so the list skips
             documents of other types and can end before the last bill payment.
+
+            `allocations` lists the documents SAP cleared the bill payment against: `bill` and `credit_memo` with the unified id of the bill or bill credit note, or
+            `journal_entry` with id `<company code>:<fiscal year>:<document number>` for a document that no
+            other resource returns. `amount` is the part of the bill payment applied to each document; a partial
+            payment lists the document with the partial amount. An uncleared bill payment returns `allocations` as `null`.
+            When one clearing in SAP settled several payments together, those payments also return
+            `allocations` as `null`, because SAP does not record which payment paid which document.
+            `reconciled` is `true` only when the whole bill payment is cleared, so one with an open remainder is
+            not. Reading allocations adds SAP reads, usually one or two per page and only when the page has
+            cleared bill payments. If one of them fails, the request returns an error rather than the page.
         - connector: fiken
           description: |
             Fiken has no bill payments list: the payments are read from the company's purchases, so a list
@@ -45436,6 +45510,40 @@ paths:
             Creating bill payments is not yet available on SAP S/4HANA On-Premise and Private Cloud connections
             (connections whose SAP System URL is your own gateway rather than an SAP-hosted Public Edition tenant on `*.s4hana.cloud.sap` or `*.s4hana.ondemand.com`):
             the request returns `501` and nothing is posted. Reading bill payments works on those connections.
+
+            `allocations` are applied in SAP by clearing. The bill payment is posted, then cleared against
+            its targets, and the request returns `201` only once SAP shows the allocations as applied.
+            Supported `type` values are `bill` and `credit_memo` (a bill credit note). `id` is the unified
+            id of the bill or bill credit note (`<supplier invoice>:<fiscal year>`). Each target must be in
+            the bill payment's company code, for the same supplier and in the same currency. A bill payment
+            takes up to 20 allocations, each to a different document. `amount` is required when there is
+            more than one allocation; a single allocation without `amount` applies the whole
+            `total_amount`. Credit memo amounts are subtracted, and the allocations must net to more than 0
+            and no more than `total_amount`.
+
+            An allocation for less than the bill's open amount is a partial payment: the bill stays open in
+            SAP and its `status` does not change. If the allocations net to less than `total_amount`, the
+            remainder stays on the supplier's account as an open payment item. A document with more than
+            one open item (installments) cannot be allocated. No cash discount is taken.
+
+            Every allocation is checked in SAP before anything is posted. The request returns `400` naming
+            the allocation (for example `allocations[1]`), and posts nothing, when the document is not
+            found, is already cleared, has a different supplier, company code or currency, or has less
+            open than the allocated `amount`, or when `type` does not match the document. Allocations also
+            need the Journal Entry – Clearing service in the **SAP_COM_0002** communication arrangement.
+            Without it the request returns `400` and nothing is posted. If SAP cannot be read during these
+            checks, the request returns `503`, nothing is posted, and you can retry.
+
+            `408` means too little of the request's time was left to post and clear the bill payment.
+            Nothing was posted, so retry the request.
+
+            `409` means the bill payment was posted but SAP has not confirmed its allocations as applied.
+            The message gives the bill payment `id` and says whether the clearing was not sent, may have
+            been sent, or was sent but not confirmed in time. Do not resend the request, because that posts
+            a second bill payment. Read the bill payment instead: its `allocations` show what SAP applied.
+            In a batch, the item is reported as created with this error. The first clearing after the SAP
+            tenant has been idle can take longer than the request allows and return this `409`; SAP may
+            still apply it afterwards, so read the bill payment to see whether it did.
         - connector: quickbooks
           description: |
             Payment method is required and must be `Check` or `CreditCard`.
@@ -45613,6 +45721,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            `allocations` and `reconciled` are read as when listing bill payments: `allocations` lists the
+            documents SAP cleared the bill payment against, and is `null` for an uncleared bill payment or one that SAP
+            cleared together with other payments. `reconciled` is `true` only when the whole bill payment is
+            cleared. Reading allocations adds one or two SAP reads when the bill payment is cleared; if one of
+            them fails, the request returns an error.
         - connector: fiken
           description: |
             The id is composite, `<bill_id>:<payment_id>`, as returned by list and create. Fiken answers 400

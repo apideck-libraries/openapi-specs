@@ -27206,7 +27206,17 @@ paths:
             fields.
         - connector: sap-s4hana-cloud
           description: |
-            Supplier credit notes are excluded from this list and returned under the `bill-credit-notes` resource instead.
+            Supplier credit notes are excluded from this list and returned under the
+            `bill-credit-notes` resource instead.
+
+            `due_date` is the net due date SAP keeps on the bill's accounting document, so it follows a due
+            date or payment terms changed there after posting. A bill that is paid in instalments shows the
+            next instalment still open, and the last one once all are paid.
+
+            A bill that is not posted yet has no accounting document: its `due_date` is calculated from the
+            bill itself, as the baseline date plus the days of its payment terms (`terms`). The same
+            calculated date is returned, with a warning in the response, when the accounting document cannot
+            be read, for example because Communication Scenario `SAP_COM_0303` is not activated.
         - connector: xero
           description: |
             `filter[bill_number]` and `filter[reference]` are exact matches on Xero's `InvoiceNumber`
@@ -27478,18 +27488,33 @@ paths:
             Each line item is either a purchase-order line or a G/L line:
             - Lines with `line_items[].purchase_order.id` are posted against that purchase order. Optionally provide
               `line_items[].purchase_order.line_id` for the purchase order item (for example `00010`), as a bill read
-              returns it; `line_number` is accepted when `line_id` is not sent.
+              returns it; `line_number` is accepted when `line_id` is not sent. Send `quantity` with the invoiced
+              quantity: without it SAP ignores the line amount and rejects the bill as unbalanced.
+              `unit_of_measure` is the order unit of the purchase order item (for example `PC`) and is taken from
+              the purchase order when it is not sent. That needs the item reference (`line_id` or `line_number`)
+              when the purchase order has more than one item; without it, send `unit_of_measure`.
             - All other lines are G/L lines and require `line_items[].ledger_account.id` (or `.code`). A line with
               neither a purchase order nor a ledger account is rejected with a 400.
 
             `line_items[].tax_rate.code` takes the SAP tax code (e.g. `V1`). SAP S/4HANA Cloud does not expose tax
             rates as readable data, so the tax code must be supplied directly.
 
-            SAP has no due-date field: it calculates the due date from a baseline date plus the days of the payment
-            terms. `due_date` is sent as the baseline date, so it is the actual due date only when the payment terms
-            add no days (e.g. `0001`). With terms such as net 30, SAP makes the bill due 30 days after `due_date`.
-            `terms` sets the payment terms; when omitted, the supplier's default terms apply. Without `due_date`,
-            SAP derives the baseline date from the payment terms.
+            `due_date` is the date the bill falls due for payment. SAP has no due-date field: it calculates the
+            due date from a baseline date plus the days of the payment terms, so the baseline date is set to
+            `due_date` minus those days. `terms` sets the payment terms; when omitted, the supplier's default
+            terms apply. Without `due_date`, SAP derives the baseline date from the payment terms.
+
+            The days of the payment terms are taken from the most recent posted bill in SAP that uses the same
+            terms. When no posted bill uses them yet, or they cannot be read, `due_date` is sent as the baseline
+            date and SAP makes the bill due later by the terms' days (for example 30 days later for net 30); the
+            `due_date` read back then shows the date SAP calculated.
+
+            `pass_through` values for the baseline date (`DueCalculationBaseDate`) or the payment terms' day
+            counts are sent to SAP as supplied and replace this calculation, so the bill can then fall due on a
+            date other than `due_date`.
+
+            A bill with purchase order lines that sends no `terms` gets the payment terms of the purchase
+            order, not those of the supplier, and the days are read from that purchase order.
 
             The tax determination date is set to `bill_date`. SAP only accepts it in company codes whose country
             uses time-dependent taxes; where it does not (for example a US company code), SAP rejects the bill and
@@ -27923,6 +27948,16 @@ paths:
             `currency` is always `"EUR"` on this get-by-id operation, regardless of the bill's actual
             currency — this endpoint does not return a currency field. `currency` is accurate on
             `bills.list`.
+        - connector: sap-s4hana-cloud
+          description: |
+            `due_date` is the net due date SAP keeps on the bill's accounting document, so it follows a due
+            date or payment terms changed there after posting. A bill that is paid in instalments shows the
+            next instalment still open, and the last one once all are paid.
+
+            A bill that is not posted yet has no accounting document: its `due_date` is calculated from the
+            bill itself, as the baseline date plus the days of its payment terms (`terms`). The same
+            calculated date is returned, with a warning in the response, when the accounting document cannot
+            be read, for example because Communication Scenario `SAP_COM_0303` is not activated.
       responses:
         '200':
           $ref: '#/components/responses/GetBillResponse'
@@ -31179,6 +31214,9 @@ paths:
         - connector: zoho-books
           description: |
             For ledger accounts, please update the "active" status separately from other updates.
+        - connector: wave
+          description: |
+            Updates need `row_version` from a prior read of the account: Wave requires it (its `sequence`) and rejects an update without it with a `400` (`Field "sequence" of required type "Int!" was not provided`).
       requestBody:
         required: true
         content:
@@ -33652,6 +33690,12 @@ paths:
             selects the company the credit note posts to — it cannot be supplied any other way. A posted
             credit note reads back as `status: authorised` and is immutable: `update` is unsupported, and
             `delete` posts a reversal rather than removing the document.
+
+            A line with `line_items[].purchase_order.id` is posted against that purchase order. Send
+            `quantity` on it; `unit_of_measure` is the order unit of the purchase order item and is taken
+            from the purchase order when it is not sent. That needs the item reference
+            (`purchase_order.line_id` or `line_number`) when the purchase order has more than one item;
+            without it, send `unit_of_measure`.
 
 
             The tax determination date is set to the UTC day of `date_issued`. SAP only accepts it in company codes

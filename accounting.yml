@@ -36578,6 +36578,9 @@ paths:
         - connector: access-financials
           description: |
             Access Financials does not expose a total record count in list responses. `meta.total_count` will not appear.
+        - connector: wave
+          description: |
+            Wave has no list of payments, only each invoice's payments, so every request reads the invoices that have a payment and pages over their payments. A request that would read more than 10,000 paid invoices fails with a 400 asking for `filter[updated_since]`, and a failed invoice page fails the request (502, or Wave's 4xx/429) rather than returning a partial list. `meta.total_count` will not appear. `filter[updated_since]` matches a payment's own modification time. Only invoice payments are listed.
         - connector: dualentry
           description: |
             DualEntry scopes payments by company. Pass the `x-apideck-company-id` header (or set a Default

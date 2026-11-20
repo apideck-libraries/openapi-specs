@@ -1,3 +1,9 @@
+## v10.87.0 - (2026-11-20)
+
+### Accounting API
+
+- Added optional `po_number` to [Quotes](apis/accounting/reference/quotes): the customer's purchase order number, as on invoices, sales orders and bills. [Wave](connectors/wave) returns it on read and writes it on create and update (the estimate's P.O./S.O. number); an update without `po_number` keeps the current value, and `po_number: null` clears it. Other connectors do not return it yet.
+
 ## v10.86.0 - (2026-11-19)
 
 ### Accounting API

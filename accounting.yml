@@ -34690,6 +34690,12 @@ paths:
 
             `"pass_through": [{"service_id": "sap-s4hana-cloud", "extend_object": {"BusinessPartnerGrouping": "BP02", "CorrespondenceLanguage": "DE"}}]`
 
+            A request with `first_name` or `last_name` creates a person; otherwise it creates a company. SAP
+            builds `display_name` from the company name, or from the first and last name, and `tax_number` can't
+            be set through this API. A request that sends a non-empty `company_name` for a person, a non-empty
+            `tax_number`, or a non-empty `display_name` that differs from the name SAP builds is rejected with a
+            `400` and no customer is created.
+
             `CorrespondenceLanguage` sets the language of a person. SAP keeps the language of a company on its
             address, so for a company send `"to_BusinessPartnerAddress": {"results": [{"Language": "DE"}]}` in the
             same `extend_object` instead.
@@ -34970,7 +34976,15 @@ paths:
             Please send status updates separately from other updates for the customer.
         - connector: sap-s4hana-cloud
           description: |
-            Only `first_name`, `last_name`, `company_name`, `display_name` and `status` can be updated.
+            Only `first_name`, `last_name`, `company_name` and `status` can be updated.
+
+            SAP builds `display_name` from the name fields, and `tax_number` can't be set through this API.
+            `first_name` and `last_name` don't apply to a company, and `company_name` doesn't apply to a person.
+            An update that sends one of these with a value the record doesn't hold is rejected with a `400` and
+            nothing is changed. A `display_name` matching the name the update produces is accepted, so sending
+            the values a read returned works. An update that sends only `display_name` or `tax_number` is also
+            rejected with a `400`: with the reason above when the value differs from the record, and as having
+            nothing to update when it matches.
 
             Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
             with a 400. Set those values when creating the record, or change them directly in SAP.
@@ -35680,6 +35694,13 @@ paths:
 
             `"pass_through": [{"service_id": "sap-s4hana-cloud", "extend_object": {"BusinessPartnerGrouping": "BP02", "CorrespondenceLanguage": "DE"}}]`
 
+            A request with `first_name` or `last_name` creates a person; otherwise it creates a company. SAP
+            builds `display_name` from the company name, or from the first and last name, and `tax_number` can't
+            be set through this API. A request that sends a non-empty `company_name` for a person, a non-empty
+            `tax_number`, or a non-empty `display_name` that differs from the name SAP builds is rejected with a
+            `400` and no supplier is
+            created.
+
             `CorrespondenceLanguage` sets the language of a person. SAP keeps the language of a company on its
             address, so for a company send `"to_BusinessPartnerAddress": {"results": [{"Language": "DE"}]}` in the
             same `extend_object` instead.
@@ -36026,7 +36047,15 @@ paths:
             Please send status updates separately from other updates for the supplier.
         - connector: sap-s4hana-cloud
           description: |
-            Only `first_name`, `last_name`, `company_name`, `display_name` and `status` can be updated.
+            Only `first_name`, `last_name`, `company_name` and `status` can be updated.
+
+            SAP builds `display_name` from the name fields, and `tax_number` can't be set through this API.
+            `first_name` and `last_name` don't apply to a company, and `company_name` doesn't apply to a person.
+            An update that sends one of these with a value the record doesn't hold is rejected with a `400` and
+            nothing is changed. A `display_name` matching the name the update produces is accepted, so sending
+            the values a read returned works. An update that sends only `display_name` or `tax_number` is also
+            rejected with a `400`: with the reason above when the value differs from the record, and as having
+            nothing to update when it matches.
 
             Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
             with a 400. Set those values when creating the record, or change them directly in SAP.

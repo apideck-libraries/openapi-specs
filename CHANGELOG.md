@@ -1,3 +1,10 @@
+## v10.88.0 - (2026-11-20)
+
+### Accounting API
+
+- [Wave](connectors/wave) now lists [Payments](apis/accounting/reference/payments) (`GET /accounting/payments`). Wave has no list of payments, only each invoice's payments, so the list holds invoice payments and is read through the invoices that have a payment. `filter[updated_since]` matches a payment's own modification time, and `meta.total_count` is not returned. A request that would read more than 10,000 paid invoices returns `400` asking for `filter[updated_since]`, and a failed read of one of those invoice pages fails the request (`502`, or Wave's `4xx`/`429`) instead of returning a partial list.
+- [Wave](connectors/wave) now creates [Expenses](apis/accounting/reference/expenses) (`POST /accounting/expenses`) as Wave money transactions, using Wave's `moneyTransactionCreate`, which Wave marks as beta and allows only on businesses that are not on classic accounting. Wave cannot read, update or delete these transactions through its API, so only create is supported. The connection needs the new `transaction:write` scope: existing connections must re-authorize, and a custom scope list saved on the Wave configuration page must include it. The amount is the sum of `line_items`; `total_amount` is ignored. `reference` becomes Wave's unique `externalId`, so resending the same `reference` returns `400` instead of creating a duplicate.
+
 ## v10.87.0 - (2026-11-20)
 
 ### Accounting API

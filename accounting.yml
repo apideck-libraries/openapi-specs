@@ -38515,6 +38515,9 @@ paths:
             The balance sheet is returned as at `filter[end_date]`, or today when it is omitted. `filter[start_date]` is accepted and ignored, because a balance sheet has no start date. `filter[period_count]` and `filter[period_type]` are not supported.
 
             `filter[end_date]` must fall within one of the company's accounting periods in FreeAgent: from the date the company's books start in FreeAgent to the end of its latest accounting year. A date outside that range returns a `400` ("No accounting period includes the specified dates"). Limit the dates you request to that range, for example by not asking for year ends before the company started using FreeAgent.
+        - connector: wave
+          description: |
+            Wave only exposes balances as of today, so the report is always as of today (`end_date` is today's date), and `filter[end_date]` or any other filter is rejected with a `400` (Unsupported Filters). Wave does not close income and expenses into an equity account, so their difference is added to equity as a computed net income line, keeping assets equal to liabilities plus equity. Archived accounts are left out.
       responses:
         '200':
           $ref: '#/components/responses/GetBalanceSheetResponse'
@@ -38602,6 +38605,9 @@ paths:
 
             Accounts with a zero balance in the requested period are omitted from the response
             entirely rather than returned with a zero total.
+        - connector: wave
+          description: |
+            Wave exposes no period-bounded balances, so the report covers the business's lifetime up to today: `start_date` is `null`, `end_date` is today, and `filter[start_date]`, `filter[end_date]` and any other filter are rejected with a `400` (Unsupported Filters). Amounts are the accounts' current balances in the business currency, grouped by Wave account type and subtype. Archived accounts are left out.
       responses:
         '200':
           $ref: '#/components/responses/GetProfitAndLossResponse'

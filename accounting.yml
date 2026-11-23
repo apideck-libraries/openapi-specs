@@ -38462,6 +38462,26 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            The report is generated live by QuickBooks Desktop on every request: the call waits up
+            to 25 seconds for the next Web Connector run (it polls about once a minute). If the run
+            does not happen in time the call returns 408 and the report job stays queued, so repeat
+            the same request a little later and it returns the finished report. Only
+            `filter[end_date]` (the "as of" date; defaults to today) and `filter[accounting_method]`
+            (Accrual or Cash) shape the report; `filter[start_date]` is accepted and ignored (a
+            balance sheet is a point-in-time position), while `period_count`, `period_type` and
+            `location_id` are rejected as unsupported. Assets, liabilities and equity follow
+            QuickBooks' own captions (ASSETS, LIABILITIES & EQUITY → Liabilities, Equity); when a
+            caption is missing (renamed or non-English company file) the group is rebuilt flat from
+            the lines whose account has a matching QuickBooks account type, and equity is then
+            assets minus liabilities. Items keep QuickBooks' own grouping (Current Assets →
+            Checking/Savings → accounts); `title` is the caption as printed (`10100 · Checking`),
+            `name` the account name, `account_id` the ledger account id and `code` the account
+            number, joined from the synced chart of accounts (absent until the first accounts sync; a
+            file that prints none of the `ASSETS`, `Liabilities` and `Equity` captions returns `502`
+            until then, since its groups can only be rebuilt from the synced account types).
+            `currency` is not reported.
         - connector: minox
           description: |
             Balances are kept per accounting period: `filter[end_date]` returns the position at the end of the period that date falls in. With monthly periods (most administrations) the report's `end_date` is that month's last day. Minox does not expose the dates of other period layouts (quarters, 13 periods), so there the report covers the whole fiscal year: `filter[end_date]` must be the fiscal year end or left out, and any other date is rejected with a `400`. Without it, the report is as of the end of the current period or of the latest fiscal year. A date after the last fiscal year returns that year's closing position. `filter[period_count]` is not supported.
@@ -38536,6 +38556,27 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            The report is generated live by QuickBooks Desktop on every request: the call waits up
+            to 25 seconds for the next Web Connector run (it polls about once a minute, occasionally
+            skipping a cycle). If the run does not happen in time the call returns 408 and the report
+            job stays queued, so repeat the same request a little later and it returns the finished
+            report. `filter[start_date]` and `filter[end_date]` map to the report period (omit both
+            for the calendar year to date; a start date alone runs to today, an end date alone runs from 1970-01-01, i.e. all history),
+            `filter[accounting_method]` selects the Accrual or Cash basis and
+            `filter[customer_id]` restricts the report to one customer or job; `filter[location_id]`
+            is not supported. Sections follow QuickBooks' own captions (Income, Cost of Goods Sold,
+            Expense, Other Income, Other Expense); when a caption is missing (renamed or non-English
+            company file) the section is rebuilt flat from the lines whose account has the matching
+            QuickBooks account type. Record titles are the account captions as QuickBooks prints
+            them (`40110 · Design Income`) and a parent account with sub-accounts becomes a nested
+            section. Each record's `id` is the ledger account id and `code` its account number,
+            joined from the synced chart of accounts; until the first accounts sync has run they
+            are absent, and a file that prints neither an `Income` nor an `Expense` caption (renamed
+            or localised) returns `502` until then, since its sections can only be rebuilt from the
+            synced account types. `currency` is not reported. When QuickBooks chooses the period (a date
+            macro, or a single bound), `start_date` / `end_date` are read from the report subtitle.
         - connector: minox
           description: |
             Amounts are kept per accounting period: `filter[start_date]` and `filter[end_date]` are widened to the periods they fall in and must fall in the same fiscal year. With monthly periods (most administrations) the report's `start_date` and `end_date` are the dates it actually covers. Minox does not expose the dates of other period layouts (quarters, 13 periods), so there the report covers the whole fiscal year: the filters must be the fiscal year's first and last day or left out, and any other range is rejected with a `400`. Without filters the report covers the current or latest fiscal year up to the end of the current period. Accounts are classified by their RGS code (the Dutch reference chart of accounts), as Minox's RGS trial balance assigns it, which includes accounts created through the API. An account without one that is in a profit-and-loss group in Minox is listed under `uncategorized_accounts` and counts towards net income; one without any group is left out (the balance sheet lists it as uncategorized). Over a fiscal year from its first period, net income equals the balance sheet's result for that year.
@@ -44654,6 +44695,8 @@ paths:
           description: 'Built from Xero''s `GET /Reports/TrialBalance`, using its YTD Debit and YTD Credit columns: balance sheet accounts are cumulative to `end_date`, income and expense accounts run from the start of the financial year that contains `end_date`. Xero''s separate Debit and Credit columns (that month''s movement only) are not used. `filter[end_date]` maps to Xero''s `date` (today in UTC when left out, since Xero''s own default is not today) and `filter[accounting_method]=cash` to `paymentsOnly=true`. Accounts whose YTD debit and credit net to zero are left out. `account_id` is Xero''s AccountID, the id `GET /accounting/ledger-accounts/{id}` takes; a balance row without an AccountID has `line_type: unmapped` and a null `account_id`. `code` and the full account `name` come from Xero''s accounts list (one extra request), because the report''s "Name (Code)" label cannot tell a code from a name that ends in parentheses; `code` is absent for accounts that have none. `currency` and `start_date` come from the organisation''s base currency and financial year end (one extra request), and are null if that lookup fails. Both extra requests are made for the organisation named by `x-apideck-company-id`, like the report itself. A report whose debits and credits differ by half a cent or more returns a `502`.'
         - connector: quickbooks
           description: Built from QuickBooks' `TrialBalance` report. QuickBooks reports income and expense accounts for the report period only, so Apideck sets the period start to the first day of the fiscal year that contains `end_date` (from the company's fiscal year start month, one extra CompanyInfo call); balance sheet accounts are cumulative to `end_date`. `end_date` defaults to today (UTC). Accounts with a zero balance are left out, so a company with no data returns an empty list. `account_id` is the QuickBooks account id, the id ledger accounts use; a balance the report shows without an account id is returned with `line_type` `unmapped` and no `account_id`. Account numbers are not in the report, so `code` is not returned. Amounts are in the company's home currency. A report whose debits and credits do not balance returns a `502`.
+        - connector: quickbooks-desktop
+          description: 'Built from QuickBooks Desktop''s `TrialBalance` report, generated live on every request: the call waits up to 25 seconds for the next Web Connector run (about once a minute, occasionally two) and returns a `408` if it does not happen in time; the report job stays queued, so repeating the same request shortly after returns the finished report. `filter[end_date]` is the "as of" date (today in UTC when left out); balance sheet accounts are cumulative to it and income and expense accounts are fiscal year to date (QuickBooks ignores a period start for this report), with `start_date` the first day of that fiscal year from the company file''s first fiscal month (null until qbd-connect has synced the company info). `filter[accounting_method]` selects the Accrual or Cash basis. Each account''s debit or credit is as QuickBooks prints it, netted into one side; accounts with a zero balance are left out, so a company with no data returns an empty list. `account_id` is the account''s ListID, the id `GET /accounting/ledger-accounts/{id}` takes, `code` its account number and `name` its own (short) name; a row whose printed caption matches no synced account has `line_type` `unmapped` and no `account_id` (poll again after the accounts sync). `currency` is null (QuickBooks Desktop reports in the home currency). A report whose debits and credits differ by half a cent or more returns a `502`.'
         - connector: pennylane
           description: "Pennylane's trial balance is a movement report, not an as-of balance: Apideck requests the postings from the first day of the fiscal year that contains `end_date` (from Pennylane's fiscal years) up to `end_date`, which is today in UTC when left out, or the last day of the last fiscal year when today is after it. Income and expense accounts are therefore year-to-date. Balance sheet accounts are correct as of `end_date` only when earlier years' balances were carried forward into that fiscal year, as Pennylane does when a year is closed, so the request returns a `422` while an earlier fiscal year is still open or reopened. A company without fiscal years returns a `422`, and an explicit `filter[end_date]` outside every fiscal year returns a `400`. Customer and supplier sub-accounts are rolled up into their general account, and accounts with a zero balance are left out. `code` is the 9-digit account number and every line has `line_type` `account`; `account_id` is null because Pennylane's report carries no ledger account id, so match lines to ledger accounts on `code`. `currency` is null. Pennylane reports on the accrual basis: `filter[accounting_method]=accrual` is accepted and `cash` returns a `400`. All report pages are fetched before responding, so a large chart of accounts costs several Pennylane requests. A report whose debits and credits differ by half a cent or more returns a `502`."
         - connector: exact-online
@@ -46981,6 +47024,26 @@ paths:
         - connector: minox
           description: |
             Minox reports what is outstanding today: `filter[report_as_of_date]` ages today's open bills as of that date and leaves out bills dated after it, but cannot restore bills that have been paid since. Items are aged by due date, and amounts in other currencies are reported per currency. Each item's `transaction_id` is Minox's own open-item id, not the bill id; `transaction_number` is the bill number.
+        - connector: quickbooks-desktop
+          description: |
+            Built from QuickBooks Desktop's `APAgingDetail` report, generated live on every request: the call
+            waits up to 25 seconds for the next Web Connector run (about once a minute, occasionally
+            two) and returns 408 if it does not happen in time; the report job stays queued, so repeat
+            the same request shortly after and it returns the finished report.
+            `filter[report_as_of_date]` is the date the report is run as of (today in UTC when left
+            out): every supplier transaction still open on that date is listed, including ones not yet
+            due (period 0, "current") and unapplied payments and credits (negative `outstanding_balance`).
+            QuickBooks ages by due date (transaction date for payments and credits) and the rows are
+            re-bucketed against `filter[period_count]` (default 4) and `filter[period_length]` (default
+            30 days), so the periods match the request exactly. `filter[supplier_id]` restricts the report to one
+            supplier. `supplier_id` is the QuickBooks ListID (the id `GET /accounting/suppliers/{id}` takes) and `transaction_id` the
+            TxnID, both resolved from the synced store by name and by type + date + number + name. The
+            two lookups are independent: when the supplier is not found `supplier_id` is empty; when the
+            transaction is not found `transaction_id` is omitted and `original_amount` falls back to the
+            open balance (poll again after the next sync).
+            `original_amount` is the transaction's own total (invoices and credit memos include sales tax).
+            `currency` is null: QuickBooks Desktop reports in the home currency. `report_generated_at`
+            is when the Web Connector returned the report.
         - connector: zoho-books
           description: |
             For vendors with an exceptionally large number of open bills, report generation
@@ -47046,6 +47109,26 @@ paths:
         - connector: minox
           description: |
             Minox reports what is outstanding today: `filter[report_as_of_date]` ages today's open invoices as of that date and leaves out invoices dated after it, but cannot restore invoices that have been paid since. Items are aged by due date, and amounts in other currencies are reported per currency. Each item's `transaction_id` is Minox's own open-item id, not the invoice id; `transaction_number` is the invoice number.
+        - connector: quickbooks-desktop
+          description: |
+            Built from QuickBooks Desktop's `ARAgingDetail` report, generated live on every request: the call
+            waits up to 25 seconds for the next Web Connector run (about once a minute, occasionally
+            two) and returns 408 if it does not happen in time; the report job stays queued, so repeat
+            the same request shortly after and it returns the finished report.
+            `filter[report_as_of_date]` is the date the report is run as of (today in UTC when left
+            out): every customer transaction still open on that date is listed, including ones not yet
+            due (period 0, "current") and unapplied payments and credits (negative `outstanding_balance`).
+            QuickBooks ages by due date (transaction date for payments and credits) and the rows are
+            re-bucketed against `filter[period_count]` (default 4) and `filter[period_length]` (default
+            30 days), so the periods match the request exactly. `filter[customer_id]` restricts the report to one
+            customer. `customer_id` is the QuickBooks ListID (the id `GET /accounting/customers/{id}` takes) and `transaction_id` the
+            TxnID, both resolved from the synced store by name and by type + date + number + name. The
+            two lookups are independent: when the customer is not found `customer_id` is empty; when the
+            transaction is not found `transaction_id` is omitted and `original_amount` falls back to the
+            open balance (poll again after the next sync).
+            `original_amount` is the transaction's own total (invoices and credit memos include sales tax).
+            `currency` is null: QuickBooks Desktop reports in the home currency. `report_generated_at`
+            is when the Web Connector returned the report.
         - connector: zoho-books
           description: |
             For customers with an exceptionally large number of open invoices, report generation

@@ -34521,9 +34521,16 @@ paths:
             returned again; dedupe by `id`. A customer that has never been changed matches on its creation date.
 
             `emails`, `phone_numbers` and `websites` combine the entries SAP keeps on each of the customer's addresses
-            with the ones kept on the customer itself, addresses first. Every entry has an `id` that is unique within its
-            list. `type` is `primary` for the entry SAP marks as default and `secondary` for the others; mobile numbers
-            are `mobile`.
+            with the ones kept on the customer itself: the standard address's entries first, then the other addresses' in
+            SAP's order, then the customer's own. `phone_numbers` lists the landlines first, then the mobile numbers, each in
+            that order. Every entry has an `id` that is unique within its list. At most one entry per list is
+            `primary`: the entry SAP marks as default on the standard address or, when that address has none, the
+            first entry SAP marks as default. Every other entry is `secondary`; mobile numbers are `mobile`, so a list with only mobile numbers has no `primary`.
+            `phone_numbers[].extension` is returned when SAP holds one.
+
+            `addresses[].type` is `primary` for the customer's standard address in SAP and `secondary` for every other
+            address. `line1` is the street, `street_number` the house number, and `line2` and `line3` are SAP's
+            Street 4 and Street 5 fields.
         - connector: e-conomic
           description: |
             Supported filters: `company_name`, `display_name` (both match anywhere in the name, ignoring case), `email`, `ids` and `updated_since`. Sorting is not supported. e-conomic customers have no creation timestamp, and custom fields are not supported.
@@ -34806,13 +34813,58 @@ paths:
             **Default Customer Reconciliation Account** is used. If neither is available the customer is created
             without a company code, and `company_id` has no effect. Send `terms` with an SAP payment terms key (for
             example `0004`) to set the customer's payment terms in that company code. `account` and `terms` have no
-            effect without `company_id`, and none of the three is returned when the customer is read. If SAP does
+            effect without `company_id`, `terms` cannot be changed by an update, and none of the three is returned when the customer is read. If SAP does
             not accept the company code, the account or the payment terms, the request fails with SAP's message and
             nothing is created. A customer created without `terms` has no payment terms in SAP, so invoices posted
             for it are due on their posting date.
 
-            **An address with a country is required.** Provide `addresses[0]` with at least `country` (e.g. `US`, `DE`).
-            Without it, SAP returns `400 Country/Region Key ... is a required entry field`.
+            **Addresses.** Send at least one address, each with a `country` (e.g. `US`, `DE`). An address without a
+            `country` rejects the whole request with a `400` naming it (for example `addresses[1] has no country`) and
+            nothing is created. Every address is written: the one with type `primary` (or else the first) first, the
+            others after it in request order. The first one becomes the standard address in SAP and reads back as
+            `primary`; the others read back as `secondary`, whatever `type` was sent. `line1` is stored as the street,
+            `street_number` as the house number, `line2` and `line3` as SAP's Street 4 and Street 5 fields. These
+            address fields are not stored on create and not returned: `email`, `phone_number`, `fax`, `website`,
+            `name`, `county`, `contact_name`, `notes`, `line4` and `line5`. A value longer than SAP stores rejects the
+            request with a `400` naming the field (for example `addresses[0].line2 is longer than 40 characters`) and
+            nothing is created. The limits are: `line1` 60, `street_number` 10, `line2` 40, `line3` 40, `city` 40,
+            `state` 3, `postal_code` 10 and `country` 3 characters.
+
+            **Emails, phone numbers and websites** are stored on the standard address (the first address written), not
+            on the customer itself, so a request with any of them and no address is rejected with a `400` naming the lists
+            (for example `emails and phone_numbers need an address with a country`) and nothing is created. A value
+            that is only whitespace (for example `phone_numbers[1].number is blank`) is rejected the same way. SAP makes
+            the first entry of each kind its default, so the entry typed `primary` is written first and the rest in
+            request order. With several entries typed `primary`, only the first is written first and becomes SAP's
+            default; the others read back as `secondary`. Mobile numbers are written in request order and always read
+            back as `mobile`, so a mobile number is never the `primary` entry. At most one entry per list reads back as
+            `primary`, and a list with only mobile numbers has none. SAP stores no label on an email or a website and only landline or
+            mobile on a phone: a phone with `type` `mobile` is stored as a mobile number, and every other phone type
+            (`home`, `work`, `fax`, ...) is stored as a landline. An email or website of any type, for example
+            `billing`, is stored without its type and the request succeeds.
+
+            **Phone details.** `extension` is stored (up to 10 characters) and returned. `country_code` and `area_code`
+            are folded into `number` as `+<country_code> <area_code> <number>` when `number` does not start with `+`,
+            and are not returned separately. A `number` that starts with `00` is already international: it is stored
+            with the `00` replaced by `+`, and `country_code` and `area_code` are not added to it. A leading `0` is
+            stored as sent, because whether it is a national trunk prefix depends on the country. With `country_code`,
+            send `area_code` and `number` without the national trunk prefix (`country_code` `31`, `area_code` `20`, not `020`),
+            so the number is stored as `+31 20 555 0104`. Without `country_code`, SAP derives the international number from the address country, so a
+            national number such as `020 555 0104` is stored correctly. A number can have 30 characters in SAP; the
+            limit applies to the stored value, dial codes included, and a longer value is rejected naming
+            `phone_numbers[i].number`. Emails can have 241 characters and websites 132: SAP keeps
+            132 characters of a website address, so a longer one is rejected rather than stored cut short.
+
+            **`pass_through`.** `extend_object` for `to_BusinessPartnerAddress` is applied by array position after the
+            primary address has been moved first: `results[0]` is the standard address, and the contacts above are
+            inside it. Setting `{"to_BusinessPartnerAddress": {"results": [{"Language": "DE"}]}}` changes the language of
+            that address only and keeps its contacts. A value set at a position the connector also writes, for example
+            `to_EmailAddress.results[0].EmailAddress`, overwrites that entry's value, and a flag such as
+            `IsDefaultEmailAddress` is added to the entry. Send contacts in `emails`, `phone_numbers` and `websites`,
+            not through `pass_through`.
+
+            **Status.** `status: inactive` creates the customer blocked. `active`, any other value, or no status creates it
+            active.
         - connector: fiken
           description: |
             A country sent as an ISO 3166-1 alpha-2 code is saved under its Norwegian name, as Fiken's own screens save it. A customer saved without a country is stored with Norway.
@@ -34978,9 +35030,16 @@ paths:
             customer role returns `404` here, even if it exists as a supplier.
 
             `emails`, `phone_numbers` and `websites` combine the entries SAP keeps on each of the customer's addresses
-            with the ones kept on the customer itself, addresses first. Every entry has an `id` that is unique within its
-            list. `type` is `primary` for the entry SAP marks as default and `secondary` for the others; mobile numbers
-            are `mobile`.
+            with the ones kept on the customer itself: the standard address's entries first, then the other addresses' in
+            SAP's order, then the customer's own. `phone_numbers` lists the landlines first, then the mobile numbers, each in
+            that order. Every entry has an `id` that is unique within its list. At most one entry per list is
+            `primary`: the entry SAP marks as default on the standard address or, when that address has none, the
+            first entry SAP marks as default. Every other entry is `secondary`; mobile numbers are `mobile`, so a list with only mobile numbers has no `primary`.
+            `phone_numbers[].extension` is returned when SAP holds one.
+
+            `addresses[].type` is `primary` for the customer's standard address in SAP and `secondary` for every other
+            address. `line1` is the street, `street_number` the house number, and `line2` and `line3` are SAP's
+            Street 4 and Street 5 fields.
         - connector: freeagent
           description: |
             `balance` reflects the contact's net position across both sales invoices and purchase
@@ -35088,8 +35147,11 @@ paths:
             rejected with a `400`: with the reason above when the value differs from the record, and as having
             nothing to update when it matches.
 
-            Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
-            with a 400. Set those values when creating the record, or change them directly in SAP.
+            Updates that include entries in `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are
+            rejected with a `400` and nothing is updated. Lists can only be set when the record is created, or changed
+            in SAP. Leave these fields out, or send them empty, to keep them unchanged: an empty list is ignored and
+            clears nothing, because clearing a list is not supported. `terms` is rejected too when it has a value: it
+            can only be set when the record is created.
 
             `company_id` and `account` are ignored on update: a company code cannot be added or changed through this
             endpoint. An update that contains none of the fields that can be updated, and no `pass_through` for
@@ -35532,9 +35594,16 @@ paths:
             returned again; dedupe by `id`. A supplier that has never been changed matches on its creation date.
 
             `emails`, `phone_numbers` and `websites` combine the entries SAP keeps on each of the supplier's addresses
-            with the ones kept on the supplier itself, addresses first. Every entry has an `id` that is unique within its
-            list. `type` is `primary` for the entry SAP marks as default and `secondary` for the others; mobile numbers
-            are `mobile`.
+            with the ones kept on the supplier itself: the standard address's entries first, then the other addresses' in
+            SAP's order, then the supplier's own. `phone_numbers` lists the landlines first, then the mobile numbers, each in
+            that order. Every entry has an `id` that is unique within its list. At most one entry per list is
+            `primary`: the entry SAP marks as default on the standard address or, when that address has none, the
+            first entry SAP marks as default. Every other entry is `secondary`; mobile numbers are `mobile`, so a list with only mobile numbers has no `primary`.
+            `phone_numbers[].extension` is returned when SAP holds one.
+
+            `addresses[].type` is `primary` for the supplier's standard address in SAP and `secondary` for every other
+            address. `line1` is the street, `street_number` the house number, and `line2` and `line3` are SAP's
+            Street 4 and Street 5 fields.
         - connector: e-conomic
           description: |
             Supported filters: `company_name`, `display_name` (both match anywhere in the name, ignoring case) and `email`. Sorting is not supported. e-conomic suppliers have no created or updated timestamps, so `updated_since` is not supported, and custom fields are not supported.
@@ -35829,13 +35898,58 @@ paths:
             **Default Supplier Reconciliation Account** is used. If neither is available the supplier is created
             without a company code, and `company_id` has no effect. Send `terms` with an SAP payment terms key (for
             example `0004`) to set the supplier's payment terms in that company code. `account` and `terms` have no
-            effect without `company_id`, and none of the three is returned when the supplier is read. If SAP does
+            effect without `company_id`, `terms` cannot be changed by an update, and none of the three is returned when the supplier is read. If SAP does
             not accept the company code, the account or the payment terms, the request fails with SAP's message and
             nothing is created. A supplier created without `terms` has no payment terms in SAP, so SAP cannot work
             out when its bills are due: send `due_date` when creating a bill for it.
 
-            **An address with a country is required.** Provide `addresses[0]` with at least `country` (e.g. `US`, `DE`).
-            Without it, SAP returns `400 Country/Region Key ... is a required entry field`.
+            **Addresses.** Send at least one address, each with a `country` (e.g. `US`, `DE`). An address without a
+            `country` rejects the whole request with a `400` naming it (for example `addresses[1] has no country`) and
+            nothing is created. Every address is written: the one with type `primary` (or else the first) first, the
+            others after it in request order. The first one becomes the standard address in SAP and reads back as
+            `primary`; the others read back as `secondary`, whatever `type` was sent. `line1` is stored as the street,
+            `street_number` as the house number, `line2` and `line3` as SAP's Street 4 and Street 5 fields. These
+            address fields are not stored on create and not returned: `email`, `phone_number`, `fax`, `website`,
+            `name`, `county`, `contact_name`, `notes`, `line4` and `line5`. A value longer than SAP stores rejects the
+            request with a `400` naming the field (for example `addresses[0].line2 is longer than 40 characters`) and
+            nothing is created. The limits are: `line1` 60, `street_number` 10, `line2` 40, `line3` 40, `city` 40,
+            `state` 3, `postal_code` 10 and `country` 3 characters.
+
+            **Emails, phone numbers and websites** are stored on the standard address (the first address written), not
+            on the supplier itself, so a request with any of them and no address is rejected with a `400` naming the lists
+            (for example `emails and phone_numbers need an address with a country`) and nothing is created. A value
+            that is only whitespace (for example `phone_numbers[1].number is blank`) is rejected the same way. SAP makes
+            the first entry of each kind its default, so the entry typed `primary` is written first and the rest in
+            request order. With several entries typed `primary`, only the first is written first and becomes SAP's
+            default; the others read back as `secondary`. Mobile numbers are written in request order and always read
+            back as `mobile`, so a mobile number is never the `primary` entry. At most one entry per list reads back as
+            `primary`, and a list with only mobile numbers has none. SAP stores no label on an email or a website and only landline or
+            mobile on a phone: a phone with `type` `mobile` is stored as a mobile number, and every other phone type
+            (`home`, `work`, `fax`, ...) is stored as a landline. An email or website of any type, for example
+            `billing`, is stored without its type and the request succeeds.
+
+            **Phone details.** `extension` is stored (up to 10 characters) and returned. `country_code` and `area_code`
+            are folded into `number` as `+<country_code> <area_code> <number>` when `number` does not start with `+`,
+            and are not returned separately. A `number` that starts with `00` is already international: it is stored
+            with the `00` replaced by `+`, and `country_code` and `area_code` are not added to it. A leading `0` is
+            stored as sent, because whether it is a national trunk prefix depends on the country. With `country_code`,
+            send `area_code` and `number` without the national trunk prefix (`country_code` `31`, `area_code` `20`, not `020`),
+            so the number is stored as `+31 20 555 0104`. Without `country_code`, SAP derives the international number from the address country, so a
+            national number such as `020 555 0104` is stored correctly. A number can have 30 characters in SAP; the
+            limit applies to the stored value, dial codes included, and a longer value is rejected naming
+            `phone_numbers[i].number`. Emails can have 241 characters and websites 132: SAP keeps
+            132 characters of a website address, so a longer one is rejected rather than stored cut short.
+
+            **`pass_through`.** `extend_object` for `to_BusinessPartnerAddress` is applied by array position after the
+            primary address has been moved first: `results[0]` is the standard address, and the contacts above are
+            inside it. Setting `{"to_BusinessPartnerAddress": {"results": [{"Language": "DE"}]}}` changes the language of
+            that address only and keeps its contacts. A value set at a position the connector also writes, for example
+            `to_EmailAddress.results[0].EmailAddress`, overwrites that entry's value, and a flag such as
+            `IsDefaultEmailAddress` is added to the entry. Send contacts in `emails`, `phone_numbers` and `websites`,
+            not through `pass_through`.
+
+            **Status.** `status: inactive` creates the supplier blocked. `active`, any other value, or no status creates it
+            active.
         - connector: exact-online
           description: |
             Exact does not enforce uniqueness on the supplier name — posting the same `display_name`/
@@ -36031,9 +36145,16 @@ paths:
             supplier role returns `404` here, even if it exists as a customer.
 
             `emails`, `phone_numbers` and `websites` combine the entries SAP keeps on each of the supplier's addresses
-            with the ones kept on the supplier itself, addresses first. Every entry has an `id` that is unique within its
-            list. `type` is `primary` for the entry SAP marks as default and `secondary` for the others; mobile numbers
-            are `mobile`.
+            with the ones kept on the supplier itself: the standard address's entries first, then the other addresses' in
+            SAP's order, then the supplier's own. `phone_numbers` lists the landlines first, then the mobile numbers, each in
+            that order. Every entry has an `id` that is unique within its list. At most one entry per list is
+            `primary`: the entry SAP marks as default on the standard address or, when that address has none, the
+            first entry SAP marks as default. Every other entry is `secondary`; mobile numbers are `mobile`, so a list with only mobile numbers has no `primary`.
+            `phone_numbers[].extension` is returned when SAP holds one.
+
+            `addresses[].type` is `primary` for the supplier's standard address in SAP and `secondary` for every other
+            address. `line1` is the street, `street_number` the house number, and `line2` and `line3` are SAP's
+            Street 4 and Street 5 fields.
         - connector: fiken
           description: |
             Customers and suppliers are both Fiken contacts. A contact that is a customer but not a supplier returns `404` here. Countries are returned as ISO 3166-1 alpha-2 codes. Fiken stores a country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.
@@ -36177,8 +36298,11 @@ paths:
             rejected with a `400`: with the reason above when the value differs from the record, and as having
             nothing to update when it matches.
 
-            Updates that include `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are rejected
-            with a 400. Set those values when creating the record, or change them directly in SAP.
+            Updates that include entries in `addresses`, `bank_accounts`, `emails`, `phone_numbers` or `websites` are
+            rejected with a `400` and nothing is updated. Lists can only be set when the record is created, or changed
+            in SAP. Leave these fields out, or send them empty, to keep them unchanged: an empty list is ignored and
+            clears nothing, because clearing a list is not supported. `terms` is rejected too when it has a value: it
+            can only be set when the record is created.
 
             `company_id` and `account` are ignored on update: a company code cannot be added or changed through this
             endpoint. An update that contains none of the fields that can be updated, and no `pass_through` for

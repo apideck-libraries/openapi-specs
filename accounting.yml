@@ -28730,6 +28730,8 @@ paths:
 
             Invoices posted directly in financial accounting, including those created through this API, have G/L account lines only.
 
+            `total_tax` is the tax SAP posted on the invoice and `sub_total` is `total` minus `total_tax`; an invoice without tax returns `total_tax` `0`. SAP posts tax as separate tax lines, which are summed into `total_tax` and are not returned in `line_items`. Each G/L account line carries SAP's tax code in `tax_rate.code`; the tax rate and a per-line `tax_amount` are not returned for G/L account lines, and `tax_code` on the invoice itself is not returned.
+
             On G/L account lines, `total_amount` is signed against the invoice: a line on the revenue side reads
             positive, and a line on the other side (an offsetting or reversing posting inside the same document)
             reads negative. `total` stays the absolute sum of the customer lines, so the lines do not always add
@@ -29888,6 +29890,9 @@ paths:
             new open item for the remainder. Otherwise it is `paid` when the invoice is cleared in SAP and
             `authorised` when it is not. Finding partial payments adds one SAP read; if it fails, the
             request returns an error.
+
+            `total_tax`, `sub_total` and `line_items[].tax_rate.code` are returned as when listing invoices: SAP's
+            tax lines are summed into `total_tax` and are not part of `line_items`.
         - connector: exact-online-nl
           description: |
             Exact Online has no balance field on an invoice, so `balance` is derived from its
@@ -32206,9 +32211,10 @@ paths:
             Credit notes are SAP FI customer credit memos read from the accounting-document line
             items, grouped into one record per document. `type` is always
             `accounts_receivable_credit`; `status` is `authorised`, or `paid` once the customer item has
-            been cleared. Every posting line of the document other than the customer line is returned
-            as a `line_items` entry — including tax lines, which appear as a line on the tax account
-            rather than as `total_tax`. `sub_total`, `total_tax`, `balance` and `allocations` are not
+            been cleared. Every posting line of the document other than the customer line and the tax
+            lines is returned as a `line_items` entry, with SAP's tax code in `tax_rate.code`. The tax
+            lines are summed into `total_tax`, and `sub_total` is `total_amount` minus `total_tax`; a
+            credit note without tax returns `total_tax` `0`. `balance` and `allocations` are not
             returned. `created_at` is the date the document was entered and `date_issued` its document
             date; both carry a date only (midnight UTC).
 
@@ -34499,6 +34505,11 @@ paths:
             `filter[updated_since]` compares on whole days: SAP keeps only the date of the last change, so the time
             part is ignored and the filter is inclusive of the given day (in UTC). Records changed earlier that day are
             returned again; dedupe by `id`. A customer that has never been changed matches on its creation date.
+
+            `emails`, `phone_numbers` and `websites` combine the entries SAP keeps on each of the customer's addresses
+            with the ones kept on the customer itself, addresses first. Every entry has an `id` that is unique within its
+            list. `type` is `primary` for the entry SAP marks as default and `secondary` for the others; mobile numbers
+            are `mobile`.
         - connector: e-conomic
           description: |
             Supported filters: `company_name`, `display_name` (both match anywhere in the name, ignoring case), `email`, `ids` and `updated_since`. Sorting is not supported. e-conomic customers have no creation timestamp, and custom fields are not supported.
@@ -34951,6 +34962,11 @@ paths:
           description: |
             Customers and suppliers are both SAP business partners. A business partner that does not have the
             customer role returns `404` here, even if it exists as a supplier.
+
+            `emails`, `phone_numbers` and `websites` combine the entries SAP keeps on each of the customer's addresses
+            with the ones kept on the customer itself, addresses first. Every entry has an `id` that is unique within its
+            list. `type` is `primary` for the entry SAP marks as default and `secondary` for the others; mobile numbers
+            are `mobile`.
         - connector: freeagent
           description: |
             `balance` reflects the contact's net position across both sales invoices and purchase
@@ -35500,6 +35516,11 @@ paths:
             `filter[updated_since]` compares on whole days: SAP keeps only the date of the last change, so the time
             part is ignored and the filter is inclusive of the given day (in UTC). Records changed earlier that day are
             returned again; dedupe by `id`. A supplier that has never been changed matches on its creation date.
+
+            `emails`, `phone_numbers` and `websites` combine the entries SAP keeps on each of the supplier's addresses
+            with the ones kept on the supplier itself, addresses first. Every entry has an `id` that is unique within its
+            list. `type` is `primary` for the entry SAP marks as default and `secondary` for the others; mobile numbers
+            are `mobile`.
         - connector: e-conomic
           description: |
             Supported filters: `company_name`, `display_name` (both match anywhere in the name, ignoring case) and `email`. Sorting is not supported. e-conomic suppliers have no created or updated timestamps, so `updated_since` is not supported, and custom fields are not supported.
@@ -35994,6 +36015,11 @@ paths:
           description: |
             Customers and suppliers are both SAP business partners. A business partner that does not have the
             supplier role returns `404` here, even if it exists as a customer.
+
+            `emails`, `phone_numbers` and `websites` combine the entries SAP keeps on each of the supplier's addresses
+            with the ones kept on the supplier itself, addresses first. Every entry has an `id` that is unique within its
+            list. `type` is `primary` for the entry SAP marks as default and `secondary` for the others; mobile numbers
+            are `mobile`.
         - connector: fiken
           description: |
             Customers and suppliers are both Fiken contacts. A contact that is a customer but not a supplier returns `404` here. Countries are returned as ISO 3166-1 alpha-2 codes. Fiken stores a country as free text, normally its Norwegian name; a stored value that is not a recognised country name is returned as stored.

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.88.0
+  version: 10.89.0
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -1663,6 +1663,27 @@ components:
         value:
           description: Custom Field value
           example: '495172776'
+        type:
+          type: string
+          x-apideck-enum-id: form_field.type
+          enum:
+            - text
+            - checkbox
+            - tel
+            - email
+            - url
+            - textarea
+            - select
+            - filtered-select
+            - multi-select
+            - datetime
+            - date
+            - time
+            - number
+            - password
+          description: The declared data type of the custom field. Only returned by connectors that can read the field's definition; omitted otherwise.
+          example: select
+          readOnly: true
         finder:
           type: string
           description: JSONPath finder for retrieving this value when mapping a response payload from downstream
@@ -4897,6 +4918,27 @@ paths:
             not inject `company_id` into the request, so the sample-record path is used.
 
             Use `?resource_id=<id>` to pin sampling to a specific employee for deterministic value coverage.
+        - connector: netsuite
+          description: |
+            Custom fields include `type`, the data type NetSuite declares for the field: `text`, `number`, `date`, `datetime`,
+            `checkbox`, `select` or `multi-select`. Whole and decimal numbers are both `number`. `type` is left out for a field
+            NetSuite gives no recognised definition for.
+
+            The list covers the custom fields defined for the resource, not only those with a value on the sampled record. A field
+            with no value on that record is returned with `name` (its NetSuite script ID, such as `custbody_po_reference`),
+            `value: null` and no `id`. To write that field, send its script ID as `id`. Use `?resource_id=<id>` to pin sampling to
+            a specific record.
+
+            Line-item custom fields (script IDs starting with `custcol`) are listed for bills, invoices, credit notes and quotes.
+            Their `finder` does not locate the field: it points at the record's own `custom_fields`, while a line field is
+            returned under `line_items[].custom_fields`. Do not use it in a custom mapping. A custom segment defined on both the
+            record and its lines is listed once.
+
+            A few list fields are reported as `text` while they have no value on the sampled record, and as `select` once they
+            have one.
+
+            If the connection's NetSuite role cannot read record definitions through NetSuite's REST web services, the list
+            contains only the custom fields with a value on the sampled record, without `type`.
       responses:
         '200':
           $ref: '#/components/responses/GetCustomFieldsResponse'

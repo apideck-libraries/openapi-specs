@@ -1,3 +1,10 @@
+## v10.89.0 - (2026-11-20)
+
+### Vault API
+
+- [Custom fields](apis/vault/reference/connections) (`GET /vault/connections/{unified_api}/{service_id}/{resource}/custom-fields`) can now return `type`, the data type declared for a custom field (`text`, `number`, `date`, `checkbox`, `select`, `multi-select`, …). It is returned by connectors that can read the field's definition. [NetSuite](connectors/netsuite) is the first: each custom field in the list carries the type NetSuite declares for it, where NetSuite declares one.
+- The [NetSuite](connectors/netsuite) custom-fields list now also includes custom fields that have no value on the sampled record, so a field can be discovered before any record uses it. Those entries have `name` (the NetSuite script ID), `value: null` and no `id`; send the script ID as `id` to write the field. Line-item custom fields (`custcol…`) are listed too, for bills, invoices, credit notes and quotes. Their `finder` does not locate the field, because it points at the record's own `custom_fields` while a line field is returned under `line_items[].custom_fields`, so it should not be used in a custom mapping. A few list fields are reported as `text` while they have no value on the sampled record and as `select` once they have one, so `text` on an empty field is not definitive. If the connection's NetSuite role cannot read record definitions through NetSuite's REST web services, the list is unchanged.
+
 ## v10.88.0 - (2026-11-20)
 
 ### Accounting API

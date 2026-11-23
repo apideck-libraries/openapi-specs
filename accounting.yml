@@ -30763,6 +30763,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            `classification` and `type` are derived: SAP has no asset, liability, equity, revenue or expense attribute on a G/L account. Cash accounts return `asset` / `bank` and secondary cost accounts return `expense` on every chart of accounts.
+
+            For all other accounts on SAP's standard chart of accounts (YCOA), the class comes from the first digit of the 8-digit account number: 1 `asset`, 2 `liability` and 3 `equity` for balance sheet accounts, and 4 `revenue`, 5 `costs_of_sales` and 6 `expense` for profit and loss accounts. An account whose SAP account type does not fit its range (for example a balance sheet account numbered in range 4), accounts in range 7 (other income and expenses), accounts with a non-standard number and accounts on any other chart of accounts return `other` (with `type` `balancesheet` for a balance sheet account).
+
+            `type` does not separate current, fixed and non-current items: assets return `other_asset` and liabilities `other_liability`.
         - connector: fiken
           description: |
             `current_balance` is the account's closing balance as of today (Oslo time), in the company currency, with debit balances positive and credit balances negative (a revenue account with sales shows a negative balance). It is an extra read of Fiken's account balances, so a balance is only returned when that read succeeds; otherwise the accounts are returned without `current_balance` and the response carries a warning. An account without any postings has a `current_balance` of `0`.
@@ -31124,6 +31131,13 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            `classification` and `type` are derived: SAP has no asset, liability, equity, revenue or expense attribute on a G/L account. Cash accounts return `asset` / `bank` and secondary cost accounts return `expense` on every chart of accounts.
+
+            For all other accounts on SAP's standard chart of accounts (YCOA), the class comes from the first digit of the 8-digit account number: 1 `asset`, 2 `liability` and 3 `equity` for balance sheet accounts, and 4 `revenue`, 5 `costs_of_sales` and 6 `expense` for profit and loss accounts. An account whose SAP account type does not fit its range (for example a balance sheet account numbered in range 4), accounts in range 7 (other income and expenses), accounts with a non-standard number and accounts on any other chart of accounts return `other` (with `type` `balancesheet` for a balance sheet account).
+
+            `type` does not separate current, fixed and non-current items: assets return `other_asset` and liabilities `other_liability`.
         - connector: fiken
           description: |
             `current_balance` is the account's closing balance as of today (Oslo time), in the company currency, with debit balances positive and credit balances negative (a revenue account with sales shows a negative balance). It is an extra read of Fiken's account balances, so a balance is only returned when that read succeeds; otherwise the accounts are returned without `current_balance` and the response carries a warning. An account without any postings has a `current_balance` of `0`.

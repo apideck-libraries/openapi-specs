@@ -1,3 +1,9 @@
+## v10.90.0 - (2026-11-24)
+
+### Accounting API
+
+- [QuickBooks](connectors/quickbooks) and [Intuit Enterprise Suite](connectors/intuit-enterprise-suite) now honour the `Idempotency-Key` header on [Payments](apis/accounting/reference/payments), [Credit Notes](apis/accounting/reference/credit-notes), [Invoice Items](apis/accounting/reference/invoice-items), [Ledger Accounts](apis/accounting/reference/ledger-accounts) and [Customers](apis/accounting/reference/customers) creates, as they already did on journal entry and invoice creates and invoice updates. A 32-character value derived from the key is sent as the create's `requestid`, so a retry with the same key and body returns the original record instead of creating a second one. Creates without the header are unchanged. Updates of these resources still reject the header with `400`.
+
 ## v10.89.2 - (2026-11-23)
 
 ### Accounting API

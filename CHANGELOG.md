@@ -1,3 +1,17 @@
+## v10.89.2 - (2026-11-23)
+
+### Accounting API
+
+- Added `filter[po_number]` to [Invoices](apis/accounting/reference/invoices) and [Sales Orders](apis/accounting/reference/sales-orders) (`GET /accounting/invoices`, `GET /accounting/sales-orders`): an exact match on the customer's purchase order number, so a document can be found again by the reference sent on create. More than one document can carry the same PO number. [SAP Business One](connectors/sap-business-one) supports it on both. Other connectors return `400 Unsupported Filters Error` for it until they support it.
+- [SAP Business One](connectors/sap-business-one) [Sales Orders](apis/accounting/reference/sales-orders) and [Quotes](apis/accounting/reference/quotes) can now be filtered by `updated_since`, `created_since`, `number` and `customer_id`. Before, every filter returned a 400. [Invoices](apis/accounting/reference/invoices) also accept `customer_id`, and [Credit Notes](apis/accounting/reference/credit-notes) also accept `created_since`, `number` and `customer_id`. `number` is the SAP Business One document number; a value that is not a whole number returns a 400.
+- [SAP Business One](connectors/sap-business-one): on a company with sales tax, an [Invoice](apis/accounting/reference/invoices) or [Credit Note](apis/accounting/reference/credit-notes) line without `line_items[].tax_rate.id` gets the tax code set on the customer's default ship-to address. When that address has none, the request now returns a 400 that names the field and points to `/accounting/tax-rates`, instead of SAP's "Row without tax was found".
+
+## v10.89.1 - (2026-11-23)
+
+### Proxy API
+
+- A `401` from the downstream API on a Proxy API request made with a Vault connection now triggers a credential check on that connection, using the same validation request Vault uses for the connector. If the validation request is rejected with a `401` that the connector does not treat as transient, the connection is marked invalid, as Unified API requests already do: its `state` becomes `invalid`, its health `needs_auth`, and the `vault.connection.updated` webhook is sent. Before, a Proxy `401` never changed the connection, so a connection used only through the Proxy API kept showing `callable` while every request was rejected. A `401` from one endpoint the credentials are not permitted to use does not invalidate a connection whose credentials still work, because the check succeeds. A successful Proxy API request on an invalid connection also triggers a check, and the connection becomes valid again only when the check succeeds. A connection is checked at most once every 15 minutes, even when several Proxy API requests ask for a check at the same time. `401` responses that a connector already treats as transient (for example the Sage Intacct authentication failure that is retried after a session refresh) do not trigger a check. Requests that supply their own credentials through `x-apideck-downstream-authorization` are unaffected, and the Proxy API response itself is unchanged.
+
 ## v10.89.0 - (2026-11-20)
 
 ### Vault API

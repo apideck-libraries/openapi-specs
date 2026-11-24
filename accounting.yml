@@ -27508,6 +27508,14 @@ paths:
             - All other lines are G/L lines and require `line_items[].ledger_account.id` (or `.code`). A line with
               neither a purchase order nor a ledger account is rejected with a 400.
 
+            On a G/L line, `line_items[].department_id` sets the cost center and `line_items[].tracking_categories`
+            the profit center, with the ids the departments and tracking-categories resources return. SAP has one
+            profit center per line, so a line with two or more different tracking category ids is rejected with a 400
+            (a repeated id counts once, and a blank id is ignored). The profit center sent is stored as is, even
+            when the cost center belongs to a different profit center. A
+            purchase order line takes its cost center and profit center from the purchase order, so a purchase
+            order line that sets `department_id` or `tracking_categories` is rejected with a 400.
+
             `line_items[].tax_rate.code` takes the SAP tax code (e.g. `V1`). SAP S/4HANA Cloud does not expose tax
             rates as readable data, so the tax code must be supplied directly.
 
@@ -29176,6 +29184,7 @@ paths:
           description: |
             Invoices are created as drafts and returned with an id of the form `draft-{number}` and `status` `draft`; booking them is done in e-conomic, after which they get a new booked invoice number. Only `customer.id` is required: the recipient (name, address and VAT zone), payment terms, invoice layout and currency are taken from the customer unless you send them. `line_items[].item.id` is the product number; VAT is calculated by e-conomic from the product group and the customer's VAT zone. Only draft invoices can be updated or deleted; an update changes only the fields you send, and `line_items`, when sent, replace all lines. Booked invoices are final and cannot be changed. On create, `due_date` is ignored: e-conomic calculates the due date from the payment terms (`terms_id`). An update can set `due_date`; an update that changes `invoice_date` without sending `due_date` makes e-conomic recalculate the due date from the payment terms. An invoice whose lines add up to a negative total is rejected; create a credit note instead. An update cannot clear a field: empty values are ignored. Changing `customer.id` readdresses the draft to the new customer.
             A `status` other than `draft` is rejected with a 400, because e-conomic invoices are written as drafts only.
+            `number` is assigned by e-conomic and a sent `number` is ignored. `po_number` is not stored: e-conomic has no purchase order field, and its free-text reference holds `reference`. e-conomic numbers a new draft one above the highest number in use by draft invoices, credit notes, quotes and orders, so deleting the most recent draft frees its number for the next draft of any of these types: a stored id can later point at a different document. Keep your own reference (for example in `reference`) rather than relying on the id alone.
         - connector: minox
           description: |
             Creates the invoice as a booking on the administration's sales journal, which
@@ -32445,6 +32454,7 @@ paths:
           description: |
             Credit notes are created as draft invoices with negative line quantities: send the quantities you credit as positive numbers, and a charge on the credit note (such as a fee) as a negative quantity, the same signs a read returns. The id has the form `draft-{number}`; booking is done in e-conomic. Only `customer.id` is needed besides the lines; the recipient, VAT zone, payment terms, layout and currency come from the customer unless you send them. Only draft credit notes can be updated or deleted. Lines must add up to a credit: a credit note whose charges outweigh the credited lines is rejected, because e-conomic would store it as an invoice. `total_amount` is required by the request schema but not used; the total is calculated from the lines.
             A `status` other than `draft` is rejected with a 400, because e-conomic credit notes are written as drafts only.
+            `number` is assigned by e-conomic and a sent `number` is ignored. e-conomic numbers a new draft one above the highest number in use by draft invoices, credit notes, quotes and orders, so deleting the most recent draft frees its number for the next draft of any of these types: a stored id can later point at a different document. Keep your own reference (for example in `reference`) rather than relying on the id alone.
         - connector: minox
           description: |
             Books the credit note on the administration's sales journal, which updates the
@@ -33750,6 +33760,13 @@ paths:
             (`purchase_order.line_id` or `line_number`) when the purchase order has more than one item;
             without it, send `unit_of_measure`.
 
+            On a G/L line, `line_items[].department.id` sets the cost center and `line_items[].tracking_categories`
+            the profit center, with the ids the departments and tracking-categories resources return. SAP has one
+            profit center per line, so a line with two or more different tracking category ids is rejected with a 400
+            (a repeated id counts once, and a blank id is ignored). The profit center sent is stored as is, even
+            when the cost center belongs to a different profit center. A
+            purchase order line takes its cost center and profit center from the purchase order, so a purchase
+            order line that sets `department` or `tracking_categories` is rejected with a 400.
 
             The tax determination date is set to the UTC day of `date_issued`. SAP only accepts it in company codes
             whose country uses time-dependent taxes; where it does not (for example a US company code), SAP rejects
@@ -48843,6 +48860,7 @@ paths:
           description: |
             Only `customer.id` is required: the recipient (name, address and VAT zone), payment terms, layout and currency are taken from the customer unless you send them. `line_items[].item.id` is the product number. Quotes are created as drafts; an update changes only the fields you send, and `line_items`, when sent, replace all lines. An update cannot clear a field: empty values are ignored. Changing `customer.id` readdresses the quote to the new customer.
             A `status` other than `draft` is rejected with a 400, because e-conomic quotes are written as drafts only.
+            `expiry_date` is not stored: e-conomic quotes have no expiry date. e-conomic numbers a new draft one above the highest number in use by draft invoices, credit notes, quotes and orders, so deleting the most recent draft frees its number for the next draft of any of these types: a stored id can later point at a different document. Keep your own reference (for example in `reference`) rather than relying on the id alone.
         - connector: freeagent
           description: |
             `number` becomes the FreeAgent estimate reference; without it FreeAgent numbers the quote
@@ -49966,6 +49984,7 @@ paths:
           description: |
             Only `customer.id` is required: the recipient (name, address and VAT zone), payment terms, layout and currency are taken from the customer unless you send them. `line_items[].item.id` is the product number. Orders are created as drafts; an update changes only the fields you send, and `line_items`, when sent, replace all lines. An update cannot clear a field: empty values are ignored. Changing `customer.id` readdresses the order to the new customer.
             A `status` other than `draft` is rejected with a 400, because e-conomic sales orders are written as drafts only.
+            e-conomic numbers a new draft one above the highest number in use by draft invoices, credit notes, quotes and orders, so deleting the most recent draft frees its number for the next draft of any of these types: a stored id can later point at a different document. Keep your own reference (for example in `reference`) rather than relying on the id alone.
         - connector: acumatica
           description: |
             `customer.id` and at least one line are required. Every line needs an inventory item: send `line_items[].item.id` (or `code`) with the Acumatica `InventoryID`; a line without one is rejected by Acumatica. `order_type` selects the Acumatica order type and defaults to `SO`. Totals, tax and `status` are computed by Acumatica — `sub_total`, `total_tax`, `total` and `status` sent on create are ignored, except `status: on_hold`, which places the order on hold. `number` is only honoured when the order type is configured for manual numbering; otherwise Acumatica assigns it. Address fields are only written when at least one address field is sent, and then override the customer's default address on the order.

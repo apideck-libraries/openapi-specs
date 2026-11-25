@@ -1,3 +1,10 @@
+## v10.91.0 - (2026-11-25)
+
+### Accounting API
+
+- [e-conomic](connectors/e-conomic) now honours the `Idempotency-Key` header on every create: [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers), [Invoice Items](apis/accounting/reference/invoice-items), [Invoices](apis/accounting/reference/invoices), [Credit Notes](apis/accounting/reference/credit-notes), [Quotes](apis/accounting/reference/quotes), [Sales Orders](apis/accounting/reference/sales-orders), [Journal Entries](apis/accounting/reference/journal-entries), [Bills](apis/accounting/reference/bills) and [Bill Payments](apis/accounting/reference/bill-payments). A 32-character value derived from the key is sent as e-conomic's own `Idempotency-Key` header, so a retry with the same key and body within an hour returns the original record instead of creating a second one. e-conomic keeps a key for one hour, and so does Unify. Reusing a key with a different body returns `422`. On invoices, credit notes, quotes, sales orders, journal entries, bills and bill payments, Unify builds the e-conomic request again on a retry from current e-conomic data and, when the date is left out, today's date; if either changed between the attempts, the retry returns `422` instead of the original record, and no second record is created; the first attempt may have created the record, so look it up before resending with a new key. Creates without the header are unchanged. Updates still reject the header with `400`.
+- [Suppliers](apis/accounting/reference/suppliers), [Quotes](apis/accounting/reference/quotes), [Sales Orders](apis/accounting/reference/sales-orders) and [Bill Payments](apis/accounting/reference/bill-payments) creates now declare the `Idempotency-Key` header parameter.
+
 ## v10.90.3 - (2026-11-25)
 
 ### Accounting API

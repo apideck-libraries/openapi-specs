@@ -1,3 +1,9 @@
+## v10.90.3 - (2026-11-25)
+
+### Accounting API
+
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) [Journal Entries](apis/accounting/reference/journal-entries) now include SAP documents of type `AB` alongside `SA`, in the list and by id. Each journal entry has a `source_type`: `manual` for a general-ledger posting, `clearing` for a document that clears customer or supplier open items (allocating a payment or bill payment through this API posts one, so it now appears in the list), and `reversal` for a reversing document. Lines on a customer or supplier account return the SAP customer or supplier number in `line_items[].customer.id` or `line_items[].supplier.id`. Neither `filter[scope]` nor `filter[source_type]` is supported: to leave out clearing documents, skip the returned entries whose `source_type` is `clearing`. A `reversal` can reverse a clearing document.
+
 ## v10.90.2 - (2026-11-25)
 
 ### Accounting API

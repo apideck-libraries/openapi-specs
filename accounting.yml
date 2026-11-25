@@ -34613,10 +34613,35 @@ paths:
             platform.
         - connector: twinfield
           description: |
-            `status` is not returned by this list call — the underlying vendor list only returns code
-            and name per row. Fetch the customer by id to read it. The same applies to `emails`, `phone_numbers`, `addresses`,
-            `websites`, `tax_number`, `bank_accounts`, `updated_at` and `account` — all empty/null on
-            the list response, populated only when fetched by id.
+            By default, listing customers makes one Twinfield request per page (a `limit` above 100 can take two) and
+            returns only `id`, `display_id`, `company_name` and `display_name`. Use Get Customer for the full record.
+
+            To get the Get Customer details in the list as well, set "Include full details when listing customers" to
+            Yes in the connection's Customers configuration settings. Through the Vault API, this is the customers
+            resource config `enrich_customer_list` set to `"true"`. The list then also returns `emails`,
+            `phone_numbers`, `addresses`, `status`, `updated_at`, `websites`, `bank_accounts`, `tax_number` and
+            `account`.
+
+            Twinfield returns these details one customer at a time, so with the setting on every page makes one extra
+            request for each customer on it: a page of 200 customers makes 200 extra requests. Every extra request
+            counts as an Apideck API request, the same as a Get Customer call, and against the connection's
+            Twinfield rate limit.
+
+            With the setting on, `fields` limits the extra requests to lists that need them: a list that asks only for
+            `id`, `display_id`, `company_name` and `display_name` makes no extra requests. With the setting off,
+            `fields` cannot turn the extra details on.
+
+            When the setting is on, a failed extra request does not fail the list. The response is still a 200, those
+            customers are returned without the extra details, and `meta.warnings` has an entry whose `operation` is
+            `customersOne`. If Twinfield refuses access or rate-limits the connection, no further extra requests are
+            made for that page and its remaining customers are returned without the extra details.
+
+            The whole list request has about 20 seconds, counted from when it starts, so the time the list itself
+            takes is included. Customers not reached in that time are returned without the extra details, and a
+            `meta.warnings` entry says how many. If you see that warning, request smaller pages with `limit`
+            (default 20, maximum 200).
+
+            The setting applies to list requests only; it does not change webhook events.
         - connector: netsuite
           description: |
             The minimum page size accepted for Netsuite is 5. The cursor for Netsuite expires if it has not been used within 15 minutes after its creation.
@@ -35086,6 +35111,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            A Twinfield customer can have several addresses and bank accounts. `addresses`, `phone_numbers` and
+            `bank_accounts` return one entry each: the address or bank account marked as default in Twinfield, or
+            the first one when none is marked. `emails` returns one entry: the customer's e-billing
+            email address in Twinfield (the one a create or update through this API sets), or the email of that
+            same address when no e-billing email is set.
+
+            In an address, `contact_name` is Twinfield's first address field and `line1` and `line2` are its second
+            and third. That matches Twinfield's standard address layout, where the first field is the attention
+            line and the next two hold the street. An administration that renamed those fields in Twinfield gets
+            them in the same positions. Creating or updating a customer writes the same three fields.
+
+            `status` is `active`, or `archived` for a customer that was deleted in Twinfield, including one Twinfield
+            keeps hidden because it is used in a transaction.
         - connector: sap-s4hana-cloud
           description: |
             Customers and suppliers are both SAP business partners. A business partner that does not have the
@@ -35693,10 +35733,35 @@ paths:
             platform.
         - connector: twinfield
           description: |
-            `status` is not returned by this list call — the underlying vendor list only returns code
-            and name per row. Fetch the supplier by id to read it. The same applies to `emails`, `phone_numbers`, `addresses`,
-            `websites`, `tax_number`, `bank_accounts`, `updated_at` and `account` — all empty/null on
-            the list response, populated only when fetched by id.
+            By default, listing suppliers makes one Twinfield request per page (a `limit` above 100 can take two) and
+            returns only `id`, `display_id`, `company_name` and `display_name`. Use Get Supplier for the full record.
+
+            To get the Get Supplier details in the list as well, set "Include full details when listing suppliers" to
+            Yes in the connection's Suppliers configuration settings. Through the Vault API, this is the suppliers
+            resource config `enrich_supplier_list` set to `"true"`. The list then also returns `emails`,
+            `phone_numbers`, `addresses`, `status`, `updated_at`, `websites`, `bank_accounts`, `tax_number` and
+            `account`.
+
+            Twinfield returns these details one supplier at a time, so with the setting on every page makes one extra
+            request for each supplier on it: a page of 200 suppliers makes 200 extra requests. Every extra request
+            counts as an Apideck API request, the same as a Get Supplier call, and against the connection's
+            Twinfield rate limit.
+
+            With the setting on, `fields` limits the extra requests to lists that need them: a list that asks only for
+            `id`, `display_id`, `company_name` and `display_name` makes no extra requests. With the setting off,
+            `fields` cannot turn the extra details on.
+
+            When the setting is on, a failed extra request does not fail the list. The response is still a 200, those
+            suppliers are returned without the extra details, and `meta.warnings` has an entry whose `operation` is
+            `suppliersOne`. If Twinfield refuses access or rate-limits the connection, no further extra requests are
+            made for that page and its remaining suppliers are returned without the extra details.
+
+            The whole list request has about 20 seconds, counted from when it starts, so the time the list itself
+            takes is included. Suppliers not reached in that time are returned without the extra details, and a
+            `meta.warnings` entry says how many. If you see that warning, request smaller pages with `limit`
+            (default 20, maximum 200).
+
+            The setting applies to list requests only; it does not change webhook events.
         - connector: clearbooks-uk
           description: Clearbooks does not support setting the pagination size.
         - connector: wafeq
@@ -36201,6 +36266,21 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: twinfield
+          description: |
+            A Twinfield supplier can have several addresses and bank accounts. `addresses`, `phone_numbers` and
+            `bank_accounts` return one entry each: the address or bank account marked as default in Twinfield, or
+            the first one when none is marked. `emails` returns one entry: the supplier's e-billing
+            email address in Twinfield (the one a create or update through this API sets), or the email of that
+            same address when no e-billing email is set.
+
+            In an address, `contact_name` is Twinfield's first address field and `line1` and `line2` are its second
+            and third. That matches Twinfield's standard address layout, where the first field is the attention
+            line and the next two hold the street. An administration that renamed those fields in Twinfield gets
+            them in the same positions. Creating or updating a supplier writes the same three fields.
+
+            `status` is `active`, or `archived` for a supplier that was deleted in Twinfield, including one Twinfield
+            keeps hidden because it is used in a transaction.
         - connector: sap-s4hana-cloud
           description: |
             Customers and suppliers are both SAP business partners. A business partner that does not have the

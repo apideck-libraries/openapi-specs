@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.90.1
+  version: 10.90.2
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -4926,7 +4926,7 @@ paths:
 
             The list covers the custom fields defined for the resource, not only those with a value on the sampled record. A field
             with no value on that record is returned with `name` (its NetSuite script ID, such as `custbody_po_reference`),
-            `value: null` and no `id`. To write that field, send its script ID as `id`. Use `?resource_id=<id>` to pin sampling to
+            `value: null` and no `id`. To write that field, send its script ID as `id` or `name`. Use `?resource_id=<id>` to pin sampling to
             a specific record.
 
             Line-item custom fields (script IDs starting with `custcol`) are listed for bills, invoices, credit notes and quotes.

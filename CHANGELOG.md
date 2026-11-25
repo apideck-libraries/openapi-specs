@@ -1,3 +1,10 @@
+## v10.90.2 - (2026-11-25)
+
+### Accounting API
+
+- [NetSuite](connectors/netsuite) now sends a list (dropdown) custom field written with the option's internal ID as `value` as a reference to that option, instead of a number that NetSuite rejected, on [Bills](apis/accounting/reference/bills), [Bill Payments](apis/accounting/reference/bill-payments), [Bill Credit Notes](apis/accounting/reference/bill-credit-notes), [Invoices](apis/accounting/reference/invoices), [Credit Notes](apis/accounting/reference/credit-notes), [Payments](apis/accounting/reference/payments), [Refunds](apis/accounting/reference/refunds), [Customers](apis/accounting/reference/customers), [Suppliers](apis/accounting/reference/suppliers) and [Projects](apis/accounting/reference/projects). Identify the field by its script ID, in `id` or in `name` next to the internal ID, which is the shape the read returns. The connector reads the field's type from NetSuite's field definitions; when those cannot be read for the connection, the option ID is still sent as a number. A list field identified only by its numeric internal ID is still sent as a number and rejected by NetSuite.
+- [NetSuite](connectors/netsuite) `custom_fields` on those writes: an entry with only `name` now identifies the field by its script ID instead of being ignored. An entry with no `value` (except a custom segment, whose `name` starts with `cseg`), or with neither `id` nor `name`, is rejected with a `400`; it used to return a `500`, or a `200` that stored nothing.
+
 ## v10.90.1 - (2026-11-25)
 
 ### Accounting API

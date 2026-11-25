@@ -1,3 +1,9 @@
+## v10.90.1 - (2026-11-25)
+
+### Accounting API
+
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) [Payments](apis/accounting/reference/payments) and [Bill Payments](apis/accounting/reference/bill-payments) posted in SAP's Post Incoming / Post Outgoing Payments apps now read at what they paid. A partial payment that takes over the open remainder of an earlier partial payment returned a `total_amount` of the remainder plus the earlier amount (110 for a 30.00 payment after a 40.00 one) and allocated the whole new remainder to the invoice (70); it now returns 30 and allocates 30, and the earlier payment keeps its 40. A partial payment posted in SAP now returns its allocation to the invoice even when nothing was carried over (it returned none). A later payment that settles that invoice, or that pays off a residual item, now returns its allocation (it returned none), and a payment that settles a document and opens a residual item for the rest allocates only what it paid, whether it was posted in SAP or created through the API. Other payments created through the API read as before, including the earlier 40.00 partial payment in the example. A payment document posted in SAP that only moves an earlier payment onto an invoice, with no bank line, now returns a `total_amount` of 0 instead of the sum of its two offsetting lines.
+
 ## v10.90.0 - (2026-11-24)
 
 ### Accounting API

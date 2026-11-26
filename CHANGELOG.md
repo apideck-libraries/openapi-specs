@@ -1,3 +1,10 @@
+## v10.95.1 - (2026-11-26)
+
+### Accounting API
+
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) now posts tax when you create [Invoices](apis/accounting/reference/invoices), [Credit Notes](apis/accounting/reference/credit-notes) and [Journal Entries](apis/accounting/reference/journal-entries). Set `line_items[].tax_rate.code` to the SAP tax code and send the amounts: SAP does not calculate tax on these postings. The tax of a line is its `line_items[].tax_amount`, or for an invoice or credit note its `total_amount` times `line_items[].tax_rate.rate`, rounded per line; an invoice or credit note with one tax code can send `total_tax` instead. Line amounts are without tax. A request whose amounts do not add up, that leaves a taxed line without its tax (no `tax_amount` or `tax_rate.rate`, and no `total_tax` to fall back on), or that SAP would post differently than sent (`tax_inclusive: true` or discount fields on a taxed document) is rejected with a `400` and nothing is posted. Company codes that require tax per item or take no tax date refuse taxed postings, also with a `400`. Requests without a tax code are posted as before, except that a non-zero `line_items[].tax_amount` without a code is rejected with a `400`.
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud): when SAP refuses an invoice or credit note because a revenue account needs a profitability assignment, the request is posted again with the customer as the assignment. If SAP still needs a profit center, the error says to send it in `line_items[].tracking_categories[0].id`.
+
 ## v10.95.0 - (2026-11-26)
 
 ### Accounting API

@@ -1,3 +1,10 @@
+## v10.92.0 - (2026-11-26)
+
+### Connector API
+
+- A resource's release status can now differ per connector. [Trial Balance](apis/accounting/reference/trial-balance) is now `live` on [Xero](connectors/xero), [QuickBooks](connectors/quickbooks), [NetSuite](connectors/netsuite), [Sage Intacct](connectors/sage-intacct), [Zoho Books](connectors/zoho-books), [Moneybird](connectors/moneybird) and [Rillet](connectors/rillet), and stays `beta` on the other connectors that support it. [Connectors](apis/connector/reference/connectors) `supported_resources[].status` and the [Connector Resource](apis/connector/reference/connector-resource) `status` return the connector's value.
+- API Resource Coverage (`GET /connector/apis/{id}/resources/{resource_id}/coverage`) now returns `status` on each `coverage[]` item: the resource's release status on that connector. The top-level `status` there, and the resource `status` on [APIs](apis/connector/reference/apis), are not per connector, so they still return `beta` for Trial Balance.
+
 ## v10.91.0 - (2026-11-25)
 
 ### Accounting API

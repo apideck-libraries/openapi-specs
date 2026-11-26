@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.92.0
+  version: 10.93.0
   title: Accounting API
   description: "Welcome to the Accounting API.\n\nYou can use this API to access all Accounting API endpoints.\n\n## Base URL\n\nThe base URL for all API requests is `https://unify.apideck.com`\n\n## Headers\n\nCustom headers that are expected as part of the request. Note that [RFC7230](https://tools.ietf.org/html/rfc7230) states header names are case insensitive.\n\n| Name                  | Type    | Required | Description                                                                                                                                                    |\n| --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| x-apideck-consumer-id | String  | Yes      | The id of the customer stored inside Apideck Vault. This can be a user id, account id, device id or whatever entity that can have integration within your app. |\n| x-apideck-service-id  | String  | No       | Describe the service you want to call (e.g., pipedrive). Only needed when a customer has activated multiple integrations for the same Unified API.             |\n| x-apideck-app-id      | String  | Yes      | The application id of your Unify application. Available at https://app.apideck.com/unify/api-keys.                                                             |\n| Authorization         | String  | Yes      | Bearer <token> KEY                                                                                                                                                 |\n\n## Authorization\n\nYou can interact with the API through the authorization methods below.\n\n<!-- ReDoc-Inject: <security-definitions> -->\n\n## Pagination\n\nAll API resources have support for bulk retrieval via list APIs.  Apideck uses cursor-based pagination via the optional `cursor` and `limit` parameters.\n\nTo fetch the first page of results, call the list API without a `cursor` parameter. Afterwards you can fetch subsequent pages by providing a cursor parameter. You will find the next cursor in the response body in `meta.cursors.next`. If `meta.cursors.next` is `null` you're at the end of the list.\n\nIn the REST API you can also use the `links` from the response for added convenience. Simply call the URL in `links.next` to get the next page of results.\n\n### Query Parameters\n\n| Name   | Type   | Required | Description                                                                                                        |\n| ------ | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |\n| cursor | String | No       | Cursor to start from. You can find cursors for next & previous pages in the meta.cursors property of the response. |\n| limit  | Number | No       | Number of results to return. Minimum 1, Maximum 200, Default 20                                                    |\n\n### Response Body\n\n| Name                  | Type   | Description                                                        |\n| --------------------- | ------ | ------------------------------------------------------------------ |\n| meta.cursors.previous | String | Cursor to navigate to the previous page of results through the API |\n| meta.cursors.current  | String | Cursor to navigate to the current page of results through the API  |\n| meta.cursors.next     | String | Cursor to navigate to the next page of results through the API     |\n| meta.items_on_page    | Number | Number of items returned in the data property of the response      |\n| links.previous        | String | Link to navigate to the previous page of results through the API   |\n| links.current         | String | Link to navigate to the current page of results through the API    |\n| links.next            | String | Link to navigate to the next page of results through the API       |\n\n⚠️ `meta.cursors.previous`/`links.previous` is not available for all connectors.\n\n## SDKs and API Clients\n\nWe currently offer a [Node.js](https://developers.apideck.com/sdks/node), [PHP](https://developers.apideck.com/sdks/php), [Python](https://developers.apideck.com/sdks/python) and [.NET](https://developers.apideck.com/sdks/dot-net) SDK.\nNeed another SDK? [Request the SDK of your choice](https://requests.apideck.io/request).\n\n## Debugging\n\nBecause of the nature of the abstraction we do in Apideck Unify we still provide the option to the receive raw requests and responses being handled underlying. By including the raw flag `?raw=true` in your requests you can still receive the full request. Please note that this increases the response size and can introduce extra latency.\n\n## Errors\n\nThe API returns standard HTTP response codes to indicate success or failure of the API requests. For errors, we also return a customized error message inside the JSON response. You can see the returned HTTP status codes below.\n\n| Code | Title                | Description                                                                                                                                                                                              |\n| ---- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 200  | OK                   | The request message has been successfully processed, and it has produced a response. The response message varies, depending on the request method and the requested data.                                |\n| 201  | Created              | The request has been fulfilled and has resulted in one or more new resources being created.                                                                                                              |\n| 204  | No Content           | The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.                                                                          |\n| 400  | Bad Request          | The receiving server cannot understand the request because of malformed syntax. Do not repeat the request without first modifying it; check the request for errors, fix them and then retry the request. |\n| 401  | Unauthorized         | The request has not been applied because it lacks valid authentication credentials for the target resource.                                                                                              |\n| 402  | Payment Required     | Subscription data is incomplete or out of date. You'll need to provide payment details to continue.                                                                                                      |\n| 403  | Forbidden            | You do not have the appropriate user rights to access the request. Do not repeat the request.                                                                                                            |\n| 404  | Not Found            | The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.                                                                           |\n| 405  | Method Not Allowed   | The connector does not support this operation, so no request was sent to it. Do not retry. The `Allow` header lists the methods the connector does support on the same URL.                              |\n| 409  | Conflict             | The request could not be completed due to a conflict with the current state of the target resource.                                                                                                      |\n| 422  | Unprocessable Entity | The server understands the content type of the request entity, and the syntax of the request entity is correct but was unable to process the contained instructions.                                     |\n| 429  | Too Many Requests    | You sent too many requests in a given amount of time (\"rate limit\"). Try again later                                                                                                                     |\n| 5xx  | Server Errors        | Something went wrong with the Unify API. These errors are logged on our side. You can contact our team to resolve the issue.                                                                             |\n\n### Handling errors\n\nThe Unify API and SDKs can produce errors for many reasons, such as a failed requests due to misconfigured integrations, invalid parameters, authentication errors, and network unavailability.\n\n### Error Types\n\n#### RequestValidationError\n\nRequest is not valid for the current endpoint. The response body will include details on the validation error. Check the spelling and types of your attributes, and ensure you are not passing data that is outside of the specification.\n\n#### UnsupportedFiltersError\n\nFilters in the request are valid, but not supported by the connector. Remove the unsupported filter(s) to get a successful response.\n\n#### UnsupportedSortFieldError\n\nSort field (`sort[by]`) in the request is valid, but not supported by the connector. Replace or remove the sort field to get a successful response.\n\n#### InvalidCursorError\n\nPagination cursor in the request is not valid for the current connector. Make sure to use a cursor returned from the API, for the same connector.\n\n#### ConnectorExecutionError\n\nA Unified API request made via one of our downstream connectors returned an unexpected error. The `status_code` returned is proxied through to error response along with their original response via the error detail. An operation the connector does not support returns `ConnectorOperationUnsupportedError` instead.\n\n#### UnauthorizedError\n\nWe were unable to authorize the request as made. This can happen for a number of reasons, from missing header params to passing an incorrect authorization token. Verify your Api Key is being set correctly in the authorization header. ie: `Authorization: 'Bearer <API KEY>'`\n\n#### ConnectorCredentialsError\n\nA request using a given connector has not been authorized. Ensure the connector you are trying to use has been configured correctly and been authorized for use.\n\n#### ConnectorDisabledError\n\nA request has been made to a connector that has since been disabled. This may be temporary - You can contact our team to resolve the issue.\n\n#### ConnectorRateLimitError\n\nYou sent too many request to a connector. These rate limits vary from connector to connector. You will need to try again later.\n\n#### RequestLimitError\n\nYou have reached the number of requests included in your Free Tier Subscription. You will not be able to make further requests until you upgrade your subscription. Please reach out to sales@apideck.com to continue making requests.\n\n#### EntityNotFoundError\n\nYou've made a request for a resource or route that does not exist. Verify your path parameters or any identifiers used to fetch this resource.\n\n#### OAuthCredentialsNotFoundError\n\nWhen adding a connector integration that implements OAuth, both a `client_id` and `client_secret` must be provided before any authorizations can be performed. Verify the integration has been configured properly before continuing.\n\n#### IntegrationNotFoundError\n\nThe requested connector integration could not be found associated to your `application_id`. Verify your `application_id` is correct, and that this connector has been added and configured for your application.\n\n#### ConnectionNotFoundError\n\nA valid connection could not be found associated to your `application_id`. Something _may_ have interrupted the authorization flow. You may need to start the connector authorization process again.\n\n#### ConnectionSettingsError\n\nThe connector has required settings that were not supplied. Verify `connection.settings` contains all required settings for the connector to be callable.\n\n#### ConnectorNotFoundError\n\nA request was made for an unknown connector. Verify your `service_id` is spelled correctly, and that this connector is enabled for your provided `unified_api`.\n\n#### OAuthRedirectUriError\n\nA request was made either in a connector authorization flow, or attempting to revoke connector access without a valid `redirect_uri`. This is the url the user should be returned to on completion of process.\n\n#### OAuthInvalidStateError\n\nThe state param is required and is used to ensure the outgoing authorization state has not been altered before the user is redirected back. It also contains required params needed to identify the connector being used. If this has been altered, the authorization will not succeed.\n\n#### OAuthCodeExchangeError\n\nWhen attempting to exchange the authorization code for an `access_token` during an OAuth flow, an error occurred. This may be temporary. You can reattempt authorization or contact our team to resolve the issue.\n\n#### OAuthConnectorError\n\nIt seems something went wrong on the connector side. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### MappingError\n\nThere was an error attempting to retrieve the mapping for a given attribute. We've been notified and are working to fix this issue.\n\n#### ConnectorMappingNotFoundError\n\nIt seems the implementation for this connector is incomplete. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorResponseMappingNotFoundError\n\nWe were unable to retrieve the response mapping for this connector. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationMappingNotFoundError\n\nConnector mapping has not been implemented for the requested operation. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorWorkflowMappingError\n\nThe composite api calls required for this operation have not been mapped entirely. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n#### ConnectorOperationUnsupportedError\n\nYou're attempting a call that is not supported by the connector. It's likely this operation is supported by another connector, but we're unable to implement for this one. No request is sent to the connector, so retrying will not help.\n\nReturned with status `405 Method Not Allowed`. The `Allow` header lists the methods the connector does support on the same URL, and is empty when no other method is known to be served.\n\n#### PaginationNotSupportedError\n\nPagination is not yet supported for this connector, try removing limit and/or cursor from the query. It's possible this connector is in `beta` or still under development. We've been notified and are working to fix this issue.\n\n## API Design\n\n### API Styles and data formats\n\n#### REST API\n\nThe API is organized around [REST](https://restfulapi.net/), providing simple and predictable URIs to access and modify objects. Requests support standard HTTP methods like GET, PUT, POST, and DELETE and standard status codes. JSON is returned by all API responses, including errors. In all API requests, you must set the content-type HTTP header to application/json. All API requests must be made over HTTPS. Calls made over HTTP will fail.\n\n##### Available HTTP methods\n\nThe Apideck API uses HTTP verbs to understand if you want to read (GET), delete (DELETE) or create (POST) an object. When your web application cannot do a POST or DELETE, we provide the ability to set the method through the query parameter \\_method.\n\n```\nPOST /messages\nGET /messages\nGET /messages/{messageId}\nPATCH /messages/{messageId}\nDELETE /messages/{messageId}\n```\n\nResponse bodies are always UTF-8 encoded JSON objects, unless explicitly documented otherwise. For some endpoints and use cases we divert from REST to provide a better developer experience.\n\n### Schema\n\nAll API requests and response bodies adhere to a common JSON format representing individual items, collections of items, links to related items and additional meta data.\n\n### Meta\n\nMeta data can be represented as a top level member named “meta”. Any information may be provided in the meta data. It’s most common use is to return the total number of records when requesting a collection of resources.\n\n### Request IDs\n\nApplication responses include the parent Apideck request identifier in the `x-apideck-request-id` response header, on both success and error responses. This value matches the parent request log ID in your Dashboard; it does not identify a child request to a downstream service. Include it when contacting support about a request. Errors generated by API Gateway before application code runs may omit this header.\n\n### Fixed field types\n\n#### Dates\n\nThe dates returned by the API are all represented in UTC (ISO8601 format).\n\nThis example\_`2019-11-14T00:55:31.820Z`\_is defined by the\_ISO 8601\_standard. The\_T\_in the middle separates the year-month-day portion from the hour-minute-second portion. The\_Z\_on the end means UTC, that is, an offset-from-UTC of zero hours-minutes-seconds. The\_Z\_is pronounced \"Zulu\" per military/aviation tradition.\n\nThe ISO 8601 standard is more modern. The formats are wisely designed to be easy to parse by machine as well as easy to read by humans across cultures.\n\n#### Currencies\n\nAll currency codes conform to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).\n\n## Support\n\nIf you have problems or need help with your case, you can always reach out to our Support.\n\n## Static IP\n\nSome of the APIs you want to use can require a static IP. Apideck's static IP feature allows you to use Apideck with a fixed IP avoiding the need for you to set up your own infrastructure. This feature is currently available to all Apideck customers.\nTo use this feature, the API Vendor will need to whitelist the associated static IP addresses.\nThe provided static IP addresses are fixed to their specified region and shared by all customers who use this feature.\n\n- EU Central 1: **18.197.244.247**, **18.156.9.3**, **3.65.139.215**\n- Other: upcoming\n\n  More info about our data security can be found at [https://compliance.apideck.com/](https://compliance.apideck.com/)\n\n"
   contact:
@@ -33577,6 +33577,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Bill credit notes are QuickBooks vendor credits. How much of a vendor credit is still unused is not available, so `balance` and `remaining_credit` are not returned and `status` is always `posted`. Supported filters: `number`, `updated_since` and `created_since`; `supplier_id` is not supported. `currency` and the tax fields are not returned.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: minox
           description: |
             Lists the bill credit notes of every fiscal year in the administration. A Minox bill credit note is a negative booking on a purchase journal; it
@@ -33689,6 +33694,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Creates a vendor credit; `supplier` is required. A `line_items[]` entry with an `item` becomes an item line (`quantity` and `unit_price`, or `total_amount` when no unit price is given); an entry without one becomes an expense line (`ledger_account`, `total_amount`, `description` and the first of its `tracking_categories`). An item line's `description`, `customer` and first `tracking_categories` entry are written too, by qbd-connect builds that include apideck-io/qbd-connect#110; an older build takes the item, quantity and price only and QuickBooks fills the description from the item. `currency`, `line_items[].tax_rate` and the credit note's own `tracking_categories` are not written either.
+
+            Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the credit note. List bill credit notes to find it before retrying: sending the create again adds a second credit note.
         - connector: minox
           description: |
             Books the credit note on the administration's purchase journal, which updates the
@@ -34079,6 +34089,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop cannot modify vendor credit lines: `line_items` sent on update are ignored and the response still returns the `id`. Only `supplier`, `number`, `date_issued` and `note` change. Delete and recreate the credit note to change its lines.
+
+            Updates need `row_version` from a prior read of the record. Writes are applied on the Web Connector's next run, so an update can return a `504` timeout after 28 seconds while QuickBooks still applies it, and the change can take a few minutes to show when the record is read back.
         - connector: microsoft-dynamics-365-business-central
           description: |
             Updating `status` from `draft` to `authorised` posts the credit memo. A posted credit memo is immutable and can no longer be updated.
@@ -34277,6 +34292,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A delete can return a `504` timeout after 28 seconds while QuickBooks still deletes the credit note. Read it back before retrying: a `404` means it is gone.
         - connector: microsoft-dynamics-365-business-central
           description: |
             Only a draft (unposted) Business Central Purchase Credit Memo can be deleted. Once a bill credit note has been posted (status `authorised`/`posted`), it can no longer be deleted.
@@ -34929,12 +34947,17 @@ paths:
             nothing is created. Every address is written: the one with type `primary` (or else the first) first, the
             others after it in request order. The first one becomes the standard address in SAP and reads back as
             `primary`; the others read back as `secondary`, whatever `type` was sent. `line1` is stored as the street,
-            `street_number` as the house number, `line2` and `line3` as SAP's Street 4 and Street 5 fields. These
-            address fields are not stored on create and not returned: `email`, `phone_number`, `fax`, `website`,
-            `name`, `county`, `contact_name`, `notes`, `line4` and `line5`. A value longer than SAP stores rejects the
-            request with a `400` naming the field (for example `addresses[0].line2 is longer than 40 characters`) and
-            nothing is created. The limits are: `line1` 60, `street_number` 10, `line2` 40, `line3` 40, `city` 40,
-            `state` 3, `postal_code` 10 and `country` 3 characters.
+            `street_number` as the house number, `line2` and `line3` as SAP's Street 4 and Street 5 fields. This
+            connector does not write the address fields `email`, `phone_number`, `website`, `fax`, `name`, `county`,
+            `contact_name`, `salutation`, `notes`, `line4`, `line5`, `string`, `latitude` and `longitude`, so an
+            address with a value in any of them rejects the request with a `400` naming every such field (for example
+            `addresses[1].fax`) and nothing is created; empty, whitespace-only or `null` values are ignored. Send an
+            address's email, phone number or website in the top-level `emails`, `phone_numbers` or `websites` list
+            instead, and the street in `line1` and `street_number` rather than `string`. A value longer than SAP
+            stores rejects the request with a `400` naming the field (for example
+            `addresses[0].line2 is longer than 40 characters`) and nothing is created. The limits are: `line1` 60,
+            `street_number` 10, `line2` 40, `line3` 40, `city` 40, `state` 3, `postal_code` 10 and `country` 3
+            characters.
 
             **Emails, phone numbers and websites** are stored on the standard address (the first address written), not
             on the customer itself, so a request with any of them and no address is rejected with a `400` naming the lists
@@ -36085,12 +36108,17 @@ paths:
             nothing is created. Every address is written: the one with type `primary` (or else the first) first, the
             others after it in request order. The first one becomes the standard address in SAP and reads back as
             `primary`; the others read back as `secondary`, whatever `type` was sent. `line1` is stored as the street,
-            `street_number` as the house number, `line2` and `line3` as SAP's Street 4 and Street 5 fields. These
-            address fields are not stored on create and not returned: `email`, `phone_number`, `fax`, `website`,
-            `name`, `county`, `contact_name`, `notes`, `line4` and `line5`. A value longer than SAP stores rejects the
-            request with a `400` naming the field (for example `addresses[0].line2 is longer than 40 characters`) and
-            nothing is created. The limits are: `line1` 60, `street_number` 10, `line2` 40, `line3` 40, `city` 40,
-            `state` 3, `postal_code` 10 and `country` 3 characters.
+            `street_number` as the house number, `line2` and `line3` as SAP's Street 4 and Street 5 fields. This
+            connector does not write the address fields `email`, `phone_number`, `website`, `fax`, `name`, `county`,
+            `contact_name`, `salutation`, `notes`, `line4`, `line5`, `string`, `latitude` and `longitude`, so an
+            address with a value in any of them rejects the request with a `400` naming every such field (for example
+            `addresses[1].fax`) and nothing is created; empty, whitespace-only or `null` values are ignored. Send an
+            address's email, phone number or website in the top-level `emails`, `phone_numbers` or `websites` list
+            instead, and the street in `line1` and `street_number` rather than `string`. A value longer than SAP
+            stores rejects the request with a `400` naming the field (for example
+            `addresses[0].line2 is longer than 40 characters`) and nothing is created. The limits are: `line1` 60,
+            `street_number` 10, `line2` 40, `line3` 40, `city` 40, `state` 3, `postal_code` 10 and `country` 3
+            characters.
 
             **Emails, phone numbers and websites** are stored on the standard address (the first address written), not
             on the supplier itself, so a request with any of them and no address is rejected with a `400` naming the lists
@@ -38684,6 +38712,9 @@ paths:
       summary: Get company info
       description: Get company info
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            QuickBooks Desktop has no company identifier or status: `id` is not returned and `status` is always `active`. `currency`, `sales_tax_number` and the sales tax settings are not returned.
         - connector: netsuite
           description: |
             Subsidiary scoping (NetSuite OneWorld) applies to transactions, entities, reference data and the financial reports. It does **not** apply to these, which are returned in full whatever subsidiary is selected: currencies, payment-methods, accounting-periods, subsidiaries, attachments, server-time, company-info and the bank-feed resources — NetSuite keeps them at account level. `tax-rates` and `expenses` are also returned in full, but for a different reason: those records **are** subsidiary-specific in NetSuite (tax nexuses are registered per subsidiary), and the surface this connector reads them through offers no way to filter by it, so a scoped consumer still receives every tax code and every expense in the account. See their own gotchas. Two further limits. **Changing the Default Subsidiary invalidates pages you have already started**: a pagination cursor carries the scope it was created under, so continuing an older cursor after changing the setting keeps returning the previous scope's records and record count. Start the list again after changing it. And **writes are never scoped** — the subsidiary of a created or updated record comes from the request body, or is derived by NetSuite from the record's own customer or vendor when the body does not name one. Neither the setting nor the `x-apideck-company-id` header moves a write. A consequence worth planning for: a scoped connection can create a record that its own list requests will not return, because the created record belongs to the subsidiary its customer does rather than to the one selected. Two behaviours that hold for every scoped resource. A per-request override is available as the `x-apideck-company-id` header, and it wins over the connection's setting while an explicit `filter[subsidiary_id]` wins over both. And a record fetched directly by its ID is returned whatever subsidiary is selected — an id is an explicit request for one record, so it is not filtered out of scope.
@@ -39433,7 +39464,7 @@ paths:
       x-apideck-gotchas:
         - connector: quickbooks-desktop
           description: |
-            Each line needs its account by name: send `line_items[].ledger_account.name` (the QuickBooks account name); an account `id` alone is not resolved and the entry is rejected. Only the date part of `posted_at` is stored.
+            Each line needs its account by name: send `line_items[].ledger_account.name` (the QuickBooks account name); an account `id` alone is not resolved and the entry is rejected. Only the date part of `posted_at` is stored. `memo` is not stored: QuickBooks keeps a memo per line (`line_items[].description`), not on the entry.
 
             Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the entry. List journal entries before retrying.
         - connector: e-conomic
@@ -41033,6 +41064,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Only `filter[updated_since]` is supported; `customer_id` is not. `currency` and `customer_memo` are not returned.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: fiken
           description: |
             Sales receipts are Fiken's cash sales ("Annet salg" paid at the time of sale). Fiken's invoice sales, whether issued in Fiken or registered from an external invoice, are not sales receipts; deleted cash sales are not returned either. Fiken cannot filter by kind, so the connector reads Fiken's sales pages and keeps the cash sales, which makes a list call read as many sales pages as the company has (up to 2,000 sales, after which the response carries a warning that the list is incomplete).
@@ -41075,6 +41111,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A `line_items[]` entry sends `unit_price`, or `total_amount` when no unit price is given. `line_items[].tax_rate`, `currency` and the discount fields are not written. `customer_memo` is not written either: QuickBooks holds it as a reference to its Customer Message list and refuses the document for any other text.
+
+            Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the sales receipt. List sales receipts to find it before retrying: sending the create again adds a second sales receipt.
         - connector: fiken
           description: |
             Creates a cash sale in Fiken ("Annet salg"). `account` is required: it is the bank or cash ledger account (for example `1920:10001`) the sale was paid into, and the sale is registered as paid in full on `transaction_date`. Each line item needs `tax_rate.id` (a Fiken VAT type from tax rates that is valid for sales) and `ledger_account.id` (the revenue account).
@@ -41391,6 +41432,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Only `customer`, `number`, `transaction_date` and `note` change. `line_items` sent on update are ignored; delete and recreate the sales receipt to change its lines.
+
+            Updates need `row_version` from a prior read of the record. Writes are applied on the Web Connector's next run, so an update can return a `504` timeout after 28 seconds while QuickBooks still applies it, and the change can take a few minutes to show when the record is read back.
         - connector: quickbooks
           description: |
             row_version submitted in the request body is ignored. The connector always fetches the
@@ -41663,6 +41709,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A delete can return a `504` timeout after 28 seconds while QuickBooks still deletes the sales receipt. Read it back before retrying: a `404` means it is gone.
         - connector: fiken
           description: |
             Deleting a sales receipt cancels the cash sale in Fiken: its postings are reversed by a counter-transaction (visible in general ledger transactions) rather than removed, and the receipt no longer appears in the list. Only live cash sales can be deleted: the id of an invoice's sale or of an already deleted sale returns 404.
@@ -42543,6 +42592,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Goods receipts are QuickBooks item receipts, and `status` is always `received`. `purchase_order_id` and `po_number` are set when the receipt is linked to exactly one purchase order; `line_items[].purchase_order` is not returned. `line_items` holds the receipt's item lines only. Only `filter[updated_since]` is supported.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: microsoft-dynamics-365-business-central
           description: |
             Receipt lines carry no reference to the purchase order line they fulfil, so
@@ -42686,6 +42740,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Goods receipts are QuickBooks item receipts, and `status` is always `received`. `purchase_order_id` and `po_number` are set when the receipt is linked to exactly one purchase order; `line_items[].purchase_order` is not returned. `line_items` holds the receipt's item lines only.
         - connector: microsoft-dynamics-365-business-central
           description: |
             `purchase_order_id`, `line_items[].purchase_order` and `supplier.id` are always null, and
@@ -44273,6 +44330,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Bank accounts are the QuickBooks accounts of type Bank and Credit Card. `account_type` is `credit_card` for a credit card account and is not returned for a bank account, because QuickBooks has a single type for checking, savings and cash accounts. `ledger_account` is the account itself, with its chart-of-accounts number in `nominal_code`; the bank's own account number is not returned. Supported filters: `name` and `status` (`active` or `inactive`); `account_type` is not supported.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: sap-business-one
           description: |
             Bank accounts are SAP Business One house bank accounts. `bank_name` comes from the linked bank, and `currency` and `balance` from the linked G/L account (`ledger_account.id`): the balance is in the company's local currency, which is also the `currency` of an all-currencies account. SAP Business One has no account type, status, available balance, overdraft limit, routing number, description or created/updated dates for a house bank account, so these are not returned.
@@ -44366,6 +44428,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A bank account is created as a QuickBooks account: of type Credit Card when `account_type` is `credit_card`, of type Bank for every other `account_type` or none. Written: `name`, `description` and `ledger_account.nominal_code` (the number in the chart of accounts). The bank's own `account_number`, `bank_name`, `currency`, `balance` and the other bank details are not written. Creating an account whose name already exists returns that account instead of a second one.
+
+            A write runs when the QuickBooks Web Connector next polls, about once a minute. A request that waits longer than the platform allows answers `408` or `504` and is still applied: read the list before sending it again.
         - connector: sap-business-one
           description: |
             `bank_code` is required and must be the code of a bank that already exists in SAP Business One (*Administration > Setup > Banking > Banks*); an unknown code is rejected with a 400 and no bank is created. `ledger_account.id` is the G/L account the bank account posts to. The bank cannot be changed afterwards: an update ignores `bank_code`.
@@ -44459,6 +44526,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Bank accounts are the QuickBooks accounts of type Bank and Credit Card. `account_type` is `credit_card` for a credit card account and is not returned for a bank account. `ledger_account` is the account itself, with its chart-of-accounts number in `nominal_code`; the bank's own account number is not returned.
         - connector: odoo
           description: |
             On Odoo 20, bank accounts have no currency, so `currency` is `null`.
@@ -44509,6 +44579,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Updates the QuickBooks account: `name`, `description`, `status` (`active` or `inactive`) and `ledger_account.nominal_code`. The unified bank account has no `row_version`, so the update is applied to the account as it is now: the last write wins. The id of an account that is not a bank or credit card account answers `404`. `account_type` cannot be changed, and the bank details (`account_number`, `bank_name`, `currency`, `balance`) are not written.
+
+            A write runs when the QuickBooks Web Connector next polls, about once a minute. A request that waits longer than the platform allows answers `408` or `504` and is still applied.
         - connector: zoho-books
           description: |
             `status` accepts `active` and `inactive` only. `closed` is rejected rather than treated as
@@ -44589,6 +44664,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Deletes the QuickBooks account from the chart of accounts. To hide an account without deleting it, update its `status` to `inactive`. Only a bank or credit card account can be deleted here: the id of any other account answers `404`.
+
+            A delete runs when the QuickBooks Web Connector next polls, about once a minute. A request that waits longer than the platform allows answers `408` or `504` and is still applied.
         - connector: zoho-books
           description: |
             Deleting an account also deletes any bank feed transactions still awaiting reconciliation on
@@ -45220,6 +45300,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Tracking categories are QuickBooks classes. `name` is the class's own name; a sub-class carries its parent in `parent_id` and `parent_name`.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: fiken
           description: |
             Tracking categories are Fiken projects, Fiken's only analytic dimension, so they are the same
@@ -45367,6 +45452,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            To create a sub-class send `parent_name` with the parent class's full name (for example `Remodel`, or `Remodel:Kitchen` for a class two levels down). `parent_id` on its own is not used.
+
+            Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the class. List tracking categories to find it before retrying: sending the create again adds a second class.
         - connector: fiken
           description: |
             Fiken requires a project number, so `code` is required; a tracking category without it is
@@ -45485,6 +45575,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            `name` and `status` can be changed, and the parent through `parent_name`.
+
+            Updates need `row_version` from a prior read of the record. Writes are applied on the Web Connector's next run, so an update can return a `504` timeout after 28 seconds while QuickBooks still applies it, and the change can take a few minutes to show when the record is read back.
         - connector: sage-intacct
           description: When updating the Parent ID field please use the tracking category code.
       responses:
@@ -45541,6 +45636,10 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A delete can return a `504` timeout after 28 seconds while QuickBooks still deletes the class. Read it back before retrying: a `404` means it is gone.
       responses:
         '200':
           $ref: '#/components/responses/DeleteTrackingCategoryResponse'
@@ -45819,6 +45918,8 @@ paths:
             The Apideck service type is used for MYOB Acumatica non-stock items, and inventory is used for stock items.
         - connector: quickbooks-desktop
           description: |
+            Bill payments are QuickBooks bill payment checks: bill payments made by credit card are not returned. `account` is the bank account the check is drawn on and `allocations[]` lists the bills it was applied to. `status` is `voided` for a voided check and `paid` otherwise. Only `filter[updated_since]` is supported. `currency` is not returned.
+
             QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: acumatica
           description: |
@@ -45892,6 +45993,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Creates a bill payment check. `supplier`, `account` (the bank account to pay from) and at least one `allocations[]` entry carrying the bill `id` and `amount` are required. QuickBooks sets the check total to the sum of those amounts, so `total_amount` is not used. Only allocations of type `bill` are sent. `currency` and `payment_method` are not written.
+
+            Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the bill payment. List bill payments to find it before retrying: sending the create again adds a second bill payment.
         - connector: fiken
           description: |
             Creates the payment on the purchase (Fiken `POST /purchases/{purchaseId}/payments`). Send exactly
@@ -46276,6 +46382,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Only `transaction_date`, `reference` and `note` change. `allocations`, `supplier`, `account` and the amounts sent on update are ignored; delete and recreate the payment to change them.
+
+            Updates need `row_version` from a prior read of the record. Writes are applied on the Web Connector's next run, so an update can return a `504` timeout after 28 seconds while QuickBooks still applies it, and the change can take a few minutes to show when the record is read back.
         - connector: freeagent
           description: |
             Returns 404 when the id belongs to a FreeAgent bank transaction explanation that does not
@@ -46475,6 +46586,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A delete can return a `504` timeout after 28 seconds while QuickBooks still deletes the bill payment. Read it back before retrying: a `404` means it is gone.
         - connector: fiken
           description: |
             Undoes the payment the way Fiken's "Angre" action does: an open payment is deleted, a payment in a
@@ -46733,6 +46847,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Expenses are QuickBooks checks: credit card charges are not returned and `payment_type` is always `check`. `account` is the bank account the check is written from. QuickBooks does not say whether a check's payee is a supplier, a customer or an employee, so `supplier` is not returned. `status` is `voided` for a voided check and `posted` otherwise. `currency` is not returned. Only `filter[updated_since]` is supported.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: freeagent
           description: |
             A FreeAgent expense is a single claim, so each expense has exactly one entry in `line_items`.
@@ -46831,6 +46950,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Creates a check. `account` must be the bank account to write the check from, sent as an object with `id` or `name` (`account_id` is not read). `supplier` is sent as the payee. A `line_items[]` entry with an `item` becomes an item line (`quantity` and `unit_price`, or `total_amount` when no unit price is given); an entry without one becomes an expense line (`account`, `total_amount`, `description`, `customer` and the first of its `tracking_categories`). An item line's `description`, `customer` and first `tracking_categories` entry are written too, by qbd-connect builds that include apideck-io/qbd-connect#110; an older build takes the item, quantity and price only and QuickBooks fills the description from the item.
+
+            Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the check. List expenses to find it before retrying: sending the create again adds a second check.
         - connector: freeagent
           description: |
             Send exactly one `line_items` entry with `total_amount` and `account.id` (a ledger account id);
@@ -47210,6 +47334,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Only `number`, `transaction_date` and `memo` change. `line_items`, `account` and `supplier` sent on update are ignored; delete and recreate the expense to change them.
+
+            Updates need `row_version` from a prior read of the record. Writes are applied on the Web Connector's next run, so an update can return a `504` timeout after 28 seconds while QuickBooks still applies it, and the change can take a few minutes to show when the record is read back.
         - connector: freeagent
           description: |
             On update, `line_items` may hold at most one entry. Without `type`, the expense keeps its
@@ -47402,6 +47531,9 @@ paths:
       summary: Delete Expense
       description: Delete Expense
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A delete can return a `504` timeout after 28 seconds while QuickBooks still deletes the expense. Read it back before retrying: a `404` means it is gone.
         - connector: sage-intacct
           description: The delete operation for credit card transactions in Sage Intacct is not a true deletion. Instead, it performs a reversal using the reverse_cctransaction function.
       parameters:
@@ -48892,6 +49024,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Categories are the QuickBooks customer types (`type: customer`) and vendor types (`type: supplier`), customer types first. QuickBooks has no expense or revenue categories: `filter[type]=expense` and `filter[type]=revenue` return an empty list. The `id` is `customer-` or `supplier-` followed by the QuickBooks ListID, because the two lists are numbered separately and share ids. `name` is the full name of the type, with its parents (`Parent:Child`). Read-only.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. `meta.total_count` will not appear.
         - connector: workday
           description: It is required to pass the filter[type] parameter to the request. For supplier categories, use the `supplier` value. For resource/spend categories, use the `expense` value. For revenue categories, use the `revenue` value.
         - connector: quickbooks
@@ -48958,6 +49095,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A category is a QuickBooks customer type or vendor type. The `id` is `customer-` or `supplier-` followed by the QuickBooks ListID (as returned by the list); a bare ListID answers `404`, because the two lists share ids.
         - connector: workday
           description: It is required to pass the filter[type] parameter to the request. For supplier categories, use the `supplier` value. For resource/spend categories, use the `expense` value. For revenue categories, use the `revenue` value.
       responses:
@@ -49003,6 +49143,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Quotes are QuickBooks estimates. `status` is not returned: QuickBooks only marks an estimate active or inactive, which does not tell a sent, an accepted and a rejected quote apart. `expiry_date` and `currency` are not returned. Supported filters: `number`, `updated_since` and `created_since`; `customer_id` is not supported.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: sap-business-one
           description: |
             `status` is `void` for a cancelled quote, `accepted` once it is closed (for example copied to a sales order or closed by hand), otherwise `sent`. Supported filters: `updated_since`, `created_since`, `number` and `customer_id`. `number` is the SAP Business One document number: a whole number from 0 to 2,147,483,647, and any other value returns a 400.
@@ -49089,6 +49234,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A `line_items[]` entry sends `unit_price`, or `total_amount` when no unit price is given. `status`, `expiry_date`, `line_items[].tax_rate` and `currency` are not written. `customer_memo` is not written either: QuickBooks holds it as a reference to its Customer Message list and refuses the document for any other text.
+
+            Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the quote. List quotes to find it before retrying: sending the create again adds a second quote.
         - connector: sap-business-one
           description: |
             `reference` is stored as the customer reference number (*Customer Ref. No.*, `NumAtCard`).
@@ -49399,6 +49549,11 @@ paths:
             schema:
               $ref: '#/components/schemas/Quote'
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Only `customer`, `number`, `quote_date` and `reference` change. `line_items` sent on update are ignored; delete and recreate the quote to change its lines.
+
+            Updates need `row_version` from a prior read of the record. Writes are applied on the Web Connector's next run, so an update can return a `504` timeout after 28 seconds while QuickBooks still applies it, and the change can take a few minutes to show when the record is read back.
         - connector: sap-business-one
           description: |
             To change a line, send it with the `id` from a read: SAP Business One updates the line with that number. A line without an `id` is matched by its position in `line_items`, so it is added only when it comes after all of the document's existing lines; otherwise it replaces the line at that position. To add lines safely, send every existing line with its `id` followed by the new ones. Lines left out of the request are kept.
@@ -49641,6 +49796,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A delete can return a `504` timeout after 28 seconds while QuickBooks still deletes the quote. Read it back before retrying: a `404` means it is gone.
         - connector: sap-business-one
           description: |
             SAP Business One cannot delete quotations. `DELETE` cancels the quote (it stays readable with `status: void`). A quote that has already been copied to a sales order cannot be cancelled; SAP Business One rejects it.
@@ -50152,6 +50310,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            `status` is `closed` when the order was closed by hand in QuickBooks, `invoiced` when it is fully invoiced, otherwise `open`. `delivery_date` and `currency` are not returned. Supported filters: `number`, `updated_since` and `created_since`; `customer_id` is not supported.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: sap-business-one
           description: |
             Sales orders are SAP Business One sales orders (Service Layer `Orders`). `status` is `cancelled` when the order is cancelled, `closed` once it is closed (fully delivered or invoiced, or closed by hand), otherwise `open`; SAP Business One does not tell a closed order's reason apart, so `invoiced` is not returned. `po_number` is the customer's reference number (*Customer Ref. No.*).
@@ -50215,6 +50378,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A `line_items[]` entry sends `unit_price`, or `total_amount` when no unit price is given. `status`, `line_items[].tax_rate` and `currency` are not written. `customer_memo` is not written either: QuickBooks holds it as a reference to its Customer Message list and refuses the document for any other text.
+
+            Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the sales order. List sales orders to find it before retrying: sending the create again adds a second sales order.
         - connector: sap-business-one
           description: |
             `customer.id` is the business partner's CardCode, and each line needs an `item.id` (ItemCode) or a `ledger_account.id` for service lines. `order_date` and `delivery_date` map to the posting and delivery dates. `reference` cannot be written: SAP Business One sets it to the document number; `po_number` holds the customer's reference (*Customer Ref. No.*).
@@ -50535,6 +50703,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            Only `customer`, `number`, `order_date` and `notes` change. `line_items` sent on update are ignored; delete and recreate the sales order to change its lines.
+
+            Updates need `row_version` from a prior read of the record. Writes are applied on the Web Connector's next run, so an update can return a `504` timeout after 28 seconds while QuickBooks still applies it, and the change can take a few minutes to show when the record is read back.
         - connector: sap-business-one
           description: |
             To change a line, send it with the `id` from a read: SAP Business One updates the line with that number. A line without an `id` is matched by its position in `line_items`, so it is added only when it comes after all of the document's existing lines; otherwise it replaces the line at that position. To add lines safely, send every existing line with its `id` followed by the new ones. Lines left out of the request are kept.
@@ -50765,6 +50938,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A delete can return a `504` timeout after 28 seconds while QuickBooks still deletes the sales order. Read it back before retrying: a `404` means it is gone.
         - connector: sap-business-one
           description: |
             SAP Business One cannot delete sales orders. `DELETE` cancels the order (it stays readable with `status: cancelled`). Only an order nothing has been delivered or invoiced from can be cancelled; SAP Business One rejects the others.
@@ -50814,6 +50990,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            `status` is `active` or `inactive`: an employee released in QuickBooks keeps that status and carries the release date in `termination_date`. Supported filters: `status` (`active` or `inactive`) and `updated_since`. Social security numbers are never returned.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: netsuite
           description: |
             `filter[subsidiary_id]` is rejected on this resource, so the `x-apideck-company-id` header is the only per-request override of the connection's Default Subsidiary. The connector rejects every other filter here too, including the `updated_since` and `status` the schema declares.
@@ -50865,6 +51046,11 @@ paths:
             schema:
               $ref: '#/components/schemas/AccountingEmployee'
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            An employee needs `display_name` or `first_name`; `display_name` defaults to the first and last name. One address (`line1`, `line2`, `city`, `state`, `postal_code`, `country`), the `primary` and `mobile` phone numbers and one email are written. `notes`, a fax number and further address lines are not written. Social security numbers are never written.
+
+            Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the employee. List employees to find it before retrying: sending the create again adds a second employee.
         - connector: netsuite
           description: |
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the
@@ -51085,6 +51271,11 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedErrorResponse'
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            The same fields are written as on create; `notes` and a fax number are not. A field cannot be cleared by sending `null`: it keeps its value.
+
+            Updates need `row_version` from a prior read of the record. Writes are applied on the Web Connector's next run, so an update can return a `504` timeout after 28 seconds while QuickBooks still applies it, and the change can take a few minutes to show when the record is read back.
         - connector: netsuite
           description: |
             Date-only fields need no configuration: NetSuite converts the datetime it receives into the
@@ -51221,6 +51412,10 @@ paths:
         - $ref: '#/components/parameters/raw'
       security:
         - apiKey: []
+      x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A delete can return a `504` timeout after 28 seconds while QuickBooks still deletes the employee. Read it back before retrying: a `404` means it is gone.
       responses:
         '200':
           $ref: '#/components/responses/DeleteAccountingEmployeeResponse'
@@ -51543,6 +51738,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            `type` is `credit_card` for every QuickBooks card type (Visa, MasterCard, American Express, Discover) and `electronic` for an e-check.
+
+            QuickBooks Desktop does not expose a reliable cross-page total record count. Getting `total_count` requires a separate COUNT query — an extra API call that is not currently implemented. `meta.total_count` will not appear.
         - connector: fiken
           description: |
             Fiken has no payment-method list: a payment is booked against the bank account it was paid
@@ -51595,6 +51795,11 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            `name` is required. `type` `bank_transfer` has no QuickBooks equivalent and is left unset.
+
+            Writes are applied on the Web Connector's next run, so a create can return a `504` timeout after 28 seconds while QuickBooks still creates the payment method. List payment methods to find it before retrying: sending the create again adds a second payment method.
         - connector: twinfield
           description: |
             Payment methods cannot be created through this connector — the vendor operation for
@@ -51761,6 +51966,9 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: quickbooks-desktop
+          description: |
+            A delete can return a `504` timeout after 28 seconds while QuickBooks still deletes the payment method. Read it back before retrying: a `404` means it is gone.
         - connector: twinfield
           description: |
             Payment methods cannot be deleted through this connector — no documented delete

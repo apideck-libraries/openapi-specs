@@ -1,3 +1,17 @@
+## v10.95.0 - (2026-11-26)
+
+### Accounting API
+
+- Added [Goods Receipts](apis/accounting/reference/goods-receipts) create (`POST /accounting/goods-receipts`, `goodsReceiptsAdd`): records goods received against a purchase order. `purchase_order_id` is required, and every line names the purchase order line it receives (`line_items[].purchase_order.line_number`, or `line_id`) and the `quantity_received`, so a partial receipt is a quantity below what is still open on the order line and one request can receive several lines. The response returns the `id` of the new receipt, which `GET /accounting/goods-receipts/{id}` takes unchanged. [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) is the first connector to support it: material, plant and unit come from the purchase order item, `location_id` (`<plant>/<storage location>`) sets the storage location, and a posted receipt cannot be changed or deleted through the API. It needs the `SAP_COM_0108` and `SAP_COM_0053` communication scenarios. [Business Central](connectors/microsoft-dynamics-365-business-central), [NetSuite](connectors/netsuite) and [Odoo](connectors/odoo) read goods receipts only and answer this operation with `405`.
+
+## v10.94.0 - (2026-11-26)
+
+### Accounting API
+
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) can now create and update [Purchase Orders](apis/accounting/reference/purchase-orders) (`POST /accounting/purchase-orders`, `PATCH /accounting/purchase-orders/{id}`). A create needs `supplier.id`, `company_id`, `currency` and `line_items`, each with `item.id`, `quantity`, `unit_price` and a plant (`location_id`, or the `default_plant` connection setting). SAP also needs a purchasing organization and a purchasing group (and a purchase order type, `NB` unless set otherwise): set them in the connection settings, or send them in `pass_through`. On update, `line_items` replaces the order's lines: a line with an `id` is updated, a line without one is added, and a stored line that is left out is removed. An empty `line_items` is rejected (an order without lines cannot be changed again), and `supplier.id`, `company_id` and `currency` cannot be changed on an existing order. A single update can change at most 5 lines; if SAP rejects a line after something was changed, the header and the lines before it stay changed and the `409` response says which. Fields SAP cannot take are rejected with `400` before anything is sent. Deleting purchase orders is not supported.
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud): when a write is refused for an expired CSRF token and the re-send with a fresh token fails too, the response now carries what the re-send got instead of the original `403`: SAP's own status and reason when SAP rejected it (nothing was written), or an error saying the write may have been applied when the re-send got a `5xx` or no answer. This applies to the customer, supplier, bill, bill credit note and purchase order writes.
+- [SAP S/4HANA Cloud](connectors/sap-s4hana-cloud) [Purchase Orders](apis/accounting/reference/purchase-orders): a line whose first account assignment is marked deleted in SAP now returns the `department_id` and `ledger_account` of the assignment it posts to. It returned the deleted one, so the line could not be sent back unchanged in an update.
+
 ## v10.93.0 - (2026-11-26)
 
 ### Accounting API

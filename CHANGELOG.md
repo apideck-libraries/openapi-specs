@@ -1,3 +1,15 @@
+## v10.96.0 - (2026-11-26)
+
+### Accounting API
+
+- [QuickBooks Desktop](connectors/quickbooks-desktop) now supports [Projects](apis/accounting/reference/projects): the QuickBooks jobs (the customers that belong to another customer), with create, update and delete, the `name`, `status` and `updated_since` filters and sorting. A project is created under its `customer` or its `parent_project`.
+- [QuickBooks Desktop](connectors/quickbooks-desktop) [Expenses](apis/accounting/reference/expenses) now include credit card charges and credit card credits next to checks. `payment_type` is `credit_card` for those and `type` is `refund` for a credit card credit; they were not returned before. On create the `account` decides: a credit card account makes a credit card charge, `type: refund` a credit card credit. A create whose `payment_type` the account contradicts, a refund on an account that is not a credit card, or a check from an account QuickBooks knows is not a bank account now answers `400`; these wrote a check, or were refused by QuickBooks later, before.
+- [QuickBooks Desktop](connectors/quickbooks-desktop) [Bill Payments](apis/accounting/reference/bill-payments) now include payments made by credit card, with `payment_method` set to `check` or `credit_card`. Creating a bill payment from a credit card account records a credit card payment. A credit card payment cannot be updated: QuickBooks has no such operation.
+
+### Connector API
+
+- A connector's `settings[].description` no longer carries a link to a value only a connection has. [QuickBooks Desktop](connectors/quickbooks-desktop)'s "Download apideck.qwc" showed as a link that led nowhere in the integration settings; it is plain text there, and still a working link in Vault.
+
 ## v10.95.1 - (2026-11-26)
 
 ### Accounting API

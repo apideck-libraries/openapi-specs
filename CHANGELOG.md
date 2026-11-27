@@ -1,3 +1,10 @@
+## v10.97.0 - (2026-11-27)
+
+### Accounting API
+
+- [Odoo](connectors/odoo) now supports creating [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) (`POST /accounting/bank-feed-statements`). `bank_feed_account_id` is an Odoo bank journal id from [Bank Feed Accounts](apis/accounting/reference/bank-feed-accounts), and each transaction becomes a statement line, signed by `credit_or_debit`. The response returns the `id` of the new statement, which `GET /accounting/bank-feed-statements/{id}` takes unchanged. A request without transactions or with more than 1,000, with a transaction missing a valid date, amount or direction, with a `source_transaction_id` that is repeated or was already imported (Odoo keeps these unique across the whole database), or with a journal that is not a bank journal of the selected company is rejected with a `400` and nothing is created.
+- [Odoo](connectors/odoo) [Bank Feed Statements](apis/accounting/reference/bank-feed-statements) now return `reference`, `counterparty` and `transaction_type` for each transaction. `source_transaction_id` now returns the import id of the bank transaction (the id sent on create, or the one Odoo's bank synchronization stored); it returned the Odoo line id before, which lines without an import id still return.
+
 ## v10.96.1 - (2026-11-26)
 
 ### Connector API

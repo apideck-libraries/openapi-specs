@@ -27397,6 +27397,17 @@ paths:
             bill itself, as the baseline date plus the days of its payment terms (`terms`). The same
             calculated date is returned, with a warning in the response, when the accounting document cannot
             be read, for example because Communication Scenario `SAP_COM_0303` is not activated.
+
+            `status` follows the bill's accounting document. A posted bill reads `paid` once SAP has cleared
+            it, and `partially_paid` while part of it is still open: after a partial payment, when a payment
+            left a remainder open, or when only some of its instalments are paid. A cancelled bill reads
+            `void`. Reading the status needs Communication Scenario `SAP_COM_0303`: without it a posted bill
+            reads `authorised` and the response carries a warning. If SAP cannot be reached while the status
+            is read, the request returns a retryable error. Reading the status adds calls to SAP for each
+            page: if a page cannot be read in time, or has too many supplier lines, the error asks for a
+            smaller `limit`. A payment does not change `updated_at`, so `filter[updated_since]` does not
+            return a bill whose only change is that it was paid: to follow payments, read posted bills
+            again. `balance` is not returned.
         - connector: xero
           description: |
             `filter[bill_number]` and `filter[reference]` are exact matches on Xero's `InvoiceNumber`
@@ -28151,6 +28162,14 @@ paths:
             bill itself, as the baseline date plus the days of its payment terms (`terms`). The same
             calculated date is returned, with a warning in the response, when the accounting document cannot
             be read, for example because Communication Scenario `SAP_COM_0303` is not activated.
+
+            `status` follows the bill's accounting document. A posted bill reads `paid` once SAP has cleared
+            it, and `partially_paid` while part of it is still open: after a partial payment, when a payment
+            left a remainder open, or when only some of its instalments are paid. A cancelled bill reads
+            `void`. Reading the status needs Communication Scenario `SAP_COM_0303`: without it a posted bill
+            reads `authorised` and the response carries a warning. If SAP cannot be reached while the status
+            is read, the request returns a retryable error. A payment does not change `updated_at`.
+            `balance` is not returned.
       responses:
         '200':
           $ref: '#/components/responses/GetBillResponse'
@@ -33808,6 +33827,17 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            `status` follows the credit note's accounting document. A posted credit note reads `paid` once
+            SAP has cleared it, for example when a bill payment allocates it, and `partially_paid` while part
+            of it is still open. A cancelled credit note reads `voided`. Reading the status needs
+            Communication Scenario `SAP_COM_0303`: without it a posted credit note reads `authorised` and the
+            response carries a warning. If SAP cannot be reached while the status is read, the request
+            returns a retryable error. Reading the status adds calls to SAP for each page: if a page cannot be
+            read in time, or has too many supplier lines, the error asks for a smaller `limit`. Clearing a
+            credit note does not change `updated_at`, so `filter[updated_since]` does not return a credit
+            note whose only change is that it was cleared: to follow that, read posted credit notes again.
         - connector: quickbooks-desktop
           description: |
             Bill credit notes are QuickBooks vendor credits. How much of a vendor credit is still unused is not available, so `balance` and `remaining_credit` are not returned and `status` is always `posted`. Supported filters: `number`, `updated_since` and `created_since`; `supplier_id` is not supported. `currency` and the tax fields are not returned.
@@ -34022,8 +34052,9 @@ paths:
             reference) and `note` is limited to 25 characters. `number` is assigned by SAP and read-only
             — it is the SAP document number, not the caller's reference. `subsidiary.id` is required and
             selects the company the credit note posts to — it cannot be supplied any other way. A posted
-            credit note reads back as `status: authorised` and is immutable: `update` is unsupported, and
-            `delete` posts a reversal rather than removing the document.
+            credit note reads back as `status: authorised`, then `partially_paid` or `paid` as SAP clears it,
+            and is immutable: `update` is unsupported, and `delete` posts a reversal rather than removing the
+            document.
 
             A line with `line_items[].purchase_order.id` is posted against that purchase order. Send
             `quantity` on it; `unit_of_measure` is the order unit of the purchase order item and is taken
@@ -34279,6 +34310,14 @@ paths:
       security:
         - apiKey: []
       x-apideck-gotchas:
+        - connector: sap-s4hana-cloud
+          description: |
+            `status` follows the credit note's accounting document. A posted credit note reads `paid` once
+            SAP has cleared it, for example when a bill payment allocates it, and `partially_paid` while part
+            of it is still open. A cancelled credit note reads `voided`. Reading the status needs
+            Communication Scenario `SAP_COM_0303`: without it a posted credit note reads `authorised` and the
+            response carries a warning. If SAP cannot be reached while the status is read, the request
+            returns a retryable error. Clearing a credit note does not change `updated_at`.
         - connector: sage-business-cloud-accounting
           description: |
             The `allocations` field is not returned in responses. To retrieve allocation details, use the proxy API to call `/contact_allocations?contact_id={supplier_id}`.
@@ -46550,7 +46589,7 @@ paths:
             and no more than `total_amount`.
 
             An allocation for less than the bill's open amount is a partial payment: the bill stays open in
-            SAP and its `status` does not change. If the allocations net to less than `total_amount`, the
+            SAP and reads `partially_paid` until the rest is paid. If the allocations net to less than `total_amount`, the
             remainder stays on the supplier's account as an open payment item. A document with more than
             one open item (installments) cannot be allocated. No cash discount is taken.
 

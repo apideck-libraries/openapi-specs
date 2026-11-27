@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 10.97.0
+  version: 10.97.1
   title: Vault API
   description: |
     Welcome to the Vault API 👋
@@ -84,13 +84,15 @@ info:
 
     Vault provides real-time webhook events to notify you of connection state changes:
 
-    - **vault.connection.created** - Triggered when a new connection is created in Vault - **vault.connection.updated** - Triggered whenever any connection data changes (credentials, settings, metadata) - **vault.connection.callable** - Triggered when a connection transitions to callable state (ready for API calls) - **vault.connection.disabled** - Triggered when the enabled property changes from true to false - **vault.connection.deleted** - Triggered when a connection is permanently removed from the system - **vault.connection.revoked** - Triggered when OAuth access is successfully revoked at the service provider level - **vault.connection.migrated** - Triggered when a connection is migrated to another connector; the payload entity carries `migrated_from` with the source `service_id`. Emitted alongside `vault.connection.created` (for the target connection) and `vault.connection.deleted` (for the source connection), all sharing the same request id. Migrated tokens keep the source connector's OAuth scopes, so operations exclusive to the target connector may require re-authorization - **vault.connection.token_refresh.failed** - Triggered when automatic token refresh fails for an OAuth connection
+    - **vault.connection.created** - Triggered when a new connection is created in Vault - **vault.connection.updated** - Triggered when connection data changes (credentials, settings, metadata), and when Apideck marks the connection `invalid` after the integration rejects a request - **vault.connection.callable** - Triggered when a connection transitions to callable state (ready for API calls) - **vault.connection.disabled** - Triggered when the enabled property changes from true to false - **vault.connection.deleted** - Triggered when a connection is permanently removed from the system - **vault.connection.revoked** - Triggered when OAuth access is successfully revoked at the service provider level - **vault.connection.migrated** - Triggered when a connection is migrated to another connector; the payload entity carries `migrated_from` with the source `service_id`. Emitted alongside `vault.connection.created` (for the target connection) and `vault.connection.deleted` (for the source connection), all sharing the same request id. Migrated tokens keep the source connector's OAuth scopes, so operations exclusive to the target connector may require re-authorization - **vault.connection.token_refresh.failed** - Triggered when automatic token refresh fails for an OAuth connection
 
     ### Event Sequences
 
     **Initial OAuth Flow:** 1. `vault.connection.created` (if new connection) 2. `vault.connection.updated` (when OAuth credentials are saved) 3. `vault.connection.callable` (when connection becomes ready for API calls)
 
     **Re-authorization:** 1. `vault.connection.updated` (when new credentials are saved) 2. `vault.connection.callable` (if connection becomes callable again)
+
+    **Integration rejects the credentials:** `vault.connection.updated` with `state` `invalid` (`health` is usually `needs_auth`), normally sent once when the state changes. See "How do I find out that a connection stopped working?" below.
 
     **Connection Management:** - **Disabled**: `vault.connection.disabled` (connection paused but preserved) - **Deleted**: `vault.connection.deleted` (permanent removal) - **Revoked**: `vault.connection.revoked` (OAuth access revoked at service provider)
 
@@ -157,7 +159,19 @@ info:
 
     **What's the difference between updated and callable events?**
 
-    - `updated` fires on any change to connection data - `callable` only fires when the connection state changes TO callable - Think of `callable` as a significant milestone, while `updated` is any change
+    - `updated` fires on changes to connection data (a connection that becomes valid again after a successful request sends no event) - `callable` only fires when the connection state changes TO callable - Think of `callable` as a significant milestone, while `updated` covers other data and state changes
+
+    **How do I find out that a connection stopped working?**
+
+    When the integration rejects a request that Apideck sends with a connection, for example a Unified API request or virtual webhook polling, with a `401` that the connector does not treat as temporary, Apideck sets the connection `state` to `invalid` and sends `vault.connection.updated` with that state. The `health` is usually `needs_auth`. For a Proxy API request, such a `401` triggers a check of the connection instead, at most once every 15 minutes. The connection becomes `invalid` only if that check is rejected.
+
+    This applies to connections with `validation_support: true`. The event is normally sent once, when the state changes, and it is not sent again while the connection stays invalid. It can be delivered more than once, so handle duplicates. During refresh-token retention (`credentials_expire_at` is a future time), the state does not change and no event is sent. If the credentials are still rejected when retention ends, the state can become `invalid` without this event, so also watch `vault.connection.token_refresh.failed`.
+
+    Unified API and Proxy API requests made with an invalid connection are still sent. Native and virtual webhook events for the connection are not delivered while it is invalid.
+
+    The connection becomes valid again after the next successful Unified API request made with this connection, with no event. Send `x-apideck-service-id`: a request that Apideck routes to another callable connection of the consumer does not change this one. It also becomes valid when it is authorized again or its credentials are updated and validation then succeeds, or when [Validate Connection State](https://developers.apideck.com/apis/vault/reference#tag/Connections/operation/validateConnectionState) finds it valid. Then Apideck sends `vault.connection.updated`, and `vault.connection.callable` when the connection becomes callable. A successful Proxy API request with an invalid connection triggers a check, if no check ran in the last 15 minutes. The connection becomes valid only if that check passes. No check is scheduled on its own. Reading the connection with `GET /vault/connections` does not check it again.
+
+    With the current recovery settings, virtual webhook sync jobs that stopped because of the `401` restart only when the connection changes to `callable` after it is authorized again or its credentials are updated. They stay stopped when the connection becomes valid through a successful request or through Validate Connection State. Authorizing a connection that is already `callable` again does not restart them.
   contact:
     email: hello@apideck.com
     url: https://developers.apideck.com
@@ -4418,12 +4432,19 @@ paths:
       summary: Validate Connection State
       operationId: validateConnectionState
       description: |
-        This endpoint validates the current state of a given connection. This will perform different checks based on the connection auth type. For basic and apiKey auth types, the presence of required fields is checked.
-        For connectors that implement OAuth2, this operation forces the refresh flow for an access token regardless of its expiry.
+        This endpoint checks a connection again and returns its updated state.
+        For OAuth2 connectors and custom connectors with an OAuth grant (except connectors used only for authentication), this operation first forces the refresh flow for an access token regardless of its expiry.
+        Then, for connectors that support connection validation (`validation_support: true`), it sends the connector's validation request with the stored credentials.
+        The validation request is not sent when the connection is disabled, does not have the settings that the request needs, or still needs OAuth authorization.
+        When the connector has no OAuth refresh and no connection validation, nothing is sent to the integration, and the state is computed from the stored connection.
+        When the integration rejects the forced token refresh with a non-recoverable error, and no other process saved a newer token in the meantime, the connection is marked as not valid, `vault.connection.token_refresh.failed` is triggered, and the operation returns an error. Its `state` becomes `invalid` only when the connector supports connection validation and no refresh-token retention is active (`credentials_expire_at` is not a future time).
+
+        The result is saved on the connection. When the connection `state` changes, `vault.connection.updated` is triggered, and `vault.connection.callable` too when the connection becomes callable. Use this operation to check an `invalid` connection again: reading the connection does not check it.
 
         Note:
-          - Do not include any credentials in the request body. This operation does not persist changes, but only triggers the validation of connection state.
+          - Do not include any credentials in the request body. The operation uses the credentials stored on the connection.
           - If a refresh token flow was performed and successful, the new access token will then be used for subsequent API requests.
+          - A connection that is waiting for confirmation is returned with its stored state, without a refresh or a validation request.
       security:
         - apiKey: []
       parameters:

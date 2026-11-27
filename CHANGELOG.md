@@ -1,3 +1,9 @@
+## v10.96.1 - (2026-11-26)
+
+### Connector API
+
+- Getting a connector whose setting has an empty `description` no longer fails with a `500`. Since v10.96.0, getting [Justworks](connectors/justworks) or [Personio](connectors/personio) failed, and so did any connector list that included them. Such a setting now returns `description: ""`.
+
 ## v10.96.0 - (2026-11-26)
 
 ### Accounting API
